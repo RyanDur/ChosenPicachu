@@ -1,0 +1,20 @@
+.crossing {
+  /* px on purpose: the viewBox width CrossingFigure draws in, so drawn-caption can undo the drawing's scale */
+  --drawn-width: 480px;
+  --widest-drawing: var(--base-x-60);
+
+  .item {
+    fill: var(--paper);
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .part.still {
+    fill: var(--faded-leather);
+  }
+
+  .part.swaps {
+    fill: var(--faded-mint);
+  }
+}

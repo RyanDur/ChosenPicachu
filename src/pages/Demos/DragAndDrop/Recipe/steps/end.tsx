@@ -2,8 +2,8 @@ import {Codes, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 
 export const roadEnd =
   <Step title="What drag and drop cannot give you">
-    <Words want="Some pixels on this road are never yours: the snapshot, the cursor, the cancel. And the keyboard never gets a session at all.">
-      <Says>The drag image, the copy of the item under the pointer, is a fixed picture taken at dragstart, so it cannot be animated and cannot
+    <Words want="Some pixels on this road are never yours: the drag image, the cursor, the cancel. And the keyboard never gets a session at all.">
+      <Says>The drag image is a fixed picture taken at dragstart, so it cannot be animated and cannot
         be made opaque on macOS; the cursor belongs to the platform; on macOS even the cancel is
         the platform’s animation to run; and drag-and-drop itself never answers the keyboard:
         the arrows on the grips work because they change the order directly, without the

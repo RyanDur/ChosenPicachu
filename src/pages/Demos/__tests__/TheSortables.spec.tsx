@@ -268,7 +268,6 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Fade the origin to a whisper/);
     expect(recipe).toHaveTextContent(/Slide the crossed item home/);
     expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
-    expect(recipe).toHaveTextContent(/What drag and drop cannot give you/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
   });
@@ -324,23 +323,48 @@ describe('the sortable list demo', () => {
 
 describe('the native drag sort tutorial’s words', () => {
   test('should head its steps with what happens, not with aloft or the road', async () => {
-    const recipe = await nativeRecipe();
+    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
 
-    expect(recipe).toHaveTextContent(/Keep which item is held in state, not in the drag’s payload/);
-    expect(recipe).toHaveTextContent(/A swap counts once the pointer is a quarter of the way into a neighbour/);
-    expect(recipe).toHaveTextContent(/What drag and drop cannot give you/);
-    expect(recipe).not.toHaveTextContent(/Hold the aloft|Find the crossing with the inner half|Know where the road ends/);
+    expect(recipeFolds.stepTitles(story)).toEqual([
+      'Arm the drag from its handle',
+      'Keep which item is held in state, not in the drag’s payload',
+      'Accept the drop, or the platform takes it back',
+      'A swap counts once the pointer is a quarter of the way into a neighbour',
+      'Commit inside the crossing',
+      'Fade the origin to a whisper',
+      'Slide the crossed item home',
+      'What drag and drop cannot give you'
+    ]);
+  });
+
+  test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {
+    const recipe = await nativeRecipe();
+    await recipeFolds.press(recipe, 'The user can arrange the list by hand');
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
+    const story = recipeFolds.story(recipe, 'The user can arrange the list by hand');
+
+    expect(recipeFolds.stepTitles(story)).toEqual([
+      'Arm the drag from its handle',
+      'Keep which item is held in state, not in the drag’s payload',
+      'Accept the drop, or the platform takes it back',
+      'Stash the landing, settle after the drag',
+      'Fade the origin to a whisper',
+      'Glide the settle, one tick after',
+      'What drag and drop cannot give you'
+    ]);
+    expect(within(story).queryByRole('figure', {name: /^Where a swap counts\./})).not.toBeInTheDocument();
+    expect(story).toHaveTextContent('No quarter has to be passed here, because nothing moves until the release.');
   });
 
   test.each([
-    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On mousedown, the event for a mouse button going down,'],
+    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler declares the move'],
     ['dataTransfer and dragover', 'dataTransfer, the object a drag event carries its data in, the payload, exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
     ['state', 'Steer with state instead, the values React keeps between one drawing of the page and the next. The lift reports which item is held, which the code calls aloft,'],
     ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default, and here the default is to refuse the drop. dropEffect, a property of dataTransfer, names the verb, such as move or copy, so the cursor matches. And the handler for drop, the event for a release over a target,'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
     ['where a crossing counts', 'only counts once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
-    ['the drag image', 'The drag image, the copy of the item under the pointer, is a fixed picture taken at dragstart,']
+    ['the drag image', 'the drag image, a picture of the card that follows the pointer, the cursor, the cancel.']
   ])('should say what %s is where the reader meets it', async (_term, sentence) => {
     expect(await nativeRecipe()).toHaveTextContent(sentence);
   });

@@ -46,22 +46,18 @@ export const feedStillConnecting = async (page: Page, prices: number[]): Promise
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
-  const opacityAtDragStart = (): Promise<string | undefined> => page.evaluate(() => document.body.dataset.opacityAtDragStart);
-  const recordOpacityAtDragStart = (): Promise<void> => page.evaluate(() => window.addEventListener('dragstart', event => {
-    const held = event.target instanceof Element ? event.target.closest('li') : null;
-    document.body.dataset.opacityAtDragStart = held === null ? 'no chart' : getComputedStyle(held).opacity;
-  }));
-  const holdByTheGrip = async (region: string): Promise<{whenTheDragBegan: string | undefined; now: () => Promise<number>}> => {
+  const holdByTheGrip = async (region: string): Promise<{whenTheDragBegan: string; now: () => Promise<number>}> => {
     const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
     await chart.scrollIntoViewIfNeeded();
-    await recordOpacityAtDragStart();
+    const opacityAtDragStart = await chart.evaluateHandle(held => ({seen: new Promise<string>(resolve =>
+      held.addEventListener('dragstart', () => resolve(getComputedStyle(held).opacity), {once: true}))}));
     await chart.hover();
     const grip = await chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox();
     if (grip === null) throw new Error(`the ${region} chart has no grip`);
     await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
     await page.mouse.down();
     await page.mouse.move(grip.x + grip.width / 2, grip.y + 40, {steps: 8});
-    return {whenTheDragBegan: await opacityAtDragStart(), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity))};
+    return {whenTheDragBegan: await opacityAtDragStart.evaluate(({seen}) => seen), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity))};
   };
   return {
     holdByTheGrip,

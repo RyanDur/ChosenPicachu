@@ -6,7 +6,6 @@ import {
   fadeOrigin,
   glideSettle,
   holdTheAloft,
-  innerHalf,
   neverOurs,
   platformCurrency,
   promises,
@@ -30,7 +29,6 @@ export const LazyHideAnimatedRecipe: FC = () => <>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
       {acceptTheDrop(listSource)}
-      {innerHalf}
       {stashLanding(listSource)}
       {fadeOrigin(itemSource, cssSource)}
       {glideSettle(listSource)}

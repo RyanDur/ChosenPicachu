@@ -369,11 +369,11 @@ const workspaceStory =
     soThat="the charts they watch sit where they put them">
     <Tell>Adding a chart, sorting, removing one and choosing a period are each written into the page’s address.
       That is all a reload or a shared link needs to bring the layout back.</Tell>
-    <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute. A chart is
-      draggable only while its grip is pressed, and the grip shows when the pointer is over the chart. While a chart is
-      held it fades almost to nothing where it sits, and the browser draws a copy of it under the hand. It swaps with
-      its neighbour once the hand has moved a third of the chart’s height from where it grabbed, up or down, and the
-      neighbour slides into the place it left.</Tell>
+    <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
+      the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
+      chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
+      hand. It swaps with its neighbour once the hand has moved a third of the chart’s height from where it grabbed, up
+      or down, and the neighbour slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
       and down arrows move it one place and focus stays on it. Delete removes it. When one chart is left it has no
       grip and no remove button, and Delete does nothing, so the workspace always has a chart.</Tell>
@@ -408,8 +408,8 @@ const workspaceStory =
             back.</Says>
           <AThirdFromTheHand/>
           <Says>The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
-            starts its own height away and runs to its new place in 150 milliseconds. No swap happens while the
-            neighbour is still sliding.</Says>
+            starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
+            with one that is still sliding.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

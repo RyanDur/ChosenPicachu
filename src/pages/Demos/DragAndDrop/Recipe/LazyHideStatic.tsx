@@ -6,7 +6,6 @@ import {
   directState,
   fadeOrigin,
   holdTheAloft,
-  innerHalf,
   neverOurs,
   platformCurrency,
   promises,
@@ -30,7 +29,6 @@ export const LazyHideStaticRecipe: FC = () => <>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
       {acceptTheDrop(listSource)}
-      {innerHalf}
       {stashLanding(listSource)}
       {fadeOrigin(itemSource, cssSource)}
       {directState(listSource)}

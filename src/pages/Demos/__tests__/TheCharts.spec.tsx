@@ -743,11 +743,12 @@ describe('the workspace story', () => {
 
   test.each([
     ['the address', 'Adding a chart, sorting, removing one and choosing a period are each written into the page’s address. That is all a reload or a shared link needs to bring the layout back.'],
-    ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute.'],
+    ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
     ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where on the chart the hand is. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand with that mark.'],
     ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
+    ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
     ['the last chart', 'With one chart left there is no grip and no remove button, and Delete does nothing. The + is still there.']
   ])('should say %s in plain words', async (_term, sentence) => {
     expect(await workspaceStory()).toHaveTextContent(sentence);

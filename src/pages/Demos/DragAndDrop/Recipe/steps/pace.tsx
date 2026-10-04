@@ -10,7 +10,7 @@ export const commitCrossing = (listSource: string): ReactNode =>
     <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
       <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>: the state updates
         mid-drag, the markup renders through it, and the same key finds its new seat while the
-        platform still holds the snapshot in your hand. Carrying the item back is just more
+        platform still holds the drag image in your hand. Carrying the item back is just more
         crossings, so home stays reachable.</Says>
     </Words>
     <Codes>
@@ -24,10 +24,10 @@ export const commitCrossing = (listSource: string): ReactNode =>
 export const stashLanding = (listSource: string): ReactNode =>
   <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
     <Words want={<>You want the list calm while the platform drags, which means the reorder must wait for a <Term word="session">session</Term> that is still alive when the drop lands.</>}>
-      <Says>Each dragover only remembers the <Term word="landing">landing</Term> where the pointer last hovered,
-        and <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn>, the event for the pointer leaving an item,
-        forgets it. The commit runs from the release: the session has to finish before the list moves,
-        because the platform is still animating its own end of the bargain.</Says>
+      <Says>Each dragover only remembers the <Term word="landing">landing</Term>, the item the pointer is over at that
+        moment, and <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn>, the event for the pointer leaving an
+        item, forgets it. No quarter has to be passed here, because nothing moves until the release. The commit
+        runs from the release: the session has to finish before the list moves, because the platform is still animating its own end of the bargain.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

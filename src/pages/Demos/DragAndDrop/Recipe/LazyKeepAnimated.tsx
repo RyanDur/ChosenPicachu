@@ -5,7 +5,6 @@ import {
   armTheDrag,
   glideSettle,
   holdTheAloft,
-  innerHalf,
   keepStanding,
   neverOurs,
   platformCurrency,
@@ -29,7 +28,6 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
       {acceptTheDrop(listSource)}
-      {innerHalf}
       {stashLanding(listSource)}
       {keepStanding(listSource)}
       {glideSettle(listSource)}
