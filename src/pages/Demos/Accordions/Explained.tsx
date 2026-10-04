@@ -516,7 +516,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         {motion === 'drawer' && <li className="run">
           <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
             from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
-            around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom. Align-self: end
+            around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom. Then <code>align-self: end</code>
             sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
             on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
             fold. One transition moves it all, so no part can fall behind another. It answers no
