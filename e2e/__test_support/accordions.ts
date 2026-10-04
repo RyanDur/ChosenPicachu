@@ -18,6 +18,8 @@ const headings: Record<Build, string> = {
   'the grid radio build': 'Exclusive accordion using radio group'
 };
 
+export type Pointing = 'right' | 'down' | 'nowhere';
+
 export type Part = {
   fold: Locator;
   showsText: () => Promise<boolean>;
@@ -159,31 +161,43 @@ export const accordionsTab = (page: Page) => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
-  const barAt = (build: Build, at: number): Promise<{name: string; x: number; y: number; width: number; height: number} | null> =>
-    built(build).evaluate((article, index) => {
-      const bars = [
-        ...[...article.querySelectorAll('input')].map(input => input.labels?.item(0)),
-        ...[...article.querySelectorAll('details')].map(fold => fold.querySelector(':scope > summary'))
-      ].filter((found): found is Element => found instanceof Element && found.textContent.trim() !== 'Close');
-      if (index >= bars.length) return null;
-      const bar = bars[index];
-      bar.scrollIntoView({block: 'center'});
-      const {x, y, width, height} = bar.getBoundingClientRect();
-      return {name: bar.textContent.trim(), x, y, width, height};
-    }, at);
-  const barsWithoutAnArrow = async (build: Build): Promise<string[]> => {
+  type Box = {x: number; y: number; width: number; height: number};
+  const settled = (): Promise<unknown> =>
+    page.waitForFunction(() => document.getAnimations().every(motion => motion.playState !== 'running'));
+  const boxOf = async (shown: Locator): Promise<Box> => {
+    await shown.scrollIntoViewIfNeeded();
+    const box = await shown.boundingBox();
+    if (box === null) throw new Error('a bar is not shown');
+    return box;
+  };
+  const shotOf = async (clip: Box): Promise<number[]> =>
+    (await decodedShot(page, await page.screenshot({clip, scale: 'css'}))).rgba;
+  const lightAt = (rgba: number[], pixel: number): boolean =>
+    0.2126 * rgba[pixel * 4] + 0.7152 * rgba[pixel * 4 + 1] + 0.0722 * rgba[pixel * 4 + 2] > 150;
+  const pointingIn = (rgba: number[], width: number): Pointing => {
+    const light = Array.from({length: rgba.length / 4}, (_, pixel) => pixel).filter(pixel => lightAt(rgba, pixel));
+    if (light.length < 10) return 'nowhere';
+    const across = light.map(pixel => pixel % width);
+    const down = light.map(pixel => Math.floor(pixel / width));
+    return Math.max(...across) - Math.min(...across) < Math.max(...down) - Math.min(...down) ? 'right' : 'down';
+  };
+  const arrowOn = async (bar: Locator): Promise<Pointing> => {
     await page.mouse.move(0, 0);
-    const missing: string[] = [];
-    for (let at = 0, bar = await barAt(build, at); bar; at++, bar = await barAt(build, at)) {
-      const end = {x: bar.x + bar.width - 48, y: bar.y + 4, width: 48, height: bar.height - 8};
-      const {rgba} = await decodedShot(page, await page.screenshot({clip: end, scale: 'css'}));
-      const light = rgba.filter((_, i) => i % 4 === 0 && 0.2126 * rgba[i] + 0.7152 * rgba[i + 1] + 0.0722 * rgba[i + 2] > 150).length;
-      if (light < 10) missing.push(bar.name);
-    }
-    return missing;
+    await settled();
+    const {x, y, width, height} = await boxOf(bar);
+    const end = {x: x + width - 52, y: y + 4, width: 44, height: height - 8};
+    return pointingIn(await shotOf(end), end.width);
   };
   return {
-    barsWithoutAnArrow,
+    arrowsOf: async (build: Build): Promise<Pointing[]> => {
+      const arrows: Pointing[] = [];
+      await folds(build).first().waitFor();
+      for (const fold of (await folds(build).all()).slice(closeBarsBeforeTheParts(build))) {
+        arrows.push(await arrowOn(nameOn(fold)));
+      }
+      return arrows;
+    },
+    arrowOnTheFirstPartOf: (build: Build): Promise<Pointing> => arrowOn(nameOn(partOf(build, 0).fold)),
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),

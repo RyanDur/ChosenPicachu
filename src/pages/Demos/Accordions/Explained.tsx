@@ -275,7 +275,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   while it is open. The label is a flex row, which lays its children side by side: the
                   part’s name sits at one end and the arrow at the other, both centred on the bar’s height.
                   The arrow is an empty box drawn after the label’s words, with only its top and right
-                  borders, turned 45 degrees so the corner points right. When the {input} is checked, the
+                  borders, turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a
+                  keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When
+                  the {input} is checked, the
                   ~ combinator picks the label after it, and the corner turns to 135 degrees and points
                   down. The turn is a transition, which runs whenever the value changes.
                 {motion === 'static'
@@ -402,16 +404,20 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
-                  summary, in the same colours. Summary takes focus and hover itself, where the {input}
-                  build carried focus from the hidden {input} to the label. Summary also draws its own
-                  arrow, called a marker, where the {input} build drew one from two borders. List-style
-                  none removes that marker, and the bar draws the {input} build’s arrow in its place, so a bar reads
-                  the same in every build. The arrow points right while the part is closed and down while it is open.
-                  The hairline border draws the line between one bar and the next.</p>
-                <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), gap,
-                  ...unit(accordionsCss, '&[open] > .info-label::after {')
-                ]}/>
+                  summary, in the same colours. Summary takes focus and hover itself, where the {input} build
+                  carried focus from the hidden {input} to the label. The hairline border draws the line between
+                  one bar and the next.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
+                  drew one from two borders. List-style none removes that marker, and the bar draws the {input} build’s
+                  arrow in its place, so this bar reads the same as the bars of the known-height and
+                  measured builds. The arrow points right while the part is closed. When the part opens, the
+                  browser adds the attribute open to the details, as if it were written in the opening
+                  tag. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
+                  rule turns the arrow down.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '&[open] > .info-label::after {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">A pseudo-element is a part of an element

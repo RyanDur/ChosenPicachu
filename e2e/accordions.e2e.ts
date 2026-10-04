@@ -303,12 +303,23 @@ for (const {type, arrowed} of [
   {type: 'inclusive', arrowed: ['the checkbox build', 'the measured checkbox build', 'the inclusive details build'] as Build[]},
   {type: 'exclusive', arrowed: ['the radio build', 'the measured radio build', 'the details build'] as Build[]}
 ]) {
-  test(`every bar of the ${type} builds that turn an arrow draws one`, async ({page}) => {
+  test(`every bar of the ${type} builds that turn an arrow draws one pointing right`, async ({page}) => {
     await page.goto(`demos/?tab=accordions&type=${type}`);
     const tab = accordionsTab(page);
 
     for (const build of arrowed) {
-      expect(await tab.barsWithoutAnArrow(build), build).toEqual([]);
+      expect(await tab.arrowsOf(build), build).toEqual(['right', 'right', 'right', 'right', 'right']);
     }
+  });
+}
+
+for (const build of ['the inclusive details build', 'the details build'] as const) {
+  test(`an open part of ${build} turns its arrow down`, async ({page}) => {
+    await page.goto(showing(build));
+    const tab = accordionsTab(page);
+
+    await tab.firstPartOf(build).open();
+
+    expect(await tab.arrowOnTheFirstPartOf(build)).toBe('down');
   });
 }

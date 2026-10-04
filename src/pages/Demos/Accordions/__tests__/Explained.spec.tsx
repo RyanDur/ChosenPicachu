@@ -546,10 +546,27 @@ describe('the platform build’s bars', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
-    const run = explanation.runTelling(platform, /The bar is the same flex row/);
+    const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent('List-style none removes that marker, and the bar draws the checkbox build’s arrow in its place, so a bar reads the same in every build. The arrow points right while the part is closed and down while it is open.');
-    expect(explanation.everyCodeBeside(platform, /The bar is the same flex row/).join()).toMatch(/&\[open\] > \.info-label::after \{[^]*rotate\(135deg\)/);
+    expect(run).toHaveTextContent('List-style none removes that marker, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(run).not.toHaveTextContent(/every build/);
+    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toMatch(/&\[open\] > \.info-label::after \{[^]*rotate\(135deg\)/);
+  });
+
+  test('should say the browser marks an open details with the open attribute, and [open] picks it to turn the arrow', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds the attribute open to the details, as if it were written in the opening tag. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+  });
+
+  test('should keep the bar’s own run to the row, its focus and its border', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, in the same colours\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\. The hairline border draws the line between one bar and the next\./);
   });
 
   test('should show the arrow’s one shared shape beside the run that draws it', async () => {
@@ -558,6 +575,7 @@ describe('the platform build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
   });
 });
 
