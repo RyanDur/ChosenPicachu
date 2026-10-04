@@ -290,6 +290,17 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 everyBuildJourneys(builds);
 evenMotionJourneys(['the checkbox build', 'the radio build']);
 
+test('the accordion in HTML alone keeps two folds open with exclusive and static chosen', async ({page}) => {
+  await page.goto('demos/?tab=accordions&type=exclusive&style=static');
+  const [basalt, cinder] = [accordionsTab(page).htmlAloneFold('basalt'), accordionsTab(page).htmlAloneFold('cinder')];
+
+  await basalt.open();
+  await cinder.open();
+
+  await expect.poll(basalt.isOpen).toBe(true);
+  await expect.poll(cinder.isOpen).toBe(true);
+});
+
 test('a fold of the accordion in HTML alone opens by pointer and closes by keyboard', async ({page}) => {
   await page.goto('demos/?tab=accordions');
   const fold = accordionsTab(page).htmlAloneFold('basalt');

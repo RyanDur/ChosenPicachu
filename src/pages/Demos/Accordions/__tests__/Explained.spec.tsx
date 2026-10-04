@@ -167,16 +167,12 @@ describe('the fold choices', () => {
     return rows[rows.length - 1];
   };
 
-  test('should keep the accordion in HTML alone the same with exclusive and static chosen', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive&style=static')}/>);
+  test('should read the chosen motion and the less-motion sentence as two sentences with the styles off', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
 
-    const htmlAlone = await screen.findByRole('region', {name: 'An accordion in HTML alone'});
-    const [first, second] = within(htmlAlone).getAllByRole('group');
-    await userEvent.click(within(first).getByText(/^\w+$/));
-    await userEvent.click(within(second).getByText(/^\w+$/));
+    const row = await rowOf('fold motion');
 
-    expect(first).toHaveAttribute('open');
-    expect(second).toHaveAttribute('open');
+    expect(within(row).getByRole('status').textContent).toBe('The text slides down from under its bar. If your system asks for less motion, every fold here opens at once, whichever you choose.');
   });
 
   test('should say, just before the rows, which accordions they set', async () => {

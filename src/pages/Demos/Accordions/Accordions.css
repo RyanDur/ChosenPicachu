@@ -179,7 +179,7 @@
         linear-gradient(var(--trim), var(--trim)),
         linear-gradient(to top, var(--charcoal), transparent);
       background-position: bottom;
-      background-size: 100% var(--base-x-6), 100% var(--base-x-2);
+      background-size: 100% calc(var(--base-x-4) + var(--base-x-2)), 100% var(--base-x-2);
       background-repeat: no-repeat;
       background-attachment: local, scroll;
 
