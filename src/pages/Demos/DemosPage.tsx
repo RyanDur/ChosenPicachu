@@ -20,6 +20,7 @@ import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
+import {ZIndexIntroduction} from './ZIndexDemo/Introduction';
 import {AccordionsExplained, foldMotionParam, foldTypeParam} from './Accordions';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
@@ -68,7 +69,8 @@ export const DemosPage = () => {
                   motion={foldMotion} onMotionChosen={next => updateSearchParams({style: next})}/>
               </>,
         [DemoTopics.zIndex]: <>
-          <h2 className="title bold">Z-Index Demo.</h2>
+          <h2 className="title bold">Z-index</h2>
+          <ZIndexIntroduction/>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
           <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
           <PopoverExplained/>

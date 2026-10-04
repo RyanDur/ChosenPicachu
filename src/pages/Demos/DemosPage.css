@@ -5,3 +5,9 @@
     gap: var(--base-x-6);
     padding: var(--base-x-5);
 }
+
+.tab-introduction {
+  display: grid;
+  gap: var(--base);
+  max-inline-size: var(--measure);
+}

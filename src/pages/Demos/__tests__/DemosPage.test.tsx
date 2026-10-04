@@ -42,7 +42,7 @@ describe('The Demos page', () => {
 
     await waitFor(() => {
       const main = screen.getByRole('main');
-      expect(within(main).getByText('Z-Index Demo.')).toBeInTheDocument();
+      expect(within(main).getByRole('heading', {level: 2, name: 'Z-index'})).toBeInTheDocument();
     });
 
     expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('Demos Z-index');
