@@ -32,11 +32,16 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
-            API</Mdn> does all of it. Each button carries a tabIndex of 0. That is React’s spelling of the HTML
-          attribute <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>, and 0 asks the browser to stop on the
-          element when Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only
-          to text fields and to elements that ask for it.</p>
+            API</Mdn> does all of it.</p>
         <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</menu>')}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">Each button carries a tabIndex of 0.
+          That is the HTML attribute <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>, spelled the way
+          React spells it, and React is the JavaScript library this site is built with. A tabindex of 0 asks the browser to stop on the element when
+          Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
+          fields and to elements that ask for it.</p>
+        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button" tabIndex={0} className="button primary', '</button>')}/>
       </li>
       <li className="run">
         <p className="paragraph">Script adds two things, and both wait for an event. An event is the browser telling the

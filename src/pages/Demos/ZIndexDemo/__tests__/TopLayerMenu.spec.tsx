@@ -38,13 +38,16 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const run = explanation.runTelling(part, /Each button carries a tabIndex of 0/);
+    const sample = explanation.everyCodeBeside(part, /Each button carries a tabIndex of 0/).join();
 
-    expect(explanation.everyCodeBeside(part, /Each button carries a tabIndex of 0/).join()).toMatch(/tabIndex=\{0\}/);
-    expect(run).toHaveTextContent(/HTML attribute tabindex, and 0 asks the browser to stop/);
+    expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
+    expect(sample).not.toMatch(/<menu/);
+    expect(run).toHaveTextContent(/That is the HTML attribute tabindex, spelled the way React spells it, and React is the JavaScript library/);
+    expect(run).toHaveTextContent(/A tabindex of 0 asks the browser to stop on the element when Tab moves focus/);
     expect(run).toHaveTextContent(/by default Safari moves Tab only to text fields and to elements that ask for it/);
   });
 
-  test('should name the toggle in the run that follows the markup that holds it', async () => {
+  test('should name the toggle in a run after the markup that holds it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
@@ -52,7 +55,7 @@ describe('why the popover wins', () => {
     const scriptsAt = runs.indexOf(explanation.runTelling(part, /A toggle on the menu/));
 
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/onToggle=/);
-    expect(runs[scriptsAt - 1]).toBe(explanation.runTelling(part, /The button names its menu with popovertarget/));
+    expect(runs.indexOf(explanation.runTelling(part, /The button names its menu with popovertarget/))).toBeLessThan(scriptsAt);
   });
 
   test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {

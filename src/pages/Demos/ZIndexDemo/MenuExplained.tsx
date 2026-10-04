@@ -23,8 +23,8 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
       <li className="run">
         <p className="paragraph">The list has a z-index of 9999, and card two has a z-index of 1, yet the list
           opens under card two. Its top shows in the gap between the cards, and its bottom shows below card two.
-          Move through it with the arrow keys, and the choice in focus moves where you cannot see it, under card
-          two. The menu works. It is drawn in the wrong place.</p>
+          Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you
+          cannot see it, under card two. The menu works. It is drawn in the wrong place.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.sort-choices {'), gap,
           ...unit(zIndexCss, '.old-way-card {'), gap,
