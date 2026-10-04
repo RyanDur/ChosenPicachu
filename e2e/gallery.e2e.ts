@@ -154,6 +154,22 @@ test.describe('a desktop window made narrow', () => {
   });
 });
 
+test.describe('a visitor at a desk', () => {
+  test.use(desktop);
+
+  test('should see each picture on the wall once it arrives', async ({page}) => {
+    await page.goto('gallery/?tab=vam');
+    const works = galleryPage(page).wall;
+    await expect(works.first()).toBeVisible();
+
+    for (const work of await works.all()) {
+      await work.scrollIntoViewIfNeeded();
+      const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
+      await expect(work.getByRole('img', {name: alt, exact: true})).toBeVisible();
+    }
+  });
+});
+
 test.describe('a keyboard reader on a desktop', () => {
   test.use(desktop);
 

@@ -148,7 +148,7 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
     const news = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(recipeFolds.steps(news).map(step => within(step).getAllByRole('heading')[0].textContent))
+    expect(recipeFolds.stepTitles(news))
       .toEqual(['Make the panel a popover', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
   });
 
@@ -204,7 +204,7 @@ describe('the banner tutorial’s second story', () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
     const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(recipeFolds.steps(many).map(step => within(step).getAllByRole('heading')[0].textContent)).toEqual([
+    expect(recipeFolds.stepTitles(many)).toEqual([
       'Skip a message that is already up',
       'Open a gap in the stack first',
       'Slide in from off screen',
@@ -219,14 +219,27 @@ describe('the banner tutorial’s second story', () => {
 
     expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/The banner has one transition list, so the slide in the next step is in it too\.$/);
     expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
-    expect(steps[2]).toHaveTextContent('In the transition list in step 2’s sample, the slide waits 0.3 seconds, the time the gap takes to open.');
+  });
+
+  test('should let a sideways stack’s message shrink across, in step 2’s sample', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(steps[1]).toHaveTextContent(/\.news \{ min-inline-size: 0;[^]*padding-inline: 0; border-inline-width: 0;/);
+    expect(steps[1]).not.toHaveTextContent(/min-block-size/);
+  });
+
+  test('should say the slide waits for the gap, in the transition list of step 2’s sample', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.steps(await secondStory())[2]).toHaveTextContent('In the transition list in step 2’s sample, the slide waits 0.3 seconds, the time the gap takes to open.');
   });
 
   test('should leave out the height step for a stack that grows down', async () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=down')}/>);
     const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(recipeFolds.steps(many).map(step => within(step).getAllByRole('heading')[0].textContent)).not.toContain('Change a banner’s height smoothly when its text rewraps');
+    expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
   });
 
   test('should open on the two moves, and say what a transition and a starting style are', async () => {

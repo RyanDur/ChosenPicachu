@@ -71,7 +71,12 @@ export const closingGapTransition: Record<Stack, string> = {
   right: 'margin-inline-end 0.3s 0.6s;'
 };
 
-export const newsShrinks = 'min-block-size: 0;';
+export const newsShrinks: Record<Stack, string> = {
+  down: 'min-block-size: 0;',
+  up: 'min-block-size: 0;',
+  left: 'min-inline-size: 0;',
+  right: 'min-inline-size: 0;'
+};
 
 export const newsTransition = 'padding 0.3s, border-width 0.3s;';
 
@@ -103,7 +108,7 @@ export const slotLines = (stack: Stack): Line[] => [
   plain(ownedGap[stack]),
   plain(' '),
   plain('.news {'),
-  plain(`  ${newsShrinks}`),
+  plain(`  ${newsShrinks[stack]}`),
   plain(`  transition: ${newsTransition}`),
   plain('  @starting-style {'),
   ...flatNews[stack].map(declaration => plain(`    ${declaration}`)),

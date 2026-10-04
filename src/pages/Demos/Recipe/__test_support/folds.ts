@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 export const recipeFolds = {
   story: (root: HTMLElement, title: string): HTMLElement => within(root).getByRole('group', {name: title}),
   steps: (story: HTMLElement): HTMLElement[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem'),
+  stepTitles: (story: HTMLElement): string[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem')
+    .map(step => within(step).getAllByRole('heading')[0].textContent),
   press: async (root: HTMLElement, title: string): Promise<HTMLElement> => {
     const story = within(root).getByRole('group', {name: title});
     await userEvent.click(within(story).getByRole('heading', {name: title}));

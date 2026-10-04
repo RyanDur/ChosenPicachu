@@ -1,4 +1,5 @@
 import bannersCss from '@components/Banners/Banners.css?raw';
+import {span} from '../../../Recipe/carve';
 import {
   arriveDistance, arriveStart, closedGap, closedSlot, closingGapTransition, closingTransition, flatNews, gapTransition,
   newsClosingTransition, newsShrinks, newsTransition, openingTransition, ownedGap, slideOutTransition, slideTransition, slotTrack
@@ -21,13 +22,22 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
     expect(bannersCss).toContain(declaration);
   });
 
-  test.each([arriveStart, slideTransition, slideOutTransition, newsShrinks, newsTransition, ...newsClosingTransition])(
+  test.each([slideTransition, slideOutTransition, newsTransition, ...newsClosingTransition, ...Object.values(newsShrinks)])(
     'every banner wears the declaration Banners.css gives it: %s', declaration => {
       expect(bannersCss).toContain(declaration);
     });
 
-  test.each(Object.entries(flatNews))('a %s stack flattens its message as Banners.css writes it', (_stack, declarations) => {
-    declarations.forEach(declaration => expect(bannersCss).toContain(declaration));
+  test.each(Object.entries(flatNews))('a %s stack starts its message flat, inside the message’s own starting style', (stack, declarations) => {
+    const axis = ['left', 'right'].includes(stack) ? '&:where(.stack-left, .stack-right) .news {' : '&:where(.stack-down, .stack-up) .news {';
+    const startingStyle = span(bannersCss, axis, '}').map(line => line.text).join('\n');
+    declarations.forEach(declaration => expect(startingStyle).toContain(declaration));
+  });
+
+  test('the banner starts at its distance inside the banner’s own starting style', () => {
+    const banner = span(bannersCss, '  .trouble {', '    }').map(line => line.text).join('\n');
+
+    expect(banner).toContain('@starting-style');
+    expect(banner).toContain(arriveStart);
   });
 
   test.each(declarationsOf(ownedGap))('the %s stack owns its gap, as Banners.css writes it', (_choice, rule) => {
