@@ -33,12 +33,15 @@ describe('why the popover wins', () => {
     expect(run).toHaveTextContent(/like the old list above, has no anchor, so it is left out\./);
   });
 
-  test('should name the toggle listener beside the markup that holds it', async () => {
+  test('should name the toggle in the run that follows the markup that holds it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const runs = within(part).getAllByRole('listitem');
+    const scripts = runs.indexOf(explanation.runTelling(part, /A toggle on the menu/));
 
-    expect(explanation.everyCodeBeside(part, /The menu also listens for toggle/).join()).toMatch(/onToggle=/);
+    expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/onToggle=/);
+    expect(runs[scripts - 1]).toBe(explanation.runTelling(part, /The button names its menu with popovertarget/));
   });
 
   test('should show the site’s menu placement and its fallback beside the run that says what each way costs', async () => {

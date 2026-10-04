@@ -32,11 +32,15 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
-            API</Mdn> does all of it. Script adds two things. A click on each choice keeps the pick, so the button can name
-          it. The menu also listens for toggle, the event the browser fires when a popover opens or closes, so the exhibit
-          above can say where the list opened. Each button carries a tabIndex, because by default Safari moves Tab only to text fields
-          and to elements that ask for it.</p>
+            API</Mdn> does all of it.</p>
         <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</menu>')}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">Script adds two things, and both wait for an event. An event is the browser telling the
+          page that something happened, such as a click, a key or a popover opening, and script can ask to hear it. A click
+          on each choice keeps the pick, so the button can name it. A toggle on the menu, the event for a popover opening or
+          closing, lets the trap above say where the list opened. Each button also carries a tabIndex, because by default
+          Safari moves Tab only to text fields and to elements that ask for it.</p>
       </li>
       <li className="run">
         <p className="paragraph">With the old way, any card around the menu that forms a stacking context traps it, and
