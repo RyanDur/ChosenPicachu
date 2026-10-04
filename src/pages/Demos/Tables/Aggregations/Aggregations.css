@@ -20,10 +20,8 @@
 @media (width <= 600px) {
   .aggregations {
     .fancy-table {
-      min-width: 64rem;
-
-      @media (pointer: coarse) {
-        min-width: 86rem;
+      @media not (pointer: coarse) {
+        min-width: 64rem;
       }
     }
 
