@@ -24,6 +24,8 @@ export type Pointing = 'right' | 'down' | 'nowhere';
 
 export type HoveredPaint = {ground: string; words: number[]};
 
+export type FocusedPaint = {ground: string; edge: number[]};
+
 export type Part = {
   fold: Locator;
   showsText: () => Promise<boolean>;
@@ -222,10 +224,25 @@ export const accordionsTab = (page: Page) => {
     await settled();
     return paintOf(await shotOf(insideTheHairlines(bar)));
   };
+  const restingAt = async (build: Build): Promise<HoveredPaint> => {
+    await page.mouse.move(0, 0);
+    const bar = await boxOf(partOf(build, 0).fold);
+    await settled();
+    return paintOf(await shotOf(insideTheHairlines(bar)));
+  };
+  const focusedByKeyboard = async (build: Build): Promise<FocusedPaint> => {
+    await page.mouse.move(0, 0);
+    await partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first().focus();
+    const bar = await boxOf(partOf(build, 0).fold);
+    await settled();
+    const rgba = await shotOf(insideTheHairlines(bar));
+    const middleRow = Math.floor((bar.height - 8) / 2) * Math.round(bar.width) * 4;
+    return {ground: paintOf(rgba).ground, edge: rgba.slice(middleRow, middleRow + 3)};
+  };
   const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
     const bar = await boxOf(partOf(build, 0).fold);
     await page.touchscreen.tap(bar.x + bar.width / 2, bar.y + bar.height / 2);
-    await page.waitForTimeout(1000);
+    await settled();
     return lightShare(await shotOf(insideTheHairlines({...bar, x: bar.x + bar.width - 80, width: 80}))) > 0.4;
   };
   return {
@@ -239,6 +256,8 @@ export const accordionsTab = (page: Page) => {
     },
     arrowOnTheFirstPartOf: (build: Build): Promise<Pointing> => arrowOn(nameOn(partOf(build, 0).fold)),
     hoveredAt,
+    restingAt,
+    focusedByKeyboard,
     endOfTheFirstBarLitAfterATap,
     partOf,
     htmlAloneFold,

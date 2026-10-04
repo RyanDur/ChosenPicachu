@@ -336,6 +336,8 @@ test.describe('a desktop', () => {
       await page.goto(showing('the checkbox build'));
       const lit = await tab.hoveredAt('the checkbox build', 'middle');
       await page.goto(showing(build));
+      const resting = await tab.restingAt(build);
+      expect(resting.ground, 'the bar at rest').not.toBe(lit.ground);
 
       for (const spot of ['start', 'middle', 'end'] as const) {
         const {ground, words} = await tab.hoveredAt(build, spot);
@@ -345,6 +347,19 @@ test.describe('a desktop', () => {
       await page.mouse.down();
       await page.mouse.up();
       await expect.poll(tab.firstPartOf(build).isOpen).toBe(true);
+    });
+
+    test(`a keyboard's focus on a bar of ${build} fills and rings the bar, as on a focused bar of the checkbox build`, async ({page}) => {
+      const tab = accordionsTab(page);
+      await page.goto(showing('the checkbox build'));
+      const focused = await tab.focusedByKeyboard('the checkbox build');
+      await page.goto(showing(build));
+      expect(focused.ground, 'a focused bar of the checkbox build').not.toBe((await tab.restingAt(build)).ground);
+
+      const {ground, edge} = await tab.focusedByKeyboard(build);
+
+      expect(ground, 'the bar\'s ground').toBe(focused.ground);
+      expect(Math.max(...edge.map((channel, at) => Math.abs(channel - focused.edge[at]))), 'the ring inside the bar\'s edge, off by').toBeLessThanOrEqual(antialiasing);
     });
   }
 });

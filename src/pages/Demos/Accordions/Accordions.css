@@ -108,13 +108,16 @@
         }
       }
 
+      &:has(input:focus-visible) {
+        background: var(--approach);
+        color: var(--ink);
+        outline: var(--hairline-x-2) solid var(--ring);
+        outline-offset: calc(var(--hairline-x-2) * -1);
+      }
+
       &:active::before {
         background: var(--field-inverse);
         color: var(--field);
-      }
-
-      &:active::before,
-      &:has(input:focus-visible)::before {
         outline: var(--hairline) solid var(--field);
         outline-offset: calc(var(--hairline-x-3) * -1);
       }
