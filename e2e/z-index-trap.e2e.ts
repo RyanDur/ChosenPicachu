@@ -47,6 +47,20 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
   });
 }
 
+test('going back past the box takes back the sentence, which no longer matches the cards', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const menu = trappedMenu(page);
+  await menu.contextChoice.click();
+  await menu.open();
+  await expect(menu.said).toContainText('over card two');
+  await page.keyboard.press('Escape');
+
+  await page.goBack();
+
+  await expect(menu.contextChoice).toBeChecked();
+  await expect(menu.said).toBeEmpty();
+});
+
 test('a choice in the gap takes a click, and the menu names it', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   const menu = trappedMenu(page);
