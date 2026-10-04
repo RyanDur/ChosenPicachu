@@ -2,24 +2,33 @@ import type {Locator, Page} from '@playwright/test';
 
 const margin = 4;
 
-const shot = async (page: Page, control: Locator): Promise<string> => {
-  const box = await control.boundingBox();
-  if (box === null) throw new Error('the control is not shown');
+type Box = {x: number; y: number; width: number; height: number};
+
+const around = async (marked: readonly Locator[]): Promise<Box> => {
+  const boxes = (await Promise.all(marked.map(part => part.boundingBox()))).flatMap(box => box === null ? [] : [box]);
+  if (boxes.length === 0) throw new Error('the control is not shown');
+  const [left, top] = [Math.min(...boxes.map(({x}) => x)), Math.min(...boxes.map(({y}) => y))];
+  const [right, bottom] = [Math.max(...boxes.map(({x, width}) => x + width)), Math.max(...boxes.map(({y, height}) => y + height))];
+  return {x: left, y: top, width: right - left, height: bottom - top};
+};
+
+const shot = async (page: Page, marked: readonly Locator[]): Promise<string> => {
+  const box = await around(marked);
   const clip = {x: box.x - margin, y: box.y - margin, width: box.width + 2 * margin, height: box.height + 2 * margin};
   return (await page.screenshot({clip, scale: 'css', animations: 'disabled'})).toString('base64');
 };
 
 // a focus indicator counts where the focused pixel differs from the unfocused one by 3:1 or more; it must cover a ring
 // one pixel round the control at least
-export const focusStandsOut = async (page: Page, control: Locator, marked = control): Promise<{changed: number; ring: number}> => {
-  await marked.scrollIntoViewIfNeeded();
+export const focusStandsOut = async (page: Page, control: Locator, marked: readonly Locator[] = [control]): Promise<{changed: number; ring: number}> => {
+  await control.scrollIntoViewIfNeeded();
   await page.mouse.move(0, 0);
   const before = await shot(page, marked);
   await page.keyboard.press('Shift');
   await control.focus();
   const after = await shot(page, marked);
-  const box = await marked.boundingBox();
-  const ring = box === null ? 0 : 2 * (box.width + box.height);
+  const box = await around(marked);
+  const ring = 2 * (box.width + box.height);
   const changed = await page.evaluate(async ([unfocused, focused]) => {
     const pixels = async (src: string): Promise<Uint8ClampedArray> => {
       const image = new Image();

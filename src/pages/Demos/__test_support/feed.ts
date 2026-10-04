@@ -1,20 +1,25 @@
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {FEED, feedLink, server} from '@__test_support/server';
 
+export type Taken = 'bought' | 'sold';
+
+// Coinbase marks a trade with the side of the order that was waiting, so a trade a buyer took is marked sell
+export const coinbaseSide = (taken: Taken): 'buy' | 'sell' => taken === 'bought' ? 'sell' : 'buy';
+
 type FrameParts = {
   price: string;
   id: number;
   at?: number;
   size?: string;
-  side?: string;
+  taken?: Taken;
 };
 
-export const tradeFrameWith = ({price, id, at = 1700000000000, size = '0.01', side = 'buy'}: FrameParts): string => JSON.stringify({
+export const tradeFrameWith = ({price, id, at = 1700000000000, size = '0.01', taken = 'sold'}: FrameParts): string => JSON.stringify({
   type: 'match',
   trade_id: id,
   maker_order_id: 'maker',
   taker_order_id: 'taker',
-  side,
+  side: coinbaseSide(taken),
   size,
   price,
   product_id: 'BTC-USD',
@@ -22,8 +27,8 @@ export const tradeFrameWith = ({price, id, at = 1700000000000, size = '0.01', si
   time: new Date(at).toISOString()
 });
 
-export const tradeFrame = (price: number, at = 1700000000000, size = '0.01', side = 'buy'): string =>
-  tradeFrameWith({price: String(price), id: 900000 + price, at, size, side});
+export const tradeFrame = (price: number, at = 1700000000000, size = '0.01', taken: Taken = 'sold'): string =>
+  tradeFrameWith({price: String(price), id: 900000 + price, at, size, taken});
 
 export const nonTradeFrame = (price: number): string => JSON.stringify({
   type: 'ticker',

@@ -10,10 +10,10 @@ import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
 const fourTrades = [
-  tradeFrame(50001, now - 30 * 60000, '0.10', 'sell'),
-  tradeFrame(50002, now - 10 * 60000, '0.25', 'buy'),
-  tradeFrame(50003, now - 3 * 60000, '0.05', 'sell'),
-  tradeFrame(50004, now, '0.01', 'sell')
+  tradeFrame(50001, now - 30 * 60000, '0.10', 'bought'),
+  tradeFrame(50002, now - 10 * 60000, '0.25', 'sold'),
+  tradeFrame(50003, now - 3 * 60000, '0.05', 'bought'),
+  tradeFrame(50004, now, '0.01', 'bought')
 ];
 
 const dragSortRecipe = async (): Promise<HTMLElement> => {
@@ -836,7 +836,8 @@ describe('the drag sort recipe’s words', () => {
   test.each([
     ['the drawing', 'A dead zone at the near edge of its neighbour holds still: a quarter of the neighbour’s width, or more when the neighbour is much the wider. Past it, the two switch.'],
     ['the walk', 'To find the column under the pointer, the code adds the columns’ widths from the left until the total passes the pointer’s x.'],
-    ['the dead zone', 'The dead zone is a quarter of that column’s width, or half the difference between it and the carried column when that is more,']
+    ['the dead zone', 'The dead zone is a quarter of that column’s width, or half the difference between it and the carried column when that is more,'],
+    ['the plain boundary', 'switch a narrow column past a wide one at first touch, and the wide one lands back under the resting pointer, ready to switch straight back.']
   ])('should say where a switch counts as the code decides it, in %s', async (_where, sentence) => {
     expect(await dragSortRecipe()).toHaveTextContent(sentence);
   });

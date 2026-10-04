@@ -2,24 +2,21 @@ import {render, screen} from '@testing-library/react';
 import {bucketPressure, pressureShapes} from '@pages/Demos/Charts/Pressure/shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
 import {bitcoin} from '@pages/Demos/Charts/money';
-import {Trade} from '@pages/Demos/Charts/coinbase';
-
-const trade = (overrides: Partial<Trade>): Trade =>
-  ({id: 1, price: 65000, tradedAt: 1700000000000, size: 1, side: 'sell', ...overrides});
+import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('pressure', () => {
   test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
     expect(bucketPressure([
-      trade({tradedAt: 60000, size: 2, side: 'sell'}),
-      trade({id: 2, tradedAt: 61000, size: 5, side: 'buy'})
+      aTrade({tradedAt: 60000, size: 2, side: 'sell'}),
+      aTrade({id: 2, tradedAt: 61000, size: 5, side: 'buy'})
     ], 60000)).toEqual([{openedAt: 60000, bought: 2, sold: 5}]);
   });
 
   test('trades bucket by window, split by side', () => {
     expect(bucketPressure([
-      trade({tradedAt: 60000, size: 2, side: 'sell'}),
-      trade({id: 2, tradedAt: 61000, size: 1, side: 'buy'}),
-      trade({id: 3, tradedAt: 120000, size: 3, side: 'buy'})
+      bought(2, {tradedAt: 60000}),
+      sold(1, {id: 2, tradedAt: 61000}),
+      sold(3, {id: 3, tradedAt: 120000})
     ], 60000)).toEqual([
       {openedAt: 60000, bought: 2, sold: 1},
       {openedAt: 120000, bought: 0, sold: 3}
@@ -42,8 +39,8 @@ describe('pressure', () => {
 
   test('the card bars the sides around the midline', () => {
     render(<Pressure trades={[
-      trade({size: 2, side: 'sell'}),
-      trade({id: 2, tradedAt: 1700000001000, size: 1, side: 'buy'})
+      bought(2),
+      sold(1, {id: 2, tradedAt: 1700000001000})
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pressure'});

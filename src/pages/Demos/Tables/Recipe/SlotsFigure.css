@@ -10,11 +10,11 @@
     vector-effect: non-scaling-stroke;
   }
 
-  .dead {
+  .part.still {
     fill: var(--faded-leather);
   }
 
-  .inner {
+  .part.swaps {
     fill: var(--faded-mint);
   }
 }

@@ -20,6 +20,7 @@ export const galleryPage = (page: Page) => {
     },
     submitSearch: page.getByRole('button', {name: 'submit search'}),
     resetSearch: page.getByRole('button', {name: 'reset search'}),
+    go: page.getByRole('button', {name: 'Go', exact: true}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
     settingsPanel: page.getByRole('complementary', {name: 'gallery settings'}),
     searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {

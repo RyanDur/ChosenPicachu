@@ -12,8 +12,8 @@ export const SlotsFigure: FC = () =>
     <rect className="slot" x="120" y="20" width="160" height="70"/>
     <rect className="slot" x="280" y="20" width="90" height="70"/>
     <rect className="slot" x="370" y="20" width="100" height="70"/>
-    <rect className="dead" x="120" y="20" width="40" height="70"/>
-    <rect className="inner" x="160" y="20" width="120" height="70"/>
+    <rect className="part still" x="120" y="20" width="40" height="70"/>
+    <rect className="part swaps" x="160" y="20" width="120" height="70"/>
     <text className="drawn-caption" x="65" y="60" textAnchor="middle">carried</text>
     <text className="drawn-caption" x="140" y="12" textAnchor="middle">dead</text>
     <text className="drawn-caption" x="220" y="110" textAnchor="middle">a switch counts</text>
