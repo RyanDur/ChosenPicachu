@@ -47,7 +47,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
-      <ul className="dials">
+      <ul>
         <DialRow label="pace"
           name={`${copy.kind}-pace`}
           options={[

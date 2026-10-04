@@ -167,6 +167,18 @@ describe('the fold choices', () => {
     return rows[rows.length - 1];
   };
 
+  test('should keep the accordion in HTML alone the same with exclusive and static chosen', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive&style=static')}/>);
+
+    const htmlAlone = await screen.findByRole('region', {name: 'An accordion in HTML alone'});
+    const [first, second] = within(htmlAlone).getAllByRole('group');
+    await userEvent.click(within(first).getByText(/^\w+$/));
+    await userEvent.click(within(second).getByText(/^\w+$/));
+
+    expect(first).toHaveAttribute('open');
+    expect(second).toHaveAttribute('open');
+  });
+
   test('should say, just before the rows, which accordions they set', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

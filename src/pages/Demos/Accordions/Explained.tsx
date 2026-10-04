@@ -121,7 +121,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h3 id="fold-choices-heading" className="off-screen">fold choices</h3>
       <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
         they don’t change it.</p>
-      <ul className="dials">
+      <ul>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
           <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}

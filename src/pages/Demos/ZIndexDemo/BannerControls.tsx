@@ -48,7 +48,7 @@ export type BannerControlsProps = {
 export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen}) =>
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
-    <ul className="dials">
+    <ul>
       <DialRow label="side"
         name="banner-side"
         options={[

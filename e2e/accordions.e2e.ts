@@ -395,12 +395,14 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
         const widths = await Promise.all((await shownNames.all()).map(async shown => (await shown.boundingBox())?.width ?? 0));
         expect(Math.max(...widths), `the widest copy of ${name}`).toBeGreaterThan(name.length * 4);
       }
-      await expect(dialRow(page, 'fold type').row).toMatchAriaSnapshot(`
-        - listitem:
-          - /children: equal
-          - group "fold type"
-          - status
-      `);
+      for (const name of ['fold type', 'fold motion']) {
+        await expect(dialRow(page, name).row).toMatchAriaSnapshot(`
+          - listitem:
+            - /children: equal
+            - group "${name}"
+            - status
+        `);
+      }
     });
 
     test('the fold choices keep their pills in the row, each a finger tall, beside the reading of the chosen one', async ({page}) => {
