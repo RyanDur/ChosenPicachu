@@ -316,7 +316,36 @@ describe('a list of charts', () => {
     expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
     expect(screen.getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeInTheDocument();
     expect(screen.getByRole('heading', {name: 'The trader can watch the price move, live', level: 4})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'Open the stream', level: 5})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Open a socket, and keep only what decodes', level: 5})).toBeInTheDocument();
+  });
+
+  describe('the price line’s story', () => {
+    const priceStory = async (): Promise<HTMLElement> => {
+      const feed = await listeningFeed();
+      render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
+      await screen.findByRole('heading', {name: 'price line tutorial', level: 2});
+      return recipeFolds.story(document.body, 'The trader can watch the price move, live');
+    };
+
+    test('should head each step with what happens', async () => {
+      expect(recipeFolds.stepTitles(await priceStory())).toEqual([
+        'Open a socket, and keep only what decodes',
+        'Fetch the recent past, and join it to the live trades',
+        'Group the live trades into candles',
+        'Let the trader choose the period',
+        'Turn each candle into a point on the line',
+        'Label the prices and the time'
+      ]);
+    });
+
+    test.each([
+      ['the popover is taught on the z-index tab', 'It is a popover, the kind of menu the z-index tab explains.'],
+      ['the three periods', 'The hour has candles of a minute, 60 of them, marked every ten minutes. The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them, marked every day.'],
+      ['only the dot moves', 'Nothing on the page is measured, and the line is never animated: it is drawn again. Only the dot on the newest point moves, sliding to its new place over 300 milliseconds.'],
+      ['the three price labels', 'At the side it labels the highest price, the lowest, and the one midway between them.']
+    ])('should say what the code does: %s', async (_claim, sentence) => {
+      expect(await priceStory()).toHaveTextContent(sentence);
+    });
   });
 
   test('the workspace tutorial names its story and steps in the heading outline', async () => {

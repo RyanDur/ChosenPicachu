@@ -36,22 +36,23 @@ const priceStory =
   <Story param="graph" id="price"
     can="The trader can watch the price move, live"
     soThat="the session reads at a glance">
-    <Tell>We could reach for a chart library, but the promise is one line and two axes; so
-      the line is an SVG polyline whose points are arithmetic over the trades we already
-      hold, and everything the card shows derives fresh on every render.</Tell>
-    <Tell>The stream writes faster than an eye reads; so the trades bucket into windows,
-      one candle per window. History hydrates the left of the line, the live feed writes
-      the right, and the merge keeps a single truth in time order.</Tell>
+    <Tell>We could reach for a chart library, but this chart is one line and two axes. So the line is drawn with SVG, the
+      browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.</Tell>
+    <Tell>The candles and the points are never stored. Every time React redraws the chart, they are worked out again
+      from the trades.</Tell>
+    <Tell>Trades arrive faster than anyone can read, so they are grouped into equal spans of time. Each span becomes one
+      candle: a record of where the price opened, how high and how low it reached, and where it closed. The past is
+      fetched and fills the left of the line, the live feed fills the right, and the two are joined in time order.</Tell>
     <Steps>
-      <Step title="Open the stream">
-        <Words want="A live chart starts with a conversation: the exchange speaks in frames, and every frame is a stranger until it proves otherwise.">
-          <Says>The browser opens
-            a <Mdn path="Web/API/WebSocket">WebSocket</Mdn> and asks for one product’s
-            matches. Every frame then runs a gauntlet: parse, a strict decoder that
-            names exactly the shape a match may take, and number conversions that
-            refuse NaN. What survives is a Trade; what does not never reaches state.
-            And the page keeps only the newest 1500, because the stream never ends and
-            the page must not grow with it.</Says>
+      <Step title="Open a socket, and keep only what decodes">
+        <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
+          <Says>The browser opens a <Mdn path="Web/API/WebSocket">WebSocket</Mdn>, a connection the server can keep sending
+            on, and asks the exchange for one product’s matches. A match is one trade.</Says>
+          <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields a
+            match has, each of the right kind. And its price, its size and its time have to turn into real numbers. What
+            passes is a Trade. What fails never reaches the page’s state.</Says>
+          <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
+            it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -62,13 +63,12 @@ const priceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Hydrate the past">
-        <Words want="The trader arrives mid-session; the left of the chart existed before they did.">
-          <Says>The exchange also answers
-            over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>: recent candles at the
-            period’s granularity, decoded with the same suspicion. mergeLive stitches
-            the two truths into one: history where the stream has not spoken, the
-            stream everywhere it has, capped to what the card can hold.</Says>
+      <Step title="Fetch the recent past, and join it to the live trades">
+        <Words want="The trader arrives mid-session. The left of the chart happened before they came.">
+          <Says>The exchange also answers plain requests over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>. The page asks it for
+            recent candles, each the size the chosen period uses, and checks them as it checks the live messages.</Says>
+          <Says>mergeLive joins the two. It takes the fetched candles up to where the live ones begin, then the live ones,
+            and keeps only as many as the chart shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -79,12 +79,12 @@ const priceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Bucket the stream into candles">
-        <Words want="Raw trades tick too fast to draw; the line needs one point per window.">
-          <Says>bucketTrades folds the live trades into one candle per window: the first
-            price opens it, every trade stretches its reach, and the last one closes it.
-            One candle per window is one point per window, which is all a line
-            needs.</Says>
+      <Step title="Group the live trades into candles">
+        <Words want="Raw trades arrive too fast to draw. The line needs one point for each span of time.">
+          <Says>bucketTrades goes through the live trades in order and makes one candle for each span. The first trade in a
+            span opens the candle. Each later one raises its high or lowers its low if it has to, becomes its close, and
+            adds to its volume.</Says>
+          <Says>One candle for each span is one point for each span, which is all a line needs.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -93,13 +93,15 @@ const priceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Choose the window">
-        <Words want="A minute of scalping and a session of context are different questions; the trader picks the window, and every measure follows it.">
-          <Says>The period menu rides the card, the same
-            native <Mdn path="Web/API/Popover_API">popover</Mdn> chooser the tables
-            taught. Each period carries its own bucket size, its cap on how many candles
-            a card holds, and how often the time axis speaks; choosing one refetches
-            history at that granularity.</Says>
+      <Step title="Let the trader choose the period">
+        <Words want="A trader watching the last few minutes and one reading the whole week are asking different questions. The trader picks the period, and everything on the chart follows it.">
+          <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of menu
+            the z-index tab explains.</Says>
+          <Says>Each period has its own span for a candle, its own limit on how many candles the chart holds, and its own
+            spacing for the marks on the time axis. The hour has candles of a minute, 60 of them, marked every ten minutes.
+            The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them,
+            marked every day.</Says>
+          <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -111,13 +113,14 @@ const priceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Draw the line from arithmetic">
-        <Words want="The price line must stay smooth while the stream writes, on slow machines too.">
-          <Says>Every candle becomes a point by proportion: time across the width,
-            price down the height. The result feeds one
-            SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>; a new trade means new
-            points and React paints the new line, nothing is measured and nothing
-            animates, which is what keeps a busy stream smooth.</Says>
+      <Step title="Turn each candle into a point on the line">
+        <Words want="The line has to stay smooth while trades keep arriving, on a slow machine too.">
+          <Says>Each candle becomes a point by proportion. Its time sets how far across the point is, and its closing price
+            sets how far down, with the highest price at the top.</Says>
+          <Says>The points go to one SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>, a line drawn through a list of
+            points. A new trade means new points, and React draws the new line. Nothing on the page is measured, and the line is
+            never animated: it is drawn again. Only the dot on the newest point moves, sliding to its new place over 300
+            milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -128,11 +131,12 @@ const priceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Let the axes speak">
-        <Words want="A naked line is a shape, not a chart; the trader needs the high, the low, and the hour under it.">
-          <Says>Axes wraps any chart body: the high and low label the vertical reach,
-            and time ticks land every tickEveryMs, patterned per period, so an hour
-            chart speaks minutes and a session chart speaks hours.</Says>
+      <Step title="Label the prices and the time">
+        <Words want="A line with no labels is a shape, not a chart. The trader needs the high, the low and the time under it.">
+          <Says>Axes wraps the body of any chart. At the side it labels the highest price, the lowest, and the one midway
+            between them. Along the bottom it marks the time.</Says>
+          <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour on the
+            day chart, every day on the week chart.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
