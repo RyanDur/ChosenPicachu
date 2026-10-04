@@ -14,7 +14,7 @@ type Travel = {
 export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const [armed, setArmed] = useState<Maybe<number>>(nothing());
   const [aloft, setAloft] = useState<Maybe<number>>(nothing());
-  const [aloftLead, setAloftLead] = useState(0);
+  const [mark, setMark] = useState(0);
   const [pushed, setPushed] = useState<Pushed>({});
 
   const isArmed = (at: number) => armed.map(seat => seat === at).orElse(false);
@@ -31,7 +31,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
 
   const lift = (at: number) => (event: DragEvent<HTMLElement>) => {
     event.dataTransfer.effectAllowed = 'move';
-    setAloftLead(event.clientY - event.currentTarget.getBoundingClientRect().top);
+    setMark(event.clientY + scrollY);
     setAloft(maybe(at));
   };
 
@@ -39,12 +39,10 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     node instanceof HTMLElement ? node.getBoundingClientRect() : undefined;
 
   const resting = (node: Element | null | undefined) =>
-    node instanceof HTMLElement && node.getAnimations().length === 0
-      ? node.getBoundingClientRect()
-      : undefined;
+    node instanceof HTMLElement && node.getAnimations().length === 0;
 
-  const swap = (held: number, to: number, landingTop: number, hand: number) => {
-    setAloftLead(hand - landingTop);
+  const swap = (held: number, to: number, hand: number) => {
+    setMark(hand);
     setPushed({[held]: to > held ? 'up' : 'down'});
     onSeated(held, to, {replace: true});
     setAloft(maybe(to));
@@ -59,14 +57,13 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
       if (!seat) {
         return;
       }
-      const to = strayedTo(event.clientY, seat.top + aloftLead, seat.height / 3, held);
+      const hand = event.clientY + scrollY;
+      const to = strayedTo(hand, mark, seat.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
-      const landing = resting(slots?.item(to));
-      if (landing) {
-        const landingTop = to > held ? seat.top + landing.height : seat.top - landing.height;
-        swap(held, to, landingTop, event.clientY);
+      if (resting(slots?.item(to))) {
+        swap(held, to, hand);
       }
     });
   };

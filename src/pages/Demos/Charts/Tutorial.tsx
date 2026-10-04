@@ -399,8 +399,8 @@ const workspaceStory =
       </Step>
       <Step title="A chart swaps once the hand has moved a third of its height">
         <Words want="A chart is large and the hand holds only its grip. So the swap is measured from the hand, not from the chart’s far edge.">
-          <Says>On dragstart, the event the browser sends when a drag begins, the code marks where on the chart the
-            hand is. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand
+          <Says>On dragstart, the event the browser sends when a drag begins, the code marks where the hand is on
+            the page. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand
             with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under it;
             a third above, with the one over it. Then the mark is set again to where the hand is.</Says>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall

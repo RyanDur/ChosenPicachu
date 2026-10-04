@@ -66,8 +66,31 @@ export const chartsPage = (page: Page) => {
     };
     return {whenTheDragBegan: await opacityAtDragStart.evaluate(({seen}) => seen), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity)), dropped};
   };
+  const carryByTheGrip = async (region: string): Promise<{height: number; handWhenTheyTrade: (step: number) => Promise<number>}> => {
+    const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
+    await chart.hover();
+    const [box, grip] = await Promise.all([chart.boundingBox(), chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox()]);
+    if (box === null || grip === null) throw new Error(`the ${region} chart has no grip`);
+    const x = grip.x + grip.width / 2;
+    let hand = grip.y + grip.height / 2;
+    await page.mouse.move(x, hand);
+    await page.mouse.down();
+    hand += 10;
+    await page.mouse.move(x, hand, {steps: 5});
+    const handWhenTheyTrade = async (step: number): Promise<number> => {
+      const order = page.url();
+      for (const start = hand; Math.abs(hand - start) < box.height; hand += step) {
+        await page.mouse.move(x, hand);
+        if (page.url() !== order) return hand;
+      }
+      throw new Error(`the ${region} chart never traded places`);
+    };
+    return {height: box.height, handWhenTheyTrade};
+  };
   return {
     holdByTheGrip,
+    carryByTheGrip,
+    stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
     explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),
     priceCard,
     priceCardScope: async (): Promise<string> => `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
