@@ -131,7 +131,7 @@ const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
-      aside('// …the press measures; the descent stops here'), gap,
+      aside('// …the press measures; the bubbling stops here'), gap,
       ...unit(sharesSource, 'export const resizeArrows'), gap,
       ...span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
       aside('// the column drag above never hears a thing')
@@ -140,7 +140,7 @@ const gestureCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
-      aside('// …the press measures; the descent stops here'), gap,
+      aside('// …the press measures; the bubbling stops here'), gap,
       ...unit(frameResize, "handle.addEventListener('keydown'"),
       aside('// the column drag above never hears a thing')
     ]}/>
@@ -158,10 +158,11 @@ const widenStory = (world: World) =>
       between neighbours: whatever one column gains, the next gives, and the sum cannot
       change.</Tell>
     <Tell>The header cell lets each control find its own edge, and pads for whatever it holds,
-      so the handle sits at the boundary without a box to arrange it. It captures its pointer
-      and measures the table once, pixels per share; it
-      stops pointer descent, so a boundary drag never becomes a column drag; and the
-      keyboard gets the same road, one fixed step per arrow.</Tell>
+      so the handle sits at the boundary without a box to arrange it. It captures its pointer and measures the
+      table once, pixels per share. A press on the handle would bubble, which means the browser hands it on to the
+      header around it, and the header would start a column drag. So the handle stops the press there, and a
+      boundary drag never becomes a column drag. Arrow keys on a focused handle make the same trade, one fixed step
+      per arrow.</Tell>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the promise that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
@@ -249,9 +250,8 @@ const widenStory = (world: World) =>
       </Step>
       <Step title="Two gestures, one header">
         <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
-          <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop pointer
-            descent</Mdn>, and the keyboard should get its own road: a fixed step per
-            arrow.</Says>
+          <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop its press from bubbling</Mdn> up to
+            the header, and arrow keys on the handle should make the same trade as a drag, a fixed step per arrow.</Says>
         </Words>
         <Reveal>
           <Says>The sort never hears the press, and the arrow keys trade a fixed step with no

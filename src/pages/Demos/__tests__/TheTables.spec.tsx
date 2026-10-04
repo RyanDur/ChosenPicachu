@@ -467,6 +467,9 @@ describe('the tables demo', () => {
 
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toHaveTextContent(/neither side drops below its floor/);
+    expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser hands it on to the header around it/);
+    expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
+    expect(resize).not.toHaveTextContent(/descent|road/);
     expect(resize).toHaveTextContent(/never less than the slimmest share, 5% of the table/);
     expect(resize).toHaveTextContent(/const SLIMMEST = 5;[^]*const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
   });
