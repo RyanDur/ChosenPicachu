@@ -117,7 +117,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
       </ol>
     </section>
-    <section className="fold-choices">
+    <section aria-labelledby="fold-choices-heading" className="fold-choices">
+      <h3 id="fold-choices-heading" className="off-screen">fold choices</h3>
       <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
         they don’t change it.</p>
       <ul className="dials">

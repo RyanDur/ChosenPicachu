@@ -11,12 +11,22 @@ const parts = ['How we used to build a fold', 'What the platform gives now', 'Th
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /export const foldMeasured/];
 
 describe('the accordions tab', () => {
-  test('should start with HTML alone, then tell the old way, the platform, the two together, and how every fold moves', async () => {
+  test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how every fold moves', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
 
-    expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual([htmlAlone, ...parts]);
+    expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual([htmlAlone, 'fold choices', ...parts]);
+  });
+
+  test('should name the fold choices’ section by its heading, with the line and both rows inside it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const choices = await screen.findByRole('region', {name: 'fold choices'});
+
+    expect(within(choices).getByText(/^Two choices set the accordions/)).toBeVisible();
+    expect(within(choices).getByRole('group', {name: 'fold type'})).toBeVisible();
+    expect(within(choices).getByRole('group', {name: 'fold motion'})).toBeVisible();
   });
 
   test('should open on the inclusive type, and write the type chosen into the address', async () => {
