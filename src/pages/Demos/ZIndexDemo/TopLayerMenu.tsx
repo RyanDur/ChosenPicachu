@@ -1,11 +1,11 @@
 import {FC, useId, useState} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
-import {SortChoice, sortChoices} from './sort-choices';
+import {SortChoice, sortChoices, sortByWords} from './sort-choices';
 
 export const TopLayerMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const menu = useId();
   const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
-  const words = chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by');
+  const words = sortByWords(chosen);
 
   return <>
     <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu} aria-label={`${words}, in the top layer`}>{words}</button>

@@ -1,6 +1,6 @@
 import {FC, FocusEvent, KeyboardEvent, useEffect, useId, useState} from 'react';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
-import {SortChoice, sortChoices} from './sort-choices';
+import {SortChoice, sortChoices, sortByWords} from './sort-choices';
 
 const steps: Partial<Record<string, (at: number, count: number) => number>> = {
   ArrowDown: (at, count) => (at + 1) % count,
@@ -65,7 +65,7 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
     }
   };
 
-  const words = chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by');
+  const words = sortByWords(chosen);
 
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
