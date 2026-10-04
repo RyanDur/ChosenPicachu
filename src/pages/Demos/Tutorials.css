@@ -201,6 +201,7 @@
 
   .design-still {
     margin: 0;
+    min-width: 0;
     justify-self: stretch;
     padding: var(--base-x-2_5);
     border: var(--hairline-x-2) dashed var(--charcoal);
@@ -208,27 +209,38 @@
     gap: var(--base-x-2);
   }
 
+  /* a sketch wider than a phone scrolls inside its own frame, as the real tables do, so the page holds still */
   .design-sketch {
     display: grid;
     gap: var(--base);
+    overflow-x: auto;
   }
 
-  .design-header,
-  .design-row {
-    display: grid;
-    grid-template-columns: 14ch repeat(6, minmax(0, 1fr));
-    gap: var(--base);
-    align-items: center;
+  .design-table {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: var(--base);
+    margin: calc(-1 * var(--base));
+  }
+
+  /* six equal shares of the width, a preference a table column still widens past to fit its name */
+  .design-column {
+    inline-size: 14%;
   }
 
   .design-measure {
     font-size: var(--text-caption);
     font-weight: bold;
+    text-align: start;
   }
 
   .design-window {
     font-size: var(--text-caption);
+    font-weight: normal;
     color: var(--ink-muted);
+    text-align: start;
+    vertical-align: middle;
+    white-space: nowrap;
   }
 
   .sliced {

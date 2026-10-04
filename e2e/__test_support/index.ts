@@ -27,3 +27,4 @@ export {bannerLeavesBeforeTheGapCloses, bannerMotion, gapOpensBeforeTheBannerIsS
 export {definitionTapped, type DefinitionFit} from './terms';
 export {focusStandsOut} from './focus';
 export {reachesAcross} from './reach';
+export {designSketch} from './design-sketch';

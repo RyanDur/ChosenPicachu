@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Design} from '../../Recipe/Arc';
 
-const measures = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
+const measures = ['trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 const unanswered = [
@@ -11,16 +11,22 @@ const unanswered = [
   'Which measures are worth ranking at all.'
 ];
 
-const sketch = <>
-  <div className="design-header">
-    {measures.map(measure => <span className="design-measure" key={measure}>{measure}</span>)}
-  </div>
-  {windows.map(window =>
-    <div className="design-row" key={window}>
-      <span className="design-window">{window}</span>
-      {measures.slice(1).map(measure => <span className="design-cell" key={measure}/>)}
-    </div>)}
-</>;
+const sketch =
+  <table className="design-table">
+    <thead>
+      <tr>
+        <th className="design-measure" scope="col">window</th>
+        {measures.map(measure => <th className="design-measure design-column" scope="col" key={measure}>{measure}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {windows.map(window =>
+        <tr key={window}>
+          <th className="design-window" scope="row">{window}</th>
+          {measures.map(measure => <td className="design-cell design-column" key={measure}/>)}
+        </tr>)}
+    </tbody>
+  </table>;
 
 export const DesignAsk: FC = () =>
   <Design sketch={sketch}
