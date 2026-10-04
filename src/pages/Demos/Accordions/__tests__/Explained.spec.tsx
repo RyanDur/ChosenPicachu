@@ -210,7 +210,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.codeBeside(platform, /This replaces the three old ways/)).toHaveTextContent('.drawer &::details-content');
+    expect(explanation.everyCodeBeside(platform, /A pseudo-element is a part of an element/).join()).toContain('.drawer &::details-content');
   });
 
   test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
@@ -340,8 +340,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['One guess, two parts', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
-    ['exclusive', parts[0], ['One guess, two parts', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
+    ['inclusive', parts[0], ['One guess, two parts', 'The known height', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar']],
+    ['exclusive', parts[0], ['One guess, two parts', 'The known height', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
@@ -455,5 +455,32 @@ describe('the accordion in HTML alone', () => {
 
     expect(code).toMatch(/<ul>[^]*<details>[^]*<summary>basalt<\/summary>[^]*<summary>meadow<\/summary>[^]*<\/ul>/);
     expect(code).not.toMatch(/className|on[A-Z]\w*=/);
+  });
+});
+
+describe('the depth of each part', () => {
+  test.each([
+    [parts[0], 'How the measured height works', /Most of us reached next for script/, /Closing runs the other way/],
+    [parts[0], 'How the known height works', /Here every panel is the same height/, /You want the reader to see a bar/],
+    [parts[1], 'How details works', /This replaces the three old ways/, /A pseudo-element is a part of an element/],
+    [parts[2], 'How the two work together', /Details slides to its content’s height/, /A row closes only as far as its item can/]
+  ])('should keep, under "%s", a closed fold named "%s" with the depth inside it and the point outside it', async (part, fold, point, depth) => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: part});
+    const folded = within(explained).getByRole('group', {name: fold});
+
+    expect(folded).not.toHaveAttribute('open');
+    expect(folded).toContainElement(within(explained).getByText(depth));
+    expect(folded).not.toContainElement(within(explained).getByText(point));
+  });
+
+  test('should tell, under reveal, what content-visibility is before what allow-discrete does with it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=reveal')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(within(platform).getByText(/A pseudo-element is a part of an element/))
+      .toHaveTextContent('Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open.');
   });
 });

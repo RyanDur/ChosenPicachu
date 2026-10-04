@@ -154,40 +154,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
         </li>
         <li className="run">
-          <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
-            through a custom property, a value the stylesheet can read, named --measured-height, and while the
-            class sized is on, the panel’s height reads it. To close, the script sets the open height, then 0, and
-            the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
-            when the change event fires, so the script first pins where the motion starts, with a second class,
-            unmoving, that switches the height’s transition off for that moment.</p>
-          <Snippet label="TS" lines={[
-            ...unit(measuredSource, 'const setsHeight'), gap,
-            ...unit(measuredSource, 'const startsAt'), gap,
-            ...unit(measuredSource, 'const closed')
-          ]}/>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
-            ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
-          ]}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">A press while the panel moves keeps sized on and only sets a new end, so the
-            panel turns around from where it is. If that end is where the panel already stands, no motion is left
-            to run, and the script takes the number away at once.</p>
-          <Snippet label="TS" lines={[
-            ...unit(measuredSource, 'const movesTo'), gap,
-            ...unit(measuredSource, 'const stillMoving')
-          ]}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all, so
-            the script asks the whole list which parts are open. </>}This page lets its other folds move to auto,
-            and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
-            the trick was for browsers that could only move between numbers.</p>
-          {type === 'exclusive' && <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>}
-          <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
-        </li>
-        <li className="run">
           <p className="paragraph">The cost was script. The motion needs it, but whether a part is open does not:
             the checkbox and the stylesheet own that, so if the script fails, a part still opens and closes, at
             once.</p>
@@ -195,6 +161,47 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
             ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
           ]}/>
+        </li>
+        <li className="part-depth">
+          <details aria-labelledby="measured-depth">
+            <summary id="measured-depth" className="depth-opener bold">How the measured height works</summary>
+            <ol className="runs">
+              <li className="run">
+                <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
+                  through a custom property, a value the stylesheet can read, named --measured-height, and while the
+                  class sized is on, the panel’s height reads it. To close, the script sets the open height, then 0, and
+                  the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
+                  when the change event fires, so the script first pins where the motion starts, with a second class,
+                  unmoving, that switches the height’s transition off for that moment.</p>
+                <Snippet label="TS" lines={[
+                  ...unit(measuredSource, 'const setsHeight'), gap,
+                  ...unit(measuredSource, 'const startsAt'), gap,
+                  ...unit(measuredSource, 'const closed')
+                ]}/>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
+                  ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
+                ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">A press while the panel moves keeps sized on and only sets a new end, so the
+                  panel turns around from where it is. If that end is where the panel already stands, no motion is left
+                  to run, and the script takes the number away at once.</p>
+                <Snippet label="TS" lines={[
+                  ...unit(measuredSource, 'const movesTo'), gap,
+                  ...unit(measuredSource, 'const stillMoving')
+                ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all, so
+                  the script asks the whole list which parts are open. </>}This page lets its other folds move to auto,
+                  and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
+                  the trick was for browsers that could only move between numbers.</p>
+                {type === 'exclusive' && <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>}
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
+              </li>
+            </ol>
+          </details>
         </li>
       </ol>
       {type === 'inclusive'
@@ -207,153 +214,162 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             what the elements hold, and what the stylesheet can read.</p>
         </li>
         <li className="run">
-          {type === 'inclusive'
-            ? <p className="paragraph">To open and close a part, something has to remember which way it is.
-              A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
-              checked or not, and pressing it switches between the two. So each part is a list item
-              holding three things, in this order: the checkbox, its label, and the text. The
-              label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
-              id. That link makes a press anywhere on the label press the checkbox. Each id includes
-              the part’s place in the list, so no two checkboxes share one.</p>
-            : <p className="paragraph">To open and close a part, something has to remember which way it is.
-              A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> remembers: it is either checked or
-              not. Radios that share a name form a group, and checking one unchecks the others. So each
-              part is a list item holding three things, in this order: the radio, its label, and the
-              text. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
-              radio’s id. That link makes a press anywhere on the label press the radio. Each id
-              includes the part’s place in the list, so no two radios share one.</p>}
-          <Snippet label="TS" lines={type === 'inclusive'
-            ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
-            : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">You want the reader to see a bar, not a {input}, so you hide the {input}.
-            Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
-            hundredth of the window’s width, so a right offset of 1000vw puts the {input} ten
-            window widths to the left, far off the page. Display none would hide it too, but it
-            would also take the {input} out of the tab order, and a keyboard could no longer open
-            the part. Focus is the element the keyboard will act on. Off screen, the {input} still
-            takes focus, still answers the space bar, and
-            is still named by its label.</p>
-          <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
-          <OffScreenNotGone/>
-        </li>
-        <li className="run">
-          <p className="paragraph">Now the stylesheet needs to know whether the {input} is checked. A selector
-            is the part of a CSS rule that picks which elements the rule styles. A pseudo-class is a
-            selector that picks an element by its state rather than by its name,
-            and <Mdn path="Web/CSS/:checked">:checked</Mdn> picks a checked {input}. Elements with
-            the same parent are siblings. A combinator is a symbol between two selectors that says
-            how their elements relate. The ~ is
-            the <Mdn path="Web/CSS/Subsequent-sibling_combinator">subsequent-sibling
-              combinator</Mdn>: it picks the siblings that come after the first element. That is why
-            the order is fixed, because the stylesheet can only look forward from the {input}. While
-            the {input} is not checked, this rule collapses the text. No script watches the {input};
-            the stylesheet reads it.</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
-          <TheSheetReadsTheBox/>
-        </li>
-        <li className="run">
-          <p className="paragraph">Each bar shows an arrow that points right while its part is closed and down
-            while it is open. The label is a flex row, which lays its children side by side: the
-            part’s name sits at one end and the arrow at the other, both centred on the bar’s height.
-            The arrow is an empty box drawn after the label’s words, with only its top and right
-            borders, turned 45 degrees so the corner points right. When the {input} is checked, the
-            ~ combinator picks the label after it, and the corner turns to 135 degrees and points
-            down. A transition moves a property from its old value to its new one over a set time,
-            whenever the value changes.
-          {motion === 'static'
-            ? ' With static there is none, so the corner turns in a single frame.'
-            : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
-          {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
-            so a turn is cheap. The bar has a set height and side padding, so every bar is the same
-            size whatever its word, and its colours are the page’s, inverted. The arrow’s width and
-            height size the box its borders outline, and its right margin keeps the corner off the
-            bar’s edge.</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
-            ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
-            ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
-          ]}/>
-          <TwoBordersTurned/>
-        </li>
-        <li className="run">
-          <p className="paragraph">A keyboard user needs to see which bar they are on. Here the {input} has the focus, but the label is what the reader
-            sees, so the stylesheet carries one to the other. The :focus-visible pseudo-class picks
-            the {input} while it has keyboard focus, and <code>:focus-visible ~ .info-label</code> gives the
-            bar the approach colour and a ring inside its edge. The browser treats hovering a label
-            as hovering its {input}, so :hover on the {input} lights the bar too. That rule sits
-            inside a media query, <code>(hover: hover)</code>, which applies its rules only on a device whose
-            pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s
-            borders take the ink colour with the words.</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '@media (hover: hover) {'), gap,
-            ...unit(accordionsCss, '.info-toggle:focus-visible ~ .info-label {')
-          ]}/>
-          <FocusOnTheBar/>
-        </li>
-        <li className="run">
-          <p className="paragraph">The text should slide open, not appear at once. A transition cannot move a
-            height to auto, the height the content needs. Before grid, the way to move evenly with no
-            script was a height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
-            so the panel grows with the text size. It is the one size in the sheet off the page’s
-            spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
-            hidden hides the text. Inside it, a section of the same height holds the paragraph and
-            scrolls what does not fit. The paragraph is at least as tall as the section and pads
-            its text with the page’s spacing on every side. Whether a tall part’s last line is cut at
-            the foot depends on where its lines fall, so the section paints the sign in its background
-            instead: a soft shadow held at its foot, and a cover in the panel’s colour that scrolls with
-            the text and hides the shadow at the end, or when the text fits.
-            The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
-            scroll it, and aria-labelledby names it by its bar, so a screen reader says which part
-            it is reading. Closed, visibility hidden takes the text out of the tab order and out of
-            what a screen reader reads. Every part travels the same distance, so a short part moves
-            like a tall one. The cost is that a short part leaves room under its text, and a tall
-            one makes you scroll.
-          {{
-            reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
-            drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
-            static: ' With static, nothing moves: the panel is at its full height or at 0, in a single frame.'
-          }[motion]}</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
-            ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
-            ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
-            ...unit(accordionsCss, '.info-paragraph {'), gap,
-            ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
-            ...{
-              reveal: unit(accordionsCss, '& .info {\n      transition: height'),
-              drawer: [
-                ...unit(accordionsCss, '& .info {\n      transition: height'), gap,
-                ...unit(accordionsCss, '.drawer & .info {'), gap,
-                ...unit(accordionsCss, '.drawer & .info-text {')
-              ],
-              static: []
-            }[motion]
-          ]}/>
+          <p className="paragraph">A transition cannot move a height to auto, the height the content needs. Before grid,
+            the way to move evenly with no script was a height you knew. Here every panel is the same height, so every
+            part travels the same distance, and a short part moves like a tall one. The cost is that a short part leaves
+            room under its text, and a tall one makes you scroll.</p>
           <TheKnownHeight/>
         </li>
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the
-            last one, and the rule that collapses unchecked text closes it. The arrow keys move the
-            choice within a group, so a keyboard opens each part it passes.</p>
-          <OneNameOneChoice/>
-        </li>}
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">A checked radio stays checked when you press it again, so a part cannot close
-            itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
-            whichever part was open.</p>
-          <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close">', '</li>')}/>
-        </li>}
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
-            gets its own rule: a flex row that centres its one word. Its label fills the whole bar,
-            so a press anywhere on the bar counts.</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '&.close {')}/>
-        </li>}
-        <li className="run">
-          <p className="paragraph">A screen reader announces each part as what its markup says it is:
-            {type === 'inclusive' ? ' a checkbox, checked or not checked.' : ' a radio, one of six.'}</p>
+        <li className="part-depth">
+          <details aria-labelledby="known-depth">
+            <summary id="known-depth" className="depth-opener bold">How the known height works</summary>
+            <ol className="runs">
+              <li className="run">
+                {type === 'inclusive'
+                  ? <p className="paragraph">To open and close a part, something has to remember which way it is.
+                    A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
+                    checked or not, and pressing it switches between the two. So each part is a list item
+                    holding three things, in this order: the checkbox, its label, and the text. The
+                    label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
+                    id. That link makes a press anywhere on the label press the checkbox. Each id includes
+                    the part’s place in the list, so no two checkboxes share one.</p>
+                  : <p className="paragraph">To open and close a part, something has to remember which way it is.
+                    A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> remembers: it is either checked or
+                    not. Radios that share a name form a group, and checking one unchecks the others. So each
+                    part is a list item holding three things, in this order: the radio, its label, and the
+                    text. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
+                    radio’s id. That link makes a press anywhere on the label press the radio. Each id
+                    includes the part’s place in the list, so no two radios share one.</p>}
+                <Snippet label="TS" lines={type === 'inclusive'
+                  ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
+                  : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">You want the reader to see a bar, not a {input}, so you hide the {input}.
+                  Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
+                  hundredth of the window’s width, so a right offset of 1000vw puts the {input} ten
+                  window widths to the left, far off the page. Display none would hide it too, but it
+                  would also take the {input} out of the tab order, and a keyboard could no longer open
+                  the part. Focus is the element the keyboard will act on. Off screen, the {input} still
+                  takes focus, still answers the space bar, and
+                  is still named by its label.</p>
+                <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
+                <OffScreenNotGone/>
+              </li>
+              <li className="run">
+                <p className="paragraph">Now the stylesheet needs to know whether the {input} is checked. A selector
+                  is the part of a CSS rule that picks which elements the rule styles. A pseudo-class is a
+                  selector that picks an element by its state rather than by its name,
+                  and <Mdn path="Web/CSS/:checked">:checked</Mdn> picks a checked {input}. Elements with
+                  the same parent are siblings. A combinator is a symbol between two selectors that says
+                  how their elements relate. The ~ is
+                  the <Mdn path="Web/CSS/Subsequent-sibling_combinator">subsequent-sibling
+                    combinator</Mdn>: it picks the siblings that come after the first element. That is why
+                  the order is fixed, because the stylesheet can only look forward from the {input}. While
+                  the {input} is not checked, this rule collapses the text. No script watches the {input};
+                  the stylesheet reads it.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
+                <TheSheetReadsTheBox/>
+              </li>
+              <li className="run">
+                <p className="paragraph">Each bar shows an arrow that points right while its part is closed and down
+                  while it is open. The label is a flex row, which lays its children side by side: the
+                  part’s name sits at one end and the arrow at the other, both centred on the bar’s height.
+                  The arrow is an empty box drawn after the label’s words, with only its top and right
+                  borders, turned 45 degrees so the corner points right. When the {input} is checked, the
+                  ~ combinator picks the label after it, and the corner turns to 135 degrees and points
+                  down. A transition moves a property from its old value to its new one over a set time,
+                  whenever the value changes.
+                {motion === 'static'
+                  ? ' With static there is none, so the corner turns in a single frame.'
+                  : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
+                {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
+                  so a turn is cheap. The bar has a set height and side padding, so every bar is the same
+                  size whatever its word, and its colours are the page’s, inverted. The arrow’s width and
+                  height size the box its borders outline, and its right margin keeps the corner off the
+                  bar’s edge.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
+                  ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
+                  ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
+                ]}/>
+                <TwoBordersTurned/>
+              </li>
+              <li className="run">
+                <p className="paragraph">A keyboard user needs to see which bar they are on. Here the {input} has the focus, but the label is what the reader
+                  sees, so the stylesheet carries one to the other. The :focus-visible pseudo-class picks
+                  the {input} while it has keyboard focus, and <code>:focus-visible ~ .info-label</code> gives the
+                  bar the approach colour and a ring inside its edge. The browser treats hovering a label
+                  as hovering its {input}, so :hover on the {input} lights the bar too. That rule sits
+                  inside a media query, <code>(hover: hover)</code>, which applies its rules only on a device whose
+                  pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s
+                  borders take the ink colour with the words.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '@media (hover: hover) {'), gap,
+                  ...unit(accordionsCss, '.info-toggle:focus-visible ~ .info-label {')
+                ]}/>
+                <FocusOnTheBar/>
+              </li>
+              <li className="run">
+                <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines tall. The lh unit is the height of one line,
+                  so the panel grows with the text size. It is the one size in the sheet off the page’s
+                  spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
+                  hidden hides the text. Inside it, a section of the same height holds the paragraph and
+                  scrolls what does not fit. The paragraph is at least as tall as the section and pads
+                  its text with the page’s spacing on every side. Whether a tall part’s last line is cut at
+                  the foot depends on where its lines fall, so the section paints the sign in its background
+                  instead: a soft shadow held at its foot, and a cover in the panel’s colour that scrolls with
+                  the text and hides the shadow at the end, or when the text fits.
+                  The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
+                  scroll it, and aria-labelledby names it by its bar, so a screen reader says which part
+                  it is reading. Closed, visibility hidden takes the text out of the tab order and out of
+                  what a screen reader reads.
+                {{
+                  reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
+                  drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
+                  static: ' With static, nothing moves: the panel is at its full height or at 0, in a single frame.'
+                }[motion]}</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
+                  ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
+                  ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
+                  ...unit(accordionsCss, '.info-paragraph {'), gap,
+                  ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
+                  ...{
+                    reveal: unit(accordionsCss, '& .info {\n      transition: height'),
+                    drawer: [
+                      ...unit(accordionsCss, '& .info {\n      transition: height'), gap,
+                      ...unit(accordionsCss, '.drawer & .info {'), gap,
+                      ...unit(accordionsCss, '.drawer & .info-text {')
+                    ],
+                    static: []
+                  }[motion]
+                ]}/>
+              </li>
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the
+                  last one, and the rule that collapses unchecked text closes it. The arrow keys move the
+                  choice within a group, so a keyboard opens each part it passes.</p>
+                <OneNameOneChoice/>
+              </li>}
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">A checked radio stays checked when you press it again, so a part cannot close
+                  itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
+                  whichever part was open.</p>
+                <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close">', '</li>')}/>
+              </li>}
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
+                  gets its own rule: a flex row that centres its one word. Its label fills the whole bar,
+                  so a press anywhere on the bar counts.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '&.close {')}/>
+              </li>}
+              <li className="run">
+                <p className="paragraph">A screen reader announces each part as what its markup says it is:
+                  {type === 'inclusive' ? ' a checkbox, checked or not checked.' : ' a radio, one of six.'}</p>
+              </li>
+            </ol>
+          </details>
         </li>
       </ol>
     </section>
@@ -370,53 +386,60 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             no for and no id. Details remembers whether it is open, so there is no {input} to
             hide and no sibling selector to read it. The keyboard comes with it, and a screen
             reader announces the bar as a disclosure, collapsed or expanded.
-          {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'}</p>
+          {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'} This replaces the three old ways:
+            the max-height guess, the height measured by script, and the known height.</p>
           <Snippet label="TS" lines={type === 'inclusive'
             ? span(accordionsSource, '<details className="fold">', '</details>')
             : span(accordionsSource, '<details className="fold" name=', '</details>')}/>
           <OneJobTwoWays input={input}/>
           <ThreeBecomeTwo/>
         </li>
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">This replaces the radio group. Give every details the
-            same <Mdn path="Web/HTML/Element/details#name">name</Mdn>, and the browser closes the
-            others when one opens. Pressing the open one closes it, so no Close radio is needed.</p>
-        </li>}
-        <li className="run">
-          <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
-            summary, in the same colours. Summary takes focus and hover itself, where the {input}
-            build carried focus from the hidden {input} to the label. Summary also draws its own
-            arrow, called a marker, where the {input} build drew one from two borders. List-style
-            none removes that marker, because this bar shows open and closed by its word alone. The
-            hairline border draws the line between one bar and the next.</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">This replaces the three old ways: the max-height guess, the height measured
-            by script, and the known height. A pseudo-element is a part of an element
-            that CSS can style as if it were an element of its
-            own. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
-            details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
-            keyword, not a number, and a transition cannot move to a keyword on its
-            own. <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> in the reset lets a size
-            move to and from keywords like auto, and overflow hidden hides the text the size does not
-            hold yet.
-          {{
-            reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility, which hides the closed content, has no values between on and off, so allow-discrete lets it switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
-            drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
-            static: ' With static, the part a details hides has no transition, so the fold opens in a single frame, in every browser.'
-          }[motion]}</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '&::details-content {'), gap,
-            ...unit(accordionsCss, '&[open]::details-content {'), gap,
-            ...unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
-            ...(motion === 'drawer' ? [...unit(accordionsCss, '.drawer &::details-content {'), gap, ...unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
-            ...unit(resetCss, ':root {\n  interpolate-size')
-          ]}/>
-          <SizedToTheText/>
-        </li>
-        <li className="run">
-          <p className="paragraph">There is no script here either.</p>
+        <li className="part-depth">
+          <details aria-labelledby="details-depth">
+            <summary id="details-depth" className="depth-opener bold">How details works</summary>
+            <ol className="runs">
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">This replaces the radio group. Give every details the
+                  same <Mdn path="Web/HTML/Element/details#name">name</Mdn>, and the browser closes the
+                  others when one opens. Pressing the open one closes it, so no Close radio is needed.</p>
+              </li>}
+              <li className="run">
+                <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
+                  summary, in the same colours. Summary takes focus and hover itself, where the {input}
+                  build carried focus from the hidden {input} to the label. Summary also draws its own
+                  arrow, called a marker, where the {input} build drew one from two borders. List-style
+                  none removes that marker, because this bar shows open and closed by its word alone. The
+                  hairline border draws the line between one bar and the next.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">A pseudo-element is a part of an element
+                  that CSS can style as if it were an element of its
+                  own. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
+                  details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
+                  keyword, not a number, and a transition cannot move to a keyword on its
+                  own. <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> in the reset lets a size
+                  move to and from keywords like auto, and overflow hidden hides the text the size does not
+                  hold yet.
+                {{
+                  reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
+                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
+                  static: ' With static, the part a details hides has no transition, so the fold opens in a single frame, in every browser.'
+                }[motion]}</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&::details-content {'), gap,
+                  ...unit(accordionsCss, '&[open]::details-content {'), gap,
+                  ...unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
+                  ...(motion === 'drawer' ? [...unit(accordionsCss, '.drawer &::details-content {'), gap, ...unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
+                  ...unit(resetCss, ':root {\n  interpolate-size')
+                ]}/>
+                <SizedToTheText/>
+              </li>
+              <li className="run">
+                <p className="paragraph">There is no script here either.</p>
+              </li>
+            </ol>
+          </details>
         </li>
       </ol>
     </section>
@@ -432,18 +455,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             part is open, as it did in part one. What is new is the way the text opens, below.</p>
           <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
         </li>}
-        <li className="run">
-          <p className="paragraph">The bar is named by its part. The label holds the part’s name, and that
-            name is what the {input} is called. Its checked state is the part’s state, so a listener
-            hears the part and whether it is open, such as “basalt, {input}, checked”. The
-            stylesheet writes Open or Close at the bar’s end, for the eye, to say what a press will
-            do. It marks the word as decoration with an empty alternative, so the word is not read.
-            Someone using voice control says the part’s name.</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '&::before {\n        order: 1;'), gap,
-            ...unit(accordionsCss, '&:has(:checked) .info-label::before {')
-          ]}/>
-        </li>
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build is a radio group. Radios that share a name keep one part
             open on their own, which checkboxes cannot do without script. What a radio cannot do is
@@ -460,18 +471,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
           <WhatEachPromises/>
         </li>}
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
-            nothing with it, so no press reaches the list. So the list listens for the space bar
-            too, and closes the part when the key lands on the open radio.</p>
-          <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
-        </li>}
-        <li className="run">
-          {type === 'inclusive'
-            ? <p className="paragraph">This build has no script to lose.</p>
-            : <p className="paragraph">Without the list’s script, the build still works as a radio group: it keeps one
-              part open. Only the second press that closes a part is lost.</p>}
-        </li>
         <li className="run">
           <p className="paragraph">Details slides to its content’s height with ::details-content, but only in
             Chromium. A grid row does the same in every browser today. Under the bar, the fold’s
@@ -490,40 +489,71 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
           <RowToItsContent/>
         </li>
-        <li className="run">
-          <p className="paragraph">A row closes only as far as its item can. The paragraph’s item is a span with
-            no minimum height, so the row can shrink to 0. The text’s padding sits on a span inside
-            that one, where it cannot hold the row open. A paragraph may hold spans, so the text
-            needs no other element. If you put the padding on the item, a strip of text shows under
-            every closed bar. If you let the fold’s own row move and the paragraph clip inside it,
-            the clip falls behind the row while it moves, and a blank band shows under the text.</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.fold-clip-item {'), gap,
-            ...unit(accordionsCss, '.fold-text {\n      display: block;')
-          ]}/>
-          <PaddingInsideTheClip/>
+        <li className="part-depth">
+          <details aria-labelledby="together-depth">
+            <summary id="together-depth" className="depth-opener bold">How the two work together</summary>
+            <ol className="runs">
+              <li className="run">
+                <p className="paragraph">The bar is named by its part. The label holds the part’s name, and that
+                  name is what the {input} is called. Its checked state is the part’s state, so a listener
+                  hears the part and whether it is open, such as “basalt, {input}, checked”. The
+                  stylesheet writes Open or Close at the bar’s end, for the eye, to say what a press will
+                  do. It marks the word as decoration with an empty alternative, so the word is not read.
+                  Someone using voice control says the part’s name.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&::before {\n        order: 1;'), gap,
+                  ...unit(accordionsCss, '&:has(:checked) .info-label::before {')
+                ]}/>
+              </li>
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
+                  nothing with it, so no press reaches the list. So the list listens for the space bar
+                  too, and closes the part when the key lands on the open radio.</p>
+                <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
+              </li>}
+              <li className="run">
+                {type === 'inclusive'
+                  ? <p className="paragraph">This build has no script to lose.</p>
+                  : <p className="paragraph">Without the list’s script, the build still works as a radio group: it keeps one
+                    part open. Only the second press that closes a part is lost.</p>}
+              </li>
+              <li className="run">
+                <p className="paragraph">A row closes only as far as its item can. The paragraph’s item is a span with
+                  no minimum height, so the row can shrink to 0. The text’s padding sits on a span inside
+                  that one, where it cannot hold the row open. A paragraph may hold spans, so the text
+                  needs no other element. If you put the padding on the item, a strip of text shows under
+                  every closed bar. If you let the fold’s own row move and the paragraph clip inside it,
+                  the clip falls behind the row while it moves, and a blank band shows under the text.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.fold-clip-item {'), gap,
+                  ...unit(accordionsCss, '.fold-text {\n      display: block;')
+                ]}/>
+                <PaddingInsideTheClip/>
+              </li>
+              <li className="run">
+                <p className="paragraph">The fold motion above chooses how the folds here move, and each build wears
+                  the choice as a class.
+                {{
+                  reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out, which starts gently and settles. The text shows from its top down as the row grows.',
+                  drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
+                  static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes in a single frame.'
+                }[motion]}</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
+              </li>
+              {motion === 'drawer' && <li className="run">
+                <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
+                  from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
+                  around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom.
+                  Then <code>align-self: end</code> sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
+                  on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
+                  fold. One transition moves it all, so no part can fall behind another. It answers no
+                  limit. It is there to show what grid alignment does on its own.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
+                <RidesTheEdge/>
+              </li>}
+            </ol>
+          </details>
         </li>
-        <li className="run">
-          <p className="paragraph">The fold motion above chooses how the folds here move, and each build wears
-            the choice as a class.
-          {{
-            reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out, which starts gently and settles. The text shows from its top down as the row grows.',
-            drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
-            static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes in a single frame.'
-          }[motion]}</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
-        </li>
-        {motion === 'drawer' && <li className="run">
-          <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
-            from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
-            around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom.
-            Then <code>align-self: end</code> sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
-            on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
-            fold. One transition moves it all, so no part can fall behind another. It answers no
-            limit. It is there to show what grid alignment does on its own.</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
-          <RidesTheEdge/>
-        </li>}
       </ol>
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">

@@ -2,7 +2,7 @@ import {within} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
-  const run = within(part).getAllByRole('listitem').find(holds);
+  const run = within(part).getAllByRole('listitem').filter(holds).pop();
   if (run) {
     return run;
   }

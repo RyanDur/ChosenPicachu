@@ -9,3 +9,14 @@
   gap: var(--base);
   max-inline-size: var(--measure);
 }
+
+.part-depth {
+  .depth-opener {
+    cursor: pointer;
+    padding-block: var(--base);
+  }
+
+  .runs {
+    padding-block-start: var(--base-x-4);
+  }
+}
