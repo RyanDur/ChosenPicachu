@@ -463,7 +463,7 @@ describe('the depth of each part', () => {
     [parts[0], 'How the measured height works', /Most of us reached next for script/, /Closing runs the other way/],
     [parts[0], 'How the known height works', /Here every panel is the same height/, /You want the reader to see a bar/],
     [parts[1], 'How details works', /This replaces the three old ways/, /A pseudo-element is a part of an element/],
-    [parts[2], 'How the two work together', /Details slides to its content’s height/, /A row closes only as far as its item can/]
+    [parts[2], 'How the two work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
   ])('should keep, under "%s", a closed fold named "%s" with the depth inside it and the point outside it', async (part, fold, point, depth) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -501,6 +501,7 @@ describe('the runs in view, with the folds shut', () => {
     const run = within(platform).getByText(/This build uses details and summary/);
 
     expect(run).toBeVisible();
+    expect(run).not.toHaveTextContent(/no for and no id|sibling selector/);
     expect(run).toHaveTextContent(`nothing has to tie a label to a hidden ${input}. Details remembers whether it is open, so there is no ${input} to hide and no rule that reads it.`);
   });
 
@@ -510,7 +511,7 @@ describe('the runs in view, with the folds shut', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
 
     expect(within(platform).getByText(/This build uses details and summary/))
-      .toHaveTextContent(/Give every details the same name, and the browser closes the others when one opens, as a radio group does\. Pressing the open one closes it, so no Close radio is needed\. That is the exclusive build\. This replaces the three old ways/);
+      .toHaveTextContent(/Give every details the same name, and the browser closes the others when one opens\. Pressing the open one closes it, so the list needs no Close bar\. That is the exclusive build\. This replaces the three old ways/);
   });
 
   test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
@@ -535,8 +536,8 @@ describe('the runs in view, with the folds shut', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(together).getByText(/Details slides to its content’s height/))
-      .toHaveTextContent(/today\. Grid is the CSS layout that sets a box out in rows and columns\. Under the bar[^]*while the fold is closed\. :has\(\) is a piece of a CSS rule that picks an element/);
+    expect(within(together).getByText(/A grid row can slide open to its content’s height/))
+      .toHaveTextContent(/^Grid is the CSS layout that sets a box out in rows and columns\. A grid row can slide open to its content’s height in every browser today\. Under the bar[^]*while the fold is closed\. :has\(\) is a piece of a CSS rule that picks an element/);
   });
 });
 
@@ -557,5 +558,31 @@ describe('the platform build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
+  });
+});
+
+describe('three sentences the read with the folds shut rewrote', () => {
+  test('should say, with inclusive chosen, that the checkbox remembers as it did in the known-height build', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/The inclusive build is a checkbox build again/)).toHaveTextContent(/the checkbox remembers whether the part is open, as it did in the known-height build\./);
+  });
+
+  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the radio and the stylesheet own that/);
+  });
+
+  test('should say that a transition turns around when the reader presses again midway', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const motion = await screen.findByRole('region', {name: parts[3]});
+
+    expect(within(motion).getByText(/Every fold on this tab moves by transition/)).toHaveTextContent(/If the reader presses again midway, a transition turns around from wherever it is\./);
   });
 });

@@ -155,7 +155,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">The cost was script. The motion needs it, but whether a part is open does not:
-            the checkbox and the stylesheet own that, so if the script fails, a part still opens and closes, at
+            the {input} and the stylesheet own that, so if the script fails, a part still opens and closes, at
             once.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
@@ -386,8 +386,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             reader announces the bar as a disclosure, collapsed or expanded.
           {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'}
           {type === 'exclusive' && <> Give every details the same <Mdn path="Web/HTML/Element/details#name">name</Mdn>,
-            and the browser closes the others when one opens, as a radio group does. Pressing the open one closes it, so
-            no Close radio is needed. That is the exclusive build.</>} This replaces the
+            and the browser closes the others when one opens. Pressing the open one closes it, so the list needs no Close
+            bar. That is the exclusive build.</>} This replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.
           {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and WebKit open it at once, and it still works.'}</p>
           <Snippet label="TS" lines={type === 'inclusive'
@@ -473,9 +473,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <WhatEachPromises/>
         </li>}
         <li className="run">
-          <p className="paragraph">Details slides to its content’s height, but only in
-            Chromium. A grid row does the same in every browser today. Grid is the CSS layout that sets a box out in rows
-            and columns. Under the bar, the fold’s
+          <p className="paragraph">Grid is the CSS layout that sets a box out in rows and columns. A grid row can slide
+            open to its content’s height in every browser today. Under the bar, the fold’s
             paragraph is a grid with one row. The fr is a grid unit for a share of the space. In a
             grid sized to its content, a row of 1fr is exactly as tall as its content needs. A row
             of 0fr has no height. The row is 0fr while the fold is
@@ -563,7 +562,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab moves by transition, never by animation.
-            If the property changes back midway, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
+            If the reader presses again midway, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
             around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
             a set of keyframes on its own clock, whatever the state does. A fold moves because the
             reader pressed it, and a reader may press again before it lands, so every build here

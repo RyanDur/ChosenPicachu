@@ -52,8 +52,12 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join())
-      .toMatch(/<button type="button" tabIndex=\{0\} className="item sub-title reachable"/);
+    const runs = within(part).getAllByRole('listitem');
+    const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
+
+    expect(menuSample).toMatch(/<button type="button" tabIndex=\{0\}[^\n]*popoverTargetAction="hide"/);
+    expect(runs.indexOf(explanation.runTelling(part, /The button names its menu with popovertarget/)))
+      .toBeLessThan(runs.indexOf(explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0/)));
   });
 
   test('should name the toggle in a run after the markup that holds it', async () => {
