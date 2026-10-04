@@ -4,6 +4,7 @@ export const homePage = (page: Page) => ({
   linkToTheDemos: page.getByRole('link', {name: 'Start where the demos start'}),
   opener: page.getByRole('paragraph').filter({hasText: /^A webpage is three languages/}),
   timelineStories: page.getByRole('list', {name: 'the timeline'}).getByRole('group'),
+  researchFold: page.getByRole('region', {name: 'The research'}).getByRole('group').first(),
   recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first(),
   fullerStoryOf: (story: Locator): Locator => story.getByText('the fuller story'),
   storyTold: (story: Locator): Locator => story.getByRole('paragraph').first()

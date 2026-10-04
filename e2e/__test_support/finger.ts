@@ -19,3 +19,14 @@ export const shortOfAFinger = async (controls: Locator[]): Promise<string[]> => 
   })));
   return measured.filter(({height}) => height < fingerReach).map(({name, height}) => `${name}: ${height}px`);
 };
+
+export const foldBarsShortOfAFinger = async (folds: Locator[]): Promise<string[]> => {
+  const measured = await Promise.all(folds.map(fold => fold.evaluate(details => {
+    const bar = details instanceof HTMLDetailsElement ? details.querySelector(':scope > summary') : null;
+    return {name: bar?.textContent.trim() ?? 'a fold with no bar', open: details instanceof HTMLDetailsElement && details.open, height: Math.round(bar?.getBoundingClientRect().height ?? 0)};
+  })));
+  return measured.flatMap(({name, open, height}) => {
+    if (open) return [`${name}: open`];
+    return height < fingerReach ? [`${name}: ${height}px`] : [];
+  });
+};

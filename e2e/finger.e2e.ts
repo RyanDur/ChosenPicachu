@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, fingerTap, iPhone, nameOn, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -79,27 +79,36 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(menu.contextChoice).not.toBeChecked();
     });
 
-    for (const {where, at, folds} of [
-      {where: 'home', at: '', folds: (page: Page) => page.getByRole('group').filter({has: page.getByText('the fuller story', {exact: true})})},
-      {where: 'the drag sort tab', at: 'demos/?tab=dragAndDrop', folds: (page: Page) => page.getByRole('group', {name: 'settings', exact: true})},
-      {where: 'the gallery', at: 'gallery/?tab=vam', folds: (page: Page) => page.getByRole('group', {name: 'gallery settings'})}
-    ]) {
-      test(`every closed fold on ${where} is a finger tall`, async ({page}) => {
-        await page.goto(at);
-        await expect(folds(page).first()).toBeVisible();
+    test('every fold on home has a bar a finger tall', async ({page}) => {
+      await page.goto('');
+      const home = homePage(page);
+      await expect(home.researchFold).toBeVisible();
 
-        expect(await shortOfAFinger(await folds(page).all())).toEqual([]);
-      });
-    }
+      expect(await foldBarsShortOfAFinger([...await home.timelineStories.all(), home.researchFold])).toEqual([]);
+    });
 
-    test('every closed fold in an open story on the tables tab is a finger tall', async ({page}) => {
+    test('the settings fold on the drag sort tab has a bar a finger tall', async ({page}) => {
+      await page.goto('demos/?tab=dragAndDrop');
+      const settings = tablesDemo(page).settingsFold;
+      await expect(settings).toBeVisible();
+
+      expect(await foldBarsShortOfAFinger([settings])).toEqual([]);
+    });
+
+    test('the gallery’s settings fold has a bar a finger tall', async ({page}) => {
+      await page.goto('gallery/?tab=vam');
+      const settings = galleryPage(page).settings;
+      await expect(settings).toBeVisible();
+
+      expect(await foldBarsShortOfAFinger([settings])).toEqual([]);
+    });
+
+    test('every how we built it fold in an open story on the tables tab has a bar a finger tall', async ({page}) => {
       await page.goto('demos/?tab=tables');
-      const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).first();
-      await story.getByText(/^so that /).click();
-      const reveals = story.getByRole('group', {name: 'how we built it'});
+      const reveals = await tablesDemo(page).howWeBuiltItInTheFirstStory();
       await expect(reveals.first()).toBeVisible();
 
-      expect(await shortOfAFinger(await reveals.all())).toEqual([]);
+      expect(await foldBarsShortOfAFinger(await reveals.all())).toEqual([]);
     });
 
     test('every fold of the accordion in HTML alone takes a finger', async ({page}) => {
