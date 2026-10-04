@@ -11,6 +11,7 @@ export {siteFrame} from './site';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss, shortOfAFinger} from './finger';
+export {pillSwitch, shownPillSwitches} from './pills';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures} from './recipes';

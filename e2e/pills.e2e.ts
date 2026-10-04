@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {fingerTap, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch, shownPillSwitches} from './__test_support';
 
 const choicesOn = [
   {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
@@ -39,6 +39,49 @@ for (const {reader, device} of [
       await fingerTap(page, world.getByText('Vanilla', {exact: true}));
 
       await expect(world.getByRole('radio', {name: 'Vanilla', includeHidden: true})).toBeChecked();
+    });
+  });
+}
+
+for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
+  test.describe(`${reader}, reading the pills`, () => {
+    test.use(device);
+
+    for (const {demo, at, groups} of choicesOn) {
+      test(`every pill shown on ${demo} is painted for whether it is chosen, on arrival`, async ({page}) => {
+        await page.goto(at);
+        await expect(page.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
+
+        const shown = await shownPillSwitches(page, groups);
+
+        expect(shown).not.toEqual([]);
+        for (const group of shown) {
+          const pills = pillSwitch(page, group);
+          await expect.poll(pills.stillMoving, group).toBe(0);
+          expect(await pills.paintedWrong(), group).toEqual([]);
+        }
+      });
+    }
+
+    test('the pill left behind is painted as not chosen once the switch has moved', async ({page}) => {
+      await page.goto('demos/?tab=tables');
+      const world = pillSwitch(page, 'world');
+      await expect.poll(world.stillMoving).toBe(0);
+
+      await world.choose('Vanilla');
+
+      await expect.poll(world.stillMoving).toBe(0);
+      expect(await world.paintedWrong()).toEqual([]);
+    });
+
+    test('asking for less motion, the pill left behind is painted as not chosen at once', async ({page}) => {
+      await page.emulateMedia({reducedMotion: 'reduce'});
+      await page.goto('demos/?tab=accordions');
+      const foldType = pillSwitch(page, 'fold type');
+
+      await foldType.choose('Exclusive');
+
+      expect(await foldType.paintedWrong()).toEqual([]);
     });
   });
 }
