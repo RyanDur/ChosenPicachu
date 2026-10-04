@@ -7,10 +7,10 @@ import {sortableTable} from '@components/DragSortableTable/__test_support';
 const NOW = 1700000000000;
 
 const recentTradesNewestFirst = [
-  {trade_id: 4, price: '50004.00', size: '0.01', side: 'buy', time: new Date(NOW).toISOString()},
-  {trade_id: 3, price: '50003.00', size: '0.05', side: 'buy', time: new Date(NOW - 3 * 60000).toISOString()},
-  {trade_id: 2, price: '50002.00', size: '0.25', side: 'sell', time: new Date(NOW - 10 * 60000).toISOString()},
-  {trade_id: 1, price: '50001.00', size: '0.10', side: 'buy', time: new Date(NOW - 30 * 60000).toISOString()}
+  {trade_id: 4, price: '50004.00', size: '0.01', side: 'sell', time: new Date(NOW).toISOString()},
+  {trade_id: 3, price: '50003.00', size: '0.05', side: 'sell', time: new Date(NOW - 3 * 60000).toISOString()},
+  {trade_id: 2, price: '50002.00', size: '0.25', side: 'buy', time: new Date(NOW - 10 * 60000).toISOString()},
+  {trade_id: 1, price: '50001.00', size: '0.10', side: 'sell', time: new Date(NOW - 30 * 60000).toISOString()}
 ];
 
 describe('the windows hydrate from history', () => {

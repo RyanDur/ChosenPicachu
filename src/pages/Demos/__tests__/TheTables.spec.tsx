@@ -10,10 +10,10 @@ import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
 const fourTrades = [
-  tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
-  tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
-  tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
-  tradeFrame(50004, now, '0.01', 'buy')
+  tradeFrame(50001, now - 30 * 60000, '0.10', 'sell'),
+  tradeFrame(50002, now - 10 * 60000, '0.25', 'buy'),
+  tradeFrame(50003, now - 3 * 60000, '0.05', 'sell'),
+  tradeFrame(50004, now, '0.01', 'sell')
 ];
 
 const dragSortRecipe = async (): Promise<HTMLElement> => {

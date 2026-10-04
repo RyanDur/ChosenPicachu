@@ -160,7 +160,7 @@ describe('the frame table', () => {
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
-    broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'sell')]);
+    broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'buy')]);
 
     await waitFor(() => {
       const row = within(screen.getByRole('row', {name: /session/})).getAllByRole('cell');
