@@ -539,6 +539,30 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(together).getByText(/A grid row can slide open to its content’s height/))
       .toHaveTextContent(/^Grid is the CSS layout that sets a box out in rows and columns\. A grid row can slide open to its content’s height in every browser today\. Under the bar[^]*while the fold is closed\. :has\(\) is a piece of a CSS rule that picks an element/);
   });
+
+  test('should say, with inclusive chosen, that the checkbox remembers as it did in the known-height build', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/The inclusive build is a checkbox build again/)).toHaveTextContent(/the checkbox remembers whether the part is open, as it did in the known-height build\./);
+  });
+
+  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the radio and the stylesheet own that/);
+  });
+
+  test('should say that a transition turns around when the reader presses again midway', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const motion = await screen.findByRole('region', {name: parts[3]});
+
+    expect(within(motion).getByText(/Every fold on this tab moves by transition/)).toHaveTextContent(/If the reader presses again midway, a transition turns around from wherever it is\./);
+  });
 });
 
 describe('the platform build’s bars', () => {
@@ -576,31 +600,5 @@ describe('the platform build’s bars', () => {
 
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
     expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
-  });
-});
-
-describe('three sentences the read with the folds shut rewrote', () => {
-  test('should say, with inclusive chosen, that the checkbox remembers as it did in the known-height build', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
-
-    const together = await screen.findByRole('region', {name: parts[2]});
-
-    expect(within(together).getByText(/The inclusive build is a checkbox build again/)).toHaveTextContent(/the checkbox remembers whether the part is open, as it did in the known-height build\./);
-  });
-
-  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
-
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-
-    expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the radio and the stylesheet own that/);
-  });
-
-  test('should say that a transition turns around when the reader presses again midway', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const motion = await screen.findByRole('region', {name: parts[3]});
-
-    expect(within(motion).getByText(/Every fold on this tab moves by transition/)).toHaveTextContent(/If the reader presses again midway, a transition turns around from wherever it is\./);
   });
 });

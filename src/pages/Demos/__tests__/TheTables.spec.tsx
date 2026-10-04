@@ -471,7 +471,7 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/const SLIMMEST = 5;[^]*const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
   });
 
-  test('the resize build says the handle stops its press from bubbling to the header, and the arrow keys make the same trade', async () => {
+  test('the resize build says the handle stops both its press and its arrow keys from bubbling to the header', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -483,7 +483,16 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
     expect(resize).toHaveTextContent(/The handle stops those keys from bubbling too, so the header’s own arrow keys never move the column/);
     expect(resize).toHaveTextContent(/It should stop those keys there as well, because the header answers arrow keys by moving the column/);
-    expect(resize).not.toHaveTextContent(/\bdescent\b|\broad\b/);
+  });
+
+  test('the resize build no longer speaks of a descent or a road', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    await userEvent.click(await screen.findByRole('radio', {name: 'Drag resize'}));
+
+    expect(await screen.findByRole('region', {name: 'build the drag resize yourself'})).not.toHaveTextContent(/\bdescent\b|\broad\b/);
   });
 
   test('choosing drag sort brings the sort tutorial back', async () => {
@@ -573,7 +582,17 @@ describe('the tables demo', () => {
 
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
     expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never hears it/);
-    expect(recipe).not.toHaveTextContent(/\bdescent\b/);
+  });
+
+  test('the sort menu build no longer speaks of a descent', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed(feed);
+    await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
+
+    expect(await screen.findByRole('region', {name: 'build the sort menu yourself'})).not.toHaveTextContent(/\bdescent\b/);
   });
 
   test('choosing the sort menu swaps in the sort menu tutorial', async () => {
