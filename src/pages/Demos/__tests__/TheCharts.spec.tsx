@@ -742,11 +742,8 @@ describe('the workspace story', () => {
     expect(within(swap).getByRole('figure', {name: /^A third from the hand\./})).toHaveTextContent(/the mark moves to where the hand is/);
   });
 
-  test('should say a held chart fades where it sits, and claim no copy under the hand', async () => {
-    const story = await workspaceStory();
-
-    expect(story).toHaveTextContent('While a chart is held it fades almost to nothing where it sits. It swaps with its neighbour');
-    expect(story).not.toHaveTextContent(/a copy of it under the hand/);
+  test('should say a held chart fades where it sits while the browser draws a copy of it under the hand', async () => {
+    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the hand. It swaps with its neighbour');
   });
 
   test('should drop the figures of speech from its words', async () => {
