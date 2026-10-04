@@ -23,6 +23,16 @@ describe('why the popover wins', () => {
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/popoverTarget=[^]*popover="auto"[^]*popoverTargetAction="hide"/);
   });
 
+  test('should say the placement is only for a menu that is also a popover, and why', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const run = within(part).getByText(/The new way costs placement/);
+
+    expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
+    expect(run).toHaveTextContent(/like the old list above, has no anchor, so it is left out\./);
+  });
+
   test('should name the toggle listener beside the markup that holds it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
