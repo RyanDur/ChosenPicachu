@@ -324,6 +324,9 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
   });
 }
 
+// a thin stroke on Linux may never cover a whole pixel, so its darkest pixel sits a little above the ink
+const antialiasing = 40;
+
 test.describe('a desktop', () => {
   test.use(desktop);
 
@@ -335,7 +338,9 @@ test.describe('a desktop', () => {
       await page.goto(showing(build));
 
       for (const spot of ['start', 'middle', 'end'] as const) {
-        expect(await tab.hoveredAt(build, spot), spot).toEqual(lit);
+        const {ground, words} = await tab.hoveredAt(build, spot);
+        expect(ground, `${spot}: the bar's ground`).toBe(lit.ground);
+        expect(Math.max(...words.map((channel, at) => Math.abs(channel - lit.words[at]))), `${spot}: the words' colour, off by`).toBeLessThanOrEqual(antialiasing);
       }
       await page.mouse.down();
       await page.mouse.up();

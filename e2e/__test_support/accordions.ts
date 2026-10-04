@@ -22,6 +22,8 @@ export type Spot = 'start' | 'middle' | 'end';
 
 export type Pointing = 'right' | 'down' | 'nowhere';
 
+export type HoveredPaint = {ground: string; words: number[]};
+
 export type Part = {
   fold: Locator;
   showsText: () => Promise<boolean>;
@@ -168,9 +170,18 @@ export const accordionsTab = (page: Page) => {
     page.waitForFunction(() => document.getAnimations().every(motion => motion.playState !== 'running'));
   const boxOf = async (shown: Locator): Promise<Box> => {
     await shown.scrollIntoViewIfNeeded();
-    const box = await shown.boundingBox();
-    if (box === null) throw new Error('a bar is not shown');
-    return box;
+    return shown.evaluate(element => new Promise<Box>(resolve => {
+      const steady = (before: DOMRect, frames: number): void => {
+        const now = element.getBoundingClientRect();
+        const moved = now.x !== before.x || now.y !== before.y || now.width !== before.width || now.height !== before.height;
+        if (frames >= 10) {
+          resolve({x: now.x, y: now.y, width: now.width, height: now.height});
+        } else {
+          requestAnimationFrame(() => steady(now, moved ? 0 : frames + 1));
+        }
+      };
+      requestAnimationFrame(() => steady(element.getBoundingClientRect(), 0));
+    }));
   };
   const shotOf = async (clip: Box): Promise<number[]> =>
     (await decodedShot(page, await page.screenshot({clip, scale: 'css'}))).rgba;
@@ -190,23 +201,26 @@ export const accordionsTab = (page: Page) => {
     const end = {x: x + width - 52, y: y + 4, width: 44, height: height - 8};
     return pointingIn(await shotOf(end), end.width);
   };
-  const twoCommonestColours = (rgba: number[]): string[] => {
+  const paintOf = (rgba: number[]): HoveredPaint => {
     const counts = new Map<string, number>();
+    let words = [255, 255, 255];
     for (let at = 0; at < rgba.length; at += 4) {
-      const colour = rgba.slice(at, at + 3).join(',');
-      counts.set(colour, (counts.get(colour) ?? 0) + 1);
+      const colour = rgba.slice(at, at + 3);
+      counts.set(colour.join(','), (counts.get(colour.join(',')) ?? 0) + 1);
+      if (colour.reduce((sum, channel) => sum + channel) < words.reduce((sum, channel) => sum + channel)) words = colour;
     }
-    return [...counts].sort(([, many], [, more]) => more - many).slice(0, 2).map(([colour]) => colour);
+    const [[ground]] = [...counts].sort(([, many], [, more]) => more - many);
+    return {ground, words};
   };
   const lightShare = (rgba: number[]): number =>
     Array.from({length: rgba.length / 4}, (_, pixel) => pixel).filter(pixel => lightAt(rgba, pixel)).length / Math.max(1, rgba.length / 4);
   const insideTheHairlines = ({x, y, width, height}: Box): Box => ({x, y: y + 4, width, height: height - 8});
-  const hoveredAt = async (build: Build, spot: Spot): Promise<string[]> => {
+  const hoveredAt = async (build: Build, spot: Spot): Promise<HoveredPaint> => {
     const bar = await boxOf(partOf(build, 0).fold);
     const along = {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot];
     await page.mouse.move(bar.x + along, bar.y + bar.height / 2);
     await settled();
-    return twoCommonestColours(await shotOf(insideTheHairlines(bar)));
+    return paintOf(await shotOf(insideTheHairlines(bar)));
   };
   const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
     const bar = await boxOf(partOf(build, 0).fold);
