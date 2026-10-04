@@ -46,7 +46,7 @@ export const feedStillConnecting = async (page: Page, prices: number[]): Promise
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
-  const holdByTheGrip = async (region: string): Promise<{whenTheDragBegan: string; now: () => Promise<number>}> => {
+  const holdByTheGrip = async (region: string): Promise<{whenTheDragBegan: string; now: () => Promise<number>; dropped: () => Promise<string>}> => {
     const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
     await chart.scrollIntoViewIfNeeded();
     const opacityAtDragStart = await chart.evaluateHandle(held => ({seen: new Promise<string>(resolve =>
@@ -57,7 +57,14 @@ export const chartsPage = (page: Page) => {
     await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
     await page.mouse.down();
     await page.mouse.move(grip.x + grip.width / 2, grip.y + 40, {steps: 8});
-    return {whenTheDragBegan: await opacityAtDragStart.evaluate(({seen}) => seen), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity))};
+    const dropped = async (): Promise<string> => {
+      // 40ms: past the frames that run the reset's 0.01ms transition for less motion, and inside the 50ms a wait on the return would hold
+      const opacitySoonAfterTheDrop = await chart.evaluateHandle(held => ({seen: new Promise<string>(resolve =>
+        held.addEventListener('dragend', () => setTimeout(() => resolve(getComputedStyle(held).opacity), 40), {once: true}))}));
+      await page.mouse.up();
+      return opacitySoonAfterTheDrop.evaluate(({seen}) => seen);
+    };
+    return {whenTheDragBegan: await opacityAtDragStart.evaluate(({seen}) => seen), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity)), dropped};
   };
   return {
     holdByTheGrip,

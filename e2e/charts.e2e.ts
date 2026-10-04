@@ -121,5 +121,14 @@ test.describe('a mouse dragging a chart by its grip', () => {
       await expect.poll(held.now).toBeLessThan(0.01);
       await page.mouse.up();
     });
+
+    test(`with motion ${reducedMotion === 'reduce' ? 'reduced' : 'allowed'}, a dropped chart is whole again at once`, async ({page}) => {
+      await page.emulateMedia({reducedMotion});
+      await page.goto('demos/?tab=charts&charts=price,pie');
+      const held = await chartsPage(page).holdByTheGrip('live trades');
+      await expect.poll(held.now).toBeLessThan(0.01);
+
+      expect(await held.dropped()).toBe('1');
+    });
   }
 });

@@ -95,9 +95,6 @@
 
 .chart-slot {
   position: relative;
-  /* the browser draws the copy under the hand from the chart as it is when the drag begins, so the fade waits a moment;
-     a delay, not a duration, so asking for less motion does not cut it */
-  transition: opacity 0s 50ms;
 
   .doorway {
     position: absolute;
@@ -121,6 +118,9 @@
 
   &.hide {
     opacity: 0.1%;
+    /* the browser draws the copy under the hand from the chart as it is when the drag begins, so the fade waits a moment;
+       a delay, not a duration, so asking for less motion does not cut it; here alone, so a dropped chart shows at once */
+    transition: opacity 0s 50ms;
   }
 
   &.chart-pushed {
