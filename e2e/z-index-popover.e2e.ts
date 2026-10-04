@@ -20,6 +20,18 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
         await expect(trappedMenu(page).said).toHaveText('The list opened over both cards. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.');
       });
     }
+
+    test('the menu in the top layer ends above the sentence that says where it opened', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const menu = topLayerMenu(page);
+      const said = trappedMenu(page).said;
+
+      await menu.open();
+
+      await expect(said).not.toBeEmpty();
+      const [list, sentence] = await Promise.all([menu.menu.boundingBox(), said.boundingBox()]);
+      expect((list?.y ?? Infinity) + (list?.height ?? 0)).toBeLessThanOrEqual(sentence?.y ?? 0);
+    });
   });
 }
 

@@ -74,7 +74,7 @@
         gap: var(--base-x-2_5);
     }
 
-    .old-way-cards:has(.sort-choices) {
+    .old-way-cards:has(.sort-choices, :popover-open) {
         padding-block-end: var(--base-x-7);
     }
 
