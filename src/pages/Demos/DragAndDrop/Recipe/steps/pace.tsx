@@ -24,8 +24,9 @@ export const commitCrossing = (listSource: string): ReactNode =>
 export const stashLanding = (listSource: string): ReactNode =>
   <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
     <Words want={<>You want the list calm while the platform drags, which means the reorder must wait for a <Term word="session">session</Term> that is still alive when the drop lands.</>}>
-      <Says>Each dragover only remembers the <Term word="landing">landing</Term> where the pointer last hovered, and
-        a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
+      <Says>Each dragover only remembers the <Term word="landing">landing</Term> where the pointer last hovered,
+        and <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn>, the event for the pointer leaving an item,
+        forgets it. The commit runs from the release: the session has to finish before the list moves,
         because the platform is still animating its own end of the bargain.</Says>
     </Words>
     <Codes>

@@ -2,17 +2,18 @@ import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
 
 export const holdTheAloft = (listSource: string) =>
-  <Step title="Hold the aloft in state, not in the payload">
-    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> exists to carry data between
-      windows, and mid-drag it is locked:
-      a <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn> may not read what
-      dragstart wrote, so the payload cannot steer the sort.</>}>
+  <Step title="Keep which item is held in state, not in the drag’s payload">
+    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn>, the object a drag event carries its data in,
+      the payload, exists to carry data between windows, and mid-drag it is locked: a handler
+      for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
+      on whatever the pointer is over, may not read what dragstart wrote, so the payload cannot steer the sort.</>}>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in
         dragover, and the read comes back empty. That is not a bug: the store is sealed
         mid-drag so a hovered window cannot sniff data that was never dropped on it.</Says>
-      <Says>Steer with state instead. The lift reports which item is aloft, the release clears
-        it, and every handler in between reads the same value the render does. The payload API
-        is still there when another window genuinely needs the data.</Says>
+      <Says>Steer with state instead, the values React keeps between one drawing of the page and the next. The lift
+        reports which item is held, which the code calls aloft, the release clears it, and every handler in between
+        reads the same value the render does. The payload API is still there when another window genuinely needs the
+        data.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

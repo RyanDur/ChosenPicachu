@@ -268,7 +268,7 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Fade the origin to a whisper/);
     expect(recipe).toHaveTextContent(/Slide the crossed item home/);
     expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
-    expect(recipe).toHaveTextContent(/Know where the road ends/);
+    expect(recipe).toHaveTextContent(/What drag and drop cannot give you/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
   });
@@ -319,5 +319,51 @@ describe('the sortable list demo', () => {
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
+  });
+});
+
+describe('the native drag sort tutorial’s words', () => {
+  test('should head its steps with what happens, not with aloft or the road', async () => {
+    const recipe = await nativeRecipe();
+
+    expect(recipe).toHaveTextContent(/Keep which item is held in state, not in the drag’s payload/);
+    expect(recipe).toHaveTextContent(/A swap counts once the pointer is a quarter of the way into a neighbour/);
+    expect(recipe).toHaveTextContent(/What drag and drop cannot give you/);
+    expect(recipe).not.toHaveTextContent(/Hold the aloft|Find the crossing with the inner half|Know where the road ends/);
+  });
+
+  test.each([
+    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On mousedown, the event for a mouse button going down,'],
+    ['dragstart', 'dragstart, the event for a drag beginning, and its handler declares the move'],
+    ['dataTransfer and dragover', 'dataTransfer, the object a drag event carries its data in, the payload, exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
+    ['state', 'Steer with state instead, the values React keeps between one drawing of the page and the next. The lift reports which item is held, which the code calls aloft,'],
+    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default, and here the default is to refuse the drop. dropEffect, a property of dataTransfer, names the verb, such as move or copy, so the cursor matches. And the handler for drop, the event for a release over a target,'],
+    ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
+    ['where a crossing counts', 'only counts once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
+    ['the drag image', 'The drag image, the copy of the item under the pointer, is a fixed picture taken at dragstart,']
+  ])('should say what %s is where the reader meets it', async (_term, sentence) => {
+    expect(await nativeRecipe()).toHaveTextContent(sentence);
+  });
+
+  test('should say what dragleave is where the lazy pace meets it', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and dragleave, the event for the pointer leaving an item, forgets it.');
+  });
+
+  test('should drop the tables tab’s survey and inner half', async () => {
+    expect(await nativeRecipe()).not.toHaveTextContent(/survey|inner half/);
+  });
+
+  test('should draw where a swap counts', async () => {
+    expect(within(await nativeRecipe()).getByRole('figure', {name: /^Where a swap counts\./})).toBeInTheDocument();
+  });
+
+  test('should name MDN as Mozilla’s web reference', async () => {
+    await nativeRecipe();
+
+    expect(screen.getByText(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
   });
 });
