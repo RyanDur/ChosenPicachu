@@ -371,7 +371,7 @@ const workspaceStory =
       That is all a reload or a shared link needs to bring the layout back.</Tell>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute. A chart is
       draggable only while its grip is pressed, and the grip shows when the pointer is over the chart. While a chart is
-      held it fades almost to nothing where it sits, and the browser draws a copy of it under the hand. It swaps with
+      held it fades almost to nothing where it sits. It swaps with
       its neighbour once the hand has moved a third of the chart’s height from where it grabbed, up or down, and the
       neighbour slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
