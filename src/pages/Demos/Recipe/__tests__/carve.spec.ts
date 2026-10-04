@@ -1,7 +1,8 @@
 import {span, unit} from '../carve';
+import {aSample} from '../__test_support';
 
 // language=TEXT
-const source = `const still = 0;
+const source = aSample(`const still = 0;
 
 const travel = (event) => {
     if (event.buttons === 0) {
@@ -36,9 +37,9 @@ const Row: FC<Props & {row: string}> = ({row: _row, children, ...tr}) => {
 };
 
 const trailing = 'never carved';
-`;
+`);
 
-const css = `.sortable .header-cell {
+const css = aSample(`.sortable .header-cell {
     width: var(--share);
 }
 
@@ -61,9 +62,15 @@ const css = `.sortable .header-cell {
 .bought-wall {
     fill: darkgreen;
 }
-`;
+`, 'src/example.css');
 
 describe('carving examples out of the source they teach', () => {
+  test('every carved line remembers the file it was taken from', () => {
+    const carved = [...unit(source, 'const travel = '), ...span(source, 'onPointerMove', 'onPointerUp')];
+
+    expect(new Set(carved.map(({from}) => from))).toEqual(new Set([source]));
+  });
+
   test('a braced unit runs from its anchor to the bracket that closes it', () => {
     expect(unit(source, 'const travel = ').map(({text}) => text)).toEqual([
       'const travel = (event) => {',
@@ -155,7 +162,7 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('a css selector carries on past a pseudo-class paren into its combinator', () => {
-    const sheet = '.toggle:not(:checked) ~ .text {\n    height: 0;\n}\n';
+    const sheet = aSample('.toggle:not(:checked) ~ .text {\n    height: 0;\n}\n', 'src/example.css');
 
     expect(unit(sheet, '.toggle:not(:checked) ~ .text {').map(({text}) => text)).toEqual([
       '.toggle:not(:checked) ~ .text {',
@@ -165,7 +172,7 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('a css selector carries on past a pseudo-class paren into a next-sibling combinator', () => {
-    const sheet = '.toggle:not(:checked) + .text {\n    height: 0;\n}\n';
+    const sheet = aSample('.toggle:not(:checked) + .text {\n    height: 0;\n}\n', 'src/example.css');
 
     expect(unit(sheet, '.toggle:not(:checked) + .text {').map(({text}) => text)).toEqual([
       '.toggle:not(:checked) + .text {',
@@ -175,7 +182,7 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('a css selector carries on past a pseudo-class paren into a pseudo-element', () => {
-    const sheet = '.next:not(:has(.prev))::before {\n    content: "";\n}\n';
+    const sheet = aSample('.next:not(:has(.prev))::before {\n    content: "";\n}\n', 'src/example.css');
 
     expect(unit(sheet, '.next:not(:has(.prev))::before {').map(({text}) => text)).toEqual([
       '.next:not(:has(.prev))::before {',
@@ -185,7 +192,7 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('a css block ends at its brace, even when the next selector starts with a colon', () => {
-    const sheet = '@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n';
+    const sheet = aSample('@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n', 'src/example.css');
 
     expect(unit(sheet, '@media (hover: hover) {').map(({text}) => text)).toEqual([
       '@media (hover: hover) {',

@@ -14,10 +14,10 @@ import {
   slideCrossed,
   straightToOrder
 } from './steps';
-import gripSource from '../items/Grip.tsx?raw';
-import listSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?raw';
-import itemSource from '../items/KeepItem.tsx?raw';
-import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
+import gripSource from '../items/Grip.tsx?sample';
+import listSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?sample';
+import itemSource from '../items/KeepItem.tsx?sample';
+import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?sample';
 
 export const EagerKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"

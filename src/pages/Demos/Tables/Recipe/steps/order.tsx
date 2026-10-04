@@ -4,8 +4,9 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {arrangementSource, gap, headersSource, placingSource, rowSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const orderInState = (world: World, tableSource: string, buildSrc: string): ReactNode =>
+export const orderInState = (world: World, tableSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Keep the order in state, not in the data">
     <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
       <Says>So the order is the page’s state, the columns and the rows as they stand, held beside

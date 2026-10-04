@@ -4,8 +4,9 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {gap, sortableCss, stateSource, liftSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const liftOnce = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const liftOnce = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
       <Says>Asking the DOM where things are mid-drag causes the layout thrash you came here to

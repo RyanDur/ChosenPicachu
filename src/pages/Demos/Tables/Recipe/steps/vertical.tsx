@@ -4,8 +4,9 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameHtml, gap, gripSource, surveySource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const carryVertical = (world: World, rowSource: string, buildSrc: string): ReactNode =>
+export const carryVertical = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
       <Says>The second axis should be bought with substitutions, not new machinery: a real

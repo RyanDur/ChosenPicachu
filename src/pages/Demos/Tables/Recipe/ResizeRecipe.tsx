@@ -4,14 +4,14 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
-import sharesSource from '@components/Table/shares.ts?raw';
-import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?raw';
-import stateSource from '@components/DragSortableTable/table-state.ts?raw';
-import baseCss from '@components/DragSortableTable/Table.css?raw';
-import tableSource from '../Frame/table.html?raw';
-import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
-import frameResize from '../Frame/table/resize.ts?raw';
-import widthsSource from '../Aggregations/Aggregations.css?raw';
+import sharesSource from '@components/Table/shares.ts?sample';
+import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample';
+import stateSource from '@components/DragSortableTable/table-state.ts?sample';
+import baseCss from '@components/DragSortableTable/Table.css?sample';
+import tableSource from '../Frame/table.html?sample';
+import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import frameResize from '../Frame/table/resize.ts?sample';
+import widthsSource from '../Aggregations/Aggregations.css?sample';
 import {theImplementation} from './steps';
 import '../../Recipe/Recipe.css';
 

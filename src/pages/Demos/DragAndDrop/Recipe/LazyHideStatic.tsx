@@ -13,10 +13,10 @@ import {
   stashLanding,
   straightToOrder
 } from './steps';
-import gripSource from '../items/Grip.tsx?raw';
-import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?raw';
-import itemSource from '../items/HideItem.tsx?raw';
-import cssSource from '../LazyHideStaticList/LazyHideStaticList.css?raw';
+import gripSource from '../items/Grip.tsx?sample';
+import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?sample';
+import itemSource from '../items/HideItem.tsx?sample';
+import cssSource from '../LazyHideStaticList/LazyHideStaticList.css?sample';
 
 export const LazyHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"

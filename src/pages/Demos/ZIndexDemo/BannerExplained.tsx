@@ -6,8 +6,8 @@ import {BannerTrap} from './BannerTrap';
 import {storyAnchor} from '../Recipe/story-anchor';
 import {storyOpenedIn} from '../Recipe/Story';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
-import zIndexCss from './ZIndexDemo.css?raw';
-import bannersSource from '@components/Banners/Banners.tsx?raw';
+import zIndexCss from './ZIndexDemo.css?sample';
+import bannersSource from '@components/Banners/Banners.tsx?sample';
 import '../Recipe/Runs.css';
 
 const gap = plain(' ');

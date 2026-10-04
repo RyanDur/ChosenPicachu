@@ -3,8 +3,9 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {gap, glideSource, marksSource, sessionSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const slideCrossed = (listSource: string, cssSource: string): ReactNode =>
+export const slideCrossed = (listSource: Sample, cssSource: Sample): ReactNode =>
   <Step title="Slide the crossed item home" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.">
       <Says>The swap commits instantly and the crossed item is merely drawn where it used
@@ -25,7 +26,7 @@ export const slideCrossed = (listSource: string, cssSource: string): ReactNode =
     </Codes>
   </Step>;
 
-export const glideSettle = (listSource: string): ReactNode =>
+export const glideSettle = (listSource: Sample): ReactNode =>
   <Step title="Glide the settle, one tick after" dial={<MotionDial name="native-motion"/>}>
     <Words want="A lazy settle happens all at once on release, the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.">
       <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and
@@ -47,7 +48,7 @@ export const glideSettle = (listSource: string): ReactNode =>
     </Codes>
   </Step>;
 
-export const directState = (listSource: string): ReactNode =>
+export const directState = (listSource: Sample): ReactNode =>
   <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
     <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
       <Says>This is the static list; no marking code exists in it. The order applies and React

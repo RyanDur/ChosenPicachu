@@ -6,9 +6,9 @@ import {span, unit} from '../../Recipe/carve';
 import {EntranceDial, StackDial} from '../../Controls';
 import {popoverWinsHeading} from '../part-headings';
 import {arrivalLines, leavingLines, slotLines} from './decided';
-import bannersSource from '@components/Banners/Banners.tsx?raw';
-import providerSource from '@components/Banners/BannerProvider.tsx?raw';
-import bannersCss from '@components/Banners/Banners.css?raw';
+import bannersSource from '@components/Banners/Banners.tsx?sample';
+import providerSource from '@components/Banners/BannerProvider.tsx?sample';
+import bannersCss from '@components/Banners/Banners.css?sample';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');

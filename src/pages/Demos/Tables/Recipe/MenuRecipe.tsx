@@ -5,29 +5,30 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
-import menuCss from '../../../../styles/menu.css?raw';
-import headerCss from '@components/DragSortableTable/Header.css?raw';
-import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
-import tableSource from '../Frame/table.html?raw';
-import arrangementSource from '@components/DragSortableTable/arrangement.ts?raw';
-import demosSource from '@pages/Demos/store.ts?raw';
-import frameMenus from '../Frame/table/menus.ts?raw';
+import menuCss from '../../../../styles/menu.css?sample';
+import headerCss from '@components/DragSortableTable/Header.css?sample';
+import sortingSource from '@components/DragSortableTable/sorting.ts?sample';
+import tableSource from '../Frame/table.html?sample';
+import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
+import demosSource from '@pages/Demos/store.ts?sample';
+import frameMenus from '../Frame/table/menus.ts?sample';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
 import {menuSource} from './steps/sources';
 import {theImplementation} from './steps';
-import baseCss from '@components/DragSortableTable/Table.css?raw';
+import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
 const gap = plain(' ');
 
 type Build = {
   world: World;
-  source: string;
-  menuSrc: string;
-  tableSrc: string;
-  rowSrc: string;
-  buildSrc: string;
+  source: Sample;
+  menuSrc: Sample;
+  tableSrc: Sample;
+  rowSrc: Sample;
+  buildSrc: Sample;
 };
 
 const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>

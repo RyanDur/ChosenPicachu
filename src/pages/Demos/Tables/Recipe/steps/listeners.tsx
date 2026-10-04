@@ -4,8 +4,9 @@ import {Term} from '../Term';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {gap, elementSource, storeSource, liftSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
+export const listenersOnce = (world: World, buildSrc: Sample): ReactNode =>
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>, and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state

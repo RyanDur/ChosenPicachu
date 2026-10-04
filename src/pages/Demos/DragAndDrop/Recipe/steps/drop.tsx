@@ -1,7 +1,8 @@
 import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const acceptTheDrop = (listSource: string) =>
+export const acceptTheDrop = (listSource: Sample) =>
   <Step title="Accept the drop, or the platform takes it back">
     <Words want="By default nothing is a drop target: release over the list and the platform animates the card flying home, a snapback you cannot cancel.">
       <Says>A bare list looks finished. Then you release over it, the card flies home, and your

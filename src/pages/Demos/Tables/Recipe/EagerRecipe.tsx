@@ -31,12 +31,12 @@ import {
   twoRoads,
   walkSlides
 } from './steps';
-import buildSrc from '../Frame/builds/Eager.ts?raw';
-import tableSource from '../Builds/EagerTable/EagerTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
-import rowSource from '@components/DragSortableTable/RowHeader.tsx?raw';
+import buildSrc from '../Frame/builds/Eager.ts?sample';
+import tableSource from '../Builds/EagerTable/EagerTable.tsx?sample';
+import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import rowSource from '@components/DragSortableTable/RowHeader.tsx?sample';
 
-import cssSource from '@components/DragSortableTable/motion.css?raw';
+import cssSource from '@components/DragSortableTable/motion.css?sample';
 
 type Props = {track: Track; world: World; origin: Origin; motion: Motion};
 

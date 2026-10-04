@@ -3,19 +3,19 @@ import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, aside, pl
 import {span, unit} from '../../Recipe/carve';
 import {World} from '../params';
 import {Term} from './Term';
-import stateSource from '@components/DragSortableTable/table-state.ts?raw';
-import arrangementSource from '@components/DragSortableTable/arrangement.ts?raw';
-import actionsSource from '@components/DragSortableTable/actions.ts?raw';
-import reducerSource from '@components/DragSortableTable/reducer.ts?raw';
-import storeSource from '@components/store.ts?raw';
-import contextSource from '@components/DragSortableTable/context.ts?raw';
-import selectorsSource from '@components/DragSortableTable/selectors.ts?raw';
-import elementSource from '@components/DragSortableTable/DragSortableTable.tsx?raw';
-import demosSource from '@pages/Demos/store.ts?raw';
-import exchangeSource from '@pages/Demos/exchange.ts?raw';
-import openingSource from '@pages/Demos/useExchange.ts?raw';
-import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
-import buildSrc from '../Frame/builds/Eager.ts?raw';
+import stateSource from '@components/DragSortableTable/table-state.ts?sample';
+import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
+import actionsSource from '@components/DragSortableTable/actions.ts?sample';
+import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
+import storeSource from '@components/store.ts?sample';
+import contextSource from '@components/DragSortableTable/context.ts?sample';
+import selectorsSource from '@components/DragSortableTable/selectors.ts?sample';
+import elementSource from '@components/DragSortableTable/DragSortableTable.tsx?sample';
+import demosSource from '@pages/Demos/store.ts?sample';
+import exchangeSource from '@pages/Demos/exchange.ts?sample';
+import openingSource from '@pages/Demos/useExchange.ts?sample';
+import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import buildSrc from '../Frame/builds/Eager.ts?sample';
 
 const gap = plain(' ');
 

@@ -4,8 +4,9 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameSettle, gap, reducerSource, stateSource, surveySource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const animatedMotion = (world: World, headerSource: string, cssSource: string, buildSrc: string): ReactNode =>
+export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="The trader must see where the column went and what it pushed aside. A column that snaps home on release, over a neighbour that has already jumped, leaves the eye to work out both.">
       <Says>The reorder has to land instantly for the drag math to stay true, and the hand is
@@ -72,7 +73,7 @@ export const animatedMotion = (world: World, headerSource: string, cssSource: st
     </Reveal>
   </Step>;
 
-export const staticMotion = (world: World, cssSource: string): ReactNode =>
+export const staticMotion = (world: World, cssSource: Sample): ReactNode =>
   <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       <Says>No motion should be the stylesheet’s decision, not a second table: the same marks

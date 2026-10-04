@@ -5,8 +5,8 @@ import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer, Where9999IsCompared} from './Diagrams';
 import {CardOne} from './card-one';
 import {stillLosesHeading} from './part-headings';
-import trappedSource from './TrappedMenu.tsx?raw';
-import zIndexCss from './ZIndexDemo.css?raw';
+import trappedSource from './TrappedMenu.tsx?sample';
+import zIndexCss from './ZIndexDemo.css?sample';
 import '../Recipe/Runs.css';
 
 const gap = plain(' ');

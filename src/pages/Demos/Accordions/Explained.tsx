@@ -13,13 +13,13 @@ import {
 } from './Accordions';
 import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
-import accordionsSource from './Accordions.tsx?raw';
-import accordionsCss from './Accordions.css?raw';
-import measuredSource from './measured.ts?raw';
-import htmlAloneSource from './HtmlAlone.tsx?raw';
+import accordionsSource from './Accordions.tsx?sample';
+import accordionsCss from './Accordions.css?sample';
+import measuredSource from './measured.ts?sample';
+import htmlAloneSource from './HtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
-import placementCss from '../../../styles/placement.css?raw';
-import resetCss from '../../../styles/reset.css?raw';
+import placementCss from '../../../styles/placement.css?sample';
+import resetCss from '../../../styles/reset.css?sample';
 import {
   FocusOnTheBar,
   OffScreenNotGone,

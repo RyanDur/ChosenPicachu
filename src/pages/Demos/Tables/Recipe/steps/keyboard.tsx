@@ -3,8 +3,9 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {gap, gripSource, headerCss, surveySource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const focusLands = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
       <Says>HTML already focuses more than it gets credit for: a button is focusable by birth,
@@ -45,7 +46,7 @@ export const focusLands = (world: World, headerSource: string, buildSrc: string)
     </Reveal>
   </Step>;
 
-export const arrowsSpeak = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const arrowsSpeak = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Arrows speak direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
       <Says>The verb gets claimed with

@@ -14,10 +14,10 @@ import {
   roadEnd,
   straightToOrder
 } from './steps';
-import gripSource from '../items/Grip.tsx?raw';
-import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?raw';
-import itemSource from '../items/HideItem.tsx?raw';
-import cssSource from '../EagerHideStaticList/EagerHideStaticList.css?raw';
+import gripSource from '../items/Grip.tsx?sample';
+import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?sample';
+import itemSource from '../items/HideItem.tsx?sample';
+import cssSource from '../EagerHideStaticList/EagerHideStaticList.css?sample';
 
 export const EagerHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"

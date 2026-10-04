@@ -1,11 +1,13 @@
 import {FC} from 'react';
 import {classNames} from '@components/class-names';
 import {highlight} from './highlight';
+import {Sample} from './sample';
 import './Snippet.css';
 
 export type Line = {
   text: string;
   dim?: boolean;
+  from?: Sample;
 };
 
 type Props = {

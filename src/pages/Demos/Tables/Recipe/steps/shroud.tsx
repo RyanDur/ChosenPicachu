@@ -5,8 +5,9 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameCarry, gap, selectorsSource, stateSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const hideOrigin = (world: World, headerSource: string, cssSource: string, buildSrc: string): ReactNode =>
+export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
     <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
       <Says>Copying the column would go stale on the next trade, and a copy never has
@@ -61,7 +62,7 @@ export const hideOrigin = (world: World, headerSource: string, cssSource: string
     </Reveal>
   </Step>;
 
-export const keepOrigin = (world: World, cssSource: string): ReactNode =>
+export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
   <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the

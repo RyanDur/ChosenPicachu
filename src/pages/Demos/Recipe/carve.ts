@@ -1,14 +1,15 @@
 import {Line} from './Snippet';
+import {Sample} from './sample';
 
 type Closer = '}' | ')' | ']';
 
 const openers: Record<string, Closer> = {'{': '}', '(': ')', '[': ']'};
 
-const dedented = (lines: string[]): Line[] => {
+const dedented = (lines: string[], from: Sample): Line[] => {
   const margin = Math.min(...lines
     .filter(line => line.trim().length > 0)
     .map(line => line.length - line.trimStart().length));
-  return lines.map(line => ({text: line.slice(margin)}));
+  return lines.map(line => ({text: line.slice(margin), from}));
 };
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean => {
@@ -25,7 +26,8 @@ const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>)
   return !'=:{>~+'.includes(ahead[0]);
 };
 
-export const unit = (source: string, anchor: string): Line[] => {
+export const unit = (sample: Sample, anchor: string): Line[] => {
+  const source = sample.text;
   const found = source.indexOf(anchor);
   if (found < 0) {
     throw new Error(`no unit anchored at "${anchor}"`);
@@ -50,10 +52,11 @@ export const unit = (source: string, anchor: string): Line[] => {
     at += 1;
   }
   const close = source.indexOf('\n', at);
-  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'));
+  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample);
 };
 
-export const span = (source: string, from: string, to: string): Line[] => {
+export const span = (sample: Sample, from: string, to: string): Line[] => {
+  const source = sample.text;
   const first = source.indexOf(from);
   if (first < 0) {
     throw new Error(`no span opens at "${from}"`);
@@ -64,11 +67,11 @@ export const span = (source: string, from: string, to: string): Line[] => {
   }
   const start = source.lastIndexOf('\n', first) + 1;
   const close = source.indexOf('\n', last);
-  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'));
+  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample);
 };
 
-export const withoutImports = (source: string): Line[] => {
-  const lines = source.split('\n');
+export const withoutImports = (sample: Sample): Line[] => {
+  const lines = sample.text.split('\n');
   const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
   const body = lines.slice(lastImport + 1);
   while (body[0]?.trim() === '') {
@@ -77,5 +80,5 @@ export const withoutImports = (source: string): Line[] => {
   while (body[body.length - 1]?.trim() === '') {
     body.pop();
   }
-  return dedented(body);
+  return dedented(body, sample);
 };

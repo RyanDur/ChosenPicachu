@@ -31,12 +31,12 @@ import {
   twoRoads,
   walkSlides
 } from './steps';
-import buildSrc from '../Frame/builds/Lazy.ts?raw';
-import tableSource from '../Builds/LazyTable/LazyTable.tsx?raw';
-import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?raw';
-import rowSource from '../Builds/LazyTable/RowHeader.tsx?raw';
-import paceSource from '../Builds/LazyTable/travel.ts?raw';
-import cssSource from '@components/DragSortableTable/motion.css?raw';
+import buildSrc from '../Frame/builds/Lazy.ts?sample';
+import tableSource from '../Builds/LazyTable/LazyTable.tsx?sample';
+import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?sample';
+import rowSource from '../Builds/LazyTable/RowHeader.tsx?sample';
+import paceSource from '../Builds/LazyTable/travel.ts?sample';
+import cssSource from '@components/DragSortableTable/motion.css?sample';
 
 type Props = {track: Track; world: World; origin: Origin; motion: Motion};
 

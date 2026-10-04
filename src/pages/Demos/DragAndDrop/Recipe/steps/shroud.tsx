@@ -3,8 +3,9 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {gap} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const fadeOrigin = (itemSource: string, cssSource: string): ReactNode =>
+export const fadeOrigin = (itemSource: Sample, cssSource: Sample): ReactNode =>
   <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
     <Words want="With the drag image in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
       <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
@@ -24,7 +25,7 @@ export const fadeOrigin = (itemSource: string, cssSource: string): ReactNode =>
     </Codes>
   </Step>;
 
-export const keepStanding = (listSource: string): ReactNode =>
+export const keepStanding = (listSource: Sample): ReactNode =>
   <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
     <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
       <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform

@@ -4,8 +4,9 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {arrowsSource, frameSettle, gap} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const walkSlides = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const walkSlides = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
     <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
@@ -37,7 +38,7 @@ export const walkSlides = (world: World, headerSource: string, buildSrc: string)
     </Reveal>
   </Step>;
 
-export const cutKey = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const cutKey = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
       <Says>Motion off should cost nothing extra: no marks, no waiting. The static walk should
@@ -65,7 +66,7 @@ export const cutKey = (world: World, headerSource: string, buildSrc: string): Re
     </Reveal>
   </Step>;
 
-export const gripArrows = (world: World, rowSource: string, buildSrc: string): ReactNode =>
+export const gripArrows = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Turn the arrows vertical">
     <Words want="A row is the same walk turned vertical, and the grip is already a button under the fingers.">
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so

@@ -4,8 +4,8 @@ import {span, unit} from '../Recipe/carve';
 import {NaturalZIndex} from './NaturalZIndex';
 import {OneNumberLiftsOneCard, PileFromTheSide} from './Diagrams';
 import {RaisedCard} from './raised';
-import naturalSource from './NaturalZIndex.tsx?raw';
-import zIndexCss from './ZIndexDemo.css?raw';
+import naturalSource from './NaturalZIndex.tsx?sample';
+import zIndexCss from './ZIndexDemo.css?sample';
 import '../Recipe/Runs.css';
 
 const gap = plain(' ');

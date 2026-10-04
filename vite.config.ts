@@ -1,4 +1,6 @@
 import {readFileSync} from 'node:fs';
+import {execSync} from 'node:child_process';
+import {relative} from 'node:path';
 import {defineConfig} from 'vitest/config';
 import type {Plugin} from 'vite';
 import {loadEnv} from 'vite';
@@ -61,6 +63,46 @@ const rawCss = (): Plugin => ({
     }
   }
 });
+
+const builtCommit = (): string => {
+  try {
+    return process.env.GITHUB_SHA ?? execSync('git rev-parse HEAD', {encoding: 'utf8'}).trim();
+  } catch {
+    return 'main';
+  }
+};
+
+const sample = (): Plugin => {
+  const commit = builtCommit();
+  let root = process.cwd();
+  return {
+    name: 'sample',
+    enforce: 'pre',
+    configResolved(config) {
+      root = config.root;
+    },
+    async resolveId(source, importer) {
+      if (source.endsWith('?sample')) {
+        const resolved = await this.resolve(source.slice(0, -'?sample'.length), importer, {skipSelf: true});
+        if (resolved !== null) {
+          return '\0sample' + resolved.id + '.js';
+        }
+      }
+    },
+    load(id) {
+      if (id.startsWith('\0sample')) {
+        const file = id.slice('\0sample'.length, -'.js'.length);
+        this.addWatchFile(file);
+        const path = relative(root, file);
+        return `export default ${JSON.stringify({
+          text: readFileSync(file, 'utf8'),
+          path,
+          url: `https://github.com/RyanDur/ChosenPicachu/blob/${commit}/${path}`
+        })};`;
+      }
+    }
+  };
+};
 
 const frameCss = (): Plugin => ({
   name: 'frame-css',
@@ -158,7 +200,7 @@ export default defineConfig(({mode}) => ({
   build: {
     manifest: true
   },
-  plugins: [rawCss(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

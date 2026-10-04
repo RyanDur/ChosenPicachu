@@ -5,6 +5,7 @@ import {DemoTopics} from '../../../types';
 import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
 import {withoutImports} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
 const sourceOf = (world: World, path: string): string =>
   `${Paths.repo}/${world === 'react' ? 'tree' : 'blob'}/main/src/pages/Demos/Tables/${path}`;
@@ -16,7 +17,7 @@ export const theImplementation = (world: World, react: string, vanilla: string):
     target="_blank"
     rel="noreferrer">the implementation</a>.</Tell>;
 
-export const theWholeBuild = (world: World, tableSource: string, buildSrc: string): ReactNode =>
+export const theWholeBuild = (world: World, tableSource: Sample, buildSrc: Sample): ReactNode =>
   <Codes>
     {world === 'react'
       ? <Snippet label="TS" lines={withoutImports(tableSource)}/>

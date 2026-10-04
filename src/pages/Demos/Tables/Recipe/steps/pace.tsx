@@ -5,8 +5,9 @@ import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {gap, travelSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const eagerPace = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const eagerPace = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
       <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a drop
@@ -60,7 +61,7 @@ export const eagerPace = (world: World, headerSource: string, buildSrc: string):
     </Reveal>
   </Step>;
 
-export const lazyPace = (world: World, headerSource: string, paceSource: string, buildSrc: string): ReactNode =>
+export const lazyPace = (world: World, headerSource: Sample, paceSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the

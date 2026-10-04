@@ -5,10 +5,10 @@ import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from 
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
 import {popoverWinsHeading, stillLosesHeading} from '../part-headings';
-import bannersSource from '@components/Banners/Banners.tsx?raw';
-import bannersCss from '@components/Banners/Banners.css?raw';
-import placementCss from '../../../../styles/placement.css?raw';
-import surfaceCss from '../../../../styles/surface.css?raw';
+import bannersSource from '@components/Banners/Banners.tsx?sample';
+import bannersCss from '@components/Banners/Banners.css?sample';
+import placementCss from '../../../../styles/placement.css?sample';
+import surfaceCss from '../../../../styles/surface.css?sample';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');

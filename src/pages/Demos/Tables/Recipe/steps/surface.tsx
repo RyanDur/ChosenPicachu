@@ -4,8 +4,9 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {gap, travelSource} from './sources';
+import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const dragSurface = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const dragSurface = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Hold the pointer from the lift">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
       <Says>So nothing can wait for the pointer to come back. Whoever lifts

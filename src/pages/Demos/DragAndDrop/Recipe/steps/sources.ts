@@ -1,7 +1,7 @@
-import crossingSource from '../../crossing.ts?raw';
-import glideSource from '@components/glide.ts?raw';
-import marksSource from '../../marks.ts?raw';
-import sessionSource from '../../session.ts?raw';
+import crossingSource from '../../crossing.ts?sample';
+import glideSource from '@components/glide.ts?sample';
+import marksSource from '../../marks.ts?sample';
+import sessionSource from '../../session.ts?sample';
 import {plain} from '../../../Recipe';
 
 export {crossingSource, glideSource, marksSource, sessionSource};

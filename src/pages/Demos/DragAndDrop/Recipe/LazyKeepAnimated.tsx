@@ -13,9 +13,9 @@ import {
   stashLanding,
   straightToOrder
 } from './steps';
-import gripSource from '../items/Grip.tsx?raw';
-import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
-import itemSource from '../items/KeepItem.tsx?raw';
+import gripSource from '../items/Grip.tsx?sample';
+import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?sample';
+import itemSource from '../items/KeepItem.tsx?sample';
 
 export const LazyKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"

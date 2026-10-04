@@ -1,4 +1,4 @@
-import bannersCss from '@components/Banners/Banners.css?raw';
+import bannersCss from '@components/Banners/Banners.css?sample';
 import {span} from '../../../Recipe/carve';
 import {
   arriveDistance, arriveStart, closedGap, closedSlot, closingGapTransition, closingTransition, flatNews, gapTransition,
@@ -19,12 +19,12 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
     ...declarationsOf(gapTransition),
     ...declarationsOf(closingGapTransition)
   ])('the %s banner wears the declaration Banners.css gives it: %s', (_choice, declaration) => {
-    expect(bannersCss).toContain(declaration);
+    expect(bannersCss.text).toContain(declaration);
   });
 
   test.each([slideTransition, slideOutTransition, newsTransition, ...newsClosingTransition, ...Object.values(newsShrinks)])(
     'every banner wears the declaration Banners.css gives it: %s', declaration => {
-      expect(bannersCss).toContain(declaration);
+      expect(bannersCss.text).toContain(declaration);
     });
 
   test.each(Object.entries(flatNews))('a %s stack starts its message flat, inside the message’s own starting style', (stack, declarations) => {
@@ -43,7 +43,7 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
 
   test.each(declarationsOf(ownedGap))('the %s stack owns its gap, as Banners.css writes it', (_choice, rule) => {
     const [selector, declaration] = rule.split(' { ');
-    expect(bannersCss).toContain(selector.replace('.trouble', '.trouble:where('));
-    expect(bannersCss).toContain(declaration.replace(' }', ''));
+    expect(bannersCss.text).toContain(selector.replace('.trouble', '.trouble:where('));
+    expect(bannersCss.text).toContain(declaration.replace(' }', ''));
   });
 });
