@@ -36,8 +36,8 @@ export const PopoverExplained: FC = () =>
         <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</menu>')}/>
       </li>
       <li className="run">
-        <p className="paragraph">Each button carries a tabIndex of 0.
-          That is the HTML attribute <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>, spelled the way
+        <p className="paragraph">The button that opens the menu carries a tabIndex of 0, and so does each choice in the
+          sample above. That is the HTML attribute <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>, spelled the way
           React spells it, and React is the JavaScript library this site is built with. A tabindex of 0 asks the browser to stop on the element when
           Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
           fields and to elements that ask for it.</p>

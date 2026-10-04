@@ -37,8 +37,8 @@ describe('why the popover wins', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
-    const run = explanation.runTelling(part, /Each button carries a tabIndex of 0/);
-    const sample = explanation.everyCodeBeside(part, /Each button carries a tabIndex of 0/).join();
+    const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/);
+    const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/).join();
 
     expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
     expect(sample).not.toMatch(/<menu/);

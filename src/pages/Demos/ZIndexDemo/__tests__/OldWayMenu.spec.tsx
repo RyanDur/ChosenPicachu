@@ -198,6 +198,15 @@ describe('the card that traps the menu', () => {
 });
 
 describe('why 9999 still loses', () => {
+  test('should say what focus is where the tab first speaks of it', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
+
+    expect(explanation.runTelling(part, /Move through it with the arrow keys/))
+      .toHaveTextContent('Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you cannot see it, under card two.');
+  });
+
   test('should show the list’s 9999 and the card’s context beside the run that says what the reader saw', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
