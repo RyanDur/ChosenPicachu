@@ -151,20 +151,19 @@ const candlesStory =
   <Story param="graph" id="candles"
     can="The trader can read the same trades as candles"
     soThat="each window answers open, close, reach, and volume">
-    <Tell>A line answers where the price went; a candle answers what each window did:
-      where it opened and closed, how far it reached, and how much traded. The same
-      buckets feed both cards; no new state exists, only new shapes.</Tell>
-    <Tell>No new data exists for it either: the page owns one stream and one history,
-      and every card reads them, so two charts can never tell two stories.</Tell>
+    <Tell>A line shows where the price went. A candle shows what each span of time did: where the price opened and
+      closed, how high and how low it reached, and how much was traded.</Tell>
+    <Tell>This chart needs no new data and keeps none of its own. It is given the same trades as the price line, and it
+      groups and joins them with the same two functions.</Tell>
+    <Tell>So two charts set to the same period are drawn from the same candles and cannot disagree.</Tell>
     <Steps>
-      <Step title="Born from the same buckets">
-        <Words want="A second chart must not mean a second truth; two cards reading the same market have to agree, frame for frame.">
-          <Says>The page owns one stream and hands every card the same trades; this
-            card buckets them with the very fold the price line used,
-            and mergeLive stitches the same history underneath. The line only ever read
-            a corner of each candle; this card finally reads all of it. The period menu
-            rides this card too, the
-            same <Mdn path="Web/API/Popover_API">popover</Mdn> chooser.</Says>
+      <Step title="Make the candles the way the price line does">
+        <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
+          <Says>The page has one live feed and hands every chart the same trades. This chart groups them into candles with
+            bucketTrades and joins the fetched past with mergeLive, the same two functions the price line uses.</Says>
+          <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
+          <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the price
+            line.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -174,11 +173,15 @@ const candlesStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Shape each window’s candle">
-        <Words want="Open, high, low, close: four numbers per window, one honest glyph.">
-          <Says>candleShapes turns each candle into a body and a wick by the same
-            proportions the sparkline used; rising and falling wear their own class,
-            and CSS owns the colors.</Says>
+      <Step title="Draw each candle as a body and a wick">
+        <Words want="Open, high, low, close: four numbers for each span, drawn as one mark.">
+          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close. The wick, a thin
+            line through the body, runs from the high to the low.</Says>
+          <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
+            lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
+            of the slot wide, so two candles never touch.</Says>
+          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. The
+            stylesheet gives each class its colour.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -195,10 +198,11 @@ const candlesStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Bar the traded volume beneath">
-        <Words want="A price move on no volume and one on heavy volume are different stories; the trader reads both at once.">
-          <Says>volumeShapes bars each window’s traded size under the candles, scaled
-            to the busiest window on screen, drawn in the same SVG pass.</Says>
+      <Step title="Draw the volume under each candle">
+        <Words want="A price move on little trading and one on heavy trading mean different things. The trader reads both at once.">
+          <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
+            busiest span on the chart, and every other bar is in proportion to it.</Says>
+          <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -212,11 +216,11 @@ const candlesStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="The axes come free">
-        <Words want="A cluster of candles is a shape, not a chart; it needs its reach labelled and its hours ticked.">
-          <Says>The same Axes wraps this card: the high and the low come from the
-            candles’ own reach, and the time ticks pattern themselves per period. A
-            component that owns one job serves every chart that has that job.</Says>
+      <Step title="Use the same axes">
+        <Words want="Candles with no labels are a shape, not a chart. They need their prices labelled and their time marked.">
+          <Says>The same Axes wraps this chart. Its prices come from the highest high and the lowest low of the candles on
+            show, and its time marks follow the period, as on the price line.</Says>
+          <Says>Axes does one job, so every chart that has that job uses it.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[

@@ -348,6 +348,35 @@ describe('a list of charts', () => {
     });
   });
 
+  describe('the candles’ story', () => {
+    const candlesStory = async (): Promise<HTMLElement> => {
+      const feed = await listeningFeed();
+      render(<TestApp at={chartPageAt('candles', '?graph=candles')} feed={feed}/>);
+      await screen.findByRole('heading', {name: 'candles tutorial', level: 2});
+      return recipeFolds.story(document.body, 'The trader can read the same trades as candles');
+    };
+
+    test('should head each step with what happens', async () => {
+      expect(recipeFolds.stepTitles(await candlesStory())).toEqual([
+        'Make the candles the way the price line does',
+        'Draw each candle as a body and a wick',
+        'Draw the volume under each candle',
+        'Use the same axes'
+      ]);
+    });
+
+    test.each([
+      ['charts on the same period agree', 'So two charts set to the same period are drawn from the same candles and cannot disagree.'],
+      ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.']
+    ])('should say what the code does: %s', async (_claim, sentence) => {
+      expect(await candlesStory()).toHaveTextContent(sentence);
+    });
+
+    test('should not claim one history for every chart', async () => {
+      expect(await candlesStory()).not.toHaveTextContent(/one stream and one history/);
+    });
+  });
+
   test('the workspace tutorial names its story and steps in the heading outline', async () => {
     const feed = await listeningFeed();
 
