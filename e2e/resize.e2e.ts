@@ -34,11 +34,11 @@ for (const stage of stages) {
 
       test('widens a column from a press under a coarse pointer just off its edge', async ({page}) => {
         const table = await standing(page, stage);
-        const before = await table.columnWidth('trades');
+        const before = await table.columnWidth('volume');
 
-        await table.pressBesideEdgeAndDrag('trades', {besideBy: fingertipMiss, by: 60});
+        await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 60});
 
-        await expect.poll(() => table.columnWidth('trades')).toBeGreaterThan(before + 20);
+        await expect.poll(() => table.columnWidth('volume')).toBeGreaterThan(before + 20);
       });
 
       test('opens the sort menu from a finger on the toggle beside the edge, and resizes nothing', async ({page}) => {
@@ -55,6 +55,14 @@ for (const stage of stages) {
 
   test.describe(`a desktop with a mouse, in ${stage.name}`, () => {
     test.use(desktop);
+
+    test('a column still narrows to 5% under a mouse', async ({page}) => {
+      const table = await standing(page, stage);
+
+      await table.dragEdge('buys', {by: -600, moves: 20});
+
+      await expect(table.resizeHandle('buys')).toHaveAccessibleName('resize buys, 5%');
+    });
 
     test('a flick that leaves the edge in one move widens a column as far as a slow drag does', async ({page, context}) => {
       const slow = await standing(await context.newPage(), stage);

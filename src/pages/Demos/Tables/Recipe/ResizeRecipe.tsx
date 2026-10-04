@@ -224,8 +224,9 @@ const widenStory = (world: World) =>
             that exists, the total is safe by construction.</Says>
         </Words>
         <Reveal>
-          <Says>Whatever one column gains, the next gives, clamped so neither side drops below
-            the slimmest share. The invariant is not checked; it is built in.</Says>
+          <Says>Whatever one column gains, the next gives, clamped so neither side drops below its
+            floor. A column’s floor is the room its header’s controls need, and never less than the slimmest share.
+            The invariant is not checked; it is built in.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(sharesSource, 'export const traded')

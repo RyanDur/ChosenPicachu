@@ -4,7 +4,7 @@ import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
 import {arrowLifted, awoken, gripped, handleDragged, handleLeft, handleReleased, tradedBy} from './actions';
-import {grippedAt, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
+import {grippedAt, measuredFloors, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
@@ -14,7 +14,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const held = useTableSelector(columnGripped(column));
 
   const awaken = (table: HTMLTableElement): void =>
-    dispatch(awoken(measuredWidths(order, table)));
+    dispatch(awoken(measuredWidths(order, table), measuredFloors(order, table)));
   const trade = (delta: number): void => dispatch(tradedBy(column, neighbour, delta));
   const release = (): void => dispatch(handleReleased(column));
   const followed = (event: PointerEvent<HTMLElement>): void =>

@@ -193,6 +193,17 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.up();
     },
     resizeHandle,
+    narrowByKeys: async (name: string, presses: number): Promise<void> => {
+      await resizeHandle(name).focus();
+      for (let press = 0; press < presses; press++) {
+        await page.keyboard.press('ArrowLeft');
+      }
+    },
+    shareOf: async (name: string): Promise<number> => {
+      const widths = await Promise.all((await table.getByRole('columnheader').all()).map(async header => (await boxOf(header)).width));
+      return (await boxOf(columnHeader(name))).width / widths.reduce((sum, width) => sum + width, 0) * 100;
+    },
+    announcedShare: async (name: string): Promise<number> => Number(/, (\d+)%$/.exec(await resizeHandle(name).getAttribute('aria-label') ?? '')?.[1]),
     controlsPastTheirHeader: async (): Promise<string[]> => {
       const strays: string[] = [];
       for (const header of await table.getByRole('columnheader').all()) {

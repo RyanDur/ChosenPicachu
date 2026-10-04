@@ -1,5 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
+import {STEP_SHARE, grippedAt, measuredFloors, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
 import {TableAction} from '@components/DragSortableTable/actions';
 import {MountedTable, arrowLifted, columnOf, gripped, handleDragged, handleLeft, handleReleased, measured, namedShare, pointerHolds, tradedBy, widthsOf} from './table-state';
@@ -28,7 +28,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
 
   const awaken = (): void => {
     const widths = widthsOf(mounted.store.state) ?? measuredWidths(mounted.order(), table);
-    mounted.store.dispatch(measured(widths));
+    mounted.store.dispatch(measured(widths, measuredFloors(mounted.order(), table)));
   };
 
   handle.addEventListener('focus', awaken);

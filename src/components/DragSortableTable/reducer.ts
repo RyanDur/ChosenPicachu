@@ -66,8 +66,8 @@ const dragging = (state: TableState, action: TableAction): TableState => {
 
 const widths = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
-    case 'measured': return measure(state, action.widths);
-    case 'awoken': return awaken(state, action.widths);
+    case 'measured': return measure(state, action.widths, action.floors);
+    case 'awoken': return awaken(state, action.widths, action.floors);
     case 'tradedBy': return tradeBy(state, action.column, action.neighbour, action.delta);
     case 'arrowLifted': return endKeyedSizingOf(state, action.column);
     case 'handleLeft': return endSizingOf(state, action.column);

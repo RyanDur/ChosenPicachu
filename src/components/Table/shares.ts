@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 const SLIMMEST = 5;
 
 export type ColumnWidths = Readonly<Record<string, number>>;
@@ -10,10 +10,27 @@ export const measuredWidths = (keys: readonly string[], table: HTMLTableElement)
     ({...measured, [key]: (widths[at] ?? 0) / (total || 1) * 100}), {});
 };
 
-export const traded = (column: string, neighbor: string, delta: number) => (previous: ColumnWidths): ColumnWidths => {
+const pixels = (length: string): number => parseFloat(length) || 0;
+
+const controlsWidth = (header: Element): number => {
+  const {borderInlineStartWidth, borderInlineEndWidth} = getComputedStyle(header);
+  return [...header.querySelectorAll('button')].reduce((sum, control) => sum + control.getBoundingClientRect().width, 0) +
+    pixels(borderInlineStartWidth) + pixels(borderInlineEndWidth);
+};
+
+export const measuredFloors = (keys: readonly string[], table: HTMLTableElement): ColumnWidths => {
+  const headers = [...table.querySelectorAll('thead th')];
+  const total = headers.reduce((sum, header) => sum + header.getBoundingClientRect().width, 0);
+  return keys.reduce<ColumnWidths>((floors, key, at) =>
+    ({...floors, [key]: maybe(headers[at]).map(controlsWidth).orElse(0) / (total || 1) * 100}), {});
+};
+
+const floorOf = (floors: ColumnWidths, column: string): number => Math.max(SLIMMEST, floors[column] ?? 0);
+
+export const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths = {}) => (previous: ColumnWidths): ColumnWidths => {
   const given = Math.min(
-    Math.max(delta, SLIMMEST - previous[column]),
-    previous[neighbor] - SLIMMEST
+    Math.max(delta, floorOf(floors, column) - previous[column]),
+    previous[neighbor] - floorOf(floors, neighbor)
   );
   return {...previous, [column]: previous[column] + given, [neighbor]: previous[neighbor] - given};
 };
