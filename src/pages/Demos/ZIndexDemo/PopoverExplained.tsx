@@ -44,7 +44,7 @@ export const PopoverExplained: FC = () =>
           menu.css places it with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened
           it, and where a browser has no position-area, it centres the menu on the screen.</p>
         <Snippet label="CSS" lines={[
-          ...span(menuCss, '.menu {', 'width: var(--base-x-25);'), gap,
+          ...span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end) {')
         ]}/>
       </li>
