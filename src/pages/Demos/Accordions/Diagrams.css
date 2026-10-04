@@ -12,6 +12,6 @@
   }
 }
 
-.run:has(.promises) .snippet {
+.run:has(.promises) .sample {
   grid-row: span 2;
 }

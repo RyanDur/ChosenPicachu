@@ -27,15 +27,16 @@ export const codedStepLayouts = async (page: Page, within: Page | Locator = page
 const pictureName = (snapshot: string): string => `"${(/"([^"]*)"/.exec(snapshot)?.[1] ?? 'an unnamed picture').slice(0, 40)}"`;
 
 export const misplacedPictures = async (page: Page): Promise<string[]> => {
+  const picture = page.getByRole('figure').filter({hasNot: page.getByRole('code')}).or(page.getByRole('table'));
   const runs = page.getByRole('listitem').filter({has: page.getByRole('code'), hasNot: page.getByRole('article')})
-    .filter({has: page.getByRole('figure').or(page.getByRole('table'))});
+    .filter({has: picture});
   const misplaced = await Promise.all((await runs.all()).map(async run => {
     const [words, name] = await Promise.all([
       run.getByRole('paragraph').first().boundingBox(),
       run.getByRole('paragraph').first().textContent().then(prose => `the run on "${(prose ?? '').trim().slice(0, 40)}"`)
     ]);
     const code = await sampleBeside(run, words);
-    const pictures = await run.getByRole('figure').or(run.getByRole('table')).all();
+    const pictures = await run.getByRole('figure').filter({hasNot: page.getByRole('code')}).or(run.getByRole('table')).all();
     return Promise.all(pictures.map(async picture => {
       const [drawn, drawing] = await Promise.all([picture.boundingBox(), picture.ariaSnapshot().then(pictureName)]);
       if (words === null || drawn === null || code === null) {

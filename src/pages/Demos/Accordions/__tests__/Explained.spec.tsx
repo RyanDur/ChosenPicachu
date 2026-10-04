@@ -344,7 +344,7 @@ describe('the fold motion', () => {
       expect(within(together).queryByText(partThreeSays[other])).not.toBeInTheDocument();
     }
     expect(drawn.map(title => within(together).getByRole('figure', {name: new RegExp(`^${title}\\.`)})))
-      .toEqual(within(together).getAllByRole('figure'));
+      .toEqual(explanation.drawingsIn(together));
   });
 
   test('should tell the drawer run under the drawer', async () => {
@@ -411,7 +411,7 @@ describe('the accordions diagrams', () => {
     const explained = await screen.findByRole('region', {name: part});
 
     expect(titles.map(title => within(explained).getByRole('figure', {name: new RegExp(`^${title}\\. \\S.*\\.$`)})))
-      .toEqual(within(explained).getAllByRole('figure'));
+      .toEqual(explanation.drawingsIn(explained));
   });
 
   test('should set out, with exclusive chosen, what each element promises, row by row, as a table', async () => {

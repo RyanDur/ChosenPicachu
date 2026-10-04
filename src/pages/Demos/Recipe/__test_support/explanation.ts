@@ -20,6 +20,9 @@ const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
 const runDrawing = (part: HTMLElement, drawing: RegExp): HTMLElement =>
   runWith(part, run => within(run).queryByRole('figure', {name: drawing}) !== null, `draws ${drawing}`);
 
+const drawingsIn = (part: HTMLElement): HTMLElement[] =>
+  within(part).getAllByRole('figure').filter(figure => within(figure).queryByRole('code') === null);
+
 const everyCodeIn = (run: HTMLElement): string[] => within(run).getAllByRole('code').map(code => code.textContent);
 
 export const explanation = {
@@ -27,5 +30,6 @@ export const explanation = {
   codeBeside: (part: HTMLElement, words: RegExp): HTMLElement => within(runTelling(part, words)).getByRole('code'),
   everyCodeBeside: (part: HTMLElement, words: RegExp): string[] => everyCodeIn(runTelling(part, words)),
   everyCodeBesideDrawing: (part: HTMLElement, drawing: RegExp): string[] => everyCodeIn(runDrawing(part, drawing)),
-  captionsIn: (part: HTMLElement): string[] => within(part).getAllByRole('figure').map(figure => computeAccessibleName(figure))
+  drawingsIn,
+  captionsIn: (part: HTMLElement): string[] => drawingsIn(part).map(figure => computeAccessibleName(figure))
 };
