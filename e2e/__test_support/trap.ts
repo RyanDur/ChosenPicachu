@@ -4,7 +4,7 @@ export type SortChoice = 'name' | 'date' | 'size';
 
 export const trappedMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
-  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?$/});
+  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, the old way$/});
   const choice = (name: SortChoice) => trap.getByRole('menuitem', {name});
   return {
     sortBy,
@@ -32,7 +32,7 @@ export const trappedMenu = (page: Page) => {
 
 export const topLayerMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
-  const sortBy = trap.getByRole('button', {name: /^Sort by, in the top layer/});
+  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, in the top layer$/});
   const menu = page.getByLabel('Sort by, in the top layer', {exact: true}).and(page.getByRole('list'));
   const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
   return {

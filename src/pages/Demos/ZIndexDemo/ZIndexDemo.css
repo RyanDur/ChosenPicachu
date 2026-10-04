@@ -50,7 +50,10 @@
 
 :is(.trapped-menu, .banner-trap) {
     display: grid;
-    gap: var(--base-x-1_25);
+
+    & > :not(:first-child, :empty) {
+        margin-block-start: var(--base-x-1_25);
+    }
 
     .trap-steps {
         display: grid;
@@ -69,7 +72,23 @@
     .old-way-cards {
         display: grid;
         gap: var(--base-x-2_5);
+    }
+
+    .old-way-cards:has(.sort-choices) {
         padding-block-end: var(--base-x-7);
+    }
+
+    .trap-ways {
+        flex-basis: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--base-x-2_5);
+    }
+
+    .trap-way {
+        display: grid;
+        gap: var(--base-x-0_5);
+        justify-items: start;
     }
 
     .old-way-card {
@@ -86,7 +105,7 @@
 
         .button {
             max-inline-size: 100%;
-            padding-block: var(--base-x-0_5);
+            padding: var(--base-x-0_5) var(--base-x-2);
             white-space: normal;
         }
     }
@@ -100,14 +119,6 @@
         z-index: 9999;
         inset-block-start: calc(100% - var(--base-x-1_25));
         inset-inline-start: var(--base-x-1_25);
-        min-width: var(--base-x-20);
-    }
-
-    .sort-choice {
-        display: block;
-        inline-size: 100%;
-        padding: var(--base) var(--base-x-2);
-        text-align: start;
     }
 }
 

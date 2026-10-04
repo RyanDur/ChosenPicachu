@@ -65,13 +65,17 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
     }
   };
 
+  const words = chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by');
+
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
-      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
-    {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
+      aria-label={`${words}, the old way`}
+      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()} onKeyDown={onButtonKey}>{words}</button>
+    {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices menu card rounded-corners lifted" onBlur={onListBlur}>
       {sortChoices.map((choice, at) =>
-        <li key={choice} role="none">
-          <button type="button" role="menuitem" tabIndex={-1} className="sort-choice reachable borderless unfilled attentive"
+        <li key={choice} role="none" className="entry">
+          <button type="button" role="menuitem" tabIndex={-1} className="item sub-title reachable"
+            aria-current={chosen.map(picked => picked === choice).orElse(false)}
             onClick={() => {
               updateChosen(some(choice));
               closeToButton();

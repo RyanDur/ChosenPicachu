@@ -66,7 +66,7 @@ test('a choice closes the menu in the top layer, and its button names the choice
   await menu.choice('date').click();
 
   await expect(menu.menu).toBeHidden();
-  await expect(menu.sortBy).toHaveAccessibleName('Sort by, in the top layer: date');
+  await expect(menu.sortBy).toHaveAccessibleName('Sort by: date, in the top layer');
 });
 
 test('reopened, the menu in the top layer marks the choice it was given', async ({page}) => {

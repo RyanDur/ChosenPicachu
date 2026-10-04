@@ -11,7 +11,7 @@ const over = 'The list opened over card two. Card one has no z-index now, so the
 describe('the menu built the old way', () => {
   test('should open from a press, with its first choice in focus', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const sortBy = await screen.findByRole('button', {name: 'Sort by'});
+    const sortBy = await screen.findByRole('button', {name: 'Sort by, the old way'});
     expect(sortBy).toHaveAttribute('aria-expanded', 'false');
 
     await userEvent.click(sortBy);
@@ -23,7 +23,7 @@ describe('the menu built the old way', () => {
 
   test('should move through its choices by arrow, Home and End, and wrap at either end', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+    (await screen.findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{Enter}');
     await userEvent.keyboard('{ArrowDown}');
@@ -40,27 +40,37 @@ describe('the menu built the old way', () => {
 
   test('should take the choice pressed, close, and give focus back to its button', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+    (await screen.findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{Enter}{ArrowDown}{Enter}');
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Sort by: date'})).toHaveFocus();
+    expect(screen.getByRole('button', {name: 'Sort by: date, the old way'})).toHaveFocus();
+  });
+
+  test('should mark the choice taken as current when it opens again', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
+    await userEvent.click(screen.getByRole('menuitem', {name: 'date'}));
+
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by: date, the old way'}));
+
+    expect(screen.getByRole('menuitem', {current: true})).toHaveTextContent('date');
   });
 
   test('should close on Escape, and give focus back to its button', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
 
     await userEvent.keyboard('{Escape}');
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Sort by'})).toHaveFocus();
+    expect(screen.getByRole('button', {name: 'Sort by, the old way'})).toHaveFocus();
   });
 
   test('should open from ArrowDown on its button, with its first choice in focus', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+    (await screen.findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{ArrowDown}');
 
@@ -69,7 +79,7 @@ describe('the menu built the old way', () => {
 
   test('should close when focus leaves it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
 
     await userEvent.tab();
 
@@ -103,6 +113,31 @@ describe('the card that traps the menu', () => {
     expect(within(trap).getByText('Card two has z-index: 1, and comes later in the code.')).toBeInTheDocument();
   });
 
+  test('should show Sort by on both buttons, under the way each is built, and name each by its words then its way', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const trap = await screen.findByRole('figure', {name: /^The trap\./});
+
+    const way = (label: string): HTMLElement | undefined => within(trap).getAllByRole('listitem')
+      .filter(item => within(item).queryByText(label, {exact: true}) !== null).pop();
+    const oldWay = screen.getByRole('button', {name: 'Sort by, the old way'});
+    const topLayer = screen.getByRole('button', {name: 'Sort by, in the top layer'});
+
+    expect(way('The old way')).toContainElement(oldWay);
+    expect(way('The old way')).not.toContainElement(topLayer);
+    expect(way('The top layer')).toContainElement(topLayer);
+    expect(oldWay).toHaveTextContent(/^Sort by$/);
+    expect(topLayer).toHaveTextContent(/^Sort by$/);
+  });
+
+  test('should name a button by the choice it shows, then its way', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
+
+    await userEvent.click(screen.getByRole('menuitem', {name: 'date'}));
+
+    expect(screen.getByRole('button', {name: 'Sort by: date, the old way'})).toHaveTextContent(/^Sort by: date$/);
+  });
+
   test('should say nothing before the first press', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
@@ -111,7 +146,7 @@ describe('the card that traps the menu', () => {
 
   test('should take back what it said when the box changes, since the next press answers', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
     await userEvent.keyboard('{Escape}');
 
     await userEvent.click(screen.getByRole('checkbox', {name: 'Card one has z-index: 1'}));
@@ -122,14 +157,14 @@ describe('the card that traps the menu', () => {
   test('should say the list opened under card two when card one has its z-index', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
-    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by, the old way'}));
 
     expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
   });
 
   test('should say where the list opened when ArrowDown opens it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+    (await screen.findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{ArrowDown}');
 
@@ -140,7 +175,7 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     await userEvent.click(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'}));
 
-    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by, the old way'}));
 
     expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(over);
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('card-one=free');
@@ -149,11 +184,11 @@ describe('the card that traps the menu', () => {
   test('should say the list opened under card two again once the box is checked again', async () => {
     render(<TestApp at={demosAt('?tab=z-index&card-one=free')}/>);
     const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
-    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by, the old way'}));
     await userEvent.keyboard('{Escape}');
 
     await userEvent.click(contextChoice);
-    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by, the old way'}));
 
     expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
   });

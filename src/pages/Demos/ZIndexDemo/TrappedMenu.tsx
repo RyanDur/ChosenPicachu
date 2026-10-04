@@ -38,8 +38,10 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
           Card one has z-index: 1
         </label>
         <p className="paragraph">Its list has z-index: 9999.</p>
-        <SortMenu onOpened={() => updateOpened(some(cardOne))}/>
-        <TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/>
+        <ul className="trap-ways">
+          <li className="trap-way"><p className="caption">The old way</p><SortMenu onOpened={() => updateOpened(some(cardOne))}/></li>
+          <li className="trap-way"><p className="caption">The top layer</p><TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/></li>
+        </ul>
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>

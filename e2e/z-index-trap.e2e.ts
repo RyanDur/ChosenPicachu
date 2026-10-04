@@ -5,7 +5,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
   test.describe(`at ${size} wide`, () => {
     test.use(device);
 
-    test('the menu opens under card two, with its first choice showing in the gap above it', async ({page}) => {
+    test('the menu opens under card two, with its first choice in the gap above it and its last below it', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);
 
@@ -13,6 +13,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 
       await expect.poll(() => menu.onTopAt('name')).toBe('the choice');
       await expect.poll(() => menu.onTopAt('date')).toBe('card two');
+      await expect.poll(() => menu.onTopAt('size')).toBe('the choice');
     });
 
     for (const state of ['contained', 'free']) {
@@ -53,7 +54,7 @@ test('a choice in the gap takes a click, and the menu names it', async ({page}) 
 
   await menu.choice('name').click();
 
-  await expect(page.getByRole('button', {name: 'Sort by: name'})).toBeFocused();
+  await expect(page.getByRole('button', {name: 'Sort by: name, the old way'})).toBeFocused();
 });
 
 test('the keyboard moves through the trapped menu, to a choice under card two', async ({page}) => {

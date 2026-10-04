@@ -5,11 +5,10 @@ import {SortChoice, sortChoices} from './sort-choices';
 export const TopLayerMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const menu = useId();
   const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
+  const words = chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by');
 
   return <>
-    <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu}>
-      {chosen.map(choice => `Sort by, in the top layer: ${choice}`).orElse('Sort by, in the top layer')}
-    </button>
+    <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu} aria-label={`${words}, in the top layer`}>{words}</button>
     <menu id={menu} popover="auto" className="menu card rounded-corners lifted" aria-label="Sort by, in the top layer"
       onToggle={({newState}) => {
         if (newState === 'open') {

@@ -8,7 +8,7 @@ describe('the menu built the new way', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
-    const cardOne = within(trap).getAllByRole('listitem').filter(card => within(card).queryByRole('button', {name: 'Sort by'}) !== null)[0];
+    const cardOne = within(trap).getAllByRole('listitem').filter(card => within(card).queryByRole('button', {name: 'Sort by, the old way'}) !== null)[0];
 
     expect(within(cardOne).getByRole('button', {name: 'Sort by, in the top layer'})).toBeInTheDocument();
   });
