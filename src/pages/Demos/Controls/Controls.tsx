@@ -1,9 +1,9 @@
 import {FC, PropsWithChildren} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
-import {PillGlider} from '@components/PillGlider';
 import {Disclosure} from '@components/Disclosure';
 import {roomToStandOpen} from '@components/room';
+import {Dial} from './Dial';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
@@ -48,42 +48,33 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
       <ul className="dials">
-        <li className="control">
-          <span className="axis caption uppercase">pace</span>
-          <PillGlider label="pace"
-            name={`${copy.kind}-pace`}
-            options={[
-              {display: 'Eager', value: 'eager'},
-              {display: 'Lazy', value: 'lazy'}
-            ]}
-            chosen={pace}
-            onChosen={onPaceChosen}/>
-          <p className="reading paragraph">{copy.pace[pace]}</p>
-        </li>
-        <li className="control">
-          <span className="axis caption uppercase">origin</span>
-          <PillGlider label="origin"
-            name={`${copy.kind}-origin`}
-            options={[
-              {display: 'Keep', value: 'keep'},
-              {display: 'Hide', value: 'hide'}
-            ]}
-            chosen={origin}
-            onChosen={onOriginChosen}/>
-          <p className="reading paragraph">{copy.origin[origin]}</p>
-        </li>
-        <li className="control">
-          <span className="axis caption uppercase">motion</span>
-          <PillGlider label="motion"
-            name={`${copy.kind}-motion`}
-            options={[
-              {display: 'Animate', value: 'animated'},
-              {display: 'Static', value: 'static'}
-            ]}
-            chosen={motion}
-            onChosen={onMotionChosen}/>
-          <p className="reading paragraph">{copy.motion[motion]}</p>
-        </li>
+        <Dial label="pace"
+          name={`${copy.kind}-pace`}
+          options={[
+            {display: 'Eager', value: 'eager'},
+            {display: 'Lazy', value: 'lazy'}
+          ]}
+          chosen={pace}
+          onChosen={onPaceChosen}
+          reading={copy.pace[pace]}/>
+        <Dial label="origin"
+          name={`${copy.kind}-origin`}
+          options={[
+            {display: 'Keep', value: 'keep'},
+            {display: 'Hide', value: 'hide'}
+          ]}
+          chosen={origin}
+          onChosen={onOriginChosen}
+          reading={copy.origin[origin]}/>
+        <Dial label="motion"
+          name={`${copy.kind}-motion`}
+          options={[
+            {display: 'Animate', value: 'animated'},
+            {display: 'Static', value: 'static'}
+          ]}
+          chosen={motion}
+          onChosen={onMotionChosen}
+          reading={copy.motion[motion]}/>
       </ul>
       {children}
     </section>

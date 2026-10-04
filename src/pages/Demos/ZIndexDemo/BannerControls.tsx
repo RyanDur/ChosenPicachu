@@ -1,7 +1,6 @@
 import {FC} from 'react';
-import {PillGlider} from '@components/PillGlider';
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
-import '../Controls/Controls.css';
+import {Dial} from '../Controls/Dial';
 
 type Copy = {
   side: Record<Side, string>;
@@ -50,60 +49,48 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <ul className="dials">
-      <li className="control">
-        <span className="axis caption uppercase">side</span>
-        <PillGlider label="side"
-          name="banner-side"
-          options={[
-            {display: 'Top', value: 'top'},
-            {display: 'Middle', value: 'middle'},
-            {display: 'Bottom', value: 'bottom'}
-          ]}
-          chosen={side}
-          onChosen={onSideChosen}/>
-        <p className="reading paragraph">{copy.side[side]}</p>
-      </li>
-      <li className="control">
-        <span className="axis caption uppercase">align</span>
-        <PillGlider label="align"
-          name="banner-align"
-          options={[
-            {display: 'Left', value: 'left'},
-            {display: 'Center', value: 'center'},
-            {display: 'Right', value: 'right'}
-          ]}
-          chosen={align}
-          onChosen={onAlignChosen}/>
-        <p className="reading paragraph">{copy.align[align]}</p>
-      </li>
-      <li className="control">
-        <span className="axis caption uppercase">entrance</span>
-        <PillGlider label="entrance"
-          name="banner-entrance"
-          options={[
-            {display: 'Above', value: 'above'},
-            {display: 'Below', value: 'below'},
-            {display: 'Left', value: 'left'},
-            {display: 'Right', value: 'right'}
-          ]}
-          chosen={enter}
-          onChosen={onEnterChosen}/>
-        <p className="reading paragraph">{copy.enter[enter]}</p>
-      </li>
-      <li className="control">
-        <span className="axis caption uppercase">stack</span>
-        <PillGlider label="stack"
-          name="banner-stack"
-          options={[
-            {display: 'Down', value: 'down'},
-            {display: 'Up', value: 'up'},
-            {display: 'Left', value: 'left'},
-            {display: 'Right', value: 'right'}
-          ]}
-          chosen={stack}
-          onChosen={onStackChosen}/>
-        <p className="reading paragraph">{copy.stack[stack]}</p>
-      </li>
+      <Dial label="side"
+        name="banner-side"
+        options={[
+          {display: 'Top', value: 'top'},
+          {display: 'Middle', value: 'middle'},
+          {display: 'Bottom', value: 'bottom'}
+        ]}
+        chosen={side}
+        onChosen={onSideChosen}
+        reading={copy.side[side]}/>
+      <Dial label="align"
+        name="banner-align"
+        options={[
+          {display: 'Left', value: 'left'},
+          {display: 'Center', value: 'center'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={align}
+        onChosen={onAlignChosen}
+        reading={copy.align[align]}/>
+      <Dial label="entrance"
+        name="banner-entrance"
+        options={[
+          {display: 'Above', value: 'above'},
+          {display: 'Below', value: 'below'},
+          {display: 'Left', value: 'left'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={enter}
+        onChosen={onEnterChosen}
+        reading={copy.enter[enter]}/>
+      <Dial label="stack"
+        name="banner-stack"
+        options={[
+          {display: 'Down', value: 'down'},
+          {display: 'Up', value: 'up'},
+          {display: 'Left', value: 'left'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={stack}
+        onChosen={onStackChosen}
+        reading={copy.stack[stack]}/>
     </ul>
     <p className="readout caption">
       <code>{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
