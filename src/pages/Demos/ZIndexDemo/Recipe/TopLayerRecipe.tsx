@@ -73,11 +73,12 @@ export const TopLayerRecipe: FC = () => {
         <Words want="Nine places, and no arithmetic: the browser already centres a popover.">
           <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
             size that fits its content, inset: 0 and margin: auto. The auto margins share the spare room around the
-            panel, which centres it in the window. A class for an edge sets the margin on that edge to a fixed gap, so
-            the auto margin opposite takes the spare room and the panel holds to that edge. middle and center set auto
-            again: they change nothing, and they are there so the choice shows in the class names. On this page
-            margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.
-            Here, {sideFact[side]} And {alignFact[align]}</Says>
+            panel, which centres it in the window.</Says>
+          <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
+            spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
+            they are there so the choice shows in the class names.</Says>
+          <Says>On this page margin-block is the margins above and below the panel, and margin-inline is the ones to
+            its left and right. Here, {sideFact[side]} And {alignFact[align]}</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[

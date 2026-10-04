@@ -157,6 +157,16 @@ describe('the banner tutorial’s first story', () => {
       .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
   });
 
+  test('should tell step 3 in three paragraphs: the centring, the classes, then the margins for the dials chosen', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+    const placing = recipeFolds.steps(news)[2];
+
+    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\.$/);
+    expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
+    expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
+  });
+
   test('should name MDN as Mozilla’s web reference', async () => {
     await openZIndexTab();
 
