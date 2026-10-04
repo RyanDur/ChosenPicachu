@@ -63,5 +63,5 @@ export const shownPillSwitches = async (page: Page, names: string[]): Promise<st
 export const dialRow = (page: Page, name: string) => {
   const pills = page.getByRole('group', {name, exact: true}).last();
   const row = page.getByRole('listitem').filter({has: pills}).last();
-  return {row, pills, status: row.getByRole('status'), shownNames: row.getByText(name, {exact: true})};
+  return {row, pills, reading: row.getByRole('status'), shownNames: row.getByText(name, {exact: true})};
 };

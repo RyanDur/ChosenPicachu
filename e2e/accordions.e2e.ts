@@ -409,12 +409,12 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       await page.goto('demos/?tab=accordions');
 
       for (const name of ['fold type', 'fold motion']) {
-        const {row, pills, status} = dialRow(page, name);
+        const {row, pills, reading} = dialRow(page, name);
         const [rowBox, pillsBox] = await Promise.all([row.boundingBox(), pills.boundingBox()]);
         if (rowBox === null || pillsBox === null) throw new Error(`the ${name} row is not shown`);
 
         expect(pillsBox.x + pillsBox.width, name).toBeLessThanOrEqual(rowBox.x + rowBox.width);
-        await expect(status).toBeVisible();
+        await expect(reading).toBeVisible();
         if (device === iPhone) {
           expect(await shortOfAFinger(await pills.getByText(/^\w+$/).all()), name).toEqual([]);
         }
@@ -431,16 +431,16 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 
     test('the fold motion reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
       await page.goto('demos/?tab=accordions&style=drawer');
-      const {status} = dialRow(page, 'fold motion');
-      await status.scrollIntoViewIfNeeded();
+      const {reading} = dialRow(page, 'fold motion');
+      await reading.scrollIntoViewIfNeeded();
 
-      await expect(status).toHaveText('The text slides down from under its bar.', {useInnerText: true});
-      await expect(status).toMatchAriaSnapshot('- status: The text slides down from under its bar.');
+      await expect(reading).toHaveText('The text slides down from under its bar.', {useInnerText: true});
+      await expect(reading).toMatchAriaSnapshot('- status: The text slides down from under its bar.');
 
       await page.emulateMedia({reducedMotion: 'reduce'});
 
-      await expect(status).toHaveText(lessMotion, {useInnerText: true});
-      await expect(status).toMatchAriaSnapshot(`- status: ${lessMotion}`);
+      await expect(reading).toHaveText(lessMotion, {useInnerText: true});
+      await expect(reading).toMatchAriaSnapshot(`- status: ${lessMotion}`);
     });
   });
 }

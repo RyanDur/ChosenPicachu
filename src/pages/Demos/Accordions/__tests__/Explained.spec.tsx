@@ -185,8 +185,8 @@ describe('the fold choices', () => {
     const types = await screen.findByRole('group', {name: 'fold type'});
     const line = screen.getByText('Two choices set the accordions in the three parts below. The one above is HTML alone, so they don’t change it.');
 
-    expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(line.compareDocumentPosition(screen.getByRole('region', {name: 'An accordion in HTML alone'})) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy();
+    expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(line.compareDocumentPosition(screen.getByRole('region', {name: 'An accordion in HTML alone'})) & Node.DOCUMENT_POSITION_PRECEDING).toBe(Node.DOCUMENT_POSITION_PRECEDING);
   });
 
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
