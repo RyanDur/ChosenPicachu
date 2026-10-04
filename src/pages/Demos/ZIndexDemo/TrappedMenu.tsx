@@ -49,6 +49,6 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
       </li>
     </ol>
     <output aria-label="where the list opened" className="paragraph">{openedAsTheCardsAre.map(place => whereItOpened[place]).orElse('')}</output>
-    <figcaption className="caption"><strong>The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
+    <figcaption className="caption"><strong className="bold">The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
   </figure>;
 };

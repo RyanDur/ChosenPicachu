@@ -4,7 +4,7 @@ import './CrossingFigure.css';
 
 export const CrossingFigure: FC = () =>
   <Figure className="crossing" viewBox="0 -20 480 150" caption={<>
-    <strong>Where a swap counts.</strong> The carried item is moving right. The first quarter of its neighbour holds
+    <strong className="bold">Where a swap counts.</strong> The carried item is moving right. The first quarter of its neighbour holds
     still; past it, the two trade places. Coming back the other way, it is the quarter on the other side.
   </>}>
     <rect className="item" x="10" y="20" width="130" height="70"/>

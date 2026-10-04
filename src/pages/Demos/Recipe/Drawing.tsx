@@ -7,7 +7,7 @@ export type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
 export const Diagram: FC<PropsWithChildren<{title: string; says: string; height: number}>> = ({title, says, height, children}) =>
-  <Figure className="diagram" viewBox={`0 0 320 ${height}`} caption={<><strong>{title}.</strong> {says}</>}>{children}</Figure>;
+  <Figure className="diagram" viewBox={`0 0 320 ${height}`} caption={<><strong className="bold">{title}.</strong> {says}</>}>{children}</Figure>;
 
 export const Box: FC<Sized & {kind: Kind}> = ({x, y, width, height, kind}) =>
   <rect className={kind} x={x} y={y} width={width} height={height}/>;
