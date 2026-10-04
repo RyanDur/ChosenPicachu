@@ -11,7 +11,8 @@ export const ZIndexIntroduction: FC = () =>
       group of boxes, called a stacking context, and most of this page is about that group: what makes one, what it traps,
       and the browser’s own way out of it, the top layer.</p>
     <p className="paragraph">By the end you can say why one box is drawn over another, why a z-index of 9999 can still
-      lose, and how a popover gets out from under everything on the page. The last part builds this site’s banner that
+      lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the
+      page. The last part builds this site’s banner that
       way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch
       it come to the top.</p>
   </header>;

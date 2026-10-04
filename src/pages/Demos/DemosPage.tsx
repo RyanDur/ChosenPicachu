@@ -36,7 +36,7 @@ const paragraphs = (count: number) =>
 
 const topics = [
   {display: 'Accordions', param: DemoTopics.accordions},
-  {display: 'Z-Index', param: DemoTopics.zIndex},
+  {display: 'Z-index', param: DemoTopics.zIndex},
   {display: 'Drag sort', param: DemoTopics.dragAndDrop},
   {display: 'Charts', param: DemoTopics.charts},
   {display: 'Tables', param: DemoTopics.tables}

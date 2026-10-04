@@ -8,8 +8,8 @@ export const ChartsIntroduction: FC = () =>
       read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must
       not disagree.</p>
     <p className="paragraph">This page’s view is that a chart is arithmetic over data the page already holds, so there is
-      no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and one
-      history. Each chart is worked out from those every time the page redraws. The layout is kept in the page’s
+      no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the
+      past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws. The layout is kept in the page’s
       address, so a reload or a shared link brings back the same charts in the same order.</p>
     <p className="paragraph">By the end you can draw a live line chart, candles, which show how the price opened, closed
       and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can

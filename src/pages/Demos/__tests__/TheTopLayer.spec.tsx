@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, inReadingOrder} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';
@@ -13,14 +13,14 @@ const troublesIn = (alert: HTMLElement): HTMLElement[] =>
 const openZIndexTab = async () => {
   render(<TestApp at={demosAt()}/>);
   const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-  await userEvent.click(within(demoTabs).getByText('Z-Index'));
+  await userEvent.click(within(demoTabs).getByText('Z-index'));
 };
 
 describe('the top layer', () => {
   test('the z-index tab opens on its four parts, in order, in the heading outline', async () => {
     await openZIndexTab();
 
-    const tab = await screen.findByRole('region', {name: 'Z-Index'});
+    const tab = await screen.findByRole('region', {name: 'Z-index'});
 
     expect(within(tab).getAllByRole('heading', {level: 3}).map(heading => heading.textContent).slice(0, 4))
       .toEqual(['Why Third is on top', 'Why 9999 still loses', 'Why the popover wins', 'Why a fixed banner still loses']);
@@ -233,6 +233,7 @@ describe('the banner tutorial’s second story', () => {
     expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/its padding and border start at 0 as well\.$/);
     expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, and the slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
     expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
+    expect(within(steps[2]).getAllByRole('paragraph')).toHaveLength(3);
   });
 
   test('should let a sideways stack’s message shrink across, in step 2’s sample', async () => {
@@ -320,18 +321,15 @@ describe('the z-index tab’s introduction', () => {
     'Where two boxes on a page overlap, the browser draws one over the other. z-index is the CSS property for changing which.',
     'It reads like one ranking for the whole page, where the biggest number wins. So when a menu opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999 loses too.',
     'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a group of boxes, called a stacking context, and most of this page is about that group: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
-    'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover gets out from under everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
+    'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
   ];
 
   test('should name the tab Z-index, and tell the problem, the page’s view and what a reader can do after, before the first exhibit', async () => {
     await openZIndexTab();
-    const tab = await screen.findByRole('region', {name: 'Z-Index'});
+    const tab = await screen.findByRole('region', {name: 'Z-index'});
     const firstExhibit = within(tab).getByRole('heading', {name: 'Why Third is on top'});
 
     expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Z-index$/);
-    const shown = [...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit];
-    const eachBeforeTheNext = shown.slice(1).map((next, at) => shown[at].compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(eachBeforeTheNext).toEqual(paragraphs.map(() => Node.DOCUMENT_POSITION_FOLLOWING));
-    expect(within(tab).queryByText('Z-Index Demo.')).not.toBeInTheDocument();
+    expect(inReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit])).toBe(true);
   });
 });

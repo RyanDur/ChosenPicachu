@@ -104,6 +104,11 @@
     inset: 0;
   }
 
+  /* the drawing comes after the doorway and is positioned, so it would take every press meant for the doorway */
+  .chart-stage {
+    pointer-events: none;
+  }
+
   .chart-header,
   .explainer {
     position: relative;

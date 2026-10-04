@@ -1,7 +1,7 @@
 import {Page, expect, test} from '@playwright/test';
 import {iPad11Upright, iPadUpright, justPastAPhone, siteFrame, splitViewWide} from './__test_support';
 
-const demos = ['Accordions', 'Z-Index', 'Drag sort', 'Charts', 'Tables'];
+const demos = ['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'];
 
 const scrolledSideways = async (page: Page): Promise<number> => page.evaluate(() => {
   window.scrollBy(300, 0);

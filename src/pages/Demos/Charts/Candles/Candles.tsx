@@ -1,4 +1,4 @@
-import {FC, ReactNode, useId} from 'react';
+import {FC, ReactNode, useContext, useId} from 'react';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {candlesOf, captionFor} from '../period-history';
@@ -8,6 +8,7 @@ import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
+import {ChartHeading} from '../heading';
 
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
+  const Heading = useContext(ChartHeading);
   const generated = useId();
   const id = given ?? `candles${generated}`;
   const history = usePeriodCandles(period);
@@ -36,7 +38,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     Math.min(...candles.map(candle => candle.low))
   );
   return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
-    <h3 id={`${id}-heading`} className="off-screen">candles</h3>
+    <Heading id={`${id}-heading`} className="off-screen">candles</Heading>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field attentive caption"

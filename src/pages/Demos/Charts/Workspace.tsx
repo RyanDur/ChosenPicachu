@@ -17,6 +17,7 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import './Workspace.css';
+import {ChartHeading} from './heading';
 
 const chartNames: Record<ChartKind, string> = {
   price: 'Price line',
@@ -89,30 +90,32 @@ export const Workspace: FC<Props> = ({product}) => {
             </menu>
           </>}
     </header>
-    <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-      const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
-      return <li key={kind}
-        className={dress(at)}
-        onAnimationEnd={settled}
-        draggable={isArmed(at)}
-        onDragStart={lift(at)}
-        onDragOver={travel}
-        onDrop={event => event.preventDefault()}
-        onDragEnd={release}>
-        <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
-          <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
-        </Link>
-        {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
-        {matchChartKind(kind, {
-          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
-          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
-          pressure: () => <Pressure trades={trades} actions={actions}/>,
-          pie: () => <Pie trades={trades} actions={actions}/>
-        }).orNull()}
-      </li>;
-    })}
-    </ol>
+    <ChartHeading.Provider value="h4">
+      <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
+        const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
+        return <li key={kind}
+          className={dress(at)}
+          onAnimationEnd={settled}
+          draggable={isArmed(at)}
+          onDragStart={lift(at)}
+          onDragOver={travel}
+          onDrop={event => event.preventDefault()}
+          onDragEnd={release}>
+          <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
+            <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
+          </Link>
+          {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
+          {matchChartKind(kind, {
+            price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
+              period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
+            candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
+              period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
+            pressure: () => <Pressure trades={trades} actions={actions}/>,
+            pie: () => <Pie trades={trades} actions={actions}/>
+          }).orNull()}
+        </li>;
+      })}
+      </ol>
+    </ChartHeading.Provider>
   </>;
 };

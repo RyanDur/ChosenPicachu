@@ -30,6 +30,7 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
   test.each(Object.entries(flatNews))('a %s stack starts its message flat, inside the message’s own starting style', (stack, declarations) => {
     const axis = ['left', 'right'].includes(stack) ? '&:where(.stack-left, .stack-right) .news {' : '&:where(.stack-down, .stack-up) .news {';
     const startingStyle = span(bannersCss, axis, '}').map(line => line.text).join('\n');
+    expect(startingStyle).toContain('@starting-style');
     declarations.forEach(declaration => expect(startingStyle).toContain(declaration));
   });
 

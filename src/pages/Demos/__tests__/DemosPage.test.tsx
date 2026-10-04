@@ -38,7 +38,7 @@ describe('The Demos page', () => {
     render(<TestApp at={demosAt()}/>);
 
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-    await userEvent.click(within(demoTabs).getByText('Z-Index'));
+    await userEvent.click(within(demoTabs).getByText('Z-index'));
 
     await waitFor(() => {
       const main = screen.getByRole('main');

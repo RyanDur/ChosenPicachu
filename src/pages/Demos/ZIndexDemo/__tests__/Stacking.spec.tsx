@@ -42,7 +42,7 @@ describe('the stacking pile', () => {
   test('should show the pile’s list and its positioning beside the drawing of the pile from the side', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
-    const tab = await screen.findByRole('region', {name: 'Z-Index'});
+    const tab = await screen.findByRole('region', {name: 'Z-index'});
 
     expect(explanation.everyCodeBesideDrawing(tab, /The pile from the side/).join()).toMatch(/First[^]*Second[^]*Third[^]*\.layer \{[^]*position: relative[^]*\.closed \{[^]*position: absolute/);
   });
@@ -50,7 +50,7 @@ describe('the stacking pile', () => {
   test('should show the rule that raises a card beside the drawing of one card lifted', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
-    const tab = await screen.findByRole('region', {name: 'Z-Index'});
+    const tab = await screen.findByRole('region', {name: 'Z-index'});
 
     expect(explanation.everyCodeBesideDrawing(tab, /One number lifts one card/).join()).toMatch(/\.raised \{[^]*z-index: 1/);
   });
