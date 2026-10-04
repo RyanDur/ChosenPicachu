@@ -98,14 +98,14 @@
         order: 1;
         content: 'Open' / '';
         padding: var(--base);
-        border: var(--hairline) solid var(--field);
+        border: var(--hairline) solid;
       }
 
-      &:hover::before {
-        background: var(--field);
-        outline: var(--hairline) solid var(--ring);
-        outline-offset: calc(var(--hairline-x-3) * -1);
-        color: var(--field-inverse);
+      @media (hover: hover) {
+        &:hover {
+          background: var(--approach);
+          color: var(--ink);
+        }
       }
 
       &:active::before {

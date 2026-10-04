@@ -18,6 +18,8 @@ const headings: Record<Build, string> = {
   'the grid radio build': 'Exclusive accordion using radio group'
 };
 
+export type Spot = 'start' | 'middle' | 'end';
+
 export type Pointing = 'right' | 'down' | 'nowhere';
 
 export type Part = {
@@ -188,6 +190,30 @@ export const accordionsTab = (page: Page) => {
     const end = {x: x + width - 52, y: y + 4, width: 44, height: height - 8};
     return pointingIn(await shotOf(end), end.width);
   };
+  const twoCommonestColours = (rgba: number[]): string[] => {
+    const counts = new Map<string, number>();
+    for (let at = 0; at < rgba.length; at += 4) {
+      const colour = rgba.slice(at, at + 3).join(',');
+      counts.set(colour, (counts.get(colour) ?? 0) + 1);
+    }
+    return [...counts].sort(([, many], [, more]) => more - many).slice(0, 2).map(([colour]) => colour);
+  };
+  const lightShare = (rgba: number[]): number =>
+    Array.from({length: rgba.length / 4}, (_, pixel) => pixel).filter(pixel => lightAt(rgba, pixel)).length / Math.max(1, rgba.length / 4);
+  const insideTheHairlines = ({x, y, width, height}: Box): Box => ({x, y: y + 4, width, height: height - 8});
+  const hoveredAt = async (build: Build, spot: Spot): Promise<string[]> => {
+    const bar = await boxOf(partOf(build, 0).fold);
+    const along = {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot];
+    await page.mouse.move(bar.x + along, bar.y + bar.height / 2);
+    await settled();
+    return twoCommonestColours(await shotOf(insideTheHairlines(bar)));
+  };
+  const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
+    const bar = await boxOf(partOf(build, 0).fold);
+    await page.touchscreen.tap(bar.x + bar.width / 2, bar.y + bar.height / 2);
+    await page.waitForTimeout(1000);
+    return lightShare(await shotOf(insideTheHairlines({...bar, x: bar.x + bar.width - 80, width: 80}))) > 0.4;
+  };
   return {
     arrowsOf: async (build: Build): Promise<Pointing[]> => {
       const arrows: Pointing[] = [];
@@ -198,6 +224,8 @@ export const accordionsTab = (page: Page) => {
       return arrows;
     },
     arrowOnTheFirstPartOf: (build: Build): Promise<Pointing> => arrowOn(nameOn(partOf(build, 0).fold)),
+    hoveredAt,
+    endOfTheFirstBarLitAfterATap,
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),

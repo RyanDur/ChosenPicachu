@@ -323,3 +323,35 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
     expect(await tab.arrowOnTheFirstPartOf(build)).toBe('down');
   });
 }
+
+test.describe('a desktop', () => {
+  test.use(desktop);
+
+  for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+    test(`a pointer anywhere on a bar of ${build} lights the whole bar, as a hovered bar of the checkbox build`, async ({page}) => {
+      const tab = accordionsTab(page);
+      await page.goto(showing('the checkbox build'));
+      const lit = await tab.hoveredAt('the checkbox build', 'middle');
+      await page.goto(showing(build));
+
+      for (const spot of ['start', 'middle', 'end'] as const) {
+        expect(await tab.hoveredAt(build, spot), spot).toEqual(lit);
+      }
+      await page.mouse.down();
+      await page.mouse.up();
+      await expect.poll(tab.firstPartOf(build).isOpen).toBe(true);
+    });
+  }
+});
+
+test.describe('a phone', () => {
+  test.use(iPhone);
+
+  for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+    test(`a tap leaves no bar of ${build} lit`, async ({page}) => {
+      await page.goto(showing(build));
+
+      expect(await accordionsTab(page).endOfTheFirstBarLitAfterATap(build)).toBe(false);
+    });
+  }
+});
