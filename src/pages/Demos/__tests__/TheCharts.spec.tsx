@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, Feed} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
-import {feedIsSubscribed, inReadingOrder} from '@pages/Demos/__test_support';
+import {feedIsSubscribed, outOfReadingOrder} from '@pages/Demos/__test_support';
 import userEvent from '@testing-library/user-event';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
@@ -720,7 +720,7 @@ describe('the charts tab’s introduction', () => {
     const headline = within(tab).getByRole('heading', {level: 3, name: /^Bitcoin, live/});
 
     expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Charts$/);
-    expect(inReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline])).toBe(true);
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline])).toEqual([]);
   });
 });
 

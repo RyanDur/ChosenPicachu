@@ -788,7 +788,7 @@ describe('the living table’s terms', () => {
     ['middleware', 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own'],
     ['provider', 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it'],
     ['hook', 'a function, named use and something, that a React component calls to get state or behaviour from React'],
-    ['effect', 'code React runs after it has updated the page. This one asks for the feed when the page arrives and releases it when the page leaves'],
+    ['effect', 'code React runs after it has updated the page'],
     ['hydrate', 'fill the table with the recent past, fetched once, and join it to the live trades']
   ])('should define %s in plain words where the living table first uses it', async (term, definition) => {
     const [defined] = within(await livingTable()).getAllByLabelText(term);
@@ -800,7 +800,13 @@ describe('the living table’s terms', () => {
     await livingTable();
     const [defined] = within(screen.getByRole('region', {name: 'the still table'})).getAllByLabelText('ledger');
 
-    expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts when a width is first changed, and what one column gains its neighbour gives up');
+    expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
+  });
+
+  test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
+    const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
+
+    expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
 
   test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {

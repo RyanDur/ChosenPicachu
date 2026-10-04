@@ -1,2 +1,4 @@
-export const inReadingOrder = (elements: readonly Element[]): boolean =>
-  elements.slice(1).every((next, at) => Boolean(elements[at].compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING));
+import {not} from '@ryandur/sand';
+
+export const outOfReadingOrder = (elements: readonly Element[]): Element[] =>
+  elements.slice(1).filter((next, at) => not(elements[at].compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING));

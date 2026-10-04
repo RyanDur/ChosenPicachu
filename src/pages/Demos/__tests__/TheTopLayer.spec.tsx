@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, inReadingOrder} from '@pages/Demos/__test_support';
+import {demosAt, outOfReadingOrder} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';
@@ -225,7 +225,7 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
-  test('should tell step 2 in three paragraphs and step 3 in two', async () => {
+  test('should tell step 2 in three paragraphs, and step 3 in two after its want', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
@@ -330,6 +330,6 @@ describe('the z-index tab’s introduction', () => {
     const firstExhibit = within(tab).getByRole('heading', {name: 'Why Third is on top'});
 
     expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Z-index$/);
-    expect(inReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit])).toBe(true);
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit])).toEqual([]);
   });
 });

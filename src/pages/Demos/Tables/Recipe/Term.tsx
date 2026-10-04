@@ -29,9 +29,9 @@ const definitions: Record<Word, ReactNode> = {
   middleware: 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own',
   provider: 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it',
   hook: 'a function, named use and something, that a React component calls to get state or behaviour from React',
-  effect: 'code React runs after it has updated the page. This one asks for the feed when the page arrives and releases it when the page leaves',
+  effect: 'code React runs after it has updated the page',
   hydrate: 'fill the table with the recent past, fetched once, and join it to the live trades',
-  ledger: 'the table’s record of each column’s share of the width. It starts when a width is first changed, and what one column gains its neighbour gives up'
+  ledger: 'the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up'
 };
 
 export const Term: FC<PropsWithChildren<{word: Word}>> = ({word, children}) =>

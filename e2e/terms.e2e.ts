@@ -1,6 +1,9 @@
 import {expect, test} from '@playwright/test';
 import {definitionTapped, iPhone} from './__test_support';
 
+// a definition squeezed beside its word ran 124 to 266px wide, a few words to a line
+const aReadableWidth = 300;
+
 test.describe('a phone', () => {
   test.use(iPhone);
 
@@ -15,9 +18,9 @@ test.describe('a phone', () => {
     test(`a tap on ${term} opens its definition at a readable width, clear of both edges and of the word`, async ({page}) => {
       await page.goto(`demos/?tab=${tab}`);
 
-      const {width, floor, left, right, overTheWord} = await definitionTapped(page, story, term, shown);
+      const {width, left, right, overTheWord} = await definitionTapped(page, story, term, shown);
 
-      expect(width, 'the definition’s width').toBeGreaterThanOrEqual(floor - 1);
+      expect(width, 'the definition’s width').toBeGreaterThanOrEqual(aReadableWidth);
       expect(left, 'room on the left').toBeGreaterThanOrEqual(8);
       expect(right, 'room on the right').toBeGreaterThanOrEqual(8);
       expect(overTheWord, 'over the word it defines').toBe(false);
