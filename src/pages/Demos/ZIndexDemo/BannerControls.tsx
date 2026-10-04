@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
-import {DialRow} from '../Controls/DialRow';
+import {DialGroup, DialRow} from '../Controls/DialRow';
 
 type Copy = {
   side: Record<Side, string>;
@@ -48,7 +48,7 @@ export type BannerControlsProps = {
 export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen}) =>
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
-    <ul>
+    <DialGroup>
       <DialRow label="side"
         name="banner-side"
         options={[
@@ -91,7 +91,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         chosen={stack}
         onChosen={onStackChosen}
         reading={copy.stack[stack]}/>
-    </ul>
+    </DialGroup>
     <p className="readout caption">
       <code>{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>

@@ -29,3 +29,4 @@ export {focusStandsOut} from './focus';
 export {reachesAcross} from './reach';
 export {designSketch} from './design-sketch';
 export {pageScrollsSideways, piecesPastTheirParts} from './fit';
+export {dialGroups, dialGroupsLaidOutTwoWays, type DialGroup} from './dial-groups';

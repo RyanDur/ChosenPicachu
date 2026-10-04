@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {DialRow} from '../Controls/DialRow';
+import {DialGroup, DialRow} from '../Controls/DialRow';
 import {
   ExclusiveAccordion,
   ExclusiveMeasuredAccordion,
@@ -122,13 +122,13 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h3 id="fold-choices-heading" className="off-screen">fold choices</h3>
       <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
         they don’t change it.</p>
-      <ul>
+      <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
           <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
           <span className="when-less-motion">If your system asks for less motion, every fold here opens at once, whichever you choose.</span>
         </>}/>
-      </ul>
+      </DialGroup>
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>

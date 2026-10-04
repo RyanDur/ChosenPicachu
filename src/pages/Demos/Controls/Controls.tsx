@@ -3,7 +3,7 @@ import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
 import {roomToStandOpen} from '@components/room';
-import {DialRow} from './DialRow';
+import {DialGroup, DialRow} from './DialRow';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
@@ -47,7 +47,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
-      <ul>
+      <DialGroup>
         <DialRow label="pace"
           name={`${copy.kind}-pace`}
           options={[
@@ -75,7 +75,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
           chosen={motion}
           onChosen={onMotionChosen}
           reading={copy.motion[motion]}/>
-      </ul>
+      </DialGroup>
       {children}
     </section>
   </Disclosure>;
