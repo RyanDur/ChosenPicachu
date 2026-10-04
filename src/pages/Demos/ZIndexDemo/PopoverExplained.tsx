@@ -13,8 +13,8 @@ export const PopoverExplained: FC = () =>
     <h3 id="popover-wins-heading" className="title bold">Why the popover wins</h3>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">Open Sort by, in the top layer, with the checkbox either way. Its list opens over card
-          two every time. The list is a popover, an element the browser shows on top and hides again by itself, and a
+        <p className="paragraph">The list from Sort by, in the top layer, opens over card two every time, with the box
+          checked or not. It is a popover, an element the browser shows on top and hides again by itself, and a
           popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen. Whatever the page stacks, the top layer sits
           over it.</p>

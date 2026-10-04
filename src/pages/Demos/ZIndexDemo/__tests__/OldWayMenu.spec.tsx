@@ -1,5 +1,6 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {not} from '@ryandur/sand';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
@@ -88,8 +89,8 @@ describe('the card that traps the menu', () => {
       'Uncheck “Card one has z-index: 1”, and press Sort by again.',
       'Press Sort by, in the top layer, with the box checked or not.'
     ]);
-    expect(within(steps).queryByRole('button')).not.toBeInTheDocument();
-    expect(within(steps).queryByRole('checkbox')).not.toBeInTheDocument();
+    expect([...within(trap).getAllByRole('button'), within(trap).getByRole('checkbox')]
+      .filter(control => not(steps.compareDocumentPosition(control) & Node.DOCUMENT_POSITION_FOLLOWING))).toEqual([]);
   });
 
   test('should keep the checkbox in card one, and tell each card’s z-index in a sentence', async () => {
@@ -102,15 +103,10 @@ describe('the card that traps the menu', () => {
     expect(within(trap).getByText('Card two has z-index: 1, and comes later in the code.')).toBeInTheDocument();
   });
 
-  test('should say nothing before the first press, and nothing when the checkbox changes', async () => {
+  test('should say nothing before the first press', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
-    expect(contextChoice).toBeChecked();
-    expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
 
-    await userEvent.click(contextChoice);
-
-    expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
+    expect(await screen.findByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
   });
 
   test('should take back what it said when the box changes, since the next press answers', async () => {
@@ -127,6 +123,15 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
+  });
+
+  test('should say where the list opened when ArrowDown opens it', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+
+    await userEvent.keyboard('{ArrowDown}');
 
     expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
   });
@@ -166,16 +171,17 @@ describe('why 9999 still loses', () => {
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
-    expect(explanation.everyCodeBeside(part, /Open Sort by\. The list has a z-index of 9999/).join())
+    expect(explanation.everyCodeBeside(part, /The list has a z-index of 9999, and card two/).join())
       .toMatch(/\.sort-choices \{[^]*position: absolute[^]*z-index: 9999[^]*\.old-way-card \{[^]*position: relative[^]*\.forms-context \{[^]*z-index: 1/);
   });
 
-  test('should show the checkbox and the class it takes away beside the run that says what the reader changed', async () => {
+  test('should show card one, with the checkbox inside it, beside the run that says what unchecking it does', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
-    expect(explanation.everyCodeBeside(part, /Uncheck Card one has z-index: 1/).join()).toMatch(/type="checkbox"[^]*Card one has z-index: 1[^]*'forms-context'/);
+    expect(explanation.everyCodeBeside(part, /With the box unchecked, card one’s z-index is auto/).join())
+      .toMatch(/'old-way-card[^]*'forms-context'[^]*type="checkbox"[^]*Card one has z-index: 1/);
   });
 
   test('should draw the layer and the tree of contexts beside the runs that tell them', async () => {

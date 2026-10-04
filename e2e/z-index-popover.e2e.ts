@@ -17,7 +17,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
         for (const choice of ['name', 'date', 'size'] as const) {
           await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
         }
-        await expect(trappedMenu(page).said).toHaveText('The list opened in the top layer, over both cards. No z-index is compared there.');
+        await expect(trappedMenu(page).said).toHaveText('The list opened over both cards. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.');
       });
     }
   });

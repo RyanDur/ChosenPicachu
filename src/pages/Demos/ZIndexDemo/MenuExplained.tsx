@@ -21,10 +21,10 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
     <TrappedMenu cardOne={cardOne} onCardOneChosen={onCardOneChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">Open Sort by. The list has a z-index of 9999, and card two has a z-index of 1,
-          yet the list opens under card two: its top shows in the gap between the cards, and its bottom shows
-          below card two. Move through it with the arrow keys, and the choice in focus moves where you cannot
-          see it, under card two. The menu works. It is drawn in the wrong place.</p>
+        <p className="paragraph">The list has a z-index of 9999, and card two has a z-index of 1, yet the list
+          opens under card two. Its top shows in the gap between the cards, and its bottom shows below card two.
+          Move through it with the arrow keys, and the choice in focus moves where you cannot see it, under card
+          two. The menu works. It is drawn in the wrong place.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.sort-choices {'), gap,
           ...unit(zIndexCss, '.old-way-card {'), gap,
@@ -45,13 +45,12 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
         <Where9999IsCompared/>
       </li>
       <li className="run">
-        <p className="paragraph">Uncheck Card one has z-index: 1, and card one’s z-index goes back to auto. The card
-          is still positioned, but at auto it forms no stacking context, so the list joins the page’s context, and
-          its 9999 is compared with card two’s 1. The list opens over card two. Check it again, and the card forms
-          its layer again, with the list inside it.</p>
+        <p className="paragraph">With the box unchecked, card one’s z-index is auto. The card is still positioned,
+          but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the
+          page’s context, where card two is, and there 9999 is the larger number. With the box checked again, the
+          card forms its layer again, with the list inside it.</p>
         <Snippet label="HTML" lines={[
-          ...span(trappedSource, '<label className="context-choice', '</label>'), gap,
-          ...span(trappedSource, "<li className={classNames('old-way-card", "'forms-context')}>")
+          ...span(trappedSource, "<li className={classNames('old-way-card", '</label>')
         ]}/>
       </li>
     </ol>

@@ -10,7 +10,7 @@ type Opened = CardOne | 'top layer';
 const whereItOpened: Record<Opened, string> = {
   contained: 'The list opened under card two. Its 9999 counts only inside card one.',
   free: 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.',
-  'top layer': 'The list opened in the top layer, over both cards. No z-index is compared there.'
+  'top layer': 'The list opened over both cards. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.'
 };
 
 type Props = {
