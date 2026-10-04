@@ -11,6 +11,21 @@ const parts = ['How we used to build a fold', 'What the platform gives now', 'Th
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /export const foldMeasured/];
 
 describe('the accordions tab', () => {
+  test('should open on the three languages and the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const openings = [
+      /^A web page is written in three languages\./,
+      /^You don’t always need all three\./,
+      /^The thing is an accordion:/,
+      /^Sliding it open is the hard part\./,
+      /^By the end you can build an accordion.* say which language each job needed and why\./
+    ];
+
+    expect(outOfReadingOrder([...openings.map(opening => within(tab).getByText(opening)), within(tab).getAllByRole('group')[0]])).toEqual([]);
+  });
+
   test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how every fold moves', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -482,25 +497,6 @@ describe('what the newer builds end', () => {
 });
 
 describe('the accordion in HTML alone', () => {
-  test('should open the tab on the three languages, and bring the accordion in as the example', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const openings = [/^A web page is written in three languages\./, /^You don’t always need all three\./, /^The thing is an accordion:/, /^By the end you can build an accordion/];
-
-    expect(outOfReadingOrder([...openings.map(opening => within(tab).getByText(opening)), within(tab).getAllByRole('group')[0]])).toEqual([]);
-    expect(tab).toHaveTextContent('say which language each job needed and why.');
-  });
-
-  test('should come after the introduction, as the first accordion on the tab', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const introduction = within(tab).getByText(/^A web page is written in three languages/);
-
-    expect(introduction.compareDocumentPosition(within(tab).getAllByRole('group')[0])).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-  });
-
   test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
