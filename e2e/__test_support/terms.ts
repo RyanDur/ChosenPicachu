@@ -2,10 +2,10 @@ import type {Page} from '@playwright/test';
 
 export type DefinitionFit = {width: number; left: number; right: number; overTheWord: boolean};
 
-export const definitionTapped = async (page: Page, story: string, term: string, shown = term): Promise<DefinitionFit> => {
+export const definitionTapped = async (page: Page, story: string, term: string): Promise<DefinitionFit> => {
   const fold = page.getByRole('group', {name: story, exact: true}).first();
   await fold.getByRole('heading', {name: story, exact: true}).click();
-  const word = fold.getByRole('button', {name: shown, exact: true}).first();
+  const word = fold.getByRole('button', {name: term, exact: true}).first();
   await word.scrollIntoViewIfNeeded();
   await word.tap();
   const definition = fold.getByLabel(term, {exact: true}).first();
