@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {chartsPage, feedStillConnecting, heldMarket, iPad13Upright, iPadUpright, iPhone, scriptedMarket} from './__test_support';
+import {chartsPage, desktop, feedStillConnecting, heldMarket, iPad13Upright, iPadUpright, iPhone, scriptedMarket} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -75,5 +75,34 @@ for (const {reader, device, statusLine} of [
 
       expect(await chartsPage(page).whereTheFeedStatusSits()).toBe(statusLine);
     });
+  });
+}
+
+for (const {reader, device, press} of [
+  {reader: 'a mouse at a desk', device: desktop, press: 'click' as const},
+  {reader: 'a finger on a phone', device: iPhone, press: 'tap' as const}
+]) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    for (const {kind, region} of [
+      {kind: 'price', region: 'live trades'},
+      {kind: 'candles', region: 'candles'},
+      {kind: 'pressure', region: 'pressure'},
+      {kind: 'pie', region: 'pie'}
+    ]) {
+      test(`a press in the middle of the ${kind} drawing opens its tutorial`, async ({page}) => {
+        await page.goto(`demos/?tab=charts&charts=${kind}`);
+        const drawing = page.getByRole('region', {name: region, exact: true}).getByRole('figure');
+        await drawing.scrollIntoViewIfNeeded();
+        const box = await drawing.boundingBox();
+        if (box === null) throw new Error(`the ${kind} drawing is not shown`);
+
+        const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
+        await (press === 'tap' ? page.touchscreen.tap(x, y) : page.mouse.click(x, y));
+
+        await expect(page).toHaveURL(new RegExp(`/demos/charts/${kind}/?$`));
+      });
+    }
   });
 }

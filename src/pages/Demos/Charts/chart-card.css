@@ -30,6 +30,7 @@
 
   .chart-stage {
     position: relative;
+    pointer-events: none;
 
     &:has(> .chart-loading)::before {
       content: '';
