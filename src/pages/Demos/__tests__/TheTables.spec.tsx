@@ -467,11 +467,23 @@ describe('the tables demo', () => {
 
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toHaveTextContent(/neither side drops below its floor/);
-    expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser hands it on to the header around it/);
-    expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
-    expect(resize).not.toHaveTextContent(/descent|road/);
     expect(resize).toHaveTextContent(/never less than the slimmest share, 5% of the table/);
     expect(resize).toHaveTextContent(/const SLIMMEST = 5;[^]*const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
+  });
+
+  test('the resize build says the handle stops its press from bubbling to the header, and the arrow keys make the same trade', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    await userEvent.click(await screen.findByRole('radio', {name: 'Drag resize'}));
+
+    const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
+    expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser hands it on to the header around it/);
+    expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
+    expect(resize).toHaveTextContent(/The handle stops those keys from bubbling too, so the header’s own arrow keys never move the column/);
+    expect(resize).toHaveTextContent(/It should stop those keys there as well, because the header answers arrow keys by moving the column/);
+    expect(resize).not.toHaveTextContent(/\bdescent\b|\broad\b/);
   });
 
   test('choosing drag sort brings the sort tutorial back', async () => {
@@ -551,6 +563,19 @@ describe('the tables demo', () => {
     expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
   });
 
+  test('the sort menu build says the toggle and the menu stop a press from bubbling to the header', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed(feed);
+    await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
+
+    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
+    expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never hears it/);
+    expect(recipe).not.toHaveTextContent(/\bdescent\b/);
+  });
+
   test('choosing the sort menu swaps in the sort menu tutorial', async () => {
     const feed = await listeningFeed();
 
@@ -565,8 +590,6 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The sort keeps sorting/);
     expect(recipe).toHaveTextContent(/A hand ends the sort/);
-    expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never hears it/);
-    expect(recipe).not.toHaveTextContent(/descent/);
     expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction}\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))

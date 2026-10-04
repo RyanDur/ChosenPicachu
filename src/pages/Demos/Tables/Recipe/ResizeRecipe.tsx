@@ -162,7 +162,8 @@ const widenStory = (world: World) =>
       table once, pixels per share. A press on the handle would bubble, which means the browser hands it on to the
       header around it, and the header would start a column drag. So the handle stops the press there, and a
       boundary drag never becomes a column drag. Arrow keys on a focused handle make the same trade, one fixed step
-      per arrow.</Tell>
+      per arrow. The handle stops those keys from bubbling too, so the header’s own arrow keys never move the
+      column.</Tell>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the promise that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
@@ -251,7 +252,8 @@ const widenStory = (world: World) =>
       <Step title="Two gestures, one header">
         <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
           <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop its press from bubbling</Mdn> up to
-            the header, and arrow keys on the handle should make the same trade as a drag, a fixed step per arrow.</Says>
+            the header, and arrow keys on the handle should make the same trade as a drag, a fixed step per arrow. It should stop those keys there
+            as well, because the header answers arrow keys by moving the column.</Says>
         </Words>
         <Reveal>
           <Says>The sort never hears the press, and the arrow keys trade a fixed step with no
