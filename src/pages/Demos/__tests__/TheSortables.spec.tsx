@@ -337,6 +337,16 @@ describe('the native drag sort tutorial’s words', () => {
     ]);
   });
 
+  test('should arm the drag in one run and walk dragstart in the next', async () => {
+    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
+    const arm = recipeFolds.steps(story)[0];
+
+    expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
+      'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable just for that gesture.',
+      'Then the browser fires dragstart, the event for a drag beginning, and its handler declares the move the platform is about to make. The browser answers with the whole ceremony (the drag image under your pointer, the cursor, the cancel) without another line.'
+    ]));
+  });
+
   test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {
     const recipe = await nativeRecipe();
     await recipeFolds.press(recipe, 'The user can arrange the list by hand');
@@ -359,7 +369,8 @@ describe('the native drag sort tutorial’s words', () => {
   test.each([
     ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler declares the move'],
-    ['dataTransfer and dragover', 'dataTransfer, the object a drag event carries its data in, the payload, exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
+    ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
+    ['the road', 'Some pixels are never yours on this road, the browser’s own drag and drop: the drag image, the cursor, the macOS cancel.'],
     ['state', 'Steer with state instead, the values React keeps between one drawing of the page and the next. The lift reports which item is held, which the code calls aloft,'],
     ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default, and here the default is to refuse the drop. dropEffect, a property of dataTransfer, names the verb, such as move or copy, so the cursor matches. And the handler for drop, the event for a release over a target,'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],

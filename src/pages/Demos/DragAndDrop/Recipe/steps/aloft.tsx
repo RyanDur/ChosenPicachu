@@ -3,10 +3,10 @@ import {span} from '../../../Recipe/carve';
 
 export const holdTheAloft = (listSource: string) =>
   <Step title="Keep which item is held in state, not in the drag’s payload">
-    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn>, the object a drag event carries its data in,
-      the payload, exists to carry data between windows, and mid-drag it is locked: a handler
+    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in, the
+      payload. It exists to carry data between windows, and mid-drag it is locked: a handler
       for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
-      on whatever the pointer is over, may not read what dragstart wrote, so the payload cannot steer the sort.</>}>
+      on whatever the pointer is over, may not read what dragstart wrote. So the payload cannot steer the sort.</>}>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in
         dragover, and the read comes back empty. That is not a bug: the store is sealed
         mid-drag so a hovered window cannot sniff data that was never dropped on it.</Says>

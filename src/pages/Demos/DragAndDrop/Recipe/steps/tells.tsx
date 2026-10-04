@@ -6,12 +6,12 @@ import {Tell} from '../../../Recipe';
 export const platformCurrency =
   <Tell>The tables build their drag from pointer events and own every pixel; this
     list pays platform currency instead. Mark a card draggable and the ceremony
-    arrives: the drag image, a picture of the card that follows the pointer, the cursor, the cancel. What the platform asks in return is
-    protocol, a series of consents and timings, and the steps below are those
+    arrives: the drag image, a picture of the card that follows the pointer, the cursor, the cancel. What the
+    platform asks in return is protocol, a series of consents and timings, and the steps below are those
     consents.</Tell>;
 
 export const neverOurs =
-  <Tell>Some pixels are never yours on this road: the drag image, the cursor, the macOS
-    cancel. The steps name them instead of faking them, and the <Link className="signpost"
+  <Tell>Some pixels are never yours on this road, the browser’s own drag and drop: the drag image, the cursor,
+    the macOS cancel. The steps name them instead of faking them, and the <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> walks the road that
     owns them.</Tell>;
