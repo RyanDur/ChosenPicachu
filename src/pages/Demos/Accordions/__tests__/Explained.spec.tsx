@@ -150,6 +150,39 @@ describe('the measured build', () => {
   });
 });
 
+describe('the fold choices', () => {
+  const rowOf = async (name: string): Promise<HTMLElement> => {
+    await screen.findByRole('group', {name});
+    const rows = screen.getAllByRole('listitem').filter(item => within(item).queryByRole('group', {name}) !== null);
+    return rows[rows.length - 1];
+  };
+
+  test('should read the chosen fold type, and read the other once it is chosen', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const row = await rowOf('fold type');
+
+    expect(within(row).getByRole('status')).toHaveTextContent('Any number of folds can be open at once.');
+
+    await userEvent.click(within(row).getByRole('radio', {name: 'Exclusive'}));
+
+    expect(within(row).getByRole('status')).toHaveTextContent('Opening one fold closes the others.');
+  });
+
+  test.each([
+    ['Reveal', 'The text is uncovered from its first line down.'],
+    ['Drawer', 'The text slides down from under its bar.'],
+    ['Static', 'The fold opens in one frame, with nothing moving.']
+  ])('should read %s as the fold motion once it is chosen', async (motion, reading) => {
+    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+
+    const row = await rowOf('fold motion');
+    await userEvent.click(within(row).getByRole('radio', {name: motion}));
+
+    expect(within(row).getByRole('status')).toHaveTextContent(reading);
+  });
+});
+
 describe('the fold motion', () => {
   test('should sit after the accordion in HTML alone, right after the fold type, before the old way, and in no part', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);

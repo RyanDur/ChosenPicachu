@@ -13,7 +13,7 @@ type Props<T extends string> = {
 
 export const Dial = <T extends string>({label, reading, ...pills}: Props<T>) =>
   <li className="control">
-    <span className="axis caption uppercase">{label}</span>
+    <span className="axis caption uppercase" aria-hidden>{label}</span>
     <PillGlider label={label} {...pills}/>
-    <p className="reading paragraph">{reading}</p>
+    <output className="reading paragraph">{reading}</output>
   </li>;

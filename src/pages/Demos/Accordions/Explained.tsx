@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {PillGlider} from '@components/PillGlider';
+import {Dial} from '../Controls/Dial';
 import {
   ExclusiveAccordion,
   ExclusiveMeasuredAccordion,
@@ -59,6 +59,15 @@ const toldRun = 'run card rounded-corners lifted padded';
 const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
 const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
 const foldMotions = [{display: 'Reveal', value: 'reveal'}, {display: 'Drawer', value: 'drawer'}, {display: 'Static', value: 'static'}] as const;
+const typeReadings: Record<FoldType, string> = {
+  inclusive: 'Any number of folds can be open at once.',
+  exclusive: 'Opening one fold closes the others.'
+};
+const motionReadings: Record<FoldMotion, string> = {
+  reveal: 'The text is uncovered from its first line down.',
+  drawer: 'The text slides down from under its bar.',
+  static: 'The fold opens in one frame, with nothing moving.'
+};
 
 type Props = {
   contents: Contents;
@@ -108,8 +117,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
       </ol>
     </section>
-    <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen}/>
-    <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
+    <ul className="dials">
+      <Dial label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
+      <Dial label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={motionReadings[motion]}/>
+    </ul>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
