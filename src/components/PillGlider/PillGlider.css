@@ -1,6 +1,13 @@
+@property --veil-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 .pill-glider {
   --chosen-color: var(--charcoal);
   --not-chosen-color: var(--field);
+  --veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
 
   width: fit-content;
   outline: var(--hairline-x-2) solid var(--chosen-color);
@@ -10,10 +17,11 @@
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   border-radius: var(--radius);
-  transition: background-color 0.3s;
+  background: var(--veil);
+  transition: --veil-alpha 0.3s;
 
   &:hover {
-    background: var(--charcoal-veil);
+    --veil-alpha: 0.5;
   }
 
   @supports (anchor-name: --chosen) {

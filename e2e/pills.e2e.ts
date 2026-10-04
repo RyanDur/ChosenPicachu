@@ -85,3 +85,18 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     });
   });
 }
+
+test.describe('a desktop, leaving the pills', () => {
+  test.use(desktop);
+
+  test('no pill goes dark while the hover fades from the switch', async ({page}) => {
+    await page.goto('demos/?tab=tables');
+    const world = pillSwitch(page, 'world');
+    await world.hover('React');
+    await expect.poll(world.stillMoving).toBe(0);
+
+    await page.mouse.move(0, 0);
+
+    expect(await world.paintedWrongFor(1000)).toEqual([]);
+  });
+});
