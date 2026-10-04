@@ -128,6 +128,14 @@
   }
 
   @media (width <= 600px) {
+    /* from a word near the edge, the strip from the word to the edge is a sliver; under it, centred on the page */
+    .term-definition {
+      position-area: block-end span-all;
+      justify-self: center;
+      inline-size: min(var(--measure-floor), calc(100vw - var(--base-x-4)));
+      max-width: none;
+    }
+
     .step {
       grid-template-columns: var(--base-x-2_5) minmax(0, 1fr);
       gap: var(--base);

@@ -24,3 +24,4 @@ export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab} from './keyboard';
 export {seedRandom} from './random';
 export {bannerLeavesBeforeTheGapCloses, bannerMotion, gapOpensBeforeTheBannerIsSeen} from './banner-motion';
+export {definitionTapped, type DefinitionFit} from './terms';
