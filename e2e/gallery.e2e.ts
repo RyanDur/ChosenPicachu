@@ -1,5 +1,5 @@
-import {Locator, Page, expect, test} from '@playwright/test';
-import {desktop, galleryPage, unpaintedPixels, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {Locator, expect, test} from '@playwright/test';
+import {desktop, galleryPage, siteFrame, unpaintedPixels, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
@@ -191,16 +191,45 @@ for (const {reader, device} of [...handhelds, {reader: 'a desktop', device: desk
   test.describe(`${reader}, looking at the corner`, () => {
     test.use(device);
 
-    const corner = (page: Page) => [page.getByRole('link', {name: 'Home', exact: true}), page.getByRole('heading', {name: 'Gallery', exact: true})];
-
     test('paints the title and Home whole once the wall has hung', async ({page}) => {
       const gallery = galleryPage(page);
+      const site = siteFrame(page);
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
-      for (const part of corner(page)) {
+      for (const part of [site.home, site.title]) {
         expect(await unpaintedPixels(page, part)).toBe(0);
       }
     });
   });
 }
+
+test.describe('a desktop, with a work in hand', () => {
+  test.use(desktop);
+
+  test('paints the title and Home whole while a work is hovered', async ({page}) => {
+    const gallery = galleryPage(page);
+    const site = siteFrame(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.nth(1)).toBeVisible();
+
+    await gallery.wall.nth(1).getByRole('link').first().hover();
+
+    for (const part of [site.home, site.title]) {
+      await expect.poll(() => unpaintedPixels(page, part)).toBe(0);
+    }
+  });
+
+  test('paints the title and Home whole while a work has keyboard focus', async ({page}) => {
+    const gallery = galleryPage(page);
+    const site = siteFrame(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.nth(1)).toBeVisible();
+
+    await gallery.wall.nth(1).getByRole('link').first().focus();
+
+    for (const part of [site.home, site.title]) {
+      await expect.poll(() => unpaintedPixels(page, part)).toBe(0);
+    }
+  });
+});

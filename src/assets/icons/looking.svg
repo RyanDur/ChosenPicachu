@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-  <circle cx="10.6" cy="10.6" r="6.4"/>
-  <path d="M15.4 15.4 21.2 21.2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke-linecap="round">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="0.75"/>
+    </filter>
+  </defs>
+  <g stroke="#fff" stroke-width="3.1" filter="url(#glow)">
+    <circle cx="10.6" cy="10.6" r="6.4"/>
+    <path d="M15.4 15.4 21.2 21.2"/>
+  </g>
+  <g stroke="currentColor" stroke-width="1.6">
+    <circle cx="10.6" cy="10.6" r="6.4"/>
+    <path d="M15.4 15.4 21.2 21.2"/>
+  </g>
 </svg>

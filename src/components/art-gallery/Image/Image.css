@@ -12,8 +12,6 @@
       inset: 0;
       background: url("../../../assets/icons/looking.svg")
         no-repeat center;
-      filter: drop-shadow(0 0 var(--hairline-x-3) var(--white))
-        drop-shadow(0 0 var(--hairline-x-3) var(--white));
     }
   }
 }
