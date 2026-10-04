@@ -24,10 +24,15 @@ test.describe('a desk', () => {
       const pressing = details.getByText(bar, {exact: typeof bar === 'string'}).first();
       await pressing.scrollIntoViewIfNeeded();
 
-      const [opening, shutting] = [await heightsBetween(details, pressing), await heightsBetween(details, pressing)];
-
       // where nothing slides, WebKit still lays an opened fold out over two frames, so one height between is at once
-      expect(slides ? opening >= 3 && shutting >= 3 : opening <= 1 && shutting <= 1).toBe(true);
+      const {least, most} = slides ? {least: 3, most: Infinity} : {least: 0, most: 1};
+      const opening = await heightsBetween(details, pressing);
+      const shutting = await heightsBetween(details, pressing);
+
+      expect(opening).toBeGreaterThanOrEqual(least);
+      expect(opening).toBeLessThanOrEqual(most);
+      expect(shutting).toBeGreaterThanOrEqual(least);
+      expect(shutting).toBeLessThanOrEqual(most);
     });
   }
 
