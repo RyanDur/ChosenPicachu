@@ -1,5 +1,5 @@
 .banners {
-  /* the UA popover stylesheet sets overflow: auto, which clips the arriving banner's flight */
+  /* the browser's own stylesheet gives a popover overflow: auto, which would clip the slide */
   overflow: visible;
   padding: 0;
   border: none;

@@ -253,6 +253,14 @@ describe('the banner tutorial’s second story', () => {
     expect(within(many).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', '#popover-wins-heading');
   });
 
+  test('should show the transition that opens the gap in step 2’s sample, and the whole leaving rule in step 4’s', async () => {
+    await openZIndexTab();
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(steps[1]).toHaveTextContent(/transition: grid-template-rows 0\.3s, margin-block-end 0\.3s; @starting-style/);
+    expect(steps[3]).toHaveTextContent(/margin-block-end: 0;[^]*grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; \}/);
+  });
+
   test('should say where the banner starts, for the entrance chosen', async () => {
     render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
 

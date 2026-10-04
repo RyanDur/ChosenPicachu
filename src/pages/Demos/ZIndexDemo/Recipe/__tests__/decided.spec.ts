@@ -1,5 +1,5 @@
 import bannersCss from '@components/Banners/Banners.css?raw';
-import {arriveDistance, closedGap, closedSlot, closingTransition, ownedGap, slotTrack} from '../decided';
+import {arriveDistance, closedGap, closedSlot, closingGapTransition, closingTransition, gapTransition, openingTransition, ownedGap, slotTrack} from '../decided';
 
 const declarationsOf = (record: Record<string, string>): string[][] =>
   Object.entries(record).map(([choice, declaration]) => [choice, declaration]);
@@ -10,7 +10,10 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
     ...declarationsOf(slotTrack),
     ...declarationsOf(closedSlot),
     ...declarationsOf(closedGap),
-    ...declarationsOf(closingTransition)
+    ...declarationsOf(closingTransition),
+    ...declarationsOf(openingTransition),
+    ...declarationsOf(gapTransition),
+    ...declarationsOf(closingGapTransition)
   ])('the %s banner wears the declaration Banners.css gives it: %s', (_choice, declaration) => {
     expect(bannersCss).toContain(declaration);
   });

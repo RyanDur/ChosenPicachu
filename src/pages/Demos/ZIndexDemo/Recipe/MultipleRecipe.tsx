@@ -98,7 +98,7 @@ export const MultipleRecipe: FC = () => {
         <Codes>
           <Snippet label="CSS" lines={[
             ...arrivalLines(enter), gap,
-            ...span(bannersCss, '/* the UA popover stylesheet', 'overflow: visible;')
+            ...span(bannersCss, "/* the browser's own stylesheet", 'overflow: visible;')
           ]}/>
         </Codes>
       </Step>
