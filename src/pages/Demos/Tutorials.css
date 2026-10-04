@@ -239,15 +239,10 @@
   }
 
   .design-measure {
-    font-size: var(--text-caption);
-    font-weight: bold;
     text-align: start;
   }
 
   .design-window {
-    font-size: var(--text-caption);
-    font-weight: normal;
-    color: var(--ink-muted);
     text-align: start;
     vertical-align: middle;
     white-space: nowrap;
@@ -255,7 +250,7 @@
 
   /* on a phone the six measures stand on their sides, read bottom to top, and a window's name may take two lines,
      so the whole sketch fits and nothing in it scrolls */
-  @media (width < 600px) {
+  @media (width <= 600px) {
     .design-still {
       padding: var(--base);
     }

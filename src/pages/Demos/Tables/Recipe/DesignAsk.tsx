@@ -15,15 +15,16 @@ const sketch =
   <table className="design-table">
     <thead>
       <tr>
-        <th className="design-measure" scope="col">window</th>
+        <th className="design-measure drawn-caption bold" scope="col">window</th>
         {measures.map(measure =>
-          <th className="design-measure design-column" scope="col" key={measure}><span className="design-name">{measure}</span></th>)}
+          <th className="design-measure design-column drawn-caption bold" scope="col" key={measure}><span
+            className="design-name">{measure}</span></th>)}
       </tr>
     </thead>
     <tbody>
       {windows.map(window =>
         <tr key={window}>
-          <th className="design-window" scope="row">{window}</th>
+          <th className="design-window drawn-caption muted-ink" scope="row">{window}</th>
           {measures.map(measure => <td className="design-cell design-column" key={measure}/>)}
         </tr>)}
     </tbody>
