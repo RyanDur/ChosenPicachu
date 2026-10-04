@@ -27,7 +27,7 @@ describe('why the popover wins', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
-    const run = within(part).getByText(/The new way costs placement/);
+    const run = within(part).getByText(/The site’s menu.css places it/);
 
     expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
     expect(run).toHaveTextContent(/like the old list above, has no anchor, so it is left out\./);
@@ -44,12 +44,12 @@ describe('why the popover wins', () => {
     expect(runs[scripts - 1]).toBe(explanation.runTelling(part, /The button names its menu with popovertarget/));
   });
 
-  test('should show the site’s menu placement and its fallback beside the run that says what each way costs', async () => {
+  test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(explanation.everyCodeBeside(part, /The new way costs placement/).join()).toMatch(/\.menu \{[^]*position-area: block-end span-inline-start[^]*@supports not \(position-area: block-end\)/);
+    expect(explanation.everyCodeBeside(part, /The site’s menu.css places it/).join()).toMatch(/\.menu \{[^]*position-area: block-end span-inline-start[^]*@supports not \(position-area: block-end\)/);
   });
 
   test('should draw the top layer above the page beside the run that says why nothing covers it', async () => {

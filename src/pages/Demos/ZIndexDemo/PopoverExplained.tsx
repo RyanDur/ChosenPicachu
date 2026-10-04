@@ -45,7 +45,10 @@ export const PopoverExplained: FC = () =>
       <li className="run">
         <p className="paragraph">With the old way, any card around the menu that forms a stacking context traps it, and
           script has to open it, close it and watch for clicks outside. The new way costs placement. A menu in the top
-          layer is placed against the window, not its card, so it no longer sits under its button by itself. The site’s
+          layer is placed against the window, not its card, so it no longer sits under its button by itself.</p>
+      </li>
+      <li className="run">
+        <p className="paragraph">The site’s
           menu.css places it with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened
           it, and where a browser has no position-area, it centres the menu on the screen.
           In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
