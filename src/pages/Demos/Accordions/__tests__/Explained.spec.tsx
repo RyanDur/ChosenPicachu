@@ -484,3 +484,58 @@ describe('the depth of each part', () => {
       .toHaveTextContent('Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open.');
   });
 });
+
+describe('the runs in view, with the folds shut', () => {
+  test('should say what a transition is where the tab first uses it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/Before a known height/)).toHaveTextContent(/A transition is CSS moving a property from its old value to its new one over a set time\. It can move a height/);
+  });
+
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should, with %s chosen, say what the platform build replaces without the %s’s words', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+    const run = within(platform).getByText(/This build uses details and summary/);
+
+    expect(run).toBeVisible();
+    expect(run).toHaveTextContent(`nothing has to tie a label to a hidden ${input}. Details remembers whether it is open, so there is no ${input} to hide and no rule that reads it.`);
+  });
+
+  test('should, with exclusive chosen, say in view what makes the build exclusive', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(within(platform).getByText(/This build uses details and summary/))
+      .toHaveTextContent(/This replaces the radio group\. Give every details the same name, and the browser closes the others when one opens\. Pressing the open one closes it, so no Close radio is needed\. That is the exclusive build\. This replaces the three old ways/);
+  });
+
+  test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${motion}`)}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(within(platform).getByText(/This build uses details and summary/)).toHaveTextContent(/and the known height\. Today only Chromium slides the fold\. Firefox and WebKit open it at once, and it still works\.$/);
+    expect(platform).not.toHaveTextContent(/Today only Chromium moves the size/);
+  });
+
+  test('should, with static chosen, say nothing about which browsers slide', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(platform).not.toHaveTextContent(/Today only Chromium/);
+  });
+
+  test('should say what grid and :has() are in the run on the grid row', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/Details slides to its content’s height/))
+      .toHaveTextContent(/today\. Grid is the CSS layout that sets a box out in rows and columns\. Under the bar[^]*while the fold is closed\. :has\(\) is a piece of a CSS rule that picks an element/);
+  });
+});

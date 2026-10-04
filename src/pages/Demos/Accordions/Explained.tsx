@@ -114,9 +114,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
         <h4 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h4>
-        <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition
-          can move a height to a number but not to auto, the height the text needs, so we moved
-          the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
+        <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
+          moving a property from its old value to its new one over a set time. It can move a height to a number but not
+          to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
           than any part would ever need, like 1000px. The panel stopped at its own text, so nothing
           scrolled and nothing was left empty. The cost was the timing. The transition spent its whole
           time crossing the guess, and the text filled only the start of it. So a short part opened in a
@@ -214,8 +214,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             what the elements hold, and what the stylesheet can read.</p>
         </li>
         <li className="run">
-          <p className="paragraph">A transition cannot move a height to auto, the height the content needs. Before grid,
-            the way to move evenly with no script was a height you knew. Here every panel is the same height, so every
+          <p className="paragraph">The way to move evenly with no script and no guess was a height you knew. Here every panel is the same height, so every
             part travels the same distance, and a short part moves like a tall one. The cost is that a short part leaves
             room under its text, and a tall one makes you scroll.</p>
           <TheKnownHeight/>
@@ -278,8 +277,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   The arrow is an empty box drawn after the label’s words, with only its top and right
                   borders, turned 45 degrees so the corner points right. When the {input} is checked, the
                   ~ combinator picks the label after it, and the corner turns to 135 degrees and points
-                  down. A transition moves a property from its old value to its new one over a set time,
-                  whenever the value changes.
+                  down. The turn is a transition, which runs whenever the value changes.
                 {motion === 'static'
                   ? ' With static there is none, so the corner turns in a single frame.'
                   : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
@@ -382,12 +380,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
             piece of the {input} build has a native
-            piece in its place. Summary is the bar and the control at once, so there is no label,
-            no for and no id. Details remembers whether it is open, so there is no {input} to
-            hide and no sibling selector to read it. The keyboard comes with it, and a screen
+            piece in its place. Summary is the bar and the control at once, so nothing has to tie a label to a
+            hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads it. The keyboard comes with it, and a screen
             reader announces the bar as a disclosure, collapsed or expanded.
-          {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'} This replaces the three old ways:
-            the max-height guess, the height measured by script, and the known height.</p>
+          {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'}
+          {type === 'exclusive' && <> This replaces the radio group. Give every details the
+            same <Mdn path="Web/HTML/Element/details#name">name</Mdn>, and the browser closes the others when one opens.
+            Pressing the open one closes it, so no Close radio is needed. That is the exclusive build.</>} This replaces the
+            three old ways: the max-height guess, the height measured by script, and the known height.
+          {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and WebKit open it at once, and it still works.'}</p>
           <Snippet label="TS" lines={type === 'inclusive'
             ? span(accordionsSource, '<details className="fold">', '</details>')
             : span(accordionsSource, '<details className="fold" name=', '</details>')}/>
@@ -398,11 +399,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <details aria-labelledby="details-depth">
             <summary id="details-depth" className="opener bold">How details works</summary>
             <ol className="runs">
-              {type === 'exclusive' && <li className="run">
-                <p className="paragraph">This replaces the radio group. Give every details the
-                  same <Mdn path="Web/HTML/Element/details#name">name</Mdn>, and the browser closes the
-                  others when one opens. Pressing the open one closes it, so no Close radio is needed.</p>
-              </li>}
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
                   summary, in the same colours. Summary takes focus and hover itself, where the {input}
@@ -422,8 +418,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   move to and from keywords like auto, and overflow hidden hides the text the size does not
                   hold yet.
                 {{
-                  reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
-                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
+                  reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
+                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide.',
                   static: ' With static, the part a details hides has no transition, so the fold opens in a single frame, in every browser.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
@@ -473,11 +469,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>}
         <li className="run">
           <p className="paragraph">Details slides to its content’s height with ::details-content, but only in
-            Chromium. A grid row does the same in every browser today. Under the bar, the fold’s
+            Chromium. A grid row does the same in every browser today. Grid is the CSS layout that sets a box out in rows
+            and columns. Under the bar, the fold’s
             paragraph is a grid with one row. The fr is a grid unit for a share of the space. In a
             grid sized to its content, a row of 1fr is exactly as tall as its content needs. A row
-            of 0fr has no height. The row is 0fr while the fold is closed.
-            The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
+            of 0fr has no height. The row is 0fr while the fold is
+            closed. <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> is a piece of a CSS rule that picks an element by what it
             contains, so <code>:has(:checked)</code> makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
             The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the
@@ -561,8 +558,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab moves by transition, never by animation.
-            A <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> moves a property from its old value
-            to its new one when the value changes. If the value changes back midway, it turns
+            When the value changes back midway, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
             around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
             a set of keyframes on its own clock, whatever the state does. A fold moves because the
             reader pressed it, and a reader may press again before it lands, so every build here
