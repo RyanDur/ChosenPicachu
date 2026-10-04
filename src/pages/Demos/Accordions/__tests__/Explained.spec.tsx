@@ -218,7 +218,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.codeBeside(platform, /This replaces the three old ways/)).not.toHaveTextContent('.drawer &::details-content');
+    expect(explanation.everyCodeBeside(platform, /A pseudo-element is a part of an element/).join()).not.toContain('.drawer &::details-content');
   });
 
   const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-text { overflow-y: auto;', '.info-paragraph { box-sizing', '.info-toggle:not(:checked) ~ .info { height: 0;'];
@@ -470,9 +470,9 @@ describe('the depth of each part', () => {
     const explained = await screen.findByRole('region', {name: part});
     const folded = within(explained).getByRole('group', {name: fold});
 
-    expect(folded).not.toHaveAttribute('open');
     expect(folded).toContainElement(within(explained).getByText(depth));
-    expect(folded).not.toContainElement(within(explained).getByText(point));
+    expect(within(explained).getByText(depth)).not.toBeVisible();
+    expect(within(explained).getByText(point)).toBeVisible();
   });
 
   test('should tell, under reveal, what content-visibility is before what allow-discrete does with it', async () => {
