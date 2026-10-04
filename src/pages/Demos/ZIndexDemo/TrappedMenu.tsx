@@ -43,7 +43,10 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
       <li className={classNames('old-way-card card rounded-corners floating', cardOne === 'contained' && 'forms-context')}>
         <label className="context-choice reachable">
           <input type="checkbox" checked={cardOne === 'contained'}
-            onChange={({currentTarget}) => onCardOneChosen(currentTarget.checked ? 'contained' : 'free')}/>
+            onChange={({currentTarget}) => {
+              updateSaid(nothing());
+              onCardOneChosen(currentTarget.checked ? 'contained' : 'free');
+            }}/>
           Card one has z-index: 1
         </label>
         <p className="paragraph">Its list has z-index: 9999.</p>

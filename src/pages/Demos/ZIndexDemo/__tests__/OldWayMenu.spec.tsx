@@ -113,6 +113,16 @@ describe('the card that traps the menu', () => {
     expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
   });
 
+  test('should take back what it said when the box changes, since the next press answers', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+    await userEvent.keyboard('{Escape}');
+
+    await userEvent.click(screen.getByRole('checkbox', {name: 'Card one has z-index: 1'}));
+
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
+  });
+
   test('should say the list opened under card two when card one has its z-index', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
