@@ -384,9 +384,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads it. The keyboard comes with it, and a screen
             reader announces the bar as a disclosure, collapsed or expanded.
           {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'}
-          {type === 'exclusive' && <> This replaces the radio group. Give every details the
-            same <Mdn path="Web/HTML/Element/details#name">name</Mdn>, and the browser closes the others when one opens.
-            Pressing the open one closes it, so no Close radio is needed. That is the exclusive build.</>} This replaces the
+          {type === 'exclusive' && <> Give every details the same <Mdn path="Web/HTML/Element/details#name">name</Mdn>,
+            and the browser closes the others when one opens, as a radio group does. Pressing the open one closes it, so
+            no Close radio is needed. That is the exclusive build.</>} This replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.
           {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and WebKit open it at once, and it still works.'}</p>
           <Snippet label="TS" lines={type === 'inclusive'
@@ -448,7 +448,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
             label holding the part’s name and its checkbox, and the checkbox remembers whether the
-            part is open, as it did in part one. What is new is the way the text opens, below.</p>
+            part is open, as it did in the known-height build. What is new is the way the text opens, below.</p>
           <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
@@ -468,7 +468,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <WhatEachPromises/>
         </li>}
         <li className="run">
-          <p className="paragraph">Details slides to its content’s height with ::details-content, but only in
+          <p className="paragraph">Details slides to its content’s height, but only in
             Chromium. A grid row does the same in every browser today. Grid is the CSS layout that sets a box out in rows
             and columns. Under the bar, the fold’s
             paragraph is a grid with one row. The fr is a grid unit for a share of the space. In a
@@ -558,7 +558,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab moves by transition, never by animation.
-            When the value changes back midway, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
+            If the property changes back midway, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
             around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
             a set of keyframes on its own clock, whatever the state does. A fold moves because the
             reader pressed it, and a reader may press again before it lands, so every build here

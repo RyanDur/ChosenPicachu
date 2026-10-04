@@ -510,7 +510,7 @@ describe('the runs in view, with the folds shut', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
 
     expect(within(platform).getByText(/This build uses details and summary/))
-      .toHaveTextContent(/This replaces the radio group\. Give every details the same name, and the browser closes the others when one opens\. Pressing the open one closes it, so no Close radio is needed\. That is the exclusive build\. This replaces the three old ways/);
+      .toHaveTextContent(/Give every details the same name, and the browser closes the others when one opens, as a radio group does\. Pressing the open one closes it, so no Close radio is needed\. That is the exclusive build\. This replaces the three old ways/);
   });
 
   test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
