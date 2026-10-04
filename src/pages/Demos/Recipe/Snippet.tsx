@@ -7,7 +7,7 @@ import './Snippet.css';
 export type Line = {
   text: string;
   dim?: boolean;
-  from?: Sample;
+  from?: {sample: Sample; line: number};
 };
 
 type Props = {
@@ -15,9 +15,21 @@ type Props = {
   lines: readonly Line[];
 };
 
-const sourcesOf = (lines: readonly Line[]): Sample[] =>
-  lines.flatMap(({from}) => from ? [from] : [])
-    .filter((sample, at, all) => all.findIndex(({path}) => path === sample.path) === at);
+type Source = {path: string; url: string; first: number; last: number};
+
+const sourcesOf = (lines: readonly Line[]): Source[] =>
+  lines.reduce<Source[]>((sources, {from}) => {
+    if (from) {
+      const {sample: {path, url}, line} = from;
+      const known = sources.find(source => source.path === path);
+      return known
+        ? sources.map(source => source === known
+          ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
+          : source)
+        : [...sources, {path, url, first: line, last: line}];
+    }
+    return sources;
+  }, []);
 
 const shortName = (path: string): string => path.split('/').slice(-2).join('/');
 
@@ -37,8 +49,9 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     </pre>
     <figcaption className="sources">
       {sources.length > 0
-        ? sources.map(({path, url}) =>
-          <a className="signpost reachable" href={url} target="_blank" rel="noreferrer" key={path}>{shortName(path)} on GitHub</a>)
+        ? sources.map(({path, url, first, last}) =>
+          <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
+            key={path}>{shortName(path)} on GitHub</a>)
         : 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;

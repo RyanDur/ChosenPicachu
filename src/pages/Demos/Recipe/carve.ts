@@ -5,11 +5,13 @@ type Closer = '}' | ')' | ']';
 
 const openers: Record<string, Closer> = {'{': '}', '(': ')', '[': ']'};
 
-const dedented = (lines: string[], from: Sample): Line[] => {
+const lineAt = (source: string, offset: number): number => source.slice(0, offset).split('\n').length;
+
+const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
   const margin = Math.min(...lines
     .filter(line => line.trim().length > 0)
     .map(line => line.length - line.trimStart().length));
-  return lines.map(line => ({text: line.slice(margin), from}));
+  return lines.map((line, at) => ({text: line.slice(margin), from: {sample: from, line: firstLine + at}}));
 };
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean => {
@@ -52,7 +54,7 @@ export const unit = (sample: Sample, anchor: string): Line[] => {
     at += 1;
   }
   const close = source.indexOf('\n', at);
-  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample);
+  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample, lineAt(source, start));
 };
 
 export const span = (sample: Sample, from: string, to: string): Line[] => {
@@ -67,18 +69,20 @@ export const span = (sample: Sample, from: string, to: string): Line[] => {
   }
   const start = source.lastIndexOf('\n', first) + 1;
   const close = source.indexOf('\n', last);
-  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample);
+  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample, lineAt(source, start));
 };
 
 export const withoutImports = (sample: Sample): Line[] => {
   const lines = sample.text.split('\n');
   const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
   const body = lines.slice(lastImport + 1);
+  let firstLine = lastImport + 2;
   while (body[0]?.trim() === '') {
     body.shift();
+    firstLine += 1;
   }
   while (body[body.length - 1]?.trim() === '') {
     body.pop();
   }
-  return dedented(body, sample);
+  return dedented(body, sample, firstLine);
 };

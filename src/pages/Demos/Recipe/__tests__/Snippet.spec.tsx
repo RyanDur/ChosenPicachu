@@ -11,7 +11,7 @@ describe('a code sample', () => {
   test('should name the file it was taken from, and link to it on GitHub', () => {
     render(<Snippet label="TS" lines={span(store, 'export const store', 'export const more')}/>);
 
-    expect(screen.getByRole('link', {name: 'Demos/store.ts on GitHub'})).toHaveAttribute('href', store.url);
+    expect(screen.getByRole('link', {name: 'Demos/store.ts on GitHub'})).toHaveAttribute('href', `${store.url}#L1-L2`);
   });
 
   test('should link each file it was taken from, in the order they first appear', () => {
@@ -23,6 +23,16 @@ describe('a code sample', () => {
 
     expect(within(screen.getByRole('figure')).getAllByRole('link').map(({textContent}) => textContent))
       .toEqual(['components/store.ts on GitHub', 'Demos/store.ts on GitHub']);
+  });
+
+  test('should open each file at the lines the sample took from it', () => {
+    render(<Snippet label="TS" lines={[
+      ...span(store, 'export const more', 'export const more'),
+      ...span(shared, 'export type Store', 'export type Store')
+    ]}/>);
+
+    expect(within(screen.getByRole('figure')).getAllByRole('link').map(link => link.getAttribute('href')))
+      .toEqual([`${store.url}#L2-L2`, `${shared.url}#L1-L1`]);
   });
 
   test('should say so when it was written for the page and not taken from the code', () => {

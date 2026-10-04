@@ -68,7 +68,11 @@ describe('carving examples out of the source they teach', () => {
   test('every carved line remembers the file it was taken from', () => {
     const carved = [...unit(source, 'const travel = '), ...span(source, 'onPointerMove', 'onPointerUp')];
 
-    expect(new Set(carved.map(({from}) => from))).toEqual(new Set([source]));
+    expect(new Set(carved.map(({from}) => from?.sample))).toEqual(new Set([source]));
+  });
+
+  test('every carved line knows its place in the file it was taken from', () => {
+    expect(unit(source, 'const travel = ').map(({from}) => from?.line)).toEqual([3, 4, 5, 6, 7]);
   });
 
   test('a braced unit runs from its anchor to the bracket that closes it', () => {
