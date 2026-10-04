@@ -27,7 +27,7 @@ export const measuredFloors = (keys: readonly string[], table: HTMLTableElement)
 
 const floorOf = (floors: ColumnWidths, column: string): number => Math.max(SLIMMEST, floors[column] ?? 0);
 
-export const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths = {}) => (previous: ColumnWidths): ColumnWidths => {
+export const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths) => (previous: ColumnWidths): ColumnWidths => {
   const given = Math.min(
     Math.max(delta, floorOf(floors, column) - previous[column]),
     previous[neighbor] - floorOf(floors, neighbor)

@@ -19,17 +19,21 @@ for (const stage of stages) {
 
       test('keeps buys\' controls inside its header when its edge is dragged as far toward its start as it goes', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
+        const before = await table.columnWidth('buys');
 
         await table.dragEdge('buys', {by: -400, moves: 20});
 
+        await expect.poll(() => table.columnWidth('buys')).toBeLessThan(before);
         expect(await table.controlsPastTheirHeader()).toEqual([]);
       });
 
       test('keeps sells\' controls inside its header when buys is widened into it as far as it goes', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
+        const before = await table.columnWidth('sells');
 
-        await table.dragEdge('buys', {by: 400, moves: 20});
+        await table.dragEdge('buys', {by: 60, moves: 20});
 
+        await expect.poll(() => table.columnWidth('sells')).toBeLessThan(before);
         expect(await table.controlsPastTheirHeader()).toEqual([]);
       });
 
@@ -40,8 +44,11 @@ for (const stage of stages) {
         await other.goto(stage.at);
         const keyed = dragSortTable(other, stage.table(other));
         await expect(keyed.columnHeader('trades')).toBeVisible({timeout: 30_000});
+        const before = await keyed.columnWidth('buys');
 
         await keyed.narrowByKeys('buys', 40);
+
+        expect(await keyed.columnWidth('buys')).toBeLessThan(before);
 
         expect(Math.abs(await keyed.columnWidth('buys') - await dragged.columnWidth('buys'))).toBeLessThanOrEqual(1);
         expect(await keyed.controlsPastTheirHeader()).toEqual([]);

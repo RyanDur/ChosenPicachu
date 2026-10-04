@@ -74,7 +74,7 @@ export type Marks<Shove> = {
 
 export type TableState = {
   readonly widths?: ColumnWidths;
-  readonly floors?: ColumnWidths;
+  readonly floors: ColumnWidths;
   readonly columnMarks: Readonly<Record<string, Marks<ColumnShove>>>;
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
@@ -82,22 +82,21 @@ export type TableState = {
   readonly report?: Report;
 };
 
-export const resting: TableState = {columnMarks: {}, rowMarks: {}};
+export const resting: TableState = {columnMarks: {}, rowMarks: {}, floors: {}};
 
 export const columnOf = (order: readonly string[], cell: Element): string =>
   order.find(name => cell.classList.contains(name)) ?? '';
 
-export const measure = (state: TableState, widths: ColumnWidths, floors?: ColumnWidths): TableState =>
-  ({...state, widths, ...maybe(floors).map(measuredFloors => ({floors: measuredFloors})).orElse({})});
+export const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState => ({...state, widths, floors});
 
-export const awaken = (state: TableState, widths: ColumnWidths, floors?: ColumnWidths): TableState =>
-  has(state.widths) ? {...state, ...maybe(floors).map(measuredFloors => ({floors: measuredFloors})).orElse({})} : measure(state, widths, floors);
+export const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
+  has(state.widths) ? {...state, floors} : measure(state, widths, floors);
 
 export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
 
 const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => measure(state, traded(column, neighbour, delta, state.floors)(previous)))
+    .map(previous => measure(state, traded(column, neighbour, delta, state.floors)(previous), state.floors))
     .orElse(state);
 
 const endSizing = ({sizing, ...state}: TableState): TableState =>

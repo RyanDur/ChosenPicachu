@@ -7,8 +7,8 @@ import {Grab} from './lift';
 import {Landing} from './report';
 
 export type TableAction =
-  | {readonly type: 'measured'; readonly widths: ColumnWidths; readonly floors?: ColumnWidths}
-  | {readonly type: 'awoken'; readonly widths: ColumnWidths; readonly floors?: ColumnWidths}
+  | {readonly type: 'measured'; readonly widths: ColumnWidths; readonly floors: ColumnWidths}
+  | {readonly type: 'awoken'; readonly widths: ColumnWidths; readonly floors: ColumnWidths}
   | {readonly type: 'tradedBy'; readonly column: string; readonly neighbour: string; readonly delta: number}
   | {readonly type: 'gripped'; readonly column: string; readonly grip: Grip}
   | {readonly type: 'handleDragged'; readonly column: string; readonly neighbour: string; readonly clientX: number}
@@ -63,8 +63,8 @@ const tableActions: Record<Action['type'], true> = {
 
 export const isTableAction = (action: Foreign): action is TableAction => action.type in tableActions;
 
-export const measured = (widths: ColumnWidths, floors?: ColumnWidths): Action => ({type: 'measured', widths, floors});
-export const awoken = (widths: ColumnWidths, floors?: ColumnWidths): Action => ({type: 'awoken', widths, floors});
+export const measured = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'measured', widths, floors});
+export const awoken = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'awoken', widths, floors});
 export const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
 export const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
 export const handleDragged = (column: string, neighbour: string, clientX: number): Action => ({type: 'handleDragged', column, neighbour, clientX});
