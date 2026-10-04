@@ -1,5 +1,5 @@
-import {FC, useEffect, useId, useState} from 'react';
-import {Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {FC, useState} from 'react';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
@@ -20,22 +20,8 @@ type Props = {
 
 export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
   const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
-  const trap = useId();
 
-  useEffect(() => {
-    const topLayerOpened = ({target}: Event): void => {
-      if (target instanceof HTMLElement && target.matches(':popover-open')) {
-        updateOpened(some<Opened>('top layer'));
-      }
-    };
-    const figure = maybe(document.getElementById(trap));
-    figure.map(element => element.addEventListener('toggle', topLayerOpened, true));
-    return () => {
-      figure.map(element => element.removeEventListener('toggle', topLayerOpened, true));
-    };
-  }, [trap]);
-
-  return <figure id={trap} className="trapped-menu card rounded-corners lifted padded">
+  return <figure className="trapped-menu card rounded-corners lifted padded">
     <ol className="trap-steps">
       <li className="paragraph">Press Sort by, built the old way, and look where its list opens.</li>
       <li className="paragraph">Uncheck “Card one has z-index: 1”, and press Sort by again.</li>
@@ -53,7 +39,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
         </label>
         <p className="paragraph">Its list has z-index: 9999.</p>
         <SortMenu onOpened={() => updateOpened(some(cardOne))}/>
-        <TopLayerMenu/>
+        <TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/>
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
