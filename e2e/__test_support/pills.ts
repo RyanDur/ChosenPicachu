@@ -9,15 +9,13 @@ export const pillSwitch = (page: Page, name: string) => {
   const group = page.getByRole('group', {name, exact: true}).first();
 
   const paintedWrong = async (): Promise<string[]> => {
-    const pills: Pill[] = await group.evaluate(element => {
-      const ground = element.getBoundingClientRect();
-      return [...element.querySelectorAll('input[type="radio"]')].flatMap(radio => {
-        const label = radio instanceof HTMLInputElement ? radio.labels?.item(0) : null;
-        if (!(radio instanceof HTMLInputElement) || !label) return [];
-        const {x, y, width, height} = label.getBoundingClientRect();
-        return [{name: label.textContent.trim(), chosen: radio.checked, x: x - ground.x, y: y - ground.y, width, height}];
-      });
-    });
+    const ground = await group.boundingBox();
+    const pills: Pill[] = (await group.getByRole('radio', {includeHidden: true}).evaluateAll(radios => radios.flatMap(radio => {
+      const label = radio instanceof HTMLInputElement ? radio.labels?.item(0) : null;
+      if (!(radio instanceof HTMLInputElement) || !label) return [];
+      const {x, y, width, height} = label.getBoundingClientRect();
+      return [{name: label.textContent.trim(), chosen: radio.checked, x, y, width, height}];
+    }))).map(pill => ({...pill, x: pill.x - (ground?.x ?? 0), y: pill.y - (ground?.y ?? 0)}));
     const shot = (await group.screenshot({scale: 'css'})).toString('base64');
     const darkShares: number[] = await page.evaluate(async ({src, boxes}) => {
       const image = new Image();
