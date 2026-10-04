@@ -3,33 +3,30 @@ import {empty, not} from '@ryandur/sand';
 
 export type DialGroup = {names: string; pillEdges: number};
 
-// each read is a glance: a row re-rendered mid-read throws, and the poll reads the whole page again
-const glance = 500;
+const rereadAfter = 500;
 
-type Placed = {name: {y: number; height: number}; pills: {x: number; y: number}};
+type DialRow = {name: {y: number; height: number}; pills: {x: number; y: number}};
 
-const measured = async (name: Locator, pills: Locator): Promise<Placed[]> => {
-  const [nameBox, pillsBox] = await Promise.all([name.boundingBox({timeout: glance}), pills.boundingBox({timeout: glance})]);
+const boxesOf = async (name: Locator, pills: Locator): Promise<DialRow[]> => {
+  const [nameBox, pillsBox] = await Promise.all([name.boundingBox({timeout: rereadAfter}), pills.boundingBox({timeout: rereadAfter})]);
   return nameBox && pillsBox ? [{name: nameBox, pills: pillsBox}] : [];
 };
 
-// a row's name is the one its pills are named by, shown in the row before the pills; a group named from outside its row is no dial row
-const placed = async (row: Locator, dials: Locator): Promise<Placed[]> => {
+const shownDialRow = async (row: Locator, dials: Locator): Promise<DialRow[]> => {
   const pills = row.locator(dials).first();
-  const [, name = ''] = /group "([^"]+)"/.exec(await pills.ariaSnapshot({timeout: glance})) ?? [];
-  const shown = row.getByText(name, {exact: true});
-  return not(empty(name)) && await shown.count() > 0 ? measured(shown.first(), pills) : [];
+  const [, groupName = ''] = /group "([^"]+)"/.exec(await pills.ariaSnapshot({timeout: rereadAfter})) ?? [];
+  const nameInTheRow = row.getByText(groupName, {exact: true});
+  return not(empty(groupName)) && await nameInTheRow.count() > 0 ? boxesOf(nameInTheRow.first(), pills) : [];
 };
 
-const rowsOf = async (list: Locator, dials: Locator): Promise<Placed[]> =>
-  (await Promise.all((await list.getByRole('listitem').filter({has: dials}).all()).map(row => placed(row, dials)))).flat();
+const shownDialRows = async (list: Locator, dials: Locator): Promise<DialRow[]> =>
+  (await Promise.all((await list.getByRole('listitem').filter({has: dials}).all()).map(row => shownDialRow(row, dials)))).flat();
 
-// each group of dials, read as where its names sit (above or beside their pills) and how many left edges its pills start at
 export const dialGroups = async (page: Page): Promise<DialGroup[]> => {
   const dials = page.getByRole('group').filter({has: page.getByRole('radio')});
   const listsOfDials = page.getByRole('list').filter({has: dials});
   const innermost = await page.getByRole('main').getByRole('list').filter({has: dials}).filter({hasNot: listsOfDials}).all();
-  const groups = await Promise.all(innermost.map(list => rowsOf(list, dials)));
+  const groups = await Promise.all(innermost.map(list => shownDialRows(list, dials)));
   return groups
     .filter(rows => rows.length > 1)
     .map(rows => ({
