@@ -3,11 +3,17 @@ import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {controlsBeforeTheSteps} from '@pages/Demos/ZIndexDemo/__test_support';
+import {controlsBeforeTheSteps, wayLabelled} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const oldBanner = /^An old banner\./;
 
 describe('the banner exhibit', () => {
+  test('should say its point in its caption', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    expect(await screen.findByRole('figure', {name: 'The banners. A fixed banner with z-index: 9999 is covered by a card with z-index: 1.'})).toBeInTheDocument();
+  });
+
   test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
@@ -38,14 +44,12 @@ describe('the banner exhibit', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
-    const way = (label: string): HTMLElement | undefined => within(banners).getAllByRole('listitem')
-      .filter(item => within(item).queryByText(label, {exact: true}) !== null).pop();
     const oldWay = within(banners).getByRole('button', {name: 'Raise a banner, the old way'});
     const topLayer = within(banners).getByRole('button', {name: 'Raise a banner, in the top layer'});
 
-    expect(way('The old way')).toContainElement(oldWay);
-    expect(way('The old way')).not.toContainElement(topLayer);
-    expect(way('The top layer')).toContainElement(topLayer);
+    expect(wayLabelled(banners, 'The old way')).toContainElement(oldWay);
+    expect(wayLabelled(banners, 'The old way')).not.toContainElement(topLayer);
+    expect(wayLabelled(banners, 'The top layer')).toContainElement(topLayer);
     expect(oldWay).toHaveTextContent(/^Raise a banner$/);
     expect(topLayer).toHaveTextContent(/^Raise a banner$/);
   });

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {controlsBeforeTheSteps} from '@pages/Demos/ZIndexDemo/__test_support';
+import {controlsBeforeTheSteps, wayLabelled} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const under = 'The list opened under card two. Its 9999 counts only inside card one.';
 const over = 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.';
@@ -116,14 +116,12 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
-    const way = (label: string): HTMLElement | undefined => within(trap).getAllByRole('listitem')
-      .filter(item => within(item).queryByText(label, {exact: true}) !== null).pop();
     const oldWay = screen.getByRole('button', {name: 'Sort by, the old way'});
     const topLayer = screen.getByRole('button', {name: 'Sort by, in the top layer'});
 
-    expect(way('The old way')).toContainElement(oldWay);
-    expect(way('The old way')).not.toContainElement(topLayer);
-    expect(way('The top layer')).toContainElement(topLayer);
+    expect(wayLabelled(trap, 'The old way')).toContainElement(oldWay);
+    expect(wayLabelled(trap, 'The old way')).not.toContainElement(topLayer);
+    expect(wayLabelled(trap, 'The top layer')).toContainElement(topLayer);
     expect(oldWay).toHaveTextContent(/^Sort by$/);
     expect(topLayer).toHaveTextContent(/^Sort by$/);
   });
