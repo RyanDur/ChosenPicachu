@@ -22,3 +22,4 @@ export {accordionsTab, builds, farthestChannel, measuredBuilds, textOf, type Bui
 export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab} from './keyboard';
+export {seedRandom} from './random';

@@ -684,3 +684,13 @@ describe('the known-height build’s bars', () => {
     expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
   });
 });
+
+describe('the known-height build’s scroll sign', () => {
+  test('should say the sign is a shadow held at the panel’s foot, darkest at the edge, under a cover that scrolls with the text', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/so the section paints the sign in its background/)).toHaveTextContent(/instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits\./);
+  });
+});

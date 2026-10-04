@@ -342,7 +342,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   scrolls what does not fit. The paragraph is at least as tall as the section and pads
                   its text with the page’s spacing on every side. Whether a tall part’s last line is cut at
                   the foot depends on where its lines fall, so the section paints the sign in its background
-                  instead: a soft shadow held at its foot, and a cover in the panel’s colour that scrolls with
+                  instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with
                   the text and hides the shadow at the end, or when the text fits.
                   The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
                   scroll it, and aria-labelledby names it by its bar, so a screen reader says which part

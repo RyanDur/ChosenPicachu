@@ -13,6 +13,7 @@ import {
   iPhone,
   misplacedPictures,
   pressTab,
+  seedRandom,
   nameOn,
   shortOfAFinger,
   showing,
@@ -439,5 +440,24 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       await expect(status).toHaveText(lessMotion, {useInnerText: true});
       await expect(status).toMatchAriaSnapshot(`- status: ${lessMotion}`);
     });
+  });
+}
+
+for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    for (const build of ['the checkbox build', 'the radio build'] as const) {
+      test(`a long part of ${build} shows a sign at its panel's foot at 3:1, and none once no text is left below`, async ({page}) => {
+        await seedRandom(page, 99);
+        await page.goto(showing(build, 'static'));
+
+        const {atRest, withOnlyPaddingBelow, atTheEnd} = await accordionsTab(page).footSignOfALongPart(build);
+
+        expect(atRest, 'the sign against the panel, at rest').toBeGreaterThanOrEqual(3);
+        expect(withOnlyPaddingBelow, 'the foot against the panel, with no text below it').toBeLessThan(1.05);
+        expect(atTheEnd, 'the foot against the panel, at the end').toBeLessThan(1.05);
+      });
+    }
   });
 }

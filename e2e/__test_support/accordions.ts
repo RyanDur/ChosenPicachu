@@ -27,6 +27,13 @@ export type HoveredPaint = {ground: string; words: number[]};
 
 export type FocusedPaint = {fill: number[]; edge: number[]};
 
+const luminance = ([red, green, blue]: number[]): number => {
+  const linear = (channel: number): number => channel / 255 <= 0.04045 ? channel / 255 / 12.92 : ((channel / 255 + 0.055) / 1.055) ** 2.4;
+  return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue);
+};
+
+const contrast = (one: number, other: number): number => (Math.max(one, other) + 0.05) / (Math.min(one, other) + 0.05);
+
 export const farthestChannel = (colour: number[], from: number[]): number =>
   Math.max(...colour.map((channel, at) => Math.abs(channel - from[at])));
 
@@ -250,6 +257,30 @@ export const accordionsTab = (page: Page) => {
     const insideTheEdge = (Math.floor(height / 2) * width + 1) * 4;
     return {fill: paintOf(rgba).ground.split(',').map(Number), edge: rgba.slice(insideTheEdge, insideTheEdge + 3)};
   };
+  const footOf = async (panel: Locator): Promise<number> => {
+    await page.mouse.move(0, 0);
+    await settled();
+    const {x, y, width, height} = await boxOf(panel);
+    const foot = await shotOf({x: x + 4, y: y + height - 4, width: width - 8, height: 4});
+    const ground = luminance(paintOf((await shotOf({x: x + 4, y, width: width - 8, height})).rgba).ground.split(',').map(Number));
+    const medianOfRow = (row: number): number => Array.from({length: foot.width}, (_, at) => (row * foot.width + at) * 4)
+      .map(at => luminance(foot.rgba.slice(at, at + 3)))
+      .sort((dim, bright) => dim - bright)[Math.floor(foot.width / 2)];
+    return Math.max(...Array.from({length: foot.height}, (_, row) => contrast(ground, medianOfRow(row))));
+  };
+  const paddingBelowTheText = (panel: Locator): Promise<number> =>
+    panel.getByRole('paragraph').first().evaluate(text => parseFloat(getComputedStyle(text).paddingBottom));
+  const firstLongPartOf = async (build: Build): Promise<Locator> => {
+    for (const [index, fold] of (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).entries()) {
+      const part = partOf(build, index);
+      await part.open();
+      const panel = fold.getByRole('region');
+      await settled();
+      if (await panel.evaluate((element, padded) => element.scrollHeight - element.clientHeight > padded + 16, await paddingBelowTheText(panel))) return panel;
+      await part.close();
+    }
+    throw new Error(`${build} has no part with a line of text below its panel's foot`);
+  };
   const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
     const bar = await boxOf(partOf(build, 0).fold);
     await page.touchscreen.tap(bar.x + bar.width / 2, bar.y + bar.height / 2);
@@ -270,6 +301,15 @@ export const accordionsTab = (page: Page) => {
     restingAt,
     focusedByKeyboard,
     firstInputOf,
+    footSignOfALongPart: async (build: Build): Promise<{atRest: number; withOnlyPaddingBelow: number; atTheEnd: number}> => {
+      await folds(build).first().waitFor();
+      const panel = await firstLongPartOf(build);
+      const atRest = await footOf(panel);
+      await panel.evaluate((element, padded) => element.scrollTo({top: element.scrollHeight - element.clientHeight - padded, behavior: 'instant'}), await paddingBelowTheText(panel));
+      const withOnlyPaddingBelow = await footOf(panel);
+      await panel.evaluate(element => element.scrollTo({top: element.scrollHeight, behavior: 'instant'}));
+      return {atRest, withOnlyPaddingBelow, atTheEnd: await footOf(panel)};
+    },
     endOfTheFirstBarLitAfterATap,
     partOf,
     htmlAloneFold,
