@@ -81,17 +81,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
   const input = inputOf[type];
   return <>
     <header className="tab-introduction">
-      <p className="paragraph">An accordion is a list of parts. Each part has a bar you press to show or hide the text
-        under it. This page calls one part a fold.</p>
-      <p className="paragraph">Showing and hiding is easy. The motion is hard. A fold should slide open to the height
-        of its own text, at an even pace. For years, CSS could move a height to a number but not to the height the text
-        needs. So the older ways each worked around it: guess a height, measure it with script, or set one in advance.
-        Each has a cost, and a guess is the one that makes the motion uneven.</p>
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
-        looks and moves, and script says what happens when you act. This page starts with HTML alone, and brings in CSS
-        and then script only where they are needed.</p>
+        looks and moves, and script says what happens when you act.</p>
+      <p className="paragraph">You don’t always need all three. HTML can do some jobs alone, and HTML with CSS can do more,
+        before script is needed. If you know how each one works, you can choose the best tool for the job. This page shows
+        that with one small thing, built several ways.</p>
+      <p className="paragraph">The thing is an accordion: a list of parts, each with a bar you press to show or hide the
+        text under it. This page calls one part a fold. HTML alone can show and hide a fold. Sliding it open is the hard
+        part. For years, CSS could move a height to a number but not to the height the text needs, so the older ways each
+        worked around it: guess a height, measure it with script, or set one in advance. Each has a cost.</p>
       <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one fold
-        open at a time, and say what each older way costs. The first accordion below is HTML alone.</p>
+        open at a time, and say which language each job needed and why. The first accordion below is HTML alone.</p>
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part">
       <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>

@@ -1,7 +1,7 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, outOfReadingOrder} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const htmlAlone = 'An accordion in HTML alone';
@@ -482,11 +482,21 @@ describe('what the newer builds end', () => {
 });
 
 describe('the accordion in HTML alone', () => {
+  test('should open the tab on the three languages, and bring the accordion in as the example', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const openings = [/^A web page is written in three languages\./, /^You don’t always need all three\./, /^The thing is an accordion:/, /^By the end you can build an accordion/];
+
+    expect(outOfReadingOrder([...openings.map(opening => within(tab).getByText(opening)), within(tab).getAllByRole('group')[0]])).toEqual([]);
+    expect(tab).toHaveTextContent('say which language each job needed and why.');
+  });
+
   test('should come after the introduction, as the first accordion on the tab', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const introduction = within(tab).getByText(/^An accordion is a list of parts/);
+    const introduction = within(tab).getByText(/^A web page is written in three languages/);
 
     expect(introduction.compareDocumentPosition(within(tab).getAllByRole('group')[0])).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });

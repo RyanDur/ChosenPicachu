@@ -4,7 +4,7 @@ import {desktop} from './__test_support';
 test.use(desktop);
 
 for (const {tab, at, opening} of [
-  {tab: 'Accordions', at: 'demos/?tab=accordions', opening: /^A web page is written in three languages|^An accordion is a list of parts/},
+  {tab: 'Accordions', at: 'demos/?tab=accordions', opening: /^A web page is written in three languages/},
   {tab: 'Z-index', at: 'demos/?tab=z-index', opening: /^Where two boxes on a page overlap/},
   {tab: 'Charts', at: 'demos/?tab=charts', opening: /^A live chart draws numbers/}
 ]) {
