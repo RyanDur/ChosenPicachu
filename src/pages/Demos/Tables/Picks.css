@@ -2,7 +2,8 @@
   --pick-size: var(--text-title);
 
   display: flex;
-  gap: var(--base-x-4);
+  flex-wrap: wrap;
+  column-gap: var(--base-x-4);
   margin: 0;
   padding: 0;
   border: 0;
