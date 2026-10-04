@@ -37,7 +37,8 @@ export const TopLayerRecipe: FC = () => {
       term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
       element around the banner starts a new one when its CSS gives it a transform or a filter. A z-index other than
       auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a
-      child of a flex or grid container. Inside a new one, the banner’s 9999 is compared with nothing outside it. So
+      child of a flex or grid container, the two CSS layouts that arrange their children along a line or in rows and
+      columns. Inside a new one, the banner’s 9999 is compared with nothing outside it. So
       the panel is a popover, drawn in the top layer like the new menu
       above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
       both are.</Tell>

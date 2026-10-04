@@ -125,8 +125,14 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(news).toHaveTextContent('A z-index other than auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a child of a flex or grid container.');
+    expect(news).toHaveTextContent('A z-index other than auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a child of a flex or grid container');
     expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
+  });
+
+  test('should say what flex and grid are where the first story first names them', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('or that is a child of a flex or grid container, the two CSS layouts that arrange their children along a line or in rows and columns.');
   });
 
   test('should not call stacking contexts a cascade', async () => {
@@ -213,11 +219,13 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
-  test('should tell steps 2 and 3 in two paragraphs each', async () => {
+  test('should tell step 2 in three paragraphs and step 3 in two', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/The banner has one transition list, so the slide in the next step is in it too\.$/);
+    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/The margin between banners opens over the same time\.$/);
+    expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/its padding and border start at 0 as well\.$/);
+    expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, and the slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
     expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
   });
 

@@ -79,10 +79,13 @@ export const MultipleRecipe: FC = () => {
           <Says>Each banner is a grid, a layout of rows and columns, with a single row or column, called a
             track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
             one track takes all of it, and at 0fr it takes none. The starting style sets the track to 0fr and the
-            banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.</Says>
+            banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds. The margin between
+            banners opens over the same time.</Says>
           <Says>A track closes only as far as what is inside it can shrink, so the message has a minimum size of 0,
-            and its padding and border start at 0 as well. The margin between banners opens over the same time. The
-            banner has one transition list, so the slide in the next step is in it too.</Says>
+            and its padding and border start at 0 as well.</Says>
+          <Says>The banner has one transition list, and the slide in the next step is in it. A second transition
+            declaration on the same element replaces the list; it does not add to it. So the arriving banner’s
+            transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={slotLines(stack)}/>
