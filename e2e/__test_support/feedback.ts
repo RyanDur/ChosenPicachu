@@ -29,9 +29,9 @@ export const feedbackOn = (page: Page) => {
   const dialog = page.getByRole('dialog', {name: 'Feedback'});
   const open = page.getByRole('button', {name: 'Feedback', exact: true});
   const pressed = async (): Promise<() => Promise<string[]>> => {
-    const toggles = await open.evaluateHandle(button => {
+    const toggles = await page.getByRole('dialog', {name: 'Feedback', includeHidden: true}).evaluateHandle(shown => {
       const seen: string[] = [];
-      document.getElementById(button.getAttribute('commandfor') ?? '')?.addEventListener('toggle', event => {
+      shown.addEventListener('beforetoggle', event => {
         if (event instanceof ToggleEvent) seen.push(event.newState);
       });
       return seen;
