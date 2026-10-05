@@ -8,19 +8,19 @@ declare module 'csstype' {
     '--stage-block-size'?: string;
     '--toward'?: string;
     '--share'?: string;
-    '--drift-x'?: string;
-    '--drift-y'?: string;
-    '--seat-x'?: string;
-    '--seat-y'?: string;
-    '--settle-x'?: string;
-    '--settle-y'?: string;
-    '--settle-drift-x'?: string;
-    '--settle-drift-y'?: string;
-    '--shoved-by'?: string;
-    '--explode-x'?: string;
-    '--explode-y'?: string;
-    '--turn'?: string;
-    '--swing'?: string;
+    '--drift-x'?: `${number}px`;
+    '--drift-y'?: `${number}px`;
+    '--seat-x'?: `${number}px`;
+    '--seat-y'?: `${number}px`;
+    '--settle-x'?: `${number}px`;
+    '--settle-y'?: `${number}px`;
+    '--settle-drift-x'?: `${number}px`;
+    '--settle-drift-y'?: `${number}px`;
+    '--shoved-by'?: `${number}px`;
+    '--explode-x'?: `${number}px`;
+    '--explode-y'?: `${number}px`;
+    '--turn'?: `${number}deg`;
+    '--swing'?: `${number}deg`;
     '--term-anchor'?: string;
   }
 }
