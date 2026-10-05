@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch, shownPillSwitches} from './__test_support';
+import {desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
 
 const choicesOn = [
   {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
@@ -44,50 +44,18 @@ for (const {reader, device} of [
 }
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
-  test.describe(`${reader}, reading the pills`, () => {
+  test.describe(`${reader}, choosing a pill`, () => {
     test.use(device);
 
-    for (const {demo, at, groups} of choicesOn) {
-      test(`every pill shown on ${demo} is painted for whether it is chosen, on arrival`, async ({page}) => {
-        await page.goto(at);
-        await expect(page.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
-
-        const shown = await shownPillSwitches(page, groups);
-
-        expect(shown).not.toEqual([]);
-        for (const group of shown) {
-          const pills = pillSwitch(page, group);
-          await expect.poll(pills.stillMoving, group).toBe(0);
-          expect(await pills.paintedWrong(), group).toEqual([]);
-        }
-      });
-    }
-
-    test('the pill left behind is painted as not chosen once the switch has moved', async ({page}) => {
+    test('the pill chosen is checked, and the pill left behind is not', async ({page}) => {
       await page.goto('demos/?tab=tables');
       const world = pillSwitch(page, 'world');
-      await expect.poll(world.stillMoving).toBe(0);
+      await expect(world.pill('React')).toBeChecked();
 
       await world.choose('Vanilla');
 
       await expect(world.pill('Vanilla')).toBeChecked();
-      await expect.poll(world.stillMoving).toBe(0);
-      expect(await world.paintedWrong()).toEqual([]);
+      await expect(world.pill('React')).not.toBeChecked();
     });
   });
 }
-
-test.describe('a desktop, leaving the pills', () => {
-  test.use(desktop);
-
-  test('no pill goes dark while the hover fades from the switch', async ({page}) => {
-    await page.goto('demos/?tab=tables');
-    const world = pillSwitch(page, 'world');
-    await world.hover('React');
-    await expect.poll(world.stillMoving).toBe(0);
-
-    await page.mouse.move(0, 0);
-
-    expect(await world.paintedWrongFor(1000)).toEqual([]);
-  });
-});

@@ -29,7 +29,6 @@ export const usersPage = (page: Page) => {
   const homeState = home.getByLabel(/^State/);
   return {
     sameAsHome: form.getByRole('checkbox', {name: 'Same as Home'}),
-    sameAsHomeWords: form.getByText('Same as Home', {exact: true}),
     roster,
     names,
     firstRowActions,
