@@ -50,7 +50,6 @@
     translate: none;
   }
 
-  /* the resize handle wears a wider hit pad here and would cover the toggle; the toggle sits clear of it */
   .sortable .header-cell:has(> .resize-handle) > .menu-toggle {
     inset-inline-end: var(--finger-reach);
   }

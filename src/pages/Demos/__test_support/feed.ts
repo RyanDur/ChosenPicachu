@@ -54,8 +54,6 @@ export type Feed = {
 
 let feeds = 0;
 
-// the socket laws point the history at a port nobody answers; the fetch fails the way it would on the wire
-// a refused feed hangs up abnormally on connection, which the page hears as a handshake failure
 export const listeningFeed = (refusing = false): Promise<Feed> => {
   feeds += 1;
   const url = `${FEED}/${feeds}`;

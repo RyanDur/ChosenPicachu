@@ -3,9 +3,6 @@ import {empty, has} from '@ryandur/sand';
 const answered = new Set(['success', 'failure']);
 
 /**
- * The last commit the reviewer answered: the newest run, other than this one, whose review job ran to its
- * verdict. A run that was cancelled before the review, or that never reached it, left its changes unread, so
- * the next review starts from the one before it.
  * @param {{id: number, head_sha: string}[]} runs newest first
  * @param {(runId: number) => Promise<{name: string, conclusion: string | null}[]>} jobsOf
  * @param {number} thisRun
@@ -32,7 +29,6 @@ const github = (token, path) => fetch(`https://api.github.com/${path}`, {
 });
 
 /**
- * The last commit the reviewer answered, or nothing when GitHub cannot be asked.
  * @param {(path: string) => Promise<any>} fetching
  * @param {{repository?: string, workflow?: string, runId?: string}} run
  * @param {(trouble: string) => void} warn

@@ -60,7 +60,6 @@
     padding: 0 var(--base-x-2);
     white-space: nowrap;
 
-    /* four pills at full padding are wider than the smallest phones' cards; half the padding fits them, at full height */
     @media (width < 390px) {
       padding: 0 var(--base-x-0_75);
     }

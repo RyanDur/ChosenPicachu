@@ -1,6 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
 
-// a 44px target reaches 22px from its middle, so a finger landing 21px off still lands on it, and misses anything smaller
 export const fingertipMiss = 21;
 
 export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => {

@@ -5,7 +5,6 @@
     gap: var(--base-x-6);
     padding: var(--base-x-5);
 
-    /* on a phone the tab starts where the page's title does, so the words and drawings get the screen */
     @media (width <= 600px) {
         padding-inline: var(--base-x-2_5);
     }

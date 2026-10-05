@@ -64,7 +64,6 @@ const syntheticCursor = () => {
   }, true);
 };
 
-// the keyboard reel has no hand to watch: each keydown flashes its key on screen
 const keypressOverlay = () => {
   const chip = document.createElement('div');
   chip.className = 'capture-keypress';
@@ -158,8 +157,6 @@ const boxOf = async (target: Locator) => {
   return box;
 };
 
-// everything frames the table alone: the reels crop to this box, and the
-// posters and stills shoot the same one, so every face of a story matches
 export const tableFrame = async (card: Locator): Promise<Box> => {
   const box = await boxOf(card.locator('table').first());
   const pad = 6;
@@ -173,7 +170,6 @@ export const shot = async (page: Page, frame: Box, path: string): Promise<void> 
   await page.screenshot({path, clip: frame});
 };
 
-// the keypress chip is born at the viewport's foot; the crop needs it on the table
 export const chipInto = (page: Page, frame: Box): Promise<void> =>
   page.evaluate(({frame}) => {
     const chip = document.querySelector('.capture-keypress');
@@ -184,8 +180,6 @@ export const chipInto = (page: Page, frame: Box): Promise<void> =>
     }
   }, {frame});
 
-// callouts are baked into the frame here, during capture: only the test knows
-// where the ghost stands at this instant
 export const callout = (page: Page, box: Box, label: string, inside = false): Promise<void> =>
   page.evaluate(({box, label, inside}) => {
     const outline = document.createElement('div');

@@ -19,7 +19,6 @@ export const rowsLaidOut = (table: HTMLTableElement): void => {
   });
 };
 
-// a row drag reads the table's box and the rows; the columns can stand wherever the spec put them
 export const rowsSurveyed = (table: HTMLTableElement): void => {
   const height = HEAD + (table.tBodies[0]?.rows.length ?? 0) * ROW;
   table.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
@@ -41,7 +40,6 @@ const emptyHanded = (): never => {
 
 export const noRowInHand: RowInHand = {carriedOver: emptyHanded, carriedOn: emptyHanded, captureLost: emptyHanded, captureLostOver: emptyHanded, captureLostUnheld: emptyHanded, dropped: emptyHanded};
 
-// presses the grip in its row's lane and hands back the drag, which keeps the pointer where it last moved
 export const liftedRow = (grip: Element, at: number): RowInHand => {
   let y = HEAD + at * ROW + 10;
   const laneOf = (from: number, to: number): number => HEAD + to * ROW + (to < from ? 10 : 30);

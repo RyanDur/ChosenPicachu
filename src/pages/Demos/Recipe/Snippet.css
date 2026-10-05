@@ -29,7 +29,6 @@
   display: grid;
   gap: var(--base);
 
-  /* caption size without .caption's fade, which takes a link below a readable contrast */
   .sources {
     display: grid;
     justify-items: start;

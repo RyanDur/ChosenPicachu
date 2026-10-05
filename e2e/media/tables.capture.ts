@@ -15,10 +15,6 @@ import {
   tableFrame
 } from './capture';
 
-// the reels are dial-tuned exactly as the prose and the code are: one per variant,
-// indexed the way the sources already are, and the parity law makes the footage
-// world-agnostic, so the default react world sits for the portrait
-
 const demos = '/ChosenPicachu/demos/';
 
 const variants = ['eager', 'lazy'].flatMap(pace =>

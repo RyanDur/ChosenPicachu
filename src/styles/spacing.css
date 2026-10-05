@@ -1,5 +1,4 @@
 :root {
-  /* spacing */
   --base-x-0_25: 0.2rem;
   --base-x-0_5: 0.4rem;
   --base-x-0_75: 0.6rem;
@@ -46,7 +45,6 @@
   --base-x-100: 80rem;
   --base-x-172_5: 138rem;
 
-  /* chrome — px on purpose: hairlines and radii must not scale with text */
   --hairline: 1px;
   --hairline-x-2: 2px;
   --hairline-x-3: 3px;
@@ -55,18 +53,14 @@
   --radius-soft: 2rem;
   --radius-pill: 8rem;
 
-  /* a readable line's least width: words beside code, and a definition on a phone */
   --measure-floor: 45ch;
 
-  /* a finger's reach: how wide and tall a touch target stands */
   --finger-reach: var(--base-x-5_5);
 
   /* media lines. var() cannot appear inside @media, so the sheets write these numbers by hand and lines.spec.ts holds them to these. */
   --no-gutters: 1547px;
-  /* the widest exhibit, the tables demo's 860px table, fits beside the rail only from 1224px. No lower line holds it, so this is the round number that names no device. */
   --nav-in-a-row: 1100px;
   --search-under-the-title: 600px;
 
-  /* read by script, with --nav-in-a-row: a fold starts closed on a window 600px wide or less, or 600px tall or less where the nav is in a row */
   --room-to-stand-open: 600px;
 }

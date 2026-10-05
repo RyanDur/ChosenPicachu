@@ -231,8 +231,7 @@
     margin: calc(-1 * var(--base));
   }
 
-  /* six equal shares of the width, a preference a table column still widens past to fit its name; width, not inline-size,
-     since a name turned on its side would read inline-size as its height */
+  /* width, not inline-size: a name turned on its side reads inline-size as its height */
   .design-column {
     width: 14%;
   }
@@ -247,8 +246,6 @@
     white-space: nowrap;
   }
 
-  /* on a phone the six measures stand on their sides, read bottom to top, and a window's name may take two lines,
-     so the whole sketch fits and nothing in it scrolls */
   @media (width <= 600px) {
     .design-still {
       padding: var(--base);
@@ -263,7 +260,6 @@
       vertical-align: bottom;
     }
 
-    /* the cell stays upright and centres the name; only the name turns, so every engine centres it the same way */
     .design-table .design-column.design-measure {
       text-align: center;
     }

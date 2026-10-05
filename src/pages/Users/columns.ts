@@ -14,7 +14,6 @@ export const columns: readonly {name: string; data: Candidate}[] = [
   {name: 'works-from-home', data: {label: 'Works from Home'}}
 ];
 
-// what the table is told about a user: their id, and what they rank by under each column that ranks
 export const seated = (users: readonly User[]): readonly Seated[] =>
   users.map(user => ({
     key: user.id,

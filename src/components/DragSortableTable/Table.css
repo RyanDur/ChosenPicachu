@@ -48,7 +48,6 @@
       padding-inline-end: var(--base-x-5_5);
     }
 
-    /* on touch the word keeps the cell's whole width, and the sort toggle and the resize handle share a finger-high row beneath it */
     @media (pointer: coarse) {
       --lifting-row: var(--base-x-9);
 
@@ -113,7 +112,6 @@
 
   width: var(--share);
 }
-
 
 @media (pointer: coarse) {
   .resize-handle {

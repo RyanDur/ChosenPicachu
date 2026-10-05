@@ -98,7 +98,6 @@ const lineOf = (text: string, after: number): number => {
   return onward >= 0 ? onward : fileLines.indexOf(text);
 };
 
-// each declaration is the file's own line, looked up from the last one placed so a repeated selector lands in order
 const placed = (texts: readonly string[]): Line[] =>
   texts.reduce<{lines: Line[]; after: number}>(({lines, after}, text) => {
     const at = /^[{}]?$/.test(text.trim()) ? -1 : lineOf(text.trim(), after);

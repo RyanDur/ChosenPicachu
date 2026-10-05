@@ -1,4 +1,3 @@
-/* the code voice — how source reads on the page; darcula brightened to clear contrast on its own paper */
 .code {
   background: var(--code-paper);
   color: var(--code-ink);

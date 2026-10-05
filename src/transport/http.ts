@@ -12,7 +12,6 @@ export const http = {
       maybe(response, isOk).or(() => maybe(response, isCreated)).map(bodyResult)
         .orElse(fail(response))),
 
-  // the rest of these are not needed. They are just here for an example
   put: <T>(endpoint: string, body: unknown): Result.Async<T | undefined, HTTPError> =>
     request(endpoint, HTTPMethod.PUT, {body}).mBind(response =>
       maybe(response, isNoContent).map(emptySuccess)

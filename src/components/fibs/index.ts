@@ -1,5 +1,3 @@
-// A few kilobytes of made-up data where a hundred kilobytes of library used to be.
-// Deterministic under seed(), like the library it replaces, so laws can pin structure.
 
 let next = Math.floor(Math.random() * 0xffffffff);
 

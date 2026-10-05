@@ -39,7 +39,6 @@
   grid-area: zip;
 }
 
-/* city and zip share what the state and two gaps leave; below this each would be under 16rem, too narrow for a city's name */
 @container (width <= 45.6rem) {
   .address-fields {
     grid-template-areas:

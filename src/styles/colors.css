@@ -1,5 +1,4 @@
 :root {
-  /* The base colors, each written once. The grey scale, light to dark */
   --white: rgb(255, 255, 255);
   --paper: rgb(244, 244, 244);
   --silver: rgb(204, 204, 204);
@@ -9,7 +8,6 @@
   --void: rgb(14, 11, 22);
   --black: rgb(0, 0, 0);
 
-  /* The color wheel, red round to violet */
   --international-orange-engineering: rgb(186, 45, 11);
   --silk: rgb(220, 208, 192);
   --faded-leather: rgba(171, 152, 122, 0.2);
@@ -20,7 +18,6 @@
   --primary-dark-blue: rgb(13, 71, 161);
   --plum: rgb(85, 26, 139);
 
-  /* The highlight palette, darcula-derived and brightened to clear contrast on its own paper, round the wheel */
   --code-paper: rgb(43, 43, 43);
   --code-keyword: rgb(217, 142, 76);
   --code-call: rgb(255, 198, 109);
@@ -30,7 +27,6 @@
   --code-ink: rgb(169, 183, 198);
   --code-attribute: rgb(187, 181, 226);
 
-  /* Drawn from the base colors: shades, veils and shadows */
   --mint-ink: color-mix(in srgb, var(--mint) 45%, var(--black));
   --mint-shade: color-mix(in srgb, var(--mint) 85%, var(--black));
   --mint-dim: color-mix(in srgb, var(--mint) 75%, var(--black));
@@ -45,7 +41,6 @@
   --shadow: rgb(from var(--black) r g b / 0.19);
   --dark-shadow: rgb(from var(--black) r g b / 0.23);
 
-  /* Light: how the shadows and glows fall */
   --light-box-shadow: 0 1px 3px var(--faint-shadow),
   0 1px 2px rgb(from var(--black) r g b / 0.24);
   --shadow-far: 0 14px 28px;
@@ -58,7 +53,6 @@
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);
 
-  /* The theme: what the page wears, in the words the sheets ask for */
   --backdrop: var(--void);
   --field: var(--paper);
   --field-inverse: var(--charcoal);
@@ -72,7 +66,6 @@
   --alarm-ink: var(--international-orange-engineering);
   --ring: var(--charcoal);
 
-  /* The code theme */
   --code-comment: var(--smoke);
   --code-type: var(--code-tag);
 }

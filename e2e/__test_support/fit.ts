@@ -1,6 +1,5 @@
 import type {Page} from '@playwright/test';
 
-// a piece runs past its part when its right edge passes its parent's; inside a frame that scrolls or clips, it is meant to
 export const piecesPastTheirParts = (page: Page): Promise<string[]> => page.getByRole('main').evaluate(main => {
   const framed = (element: Element): boolean => {
     for (let around: Element | null = element; around !== null && around !== main; around = around.parentElement) {

@@ -38,7 +38,6 @@
     }
   }
 
-  /* a line of prose under the measure's floor reads as a list, so prose sits beside code only where it keeps that floor */
   .step-body {
     display: flex;
     flex-wrap: wrap;
@@ -132,7 +131,6 @@
   }
 
   @media (width <= 600px) {
-    /* from a word near the edge, the strip from the word to the edge is a sliver; under it, centred on the page */
     .term-definition {
       position-area: block-end span-all;
       justify-self: center;

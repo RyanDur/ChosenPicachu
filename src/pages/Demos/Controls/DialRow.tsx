@@ -4,7 +4,6 @@ import {PillGlider} from '@components/PillGlider';
 import {classNames} from '@components/class-names';
 import './DialRow.css';
 
-// a row fits when its name, the gap and its pills fit across it; stacking never changes those widths, so the answer holds
 const fitsBeside = (row: Element): boolean => {
   const [name, pills] = [row.querySelector('.axis'), row.querySelector('.pill-glider')];
   const gap = parseFloat(getComputedStyle(row).columnGap);

@@ -17,7 +17,6 @@
   }
 }
 
-/* in a group where one name cannot sit beside its pills, every name sits above, so the pills start at one edge */
 .dial-group.stacked > .dial-row > .axis {
   margin-inline-end: 100%;
 }

@@ -1,7 +1,6 @@
 import {Page, expect, test} from '@playwright/test';
 import {definedTerm, definitionTapped, desktop, iPhone, pressTab, timesShut} from './__test_support';
 
-// a definition squeezed beside its word ran 124 to 266px wide, a few words to a line
 const aReadableWidth = 300;
 
 test.describe('a phone', () => {

@@ -1,6 +1,5 @@
 .stacking-part {
     display: grid;
-    /* a track that may be narrower than its parts' least width, so a phone's width, not the runs' 45ch floor, sets it */
     grid-template-columns: minmax(0, 1fr);
     gap: var(--base-x-3);
 }
@@ -48,7 +47,6 @@
         }
     }
 }
-
 
 :is(.trapped-menu, .banner-trap) {
     display: grid;
