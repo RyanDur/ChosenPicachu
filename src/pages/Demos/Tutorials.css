@@ -332,7 +332,6 @@
   .unanswered-title {
     margin: 0;
     font-size: var(--text-caption);
-    letter-spacing: 0.08em;
     color: var(--ink-muted);
   }
 
