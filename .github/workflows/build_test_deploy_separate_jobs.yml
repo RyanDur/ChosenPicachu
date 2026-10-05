@@ -183,6 +183,14 @@ jobs:
       - name: Read the journeys in the run
         if: always() && hashFiles('journeys.json') != ''
         run: node scripts/playwright/summary.mjs "journeys, ${{ matrix.browser }} ${{ matrix.shard }}" journeys.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep the traces of the journeys that failed
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: journey-traces-${{ matrix.browser }}-${{ strategy.job-index }}
+          path: test-results
+          include-hidden-files: true
+          if-no-files-found: error
 
   smoke:
     needs: pages
