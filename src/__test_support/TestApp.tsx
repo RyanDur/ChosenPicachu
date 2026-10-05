@@ -8,6 +8,7 @@ import {
   isValidElement,
   startTransition,
   useContext,
+  useLayoutEffect,
   useState
 } from 'react';
 import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
@@ -25,8 +26,9 @@ type Props = PropsWithChildren<{
 const Reported = createContext<readonly string[]>([]);
 
 const Probes: FC = () => {
-  const {pathname, search} = useLocation();
+  const {pathname, search, hash} = useLocation();
   const errors = useContext(Reported);
+  useLayoutEffect(() => window.location.replace(`${pathname}${search}${hash}`), [pathname, search, hash]);
 
   return <>
     <Outlet/>

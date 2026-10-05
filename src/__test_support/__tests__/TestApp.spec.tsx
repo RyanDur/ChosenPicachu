@@ -16,6 +16,16 @@ describe('the test app', () => {
     expect(screen.getByRole('link', {name: 'Second', current: 'page'})).toBeInTheDocument();
   });
 
+  test('the page reads the address the app is at, and the address follows each navigation', async () => {
+    render(<TestApp at="/somewhere#here"><Tabs label="doors" values={doors}/></TestApp>);
+
+    expect(window.location).toBeAt('/somewhere#here');
+
+    await userEvent.click(screen.getByRole('link', {name: 'Second'}));
+
+    await waitFor(() => expect(window.location).toBeAt('/somewhere?tab=second'));
+  });
+
   test('the probes outlive an error no page catches', async () => {
     const boom = new Error('boom');
     const Boom = () => {
