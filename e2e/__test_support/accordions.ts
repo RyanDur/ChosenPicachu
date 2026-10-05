@@ -104,8 +104,8 @@ const detailsBuilds: Build[] = ['the inclusive details build', 'the details buil
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
-const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: Locator): Promise<boolean> =>
-  fold.evaluate((element, {firstPress, secondPress}) => new Promise<boolean>((resolve, reject) => {
+const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: Locator): Promise<void> =>
+  fold.evaluate((element, {firstPress, secondPress}) => new Promise<void>((resolve, reject) => {
     if (!(element instanceof HTMLElement && firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
       reject(new Error('the fold or a press is not an element that can be clicked'));
       return;
@@ -114,11 +114,10 @@ const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: 
       if (event.propertyName !== 'height') return;
       element.removeEventListener('transitionstart', started);
       secondPress.click();
-      resolve(true);
+      resolve();
     };
     element.addEventListener('transitionstart', started);
     firstPress.click();
-    setTimeout(() => resolve(false), 2000);
   }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
 
 export const accordionsTab = (page: Page) => {
@@ -155,7 +154,7 @@ export const accordionsTab = (page: Page) => {
         open.click();
       }, await opens.elementHandle());
     },
-    opensTheFirstPartThenChoosesOnceItStartsMoving: (build: Build, motion: 'Static'): Promise<boolean> =>
+    opensTheFirstPartThenChoosesOnceItStartsMoving: (build: Build, motion: 'Static'): Promise<void> =>
       pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
         page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion})),
     partsOf: async (build: Build): Promise<Part[]> =>

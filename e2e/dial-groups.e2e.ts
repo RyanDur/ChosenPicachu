@@ -18,8 +18,8 @@ for (const {width, height} of [{width: 360, height: 760}, {width: 390, height: 8
           await settings.press();
         }
 
-        await expect.poll(async () => (await dialGroups(page)).length, {timeout: 20_000}).toBeGreaterThan(0);
-        await expect.poll(() => dialGroupsLaidOutTwoWays(page), {timeout: 20_000}).toEqual([]);
+        await expect.poll(async () => (await dialGroups(page)).length).toBeGreaterThan(0);
+        await expect.poll(() => dialGroupsLaidOutTwoWays(page)).toEqual([]);
       });
     }
   });

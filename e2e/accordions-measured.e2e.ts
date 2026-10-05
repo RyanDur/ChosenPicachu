@@ -71,8 +71,7 @@ for (const build of measuredBuilds) {
       const part = accordionsTab(page).firstPartOf(build);
       await expect(part.fold).toBeVisible();
 
-      const chosenWhileOpening = await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
-      expect(chosenWhileOpening, 'Static was chosen once the part began to open').toBe(true);
+      await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
       await page.setViewportSize({width: 390, height: 900});
 
       await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
