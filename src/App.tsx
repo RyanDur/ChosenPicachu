@@ -1,6 +1,7 @@
 import {ComponentProps, FC, StrictMode} from 'react';
 import {RouterProvider} from 'react-router';
 import {EnvProvider} from '@components/Env';
+import {OpeningFragmentProvider} from '@components/OpeningFragment';
 import {Env} from '@env';
 
 type Props = {
@@ -12,6 +13,8 @@ type Props = {
 export const App: FC<Props> = ({router, onError, env}) =>
   <StrictMode>
     <EnvProvider env={env}>
-      <RouterProvider router={router} onError={onError}/>
+      <OpeningFragmentProvider>
+        <RouterProvider router={router} onError={onError}/>
+      </OpeningFragmentProvider>
     </EnvProvider>
   </StrictMode>;

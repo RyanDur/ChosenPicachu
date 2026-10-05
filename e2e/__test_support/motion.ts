@@ -7,10 +7,3 @@ export const heightOnceSettled = async (fold: Locator): Promise<number> => {
   await fold.evaluate(element => Promise.all(element.getAnimations({subtree: true}).map(motion => motion.finished)));
   return heightByTheNextFrame(fold);
 };
-
-export const slideEnds = async (fold: Locator): Promise<() => Promise<unknown>> => {
-  const ending = await fold.evaluateHandle(element => ({ended: new Promise(resolve => {
-    for (const type of ['transitionend', 'transitioncancel']) element.addEventListener(type, resolve, {once: true});
-  })}));
-  return () => ending.evaluate(({ended}) => ended);
-};

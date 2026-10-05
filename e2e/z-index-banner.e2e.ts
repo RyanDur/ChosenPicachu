@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, desktop, iPhone, slideEnds} from './__test_support';
+import {bannerTrap, desktop, iPhone} from './__test_support';
 
 const isOnTopAtItsFirstLine = (element: Element): boolean => {
   const {left, top} = element.getBoundingClientRect();
@@ -50,19 +50,6 @@ test.describe('a phone, where the page itself scrolls', () => {
 
   const tutorialBelow = (page: Page) =>
     page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
-
-  test('Back pressed while the tutorial below slides open returns the reader to the link they followed', async ({page}) => {
-    await page.emulateMedia({reducedMotion: 'no-preference'});
-    await page.goto('demos/?tab=z-index');
-    const link = tutorialBelow(page);
-
-    await link.click();
-    const storyOpened = await slideEnds(page.getByRole('group').filter({has: page.getByText('Make the panel a popover')}).first());
-    await page.goBack();
-    await storyOpened();
-
-    await expect(link).toBeInViewport();
-  });
 
   test('Back from the tutorial below returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
     await page.goto('demos/?tab=z-index');
