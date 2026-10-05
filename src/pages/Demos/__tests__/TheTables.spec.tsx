@@ -300,6 +300,14 @@ describe('the tables demo', () => {
     expect(screen.getByRole('rowheader', {name: 'Widen a column'})).toBeVisible();
   });
 
+  test('each layer’s facts say their heading in their own words, so they pair without the table', async () => {
+    await dragSortRecipe();
+
+    expect(screen.getByRole('cell', {name: 'by mouse drag the edge'})).toBeInTheDocument();
+    expect(screen.getByRole('cell', {name: 'by keyboard arrows on the handle'})).toBeInTheDocument();
+    expect(screen.getByRole('cell', {name: 'asked for by precision they can actually read'})).toBeInTheDocument();
+  });
+
   test('opening the sort by column story shows the drag build with its steps closed', async () => {
     const recipe = await dragSortRecipe();
 

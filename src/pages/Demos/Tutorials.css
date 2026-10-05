@@ -205,7 +205,6 @@
 
       .cell-heading {
         display: inline;
-        margin-inline-end: var(--base);
         white-space: nowrap;
       }
     }

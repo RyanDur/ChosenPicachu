@@ -1,16 +1,18 @@
 import {FC} from 'react';
 
-const layers: [string, string, string, string][] = [
-  ['Move a column', '“comparing side by side”', 'drag the header', 'nudge with arrows'],
-  ['Move a row', '“arranged the way I think”', 'drag the grip', 'nudge with arrows'],
-  ['Rank by a measure', '“what matters most on top”', 'a menu on the header', 'the same menu, focused'],
-  ['Widen a column', 'precision they can actually read', 'drag the edge', 'arrows on the handle']
-];
-
 const heading = {layer: 'the layer', askedFor: 'asked for by', mouse: 'by mouse', keyboard: 'by keyboard'};
 
+type Layer = Record<keyof typeof heading, string>;
+
+const layers: Layer[] = [
+  {layer: 'Move a column', askedFor: '“comparing side by side”', mouse: 'drag the header', keyboard: 'nudge with arrows'},
+  {layer: 'Move a row', askedFor: '“arranged the way I think”', mouse: 'drag the grip', keyboard: 'nudge with arrows'},
+  {layer: 'Rank by a measure', askedFor: '“what matters most on top”', mouse: 'a menu on the header', keyboard: 'the same menu, focused'},
+  {layer: 'Widen a column', askedFor: 'precision they can actually read', mouse: 'drag the edge', keyboard: 'arrows on the handle'}
+];
+
 const CellHeading: FC<{children: string}> = ({children}) =>
-  <span className="cell-heading caption uppercase" aria-hidden="true">{children}</span>;
+  <span className="cell-heading caption uppercase">{children}</span>;
 
 export const LayerMap: FC = () =>
   <>
@@ -28,12 +30,12 @@ export const LayerMap: FC = () =>
         </tr>
       </thead>
       <tbody className="tutorial-rows hairline-separated">
-        {layers.map(([layer, askedFor, mouse, keyboard]) =>
+        {layers.map(({layer, askedFor, mouse, keyboard}) =>
           <tr className="tutorial-row" key={layer}>
             <th className="tutorial-cell" scope="row">{layer}</th>
-            <td className="tutorial-cell clue"><CellHeading>{heading.askedFor}</CellHeading><span className="italic">{askedFor}</span></td>
-            <td className="tutorial-cell muted-ink"><CellHeading>{heading.mouse}</CellHeading>{mouse}</td>
-            <td className="tutorial-cell muted-ink"><CellHeading>{heading.keyboard}</CellHeading>{keyboard}</td>
+            <td className="tutorial-cell clue"><CellHeading>{heading.askedFor}</CellHeading>{' '}<span className="italic">{askedFor}</span></td>
+            <td className="tutorial-cell muted-ink"><CellHeading>{heading.mouse}</CellHeading>{' '}{mouse}</td>
+            <td className="tutorial-cell muted-ink"><CellHeading>{heading.keyboard}</CellHeading>{' '}{keyboard}</td>
           </tr>)}
       </tbody>
     </table>
