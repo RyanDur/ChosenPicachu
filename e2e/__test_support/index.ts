@@ -16,7 +16,7 @@ export {dialRow, pillSwitch} from './pills';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures, roomUnderShutFolds} from './recipes';
-export {heightOnceSettled} from './motion';
+export {heightOnceSettled, slideEnds} from './motion';
 export {accordionsTab, builds, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
