@@ -34,10 +34,8 @@ export const tutorialTable = (page: Page, name: TutorialTableName) => {
       }).map(cell => cell.textContent.trim()), edge);
     },
     slides: (): Promise<boolean> => table.evaluate(element => element.scrollWidth > element.clientWidth),
-    headers: async (): Promise<{columns: number; rows: number}> => ({
-      columns: await table.getByRole('columnheader').count(),
-      rows: await table.getByRole('rowheader').count()
-    }),
+    columnHeaders: table.getByRole('columnheader'),
+    rowHeaders: table.getByRole('rowheader'),
     tabLandsInside: async (): Promise<boolean> => {
       await steps[name].before(step).click();
       await pressTab(page);

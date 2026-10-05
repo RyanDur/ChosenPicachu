@@ -16,10 +16,11 @@ for (const {width, height} of [{width: 320, height: 568}, {width: 360, height: 7
         await page.goto(`demos/?tab=${tab}`);
         const tutorial = tutorialTable(page, name);
 
-        expect(await tutorial.wordsPastItsStep()).toEqual([]);
-        expect(await tutorial.slides()).toBe(false);
-        expect(await pageScrollsSideways(page)).toBe(false);
-        expect(await tutorial.headers()).toEqual(headers);
+        await expect(tutorial.columnHeaders).toHaveCount(headers.columns);
+        await expect(tutorial.rowHeaders).toHaveCount(headers.rows);
+        await expect.poll(tutorial.wordsPastItsStep).toEqual([]);
+        await expect.poll(tutorial.slides).toBe(false);
+        await expect.poll(() => pageScrollsSideways(page)).toBe(false);
       });
 
       test(`passes over ${name} on the ${tab} tab with the Tab key`, async ({page}) => {
