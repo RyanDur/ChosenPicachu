@@ -1,6 +1,4 @@
 import type {Locator, Page} from '@playwright/test';
-import {pressTab} from './keyboard';
-import {decodedShot, type Pixels} from './shots';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
@@ -18,24 +16,6 @@ const headings: Record<Build, string> = {
   'the grid checkbox build': 'Inclusive accordion using checkboxes',
   'the grid radio build': 'Exclusive accordion using radio group'
 };
-
-export type Spot = 'start' | 'middle' | 'end';
-
-export type Pointing = 'right' | 'down' | 'nowhere';
-
-export type HoveredPaint = {ground: string; words: number[]};
-
-export type FocusedPaint = {fill: number[]; edge: number[]};
-
-const luminance = ([red, green, blue]: number[]): number => {
-  const linear = (channel: number): number => channel / 255 <= 0.04045 ? channel / 255 / 12.92 : ((channel / 255 + 0.055) / 1.055) ** 2.4;
-  return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue);
-};
-
-const contrast = (one: number, other: number): number => (Math.max(one, other) + 0.05) / (Math.min(one, other) + 0.05);
-
-export const farthestChannel = (colour: number[], from: number[]): number =>
-  Math.max(...colour.map((channel, at) => Math.abs(channel - from[at])));
 
 export type Part = {
   fold: Locator;
@@ -124,6 +104,42 @@ const detailsBuilds: Build[] = ['the inclusive details build', 'the details buil
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
+export type Travel = {from: number; to: number};
+
+export type Turn = {before: number; turned: number; end: number};
+
+const pressedAtAQuarter = async (fold: Locator, first: Locator, second: Locator, travel: Travel): Promise<Turn> =>
+  fold.evaluate((element, {firstPress, secondPress, from, to}) => new Promise<Turn>((resolve, reject) => {
+    if (!(firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
+      reject(new Error('a press is not an element that can be clicked'));
+      return;
+    }
+    const height = (): number => element.getBoundingClientRect().height;
+    const moving = (): boolean => element.getAnimations({subtree: true})
+      .some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
+    const passedAQuarter = (reached: number): boolean => to > from ? reached > from + (to - from) / 4 : reached < from - (from - to) / 4;
+    const atEnd = (turn: Omit<Turn, 'end'>) => (): void => {
+      if (moving()) {
+        requestAnimationFrame(atEnd(turn));
+      } else {
+        resolve({...turn, end: height()});
+      }
+    };
+    const watched = (): void => {
+      const before = height();
+      if (passedAQuarter(before)) {
+        secondPress.click();
+        requestAnimationFrame(atEnd({before, turned: height()}));
+      } else if (moving()) {
+        requestAnimationFrame(watched);
+      } else {
+        resolve({before, turned: before, end: before});
+      }
+    };
+    firstPress.click();
+    requestAnimationFrame(watched);
+  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle(), ...travel});
+
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
@@ -142,139 +158,7 @@ export const accordionsTab = (page: Page) => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
-  type Box = {x: number; y: number; width: number; height: number};
-  const settled = (): Promise<unknown> =>
-    page.waitForFunction(() => document.getAnimations().every(motion => motion.playState !== 'running'));
-  const boxOf = async (shown: Locator): Promise<Box> => {
-    await shown.scrollIntoViewIfNeeded();
-    return shown.evaluate(element => new Promise<Box>((resolve, reject) => {
-      const steady = (before: DOMRect, stillFor: number, waited: number): void => {
-        const now = element.getBoundingClientRect();
-        const moved = now.x !== before.x || now.y !== before.y || now.width !== before.width || now.height !== before.height;
-        if (now.width === 0 || now.height === 0) {
-          reject(new Error('a bar is not shown'));
-        } else if (stillFor >= 10) {
-          resolve({x: now.x, y: now.y, width: now.width, height: now.height});
-        } else if (waited >= 300) {
-          reject(new Error('a bar did not hold still'));
-        } else {
-          requestAnimationFrame(() => steady(now, moved ? 0 : stillFor + 1, waited + 1));
-        }
-      };
-      requestAnimationFrame(() => steady(element.getBoundingClientRect(), 0, 0));
-    }));
-  };
-  const shotOf = async (clip: Box): Promise<Pixels> => decodedShot(page, await page.screenshot({clip, scale: 'css'}));
-  const lightAt = (rgba: number[], pixel: number): boolean =>
-    0.2126 * rgba[pixel * 4] + 0.7152 * rgba[pixel * 4 + 1] + 0.0722 * rgba[pixel * 4 + 2] > 150;
-  const pointingIn = (rgba: number[], width: number): Pointing => {
-    const light = Array.from({length: rgba.length / 4}, (_, pixel) => pixel).filter(pixel => lightAt(rgba, pixel));
-    if (light.length < 10) return 'nowhere';
-    const across = light.map(pixel => pixel % width);
-    const down = light.map(pixel => Math.floor(pixel / width));
-    return Math.max(...across) - Math.min(...across) < Math.max(...down) - Math.min(...down) ? 'right' : 'down';
-  };
-  const arrowOn = async (bar: Locator): Promise<Pointing> => {
-    await page.mouse.move(0, 0);
-    await settled();
-    const {x, y, width, height} = await boxOf(bar);
-    const end = {x: x + width - 52, y: y + 4, width: 44, height: height - 8};
-    const {rgba, width: across} = await shotOf(end);
-    return pointingIn(rgba, across);
-  };
-  const paintOf = (rgba: number[]): HoveredPaint => {
-    const counts = new Map<string, number>();
-    let words = [255, 255, 255];
-    for (let at = 0; at < rgba.length; at += 4) {
-      const colour = rgba.slice(at, at + 3);
-      counts.set(colour.join(','), (counts.get(colour.join(',')) ?? 0) + 1);
-      if (colour.reduce((sum, channel) => sum + channel) < words.reduce((sum, channel) => sum + channel)) words = colour;
-    }
-    const [[ground]] = [...counts].sort(([, many], [, more]) => more - many);
-    return {ground, words};
-  };
-  const lightShare = (rgba: number[]): number =>
-    Array.from({length: rgba.length / 4}, (_, pixel) => pixel).filter(pixel => lightAt(rgba, pixel)).length / Math.max(1, rgba.length / 4);
-  const insideTheHairlines = ({x, y, width, height}: Box): Box => ({x, y: y + 4, width, height: height - 8});
-  const hoveredAt = async (build: Build, spot: Spot): Promise<HoveredPaint> => {
-    const bar = await boxOf(partOf(build, 0).fold);
-    const along = {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot];
-    await page.mouse.move(bar.x + along, bar.y + bar.height / 2);
-    await settled();
-    return paintOf((await shotOf(insideTheHairlines(bar))).rgba);
-  };
-  const restingAt = async (build: Build): Promise<HoveredPaint> => {
-    await page.mouse.move(0, 0);
-    const bar = await boxOf(partOf(build, 0).fold);
-    await settled();
-    return paintOf((await shotOf(insideTheHairlines(bar))).rgba);
-  };
-  const firstInputOf = (build: Build): Locator => partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first();
-  const focusedByKeyboard = async (build: Build): Promise<FocusedPaint> => {
-    await page.mouse.move(0, 0);
-    await firstInputOf(build).focus();
-    await pressTab(page, {backwards: true});
-    await pressTab(page);
-    const bar = await boxOf(partOf(build, 0).fold);
-    await settled();
-    const {rgba, width, height} = await shotOf(insideTheHairlines(bar));
-    const insideTheEdge = (Math.floor(height / 2) * width + 1) * 4;
-    return {fill: paintOf(rgba).ground.split(',').map(Number), edge: rgba.slice(insideTheEdge, insideTheEdge + 3)};
-  };
-  const footOf = async (panel: Locator): Promise<number> => {
-    await page.mouse.move(0, 0);
-    await settled();
-    const {x, y, width, height} = await boxOf(panel);
-    const foot = await shotOf({x: x + 4, y: y + height - 4, width: width - 8, height: 4});
-    const ground = luminance(paintOf((await shotOf({x: x + 4, y, width: width - 8, height})).rgba).ground.split(',').map(Number));
-    const medianOfRow = (row: number): number => Array.from({length: foot.width}, (_, at) => (row * foot.width + at) * 4)
-      .map(at => luminance(foot.rgba.slice(at, at + 3)))
-      .sort((dim, bright) => dim - bright)[Math.floor(foot.width / 2)];
-    return Math.max(...Array.from({length: foot.height}, (_, row) => contrast(ground, medianOfRow(row))));
-  };
-  const paddingBelowTheText = (panel: Locator): Promise<number> =>
-    panel.getByRole('paragraph').first().evaluate(text => parseFloat(getComputedStyle(text).paddingBottom));
-  const firstLongPartOf = async (build: Build): Promise<Locator> => {
-    for (const [index, fold] of (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).entries()) {
-      const part = partOf(build, index);
-      await part.open();
-      const panel = fold.getByRole('region');
-      await settled();
-      if (await panel.evaluate((element, padded) => element.scrollHeight - element.clientHeight > padded + 16, await paddingBelowTheText(panel))) return panel;
-      await part.close();
-    }
-    throw new Error(`${build} has no part with a line of text below its panel's foot`);
-  };
-  const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
-    const bar = await boxOf(partOf(build, 0).fold);
-    await page.touchscreen.tap(bar.x + bar.width / 2, bar.y + bar.height / 2);
-    await settled();
-    return lightShare((await shotOf(insideTheHairlines({...bar, x: bar.x + bar.width - 80, width: 80}))).rgba) > 0.4;
-  };
   return {
-    arrowsOf: async (build: Build): Promise<Pointing[]> => {
-      const arrows: Pointing[] = [];
-      await folds(build).first().waitFor();
-      for (const fold of (await folds(build).all()).slice(closeBarsBeforeTheParts(build))) {
-        arrows.push(await arrowOn(nameOn(fold)));
-      }
-      return arrows;
-    },
-    arrowOnTheFirstPartOf: (build: Build): Promise<Pointing> => arrowOn(nameOn(partOf(build, 0).fold)),
-    hoveredAt,
-    restingAt,
-    focusedByKeyboard,
-    firstInputOf,
-    footSignOfALongPart: async (build: Build): Promise<{atRest: number; withOnlyPaddingBelow: number; atTheEnd: number}> => {
-      await folds(build).first().waitFor();
-      const panel = await firstLongPartOf(build);
-      const atRest = await footOf(panel);
-      await panel.evaluate((element, padded) => element.scrollTo({top: element.scrollHeight - element.clientHeight - padded, behavior: 'instant'}), await paddingBelowTheText(panel));
-      const withOnlyPaddingBelow = await footOf(panel);
-      await panel.evaluate(element => element.scrollTo({top: element.scrollHeight, behavior: 'instant'}));
-      return {atRest, withOnlyPaddingBelow, atTheEnd: await footOf(panel)};
-    },
-    endOfTheFirstBarLitAfterATap,
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
@@ -290,6 +174,9 @@ export const accordionsTab = (page: Page) => {
         open.click();
       }, await opens.elementHandle());
     },
+    opensTheFirstPartThenChoosesAtAQuarter: async (build: Build, motion: 'Static', travel: Travel): Promise<Turn> =>
+      pressedAtAQuarter(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}), travel),
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
   };

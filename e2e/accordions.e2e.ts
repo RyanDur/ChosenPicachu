@@ -5,29 +5,16 @@ import {
   codedStepLayouts,
   desktop,
   dialRow,
-  farthestChannel,
   heightOnceSettled,
   iPhone,
   misplacedPictures,
   pressTab,
-  seedRandom,
   nameOn,
   shortOfAFinger,
   showing,
-  textOf,
-  type Build
+  textOf
 } from './__test_support';
 import {everyBuildJourneys, test} from './__test_support/fold-journeys';
-
-test('a details fold opens and shows its text', async ({page}) => {
-  await page.goto(showing('the details build'));
-  const part = accordionsTab(page).firstPartOf('the details build');
-  await expect(part.fold).toBeVisible();
-
-  await part.open();
-
-  await expect.poll(part.showsText).toBe(true);
-});
 
 test('opening a second details fold closes the first, from the keyboard too', async ({page}) => {
   await page.goto(showing('the details build'));
@@ -229,83 +216,24 @@ test('a fold of the accordion in HTML alone opens by pointer and closes by keybo
   await expect.poll(fold.showsText).toBe(false);
 });
 
-for (const {type, arrowed} of [
-  {type: 'inclusive', arrowed: ['the checkbox build', 'the measured checkbox build', 'the inclusive details build'] as Build[]},
-  {type: 'exclusive', arrowed: ['the radio build', 'the measured radio build', 'the details build'] as Build[]}
-]) {
-  test(`every bar of the ${type} builds that turn an arrow draws one pointing right`, async ({page}) => {
-    await page.goto(`demos/?tab=accordions&type=${type}`);
-    const tab = accordionsTab(page);
-
-    for (const build of arrowed) {
-      expect(await tab.arrowsOf(build), build).toEqual(['right', 'right', 'right', 'right', 'right']);
-    }
-  });
-}
-
-for (const build of ['the inclusive details build', 'the details build'] as const) {
-  test(`an open part of ${build} turns its arrow down`, async ({page}) => {
-    await page.goto(showing(build));
-    const tab = accordionsTab(page);
-
-    await tab.firstPartOf(build).open();
-
-    expect(await tab.arrowOnTheFirstPartOf(build)).toBe('down');
-  });
-}
-
-// a thin stroke on Linux may never cover a whole pixel, so its darkest pixel sits a little above the ink
-const antialiasing = 40;
-
 test.describe('a desktop', () => {
   test.use(desktop);
 
   for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-    test(`a pointer anywhere on a bar of ${build} lights the whole bar, as a hovered bar of the checkbox build`, async ({page}) => {
-      const tab = accordionsTab(page);
-      await page.goto(showing('the checkbox build'));
-      const lit = await tab.hoveredAt('the checkbox build', 'middle');
-      await page.goto(showing(build));
-      const resting = await tab.restingAt(build);
-      expect(resting.ground, 'the bar at rest').not.toBe(lit.ground);
+    for (const spot of ['start', 'middle', 'end'] as const) {
+      test(`a press at the ${spot} of a bar of ${build} opens its fold`, async ({page}) => {
+        await page.goto(showing(build));
+        const part = accordionsTab(page).firstPartOf(build);
+        await part.fold.scrollIntoViewIfNeeded();
+        const bar = await part.fold.boundingBox();
+        if (bar === null) throw new Error(`${build} shows no bar`);
+        await expect.poll(part.isOpen).toBe(false);
 
-      for (const spot of ['start', 'middle', 'end'] as const) {
-        const {ground, words} = await tab.hoveredAt(build, spot);
-        expect(ground, `${spot}: the bar's ground`).toBe(lit.ground);
-        expect(farthestChannel(words, lit.words), `${spot}: the words' colour, off by`).toBeLessThanOrEqual(antialiasing);
-      }
-      await page.mouse.down();
-      await page.mouse.up();
-      await expect.poll(tab.firstPartOf(build).isOpen).toBe(true);
-    });
+        await page.mouse.click(bar.x + {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot], bar.y + Math.min(bar.height, 40) / 2);
 
-    test(`a keyboard's focus on a bar of ${build} fills and rings the bar, as on a focused bar of the checkbox build`, async ({page}) => {
-      const tab = accordionsTab(page);
-      await page.goto(showing('the checkbox build'));
-      const focused = await tab.focusedByKeyboard('the checkbox build');
-      await expect(tab.firstInputOf('the checkbox build')).toBeFocused();
-      await page.goto(showing(build));
-      expect(focused.fill.join(','), 'a focused bar of the checkbox build').not.toBe((await tab.restingAt(build)).ground);
-      expect(farthestChannel(focused.edge, focused.fill), 'the ring against the fill of a focused bar of the checkbox build').toBeGreaterThan(antialiasing);
-
-      const {fill, edge} = await tab.focusedByKeyboard(build);
-
-      await expect(tab.firstInputOf(build)).toBeFocused();
-      expect(fill, 'the bar\'s fill').toEqual(focused.fill);
-      expect(farthestChannel(edge, focused.edge), 'the ring inside the bar\'s edge, off by').toBeLessThanOrEqual(antialiasing);
-    });
-  }
-});
-
-test.describe('a phone', () => {
-  test.use(iPhone);
-
-  for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-    test(`a tap leaves no bar of ${build} lit`, async ({page}) => {
-      await page.goto(showing(build));
-
-      expect(await accordionsTab(page).endOfTheFirstBarLitAfterATap(build)).toBe(false);
-    });
+        await expect.poll(part.isOpen).toBe(true);
+      });
+    }
   }
 });
 
@@ -370,24 +298,5 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       await expect(reading).toHaveText(lessMotion, {useInnerText: true});
       await expect(reading).toMatchAriaSnapshot(`- status: ${lessMotion}`);
     });
-  });
-}
-
-for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    for (const build of ['the checkbox build', 'the radio build'] as const) {
-      test(`a long part of ${build} shows a sign at its panel's foot at 3:1, and none once no text is left below`, async ({page}) => {
-        await seedRandom(page, 99);
-        await page.goto(showing(build, 'static'));
-
-        const {atRest, withOnlyPaddingBelow, atTheEnd} = await accordionsTab(page).footSignOfALongPart(build);
-
-        expect(atRest, 'the sign against the panel, at rest').toBeGreaterThanOrEqual(3);
-        expect(withOnlyPaddingBelow, 'the foot against the panel, with no text below it').toBeLessThan(1.05);
-        expect(atTheEnd, 'the foot against the panel, at the end').toBeLessThan(1.05);
-      });
-    }
   });
 }

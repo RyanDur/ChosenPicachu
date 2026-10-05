@@ -65,6 +65,24 @@ for (const build of measuredBuilds) {
   test.describe('a desktop', () => {
     test.use(desktop);
 
+    test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
+      await page.emulateMedia({reducedMotion: 'no-preference'});
+      await page.goto(showing(build));
+      const part = accordionsTab(page).firstPartOf(build);
+      const shut = await heightOnceSettled(part.fold);
+      await part.open();
+      const open = await heightOnceSettled(part.fold);
+      await part.close();
+      await heightOnceSettled(part.fold);
+
+      const {before: chosenAt} = await accordionsTab(page).opensTheFirstPartThenChoosesAtAQuarter(build, 'Static', {from: shut, to: open});
+      expect(chosenAt, 'Static was chosen while the part was still opening').toBeGreaterThan(shut + layoutRounding);
+      expect(chosenAt, 'Static was chosen while the part was still opening').toBeLessThan(open - layoutRounding);
+      await page.setViewportSize({width: 390, height: 900});
+
+      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+    });
+
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);

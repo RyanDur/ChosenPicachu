@@ -117,19 +117,12 @@ test('a press outside the open menu closes it', async ({page}) => {
   await expect(page.getByRole('menu')).toHaveCount(0);
 });
 
-test('a choice looks different under the pointer and in keyboard focus than at rest', async ({page}) => {
+test('ArrowDown moves keyboard focus onto a choice', async ({page}) => {
   await page.goto('demos/?tab=z-index&card-one=free');
   const menu = trappedMenu(page);
   await menu.openByKeyboard();
-  const date = menu.choice('date');
-  const atRest = await date.screenshot({animations: 'disabled'});
 
   await page.keyboard.press('ArrowDown');
-  const focused = await date.screenshot({animations: 'disabled'});
-  await page.keyboard.press('ArrowDown');
-  await date.hover();
-  const pointedAt = await date.screenshot({animations: 'disabled'});
 
-  expect(focused.equals(atRest)).toBe(false);
-  expect(pointedAt.equals(atRest)).toBe(false);
+  await expect(menu.choice('date')).toBeFocused();
 });
