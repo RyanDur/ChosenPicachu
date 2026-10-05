@@ -1,7 +1,7 @@
 import {expect, test} from '@playwright/test';
-import {pageScrollsSideways, tutorialTable} from './__test_support';
+import {pageScrollsSideways, tutorialTable, type TutorialTableName} from './__test_support';
 
-const tables = [
+const tables: {tab: string; name: TutorialTableName; headers: {columns: number; rows: number}}[] = [
   {tab: 'tables', name: 'the clues', headers: {columns: 2, rows: 5}},
   {tab: 'dragAndDrop', name: 'the clues', headers: {columns: 2, rows: 4}},
   {tab: 'tables', name: 'the layers', headers: {columns: 4, rows: 4}}
@@ -16,7 +16,7 @@ for (const {width, height} of [{width: 320, height: 568}, {width: 360, height: 7
         await page.goto(`demos/?tab=${tab}`);
         const tutorial = tutorialTable(page, name);
 
-        expect(await tutorial.wordsPastItsPart()).toEqual([]);
+        expect(await tutorial.wordsPastItsStep()).toEqual([]);
         expect(await tutorial.slides()).toBe(false);
         expect(await pageScrollsSideways(page)).toBe(false);
         expect(await tutorial.headers()).toEqual(headers);
