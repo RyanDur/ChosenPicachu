@@ -12,8 +12,9 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
         await page.goto(path);
 
         await expect(feedback.open).toBeInViewport();
-        await feedback.open.click();
+        const toggles = await feedback.pressed();
 
+        await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
         await expect(feedback.dialog).toBeVisible();
         await expect(feedback.words).toBeFocused();
       });
@@ -138,7 +139,8 @@ for (const {reader, device, fills} of [
       await github(page);
       const feedback = feedbackOn(page);
       await page.goto('demos/?tab=accordions');
-      await feedback.open.click();
+      const toggles = await feedback.pressed();
+      await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
       await expect(feedback.words).toBeFocused();
 
       const box = await feedback.dialog.boundingBox();

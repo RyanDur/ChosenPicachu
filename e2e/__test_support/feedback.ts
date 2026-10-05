@@ -28,8 +28,20 @@ export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise
 export const feedbackOn = (page: Page) => {
   const dialog = page.getByRole('dialog', {name: 'Feedback'});
   const open = page.getByRole('button', {name: 'Feedback', exact: true});
+  const pressed = async (): Promise<() => Promise<string[]>> => {
+    const toggles = await open.evaluateHandle(button => {
+      const seen: string[] = [];
+      document.getElementById(button.getAttribute('commandfor') ?? '')?.addEventListener('toggle', event => {
+        if (event instanceof ToggleEvent) seen.push(event.newState);
+      });
+      return seen;
+    });
+    await open.click();
+    return () => toggles.evaluate(seen => [...seen]);
+  };
   return {
     open,
+    pressed,
     dialog,
     words: dialog.getByRole('textbox', {name: 'What did you find?'}),
     reach: dialog.getByRole('textbox', {name: 'A way to reach you, if you like'}),
