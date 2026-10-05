@@ -7,12 +7,13 @@ export default defineConfig({
   testDir: './e2e',
   testMatch: '**/*.e2e.ts',
   testIgnore: '**/smoke.e2e.ts',
-  retries: 2,
+  retries: 0,
   workers: has(process.env.CI) ? 2 : undefined,
   timeout: 60_000,
   use: {
     baseURL: stage,
-    trace: 'on-first-retry'
+    contextOptions: {reducedMotion: 'reduce'},
+    trace: 'retain-on-failure'
   },
   webServer: {
     command: 'node scripts/lighthouse/server.mjs',

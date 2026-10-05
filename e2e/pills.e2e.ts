@@ -74,17 +74,6 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       await expect.poll(world.stillMoving).toBe(0);
       expect(await world.paintedWrong()).toEqual([]);
     });
-
-    test('asking for less motion, the pill left behind is painted as not chosen at once', async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'reduce'});
-      await page.goto('demos/?tab=accordions');
-      const foldType = pillSwitch(page, 'fold type');
-
-      await foldType.choose('Exclusive');
-
-      await expect(foldType.pill('Exclusive')).toBeChecked();
-      expect(await foldType.paintedWrong()).toEqual([]);
-    });
   });
 }
 

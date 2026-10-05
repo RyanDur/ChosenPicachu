@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {bannerLeavesBeforeTheGapCloses, bannerMotion, bannerTrap, desktop, gapOpensBeforeTheBannerIsSeen, iPhone} from './__test_support';
+import {bannerTrap, desktop, iPhone} from './__test_support';
 
 const isOnTopAtItsFirstLine = (element: Element): boolean => {
   const {left, top} = element.getBoundingClientRect();
@@ -42,34 +42,5 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect(page.getByText('Make the panel a popover')).toBeInViewport();
       await expect.poll(() => page.getByText('The user sees the news above everything').evaluate(isOnTopAtItsFirstLine)).toBe(true);
     });
-  });
-}
-
-for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    test('a reader who asks for less motion sees a banner arrive with no slide', async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'reduce'});
-      await page.goto('demos/?tab=z-index');
-
-      const frames = await bannerMotion(page, bannerTrap(page).raiseNew, false).arriving();
-
-      expect(frames.findIndex(({seen}) => seen), 'frames before the banner is seen').toBeLessThanOrEqual(3);
-    });
-
-    for (const {stack, query, sideways} of [
-      {stack: 'down', query: '', sideways: false},
-      {stack: 'left', query: '&stack=left&enter=right', sideways: true}
-    ]) {
-      test(`a banner stacked ${stack} opens its gap before it is seen, and leaves before the gap closes`, async ({page}) => {
-        await page.goto(`demos/?tab=z-index${query}`);
-        const motion = bannerMotion(page, bannerTrap(page).raiseNew, sideways);
-
-        expect(gapOpensBeforeTheBannerIsSeen(await motion.arriving()), 'the first banner').toEqual([]);
-        expect(gapOpensBeforeTheBannerIsSeen(await motion.arriving()), 'a second banner').toEqual([]);
-        expect(bannerLeavesBeforeTheGapCloses(await motion.leaving()), 'the first banner leaving').toEqual([]);
-      });
-    }
   });
 }

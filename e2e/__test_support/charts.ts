@@ -46,26 +46,6 @@ export const feedStillConnecting = async (page: Page, prices: number[]): Promise
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
-  const holdByTheGrip = async (region: string): Promise<{whenTheDragBegan: string; now: () => Promise<number>; dropped: () => Promise<string>}> => {
-    const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
-    await chart.scrollIntoViewIfNeeded();
-    const opacityAtDragStart = await chart.evaluateHandle(held => ({seen: new Promise<string>(resolve =>
-      held.addEventListener('dragstart', () => resolve(getComputedStyle(held).opacity), {once: true}))}));
-    await chart.hover();
-    const grip = await chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox();
-    if (grip === null) throw new Error(`the ${region} chart has no grip`);
-    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(grip.x + grip.width / 2, grip.y + 40, {steps: 8});
-    const dropped = async (): Promise<string> => {
-      // 40ms: past the frames that run the reset's 0.01ms transition for less motion, and inside the 50ms a wait on the return would hold
-      const opacitySoonAfterTheDrop = await chart.evaluateHandle(held => ({seen: new Promise<string>(resolve =>
-        held.addEventListener('dragend', () => setTimeout(() => resolve(getComputedStyle(held).opacity), 40), {once: true}))}));
-      await page.mouse.up();
-      return opacitySoonAfterTheDrop.evaluate(({seen}) => seen);
-    };
-    return {whenTheDragBegan: await opacityAtDragStart.evaluate(({seen}) => seen), now: () => chart.evaluate(held => Number(getComputedStyle(held).opacity)), dropped};
-  };
   const carryByTheGrip = async (region: string): Promise<{height: number; handWhenTheyTrade: (step: number) => Promise<number>}> => {
     const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
     await chart.hover();
@@ -88,7 +68,6 @@ export const chartsPage = (page: Page) => {
     return {height: box.height, handWhenTheyTrade};
   };
   return {
-    holdByTheGrip,
     carryByTheGrip,
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
     explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),

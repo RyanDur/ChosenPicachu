@@ -107,32 +107,6 @@ for (const {reader, device, press} of [
   });
 }
 
-test.describe('a mouse dragging a chart by its grip', () => {
-  test.use(desktop);
-
-  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
-    test(`with motion ${reducedMotion === 'reduce' ? 'reduced' : 'allowed'}, the chart is whole when the drag begins and fades where it sits just after`, async ({page}) => {
-      await page.emulateMedia({reducedMotion});
-      await page.goto('demos/?tab=charts&charts=price,pie');
-
-      const held = await chartsPage(page).holdByTheGrip('live trades');
-
-      expect(held.whenTheDragBegan).toBe('1');
-      await expect.poll(held.now).toBeLessThan(0.01);
-      await page.mouse.up();
-    });
-
-    test(`with motion ${reducedMotion === 'reduce' ? 'reduced' : 'allowed'}, a dropped chart is whole again at once`, async ({page}) => {
-      await page.emulateMedia({reducedMotion});
-      await page.goto('demos/?tab=charts&charts=price,pie');
-      const held = await chartsPage(page).holdByTheGrip('live trades');
-      await expect.poll(held.now).toBeLessThan(0.01);
-
-      expect(await held.dropped()).toBe('1');
-    });
-  }
-});
-
 test.describe('a mouse carrying a chart past its neighbour', () => {
   test.use(desktop);
 

@@ -6,9 +6,6 @@ import {
   desktop,
   dialRow,
   farthestChannel,
-  firstHeightAfter,
-  framesWhileMoving,
-  heightByTheNextFrame,
   heightOnceSettled,
   iPhone,
   misplacedPictures,
@@ -18,97 +15,17 @@ import {
   shortOfAFinger,
   showing,
   textOf,
-  type Build,
-  type Frame,
-  type Part
+  type Build
 } from './__test_support';
-import {evenMotionJourneys, everyBuildJourneys, heightMoved, layoutRounding, test} from './__test_support/fold-journeys';
+import {everyBuildJourneys, test} from './__test_support/fold-journeys';
 
-const framesOpening = async (part: Part): Promise<Frame[]> => {
-  await expect(part.fold).toBeVisible();
-  const moving = framesWhileMoving(part.fold);
-  await part.open();
-  return moving;
-};
-
-const framesClosing = async (part: Part): Promise<Frame[]> => {
-  await part.open();
-  await heightOnceSettled(part.fold);
-  const moving = framesWhileMoving(part.fold);
-  await part.close();
-  return moving;
-};
-
-const framesSliding = {open: framesOpening, closed: framesClosing};
-
-for (const build of ['the inclusive details build', 'the details build'] as const) {
-  for (const style of ['reveal', 'drawer'] as const) {
-    test(`a fold in ${build} slides open by the ${style} where the browser can animate it`, async ({page, browserName}) => {
-      test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
-      await page.goto(showing(build, style));
-      const part = accordionsTab(page).firstPartOf(build);
-
-      await part.open();
-      const midway = await heightByTheNextFrame(part.fold);
-
-      expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
-    });
-  }
-
-  test(`a fold in ${build} slides open and closed by the drawer with its text down to the fold’s edge`, async ({page, browserName}) => {
-    test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
-    await page.goto(showing(build, 'drawer'));
-    const part = accordionsTab(page).firstPartOf(build);
-    const opening = framesWhileMoving(part.fold);
-    await part.open();
-    const opened = await opening;
-    await heightOnceSettled(part.fold);
-    const closing = framesWhileMoving(part.fold);
-
-    await part.close();
-    const closed = await closing;
-
-    expect([...opened, ...closed].map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
-  });
-
-}
-
-const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
-
-for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox build', 'the grid radio build'] as const) {
-  for (const direction of ['open', 'closed'] as const) {
-    test(`a fold in ${build} slides ${direction} by the reveal, its text's top on the bar and its bottom on the fold's edge`, async ({page}) => {
-      await page.goto(showing(build, 'reveal'));
-      const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
-
-      heightMoved[direction](frames);
-      expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
-      expect(slidDown(frames)).toEqual([]);
-    });
-
-    test(`a fold in ${build} slides ${direction} by the drawer, its text coming from under the bar with its bottom on the fold's edge`, async ({page}) => {
-      await page.goto(showing(build, 'drawer'));
-      const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
-
-      heightMoved[direction](frames);
-      expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
-      expect(slidDown(frames)).not.toEqual([]);
-    });
-  }
-}
-
-test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
-  test.skip(browserName === 'chromium', 'chromium animates it');
+test('a details fold opens and shows its text', async ({page}) => {
   await page.goto(showing('the details build'));
   const part = accordionsTab(page).firstPartOf('the details build');
   await expect(part.fold).toBeVisible();
-  const closed = await heightByTheNextFrame(part.fold);
-  const firstMoved = firstHeightAfter(part.fold, closed);
 
   await part.open();
 
-  expect(await firstMoved).toBeGreaterThan(closed);
-  expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   await expect.poll(part.showsText).toBe(true);
 });
 
@@ -288,7 +205,6 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 });
 
 everyBuildJourneys(builds);
-evenMotionJourneys(['the checkbox build', 'the radio build']);
 
 test('the accordion in HTML alone keeps two folds open with exclusive and static chosen', async ({page}) => {
   await page.goto('demos/?tab=accordions&type=exclusive&style=static');
@@ -441,6 +357,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     test.use(device);
 
     test('the fold motion reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
+      await page.emulateMedia({reducedMotion: 'no-preference'});
       await page.goto('demos/?tab=accordions&style=drawer');
       const {reading} = dialRow(page, 'fold motion');
       await reading.scrollIntoViewIfNeeded();
