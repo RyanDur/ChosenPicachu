@@ -1,14 +1,18 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 
 export type DefinitionFit = {width: number; left: number; right: number; overTheWord: boolean};
 
-export const definitionTapped = async (page: Page, story: string, term: string): Promise<DefinitionFit> => {
+export const definedTerm = async (page: Page, story: string, term: string): Promise<{word: Locator; definition: Locator}> => {
   const fold = page.getByRole('group', {name: story, exact: true}).first();
   await fold.getByRole('heading', {name: story, exact: true}).click();
   const word = fold.getByRole('button', {name: term, exact: true}).first();
   await word.scrollIntoViewIfNeeded();
+  return {word, definition: fold.getByLabel(term, {exact: true}).first()};
+};
+
+export const definitionTapped = async (page: Page, story: string, term: string): Promise<DefinitionFit> => {
+  const {word, definition} = await definedTerm(page, story, term);
   await word.tap();
-  const definition = fold.getByLabel(term, {exact: true}).first();
   await definition.waitFor();
   const wordBox = await word.boundingBox();
   if (wordBox === null) throw new Error(`${term} is not shown`);

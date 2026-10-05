@@ -28,9 +28,13 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
     <button type="button"
       className="term"
       popoverTarget={id}
+      popoverTargetAction="show"
       style={{'--term-anchor': anchor}}
-      onMouseEnter={() => setIntent(window.setTimeout(() => revealed(id), 120))}
-      onMouseLeave={() => {
+      onPointerEnter={({pointerType}) => {
+        if (pointerType === 'mouse') setIntent(window.setTimeout(() => revealed(id), 120));
+      }}
+      onPointerLeave={({pointerType}) => {
+        if (pointerType !== 'mouse') return;
         window.clearTimeout(intent);
         concealed(id);
       }}

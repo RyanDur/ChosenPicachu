@@ -1,5 +1,5 @@
-import {expect, test} from '@playwright/test';
-import {definitionTapped, iPhone} from './__test_support';
+import {Page, expect, test} from '@playwright/test';
+import {definedTerm, definitionTapped, desktop, iPhone, pressTab} from './__test_support';
 
 // a definition squeezed beside its word ran 124 to 266px wide, a few words to a line
 const aReadableWidth = 300;
@@ -26,4 +26,91 @@ test.describe('a phone', () => {
       expect(overTheWord, 'over the word it defines').toBe(false);
     });
   }
+});
+
+test.describe('a phone, with a definition open', () => {
+  test.use(iPhone);
+
+  const opened = async (page: Page) => {
+    await page.goto('demos/?tab=tables');
+    const term = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+    await term.word.tap();
+    await expect(term.definition).toBeVisible();
+    return term;
+  };
+
+  test('a second tap on the term leaves its definition open', async ({page}) => {
+    const {word, definition} = await opened(page);
+
+    await word.tap();
+
+    await expect(definition).toBeVisible();
+  });
+
+  test('a tap on the page closes it', async ({page}) => {
+    const {definition} = await opened(page);
+
+    await page.getByRole('heading', {level: 1}).tap();
+
+    await expect(definition).toBeHidden();
+  });
+
+  test('Escape closes it', async ({page}) => {
+    const {definition} = await opened(page);
+
+    await page.keyboard.press('Escape');
+
+    await expect(definition).toBeHidden();
+  });
+});
+
+test.describe('a desk', () => {
+  test.use(desktop);
+
+  test('a mouse resting on a term opens its definition, and leaving it closes it', async ({page}) => {
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+
+    await word.hover();
+    await expect(definition).toBeVisible();
+
+    await page.mouse.move(0, 0);
+    await expect(definition).toBeHidden();
+  });
+
+  test('the keyboard reaching a term opens its definition', async ({page}) => {
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+
+    await word.focus();
+    await pressTab(page, {backwards: true});
+    await expect(definition).toBeHidden();
+
+    await pressTab(page);
+
+    await expect(word).toBeFocused();
+    await expect(definition).toBeVisible();
+  });
+
+  test('Enter on a focused term leaves its definition open', async ({page}) => {
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+    await word.focus();
+    await expect(definition).toBeVisible();
+
+    await page.keyboard.press('Enter');
+
+    await expect(definition).toBeVisible();
+  });
+
+  test('Tab away from a term closes its definition', async ({page}) => {
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+    await word.focus();
+    await expect(definition).toBeVisible();
+
+    await pressTab(page);
+
+    await expect(definition).toBeHidden();
+  });
 });
