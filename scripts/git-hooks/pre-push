@@ -9,6 +9,9 @@ npx tsc -b
 npx vitest run --reporter=dot
 npm run build
 
-echo "pre-push: the journeys, on the stub stage..."
-npx playwright test --reporter=line
+# one engine at a time, as CI runs them: a local WebKit worker stalls on its 90th browser context
+for engine in chromium firefox webkit; do
+  echo "pre-push: the journeys in ${engine}, on the stub stage..."
+  npx playwright test --project="${engine}" --reporter=line
+done
 echo "pre-push: clean."
