@@ -1,6 +1,6 @@
 import type {Locator, Page} from '@playwright/test';
 
-export type DialGroup = {names: string; pillEdges: number};
+export type DialGroup = {names: string; pillEdges: number; unread: number};
 
 type Box = {x: number; y: number; width: number; height: number};
 
@@ -25,9 +25,10 @@ const groupOf = async (list: Locator, dials: Locator): Promise<DialGroup[]> => {
     const [pill, name] = [pills.find(part => inside(part, row)), shownNames.find(part => inside(part, row))];
     return pill && name ? [{pill, name}] : [];
   });
-  return rows.length > 1 ? [{
+  return rowBoxes.length > 1 ? [{
     names: [...new Set(rows.map(({name, pill}) => pill.y >= name.y + name.height - 1 ? 'above' : 'beside'))].join(' and '),
-    pillEdges: new Set(rows.map(({pill}) => Math.round(pill.x))).size
+    pillEdges: new Set(rows.map(({pill}) => Math.round(pill.x))).size,
+    unread: rowBoxes.length - rows.length
   }] : [];
 };
 
@@ -39,4 +40,4 @@ export const dialGroups = async (page: Page): Promise<DialGroup[]> => {
 };
 
 export const dialGroupsLaidOutTwoWays = async (page: Page): Promise<DialGroup[]> =>
-  (await dialGroups(page)).filter(({names, pillEdges}) => names.includes(' and ') || pillEdges > 1);
+  (await dialGroups(page)).filter(({names, pillEdges, unread}) => names.includes(' and ') || pillEdges > 1 || unread > 0);

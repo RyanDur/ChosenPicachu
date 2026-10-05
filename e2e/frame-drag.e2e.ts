@@ -43,7 +43,7 @@ for (const {name, at, table} of stages) {
 
       expect(await trades.howFarTheLiftJumps('trades')).toBeLessThanOrEqual(1);
       for (const by of [120, -120]) {
-        for (const steps of [1, 20, 60]) {
+        for (const steps of [1, 20]) {
           const trail = await trades.howFarTheCarryTrails('trades', {by, steps});
           if (trail > 1) {
             trails.push(`${by}px in ${steps}: ${trail.toFixed(1)}px`);

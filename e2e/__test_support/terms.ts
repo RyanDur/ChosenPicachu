@@ -26,7 +26,7 @@ export const definitionTapped = async (page: Page, story: string, term: string):
 export const timesShut = async (definition: Locator): Promise<() => Promise<number>> => {
   const shut = await definition.evaluateHandle(shown => {
     const times = {closed: 0};
-    shown.addEventListener('toggle', event => {
+    shown.addEventListener('beforetoggle', event => {
       if (event instanceof ToggleEvent && event.newState === 'closed') times.closed++;
     });
     return times;

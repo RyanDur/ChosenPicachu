@@ -51,10 +51,12 @@ test.describe('a phone, with a definition open', () => {
 
   test('a tap on the page closes it', async ({page}) => {
     const {definition} = await opened(page);
+    const shut = await timesShut(definition);
 
     await page.getByRole('heading', {level: 1}).tap();
 
     await expect(definition).toBeHidden();
+    expect(await shut(), 'times the definition shut on the tap').toBe(1);
   });
 
   test('Escape closes it', async ({page}) => {
