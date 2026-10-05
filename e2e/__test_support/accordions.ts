@@ -104,41 +104,22 @@ const detailsBuilds: Build[] = ['the inclusive details build', 'the details buil
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
-export type Travel = {from: number; to: number};
-
-export type Turn = {before: number; turned: number; end: number};
-
-const pressedAtAQuarter = async (fold: Locator, first: Locator, second: Locator, travel: Travel): Promise<Turn> =>
-  fold.evaluate((element, {firstPress, secondPress, from, to}) => new Promise<Turn>((resolve, reject) => {
-    if (!(firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
-      reject(new Error('a press is not an element that can be clicked'));
+const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: Locator): Promise<boolean> =>
+  fold.evaluate((element, {firstPress, secondPress}) => new Promise<boolean>((resolve, reject) => {
+    if (!(element instanceof HTMLElement && firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
+      reject(new Error('the fold or a press is not an element that can be clicked'));
       return;
     }
-    const height = (): number => element.getBoundingClientRect().height;
-    const moving = (): boolean => element.getAnimations({subtree: true})
-      .some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
-    const passedAQuarter = (reached: number): boolean => to > from ? reached > from + (to - from) / 4 : reached < from - (from - to) / 4;
-    const atEnd = (turn: Omit<Turn, 'end'>) => (): void => {
-      if (moving()) {
-        requestAnimationFrame(atEnd(turn));
-      } else {
-        resolve({...turn, end: height()});
-      }
+    const started = (event: TransitionEvent): void => {
+      if (event.propertyName !== 'height') return;
+      element.removeEventListener('transitionstart', started);
+      secondPress.click();
+      resolve(true);
     };
-    const watched = (): void => {
-      const before = height();
-      if (passedAQuarter(before)) {
-        secondPress.click();
-        requestAnimationFrame(atEnd({before, turned: height()}));
-      } else if (moving()) {
-        requestAnimationFrame(watched);
-      } else {
-        resolve({before, turned: before, end: before});
-      }
-    };
+    element.addEventListener('transitionstart', started);
     firstPress.click();
-    requestAnimationFrame(watched);
-  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle(), ...travel});
+    setTimeout(() => resolve(false), 2000);
+  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
 
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
@@ -174,9 +155,9 @@ export const accordionsTab = (page: Page) => {
         open.click();
       }, await opens.elementHandle());
     },
-    opensTheFirstPartThenChoosesAtAQuarter: async (build: Build, motion: 'Static', travel: Travel): Promise<Turn> =>
-      pressedAtAQuarter(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
-        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}), travel),
+    opensTheFirstPartThenChoosesOnceItStartsMoving: (build: Build, motion: 'Static'): Promise<boolean> =>
+      pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion})),
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
   };

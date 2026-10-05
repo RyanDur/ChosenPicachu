@@ -220,20 +220,20 @@ test.describe('a desktop', () => {
   test.use(desktop);
 
   for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-    for (const spot of ['start', 'middle', 'end'] as const) {
-      test(`a press at the ${spot} of a bar of ${build} opens its fold`, async ({page}) => {
+    test(`a press at the start, middle or end of a bar of ${build} opens its fold`, async ({page}) => {
+      for (const spot of ['start', 'middle', 'end'] as const) {
         await page.goto(showing(build));
         const part = accordionsTab(page).firstPartOf(build);
         await part.fold.scrollIntoViewIfNeeded();
         const bar = await part.fold.boundingBox();
         if (bar === null) throw new Error(`${build} shows no bar`);
-        await expect.poll(part.isOpen).toBe(false);
+        await expect.poll(part.isOpen, `shut before the press at the ${spot}`).toBe(false);
 
         await page.mouse.click(bar.x + {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot], bar.y + Math.min(bar.height, 40) / 2);
 
-        await expect.poll(part.isOpen).toBe(true);
-      });
-    }
+        await expect.poll(part.isOpen, `opened by the press at the ${spot}`).toBe(true);
+      }
+    });
   }
 });
 

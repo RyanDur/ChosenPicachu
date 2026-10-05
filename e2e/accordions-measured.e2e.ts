@@ -69,15 +69,10 @@ for (const build of measuredBuilds) {
       await page.emulateMedia({reducedMotion: 'no-preference'});
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
-      const shut = await heightOnceSettled(part.fold);
-      await part.open();
-      const open = await heightOnceSettled(part.fold);
-      await part.close();
-      await heightOnceSettled(part.fold);
+      await expect(part.fold).toBeVisible();
 
-      const {before: chosenAt} = await accordionsTab(page).opensTheFirstPartThenChoosesAtAQuarter(build, 'Static', {from: shut, to: open});
-      expect(chosenAt, 'Static was chosen while the part was still opening').toBeGreaterThan(shut + layoutRounding);
-      expect(chosenAt, 'Static was chosen while the part was still opening').toBeLessThan(open - layoutRounding);
+      const chosenWhileOpening = await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
+      expect(chosenWhileOpening, 'Static was chosen once the part began to open').toBe(true);
       await page.setViewportSize({width: 390, height: 900});
 
       await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);

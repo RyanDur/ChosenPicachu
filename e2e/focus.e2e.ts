@@ -1,16 +1,16 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, feedbackOn, galleryPage, tabsTo, usersPage} from './__test_support';
+import {desktop, feedbackOn, galleryPage, homePage, tabsTo, usersPage} from './__test_support';
 
 test.use(desktop);
 
-const homeDoor = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
+const homeDoor = (page: Page) => homePage(page).doorFolds.first();
 
 for (const {control, at, find, before} of [
   {control: 'Feedback in the rail', at: '', find: (page: Page) => feedbackOn(page).open},
   {control: 'the gallery’s Go', at: 'gallery/?page=1&size=8&tab=aic', find: (page: Page) => galleryPage(page).go},
   {control: 'the gallery’s reset search', at: 'gallery/?page=1&size=8&tab=aic', find: (page: Page) => galleryPage(page).resetSearch},
   {control: 'Same as Home on the users form', at: 'users/', find: (page: Page) => usersPage(page).sameAsHome},
-  {control: 'a link that starts a line in an open home page door', at: '', find: (page: Page) => homeDoor(page).getByRole('link', {name: 'progress', exact: true}),
+  {control: 'a link in an open home page door', at: '', find: (page: Page) => homeDoor(page).getByRole('link', {name: 'progress', exact: true}),
     before: (page: Page) => homeDoor(page).getByText('how I organize it', {exact: true}).click()}
 ]) {
   test(`the keyboard reaches ${control}`, async ({page}) => {
@@ -18,7 +18,8 @@ for (const {control, at, find, before} of [
     await before?.(page);
     await expect(find(page)).toBeVisible();
 
-    expect(await tabsTo(page, find(page))).toBe(true);
+    await tabsTo(page, find(page));
+
     await expect(find(page)).toBeFocused();
   });
 }
