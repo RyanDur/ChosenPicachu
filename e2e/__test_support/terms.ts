@@ -22,3 +22,14 @@ export const definitionTapped = async (page: Page, story: string, term: string):
     return {width, left, right: document.documentElement.clientWidth - right, overTheWord};
   }, wordBox);
 };
+
+export const timesShut = async (definition: Locator): Promise<() => Promise<number>> => {
+  const shut = await definition.evaluateHandle(shown => {
+    const times = {closed: 0};
+    shown.addEventListener('toggle', event => {
+      if (event instanceof ToggleEvent && event.newState === 'closed') times.closed++;
+    });
+    return times;
+  });
+  return () => shut.evaluate(times => times.closed);
+};

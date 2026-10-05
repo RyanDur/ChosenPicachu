@@ -22,7 +22,7 @@ export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
-export {definedTerm, definitionTapped, type DefinitionFit} from './terms';
+export {definedTerm, definitionTapped, timesShut, type DefinitionFit} from './terms';
 export {reachesAcross} from './reach';
 export {designSketch} from './design-sketch';
 export {pageScrollsSideways, piecesPastTheirParts} from './fit';
