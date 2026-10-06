@@ -1,4 +1,4 @@
-import {TestApp} from '@__test_support/TestApp';
+import {TestApp, pressBack, testRouter} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -388,7 +388,8 @@ describe('the tables demo', () => {
     };
     const feed = await listeningFeed();
     try {
-      render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
+      const router = testRouter(`${demosAt('?tab=tables')}#station-5`);
+      render(<TestApp router={router} feed={feed}/>);
       await feedIsSubscribed(feed);
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
       await waitFor(() => expect(brought).toContain('station-5'));
@@ -396,7 +397,7 @@ describe('the tables demo', () => {
 
       await userEvent.click(within(screen.getByRole('navigation', {name: 'demos'})).getByRole('link', {name: 'Z-index'}));
       await screen.findByRole('region', {name: 'Z-index'});
-      await userEvent.click(screen.getByRole('button', {name: 'browser back'}));
+      pressBack(router);
 
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
       expect(brought).toHaveLength(landings);

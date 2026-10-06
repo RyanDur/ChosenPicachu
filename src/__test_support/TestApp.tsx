@@ -11,7 +11,7 @@ import {
   useLayoutEffect,
   useState
 } from 'react';
-import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation, useNavigate} from 'react-router';
+import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {App} from '../App';
 import {router} from '../router';
 import {Env, env} from '@env';
@@ -21,6 +21,7 @@ type Props = PropsWithChildren<{
   readonly at?: string;
   readonly feed?: Feed;
   readonly env?: Partial<Env>;
+  readonly router?: TestRouter;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
@@ -28,14 +29,12 @@ const Reported = createContext<readonly string[]>([]);
 const Probes: FC = () => {
   const {pathname, search, hash} = useLocation();
   const errors = useContext(Reported);
-  const navigate = useNavigate();
   useLayoutEffect(() => window.location.replace(`${pathname}${search}${hash}`), [pathname, search, hash]);
 
   return <>
     <Outlet/>
     <output aria-label="url path">{pathname}</output>
     <output aria-label="url search">{search}</output>
-    <button type="button" onClick={() => void navigate(-1)}>browser back</button>
     <ul aria-label="errors reported">{errors.map((error, at) => <li key={`${at} ${error}`}>{error}</li>)}</ul>
   </>;
 };
@@ -57,17 +56,26 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, errorElement, handle}): RouteObject[] => [{path, errorElement, handle, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
-  const [memory] = useState(() => createMemoryRouter([{
-    id: 'probes',
-    element: <Probes/>,
-    errorElement: <Probes/>,
-    children: [has(children) ? {
-      ...router,
-      id: 'root',
-      children: [...routesAt(at, children), {path: '*', element: null}]
-    } : router]
-  }], {initialEntries: [at]}));
+export const testRouter = (at = '/', children?: ReactNode) => createMemoryRouter([{
+  id: 'probes',
+  element: <Probes/>,
+  errorElement: <Probes/>,
+  children: [has(children) ? {
+    ...router,
+    id: 'root',
+    children: [...routesAt(at, children), {path: '*', element: null}]
+  } : router]
+}], {initialEntries: [at]});
+
+type TestRouter = ReturnType<typeof testRouter>;
+
+// the browser delivers Back as a popstate task, after the code that pressed it
+export const pressBack = (pressedIn: TestRouter): void => {
+  setTimeout(() => void pressedIn.navigate(-1));
+};
+
+export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, router: injected, children}) => {
+  const [memory] = useState(() => injected ?? testRouter(at, children));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
     startTransition(() => setReported(errors => [...errors, described(error)]));
