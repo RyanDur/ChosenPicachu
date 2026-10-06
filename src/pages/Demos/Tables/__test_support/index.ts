@@ -1,1 +1,1 @@
-export {tableControls} from './controls';
+export {tableControls, untilTheTablesTabRenders} from './controls';

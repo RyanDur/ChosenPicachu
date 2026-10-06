@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {tableControls} from '@pages/Demos/Tables/__test_support';
+import {tableControls, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
@@ -147,7 +147,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(await screen.findByRole('group', {name: 'settings'}, {timeout: 5000})).toHaveAttribute('open');
+    expect(await screen.findByRole('group', {name: 'settings'}, untilTheTablesTabRenders)).toHaveAttribute('open');
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await tableControls.pressSettings();
