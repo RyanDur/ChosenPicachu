@@ -21,7 +21,6 @@ type Props = PropsWithChildren<{
   readonly at?: string;
   readonly feed?: Feed;
   readonly env?: Partial<Env>;
-  readonly router?: TestRouter;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
@@ -56,26 +55,17 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, errorElement, handle}): RouteObject[] => [{path, errorElement, handle, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const testRouter = (at = '/', children?: ReactNode) => createMemoryRouter([{
-  id: 'probes',
-  element: <Probes/>,
-  errorElement: <Probes/>,
-  children: [has(children) ? {
-    ...router,
-    id: 'root',
-    children: [...routesAt(at, children), {path: '*', element: null}]
-  } : router]
-}], {initialEntries: [at]});
-
-type TestRouter = ReturnType<typeof testRouter>;
-
-// the browser delivers Back as a popstate task, after the code that pressed it
-export const pressBack = (pressedIn: TestRouter): void => {
-  setTimeout(() => void pressedIn.navigate(-1));
-};
-
-export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, router: injected, children}) => {
-  const [memory] = useState(() => injected ?? testRouter(at, children));
+export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
+  const [memory] = useState(() => createMemoryRouter([{
+    id: 'probes',
+    element: <Probes/>,
+    errorElement: <Probes/>,
+    children: [has(children) ? {
+      ...router,
+      id: 'root',
+      children: [...routesAt(at, children), {path: '*', element: null}]
+    } : router]
+  }], {initialEntries: [at]}));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
     startTransition(() => setReported(errors => [...errors, described(error)]));

@@ -1,4 +1,4 @@
-import {TestApp, pressBack, testRouter} from '@__test_support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -376,31 +376,6 @@ describe('the tables demo', () => {
 
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
       expect(brought).toContain('station-5');
-    } finally {
-      Element.prototype.scrollIntoView = () => undefined;
-    }
-  });
-
-  test('Back to the tables tab from another tab leaves the scroll to the browser', async () => {
-    const brought: string[] = [];
-    Element.prototype.scrollIntoView = function (this: Element) {
-      brought.push(this.id);
-    };
-    const feed = await listeningFeed();
-    try {
-      const router = testRouter(`${demosAt('?tab=tables')}#station-5`);
-      render(<TestApp router={router} feed={feed}/>);
-      await feedIsSubscribed(feed);
-      await screen.findByRole('heading', {name: 'Slice the design into stories'});
-      await waitFor(() => expect(brought).toContain('station-5'));
-      const landings = brought.length;
-
-      await userEvent.click(within(screen.getByRole('navigation', {name: 'demos'})).getByRole('link', {name: 'Z-index'}));
-      await screen.findByRole('region', {name: 'Z-index'});
-      pressBack(router);
-
-      await screen.findByRole('heading', {name: 'Slice the design into stories'}, {timeout: 5000});
-      expect(brought).toHaveLength(landings);
     } finally {
       Element.prototype.scrollIntoView = () => undefined;
     }

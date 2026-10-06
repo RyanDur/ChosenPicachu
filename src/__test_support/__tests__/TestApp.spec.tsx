@@ -2,7 +2,7 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Route} from 'react-router';
 import {Tabs} from '@components/Tabs';
-import {TestApp, pressBack, testRouter} from '../TestApp';
+import {TestApp} from '../TestApp';
 
 const doors = [{display: 'First', param: 'first'}, {display: 'Second', param: 'second'}];
 
@@ -24,17 +24,6 @@ describe('the test app', () => {
     await userEvent.click(screen.getByRole('link', {name: 'Second'}));
 
     await waitFor(() => expect(window.location).toBeAt('/somewhere?tab=second'));
-  });
-
-  test("the browser's Back returns the app to the address it came from", async () => {
-    const router = testRouter('/somewhere#here', <Tabs label="doors" values={doors}/>);
-    render(<TestApp router={router}/>);
-    await userEvent.click(screen.getByRole('link', {name: 'Second'}));
-    await waitFor(() => expect(window.location).toBeAt('/somewhere?tab=second'));
-
-    pressBack(router);
-
-    await waitFor(() => expect(window.location).toBeAt('/somewhere#here'));
   });
 
   test('the probes outlive an error no page catches', async () => {
