@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
 import {NavigationType, Outlet, useLocation, useMatches, useNavigationType} from 'react-router';
@@ -6,7 +7,7 @@ import {SideNav} from '@pages/BasePage/SideNav';
 import {Feedback} from '@components/Feedback';
 import {PageNameProvider} from '@components/PageName';
 import {isRegions, Regions} from '@pages/regions';
-import {gotoTopOfPage} from '@components/scroll';
+import {gotoTopOfPage, gotoTopOfPane} from '@components/scroll';
 import {Paths} from '@pages/Paths';
 import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
@@ -23,12 +24,16 @@ const NoRoomHeader = () => <Header title="No such room"/>;
 const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {pathname, hash} = useLocation();
   const navigation = useNavigationType();
-  const [place, setPlace] = useState({pathname, hash, startsAtTheTop: false});
-  if (place.pathname !== pathname || place.hash !== hash) {
-    setPlace({pathname, hash, startsAtTheTop: hash === '' && navigation !== NavigationType.Pop});
+  const [place, setPlace] = useState({pathname, hash, startsAtTheTop: false, paneStartsAtTheTop: false});
+  const pageChanged = place.pathname !== pathname;
+  if (pageChanged || place.hash !== hash) {
+    const traversed = navigation === NavigationType.Pop;
+    setPlace({pathname, hash, startsAtTheTop: hash === '' && not(traversed), paneStartsAtTheTop: pageChanged && traversed});
   }
   useEffect(() => {
     if (place.startsAtTheTop) gotoTopOfPage();
+    // the browser restores the document's scroll on Back and Forward, never a pane's
+    else if (place.paneStartsAtTheTop) gotoTopOfPane();
   }, [place]);
   const regions = useMatches()
     .map(match => match.handle)
