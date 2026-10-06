@@ -21,7 +21,7 @@ export const useArrival = () => {
   const opening = useOpeningFragment();
   useEffect(() => {
     if (opening.landed) return;
-    opening.land();
+    opening.onOpeningReached();
     landOnceItsFoldsHaveOpened(hash);
   }, [opening, hash]);
   useEffect(() => {
