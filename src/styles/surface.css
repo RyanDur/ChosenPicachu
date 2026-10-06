@@ -58,6 +58,10 @@
 .hung { box-shadow: var(--shadow-far) var(--shadow), var(--shadow-near) var(--dark-shadow); }
 .backdrop { background: var(--backdrop); }
 
+.backdrop-below { box-shadow: 0 var(--base) 0 var(--backdrop); }
+
+.backdrop-above { box-shadow: 0 calc(var(--base) * -1) 0 var(--backdrop); }
+
 .pressable {
   &:hover,
   &:focus {

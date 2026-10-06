@@ -98,7 +98,7 @@ describe('leaving a page', () => {
 
     await userEvent.click(site.signpost(/Start where the demos start/));
 
-    await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('main')));
+    await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
   });
 
   test('arriving at a place on the page keeps that place', async () => {

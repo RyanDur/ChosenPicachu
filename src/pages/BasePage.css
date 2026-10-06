@@ -346,3 +346,92 @@
     }
   }
 }
+
+@property --main-reach {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --header-block {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@media (width > 1100px) and (not (pointer: coarse)), (601px <= width <= 1100px) and (height > 600px) and (not (pointer: coarse)) {
+  :root {
+    --frame-reach: var(--main-reach);
+
+    scroll-padding-block-start: calc(var(--frame-reach) + var(--base-x-2));
+  }
+
+  :root:has(dialog:modal) {
+    overflow: hidden;
+  }
+
+  #root {
+    height: auto;
+    min-height: 100dvh;
+
+    .app-header,
+    .rail,
+    .filter {
+      position: sticky;
+      top: 0;
+    }
+
+    .app-header {
+      z-index: 2;
+    }
+
+    .app-main {
+      overflow: visible;
+      min-width: 0;
+    }
+
+    .app-footer {
+      z-index: 2;
+    }
+  }
+}
+
+@media (width > 1100px) and (not (pointer: coarse)) {
+  #root {
+    .rail {
+      grid-area: nav / nav / feedback / feedback;
+      align-self: start;
+      block-size: 100dvh;
+      display: flex;
+      flex-direction: column;
+      gap: var(--base);
+    }
+
+    .side-nav {
+      flex: 1;
+    }
+
+    .filter {
+      align-self: start;
+      block-size: 100dvh;
+    }
+  }
+
+  #root:has(.app-footer) .feedback-item {
+    block-size: var(--base-x-12);
+  }
+}
+
+@media (601px <= width <= 1100px) and (height > 600px) and (not (pointer: coarse)) {
+  #root {
+    .rail {
+      top: calc(var(--header-block) + var(--base));
+      z-index: 2;
+    }
+
+    .filter {
+      top: calc(var(--header-block) + var(--base-x-6) + var(--base) * 2);
+      z-index: 2;
+    }
+  }
+}

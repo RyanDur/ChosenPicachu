@@ -4,7 +4,7 @@
 
 .tabs {
   position: sticky;
-  top: 0;
+  top: var(--frame-reach, 0);
   z-index: 1;
   width: 100%;
   overflow-x: auto;
@@ -75,5 +75,5 @@
 }
 
 :is(:root, .app-main):has(.tabs) {
-  scroll-padding-block-start: calc(var(--tab-bar-reach) + var(--base-x-2));
+  scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
 }

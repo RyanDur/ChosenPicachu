@@ -1,4 +1,4 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 
 export const documentScrollY = (page: Page): Promise<number> => page.evaluate(() => window.scrollY);
 
@@ -34,4 +34,18 @@ export const countScriptScrolls = async (page: Page): Promise<() => Promise<numb
     const scrolls: unknown = Reflect.get(globalThis, 'scriptScrolls');
     return typeof scrolls === 'function' ? scrolls() : Number.NaN;
   }));
+};
+
+export const settledScrollY = async (page: Page): Promise<number> => {
+  await page.waitForFunction(() => new Promise<boolean>(settled => {
+    const before = window.scrollY;
+    setTimeout(() => settled(window.scrollY === before), 300);
+  }));
+  return documentScrollY(page);
+};
+
+export const clickWhereItIs = async (page: Page, target: Locator): Promise<void> => {
+  const box = await target.boundingBox();
+  if (box === null) throw new Error('nothing on screen to click');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 };

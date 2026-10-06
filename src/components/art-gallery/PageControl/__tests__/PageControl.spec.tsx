@@ -19,7 +19,7 @@ describe('The page controls', () => {
 
       await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3'));
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(3);
-      expect(landings).toContainEqual(scrolling.atTheTop('main'));
+      expect(landings).toContainEqual(scrolling.atTheTop('page'));
     });
 
     test('after going to a page, the field says which page it is', async () => {
