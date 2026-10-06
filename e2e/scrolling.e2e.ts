@@ -111,8 +111,11 @@ for (const {reader, viewport} of desks) {
       const step = page.getByRole('heading', {name: 'The trader can watch the market live, in windows'});
       await expect(step).toBeInViewport();
 
-      const tabBar = await page.getByRole('navigation', {name: 'demos'}).boundingBox();
-      await expect.poll(async () => (await step.boundingBox())?.y ?? 0).toBeGreaterThanOrEqual((tabBar?.y ?? 0) + (tabBar?.height ?? 0));
+      const tabBar = page.getByRole('navigation', {name: 'demos'});
+      await expect(tabBar).toBeVisible();
+      const bar = await tabBar.boundingBox();
+      if (bar === null) throw new Error('the tab bar has no box');
+      await expect.poll(async () => (await step.boundingBox())?.y).toBeGreaterThanOrEqual(bar.y + bar.height);
     });
 
     test('an open Feedback dialog holds the page still', async ({page}) => {

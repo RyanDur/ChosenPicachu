@@ -29,7 +29,6 @@ describe('Gallery Navigation', () => {
 
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
     expect(landings).toContainEqual(scrolling.atTheTop('page'));
-    expect(landings).toContainEqual(scrolling.atTheTop('page'));
     expect(landings.filter(({where}) => where === 'elsewhere')).toEqual([]);
   });
 

@@ -154,6 +154,27 @@ test.describe('a desktop window made narrow', () => {
   });
 });
 
+for (const {reader, viewport} of [
+  {reader: 'a desktop', viewport: desktop.viewport},
+  {reader: 'an iPad-sized window with a mouse', viewport: iPadSideways.viewport},
+  {reader: 'an upright iPad-sized window with a mouse', viewport: iPadUpright.viewport}
+]) {
+  test.describe(reader, () => {
+    test.use({viewport});
+
+    test('keeps the gallery settings and the page links in view while the wall scrolls', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      await gallery.wall.last().scrollIntoViewIfNeeded();
+
+      await expect(gallery.settingsPanel).toBeInViewport();
+      await expect(gallery.nextPage).toBeInViewport();
+    });
+  });
+}
+
 test.describe('a visitor at a desk', () => {
   test.use(desktop);
 

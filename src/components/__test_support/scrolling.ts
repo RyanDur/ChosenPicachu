@@ -1,9 +1,8 @@
 import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
-import {screen} from '@testing-library/react';
 import {onTestFinished, vi} from 'vitest';
 
-export type Landing = {where: 'page' | 'main' | 'elsewhere'; x: number; y: number};
+export type Landing = {where: 'page' | 'elsewhere'; x: number; y: number};
 
 const options = schema.object({required: {left: schema.number, top: schema.number}});
 
@@ -12,8 +11,7 @@ const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
     ? [first, second]
     : maybe(options.decode(first)).map(({left, top}): [number, number] => [left, top]).orElse(undefined);
 
-const whereIs = (scrolled: unknown): Landing['where'] =>
-  scrolled === window ? 'page' : scrolled === screen.queryByRole('main') ? 'main' : 'elsewhere';
+const whereIs = (scrolled: unknown): Landing['where'] => scrolled === window ? 'page' : 'elsewhere';
 
 const recordLandings = (): readonly Landing[] => {
   const landings: Landing[] = [];

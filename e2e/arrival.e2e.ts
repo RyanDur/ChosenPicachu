@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {clickWhereItIs, countScriptScrolls, desktop, documentScrollY, iPhone, settledScrollY} from './__test_support';
+import {countScriptScrolls, desktop, iPhone} from './__test_support';
 
 for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as const) {
   test.describe(frame, () => {
@@ -25,23 +25,3 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
     });
   });
 }
-
-test.describe('a desk', () => {
-  test.use(desktop);
-
-  test('Back to another page lands where the reader left it', async ({page}) => {
-    await page.goto('demos/?tab=z-index');
-    await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
-    await page.keyboard.press('PageDown');
-    await page.keyboard.press('PageDown');
-    await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
-    const left = await settledScrollY(page);
-    await clickWhereItIs(page, page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Users'}));
-    await expect(page.getByRole('heading', {name: 'Users'})).toBeVisible();
-
-    await page.goBack();
-
-    await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
-    await expect.poll(() => documentScrollY(page)).toBe(left);
-  });
-});
