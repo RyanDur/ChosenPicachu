@@ -1,4 +1,3 @@
-import {not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
 import {NavigationType, Outlet, useLocation, useMatches, useNavigationType} from 'react-router';
@@ -21,20 +20,29 @@ const NoHeader = () => null;
 const ClosedRoomHeader = () => <Header title="Closed room"/>;
 const NoRoomHeader = () => <Header title="No such room"/>;
 
+type Arrival = 'left alone' | 'at the top of the page' | 'at the top of the pane';
+
+const arrivalOf = (pageChanged: boolean, hash: string, navigation: NavigationType): Arrival => {
+  if (navigation === NavigationType.Pop) return pageChanged ? 'at the top of the pane' : 'left alone';
+  return hash === '' ? 'at the top of the page' : 'left alone';
+};
+
+const arrive: Record<Arrival, () => void> = {
+  'left alone': () => undefined,
+  'at the top of the page': gotoTopOfPage,
+  // the browser restores the document's scroll on Back and Forward, never a pane's
+  'at the top of the pane': gotoTopOfPane
+};
+
 const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {pathname, hash} = useLocation();
   const navigation = useNavigationType();
-  const [place, setPlace] = useState({pathname, hash, startsAtTheTop: false, paneStartsAtTheTop: false});
+  const [place, setPlace] = useState<{pathname: string; hash: string; arrival: Arrival}>({pathname, hash, arrival: 'left alone'});
   const pageChanged = place.pathname !== pathname;
   if (pageChanged || place.hash !== hash) {
-    const traversed = navigation === NavigationType.Pop;
-    setPlace({pathname, hash, startsAtTheTop: hash === '' && not(traversed), paneStartsAtTheTop: pageChanged && traversed});
+    setPlace({pathname, hash, arrival: arrivalOf(pageChanged, hash, navigation)});
   }
-  useEffect(() => {
-    if (place.startsAtTheTop) gotoTopOfPage();
-    // the browser restores the document's scroll on Back and Forward, never a pane's
-    else if (place.paneStartsAtTheTop) gotoTopOfPane();
-  }, [place]);
+  useEffect(() => arrive[place.arrival](), [place]);
   const regions = useMatches()
     .map(match => match.handle)
     .filter(isRegions)
