@@ -1,7 +1,7 @@
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
-import {Outlet, useLocation, useMatches} from 'react-router';
-import {FC, Fragment, useEffect} from 'react';
+import {NavigationType, Outlet, useLocation, useMatches, useNavigationType} from 'react-router';
+import {FC, Fragment, useEffect, useState} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {Feedback} from '@components/Feedback';
 import {PageNameProvider} from '@components/PageName';
@@ -22,11 +22,14 @@ const NoRoomHeader = () => <Header title="No such room"/>;
 
 const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {pathname, hash} = useLocation();
+  const navigation = useNavigationType();
+  const [place, setPlace] = useState({pathname, hash, startsAtTheTop: false});
+  if (place.pathname !== pathname || place.hash !== hash) {
+    setPlace({pathname, hash, startsAtTheTop: hash === '' && navigation !== NavigationType.Pop});
+  }
   useEffect(() => {
-    if (hash === '') {
-      gotoTopOfPage();
-    }
-  }, [pathname, hash]);
+    if (place.startsAtTheTop) gotoTopOfPage();
+  }, [place]);
   const regions = useMatches()
     .map(match => match.handle)
     .filter(isRegions)
