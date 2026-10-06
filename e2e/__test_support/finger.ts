@@ -1,6 +1,8 @@
 import type {Locator, Page} from '@playwright/test';
 
-export const fingertipMiss = 21;
+const fingerReach = 44;
+
+export const fingertipMiss = fingerReach / 2 - 1;
 
 export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => {
   await aimedAt.scrollIntoViewIfNeeded();
@@ -8,8 +10,6 @@ export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => 
   if (box === null) throw new Error('nothing to aim at');
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2 + fingertipMiss);
 };
-
-const fingerReach = 44;
 
 export const shortOfAFinger = async (controls: Locator[]): Promise<string[]> => {
   const measured = await Promise.all(controls.map(async control => ({
