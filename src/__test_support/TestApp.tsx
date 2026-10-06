@@ -11,7 +11,7 @@ import {
   useLayoutEffect,
   useState
 } from 'react';
-import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
+import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation, useNavigate} from 'react-router';
 import {App} from '../App';
 import {router} from '../router';
 import {Env, env} from '@env';
@@ -28,12 +28,14 @@ const Reported = createContext<readonly string[]>([]);
 const Probes: FC = () => {
   const {pathname, search, hash} = useLocation();
   const errors = useContext(Reported);
+  const navigate = useNavigate();
   useLayoutEffect(() => window.location.replace(`${pathname}${search}${hash}`), [pathname, search, hash]);
 
   return <>
     <Outlet/>
     <output aria-label="url path">{pathname}</output>
     <output aria-label="url search">{search}</output>
+    <button type="button" onClick={() => void navigate(-1)}>browser back</button>
     <ul aria-label="errors reported">{errors.map((error, at) => <li key={`${at} ${error}`}>{error}</li>)}</ul>
   </>;
 };

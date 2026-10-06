@@ -381,6 +381,30 @@ describe('the tables demo', () => {
     }
   });
 
+  test('Back to the tables tab from another tab leaves the scroll to the browser', async () => {
+    const brought: string[] = [];
+    Element.prototype.scrollIntoView = function (this: Element) {
+      brought.push(this.id);
+    };
+    const feed = await listeningFeed();
+    try {
+      render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
+      await feedIsSubscribed(feed);
+      await screen.findByRole('heading', {name: 'Slice the design into stories'});
+      await waitFor(() => expect(brought).toContain('station-5'));
+      const landings = brought.length;
+
+      await userEvent.click(within(screen.getByRole('navigation', {name: 'demos'})).getByRole('link', {name: 'Z-index'}));
+      await screen.findByRole('region', {name: 'Z-index'});
+      await userEvent.click(screen.getByRole('button', {name: 'browser back'}));
+
+      await screen.findByRole('heading', {name: 'Slice the design into stories'});
+      expect(brought).toHaveLength(landings);
+    } finally {
+      Element.prototype.scrollIntoView = () => undefined;
+    }
+  });
+
   test('the keyboard track teaches the same sort by other hands', async () => {
     const feed = await listeningFeed();
 
