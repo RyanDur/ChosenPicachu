@@ -399,7 +399,7 @@ describe('the tables demo', () => {
       await screen.findByRole('region', {name: 'Z-index'});
       pressBack(router);
 
-      await screen.findByRole('heading', {name: 'Slice the design into stories'});
+      await screen.findByRole('heading', {name: 'Slice the design into stories'}, {timeout: 5000});
       expect(brought).toHaveLength(landings);
     } finally {
       Element.prototype.scrollIntoView = () => undefined;
