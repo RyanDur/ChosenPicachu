@@ -27,6 +27,7 @@
   opacity: 0.8;
 }
 
+/* registered, so every engine computes the column to pixels before dividing */
 @property --drawing-column {
   syntax: '<length>';
   inherits: true;

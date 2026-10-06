@@ -114,6 +114,7 @@ h1, h2, h3, h4, h5, h6, p {
   interpolate-size: allow-keywords;
 }
 
+/* clip, not hidden: a hidden box is a scroll container, so scrolling to a step inside an opening fold would scroll the fold */
 details::details-content {
   block-size: 0;
   overflow-x: visible;
