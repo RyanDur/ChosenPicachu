@@ -15,8 +15,19 @@ export const countScriptScrolls = async (page: Page): Promise<() => Promise<numb
         return Reflect.apply(original, this, args);
       });
     };
+    const countedWhenSet = (property: string): void => {
+      const setting = Object.getOwnPropertyDescriptor(Element.prototype, property);
+      if (setting?.set) Object.defineProperty(Element.prototype, property, {
+        ...setting,
+        set(this: Element, value: number): void {
+          scrolls += 1;
+          setting.set?.call(this, value);
+        }
+      });
+    };
     ['scrollIntoView', 'scrollTo', 'scroll', 'scrollBy'].forEach(method => counted(Element.prototype, method));
     ['scrollTo', 'scroll', 'scrollBy'].forEach(method => counted(window, method));
+    ['scrollTop', 'scrollLeft'].forEach(countedWhenSet);
   });
   return async () => Number(await page.evaluate(async () => {
     await new Promise(settled => requestAnimationFrame(() => requestAnimationFrame(settled)));
