@@ -1,14 +1,14 @@
 import {createContext, FC, PropsWithChildren, useContext, useState} from 'react';
 
-type OpeningFragment = {readonly landed: boolean; readonly onOpeningReached: () => void};
+type OpeningFragment = {readonly openingReached: boolean; readonly onOpeningReached: () => void};
 
-const noProviderMounted: OpeningFragment = {landed: false, onOpeningReached: () => undefined};
+const noProviderMounted: OpeningFragment = {openingReached: false, onOpeningReached: () => undefined};
 
 const OpeningFragmentContext = createContext<OpeningFragment>(noProviderMounted);
 
 export const OpeningFragmentProvider: FC<PropsWithChildren> = ({children}) => {
-  const [landed, setLanded] = useState(false);
-  return <OpeningFragmentContext.Provider value={{landed, onOpeningReached: () => setLanded(true)}}>
+  const [openingReached, setOpeningReached] = useState(false);
+  return <OpeningFragmentContext.Provider value={{openingReached, onOpeningReached: () => setOpeningReached(true)}}>
     {children}
   </OpeningFragmentContext.Provider>;
 };

@@ -20,7 +20,7 @@ export const useArrival = () => {
   const navigation = useNavigationType();
   const opening = useOpeningFragment();
   useEffect(() => {
-    if (opening.landed) return;
+    if (opening.openingReached) return;
     opening.onOpeningReached();
     landOnceItsFoldsHaveOpened(hash);
   }, [opening, hash]);
