@@ -4,7 +4,7 @@ import {maybe} from '@ryandur/sand';
 const publishFrameMeasures = (): void => {
   maybe(document.querySelector('main')).map(main =>
     document.documentElement.style.setProperty('--main-reach', `${main.offsetTop}px`));
-  maybe(document.querySelector<HTMLElement>('.app-header')).map(header =>
+  maybe(document.getElementById('app-header')).map(header =>
     document.documentElement.style.setProperty('--header-block', `${header.offsetHeight}px`));
 };
 

@@ -1,5 +1,5 @@
 #root {
-  height: 100dvh;
+  min-height: 100dvh;
   width: 100%;
   display: grid;
   gap: var(--base);
@@ -60,7 +60,6 @@
 
   .app-main {
     grid-area: main;
-    overflow: auto;
     min-height: 0;
     display: flex;
     align-items: center;
@@ -182,8 +181,6 @@
 
     .app-main {
       padding: var(--base);
-      overflow: auto;
-      height: auto;
     }
 
     .filter {
@@ -286,18 +283,8 @@
 }
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px), (pointer: coarse) {
-  #root {
-    height: auto;
-    min-height: 100dvh;
-
-    .app-main {
-      overflow: visible;
-      height: auto;
-    }
-
-    .side-nav {
-      overflow: visible;
-    }
+  #root .side-nav {
+    overflow: visible;
   }
 }
 
@@ -366,14 +353,11 @@
     scroll-padding-block-start: calc(var(--frame-reach) + var(--base-x-2));
   }
 
-  :root:has(dialog:modal) {
+  :root:has(:modal) {
     overflow: hidden;
   }
 
   #root {
-    height: auto;
-    min-height: 100dvh;
-
     .app-header,
     .rail,
     .filter {
@@ -386,7 +370,6 @@
     }
 
     .app-main {
-      overflow: visible;
       min-width: 0;
     }
 
