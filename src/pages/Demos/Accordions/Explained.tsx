@@ -66,7 +66,7 @@ const typeReadings: Record<FoldType, string> = {
 const motionReadings: Record<FoldMotion, string> = {
   reveal: 'The text is uncovered from its first line down.',
   drawer: 'The text slides down from under its bar.',
-  static: 'The fold opens in one frame, with nothing moving.'
+  static: 'The fold opens at once, with nothing moving.'
 };
 
 type Props = {
@@ -305,7 +305,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ~ combinator picks the label after it, and the corner turns to 135 degrees and points
                   down. The turn is a transition, which runs whenever the value changes.
                 {motion === 'static'
-                  ? ' With static there is none, so the corner turns in a single frame.'
+                  ? ' With static there is none, so the corner turns at once.'
                   : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
                 {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
                   so a turn is cheap. The bar has a set height and side padding, so every bar is the same
@@ -352,7 +352,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
-                  static: ' With static, nothing moves: the panel is at its full height or at 0, in a single frame.'
+                  static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
@@ -455,7 +455,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 {{
                   reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
                   drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide.',
-                  static: ' With static, the part a details hides has no transition, so the fold opens in a single frame, in every browser.'
+                  static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&::details-content {'), gap,
@@ -567,7 +567,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 {{
                   reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out, which starts gently and settles. The text shows from its top down as the row grows.',
                   drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
-                  static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes in a single frame.'
+                  static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes at once.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
               </li>
@@ -576,7 +576,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
                   around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom.
                   Then <code>align-self: end</code> sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
-                  on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
+                  on the fold’s edge the whole way down, and the paragraph’s overflow hides the text above the
                   fold. One transition moves it all, so no part can fall behind another. It answers no
                   limit. It is there to show what grid alignment does on its own.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
@@ -612,10 +612,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
         </li>
         <li className="run">
-          <p className="paragraph">A transition with no duration never runs, so a change lands in the
-            frame it is made, the next picture the browser draws. One that ran at all, even for an
-            instant, would show the old state for a frame, and a fold’s text would arrive after the
-            fold had opened.</p>
+          <p className="paragraph">A transition with no duration has no middle: the change lands whole in one
+            frame, one picture the browser draws, or, when the sheet asked for a delay before it, in the frame
+            that delay ends. One that ran even for an instant would show the old state for a frame, and a
+            fold’s text would arrive after the fold had opened.</p>
         </li>
       </ol>
     </section>

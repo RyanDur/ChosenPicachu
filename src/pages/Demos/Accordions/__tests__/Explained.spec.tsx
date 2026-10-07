@@ -215,7 +215,7 @@ describe('the fold choices', () => {
   test.each([
     ['Reveal', 'The text is uncovered from its first line down.'],
     ['Drawer', 'The text slides down from under its bar.'],
-    ['Static', 'The fold opens in one frame, with nothing moving.']
+    ['Static', 'The fold opens at once, with nothing moving.']
   ])('should read %s as the fold motion once it is chosen', async (motion, reading) => {
     render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
 
@@ -329,7 +329,7 @@ describe('the fold motion', () => {
   test.each([
     {style: 'reveal', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
     {style: 'drawer', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
-    {style: 'static', says: /With static there is none, so the corner turns in a single frame/, not: /With reveal and the drawer, one sits on every bar/}
+    {style: 'static', says: /With static there is none, so the corner turns at once/, not: /With reveal and the drawer, one sits on every bar/}
   ])('should tell, with $style chosen, how the arrow turns', async ({style, says, not}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
