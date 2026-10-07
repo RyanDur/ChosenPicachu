@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, scriptedMarket, siteFrame} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
@@ -22,9 +22,9 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   });
 }
 
-for (const {name, path, title} of [
-  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables'},
-  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts'}
+for (const {name, path, title, arrived} of [
+  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
+  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts', arrived: (page: Page) => page.getByRole('article', {name: 'price line tutorial'})}
 ]) {
   test.describe('a phone held upright', () => {
     test.use(iPhone);
@@ -34,16 +34,20 @@ for (const {name, path, title} of [
       await scriptedMarket(page, []);
       const feedback = feedbackOn(page);
       const arriving = Promise.withResolvers<void>();
+      let held = false;
       await page.route('**/assets/Demos-*.js', async route => {
+        held = true;
         await arriving.promise;
         await route.continue();
       });
       await page.goto(path, {waitUntil: 'commit'});
+      await expect.poll(() => held, 'the page held back').toBe(true);
+      await expect(page.getByRole('heading', {level: 1, name: title})).toBeVisible();
       const aim = await feedback.open.boundingBox();
       if (aim === null) throw new Error('no Feedback to aim at');
 
       arriving.resolve();
-      await expect(page.getByRole('heading', {level: 1, name: title})).toBeVisible();
+      await expect(arrived(page)).toBeVisible();
       await page.mouse.click(aim.x + aim.width / 2, aim.y + aim.height / 2);
 
       await expect(feedback.dialog).toBeVisible();
@@ -53,9 +57,9 @@ for (const {name, path, title} of [
 }
 
 for (const {way, closing} of [
-  {way: 'Escape', closing: async (page: import('@playwright/test').Page) => page.keyboard.press('Escape')},
-  {way: 'Cancel', closing: async (page: import('@playwright/test').Page) => feedbackOn(page).cancel.click()},
-  {way: 'a click on the veil', closing: async (page: import('@playwright/test').Page) => page.mouse.click(5, 5)}
+  {way: 'Escape', closing: async (page: Page) => page.keyboard.press('Escape')},
+  {way: 'Cancel', closing: async (page: Page) => feedbackOn(page).cancel.click()},
+  {way: 'a click on the veil', closing: async (page: Page) => page.mouse.click(5, 5)}
 ]) {
   test(`${way} closes Feedback and gives focus back to it`, async ({page}) => {
     await github(page);
