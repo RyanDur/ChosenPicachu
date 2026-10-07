@@ -196,8 +196,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
                   pick it out: <code>sized</code>. While <code>sized</code> is on, the panel’s height
-                  reads <code>--measured-height</code>. With no height set yet, that is auto, so the panel takes its own
-                  height.</p>
+                  reads <code>--measured-height</code>.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
               </li>
               <li className="run">

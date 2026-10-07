@@ -194,7 +194,8 @@ describe('the measured build', () => {
 
     const named = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script marks the panel with a class/);
 
-    expect(named).toHaveTextContent('The script marks the panel with a class, a name an element wears so a rule can pick it out: sized. While sized is on, the panel’s height reads --measured-height. With no height set yet, that is auto, so the panel takes its own height.');
+    expect(named).toHaveTextContent('The script marks the panel with a class, a name an element wears so a rule can pick it out: sized. While sized is on, the panel’s height reads --measured-height.');
+    expect(named).not.toHaveTextContent(/takes its own height/);
   });
 
   test('should open the closing run with what closing does', async () => {
