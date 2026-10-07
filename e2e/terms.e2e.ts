@@ -55,6 +55,7 @@ test.describe('a phone, with a definition open', () => {
   });
 
   test('Escape closes it', async ({page}) => {
+    await page.clock.install();
     await page.goto('demos/?tab=tables');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     const happened = await whatHappened(word, definition);
@@ -62,6 +63,7 @@ test.describe('a phone, with a definition open', () => {
     await expect(definition).toBeVisible();
 
     await page.keyboard.press('Escape');
+    await page.clock.runFor(1000);
 
     await expect.poll(happened, 'what happened to the term and its definition').toMatch(/Escape keydown → definition closed$/);
     await expect(definition).toBeHidden();
