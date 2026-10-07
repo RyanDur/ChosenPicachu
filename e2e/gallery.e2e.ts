@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
+import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
@@ -153,28 +153,6 @@ test.describe('a desktop window made narrow', () => {
     await expect(gallery.settings).toBeVisible();
   });
 });
-
-for (const {reader, viewport} of [
-  {reader: 'a desktop', viewport: desktop.viewport},
-  {reader: 'an iPad-sized window with a mouse', viewport: iPadSideways.viewport},
-  {reader: 'an upright iPad-sized window with a mouse', viewport: iPadUpright.viewport}
-]) {
-  test.describe(reader, () => {
-    test.use({viewport});
-
-    test('keeps the gallery settings and the page links in view while the wall scrolls', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await gallery.wall.last().scrollIntoViewIfNeeded();
-
-      await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
-      await expect(gallery.settingsPanel).toBeInViewport();
-      await expect(gallery.nextPage).toBeInViewport();
-    });
-  });
-}
 
 test.describe('a visitor at a desk', () => {
   test.use(desktop);

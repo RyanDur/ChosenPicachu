@@ -1,10 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, desktop, iPhone} from './__test_support';
-
-const isOnTopAtItsFirstLine = (element: Element): boolean => {
-  const {left, top} = element.getBoundingClientRect();
-  return element.contains(document.elementFromPoint(left + 4, top + 4));
-};
+import {bannerTrap, desktop, iPhone, isOnTopAtItsFirstLine} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
