@@ -184,8 +184,12 @@ jobs:
         timeout-minutes: 15
         run: |
           for attempt in 1 2 3; do
-            timeout 4m npx playwright install-deps ${{ matrix.browser }} && exit 0
+            timeout -k 10s 4m npx playwright install-deps ${{ matrix.browser }} && exit 0
             echo "install-deps attempt $attempt did not finish; trying again"
+            # the apt-get that playwright started outlives the cut and keeps the dpkg lock, so it goes first
+            sudo pkill -9 -x apt-get || true
+            sudo pkill -9 -x dpkg || true
+            sleep 5
             sudo dpkg --configure -a || true
           done
           exit 1
