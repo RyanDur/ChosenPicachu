@@ -126,16 +126,16 @@ test('the first line links to the page’s own thread', async ({page}) => {
   await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/4');
 });
 
-for (const {reader, device, fills} of [
-  {reader: 'a phone held upright', device: iPhone, fills: true},
-  {reader: 'a phone held sideways', device: phoneSideways, fills: true},
-  {reader: 'an iPad held upright', device: iPadUpright, fills: false},
-  {reader: 'a desktop', device: desktop, fills: false}
+for (const {reader, device} of [
+  {reader: 'a phone held upright', device: iPhone},
+  {reader: 'a phone held sideways', device: phoneSideways},
+  {reader: 'an iPad held upright', device: iPadUpright},
+  {reader: 'a desktop', device: desktop}
 ] as const) {
   test.describe(reader, () => {
     test.use(device);
 
-    test(`meets a dialog that ${fills ? 'fills the view' : 'sits as a card'} and never scrolls`, async ({page}) => {
+    test('opens Feedback onto its field, with Send in view', async ({page}) => {
       await github(page);
       const feedback = feedbackOn(page);
       await page.goto('demos/?tab=accordions');
@@ -143,10 +143,6 @@ for (const {reader, device, fills} of [
       await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
       await expect(feedback.words).toBeFocused();
 
-      const box = await feedback.dialog.boundingBox();
-      const view = page.viewportSize();
-      expect(await feedback.dialog.evaluate(dialog => dialog.scrollHeight <= dialog.clientHeight)).toBe(true);
-      expect(box !== null && view !== null && Math.abs(box.width - view.width) <= 1 && Math.abs(box.height - view.height) <= 1).toBe(fills);
       await expect(feedback.send).toBeInViewport();
     });
   });

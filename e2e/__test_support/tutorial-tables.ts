@@ -13,27 +13,12 @@ const steps = {
   }
 };
 
-type Box = {x: number; width: number} | null;
-
-const rightOf = (box: Box): number => box ? box.x + box.width : Infinity;
-
 export type TutorialTableName = keyof typeof steps;
 
 export const tutorialTable = (page: Page, name: TutorialTableName) => {
   const step = steps[name].step(page);
   const table = step.getByRole('table', {name, exact: true});
-  const cells = table.getByRole('columnheader').or(table.getByRole('rowheader')).or(table.getByRole('cell'));
   return {
-    wordsPastItsStep: async (): Promise<string[]> => {
-      const [tableBox, stepBox] = await Promise.all([table.boundingBox(), step.boundingBox()]);
-      const edge = Math.min(rightOf(tableBox), rightOf(stepBox));
-      return cells.evaluateAll((all, right) => all.filter(cell => {
-        const words = document.createRange();
-        words.selectNodeContents(cell);
-        return [...words.getClientRects()].some(line => line.right > right + 1);
-      }).map(cell => cell.textContent.trim()), edge);
-    },
-    slides: (): Promise<boolean> => table.evaluate(element => element.scrollWidth > element.clientWidth),
     columnHeaders: table.getByRole('columnheader'),
     rowHeaders: table.getByRole('rowheader'),
     tabLandsInside: async (): Promise<boolean> => {

@@ -1,5 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
-import {desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
+import {Locator, Page, expect, test} from '@playwright/test';
+import {demoSettings, desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
 
 const choicesOn = [
   {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
@@ -7,11 +7,13 @@ const choicesOn = [
   {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
 ];
 
-const pillHeights = async (page: Page, group: string): Promise<number[]> => {
-  const pills = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first().getByRole('radio', {includeHidden: true});
-  await expect(pills.first()).toBeAttached();
-  return pills.evaluateAll(radios => radios.map(radio =>
-    radio instanceof HTMLInputElement ? Math.round(radio.labels?.item(0)?.getBoundingClientRect().height ?? 0) : 0));
+const pillsOf = async (page: Page, group: string): Promise<{pills: Locator; names: string[]}> => {
+  const pills = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first();
+  await expect(pills.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
+  if (await pills.isHidden()) await demoSettings(page).press();
+  const names = await pills.getByRole('radio', {includeHidden: true}).evaluateAll(radios => radios.map(radio =>
+    radio instanceof HTMLInputElement ? radio.labels?.item(0)?.textContent.trim() ?? '' : ''));
+  return {pills, names};
 };
 
 for (const {reader, device} of [
@@ -23,11 +25,15 @@ for (const {reader, device} of [
     test.use(device);
 
     for (const {demo, at, groups} of choicesOn) {
-      test(`every pill on ${demo} takes a finger`, async ({page}) => {
+      test(`every pill on ${demo} is chosen by a finger that lands just off its middle`, async ({page}) => {
         await page.goto(at);
 
         for (const group of groups) {
-          expect((await pillHeights(page, group)).filter(height => height < 44), group).toEqual([]);
+          const {pills, names} = await pillsOf(page, group);
+          for (const name of names) {
+            await fingerTap(page, pills.getByText(name, {exact: true}).first());
+            await expect(pills.getByRole('radio', {name, exact: true, includeHidden: true}), `${group}: ${name}`).toBeChecked();
+          }
         }
       });
     }

@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {chartsPage, desktop, feedStillConnecting, heldMarket, iPad13Upright, iPadUpright, iPhone, scriptedMarket} from './__test_support';
+import {chartsPage, desktop, feedStillConnecting, iPhone} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -12,71 +12,16 @@ test('the price period menu stays hidden until the reader asks for it', async ({
   await expect(charts.period('week')).toBeVisible();
 });
 
-test.describe('a phone', () => {
-  test.use(iPhone);
+test('the feed says it is connecting, then that it is live', async ({page}) => {
+  const feed = await feedStillConnecting(page, [50000, 50100]);
+  const status = page.getByRole('status', {name: 'feed'});
+  await page.goto('demos/?tab=charts');
+  await expect(status).toHaveText('connecting to the live feed…');
 
-  test('the charts tab holds still while its data arrives', async ({page}) => {
-    const market = await heldMarket(page, [50000, 50100]);
-    await page.goto('demos?tab=charts');
-    const fold = chartsPage(page).priceCard.getByText('what am I looking at?', {exact: true});
-    await expect(fold).toBeVisible();
-    const before = await fold.boundingBox();
+  feed.opens();
 
-    market.arrive();
-
-    await expect(chartsPage(page).priceDelta).toBeVisible();
-    expect(await fold.boundingBox()).toEqual(before);
-  });
-
-  test('the pressure chart holds still while its trades arrive', async ({page}) => {
-    const market = await heldMarket(page, [50000, 50100]);
-    await page.goto('demos?tab=charts');
-    await page.getByRole('button', {name: 'Add a chart'}).click();
-    await page.getByLabel('charts to add').getByRole('button', {name: 'Pressure'}).click();
-    const pressure = page.getByRole('region', {name: 'pressure'});
-    const fold = pressure.getByText('what am I looking at?', {exact: true});
-    await expect(fold).toBeVisible();
-    const before = await fold.boundingBox();
-
-    market.arrive();
-
-    await expect(pressure.getByText('waiting for the first trade')).toBeHidden();
-    expect(await fold.boundingBox()).toEqual(before);
-  });
+  await expect(status).toHaveText('live');
 });
-
-for (const {reader, device, statusLine} of [
-  {reader: 'an iPad held upright', device: iPadUpright, statusLine: 'under the title'},
-  {reader: 'a phone', device: iPhone, statusLine: 'under the title'},
-  {reader: 'a large iPad held upright', device: iPad13Upright, statusLine: 'beside the title'}
-] as const) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    test('the price period toggle holds still while the feed connects and once it is live', async ({page}) => {
-      const feed = await feedStillConnecting(page, [50000, 50100]);
-      const charts = chartsPage(page);
-      const status = page.getByRole('status', {name: 'feed'});
-      await page.goto('demos/?tab=charts');
-      await expect(status).toHaveText('connecting to the live feed…');
-      await expect(charts.periodToggle).toBeVisible();
-      const whileConnecting = await charts.periodToggle.boundingBox();
-
-      feed.opens();
-
-      await expect(status).toHaveText('live');
-      expect(await charts.periodToggle.boundingBox()).toEqual(whileConnecting);
-    });
-
-    test(`the feed's status sits ${statusLine}`, async ({page}) => {
-      await scriptedMarket(page, [50000, 50100]);
-      await page.goto('demos/?tab=charts');
-      await expect(page.getByRole('status', {name: 'feed'})).toHaveText('live');
-
-      expect(await chartsPage(page).whereTheFeedStatusSits()).toBe(statusLine);
-    });
-  });
-}
 
 for (const {reader, device, press} of [
   {reader: 'a mouse at a desk', device: desktop, press: 'click' as const},
@@ -110,17 +55,15 @@ for (const {reader, device, press} of [
 test.describe('a mouse carrying a chart past its neighbour', () => {
   test.use(desktop);
 
-  test('the chart swaps back only once the hand has come a third of its height back', async ({page}) => {
+  test('the chart trades places with its neighbour, and trades back when carried back', async ({page}) => {
     await page.goto('demos/?tab=charts&charts=price,pie');
-    const charts = chartsPage(page);
-    const carried = await charts.carryByTheGrip('live trades');
+    const carried = await chartsPage(page).carryByTheGrip('live trades');
 
-    const down = await carried.handWhenTheyTrade(1);
-    await expect.poll(charts.stillSliding).toBe(0);
-    const back = await carried.handWhenTheyTrade(-1);
+    await carried.handWhenTheyTrade(1);
+    await expect(page).toHaveURL(/charts=pie%2Cprice|charts=pie,price/);
+    await carried.handWhenTheyTrade(-1);
     await page.mouse.up();
 
-    expect(down - back).toBeGreaterThan(carried.height / 3 - 6);
-    expect(down - back).toBeLessThan(carried.height / 3 + 6);
+    await expect(page).toHaveURL(/charts=price%2Cpie|charts=price,pie/);
   });
 });

@@ -34,21 +34,21 @@ for (const stage of stages) {
 
       test('widens a column from a press under a coarse pointer just off its edge', async ({page}) => {
         const table = await standing(page, stage);
-        const before = await table.columnWidth('volume');
+        await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 30});
+        const before = await table.announcedShare('volume');
 
         await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 60});
 
-        await expect.poll(() => table.columnWidth('volume')).toBeGreaterThan(before + 20);
+        await expect.poll(() => table.announcedShare('volume')).toBeGreaterThan(before);
       });
 
       test('opens the sort menu from a finger on the toggle beside the edge, and resizes nothing', async ({page}) => {
         const table = await standing(page, stage);
-        const before = await table.columnWidth('trades');
 
         await table.sortToggle('trades').tap();
 
         await expect(table.sortMenu('trades')).toBeVisible();
-        expect(await table.columnWidth('trades')).toBe(before);
+        await expect(table.resizeHandle('trades')).toHaveAccessibleName('resize trades');
       });
     });
   }

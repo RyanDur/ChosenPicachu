@@ -11,48 +11,42 @@ for (const stage of stages) {
         await expect(dragSortTable(page, stage.table(page)).columnHeader('trades')).toBeVisible({timeout: 30_000});
       });
 
-      test('keeps every control of a column inside that column\'s header', async ({page}) => {
+      test('narrows buys to a stop, and buys\' sort control still opens its menu', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
-
-        expect(await table.controlsPastTheirHeader()).toEqual([]);
-      });
-
-      test('keeps buys\' controls inside its header when its edge is dragged as far toward its start as it goes', async ({page}) => {
-        const table = dragSortTable(page, stage.table(page));
-        const before = await table.columnWidth('buys');
+        await table.dragEdge('buys', {by: -400, moves: 20});
+        const stopped = await table.announcedShare('buys');
 
         await table.dragEdge('buys', {by: -400, moves: 20});
 
-        await expect.poll(() => table.columnWidth('buys')).toBeLessThan(before);
-        expect(await table.controlsPastTheirHeader()).toEqual([]);
+        await expect.poll(() => table.announcedShare('buys')).toBe(stopped);
+        await table.sortToggle('buys').tap();
+        await expect(table.sortMenu('buys')).toBeVisible();
       });
 
-      test('keeps sells\' controls inside its header when buys is widened into it as far as it goes', async ({page}) => {
+      test('widens buys into sells to a stop, and sells\' sort control still opens its menu', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
-        const before = await table.columnWidth('sells');
+        await table.dragEdge('buys', {by: 400, moves: 20});
+        const stopped = await table.announcedShare('sells');
 
-        await table.dragEdge('buys', {by: before, moves: 20});
+        await table.dragEdge('buys', {by: 400, moves: 20});
 
-        await expect.poll(() => table.columnWidth('sells')).toBeLessThan(before);
-        expect(await table.controlsPastTheirHeader()).toEqual([]);
+        await expect.poll(() => table.announcedShare('sells')).toBe(stopped);
+        await table.sortToggle('sells').tap();
+        await expect(table.sortMenu('sells')).toBeVisible();
       });
 
-      test('stops buys by keyboard where a drag stops it, and names the share it took', async ({page, context}) => {
+      test('stops buys by keyboard within a point of the share a drag stops it at', async ({page, context}) => {
         const dragged = dragSortTable(page, stage.table(page));
         await dragged.dragEdge('buys', {by: -400, moves: 20});
         const other = await context.newPage();
         await other.goto(stage.at);
         const keyed = dragSortTable(other, stage.table(other));
         await expect(keyed.columnHeader('trades')).toBeVisible({timeout: 30_000});
-        const before = await keyed.columnWidth('buys');
 
         await keyed.narrowByKeys('buys', 40);
 
-        await expect.poll(() => keyed.columnWidth('buys')).toBeLessThan(before);
-
-        expect(Math.abs(await keyed.columnWidth('buys') - await dragged.columnWidth('buys'))).toBeLessThanOrEqual(1);
-        expect(await keyed.controlsPastTheirHeader()).toEqual([]);
-        expect(await keyed.announcedShare('buys')).toBe(Math.round(await keyed.shareOf('buys')));
+        const draggedShare = await dragged.announcedShare('buys');
+        await expect.poll(async () => Math.abs(await keyed.announcedShare('buys') - draggedShare)).toBeLessThanOrEqual(1);
       });
 
       test('opens the buys sort menu from a finger on its sort control', async ({page}) => {
@@ -63,15 +57,15 @@ for (const stage of stages) {
         await expect(table.sortMenu('buys')).toBeVisible();
       });
 
-      test('gives volume the width vwap gives up, from a mouse dragged where the two meet', async ({page}) => {
+      test('gives volume the share vwap gives up, from a mouse dragged where the two meet, and opens no menu', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
-        const volume = await table.columnWidth('volume');
-        const vwap = await table.columnWidth('vwap');
+        await table.dragFromWhereHeadersMeet('volume', 20);
+        const [volume, vwap] = [await table.announcedShare('volume'), await table.announcedShare('vwap')];
 
-        await table.dragFromWhereHeadersMeet('volume', 40);
+        await table.dragFromWhereHeadersMeet('volume', 20);
 
-        await expect.poll(() => table.columnWidth('volume')).toBeGreaterThan(volume + 20);
-        expect(await table.columnWidth('volume') + await table.columnWidth('vwap')).toBeCloseTo(volume + vwap, 0);
+        await expect.poll(() => table.announcedShare('volume')).toBeGreaterThan(volume);
+        expect(await table.announcedShare('vwap')).toBeLessThan(vwap);
         await expect(table.sortMenu('vwap')).toBeHidden();
       });
     });

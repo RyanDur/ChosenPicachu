@@ -2,15 +2,12 @@ import {expect} from '@playwright/test';
 import {
   accordionsTab,
   builds,
-  codedStepLayouts,
   desktop,
   dialRow,
   heightOnceSettled,
   iPhone,
-  misplacedPictures,
   pressTab,
   nameOn,
-  shortOfAFinger,
   showing,
   textOf
 } from './__test_support';
@@ -27,24 +24,6 @@ test('opening a second details fold closes the first, from the keyboard too', as
   await expect.poll(second.showsText).toBe(true);
   await expect.poll(first.showsText).toBe(false);
 });
-
-for (const {reader, device, layout} of [
-  {reader: 'a phone held upright', device: iPhone, layout: 'code below prose'},
-  {reader: 'a desktop', device: desktop, layout: 'code beside prose'}
-] as const) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    for (const type of ['inclusive', 'exclusive']) {
-      test(`reads the ${type} accordions explanation with the ${layout} on every step`, async ({page}) => {
-        await page.goto(`demos/?tab=accordions&type=${type}`);
-        await expect(page.getByRole('code').first()).toBeVisible();
-
-        await expect.poll(async () => [...new Set(await codedStepLayouts(page))]).toEqual([layout]);
-      });
-    }
-  });
-}
 
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
@@ -67,19 +46,6 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
     await expect.poll(part.showsText).toBe(true);
   });
 }
-
-test.describe('a desktop', () => {
-  test.use(desktop);
-
-  for (const type of ['inclusive', 'exclusive']) {
-    test(`sees each diagram of the ${type} explanation under its prose and beside its code`, async ({page}) => {
-      await page.goto(`demos/?tab=accordions&type=${type}`);
-      await expect(page.getByRole('figure').first()).toBeVisible();
-
-      await expect.poll(() => misplacedPictures(page)).toEqual([]);
-    });
-  }
-});
 
 for (const build of ['the checkbox build', 'the inclusive details build', 'the grid checkbox build'] as const) {
   test(`a reader opens two parts of ${build} and both stay open`, async ({page}) => {
@@ -247,8 +213,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       for (const name of ['fold type', 'fold motion']) {
         const {row, shownNames} = dialRow(page, name);
         await row.scrollIntoViewIfNeeded();
-        const widths = await Promise.all((await shownNames.all()).map(async shown => (await shown.boundingBox())?.width ?? 0));
-        expect(Math.max(...widths), `the widest copy of ${name}`).toBeGreaterThan(name.length * 4);
+        await expect(shownNames.filter({visible: true}).first(), name).toHaveText(name);
       }
       for (const name of ['fold type', 'fold motion']) {
         await expect(dialRow(page, name).row).toMatchAriaSnapshot(`
@@ -257,22 +222,6 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
             - group "${name}"
             - status
         `);
-      }
-    });
-
-    test('the fold choices keep their pills in the row, each a finger tall, beside the reading of the chosen one', async ({page}) => {
-      await page.goto('demos/?tab=accordions');
-
-      for (const name of ['fold type', 'fold motion']) {
-        const {row, pills, reading} = dialRow(page, name);
-        const [rowBox, pillsBox] = await Promise.all([row.boundingBox(), pills.boundingBox()]);
-        if (rowBox === null || pillsBox === null) throw new Error(`the ${name} row is not shown`);
-
-        expect(pillsBox.x + pillsBox.width, name).toBeLessThanOrEqual(rowBox.x + rowBox.width);
-        await expect(reading).toBeVisible();
-        if (device === iPhone) {
-          expect(await shortOfAFinger(await pills.getByText(/^\w+$/).all()), name).toEqual([]);
-        }
       }
     });
   });

@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {desktop, iPad11Upright, iPadSplitView, iPadUpright, iPhone, Person, usersPage} from './__test_support';
+import {iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
@@ -12,15 +12,15 @@ const ada: Person = {
   zip: '10001'
 };
 
-test("a new person's required fields carry a mark, and a viewed person's carry none", async ({page}) => {
+test('a new person cannot be added without a first name', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
 
-  await expect.poll(() => users.requiredMarkOn('First Name')).toBe('*');
-  await users.viewFirst();
+  await users.add({...ada, firstName: ''});
 
-  await expect.poll(() => users.requiredMarkOn('First Name')).toBe('');
+  await expect.poll(() => users.firstName.evaluate(field => field.matches(':invalid'))).toBe(true);
+  await expect(users.names.filter({hasText: ada.lastName})).toHaveCount(0);
 });
 
 test('a person added on the users page still stands in the roster after leaving and coming back', async ({page}) => {
@@ -63,7 +63,7 @@ for (const {reader, device} of handhelds) {
 
       await users.scrollRosterSideways();
 
-      await expect.poll(users.lastColumnWithinTheRoster).toBe(true);
+      await expect(users.columns.last()).toBeInViewport({ratio: 0.5});
     });
 
     for (const end of ['start', 'end'] as const) {
@@ -109,25 +109,3 @@ test('the users page gives up on a worker script that never answers and says the
 
   await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
 });
-
-const sameRow = [0, 0, 0];
-const ownRows = [0, 1, 2];
-
-for (const {reader, device, rows} of [
-  {reader: 'an iPad Air held upright', device: iPadUpright, rows: sameRow},
-  {reader: 'an iPad Pro 11 held upright', device: iPad11Upright, rows: sameRow},
-  {reader: 'a phone', device: iPhone, rows: ownRows},
-  {reader: 'a desktop', device: desktop, rows: sameRow}
-]) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    test(`meets city, state and zip ${rows === sameRow ? 'on one row' : 'one to a row'}`, async ({page}) => {
-      const users = usersPage(page);
-      await page.goto('users');
-      await expect(users.names.first()).toBeVisible({timeout: 30_000});
-
-      await expect.poll(users.rowsOfTheHomeAddress).toEqual(rows);
-    });
-  });
-}

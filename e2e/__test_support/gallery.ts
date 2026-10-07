@@ -23,15 +23,6 @@ export const galleryPage = (page: Page) => {
     go: page.getByRole('button', {name: 'Go', exact: true}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
     settingsPanel: page.getByRole('complementary', {name: 'gallery settings'}),
-    searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {
-      const label = field instanceof HTMLInputElement && field.labels !== null ? field.labels.item(0) : null;
-      if (label === null) return false;
-      const range = document.createRange();
-      range.selectNodeContents(label);
-      const text = range.getBoundingClientRect();
-      const box = label.getBoundingClientRect();
-      return text.top >= box.top - 1 && text.bottom <= box.bottom + 1;
-    }),
     tapSearchLabel: (): Promise<void> => page.getByText('Search For:', {exact: true}).click(),
     emptyWall: page.getByAltText('the museum answered with nothing'),
     firstPainting: wall.first().getByRole('link').first(),

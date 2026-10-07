@@ -1,5 +1,9 @@
-import {expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {Locator, Page, expect, test} from '@playwright/test';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, galleryPage, homePage, iPhone, nameOn, phoneSideways, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+const opensFromAFinger = async (page: Page, fold: Locator): Promise<void> => {
+  await fingerTap(page, fold.getByText(/\S/).first());
+  await expect(fold).toHaveAttribute('open', '');
+};
 
 for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
   test.describe(reader, () => {
@@ -40,31 +44,40 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(told).toBeHidden();
     });
 
-    test('every control in the trap takes a finger', async ({page}) => {
+    test('the trap\'s menu opens and chooses from a finger that lands just off its controls', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);
-      await menu.open();
-      const controls = [menu.contextWords, menu.sortBy, menu.choice('name'), menu.choice('date'), menu.choice('size')];
 
-      expect(await shortOfAFinger(controls)).toEqual([]);
+      await fingerTap(page, menu.sortBy);
+      await expect(menu.choice('size')).toBeVisible();
+      await fingerTap(page, menu.choice('size'));
+
+      await expect(menu.sortBy).toHaveAccessibleName('Sort by: size, the old way');
     });
 
-    test('the menu in the top layer and its choices take a finger', async ({page}) => {
+    test('the menu in the top layer opens and chooses from a finger that lands just off its controls', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const menu = topLayerMenu(page);
-      await menu.open();
-      const controls = [menu.sortBy, menu.choice('name'), menu.choice('date'), menu.choice('size')];
+      await menu.sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
 
-      expect(await shortOfAFinger(controls)).toEqual([]);
+      await fingerTap(page, menu.sortBy);
+      await expect(menu.menu).toBeVisible();
+      await fingerTap(page, menu.choice('size'));
+
+      await expect(menu.sortBy).toHaveAccessibleName('Sort by: size, in the top layer');
     });
 
-    test('the banners\' buttons and the old banner\'s dismiss take a finger', async ({page}) => {
+    test('raises and dismisses the banners from a finger that lands just off their buttons', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const banners = bannerTrap(page);
-      await banners.raiseOld.click();
-      const controls = [banners.raiseOld, banners.raiseNew, banners.dismissOld];
 
-      expect(await shortOfAFinger(controls)).toEqual([]);
+      await fingerTap(page, banners.raiseOld);
+      await expect(banners.oldBanner).toBeVisible();
+      await fingerTap(page, banners.dismissOld);
+      await expect(banners.oldBanner).toBeHidden();
+      await fingerTap(page, banners.raiseNew);
+
+      await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toBeVisible();
     });
 
     test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {
@@ -76,45 +89,52 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(menu.contextChoice).not.toBeChecked();
     });
 
-    test('every fold on home has a bar a finger tall', async ({page}) => {
+    test('opens every fold on home from a finger that lands just off its bar', async ({page}) => {
       await page.goto('');
       const home = homePage(page);
       await expect(home.timelineStories.first()).toBeVisible();
       await expect(home.researchFold).toBeVisible();
 
-      expect(await foldBarsShortOfAFinger([...await home.timelineStories.all(), ...await home.doorFolds.all(), home.researchFold])).toEqual([]);
+      for (const fold of [...await home.timelineStories.all(), ...await home.doorFolds.all(), home.researchFold]) {
+        await opensFromAFinger(page, fold);
+      }
     });
 
-    test('the settings fold on the drag sort tab has a bar a finger tall', async ({page}) => {
+    test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', async ({page}) => {
       await page.goto('demos/?tab=dragAndDrop');
       const settings = demoSettings(page).fold;
       await expect(settings).toBeVisible();
 
-      expect(await foldBarsShortOfAFinger([settings])).toEqual([]);
+      await opensFromAFinger(page, settings);
     });
 
-    test('the gallery’s settings fold has a bar a finger tall', async ({page}) => {
+    test('opens the gallery’s settings fold from a finger that lands just off its bar', async ({page}) => {
       await page.goto('gallery/?tab=vam');
       const settings = galleryPage(page).settings;
       await expect(settings).toBeVisible();
 
-      expect(await foldBarsShortOfAFinger([settings])).toEqual([]);
+      await opensFromAFinger(page, settings);
     });
 
-    test('every how we built it fold in an open story on the tables tab has a bar a finger tall', async ({page}) => {
+    test('opens every how we built it fold in an open story on the tables tab from a finger that lands just off its bar', async ({page}) => {
       await page.goto('demos/?tab=tables');
       const reveals = await tablesDemo(page).howWeBuiltItInTheFirstStory();
       await expect(reveals.first()).toBeVisible();
 
-      expect(await foldBarsShortOfAFinger(await reveals.all())).toEqual([]);
+      for (const fold of await reveals.all()) {
+        await opensFromAFinger(page, fold);
+      }
     });
 
-    test('every fold of the accordion in HTML alone takes a finger', async ({page}) => {
+    test('opens every fold of the accordion in HTML alone from a finger that lands just off its name', async ({page}) => {
       await page.goto('demos/?tab=accordions');
-      const bars = accordionsTab(page).htmlAloneFolds().map(fold => nameOn(fold.fold));
-      await expect(bars[0]).toBeVisible();
+      const folds = accordionsTab(page).htmlAloneFolds();
+      await expect(nameOn(folds[0].fold)).toBeVisible();
 
-      expect(await shortOfAFinger(bars)).toEqual([]);
+      for (const fold of folds) {
+        await fingerTap(page, nameOn(fold.fold));
+        await expect.poll(fold.isOpen).toBe(true);
+      }
     });
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {

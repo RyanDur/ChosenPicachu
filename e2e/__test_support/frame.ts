@@ -21,10 +21,6 @@ type Point = {x: number; y: number};
 
 const centreOf = ({x, y, width, height}: Box): Point => ({x: x + width / 2, y: y + height / 2});
 
-const liesWithin = (inner: Box, outer: Box): boolean =>
-  Math.round(inner.x) >= Math.round(outer.x) && Math.round(inner.x + inner.width) <= Math.round(outer.x + outer.width) &&
-  Math.round(inner.y) >= Math.round(outer.y) && Math.round(inner.y + inner.height) <= Math.round(outer.y + outer.height);
-
 const carry = async (page: Page, from: Box, to: Point): Promise<void> => {
   const start = centreOf(from);
   await page.mouse.move(start.x, start.y);
@@ -59,24 +55,6 @@ const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> =>
   return {x: box.x + within.x, y: box.y + within.y};
 };
 
-const nextFrame = (locator: Locator): Promise<unknown> => locator.evaluate(() => new Promise(requestAnimationFrame));
-
-const whereItRests = async (locator: Locator): Promise<Point> => {
-  let last = centreOf(await boxOf(locator));
-  for (let frame = 0; frame < 30; frame++) {
-    await nextFrame(locator);
-    const now = centreOf(await boxOf(locator));
-    if (now.x === last.x && now.y === last.y) {
-      return now;
-    }
-    last = now;
-  }
-  return last;
-};
-
-const heldStill = (held: Locator): Promise<unknown> =>
-  held.evaluate(element => Promise.all(element.getAnimations({subtree: false}).map(motion => motion.finished)));
-
 export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
   const rowGrip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`});
@@ -92,46 +70,20 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
     centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),
     centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
-    howFarTheLiftJumps: async (name: string): Promise<number> => {
-      const before = centreOf(await boxOf(columnHeader(name)));
-      await page.mouse.move(before.x, before.y);
-      await page.mouse.down();
-      const lifted = await whereItRests(columnHeader(name));
-      await page.mouse.up();
-      await heldStill(columnHeader(name));
-      return Math.hypot(lifted.x - before.x, lifted.y - before.y);
-    },
-    howFarTheCarryTrails: async (name: string, {by, steps}: {by: number; steps: number}): Promise<number> => {
-      const pressed = centreOf(await boxOf(columnHeader(name)));
-      await page.mouse.move(pressed.x, pressed.y);
-      await page.mouse.down();
-      for (let step = 1; step <= steps; step++) {
-        await page.mouse.move(pressed.x + by * step / steps, pressed.y);
-      }
-      const carried = await whereItRests(columnHeader(name));
-      await page.mouse.up();
-      await heldStill(columnHeader(name));
-      return Math.abs(carried.x - (pressed.x + by));
-    },
-    howFarAFingersCarryTrails: async (name: string, {by, steps, from}: {by: number; steps: number; from: FingerPress}): Promise<number> => {
+    fingerDragColumn: async (name: string, {by, from}: {by: number; from: FingerPress}): Promise<void> => {
       const devtools = await page.context().newCDPSession(page);
       await columnHeader(name).scrollIntoViewIfNeeded();
-      const before = centreOf(await boxOf(columnHeader(name)));
       const pressed = await pressedOn(columnHeader(name), from);
       const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', x: number): Promise<unknown> =>
         devtools.send('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x, y: pressed.y}]});
       await touch('touchStart', pressed.x);
-      for (let step = 1; step <= steps; step++) {
-        await touch('touchMove', pressed.x + by * step / steps);
+      for (let step = 1; step <= 20; step++) {
+        await touch('touchMove', pressed.x + by * step / 20);
       }
-      const carried = await whereItRests(columnHeader(name));
       await touch('touchEnd', pressed.x + by);
-      await heldStill(columnHeader(name));
-      return Math.abs(carried.x - before.x - by);
     },
     sortToggle: (name: string): Locator => table.getByRole('button', {name: `sort ${name}`}),
     sortMenu: (name: string): Locator => table.getByLabel(`sort ${name} by`),
-    columnWidth: async (name: string): Promise<number> => (await boxOf(columnHeader(name))).width,
     pressBesideEdgeAndDrag: async (name: string, {besideBy, by}: {besideBy: number; by: number}): Promise<void> => {
       const handle = resizeHandle(name);
       await handle.scrollIntoViewIfNeeded();
@@ -153,23 +105,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
         await page.keyboard.press('ArrowLeft');
       }
     },
-    shareOf: async (name: string): Promise<number> => {
-      const widths = await Promise.all((await table.getByRole('columnheader').all()).map(async header => (await boxOf(header)).width));
-      return (await boxOf(columnHeader(name))).width / widths.reduce((sum, width) => sum + width, 0) * 100;
-    },
     announcedShare: async (name: string): Promise<number> => Number(/, (\d+)%$/.exec(await resizeHandle(name).getAttribute('aria-label') ?? '')?.[1]),
-    controlsPastTheirHeader: async (): Promise<string[]> => {
-      const strays: string[] = [];
-      for (const header of await table.getByRole('columnheader').all()) {
-        const edges = await boxOf(header);
-        for (const control of await header.getByRole('button').all()) {
-          if (!liesWithin(await boxOf(control), edges)) {
-            strays.push(String(await control.getAttribute('aria-label')));
-          }
-        }
-      }
-      return strays;
-    },
     dragFromWhereHeadersMeet: async (column: string, by: number): Promise<void> => {
       const handle = resizeHandle(column);
       await handle.scrollIntoViewIfNeeded();
