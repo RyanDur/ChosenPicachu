@@ -1,3 +1,7 @@
+:root:has(.slice-station:hover, .slice-station:focus) {
+  scroll-behavior: smooth;
+}
+
 .tutorials {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
