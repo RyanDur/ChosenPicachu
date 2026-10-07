@@ -604,13 +604,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold on
             this tab open at once. The reset, the stylesheet that sets every element’s defaults, has
             a reduced-motion block with three rules. The first uses the universal selector, *, which
-            picks every element and reaches their before and after too. It cuts each transition and
-            animation to 0.01 milliseconds, plays each animation once, and turns smooth scrolling
-            into a jump. The second names ::details-content, the part a details hides, which the
-            universal selector cannot reach. The third lets view transitions, the browser’s moves
-            from one page state to the next, play nothing. The duration is not zero because a
-            transition that never runs never ends, and some scripts wait for a transition to
-            end.</p>
+            picks every element and reaches their before and after too. It sets each transition to
+            zero, so a change lands in the frame it is made, cuts each animation to 0.01
+            milliseconds, plays each animation once, and turns smooth scrolling into a jump. The
+            second names ::details-content, the part a details hides, which the universal selector
+            cannot reach. The third lets view transitions, the browser’s moves from one page state
+            to the next, play nothing. An animation keeps its hundredth of a millisecond because
+            some scripts wait for an animation to end, and an animation that never runs never ends.
+            A transition gets no such instant: one that runs at all shows the old state for a
+            frame, so a fold’s text would arrive after the fold had opened.</p>
           <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
         </li>
       </ol>

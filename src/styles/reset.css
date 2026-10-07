@@ -94,12 +94,12 @@ h1, h2, h3, h4, h5, h6, p {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 
   ::details-content {
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
   }
 
   ::view-transition-group(*),
