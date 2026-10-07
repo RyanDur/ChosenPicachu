@@ -360,6 +360,27 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
   });
 
+  test('the carry step declares the four numbers the carried cells read, and says what @property is', async () => {
+    const recipe = await dragSortRecipe();
+
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+
+    expect(recipe).toHaveTextContent(/Carry the real thing[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
+    expect(recipe).toHaveTextContent('two numbers every carried cell wears as custom properties, values set by name on the cell and read back in the stylesheet with var(): the seat,');
+    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
+  });
+
+  test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
+    const recipe = await dragSortRecipe();
+
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+
+    expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, and the keep sheet simply never adds them up.');
+    expect(recipe).toHaveTextContent(/Leave the origin in place[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
+    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
+  });
+
   test('the recipe teaches whatever the dials are set to', async () => {
     const recipe = await dragSortRecipe();
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));

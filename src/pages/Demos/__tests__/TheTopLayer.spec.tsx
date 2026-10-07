@@ -257,6 +257,14 @@ describe('the banner tutorial’s second story', () => {
     expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
   });
 
+  test('should declare the banner’s height above the rule that reads it, and say what @property is, in the height step', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(steps[4]).toHaveTextContent(/@property --news-block-size \{[^]*initial-value: auto;[^]*block-size: var\(--news-block-size\)/);
+    expect(steps[4]).toHaveTextContent('The number travels in a custom property named --news-block-size. The stylesheet declares it with @property, a rule that gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
+  });
+
   test('should open on the two moves, and say what a transition and a starting style are', async () => {
     await openZIndexTab();
     const many = await secondStory();
@@ -287,7 +295,10 @@ describe('the banner tutorial’s second story', () => {
   test('should say what a ResizeObserver and block-size are, for a sideways stack', async () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
 
-    expect(await secondStory()).toHaveTextContent('A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s height to a measured number of pixels. A rewrap then changes one number to another, and the transition on block-size, the CSS name for height on this page, runs between them.');
+    const many = await secondStory();
+
+    expect(many).toHaveTextContent('A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s height to a measured number of pixels.');
+    expect(many).toHaveTextContent('A rewrap then changes one number to another, and the transition on block-size, the CSS name for height on this page, runs between them.');
   });
 
   test('should point the popover up to Why the popover wins, where it is taught', async () => {

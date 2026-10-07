@@ -434,6 +434,13 @@ describe('a list of charts', () => {
     test('should not promise the compositor or that no special case survives', async () => {
       expect(await pieStory()).not.toHaveTextContent(/compositor|no special case survives/);
     });
+
+    test('should declare the four numbers the slice reads above it, and say what @property is', async () => {
+      const cut = recipeFolds.steps(await pieStory())[1];
+
+      expect(cut).toHaveTextContent(/@property --explode-x \{[^]*@property --explode-y \{[^]*@property --turn \{[^]*@property --swing \{[^]*initial-value: -180deg;[^]*\.slice \{/);
+      expect(cut).toHaveTextContent('The sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the centre is two lengths.');
+    });
   });
 
   test('the workspace tutorial names its story and steps in the heading outline', async () => {

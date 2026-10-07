@@ -33,7 +33,10 @@ const settleStep = (
   <Step title="Change a banner’s height smoothly when its text rewraps">
     <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
       <Says>A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s
-        height to a measured number of pixels. A rewrap then changes one number to another, and the transition on
+        height to a measured number of pixels. The number travels in a custom property named --news-block-size. The
+        stylesheet declares it with @property, a rule that gives a custom property a type and a starting value: a
+        length or auto, starting as auto, so a message that has not been measured keeps its own height. A rewrap then
+        changes one number to another, and the transition on
         block-size, the CSS name for height on this page, runs between them. Before it measures, the code removes the
         height it set last time. scrollHeight is never less than the element’s own height, so a message measured with
         the old height still on it could only grow.</Says>
@@ -43,6 +46,7 @@ const settleStep = (
         ...unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
       <Snippet label="CSS" lines={[
+        ...unit(bannersCss, '@property --news-block-size {'), gap,
         ...span(bannersCss, 'block-size: var(--news-block-size', 'transition: block-size 0.3s, padding 0.3s, border-width 0.3s;')
       ]}/>
     </Codes>

@@ -1,11 +1,21 @@
 import {ReactNode} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {aside, Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameCarry, gap, selectorsSource, stateSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+import {Line} from '@pages/Demos/Recipe/Snippet';
+
+const theSheetDeclaresSeatAndDrift = 'The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.';
+
+const carriedProperties = (cssSource: Sample): Line[] => [
+  ...unit(cssSource, '@property --seat-x {'), gap,
+  ...unit(cssSource, '@property --seat-y {'), gap,
+  ...unit(cssSource, '@property --drift-x {'), gap,
+  ...unit(cssSource, '@property --drift-y {'), gap
+];
 
 export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
@@ -20,12 +30,13 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
       <Says>The <Term word="drift">drift</Term> is state on the drag, with a reducer of its own: the survey
         from the lift, the box the thing was grabbed in, and how far the pointer has moved
         since. Every move dispatches the pointer, and two selectors turn the drag into two
-        numbers every carried cell wears as custom properties: the seat, where the grab box sits
+        numbers every carried cell wears as custom properties, values set by name on the cell and read back in the
+        stylesheet with var(): the seat, where the grab box sits
         against where the column rests in the order as it stands now, and the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
         changes, the home moves, the seat moves with it. The stylesheet adds the two and does
         the moving, and only the hide sheet adds them: the same cells wear the same numbers
-        under keep and never leave their seat.</Says>
+        under keep and never leave their seat. {theSheetDeclaresSeatAndDrift}</Says>
       {world === 'react'
         ? <Says>There is no flag anywhere in the table: each cell asks the selectors whether its
           column or its row is carried, and where its seat and its drift are, and sets the class
@@ -54,6 +65,7 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
           aside('// the drift rides in the drag; the seat is a selector over it and the order')
         ]}/>
         <Snippet label="CSS" lines={[
+          ...carriedProperties(cssSource),
           ...unit(cssSource, '.sortable .carried {'), gap,
           ...unit(cssSource, '.sortable.hide .carried {'),
           aside('/* the real cells ride the pointer; their layout box stays as the gap; the sheet adds seat and drift */')
@@ -66,8 +78,8 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
   <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
-        carried cells still wear their seat and their drift, and the keep sheet simply never adds
-        them up.</Says>
+        carried cells still wear their seat and their drift as custom properties, and the keep sheet simply never adds
+        them up. {theSheetDeclaresSeatAndDrift}</Says>
     </Words>
     <Reveal>
       {world === 'react'
@@ -82,6 +94,7 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
           wears the word keep, and no rule in the sheet translates a carried cell under it.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
+          ...carriedProperties(cssSource),
           ...unit(cssSource, '.sortable .carried {'), gap,
           ...unit(cssSource, '.sortable.hide .carried {'),
           aside('/* the carried cell rises above its neighbours in every table; only under hide does it move */')

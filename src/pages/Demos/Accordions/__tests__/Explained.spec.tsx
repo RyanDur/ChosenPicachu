@@ -166,6 +166,15 @@ describe('the measured build', () => {
     expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
   });
 
+  test('should declare the measured height above the classes that hold it, and say what @property is', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;[^]*\.info-measured\.sized/);
+    expect(explained).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto.');
+  });
+
   test('should show the script that turns a part around beside the run that tells it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

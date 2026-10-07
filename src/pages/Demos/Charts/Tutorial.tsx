@@ -344,6 +344,10 @@ const pieStory =
             a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
+          <Says>The markup hands each number to the stylesheet as a custom property: a value set by name on the element,
+            such as --turn, and read back in the sheet with var(). The sheet declares each one with @property, a rule that
+            gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from
+            the centre is two lengths.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -354,6 +358,10 @@ const pieStory =
             ...span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
           ]}/>
           <Snippet label="CSS" lines={[
+            ...unit(pieCss, '@property --explode-x {'), gap,
+            ...unit(pieCss, '@property --explode-y {'), gap,
+            ...unit(pieCss, '@property --turn {'), gap,
+            ...unit(pieCss, '@property --swing {'), gap,
             ...unit(pieCss, '.slice {')
           ]}/>
         </Codes>

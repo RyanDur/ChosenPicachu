@@ -188,8 +188,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
-                  through a custom property, a value the stylesheet can read, named --measured-height, and while the
-                  class sized is on, the panel’s height reads it. To close, the script sets the open height, then 0, and
+                  through a custom property, a value the stylesheet can read, named --measured-height. The stylesheet
+                  declares that property with @property, a rule that tells the browser what kind of value a custom
+                  property holds and what it is until something sets it: here a length or auto, starting as auto.
+                  While the class sized is on, the panel’s height reads it. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
                   when the change event fires, so the script first pins where the motion starts, with a second class,
                   unmoving, that switches the height’s transition off for that moment.</p>
@@ -199,6 +201,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ...unit(measuredSource, 'const closed')
                 ]}/>
                 <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '@property --measured-height {'), gap,
                   ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
                   ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
                 ]}/>
