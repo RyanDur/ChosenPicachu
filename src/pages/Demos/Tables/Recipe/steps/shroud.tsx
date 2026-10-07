@@ -12,8 +12,7 @@ const whatACustomPropertyIs = <>values set by name on the cell and read back in 
 
 const theSheetDeclaresSeatAndDrift = <>
   The sheet declares the seat and the drift with <code>@property</code>, a rule that gives a custom property a type
-  and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its
-  seat.
+  and a starting value: each is a length that starts at 0px
 </>;
 
 const carriedProperties = (cssSource: Sample): Line[] => [
@@ -41,7 +40,8 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
         subtraction is why a settle mid-drag never makes the carried column jump: the order
         changes, the home moves, the seat moves with it. The stylesheet adds the two and does
         the moving, and only the hide sheet adds them: the same cells wear the same numbers
-        under keep and never leave their seat. {theSheetDeclaresSeatAndDrift}</Says>
+        under keep and never leave their seat. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
+        yet stays in its seat.</Says>
       {world === 'react'
         ? <Says>There is no flag anywhere in the table: each cell asks the selectors whether its
           column or its row is carried, and where its seat and its drift are, and sets the class
@@ -84,7 +84,7 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
         carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep
-        sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}</Says>
+        sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
     </Words>
     <Reveal>
       {world === 'react'

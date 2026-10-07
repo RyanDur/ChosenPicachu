@@ -176,10 +176,10 @@ describe('the measured build', () => {
 
     expect(outOfReadingOrder([declared, held])).toEqual([]);
     expect(explanation.everyCodeBeside(explained, /The script hands each height to the stylesheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
-    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto, so while sized is on and no height has been set, the panel takes its own height.');
+    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto, so while the class sized is on and no height has been set, the panel takes its own height.');
   });
 
-  test('should say the panel’s height reads --measured-height while the class sized is on', async () => {
+  test('should open the closing run with “Closing runs the other way”, and say the panel’s height reads --measured-height while the class sized is on', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});

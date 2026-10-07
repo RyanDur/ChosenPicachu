@@ -191,7 +191,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
                   property with <code>@property</code>, a rule that tells the browser what kind of value a custom
                   property holds and what it is until something sets it: here a length or auto, starting as auto, so
-                  while sized is on and no height has been set, the panel takes its own height.</p>
+                  while the class sized is on and no height has been set, the panel takes its own height.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
               </li>
               <li className="run">

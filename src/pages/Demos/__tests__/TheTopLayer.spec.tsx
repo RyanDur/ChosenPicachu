@@ -299,6 +299,7 @@ describe('the banner tutorial’s second story', () => {
 
     expect(many).toHaveTextContent('A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s height to a measured number of pixels.');
     expect(many).toHaveTextContent('A rewrap then changes one number to another, and the transition on block-size, the CSS name for height on this page, runs between them.');
+    expect(many).toHaveTextContent('Before it measures, the code removes the height it set last time. scrollHeight is never less than the element’s own height');
   });
 
   test('should point the popover up to Why the popover wins, where it is taught', async () => {
