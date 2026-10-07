@@ -576,7 +576,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
                   around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom.
                   Then <code>align-self: end</code> sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
-                  on the fold’s edge the whole way down, and the paragraph’s overflow hides the text above the
+                  on the fold’s edge the whole way, and the paragraph’s overflow hides the text above the
                   fold. One transition moves it all, so no part can fall behind another. It answers no
                   limit. It is there to show what grid alignment does on its own.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
@@ -612,10 +612,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
         </li>
         <li className="run">
-          <p className="paragraph">A transition with no duration has no middle: the change lands whole in one
-            frame, one picture the browser draws, or, when the sheet asked for a delay before it, in the frame
-            that delay ends. One that ran even for an instant would show the old state for a frame, and a
-            fold’s text would arrive after the fold had opened.</p>
+          <p className="paragraph">A fold’s transition has no delay, so with no duration it has no middle: the
+            change lands whole in one frame, one picture the browser draws. One that ran even for an instant
+            would show the old state for a frame, and a fold’s text would arrive after the fold had opened.</p>
         </li>
       </ol>
     </section>
