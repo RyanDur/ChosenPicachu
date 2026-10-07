@@ -66,7 +66,7 @@ const typeReadings: Record<FoldType, string> = {
 const motionReadings: Record<FoldMotion, string> = {
   reveal: 'The text is uncovered from its first line down.',
   drawer: 'The text slides down from under its bar.',
-  static: 'The fold opens in one frame, one picture the browser draws, with nothing moving.'
+  static: 'The fold opens in one frame, with nothing moving.'
 };
 
 type Props = {
@@ -613,9 +613,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">A transition with no duration never runs, so a change lands in the
-            frame it is made. One that ran at all, even for an instant, would show the old state for
-            a frame, and a fold’s text would arrive after the fold had opened. A transition with a
-            delay still waits out its delay, then changes at once.</p>
+            frame it is made, the next picture the browser draws. One that ran at all, even for an
+            instant, would show the old state for a frame, and a fold’s text would arrive after the
+            fold had opened.</p>
         </li>
       </ol>
     </section>

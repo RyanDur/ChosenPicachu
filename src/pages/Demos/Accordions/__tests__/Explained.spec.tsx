@@ -215,7 +215,7 @@ describe('the fold choices', () => {
   test.each([
     ['Reveal', 'The text is uncovered from its first line down.'],
     ['Drawer', 'The text slides down from under its bar.'],
-    ['Static', 'The fold opens in one frame, one picture the browser draws, with nothing moving.']
+    ['Static', 'The fold opens in one frame, with nothing moving.']
   ])('should read %s as the fold motion once it is chosen', async (motion, reading) => {
     render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
 
