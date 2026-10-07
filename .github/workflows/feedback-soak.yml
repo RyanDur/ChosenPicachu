@@ -1,0 +1,70 @@
+name: Feedback soak
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'The commit to soak: c85eb82f is the code the Feedback faults ran (#126) with the toggle record on top'
+        required: true
+        default: main
+
+# main's 21 WebKit Feedback journeys x 80 repeats = 1,680 presses a soak, over four shards.
+# 84 of them took 23s on the Mac; at CI WebKit's usual three to four times that, a shard is about 10 minutes
+# with setup, so about 40 runner-minutes a soak. The repo is public, so the minutes are free.
+env:
+  SOAK_REPEAT: 80
+  VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
+  VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+  VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
+  VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
+  VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
+  VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
+  VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
+  VITE_APP_USERS_API: /api/users
+  VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
+  VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
+  VITE_APP_TRADE_PRODUCT: BTC-USD
+  VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
+
+jobs:
+  soak:
+    runs-on: ubuntu-24.04
+    name: feedback soak (${{ inputs.ref }} webkit ${{ matrix.shard }})
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/4, 2/4, 3/4, 4/4]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Build the commit under soak
+        run: npm run build
+      - name: Install WebKit
+        run: npx playwright install --with-deps webkit
+      - name: Press Feedback over and over
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: soak.json
+        run: npx playwright test e2e/feedback.e2e.ts --project=webkit --retries=0 --repeat-each=$SOAK_REPEAT --shard=${{ matrix.shard }} --reporter=line,json
+      - name: Read the soak
+        if: always() && hashFiles('soak.json') != ''
+        run: |
+          jq -r '"\(.stats.expected) passed, \(.stats.unexpected) failed, \(.stats.flaky) flaky"' soak.json >> "$GITHUB_STEP_SUMMARY"
+          jq -r '[.. | objects | select(has("errors")) | .errors[]?.message // empty | split("\n")[0]] | group_by(.) | map("\(length) × \(.[0])")[]' soak.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep the traces of the presses that failed
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: soak-traces-${{ strategy.job-index }}
+          path: test-results
+          include-hidden-files: true
+          if-no-files-found: error
