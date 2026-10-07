@@ -141,6 +141,11 @@ jobs:
   journeys:
     needs: build_test
     runs-on: ubuntu-24.04
+    # Playwright's image has the browsers and their system libraries in it, so no job installs from the runner's apt
+    # mirror, which hung on one shard a run through 2026-10-07; its tag follows @playwright/test in package.json
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
     name: journeys (${{ matrix.browser }} ${{ matrix.shard }})
     strategy:
       fail-fast: false
@@ -167,32 +172,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
-      - name: Remember the browsers
-        id: browsers
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
-      - name: Install the browser
-        if: steps.browsers.outputs.cache-hit != 'true'
-        timeout-minutes: 10
-        run: npx playwright install --with-deps ${{ matrix.browser }}
-      - name: Install the browser's system libraries
-        if: steps.browsers.outputs.cache-hit == 'true'
-        # the runner's apt hung here three times on 2026-10-07, on three engines, for 40 minutes and more each;
-        # each try is cut at four minutes and tried again, so a hang costs minutes, not the shard
-        timeout-minutes: 15
-        run: |
-          for attempt in 1 2 3; do
-            timeout -k 10s 4m npx playwright install-deps ${{ matrix.browser }} && exit 0
-            echo "install-deps attempt $attempt did not finish; trying again"
-            # the apt-get that playwright started outlives the cut and keeps the dpkg lock, so it goes first
-            sudo pkill -9 -x apt-get || true
-            sudo pkill -9 -x dpkg || true
-            sleep 5
-            sudo dpkg --configure -a || true
-          done
-          exit 1
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
@@ -217,6 +196,9 @@ jobs:
   smoke:
     needs: pages
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
@@ -229,18 +211,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
-      - name: Remember the browsers
-        id: browsers
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
-      - name: Install browsers
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium firefox webkit
-      - name: Install the browsers' system libraries
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium firefox webkit
       - name: Smoke the deployed site
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json

@@ -28,6 +28,9 @@ env:
 jobs:
   soak:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
     name: feedback soak (${{ inputs.ref }} webkit ${{ matrix.shard }})
     strategy:
       fail-fast: false
@@ -49,8 +52,6 @@ jobs:
         run: npm ci
       - name: Build the commit under soak
         run: npm run build
-      - name: Install WebKit
-        run: npx playwright install --with-deps webkit
       - name: Press Feedback over and over
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: soak.json
