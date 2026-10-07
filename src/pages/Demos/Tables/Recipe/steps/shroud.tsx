@@ -8,7 +8,9 @@ import {frameCarry, gap, selectorsSource, stateSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 
-const theSheetDeclaresSeatAndDrift = 'The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.';
+const whatACustomPropertyIs = 'values set by name on the cell and read back in the stylesheet with var()';
+
+const theSheetDeclaresSeatAndDrift = 'The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a cell nobody has carried stays in its seat.';
 
 const carriedProperties = (cssSource: Sample): Line[] => [
   ...unit(cssSource, '@property --seat-x {'), gap,
@@ -30,8 +32,7 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
       <Says>The <Term word="drift">drift</Term> is state on the drag, with a reducer of its own: the survey
         from the lift, the box the thing was grabbed in, and how far the pointer has moved
         since. Every move dispatches the pointer, and two selectors turn the drag into two
-        numbers every carried cell wears as custom properties, values set by name on the cell and read back in the
-        stylesheet with var(): the seat, where the grab box sits
+        numbers every carried cell wears as custom properties, {whatACustomPropertyIs}: the seat, where the grab box sits
         against where the column rests in the order as it stands now, and the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
         changes, the home moves, the seat moves with it. The stylesheet adds the two and does
@@ -78,8 +79,8 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
   <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
-        carried cells still wear their seat and their drift as custom properties, and the keep sheet simply never adds
-        them up. {theSheetDeclaresSeatAndDrift}</Says>
+        carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep
+        sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}</Says>
     </Words>
     <Reveal>
       {world === 'react'

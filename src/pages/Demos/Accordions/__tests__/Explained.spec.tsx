@@ -163,7 +163,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
+    expect(explanation.everyCodeBeside(explained, /While the class sized is on/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
   });
 
   test('should declare the measured height above the classes that hold it, and say what @property is', async () => {
@@ -171,8 +171,9 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;[^]*\.info-measured\.sized/);
-    expect(explained).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto.');
+    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
+    expect(explained).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto, so a panel the script has not yet measured takes its own height.');
+    expect(explained).toHaveTextContent('While the class sized is on, the panel’s height reads --measured-height.');
   });
 
   test('should show the script that turns a part around beside the run that tells it', async () => {

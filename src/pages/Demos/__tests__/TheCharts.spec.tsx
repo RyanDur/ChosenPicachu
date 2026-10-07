@@ -439,7 +439,11 @@ describe('a list of charts', () => {
       const cut = recipeFolds.steps(await pieStory())[1];
 
       expect(cut).toHaveTextContent(/@property --explode-x \{[^]*@property --explode-y \{[^]*@property --turn \{[^]*@property --swing \{[^]*initial-value: -180deg;[^]*\.slice \{/);
-      expect(cut).toHaveTextContent('The sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the centre is two lengths.');
+      expect(cut).toHaveTextContent('The sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the centre is two lengths. Before the markup sets them, a slice sits unturned at the centre.');
+    });
+
+    test('should say what a custom property is where the pie first names it', async () => {
+      expect(recipeFolds.steps(await pieStory())[1]).toHaveTextContent('The markup hands each number to the stylesheet as a custom property: a value set by name on the element, such as --turn, and read back in the sheet with var().');
     });
   });
 
