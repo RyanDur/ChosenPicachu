@@ -20,5 +20,5 @@ export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
-export {definedTerm, timesShut} from './terms';
+export {definedTerm, timesShut, whatHappened} from './terms';
 export {tutorialTable, type TutorialTableName} from './tutorial-tables';

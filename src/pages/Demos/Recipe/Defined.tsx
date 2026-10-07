@@ -45,6 +45,7 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
       aria-label={term}
       popover="auto"
       className="term-definition card rounded-corners lifted"
-      style={{'--term-anchor': anchor}}>{definition}</span>
+      style={{'--term-anchor': anchor}}
+      onToggle={() => window.clearTimeout(intent)}>{definition}</span>
   </>;
 };

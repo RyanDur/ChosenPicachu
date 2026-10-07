@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {definedTerm, desktop, iPhone, pressTab, timesShut} from './__test_support';
+import {definedTerm, desktop, iPhone, pressTab, timesShut, whatHappened} from './__test_support';
 
 test.describe('a phone', () => {
   test.use(iPhone);
@@ -55,10 +55,15 @@ test.describe('a phone, with a definition open', () => {
   });
 
   test('Escape closes it', async ({page}) => {
-    const {definition} = await opened(page);
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+    const happened = await whatHappened(word, definition);
+    await word.tap();
+    await expect(definition).toBeVisible();
 
     await page.keyboard.press('Escape');
 
+    await expect.poll(happened, 'what happened to the term and its definition').toMatch(/Escape keydown → definition closed$/);
     await expect(definition).toBeHidden();
   });
 });
@@ -74,6 +79,20 @@ test.describe('a desk', () => {
     await expect(definition).toBeVisible();
 
     await page.mouse.move(0, 0);
+    await expect(definition).toBeHidden();
+  });
+
+  test('a click on a term the mouse has just reached, then Escape, leaves its definition closed', async ({page}) => {
+    await page.clock.install();
+    await page.goto('demos/?tab=tables');
+    const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
+    await word.hover();
+    await word.click();
+    await expect(definition).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await page.clock.runFor(1000);
+
     await expect(definition).toBeHidden();
   });
 

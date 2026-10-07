@@ -18,3 +18,18 @@ export const timesShut = async (definition: Locator): Promise<() => Promise<numb
   });
   return () => shut.evaluate(times => times.closed);
 };
+
+export const whatHappened = async (word: Locator, definition: Locator): Promise<() => Promise<string>> => {
+  const seen = await word.evaluateHandle(term => {
+    const happened: string[] = [];
+    for (const type of ['pointerdown', 'pointerup', 'focus', 'click']) {
+      term.addEventListener(type, () => happened.push(`term ${type}`));
+    }
+    document.addEventListener('keydown', ({key}) => happened.push(`${key} keydown`), true);
+    return happened;
+  });
+  await definition.evaluate((shown, happened) => shown.addEventListener('beforetoggle', event => {
+    if (event instanceof ToggleEvent) happened.push(`definition ${event.newState}`);
+  }), seen);
+  return () => seen.evaluate(happened => happened.join(' → '));
+};
