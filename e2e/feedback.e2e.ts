@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
+import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, scriptedMarket, siteFrame} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
   test.describe(reader, () => {
@@ -19,6 +19,36 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
         await expect(feedback.words).toBeFocused();
       });
     }
+  });
+}
+
+for (const {name, path, title} of [
+  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables'},
+  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts'}
+]) {
+  test.describe('a phone held upright', () => {
+    test.use(iPhone);
+
+    test(`aims at Feedback while ${name} is still arriving, and the press opens it onto the field`, async ({page}) => {
+      await github(page);
+      await scriptedMarket(page, []);
+      const feedback = feedbackOn(page);
+      const arriving = Promise.withResolvers<void>();
+      await page.route('**/assets/Demos-*.js', async route => {
+        await arriving.promise;
+        await route.continue();
+      });
+      await page.goto(path, {waitUntil: 'commit'});
+      const aim = await feedback.open.boundingBox();
+      if (aim === null) throw new Error('no Feedback to aim at');
+
+      arriving.resolve();
+      await expect(page.getByRole('heading', {level: 1, name: title})).toBeVisible();
+      await page.mouse.click(aim.x + aim.width / 2, aim.y + aim.height / 2);
+
+      await expect(feedback.dialog).toBeVisible();
+      await expect(feedback.words).toBeFocused();
+    });
   });
 }
 

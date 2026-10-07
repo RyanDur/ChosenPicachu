@@ -7,7 +7,6 @@ import {Feedback} from '@components/Feedback';
 import {PageNameProvider} from '@components/PageName';
 import {isRegions, Regions} from '@pages/regions';
 import {gotoTopOfPage} from '@components/scroll';
-import {Paths} from '@pages/Paths';
 import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
@@ -16,6 +15,7 @@ import {PageError} from '@pages/PageError';
 import {NoRoom} from '@pages/NoRoom';
 import {Header} from '@pages/BasePage/Header';
 import {useFrameMeasures} from '@pages/BasePage/useFrameMeasures';
+import {Demos} from '@pages/Demos/routes';
 
 const NoHeader = () => null;
 const ClosedRoomHeader = () => <Header title="Closed room"/>;
@@ -73,13 +73,7 @@ export const router = {
   hydrateFallbackElement: <Site/>,
   children: [
     Home,
-    {
-      lazy: () => import('@pages/Demos').then(({TradingFloor}) => TradingFloor),
-      children: [
-        {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => Demos)},
-        {path: Paths.chartTutorial, lazy: () => import('@pages/Demos').then(({ChartTutorial}) => ChartTutorial)}
-      ]
-    },
+    Demos,
     Users,
     Gallery,
     Games,
