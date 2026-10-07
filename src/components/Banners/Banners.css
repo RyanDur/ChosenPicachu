@@ -147,7 +147,6 @@
   @media (prefers-reduced-motion: reduce) {
     .trouble,
     .news {
-      transition-duration: 0.01s;
       transition-delay: 0s;
     }
   }

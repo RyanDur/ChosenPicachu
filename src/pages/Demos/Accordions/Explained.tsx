@@ -66,7 +66,7 @@ const typeReadings: Record<FoldType, string> = {
 const motionReadings: Record<FoldMotion, string> = {
   reveal: 'The text is uncovered from its first line down.',
   drawer: 'The text slides down from under its bar.',
-  static: 'The fold opens in one frame, with nothing moving.'
+  static: 'The fold opens in one frame, one picture the browser draws, with nothing moving.'
 };
 
 type Props = {
@@ -604,16 +604,18 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold on
             this tab open at once. The reset, the stylesheet that sets every element’s defaults, has
             a reduced-motion block with three rules. The first uses the universal selector, *, which
-            picks every element and reaches their before and after too. It sets each transition to
-            zero, so a change lands in the frame it is made, cuts each animation to 0.01
-            milliseconds, plays each animation once, and turns smooth scrolling into a jump. The
-            second names ::details-content, the part a details hides, which the universal selector
-            cannot reach. The third lets view transitions, the browser’s moves from one page state
-            to the next, play nothing. An animation keeps its hundredth of a millisecond because
-            some scripts wait for an animation to end, and an animation that never runs never ends.
-            A transition gets no such instant: one that runs at all shows the old state for a
-            frame, so a fold’s text would arrive after the fold had opened.</p>
+            picks every element and reaches their before and after too. It sets each transition’s
+            duration to zero, cuts each animation to 0.01 milliseconds, plays each animation once,
+            and turns smooth scrolling into a jump. The second names ::details-content, the part a
+            details hides, which the universal selector cannot reach. The third lets view
+            transitions, the browser’s moves from one page state to the next, play nothing.</p>
           <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
+        </li>
+        <li className="run">
+          <p className="paragraph">A transition with no duration never runs, so a change lands in the
+            frame it is made. One that ran at all, even for an instant, would show the old state for
+            a frame, and a fold’s text would arrive after the fold had opened. A transition with a
+            delay still waits out its delay, then changes at once.</p>
         </li>
       </ol>
     </section>
