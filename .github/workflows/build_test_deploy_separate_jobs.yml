@@ -179,9 +179,15 @@ jobs:
         run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Install the browser's system libraries
         if: steps.browsers.outputs.cache-hit == 'true'
-        # the runner's apt has hung here twice (2026-10-07, over 40 minutes each); a hang fails in minutes, not an hour
-        timeout-minutes: 10
-        run: npx playwright install-deps ${{ matrix.browser }}
+        # the runner's apt hung here three times on 2026-10-07, on three engines, for 40 minutes and more each;
+        # each try is cut at four minutes and tried again, so a hang costs minutes, not the shard
+        timeout-minutes: 15
+        run: |
+          for attempt in 1 2 3; do
+            timeout 4m npx playwright install-deps ${{ matrix.browser }} && exit 0
+            echo "install-deps attempt $attempt did not finish; trying again"
+          done
+          exit 1
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
