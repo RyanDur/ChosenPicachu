@@ -8,36 +8,37 @@ import {
   textOf,
   type Part
 } from './__test_support';
-import {everyBuildJourneys, test} from './__test_support/fold-journeys';
+import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
 
 // WebKit stopped starting page.goto after about 90 navigations of these journeys mixed with the tab's others in one worker; a worker of their own keeps them apart
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
-const textStillShown = async (part: Part): Promise<void> => {
-  await expect.poll(part.isOpen).toBe(true);
-  await expect.poll(part.showsText).toBe(true);
+const gapUnderItsText = async (part: Part): Promise<number> => {
+  const [fold, text] = await Promise.all([part.fold.boundingBox(), textOf(part).boundingBox()]);
+  return Math.abs((fold?.y ?? 0) + (fold?.height ?? 0) - (text?.y ?? Infinity) - (text?.height ?? 0));
 };
 
-const longestOf = async (parts: Part[]): Promise<Part> => {
-  const lengths = await Promise.all(parts.map(async part => (await textOf(part).textContent())?.length ?? 0));
-  return parts[lengths.indexOf(Math.max(...lengths))];
+const tallestOf = async (parts: Part[]): Promise<Part> => {
+  const heights = await Promise.all(parts.map(part => textOf(part).evaluate(text => text.getBoundingClientRect().height)));
+  return parts[heights.indexOf(Math.max(...heights))];
 };
 
 test.describe('a desktop', () => {
   test.use(desktop);
 
   for (const build of measuredBuilds) {
-    test(`an open part of ${build} still shows its text after the window narrows`, async ({page}) => {
+    test(`an open part of ${build} still ends at its text after the window narrows and widens`, async ({page}) => {
       await page.goto(showing(build));
       await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
-      const part = await longestOf(await accordionsTab(page).partsOf(build));
+      const part = await tallestOf(await accordionsTab(page).partsOf(build));
       await part.open();
       await heightOnceSettled(part.fold);
 
-      await page.setViewportSize({width: 390, height: 900});
-
-      await textStillShown(part);
+      for (const width of [390, 1440]) {
+        await page.setViewportSize({width, height: 900});
+        await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+      }
     });
   }
 });
@@ -64,7 +65,7 @@ for (const build of measuredBuilds) {
   test.describe('a desktop', () => {
     test.use(desktop);
 
-    test(`an opening part of ${build} switched to Static mid-motion still shows its text after the window narrows`, async ({page}) => {
+    test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
@@ -73,10 +74,10 @@ for (const build of measuredBuilds) {
       await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
       await page.setViewportSize({width: 390, height: 900});
 
-      await textStillShown(part);
+      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
     });
 
-    test(`an open part of ${build} closed and opened again in one frame still shows its text after the window narrows`, async ({page}) => {
+    test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
       await part.open();
@@ -86,7 +87,7 @@ for (const build of measuredBuilds) {
       await heightOnceSettled(part.fold);
       await page.setViewportSize({width: 390, height: 900});
 
-      await textStillShown(part);
+      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
     });
   });
 }

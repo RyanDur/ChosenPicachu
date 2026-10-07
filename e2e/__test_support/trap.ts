@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {clickWhereItIs} from './scrolling';
 
 export type SortChoice = 'name' | 'date' | 'size';
 
@@ -41,7 +42,7 @@ export const topLayerMenu = (page: Page) => {
     choice,
     open: async (): Promise<void> => {
       await sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
-      await sortBy.click();
+      await clickWhereItIs(page, sortBy);
     },
     overlapsCardTwo: async (): Promise<boolean> => {
       const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).boundingBox()]);

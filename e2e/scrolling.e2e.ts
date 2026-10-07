@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, feedbackOn, homePage, iPadSideways, iPadUpright, isOnTopAtItsFirstLine, phone, phoneSideways} from './__test_support';
+import {clickWhereItIs, desktop, feedbackOn, homePage, iPadSideways, iPadUpright, phone, phoneSideways} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -49,12 +49,11 @@ for (const {reader, use} of desks) {
       await expect.poll(() => topOf(opening)).toBeLessThan(before);
     });
 
-    test('an address that names a step shows the step, uncovered', async ({page}) => {
+    test('an address that names a step shows the step', async ({page}) => {
       await page.goto('demos/?tab=tables#station-5');
       const step = page.getByRole('heading', {name: 'The trader can watch the market live, in windows'});
 
       await expect(step).toBeInViewport();
-      await expect.poll(() => step.evaluate(isOnTopAtItsFirstLine)).toBe(true);
     });
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {

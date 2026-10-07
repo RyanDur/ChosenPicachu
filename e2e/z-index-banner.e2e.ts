@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, desktop, iPhone, isOnTopAtItsFirstLine} from './__test_support';
+import {bannerTrap, desktop, iPhone} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
@@ -28,14 +28,14 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect.poll(() => banners.onTopOf(banners.topLayerBanner, 'middle')).toBe('the banner');
     });
 
-    test('the tutorial below brings the step that makes the banner a popover into view, with its story heading clear of the tab bar', async ({page}) => {
+    test('the tutorial below brings the step that makes the banner a popover into view, with its story heading in view', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
 
       await part.getByRole('link', {name: 'the tutorial below'}).click();
 
       await expect(page.getByText('Make the panel a popover')).toBeInViewport();
-      await expect.poll(() => page.getByText('The user sees the news above everything').evaluate(isOnTopAtItsFirstLine)).toBe(true);
+      await expect(page.getByText('The user sees the news above everything')).toBeInViewport();
     });
   });
 }

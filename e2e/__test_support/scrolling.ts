@@ -39,8 +39,3 @@ export const clickWhereItIs = async (page: Page, target: Locator): Promise<void>
   if (box === null) throw new Error('nothing on screen to click');
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 };
-
-export const isOnTopAtItsFirstLine = (element: Element): boolean => {
-  const {left, top} = element.getBoundingClientRect();
-  return element.contains(document.elementFromPoint(left + 4, top + 4));
-};
