@@ -39,7 +39,10 @@ export const topLayerMenu = (page: Page) => {
     sortBy,
     menu,
     choice,
-    open: (): Promise<void> => sortBy.click(),
+    open: async (): Promise<void> => {
+      await trap.evaluate(exhibit => exhibit.scrollIntoView({block: 'center'}));
+      await sortBy.click();
+    },
     overlapsCardTwo: async (): Promise<boolean> => {
       const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).boundingBox()]);
       return list !== null && cardTwo !== null &&
