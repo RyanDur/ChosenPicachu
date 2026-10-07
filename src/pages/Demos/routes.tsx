@@ -1,7 +1,7 @@
 import {Paths} from '@pages/Paths';
 import {Header} from '@pages/BasePage/Header';
 import {useSearchParamsObject} from '@components/search-params';
-import {DemoTopics, demoTopicParam} from './types';
+import {demoTopicParam, DemoTopics} from './types';
 import {capitalized} from './capitalized';
 
 const DemosHeader = () => {
@@ -17,7 +17,7 @@ export const Demos = {
     {
       path: Paths.demos,
       handle: {header: DemosHeader, mainClassName: 'in-view'},
-      lazy: () => import('.').then(({Demos: tabs}) => tabs)
+      lazy: () => import('.').then(({DemoTabs}) => DemoTabs)
     },
     {
       path: Paths.chartTutorial,

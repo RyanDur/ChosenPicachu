@@ -8,7 +8,7 @@ export const TradingFloor = {
   element: <Trading/>
 };
 
-export const Demos = {
+export const DemoTabs = {
   errorElement: <PageError/>,
   element: <DemosPage/>
 };
