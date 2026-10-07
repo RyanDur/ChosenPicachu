@@ -4,7 +4,10 @@ import {fileURLToPath} from 'node:url';
 const root = dirname(fileURLToPath(import.meta.url));
 
 export default {
-  overrides: [{files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}}],
+  overrides: [
+    {files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}},
+    {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}}
+  ],
   extends: ['stylelint-config-recommended'],
   plugins: [
     'stylelint-declaration-strict-value',
@@ -15,6 +18,11 @@ export default {
       ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
       {message: 'obsolete element — this is a strict html5 site'}
     ],
+    'selector-max-type': [0, {
+      // the argument of ::view-transition-old(root) is a transition's name, which the parser reads as a tag
+      ignoreTypes: ['root'],
+      message: 'a tag is styled only in src/styles/reset.css; give the element a class'
+    }],
     'media-feature-range-notation': 'context',
     'property-disallowed-list': [
       ['/^overscroll-behavior/'],

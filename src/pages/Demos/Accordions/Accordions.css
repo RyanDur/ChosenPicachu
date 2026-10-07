@@ -114,7 +114,7 @@
         }
       }
 
-      &:has(input:focus-visible) {
+      &:has(:focus-visible) {
         background: var(--approach);
         color: var(--ink);
         outline: var(--hairline-x-2) solid var(--ring);
