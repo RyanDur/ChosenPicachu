@@ -175,9 +175,12 @@ jobs:
           key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
       - name: Install the browser
         if: steps.browsers.outputs.cache-hit != 'true'
+        timeout-minutes: 10
         run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Install the browser's system libraries
         if: steps.browsers.outputs.cache-hit == 'true'
+        # the runner's apt has hung here twice (2026-10-07, over 40 minutes each); a hang fails in minutes, not an hour
+        timeout-minutes: 10
         run: npx playwright install-deps ${{ matrix.browser }}
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
