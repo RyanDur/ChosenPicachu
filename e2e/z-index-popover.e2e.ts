@@ -1,27 +1,42 @@
 import {expect, test} from '@playwright/test';
 import {desktop, iPhone, topLayerMenu, trappedMenu} from './__test_support';
 
+const overEverything = 'The list opened over everything around it. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.';
+
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
     test.use(device);
 
     for (const state of ['contained', 'free']) {
-      test(`the menu in the top layer opens over card two with card one ${state}, and the exhibit says so`, async ({page}) => {
+      test(`the menu in the top layer opens over everything around it with card one ${state}, and the exhibit says so`, async ({page}) => {
         await page.goto(`demos/?tab=z-index&card-one=${state}`);
         const menu = topLayerMenu(page);
 
         await menu.open();
 
         await expect(menu.menu).toBeVisible();
-        await expect.poll(() => menu.overlapsCardTwo()).toBe(true);
         for (const choice of ['name', 'date', 'size'] as const) {
           await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
         }
-        await expect(trappedMenu(page).said).toHaveText('The list opened over both cards. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.');
+        await expect(trappedMenu(page).said).toHaveText(overEverything);
       });
     }
   });
 }
+
+test.describe('a phone', () => {
+  test.use(iPhone);
+
+  test('the menu in the top layer, pressed at the bottom edge of the view, is said to open over everything around it', async ({page}) => {
+    await page.goto('demos/?tab=z-index');
+    const menu = topLayerMenu(page);
+
+    await menu.openFromTheBottomEdge();
+
+    await expect(menu.menu).toBeVisible();
+    await expect(trappedMenu(page).said).toHaveText(overEverything);
+  });
+});
 
 test('Escape from a choice closes the menu in the top layer and gives focus back to its button', async ({page}) => {
   await page.goto('demos/?tab=z-index');

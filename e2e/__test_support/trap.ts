@@ -45,11 +45,9 @@ export const topLayerMenu = (page: Page) => {
       // Playwright's click retries a button it finds unstable by scrolling it to the view's edge, where the list opens upward
       await clickWhereItIs(page, sortBy);
     },
-    overlapsCardTwo: async (): Promise<boolean> => {
-      const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).boundingBox()]);
-      return list !== null && cardTwo !== null &&
-        list.y < cardTwo.y + cardTwo.height && cardTwo.y < list.y + list.height &&
-        list.x < cardTwo.x + cardTwo.width && cardTwo.x < list.x + list.width;
+    openFromTheBottomEdge: async (): Promise<void> => {
+      await sortBy.evaluate(button => button.scrollIntoView({block: 'end'}));
+      await clickWhereItIs(page, sortBy);
     },
     onTopAt: (name: SortChoice): Promise<boolean> => choice(name).evaluate(element => {
       element.scrollIntoView({block: 'center'});
