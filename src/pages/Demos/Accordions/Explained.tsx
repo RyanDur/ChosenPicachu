@@ -190,11 +190,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
                   value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
                   property with <code>@property</code>, a rule that tells the browser what kind of value a custom
-                  property holds and what it is until something sets it: here a length or auto, starting as auto. The
-                  script marks the panel with a class, a name an element wears so a rule can pick it
-                  out: <code>sized</code>. While <code>sized</code> is on and no height has been set, the panel takes
-                  its own height.</p>
+                  property holds and what it is until something sets it: here a length or auto, starting as auto.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
+                  pick it out: <code>sized</code>. While <code>sized</code> is on and no height has been set, the panel
+                  takes its own height.</p>
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">Closing runs the other way. While the class <code>sized</code> is on, the
@@ -207,10 +210,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ...unit(measuredSource, 'const startsAt'), gap,
                   ...unit(measuredSource, 'const closed')
                 ]}/>
-                <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
-                  ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
-                ]}/>
+                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">A press while the panel moves keeps <code>sized</code> on and only sets a new end, so the
