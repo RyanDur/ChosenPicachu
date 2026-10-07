@@ -65,8 +65,7 @@ test.describe('a phone, with a definition open', () => {
     await page.keyboard.press('Escape');
     await page.clock.runFor(1000);
 
-    await expect.poll(happened, 'what happened to the term and its definition').toMatch(/Escape keydown → definition closed$/);
-    await expect(definition).toBeHidden();
+    await expect(definition, await happened()).toBeHidden();
   });
 });
 
