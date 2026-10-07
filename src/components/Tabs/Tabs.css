@@ -74,6 +74,6 @@
   }
 }
 
-:is(:root, .app-main):has(.tabs) {
+:root:has(.tabs) {
   scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
 }

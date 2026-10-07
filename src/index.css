@@ -13,7 +13,7 @@ html {
   font-size: 62.5%;
 }
 
-main.app-main:has(.slice-station:hover, .slice-station:focus) {
+:root:has(.slice-station:hover, .slice-station:focus) {
   scroll-behavior: smooth;
 }
 
