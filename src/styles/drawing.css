@@ -1,0 +1,25 @@
+.drawn { stroke: var(--charcoal); }
+
+.paper-filled { fill: var(--paper); }
+
+.buy-side {
+  --side-face: var(--mint-shade);
+  --side-wall: var(--mint-ink);
+  --side-ink: var(--mint-ink);
+  --side-line: var(--mint-dim);
+}
+
+.sell-side {
+  --side-face: var(--international-orange-engineering);
+  --side-wall: var(--international-orange-engineering-shade);
+  --side-ink: var(--international-orange-engineering);
+  --side-line: var(--international-orange-engineering);
+}
+
+.side-face { fill: var(--side-face); }
+
+.side-wall { fill: var(--side-wall); }
+
+.side-ink { color: var(--side-ink); }
+
+.side-line { stroke: var(--side-line); }

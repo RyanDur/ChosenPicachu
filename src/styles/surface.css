@@ -80,6 +80,19 @@
 
 .hairline-separated > * + * { border-block-start: var(--hairline) solid var(--shadow); }
 
+.focus-ringed {
+  &:focus-visible,
+  &:has(:focus-visible) {
+    outline: var(--hairline-x-2) solid var(--ring);
+  }
+}
+
+.circular { border-radius: 50%; }
+
+.trim-bar-beside { border-inline-start: var(--hairline-x-3) solid var(--trim); }
+
+.trim-rule-above { border-block-start: var(--hairline-x-3) solid var(--trim); }
+
 .padded {
   padding: var(--base-x-4);
 
