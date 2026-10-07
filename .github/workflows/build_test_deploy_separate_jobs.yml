@@ -186,6 +186,7 @@ jobs:
           for attempt in 1 2 3; do
             timeout 4m npx playwright install-deps ${{ matrix.browser }} && exit 0
             echo "install-deps attempt $attempt did not finish; trying again"
+            sudo dpkg --configure -a || true
           done
           exit 1
       - name: Take the shipped bundle
