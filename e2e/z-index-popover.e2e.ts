@@ -27,13 +27,16 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 test.describe('a phone', () => {
   test.use(iPhone);
 
-  test('the menu in the top layer, pressed at the bottom edge of the view, is said to open over everything around it', async ({page}) => {
+  test('the menu in the top layer, pressed at the bottom edge of the view, opens over everything around it, and the exhibit says so', async ({page}) => {
     await page.goto('demos/?tab=z-index');
     const menu = topLayerMenu(page);
 
     await menu.openFromTheBottomEdge();
 
     await expect(menu.menu).toBeVisible();
+    for (const choice of ['name', 'date', 'size'] as const) {
+      await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
+    }
     await expect(trappedMenu(page).said).toHaveText(overEverything);
   });
 });

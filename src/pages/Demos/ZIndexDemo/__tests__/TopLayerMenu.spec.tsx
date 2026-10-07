@@ -15,6 +15,14 @@ describe('the menu built the new way', () => {
 });
 
 describe('why the popover wins', () => {
+  test('should say the list opens over everything around it, wherever it opens', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+
+    expect(part).toHaveTextContent('The list from Sort by, in the top layer, opens over everything around it every time, with the box checked or not.');
+  });
+
   test('should show the menu’s markup beside the run that says what popover gives for free', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
