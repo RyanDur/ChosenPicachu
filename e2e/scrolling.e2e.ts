@@ -57,17 +57,20 @@ for (const {reader, use} of desks) {
       await expect.poll(() => step.evaluate(isOnTopAtItsFirstLine)).toBe(true);
     });
 
-    test('an open Feedback dialog holds the page still', async ({page}) => {
+    test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
       await page.goto('demos/?tab=tables');
       const held = page.getByRole('heading', {name: 'Slice the design into stories'});
       await held.scrollIntoViewIfNeeded();
-      const before = await topOf(held);
+      const shut = await topOf(held);
+      await page.mouse.wheel(0, 200);
+      await expect.poll(() => topOf(held)).toBeLessThan(shut);
       await clickWhereItIs(page, feedbackOn(page).open);
       await expect(feedbackOn(page).dialog).toBeVisible();
+      const open = await topOf(held);
 
       await page.mouse.wheel(0, 1000);
 
-      await expect.poll(() => topOf(held)).toBe(before);
+      await expect.poll(() => topOf(held)).toBe(open);
     });
   });
 }
