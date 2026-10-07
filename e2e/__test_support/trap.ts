@@ -50,7 +50,8 @@ export const topLayerMenu = (page: Page) => {
       await clickWhereItIs(page, sortBy);
     },
     onTopAt: (name: SortChoice): Promise<boolean> => choice(name).evaluate(element => {
-      element.scrollIntoView({block: 'center'});
+      // WebKit scrolls even a choice already in view to the centre, which moves Sort by off the edge it was pressed at
+      element.scrollIntoView({block: 'nearest'});
       const {left, top, width, height} = element.getBoundingClientRect();
       return element.contains(document.elementFromPoint(left + width / 2, top + height / 2));
     })
