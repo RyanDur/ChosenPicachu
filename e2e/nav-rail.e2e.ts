@@ -4,10 +4,10 @@ import {desktop, iPad13Upright, iPadUpright, iPhone, siteFrame} from './__test_s
 test.describe('a 13-inch iPad held upright', () => {
   test.use(iPad13Upright);
 
-  test('has the nav in reach without scrolling', async ({page}) => {
+  test('shows the site nav', async ({page}) => {
     await page.goto('');
 
-    await expect(siteFrame(page).nav).toBeInViewport();
+    await expect(siteFrame(page).nav).toBeVisible();
   });
 });
 

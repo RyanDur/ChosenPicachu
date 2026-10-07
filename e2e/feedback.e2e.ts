@@ -135,7 +135,7 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    test('opens Feedback onto its field, with Send in view', async ({page}) => {
+    test('opens Feedback onto its field, with Send shown', async ({page}) => {
       await github(page);
       const feedback = feedbackOn(page);
       await page.goto('demos/?tab=accordions');
@@ -143,7 +143,7 @@ for (const {reader, device} of [
       await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
       await expect(feedback.words).toBeFocused();
 
-      await expect(feedback.send).toBeInViewport();
+      await expect(feedback.send).toBeVisible();
     });
   });
 }

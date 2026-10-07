@@ -19,8 +19,6 @@ export const tutorialTable = (page: Page, name: TutorialTableName) => {
   const step = steps[name].step(page);
   const table = step.getByRole('table', {name, exact: true});
   return {
-    columnHeaders: table.getByRole('columnheader'),
-    rowHeaders: table.getByRole('rowheader'),
     tabLandsInside: async (): Promise<boolean> => {
       await steps[name].before(step).click();
       await pressTab(page);

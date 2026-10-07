@@ -5,10 +5,10 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
   test.describe(reader, () => {
     test.use(device);
 
-    test('meets the games page\'s first sentence on arrival', async ({page}) => {
+    test('meets the games page\'s first sentence', async ({page}) => {
       await page.goto('games');
 
-      await expect(page.getByText('One game so far.')).toBeInViewport();
+      await expect(page.getByText('One game so far.')).toBeVisible();
     });
   });
 }

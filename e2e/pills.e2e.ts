@@ -1,4 +1,4 @@
-import {Locator, Page, expect, test} from '@playwright/test';
+import {Page, expect, test} from '@playwright/test';
 import {demoSettings, desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
 
 const choicesOn = [
@@ -7,13 +7,10 @@ const choicesOn = [
   {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
 ];
 
-const pillsOf = async (page: Page, group: string): Promise<{pills: Locator; names: string[]}> => {
-  const pills = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first();
-  await expect(pills.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
-  if (await pills.isHidden()) await demoSettings(page).press();
-  const names = await pills.getByRole('radio', {includeHidden: true}).evaluateAll(radios => radios.map(radio =>
-    radio instanceof HTMLInputElement ? radio.labels?.item(0)?.textContent.trim() ?? '' : ''));
-  return {pills, names};
+const shownGroup = async (page: Page, group: string): Promise<void> => {
+  const hidden = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first();
+  await expect(hidden.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
+  if (await hidden.isHidden()) await demoSettings(page).press();
 };
 
 for (const {reader, device} of [
@@ -29,23 +26,19 @@ for (const {reader, device} of [
         await page.goto(at);
 
         for (const group of groups) {
-          const {pills, names} = await pillsOf(page, group);
-          for (const name of names) {
-            await fingerTap(page, pills.getByText(name, {exact: true}).first());
-            await expect(pills.getByRole('radio', {name, exact: true, includeHidden: true}), `${group}: ${name}`).toBeChecked();
+          await shownGroup(page, group);
+          const pills = pillSwitch(page, group);
+          const [names, startedOn] = [await pills.names(), await pills.chosen()];
+          expect(names.length, group).toBeGreaterThan(1);
+          const eachTapMovesTheChoice = [...names.filter(name => name !== startedOn), startedOn];
+
+          for (const name of eachTapMovesTheChoice) {
+            await fingerTap(page, pills.wordsOf(name));
+            await expect(pills.pill(name), `${group}: ${name}`).toBeChecked();
           }
         }
       });
     }
-
-    test('a finger just off a pill\'s middle chooses it', async ({page}) => {
-      await page.goto('demos/?tab=tables');
-      const world = page.getByRole('group', {name: 'world', exact: true});
-
-      await fingerTap(page, world.getByText('Vanilla', {exact: true}));
-
-      await expect(world.getByRole('radio', {name: 'Vanilla', includeHidden: true})).toBeChecked();
-    });
   });
 }
 

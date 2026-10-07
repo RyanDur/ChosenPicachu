@@ -239,6 +239,23 @@ describe('the tables demo', () => {
     expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
   });
 
+  test('the recipe’s tables name their rows and columns', async () => {
+    await dragSortRecipe();
+
+    const clues = within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByRole('table', {name: 'the clues'});
+    expect(within(clues).getAllByRole('columnheader')).toHaveLength(2);
+    expect(within(clues).getAllByRole('rowheader')).toHaveLength(5);
+    const layers = screen.getByRole('table', {name: 'the layers'});
+    expect(within(layers).getAllByRole('columnheader')).toHaveLength(4);
+    expect(within(layers).getAllByRole('rowheader')).toHaveLength(4);
+    const sketch = within(screen.getByRole('region', {name: 'Sketch a design from the need'}));
+    for (const measure of ['trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
+      expect(sketch.getByRole('columnheader', {name: measure})).toBeVisible();
+    }
+    expect(sketch.getAllByRole('columnheader')).toHaveLength(7);
+    expect(sketch.getAllByRole('rowheader')).toHaveLength(5);
+  });
+
   test('the slices point at their stations', async () => {
     await dragSortRecipe();
 

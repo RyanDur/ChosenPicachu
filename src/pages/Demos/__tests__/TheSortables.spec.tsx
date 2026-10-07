@@ -250,6 +250,14 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/The list answers as you drag/);
   });
 
+  test('the recipe’s clues name their rows and columns', async () => {
+    await nativeRecipe();
+
+    const clues = within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByRole('table', {name: 'the clues'});
+    expect(within(clues).getAllByRole('columnheader')).toHaveLength(2);
+    expect(within(clues).getAllByRole('rowheader')).toHaveLength(4);
+  });
+
   test('the recipe walks the stations from need to design to slices', async () => {
     const recipe = await nativeRecipe();
 

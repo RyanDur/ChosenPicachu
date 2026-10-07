@@ -21,7 +21,6 @@ export const usersPage = (page: Page) => {
   const homeState = home.getByLabel(/^State/);
   return {
     sameAsHome: form.getByRole('checkbox', {name: 'Same as Home'}),
-    roster,
     names,
     firstRowActions,
     actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),
@@ -37,10 +36,6 @@ export const usersPage = (page: Page) => {
       await page.mouse.wheel(3000, 0);
     },
     rowOf: ({firstName, lastName}: Person) => page.getByRole('rowheader', {name: `${firstName} ${lastName}`}),
-    viewFirst: async (): Promise<void> => {
-      await firstRowActions.click();
-      await page.getByRole('link', {name: 'View'}).click();
-    },
     firstName: form.getByLabel('First Name'),
     add: async ({firstName, lastName, born, street, city, state, zip}: Person): Promise<void> => {
       await form.getByLabel('First Name').fill(firstName);

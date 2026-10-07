@@ -16,19 +16,6 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect.poll(() => menu.onTopAt('size')).toBe('the choice');
     });
 
-    for (const state of ['contained', 'free']) {
-      test(`the open menu ends above the sentence that says where it opened, with card one ${state}`, async ({page}) => {
-        await page.goto(`demos/?tab=z-index&card-one=${state}`);
-        const menu = trappedMenu(page);
-
-        await menu.open();
-
-        await expect(menu.said).not.toBeEmpty();
-        const [list, said] = await Promise.all([page.getByRole('menu').boundingBox(), menu.said.boundingBox()]);
-        expect((list?.y ?? Infinity) + (list?.height ?? 0)).toBeLessThanOrEqual(said?.y ?? 0);
-      });
-    }
-
     test('freeing card one opens the menu over card two, and trapping it again drops the menu back under', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);

@@ -14,6 +14,7 @@ for (const stage of stages) {
       test('narrows buys to a stop, and buys\' sort control still opens its menu', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
         await table.dragEdge('buys', {by: -400, moves: 20});
+        await expect(table.resizeHandle('buys')).toHaveAccessibleName(/, \d+%$/);
         const stopped = await table.announcedShare('buys');
 
         await table.dragEdge('buys', {by: -400, moves: 20});
@@ -26,6 +27,7 @@ for (const stage of stages) {
       test('widens buys into sells to a stop, and sells\' sort control still opens its menu', async ({page}) => {
         const table = dragSortTable(page, stage.table(page));
         await table.dragEdge('buys', {by: 400, moves: 20});
+        await expect(table.resizeHandle('sells')).toHaveAccessibleName(/, \d+%$/);
         const stopped = await table.announcedShare('sells');
 
         await table.dragEdge('buys', {by: 400, moves: 20});

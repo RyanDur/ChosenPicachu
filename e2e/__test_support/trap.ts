@@ -42,6 +42,7 @@ export const topLayerMenu = (page: Page) => {
     choice,
     open: async (): Promise<void> => {
       await sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
+      // Playwright's click retries a button it finds unstable by scrolling it to the view's edge, where the list opens upward
       await clickWhereItIs(page, sortBy);
     },
     overlapsCardTwo: async (): Promise<boolean> => {

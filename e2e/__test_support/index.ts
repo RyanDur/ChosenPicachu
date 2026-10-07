@@ -21,5 +21,4 @@ export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
 export {definedTerm, timesShut} from './terms';
-export {designSketch} from './design-sketch';
 export {tutorialTable, type TutorialTableName} from './tutorial-tables';
