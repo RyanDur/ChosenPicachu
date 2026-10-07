@@ -367,7 +367,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Carry the real thing[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('two numbers every carried cell wears as custom properties, values set by name on the cell and read back in the stylesheet with var(): the seat,');
-    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a cell nobody has carried stays in its seat.');
+    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its seat.');
   });
 
   test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
@@ -378,7 +378,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep sheet simply never adds them up.');
     expect(recipe).toHaveTextContent(/Leave the origin in place[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
-    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a cell nobody has carried stays in its seat.');
+    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its seat.');
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {

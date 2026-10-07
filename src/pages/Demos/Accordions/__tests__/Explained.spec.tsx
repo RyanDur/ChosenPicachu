@@ -171,9 +171,20 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
-    expect(explained).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto, so a panel the script has not yet measured takes its own height.');
-    expect(explained).toHaveTextContent('While the class sized is on, the panel’s height reads --measured-height.');
+    const declared = explanation.runTelling(explained, /The script hands each height to the stylesheet/);
+    const held = explanation.runTelling(explained, /While the class sized is on/);
+
+    expect(outOfReadingOrder([declared, held])).toEqual([]);
+    expect(explanation.everyCodeBeside(explained, /The script hands each height to the stylesheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
+    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto, so while sized is on and no height has been set, the panel takes its own height.');
+  });
+
+  test('should say the panel’s height reads --measured-height while the class sized is on', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(explained, /Closing runs the other way/)).toHaveTextContent('Closing runs the other way. While the class sized is on, the panel’s height reads --measured-height.');
   });
 
   test('should show the script that turns a part around beside the run that tells it', async () => {

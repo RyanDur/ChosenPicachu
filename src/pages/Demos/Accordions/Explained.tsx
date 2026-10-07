@@ -187,15 +187,16 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="measured-depth" className="opener bold">How the measured height works</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
-                  through a custom property, a value the stylesheet can read, named <code>--measured-height</code>. The
-                  stylesheet declares that property with <code>@property</code>, a rule that tells the browser what kind
-                  of value a custom property holds and what it is until something sets it: here a length or auto,
-                  starting as auto, so a panel the script has not yet measured takes its own height.</p>
+                <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
+                  value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
+                  property with <code>@property</code>, a rule that tells the browser what kind of value a custom
+                  property holds and what it is until something sets it: here a length or auto, starting as auto, so
+                  while sized is on and no height has been set, the panel takes its own height.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
               </li>
               <li className="run">
-                <p className="paragraph">While the class sized is on, the panel’s height reads <code>--measured-height</code>.
+                <p className="paragraph">Closing runs the other way. While the class sized is on, the panel’s height
+                  reads <code>--measured-height</code>.
                   To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
                   when the change event fires, so the script first pins where the motion starts, with a second class,

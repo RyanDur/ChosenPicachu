@@ -8,9 +8,13 @@ import {frameCarry, gap, selectorsSource, stateSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 
-const whatACustomPropertyIs = 'values set by name on the cell and read back in the stylesheet with var()';
+const whatACustomPropertyIs = <>values set by name on the cell and read back in the stylesheet with <code>var()</code></>;
 
-const theSheetDeclaresSeatAndDrift = 'The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a cell nobody has carried stays in its seat.';
+const theSheetDeclaresSeatAndDrift = <>
+  The sheet declares the seat and the drift with <code>@property</code>, a rule that gives a custom property a type
+  and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its
+  seat.
+</>;
 
 const carriedProperties = (cssSource: Sample): Line[] => [
   ...unit(cssSource, '@property --seat-x {'), gap,
