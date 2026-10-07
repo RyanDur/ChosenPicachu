@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, documentScrollY, feedbackOn, homePage, iPadSideways, iPadUpright, paneScrollTop, phone, settledScrollY} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, feedbackOn, homePage, iPadSideways, iPadUpright, paneScrollTop, phone, phoneSideways, settledScrollY} from './__test_support';
 
 const scrolled = async (page: Page): Promise<{document: number; pane: number}> =>
   ({document: await documentScrollY(page), pane: await paneScrollTop(page)});
@@ -11,6 +11,7 @@ const documentScrolled = async (page: Page): Promise<void> => {
 
 const handheld = [
   {reader: 'a phone', device: phone},
+  {reader: 'a phone held sideways', device: phoneSideways},
   {reader: 'an iPad held upright', device: iPadUpright},
   {reader: 'an iPad held sideways', device: iPadSideways}
 ];

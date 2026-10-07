@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
+import {desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
@@ -169,6 +169,7 @@ for (const {reader, viewport} of [
 
       await gallery.wall.last().scrollIntoViewIfNeeded();
 
+      await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
       await expect(gallery.settingsPanel).toBeInViewport();
       await expect(gallery.nextPage).toBeInViewport();
     });
