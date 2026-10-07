@@ -213,11 +213,11 @@ describe('the fold choices', () => {
   });
 
   test.each([
-    ['Reveal', 'The text is uncovered from its first line down.'],
-    ['Drawer', 'The text slides down from under its bar.'],
-    ['Static', 'The fold opens at once, with nothing moving.']
-  ])('should read %s as the fold motion once it is chosen', async (motion, reading) => {
-    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+    ['Reveal', 'static', 'The text is uncovered from its first line down.'],
+    ['Drawer', 'static', 'The text slides down from under its bar.'],
+    ['Static', 'reveal', 'The fold opens at once, with nothing moving.']
+  ])('should read %s as the fold motion once it is chosen over %s', async (motion, from, reading) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${from}`)}/>);
 
     const row = await rowOf('fold motion');
     await userEvent.click(within(row).getByRole('radio', {name: motion}));
