@@ -45,6 +45,7 @@ test.describe('a desktop', () => {
 
 for (const build of measuredBuilds) {
   test(`a reader opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
