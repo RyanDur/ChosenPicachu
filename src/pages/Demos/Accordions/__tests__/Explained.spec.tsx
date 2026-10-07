@@ -158,37 +158,51 @@ describe('the measured build', () => {
     expect(explanation.codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/const opened[^]*const settled[^]*const letsGo/);
   });
 
-  test('should show the class that holds the height beside the run that names it, and unmoving beside the run that closes', async () => {
+  test('should show @property beside the run that declares it, .sized beside the run that names the class, and .unmoving beside the run that closes', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
+    expect(explanation.everyCodeBeside(explained, /^The script hands each height to the stylesheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
     expect(explanation.everyCodeBeside(explained, /^The script marks the panel with a class/).join()).toMatch(/\.info-measured\.sized \{/);
     expect(explanation.everyCodeBeside(explained, /^Closing runs the other way\./).join()).toMatch(/\.info-measured\.unmoving \{/);
   });
 
-  test('should declare the measured height, then say what a class is, then close, each in a run of its own', async () => {
+  test('should tell the property, then the class, then closing, each in a run of its own', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    const declared = explanation.runTelling(explained, /^The script hands each height to the stylesheet/);
-    const named = explanation.runTelling(explained, /^The script marks the panel with a class/);
-    const closing = explanation.runTelling(explained, /^Closing runs the other way\./);
-
-    expect(outOfReadingOrder([declared, named, closing])).toEqual([]);
-    expect(explanation.everyCodeBeside(explained, /^The script hands each height to the stylesheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
-    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto.');
-    expect(declared).not.toHaveTextContent(/a name an element wears/);
-    expect(named).toHaveTextContent('The script marks the panel with a class, a name an element wears so a rule can pick it out: sized. While sized is on and no height has been set, the panel takes its own height.');
+    expect(outOfReadingOrder([
+      explanation.runTelling(explained, /^The script hands each height to the stylesheet/),
+      explanation.runTelling(explained, /^The script marks the panel with a class/),
+      explanation.runTelling(explained, /^Closing runs the other way\./)
+    ])).toEqual([]);
   });
 
-  test('should open the closing run with “Closing runs the other way”, and say the panel’s height reads --measured-height while the class sized is on', async () => {
+  test('should say what @property is in the property’s run, and leave the class to the next', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
-    const explained = await screen.findByRole('region', {name: parts[0]});
+    const declared = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script hands each height to the stylesheet/);
 
-    expect(explanation.runTelling(explained, /^Closing runs the other way\./)).toHaveTextContent('Closing runs the other way. While the class sized is on, the panel’s height reads --measured-height.');
+    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto.');
+    expect(declared).not.toHaveTextContent(/a name an element wears/);
+  });
+
+  test('should say what a class is, and that the panel’s height reads --measured-height while sized is on, in the class’s run', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const named = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script marks the panel with a class/);
+
+    expect(named).toHaveTextContent('The script marks the panel with a class, a name an element wears so a rule can pick it out: sized. While sized is on, the panel’s height reads --measured-height. With no height set yet, that is auto, so the panel takes its own height.');
+  });
+
+  test('should open the closing run with what closing does', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const closing = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^Closing runs the other way\./);
+
+    expect(closing).toHaveTextContent('Closing runs the other way. To close, the script sets the open height, then 0, and the transition moves between them.');
   });
 
   test('should show the script that turns a part around beside the run that tells it', async () => {

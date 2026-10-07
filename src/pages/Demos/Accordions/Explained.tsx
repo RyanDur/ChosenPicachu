@@ -195,13 +195,13 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
-                  pick it out: <code>sized</code>. While <code>sized</code> is on and no height has been set, the panel
-                  takes its own height.</p>
+                  pick it out: <code>sized</code>. While <code>sized</code> is on, the panel’s height
+                  reads <code>--measured-height</code>. With no height set yet, that is auto, so the panel takes its own
+                  height.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
               </li>
               <li className="run">
-                <p className="paragraph">Closing runs the other way. While the class <code>sized</code> is on, the
-                  panel’s height reads <code>--measured-height</code>. To close, the script sets the open height, then 0, and
+                <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
                   when the change event fires, so the script first pins where the motion starts, with a second
                   class, <code>unmoving</code>, that switches the height’s transition off for that moment.</p>
