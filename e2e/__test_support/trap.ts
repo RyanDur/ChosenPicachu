@@ -40,7 +40,7 @@ export const topLayerMenu = (page: Page) => {
     menu,
     choice,
     open: async (): Promise<void> => {
-      await trap.evaluate(exhibit => exhibit.scrollIntoView({block: 'center'}));
+      await sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
       await sortBy.click();
     },
     overlapsCardTwo: async (): Promise<boolean> => {
