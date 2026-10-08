@@ -6,6 +6,7 @@ export type View = {
   readonly page: SitePage;
   readonly into?: (page: Page) => Promise<void>;
   readonly withoutWorkers?: true;
+  readonly held?: RegExp;
 };
 
 // the users backend draws its roster at random inside its service worker, out of a page's reach, so that page is
@@ -62,6 +63,11 @@ export const views: readonly View[] = [
     name: 'a rail link hovered',
     page: named('home'),
     into: page => hovered(page, () => page.getByRole('navigation', {name: 'site'}).getByRole('link').nth(1))
+  },
+  {
+    name: 'its wall still on the way',
+    page: {...named('gallery'), loaded: page => page.getByRole('progressbar').first()},
+    held: /\/vam\//
   },
   {
     name: 'a pill hovered',

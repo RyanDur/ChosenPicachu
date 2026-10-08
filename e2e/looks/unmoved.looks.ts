@@ -22,6 +22,7 @@ const looked = async (browser: Browser, base: string, view: View, viewport: {wid
   const context = await browser.newContext({viewport, reducedMotion: 'reduce', serviceWorkers: view.withoutWorkers ? 'block' : 'allow'});
   const page: Page = await context.newPage();
   const settled = await heldStill(page);
+  if (view.held) await page.route(view.held, () => new Promise(() => undefined));
   await page.goto(base + view.page.path);
   await page.getByRole(view.page.ready).first().waitFor();
   await view.page.loaded?.(page).waitFor();
