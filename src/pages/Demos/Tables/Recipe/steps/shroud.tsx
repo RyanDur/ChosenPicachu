@@ -106,7 +106,7 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
   </Step>;
 
 export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
-  <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
+  <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
         carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep

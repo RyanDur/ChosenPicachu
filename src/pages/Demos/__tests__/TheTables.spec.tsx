@@ -364,7 +364,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
 
     expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
     expect(recipeFolds.reveals(recipe).length).toBeGreaterThan(0);
@@ -377,7 +377,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
 
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
@@ -405,7 +405,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
 
     expect(recipe).toHaveTextContent(/Carry the real thing[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('two numbers every carried cell wears as custom properties, values set by name on the cell and read back in the stylesheet with var(): the seat,');
@@ -418,11 +418,11 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
     expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep sheet simply never adds them up.');
-    expect(recipe).toHaveTextContent(/Leave the origin in place[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
+    expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
     expect(recipe).not.toHaveTextContent(/stays in its seat/);
   });
@@ -432,7 +432,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
     await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
@@ -444,7 +444,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
     expect(recipe).toHaveTextContent(/stays where it stands while you drag/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
-    expect(recipe).toHaveTextContent(/Leave the origin in place/);
+    expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move/);
     expect(recipe).toHaveTextContent(/Leave the motion out/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
@@ -481,7 +481,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
     expect(recipe).toHaveTextContent(/Both parties slide/);
     expect(recipe).toHaveTextContent(/the stylesheet slides them/);
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
     expect(recipe).toHaveTextContent(/measures the header row at the keypress/);
     expect(recipe).toHaveTextContent(/The trader can sort by row/);
     expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
@@ -1049,11 +1049,11 @@ describe('the classes the table wears, as its recipes tell them', () => {
     expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the sheet gives the carried cell position: relative as well. Raised, the carried cells ride over whatever they pass, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
     expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbours slide beneath the carried cells, and the paper keeps either from showing through the other.');
-    expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
+    expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
   });
 
   test.each(['react', 'vanilla'])('should say which cells paper-in-motion covers in the keep step, in the %s world', async world => {
@@ -1062,11 +1062,11 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await recipeFolds.press(recipe, 'The trader can sort by column');
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
     expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
-    expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
+    expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
   test.each(['react', 'vanilla'])('should say the keyboard ring is focus-ringed in the %s world, with its block after the header’s rule', async world => {

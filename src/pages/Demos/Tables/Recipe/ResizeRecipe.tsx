@@ -188,7 +188,7 @@ const widenStory = (world: World) =>
       <Step title="Let each control find the cell’s edge">
         <Words want="A header cell holds a title, sometimes a menu, sometimes a handle; the controls must sit at the cell’s end edge, and a table cell cannot become a grid without ceasing to be a table cell.">
           <Says>No box arranges them. The cell holds its title as text and each control places
-            itself: <Mdn path="Web/CSS/position">position</Mdn>: absolute against the cell’s end
+            itself: <code><Mdn path="Web/CSS/position">position</Mdn>: absolute</code> against the cell’s end
             edge, with the cell reserving the room in its own padding.</Says>
         </Words>
         <Reveal>
@@ -201,7 +201,7 @@ const widenStory = (world: World) =>
             holds by asking the cascade: more room when a menu is present, less when only the
             handle is. The cost is real and it is stated: the padding and the controls’ offsets are
             two numbers that must agree, so both live in the one header sheet and nowhere else.
-            The column names itself with aria-label, since the title is bare text with no element
+            The column names itself with <code>aria-label</code>, since the title is bare text with no element
             to point at.</Says>
           {edgeMarkup[world]}
         </Reveal>
