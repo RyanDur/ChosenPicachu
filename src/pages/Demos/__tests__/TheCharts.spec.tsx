@@ -268,10 +268,7 @@ describe('a list of charts', () => {
 
   test.each([
     ['shows the markup and the dress, not just the arithmetic', ['className="candlesticks"', '.wick {', '.drawn {', '.buy-side {', '.sell-side {', '.side-face {', '.side-wall {', 'className="volumes volume-side"', '.volume-side {']],
-    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']],
-    ['says the wick wears drawn', ['It wears drawn, the shared class for a charcoal hairline; the sheet keeps its width.']],
-    ['says each candle wears its side, and what a shared class is', ['Each wears a side with it, buy-side or sell-side, a shared class that sets a side’s colours; the body wears side-face and the wall side-wall, so the shared sheet paints them. A shared class is a look that lives in the site’s shared sheet and that an element wears by name.']],
-    ['says the volume bars wear volume-side', ['The volume bars wear volume-side with side-face and side-wall: leather for the bar and drab for its edge, the same slots the sides fill.']]
+    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']]
   ])('the candles story %s', async (_claim, shown) => {
     const feed = await listeningFeed();
 
@@ -373,7 +370,10 @@ describe('a list of charts', () => {
     test.each([
       ['charts on the same period agree', 'So two charts set to the same period are drawn from the same candles and cannot disagree.'],
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
-      ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume']
+      ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
+      ['the wick wears drawn', 'It wears drawn, the shared class for a charcoal hairline; the sheet keeps its width.'],
+      ['each candle wears its side, and what a shared class is', 'Each wears a side with it, buy-side or sell-side, a shared class that sets a side’s colours; the body wears side-face and the wall side-wall, so the shared sheet paints them. A shared class is a look that lives in the site’s shared sheet and that an element wears by name.'],
+      ['the volume bars wear volume-side', 'The volume bars wear volume-side with side-face and side-wall: leather for the bar and drab for its edge, the same slots the sides fill.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
     });
@@ -402,7 +402,6 @@ describe('a list of charts', () => {
     test.each([
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
       ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
-      ['each bar has an edge', 'with side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge.'],
       ['the bars wear their sides and the middle line drawn', 'The bought bars wear buy-side and the sold bars sell-side, with side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge. The middle line wears drawn.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
