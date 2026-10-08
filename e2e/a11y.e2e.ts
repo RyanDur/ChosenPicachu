@@ -35,10 +35,10 @@ test('the home page has no accessibility violations with its folds open', async 
   for (const door of await home.doorFolds.all()) await home.doorSummaryOf(door).click();
   await home.researchFold.getByRole('heading', {name: 'The research'}).click();
 
-  const found = [];
+  const found = violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze());
   for (const story of await home.timelineStories.all()) {
     await home.fullerStoryOf(story).click();
-    found.push(...violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze()));
+    found.push(...violationsOf(await new AxeBuilder({page}).include(home.timelineScope).withTags(['wcag2a', 'wcag2aa']).analyze()));
   }
 
   expect(found).toEqual([]);
