@@ -20,6 +20,7 @@ import htmlAloneSource from './HtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
 import resetCss from '../../../styles/reset.css?sample';
+import surfaceCss from '../../../styles/surface.css?sample';
 import {
   FocusOnTheBar,
   OffScreenNotGone,
@@ -306,9 +307,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Each bar shows an arrow that points right while its part is closed and down
                   while it is open. The label is a flex row, which lays its children side by side: the
                   part’s name sits at one end and the arrow at the other, both centred on the bar’s height.
-                  The arrow is an empty box drawn after the label’s words, with only its top and right
-                  borders, turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a
-                  keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When
+                  The arrow is an empty box drawn after the label’s words. The bar wears <code>corner-after</code>, which
+                  gives that box only its top and right borders; the sheet sizes it and turns it 45 degrees so the
+                  corner points right. The borders are drawn in currentcolor, a keyword for the element’s own text
+                  colour, so the arrow changes colour with the bar’s words. When
                   the {input} is checked, the
                   ~ combinator picks the label after it, and the corner turns to 135 degrees and points
                   down. The turn is a transition, which runs whenever the value changes.
@@ -317,12 +319,16 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
                 {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
                   so a turn is cheap. The bar has a set height and side padding, so every bar is the same
-                  size whatever its word, and its colours are the page’s, inverted. The arrow’s width and
-                  height size the box its borders outline, and its right margin keeps the corner off the
-                  bar’s edge.</p>
+                  size whatever its word, and it wears <code>inverse-filled</code>, the page’s colours the other way
+                  round. The arrow’s width and height size the box its borders outline, and its right margin
+                  keeps the corner off the bar’s edge. A look the bar shares with the rest of the site is a word in
+                  a shared sheet that the element wears as a class; the bar’s own sheet keeps the structure, and
+                  the samples show both.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
                   ...unit(accordionsCss, '.opening-arrow::after {'), gap,
+                  ...unit(surfaceCss, '.inverse-filled {'), gap,
+                  ...unit(surfaceCss, '.corner-after::after {'), gap,
                   ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
                   ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
                 ]}/>
@@ -330,16 +336,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">A keyboard user needs to see which bar they are on. Here the {input} has the focus, but the label is what the reader
-                  sees, so the stylesheet carries one to the other. The :focus-visible pseudo-class picks
-                  the {input} while it has keyboard focus, and <code>:focus-visible ~ .info-label</code> gives the
-                  bar the approach colour and a ring inside its edge. The browser treats hovering a label
-                  as hovering its {input}, so :hover on the {input} lights the bar too. That rule sits
-                  inside a media query, <code>(hover: hover)</code>, which applies its rules only on a device whose
-                  pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s
-                  borders take the ink colour with the words.</p>
+                  sees, so the label wears <code>prior-approached</code>, a word that reads an earlier sibling. The
+                  :focus-visible pseudo-class picks the {input} while it has keyboard focus,
+                  and <code>:focus-visible ~ .prior-approached</code> gives the bar the approach colour, ink for its
+                  words and a ring inside its edge. The browser treats hovering a label as hovering
+                  its {input}, so the word’s :hover rule lights the bar too. That rule sits inside a media
+                  query, <code>(hover: hover)</code>, which applies its rules only on a device whose pointer can
+                  hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s borders take the
+                  ink colour with the words.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '@media (hover: hover) {\n      .info-toggle:hover'), gap,
-                  ...unit(accordionsCss, '.info-toggle:focus-visible ~ .info-label {')
+                  ...unit(surfaceCss, '@media (hover: hover) {\n  :hover ~ .prior-approached'), gap,
+                  ...unit(surfaceCss, ':focus-visible ~ .prior-approached {')
                 ]}/>
                 <FocusOnTheBar/>
               </li>
@@ -350,9 +357,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   hidden hides the text. Inside it, a section of the same height holds the paragraph and
                   scrolls what does not fit. The paragraph is at least as tall as the section and pads
                   its text with the page’s spacing on every side. Whether a tall part’s last line is cut at
-                  the foot depends on where its lines fall, so the section paints the sign in its background
-                  instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with
-                  the text and hides the shadow at the end, or when the text fits.
+                  the foot depends on where its lines fall, so the section wears <code>foot-shadowed</code>, which
+                  paints the sign in its background instead: a shadow held at its foot, darkest at the edge, and a
+                  cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when
+                  the text fits. It wears <code>focus-ringed</code> too, so a keyboard reader sees when they have
+                  reached it.
                   The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
                   scroll it, and aria-labelledby names it by its bar, so a screen reader says which part
                   it is reading. Closed, visibility hidden takes the text out of the tab order and out of
@@ -366,6 +375,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
                   ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
                   ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
+                  ...unit(surfaceCss, '.foot-shadowed {'), gap,
+                  ...unit(surfaceCss, '.focus-ringed {'), gap,
                   ...unit(accordionsCss, '.info-paragraph {'), gap,
                   ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
                   ...{
@@ -389,13 +400,18 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A checked radio stays checked when you press it again, so a part cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever part was open.</p>
-                <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close">', '</li>')}/>
+                <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
                   gets its own rule: a flex row that centres its one word. Its label fills the whole bar,
-                  so a press anywhere on the bar counts.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '&.close {')}/>
+                  so a press anywhere on the bar counts. Its ground is <code>field-inverse</code> and its
+                  word <code>field-ink</code>, two plain colour words with no hover or focus of their own.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&.close {'), gap,
+                  ...unit(surfaceCss, '.field-inverse {'), gap,
+                  ...unit(surfaceCss, '.field-ink {')
+                ]}/>
               </li>}
               <li className="run">
                 <p className="paragraph">A screen reader announces each part as what its markup says it is:
@@ -436,20 +452,29 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
-                  summary, in the same colours. Summary takes focus and hover itself, where the {input} build
-                  carried focus from the hidden {input} to the label. The hairline border draws the line between
-                  one bar and the next.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
+                  summary, wearing the same words: <code>inverse-filled</code> for its colours, <code>attentive</code> for
+                  the approach colour, the ring and a glow while it is pressed, and <code>field-outlined</code> for the
+                  hairline that draws the line between one bar and the next. Summary takes focus and hover itself,
+                  where the {input} build carried focus from the hidden {input} to the label.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), gap,
+                  ...unit(surfaceCss, '.inverse-filled {'), gap,
+                  ...unit(surfaceCss, '.attentive:where(:not(:disabled)) {'), gap,
+                  ...unit(surfaceCss, '.field-outlined {')
+                ]}/>
               </li>
               <li className="run">
                 <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
-                  drew one from two borders. List-style none removes that marker, and the bar draws the {input} build’s
+                  drew one from two borders. The word <code>unmarked</code> removes that marker, and the bar draws the {input} build’s
                   arrow in its place, so this bar reads the same as the bars of the known-height and
                   measured builds. The arrow points right while the part is closed. When the part opens, the
                   browser adds open to the details in the page it is showing, as if it were written in the
                   opening tag. A name in that place is called an attribute. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
                   rule turns the arrow down.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '&[open] > .info-label::after {')}/>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&[open] > .info-label::after {'), gap,
+                  ...unit(surfaceCss, '.unmarked {')
+                ]}/>
               </li>
               <li className="run">
                 <p className="paragraph">A pseudo-element is a part of an element
@@ -538,10 +563,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   hears the part and whether it is open, such as “basalt, {input}, checked”. The
                   stylesheet writes Open or Close at the bar’s end, for the eye, to say what a press will
                   do. It marks the word as decoration with an empty alternative, so the word is not read.
-                  Someone using voice control says the part’s name.</p>
+                  The word is boxed by <code>outlined-before</code>, a hairline in the words’ own colour, which
+                  inverts while the bar is pressed. Someone using voice control says the part’s name.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&::before {\n        order: 1;'), gap,
-                  ...unit(accordionsCss, '&:has(:checked) .info-label::before {')
+                  ...unit(accordionsCss, '&:has(:checked) .info-label::before {'), gap,
+                  ...unit(surfaceCss, '.outlined-before {')
                 ]}/>
               </li>
               {type === 'exclusive' && <li className="run">

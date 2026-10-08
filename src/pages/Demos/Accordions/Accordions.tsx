@@ -45,13 +45,13 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
-    <ul className="accordion">
+    <ul className="accordion trim">
       {content.map(({value, key}, id) =>
         <li key={key} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label id={`fold-${id}-checkbox-label`} className="info-label opening-arrow" htmlFor={`fold-${id}-checkbox`}>{key}</label>
+          <label id={`fold-${id}-checkbox-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-checkbox`}>{key}</label>
           <div className="info">
-            <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-checkbox-label`}>
+            <section className="info-text foot-shadowed focus-ringed" tabIndex={0} aria-labelledby={`fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{value}</p>
             </section>
           </div>
@@ -71,17 +71,17 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
-    <ul className="accordion">
-      <li className="fold close">
+    <ul className="accordion trim">
+      <li className="fold close field-inverse">
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label" htmlFor="close-radio">Close</label>
+        <label className="info-label field-ink prior-approached" htmlFor="close-radio">Close</label>
       </li>
       {content.map(({value, key}, id) =>
         <li className="fold" key={key}>
           <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-          <label id={`fold-${id}-radio-label`} className="info-label opening-arrow" htmlFor={`fold-${id}-radio`}>{key}</label>
+          <label id={`fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-radio`}>{key}</label>
           <div className="info">
-            <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-radio-label`}>
+            <section className="info-text foot-shadowed focus-ringed" tabIndex={0} aria-labelledby={`fold-${id}-radio-label`}>
               <p className="info-paragraph">{value}</p>
             </section>
           </div>
@@ -102,7 +102,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold">
-          <summary className="info-label opening-arrow">{key}</summary>
+          <summary className="info-label opening-arrow unmarked inverse-filled attentive field-outlined corner-after">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}
@@ -121,7 +121,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordion">
-          <summary className="info-label opening-arrow">{key}</summary>
+          <summary className="info-label opening-arrow unmarked inverse-filled attentive field-outlined corner-after">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}
@@ -142,7 +142,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <ul className="new-accordion">
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
-          <label className="info-label">
+          <label className="info-label inverse-filled attentive field-outlined outlined-before">
             <span className="sub-title bold">{key}</span>
             <input type="checkbox" className="off-screen"/>
           </label>
@@ -166,7 +166,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
-          <label className="info-label">
+          <label className="info-label inverse-filled attentive field-outlined outlined-before">
             <span className="sub-title bold">{key}</span>
             <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
           </label>
@@ -187,11 +187,11 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
-    <ul className="accordion" onChange={foldMeasured}>
+    <ul className="accordion trim" onChange={foldMeasured}>
       {content.map(({value, key}, id) =>
         <li key={key} className="fold">
           <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label className="info-label opening-arrow" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
+          <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
           <div className="info-measured">
             <p className="info-paragraph">{value}</p>
           </div>
@@ -211,15 +211,15 @@ export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
-    <ul className="accordion" onChange={foldMeasured}>
-      <li className="fold close">
+    <ul className="accordion trim" onChange={foldMeasured}>
+      <li className="fold close field-inverse">
         <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
-        <label className="info-label" htmlFor="measured-close-radio">Close</label>
+        <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
       </li>
       {content.map(({value, key}, id) =>
         <li className="fold" key={key}>
           <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
-          <label className="info-label opening-arrow" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
+          <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
           <div className="info-measured">
             <p className="info-paragraph">{value}</p>
           </div>

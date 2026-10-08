@@ -88,7 +88,8 @@
   color: var(--field);
   background: var(--field-inverse);
 
-  &:focus-visible {
+  &:focus-visible,
+  &:has(:focus-visible) {
     color: var(--ink);
   }
 
@@ -226,6 +227,59 @@
 .field-before::before { background: var(--field); }
 
 .field-after::after { background: var(--field); }
+
+.field-inverse { background: var(--field-inverse); }
+
+.field-ink { color: var(--field); }
+
+.unmarked { list-style: none; }
+
+.field-outlined { border: var(--hairline) solid var(--field); }
+
+.corner-after::after {
+  border-top: var(--hairline-x-2) solid currentcolor;
+  border-right: var(--hairline-x-2) solid currentcolor;
+}
+
+@media (hover: hover) {
+  :hover ~ .prior-approached {
+    background: var(--approach);
+    color: var(--ink);
+  }
+}
+
+:focus-visible ~ .prior-approached {
+  background: var(--approach);
+  color: var(--ink);
+  outline: var(--hairline-x-2) solid var(--ring);
+  outline-offset: calc(var(--hairline-x-2) * -1);
+}
+
+.foot-shadowed {
+  background-color: var(--trim);
+  background-image:
+    linear-gradient(var(--trim), var(--trim)),
+    linear-gradient(to top, var(--charcoal), transparent);
+  background-position: bottom;
+  background-size: 100% calc(var(--base-x-4) + var(--base-x-2)), 100% var(--base-x-2);
+  background-repeat: no-repeat;
+  background-attachment: local, scroll;
+}
+
+.outlined-before {
+  &::before {
+    border: var(--hairline) solid;
+  }
+
+  &:active::before {
+    background: var(--field-inverse);
+    color: var(--field);
+    outline: var(--hairline) solid var(--field);
+    outline-offset: calc(var(--hairline-x-3) * -1);
+  }
+}
+
+.muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
 .padded {
   padding: var(--base-x-4);

@@ -7,7 +7,6 @@
 
   .promise {
     padding: var(--base-x-0_5) var(--base);
-    border-block-end: var(--hairline) solid var(--charcoal);
     text-align: start;
   }
 }

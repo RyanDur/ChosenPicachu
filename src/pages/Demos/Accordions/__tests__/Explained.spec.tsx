@@ -696,9 +696,10 @@ describe('the platform build’s bars', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent('List-style none removes that marker, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(run).toHaveTextContent('The word unmarked removes that marker, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toContain('.unmarked {');
     expect(run).not.toHaveTextContent(/every build/);
-    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toMatch(/&\[open\] > \.info-label::after \{[^]*rotate\(135deg\)/);
+    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
   });
 
   test('should say the browser marks an open details with the open attribute, and [open] picks it to turn the arrow', async () => {
@@ -709,23 +710,39 @@ describe('the platform build’s bars', () => {
     expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
   });
 
-  test('should keep the bar’s own run to the row, its focus and its border', async () => {
+  test('should keep the bar’s own run to the row, the words it wears and its focus', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, in the same colours\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\. The hairline border draws the line between one bar and the next\./);
+    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, wearing the same words: inverse-filled for its colours, attentive for the approach colour, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\./);
+  });
+
+  test('should show the words the details bar wears beside its own rule', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(explanation.everyCodeBeside(platform, /The bar is the same flex row/).join()).toMatch(/\.info-label \{[^]*\.inverse-filled \{[^]*\.attentive:where\(:not\(:disabled\)\) \{[^]*\.field-outlined \{/);
   });
 });
 
 describe('the known-height build’s bars', () => {
+  test('should say the label wears prior-approached, a word that reads an earlier sibling', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent('so the label wears prior-approached, a word that reads an earlier sibling. The :focus-visible pseudo-class picks the checkbox while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its checkbox, so the word’s :hover rule lights the bar too.');
+  });
+
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const beside = explanation.everyCodeBeside(oldWay, /A keyboard user needs to see which bar they are on/).join();
 
-    expect(beside).toMatch(/@media \(hover: hover\) \{\s*\.info-toggle:hover ~ \.info-label \{/);
+    expect(beside).toMatch(/@media \(hover: hover\) \{\s*:hover ~ \.prior-approached \{[^]*:focus-visible ~ \.prior-approached \{/);
     expect(beside).not.toMatch(/&:hover/);
   });
 
@@ -742,7 +759,36 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The arrow is an empty box drawn after the label’s words. The bar wears corner-after, which gives that box only its top and right borders; the sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
+  });
+
+  test('should say a shared look is a word the bar wears, and show the words after the bar’s own rules', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('and it wears inverse-filled, the page’s colours the other way round. The arrow’s width and height size the box its borders outline, and its right margin keeps the corner off the bar’s edge. A look the bar shares with the rest of the site is a word in a shared sheet that the element wears as a class; the bar’s own sheet keeps the structure, and the samples show both.');
+    expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*\.inverse-filled \{[^]*\.corner-after::after \{[^]*\.info-toggle:checked ~ \.info-label::after/);
+  });
+});
+
+describe('the words the bars wear', () => {
+  test('should say the Close bar’s ground and word are two plain colour words, and show them beside its rule', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /The Close bar is shorter than the others/)).toHaveTextContent('so a press anywhere on the bar counts. Its ground is field-inverse and its word field-ink, two plain colour words with no hover or focus of their own.');
+    expect(explanation.everyCodeBeside(oldWay, /The Close bar is shorter than the others/).join()).toMatch(/&\.close \{[^]*\.field-inverse \{[^]*\.field-ink \{/);
+  });
+
+  test('should say the Open and Close word is boxed by outlined-before, which inverts while the bar is pressed', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(explanation.runTelling(together, /It marks the word as decoration/)).toHaveTextContent('so the word is not read. The word is boxed by outlined-before, a hairline in the words’ own colour, which inverts while the bar is pressed. Someone using voice control says the part’s name.');
+    expect(explanation.everyCodeBeside(together, /It marks the word as decoration/).join()).toMatch(/&:has\(:checked\) \.info-label::before \{[^]*\.outlined-before \{/);
   });
 });
 
@@ -752,6 +798,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/so the section paints the sign in its background/)).toHaveTextContent(/instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits\./);
+    expect(explanation.runTelling(oldWay, /paints the sign in its background instead/)).toHaveTextContent('so the section wears foot-shadowed, which paints the sign in its background instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits. It wears focus-ringed too, so a keyboard reader sees when they have reached it.');
+    expect(explanation.everyCodeBeside(oldWay, /paints the sign in its background instead/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{[^]*\.focus-ringed \{/);
   });
 });
