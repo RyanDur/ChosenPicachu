@@ -350,7 +350,7 @@ describe('the native drag sort tutorial’s words', () => {
     const arm = recipeFolds.steps(story)[0];
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
-      'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable just for that gesture.',
+      'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable just for that gesture. The li also wears the shared classes that paint the card, soft-cornered, field, hairline-outline and handle-raised; they are its look, not its drag.',
       'Then the browser fires dragstart, the event for a drag beginning, and its handler declares the move the platform is about to make. The browser answers with the whole ceremony (the drag image under your pointer, the cursor, the cancel) without another line.'
     ]));
   });
