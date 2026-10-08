@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {chartsPage, markets, scriptedMarket, violationsOf} from './__test_support';
+import {chartsPage, homePage, markets, scriptedMarket, violationsOf} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -28,14 +28,16 @@ for (const {name, path, ready, loaded} of pages) {
 }
 
 test('the home page has no accessibility violations with its folds open', async ({page}) => {
-  const home = pages.find(({name}) => name === 'home');
-  await page.goto(home?.path ?? '');
-  for (const door of await page.getByText('how I organize it').all()) await door.click();
-  await page.getByRole('heading', {name: 'The research'}).click();
+  const home = homePage(page);
+  await page.goto('');
+  await expect(home.doorFolds).toHaveCount(3);
+  await expect(home.timelineStories).toHaveCount(13);
+  for (const door of await home.doorFolds.all()) await door.getByText('how I organize it', {exact: true}).click();
+  await home.researchFold.getByRole('heading', {name: 'The research'}).click();
 
   const found = [];
-  for (const story of await page.getByText('the fuller story').all()) {
-    await story.click();
+  for (const story of await home.timelineStories.all()) {
+    await home.fullerStoryOf(story).click();
     found.push(...violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze()));
   }
 
