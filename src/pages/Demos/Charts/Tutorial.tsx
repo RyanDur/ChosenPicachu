@@ -504,7 +504,7 @@ export const ChartStories: FC<{kind: ChartKind}> = ({kind}) =>
 export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
-    <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
+    <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use
       this page: every card below is a feature, told as a <a className="signpost"
@@ -516,12 +516,12 @@ export const ChartsTutorial: FC = () => {
       web reference, if you want more.
     </p>
     <figure className="feedback">
-      <blockquote className="quote paragraph italic">
+      <blockquote className="quote paragraph italic trim-bar-beside">
         Numbers tell me where the price is; I need to see where it has been to feel where it
         is going. One glance, the shape of the session. And I arrange my own desk: the charts
         I watch, in the order I watch them.
       </blockquote>
-      <figcaption className="attribution">a trader</figcaption>
+      <figcaption className="attribution caption muted-ink">a trader</figcaption>
     </figure>
     <p className="overview paragraph">
       If you want the exercise, stop here and build the story yourself first. The charts are

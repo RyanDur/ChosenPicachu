@@ -14,7 +14,7 @@ export const TopLayerTutorial: FC = () => {
 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
-    <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
+    <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble; on this page the button
@@ -31,11 +31,11 @@ export const TopLayerTutorial: FC = () => {
       step. The links go to MDN, Mozilla’s web reference, if you want more.
     </p>
     <figure className="feedback">
-      <blockquote className="quote paragraph italic">
+      <blockquote className="quote paragraph italic trim-bar-beside">
         When something breaks, tell me. Do not make me guess why the chart went quiet,
         and do not hide the note under the thing that broke.
       </blockquote>
-      <figcaption className="attribution">a user</figcaption>
+      <figcaption className="attribution caption muted-ink">a user</figcaption>
     </figure>
     <BannerControls side={side} align={align} enter={enter} stack={stack}
       onSideChosen={next => updateSearchParams({side: next})}

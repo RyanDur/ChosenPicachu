@@ -25,7 +25,7 @@ const sketch =
       {windows.map(window =>
         <tr key={window}>
           <th className="design-window drawn-caption muted-ink" scope="row">{window}</th>
-          {measures.map(measure => <td className="design-cell design-column" key={measure}/>)}
+          {measures.map(measure => <td className="design-cell design-column hairline-edged" key={measure}/>)}
         </tr>)}
     </tbody>
   </table>;

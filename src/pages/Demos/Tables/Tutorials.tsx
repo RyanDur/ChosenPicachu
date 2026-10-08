@@ -39,7 +39,7 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <header className="tutorials-header">
-      <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
+      <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
       <PillGlider label="world"
         name="table-world"
         options={[
@@ -51,24 +51,24 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine" aria-label="the stations">
-      <li className="station" id={stationId(1)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(1)}>
         <StoryClues/>
       </li>
-      <li className="station" id={stationId(2)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(2)}>
         <DesignAsk/>
       </li>
-      <li className="station" id={stationId(3)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(3)}>
         <StorySlices/>
         <Exercise/>
       </li>
-      <li className="station" id={stationId(4)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(4)}>
         <StillTableRecipe/>
       </li>
-      <li className="station" id={stationId(5)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(5)}>
         <FlowTableRecipe/>
       </li>
-      <li className="station" id={stationId(6)}>
-        <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(6)}>
+        <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"
           className="tutorial-picks"

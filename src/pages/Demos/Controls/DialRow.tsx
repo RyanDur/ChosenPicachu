@@ -38,7 +38,7 @@ type Props<T extends string> = {
 };
 
 export const DialRow = <T extends string>({label, reading, ...pills}: Props<T>) =>
-  <li className="dial-row">
+  <li className="dial-row veiled-rule-below">
     <span className="axis caption uppercase" aria-hidden>{label}</span>
     <PillGlider label={label} {...pills}/>
     <output className="reading paragraph">{reading}</output>

@@ -17,14 +17,9 @@
     .quote {
       margin: 0;
       padding-left: var(--base-x-2);
-      border-left: var(--hairline-x-3) solid var(--trim);
       text-wrap: pretty;
     }
 
-    .attribution {
-      color: var(--ink-muted);
-      font-size: var(--text-caption);
-    }
   }
 
   .overview {
@@ -38,10 +33,6 @@
     gap: var(--base-x-2_5);
   }
 
-  .tutorials-title {
-    font-size: var(--text-headline);
-  }
-
   .tutorial-picks {
     justify-self: stretch;
   }
@@ -52,7 +43,6 @@
   }
 
   .spine {
-    list-style: none;
     margin: 0;
     padding: 0;
     justify-self: stretch;
@@ -80,10 +70,6 @@
     place-items: center;
     width: var(--base-x-4);
     height: var(--base-x-4);
-    border-radius: 50%;
-    background: var(--backdrop);
-    color: var(--ink-inverse);
-    font-weight: bold;
     z-index: 1;
   }
 
@@ -93,7 +79,6 @@
     inset-block: 0;
     inset-inline-start: calc((var(--base-x-5) - var(--hairline-x-2)) / 2);
     width: var(--hairline-x-2);
-    background: var(--shadow);
   }
 
   .station:first-child::after {
@@ -111,7 +96,6 @@
 
   .verdict {
     margin: 0;
-    font-size: var(--text-title);
   }
 
   .phase {
@@ -125,12 +109,7 @@
 
   .phase-title {
     margin: 0;
-    font-size: var(--text-headline);
     text-wrap: balance;
-  }
-
-  .phase .overview {
-    color: var(--ink-muted);
   }
 
   .phase .story.arriving {
@@ -141,16 +120,11 @@
 
     .can {
       margin: 0;
-      font-size: var(--text-body);
-      font-weight: bold;
       text-wrap: pretty;
     }
 
     .so-that {
       margin: 0;
-      font-size: var(--text-body);
-      font-style: italic;
-      color: var(--ink-muted);
       text-wrap: pretty;
     }
   }
@@ -218,7 +192,6 @@
     margin: 0;
     justify-self: stretch;
     padding: var(--base-x-2_5);
-    border: var(--hairline-x-2) dashed var(--charcoal);
     display: grid;
     gap: var(--base-x-2);
   }
@@ -286,14 +259,8 @@
     gap: var(--base-x-0_5);
   }
 
-  .slice {
-    font-style: italic;
-    color: var(--ink-muted);
-  }
-
   .slice-station {
     margin-inline-start: var(--base);
-    font-style: normal;
   }
 
   .design-item {
@@ -301,25 +268,15 @@
     align-items: center;
     gap: var(--base);
     padding: var(--base);
-    background: var(--white);
-    border: var(--hairline) solid var(--shadow);
-    border-radius: var(--radius);
-  }
-
-  .design-grip {
-    color: var(--ink-muted);
   }
 
   .design-line {
     flex: 1;
     height: var(--base-x-1_5);
-    border-radius: var(--radius);
-    background: var(--paper);
   }
 
   .design-cell {
     height: var(--base-x-2_5);
-    border: var(--hairline) solid var(--shadow);
   }
 
   .unanswered {
@@ -331,8 +288,6 @@
 
   .unanswered-title {
     margin: 0;
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
   }
 
   .unanswered-list {

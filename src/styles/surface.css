@@ -149,6 +149,17 @@
 
 .trim-rail-along::after { background: var(--trim); }
 
+.shadow-rail-along::after { background: var(--shadow); }
+
+.void-badge-before::before {
+  border-radius: 50%;
+  background: var(--void);
+  color: var(--ink-inverse);
+  font-weight: 600;
+}
+
+.muted-dashed-outline { border: var(--hairline-x-2) dashed var(--ink-muted); }
+
 .void-dot-before::before {
   border-radius: 50%;
   background: var(--void);

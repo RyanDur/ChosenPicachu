@@ -76,7 +76,7 @@ export const ChartPage: FC = () => {
     return <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
       <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
       <Chart/>
-      <h3 className="tutorials-title">let’s build this feature</h3>
+      <h3 className="tutorials-title title">let’s build this feature</h3>
       <p className="overview paragraph">
         We are going to build the <a
           className="signpost"
@@ -92,8 +92,8 @@ export const ChartPage: FC = () => {
         if you want more.
       </p>
       <figure className="feedback">
-        <blockquote className="quote paragraph italic">{quote}</blockquote>
-        <figcaption className="attribution">a trader</figcaption>
+        <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
+        <figcaption className="attribution caption muted-ink">a trader</figcaption>
       </figure>
       <p className="overview paragraph">
         If you want the exercise, stop here and build the story yourself first. The chart
