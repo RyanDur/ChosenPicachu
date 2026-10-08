@@ -6,24 +6,12 @@
 }
 
 .pill-glider {
-  --chosen-color: var(--charcoal);
-  --not-chosen-color: var(--field);
-  --veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
-
   width: fit-content;
-  outline: var(--hairline-x-2) solid var(--chosen-color);
-  outline-offset: calc(var(--hairline-x-2) * -1);
   position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
-  border-radius: var(--radius);
-  background: var(--veil);
   transition: --veil-alpha 0.3s;
-
-  &:hover {
-    --veil-alpha: var(--veil-opacity);
-  }
 
   @supports (anchor-name: --chosen) {
     &::before {
@@ -33,8 +21,6 @@
       left: anchor(left);
       width: anchor-size(width);
       height: anchor-size(height);
-      border-radius: var(--radius);
-      background: var(--black);
       pointer-events: none;
       transition-property: left, width, opacity;
       transition-duration: 1s;
@@ -63,24 +49,11 @@
     @media (width < 390px) {
       padding: 0 var(--base-x-0_75);
     }
-    border-radius: var(--radius);
-    background: transparent;
     transition: color 0.2s;
     cursor: pointer;
 
-    &:has(:focus-visible) {
-      outline: var(--hairline-x-2) solid var(--chosen-color);
-      outline-offset: var(--base-x-0_25);
-    }
-
-    &:hover {
-      color: var(--ink-inverse);
-    }
-
     &:has(:checked) {
       anchor-name: --chosen;
-      color: var(--ink-inverse);
-      background: var(--chosen-color);
     }
   }
 }

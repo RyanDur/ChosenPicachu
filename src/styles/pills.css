@@ -1,0 +1,37 @@
+.pill-track {
+  --chosen-color: var(--charcoal);
+  --veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
+
+  outline: var(--hairline-x-2) solid var(--chosen-color);
+  outline-offset: calc(var(--hairline-x-2) * -1);
+  border-radius: var(--radius);
+  background: var(--veil);
+
+  &:hover {
+    --veil-alpha: var(--veil-opacity);
+  }
+
+  &::before {
+    border-radius: var(--radius);
+    background: var(--black);
+  }
+}
+
+.pill-choice {
+  border-radius: var(--radius);
+  background: transparent;
+
+  &:has(:focus-visible) {
+    outline: var(--hairline-x-2) solid var(--chosen-color);
+    outline-offset: var(--base-x-0_25);
+  }
+
+  &:hover {
+    color: var(--ink-inverse);
+  }
+
+  &:has(:checked) {
+    color: var(--ink-inverse);
+    background: var(--chosen-color);
+  }
+}
