@@ -433,7 +433,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     await recipeFolds.press(recipe, 'The trader can sort by column');
-    await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
+    await recipeFolds.press(recipe, 'The trader can sort by row');
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
