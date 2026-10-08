@@ -7,7 +7,7 @@ import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/source';
 
 export const SideNav: FC = () =>
-  <nav id="side-nav" className="side-nav field" aria-label="site">
+  <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
     <Link id="navigate-home" className="path rail-path bold attentive field reachable" to={Paths.home}>Home</Link>
     <Link id="navigate-demos" className="path rail-path bold attentive field reachable" to={Paths.demos}>Demos</Link>
     <Link id="navigate-users" className="path rail-path bold attentive field reachable" to={Paths.users}>Users</Link>

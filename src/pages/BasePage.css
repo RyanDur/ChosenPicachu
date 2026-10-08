@@ -50,7 +50,6 @@
 
     .path + .path {
       height: calc(var(--base-x-8) + var(--base));
-      border-block-start: var(--base) solid var(--backdrop);
     }
   }
 
@@ -219,7 +218,6 @@
 
       .path + .path {
         height: unset;
-        border: none;
       }
     }
   }

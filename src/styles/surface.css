@@ -80,6 +80,14 @@
 
 .hairline-separated > * + * { border-block-start: var(--hairline) solid var(--shadow); }
 
+.backdrop-separated > * + * {
+  border-block-start: var(--base) solid var(--backdrop);
+
+  @media (width <= 1100px) {
+    border-block-start: none;
+  }
+}
+
 .focus-ringed {
   &:focus-visible,
   &:has(:focus-visible) {
