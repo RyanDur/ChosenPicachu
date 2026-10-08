@@ -185,12 +185,11 @@ const candlesStory =
             of the slot wide, so two candles never touch.</Says>
           <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
-            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look,
-            the wick’s width and how the shapes move.</Says>
-          <Says>Each candle wears a side beside its class, up or down: buy-side or sell-side, a shared class that sets a
-            side’s colours.
-            The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn,
-            which gives it its charcoal stroke; the chart’s sheet gives the wick its hairline width.</Says>
+            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
+            the chart’s size, the wick’s hairline width and how the shapes move.</Says>
+          <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
+            wears sell-side, shared classes that set a side’s colours. The body wears side-face and the wall side-wall,
+            so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -297,10 +296,11 @@ const pressureStory =
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
             below. The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in
-            the site’s shared sheet and that an element wears by name. A side class sets a side’s colours as custom
-            properties, values a stylesheet names once and other rules read; side-face on the bar and side-wall on the
-            second rectangle set just behind it, which gives it an edge, read them. The middle line wears drawn, which
-            gives it its charcoal stroke.</Says>
+            the site’s shared sheet and that an element wears by name.</Says>
+          <Says>A side class sets a side’s colours as custom properties, values a stylesheet names once and other rules
+            read. side-face reads the face colour for the bar. side-wall reads the wall colour for the second rectangle
+            set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
+            stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
             caption says how many minutes are on show, and that the count began when you arrived.</Says>
