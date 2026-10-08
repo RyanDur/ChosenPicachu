@@ -350,9 +350,18 @@ describe('the native drag sort tutorial’s words', () => {
     const arm = recipeFolds.steps(story)[0];
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
-      'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable just for that gesture. The li also wears the shared classes that paint the card, soft-cornered, field, hairline-outline and handle-raised; they are its look, not its drag.',
+      'draggable is an attribute, a setting written on the element, so let the grip arm it. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable just for that gesture.',
       'Then the browser fires dragstart, the event for a drag beginning, and its handler declares the move the platform is about to make. The browser answers with the whole ceremony (the drag image under your pointer, the cursor, the cancel) without another line.'
     ]));
+  });
+
+  test('should say the card’s look in a paragraph of its own after the dragstart run, saying what an li and a shared class are', async () => {
+    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
+    const arm = recipeFolds.steps(story)[0];
+    const paragraphs = within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '));
+
+    expect(paragraphs.findIndex(told => told.startsWith('The li, the list item that is the card'))).toBe(paragraphs.findIndex(told => told.startsWith('Then the browser fires dragstart')) + 1);
+    expect(paragraphs).toContain('The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the card’s look, not its drag.');
   });
 
   test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {

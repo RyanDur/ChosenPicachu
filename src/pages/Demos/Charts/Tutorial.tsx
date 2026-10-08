@@ -177,16 +177,18 @@ const candlesStory =
       </Step>
       <Step title="Draw each candle as a body and a wick">
         <Words want="Open, high, low, close: four numbers for each span, drawn as one mark.">
-          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close. The wick, a thin
-            line through the body, runs from the high to the low. It wears drawn, the shared class for a charcoal
-            hairline; the sheet keeps its width.</Says>
+          <Says>candleShapes turns each candle into three shapes. The body runs from the open to the close, and a second
+            rectangle, the wall, sits just behind it and gives it an edge. The wick, a thin line through the body, runs
+            from the high to the low.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. Each
-            wears a side with it, buy-side or sell-side, a shared class that sets a side’s colours; the body wears
-            side-face and the wall side-wall, so the shared sheet paints them. A shared class is a look that lives in
-            the site’s shared sheet and that an element wears by name.</Says>
+          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
+          <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
+            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps the structure.</Says>
+          <Says>Each candle wears a side with its state, buy-side or sell-side, a shared class that sets a side’s colours.
+            The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn,
+            which gives it its charcoal stroke; the chart’s sheet gives the wick its hairline width.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -211,8 +213,9 @@ const candlesStory =
           <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
             busiest span on the chart, and every other bar is in proportion to it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
-          <Says>The volume bars wear volume-side with side-face and side-wall: leather for the bar and drab for its
-            edge, the same slots the sides fill.</Says>
+          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colours travel as custom
+            properties, values a stylesheet names once and other rules read, and a side class sets them: volume-side
+            sets leather for the bar and drab for its edge, and the bars read them through side-face and side-wall.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -291,8 +294,10 @@ const pressureStory =
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
-            below. The bought bars wear buy-side and the sold bars sell-side, with side-face on the bar and side-wall on
-            the second rectangle set just behind it, which gives it an edge. The middle line wears drawn.</Says>
+            below. The bought bars wear buy-side and the sold bars sell-side, shared classes, looks that live in the
+            site’s shared sheet and that an element wears by name, which set a side’s colours; side-face on the bar and
+            side-wall on the second rectangle set just behind it, which gives it an edge, read them. The middle line
+            wears drawn, which gives it its charcoal stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
             caption says how many minutes are on show, and that the count began when you arrived.</Says>
