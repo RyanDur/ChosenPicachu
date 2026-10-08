@@ -78,8 +78,7 @@ const handleSays: Record<World, ReactNode> = {
     exists its label speaks the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
     own: it is a grid container whose only item is the 8px line its ::after paints, so the
-    painted line is the hit area. The line wears held-bar-after, leather while a pointer hovers it and mint
-    while it holds focus; the button itself is borderless and unfilled, and its keyboard ring is focus-ringed. The
+    painted line is the hit area. The
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
@@ -87,9 +86,7 @@ const handleSays: Record<World, ReactNode> = {
     once the ledger exists dressColumn rewrites that label to speak
     the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
-    whose only item is the 8px line its ::after paints, so the painted line is the hit area. The
-    line wears held-bar-after, leather while a pointer hovers it and mint while it holds focus; the button itself
-    is borderless and unfilled, and its keyboard ring is focus-ringed. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    whose only item is the 8px line its ::after paints, so the painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>
 };
@@ -215,6 +212,10 @@ const widenStory = (world: World) =>
         </Words>
         <Reveal>
           {handleSays[world]}
+          <Says>The handle’s look is shared classes, looks that live in the site’s shared sheet and that an element
+            wears by name. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the
+            line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus.
+            focus-ringed draws the site’s ring when the keyboard reaches it.</Says>
           <Codes>
             {handleMarkup[world]}
             {spokenLabel}

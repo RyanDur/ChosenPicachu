@@ -18,12 +18,13 @@ export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample)
       {world === 'react'
         ? <Says>The row grip is already a button, and the headers ask with a tabIndex, so Tab
           walks every movable piece of the table in order. The focus-visible ring draws for the
-          keyboard only: it is focus-ringed, the site’s ring, which every header and grip wears.</Says>
+          keyboard only: it is focus-ringed, a shared class, the site’s
+          ring, which every movable column header and every grip wears.</Says>
         : <Says>The row grip is already a button in the markup, and JavaScript asks each movable
           header for focus with a tabindex as it dresses the grips (the anchored edges hold the
           table, so their headers ask for nothing), so Tab walks every movable piece of the
-          table in order. The focus-visible ring draws for the keyboard only: it is focus-ringed, the site’s
-          ring, which every header and grip wears.</Says>}
+          table in order. The focus-visible ring draws for the keyboard only: it is focus-ringed, a shared class, the site’s
+          ring, which every movable column header and every grip wears.</Says>}
       <Says>The buttons say their tab stop outright: a tabindex of zero on an element that is
         focusable by birth. That is Safari’s doing. Its plain Tab visits text fields and anything
         that writes a tabindex, and skips buttons and links unless you hold Option; every other

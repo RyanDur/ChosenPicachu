@@ -19,14 +19,18 @@ export type Slice = {
 
 const TAU = 2 * Math.PI;
 
-export const slices = (weights: readonly number[]): readonly Slice[] => {
-  const whole = weights.reduce((sum, weight) => sum + weight, 0);
+export type Weighed = {
+  weight: number;
+};
+
+export const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Slice)[] => {
+  const whole = parts.reduce((sum, {weight}) => sum + weight, 0);
   return whole === 0
     ? []
-    : weights.reduce<readonly Slice[]>((cut, weight) => {
+    : parts.reduce<readonly (Part & Slice)[]>((cut, part) => {
       const from = cut[cut.length - 1]?.to ?? 0;
-      const share = weight / whole;
-      return [...cut, {share, from, to: from + share * TAU}];
+      const share = part.weight / whole;
+      return [...cut, {...part, share, from, to: from + share * TAU}];
     }, []);
 };
 

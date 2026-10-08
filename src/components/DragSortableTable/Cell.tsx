@@ -1,10 +1,10 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useTableSelector} from './context';
 import {columnHeld, columnMarks, driftOfColumn, driftOfRow, rowHeld, rowMarks, seatOfColumn, seatOfRow} from './selectors';
-import {pixels, shoveDistance, shovedClass} from './table-state';
+import {pixels, shoveDistance} from './table-state';
 import './motion.css';
+import {cellLooks, motionLooks} from './looks';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
   const {settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(columnMarks(column));
@@ -21,7 +21,7 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
-    className={classNames(className, 'muted-rule-after', 'muted-rule-below', 'paper-in-motion', (columnCarried || rowCarried) && 'carried', has(from) && 'settling', shovedClass(shove))}
+    className={classNames(className, ...cellLooks, ...motionLooks(columnCarried || rowCarried, from, shove))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

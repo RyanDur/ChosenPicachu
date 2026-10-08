@@ -113,6 +113,10 @@ export const views: readonly View[] = [
     }
   },
   {
+    name: 'at the lazy pace',
+    page: {...named('tables'), path: 'demos/?tab=tables&pace=lazy'}
+  },
+  {
     name: 'a pill hovered',
     page: named('tables'),
     into: page => hovered(page, () => page.getByText('Vanilla', {exact: true}).first())

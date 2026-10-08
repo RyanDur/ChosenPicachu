@@ -5,7 +5,7 @@ import {useBodyEvents, useTableDispatch, useTableSelector} from '@components/Dra
 import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from '@components/DragSortableTable/selectors';
 import {Survey} from '@components/DragSortableTable/survey';
 import {RowGrip} from '@components/DragSortableTable/RowGrip';
-import {RowDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
+import {RowDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
 import {lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {movedTo} from '@components/DragSortableTable/arrangement';
@@ -13,6 +13,7 @@ import {releasedRow, travelledRow} from './travel';
 import {Grab, rowLift} from '@components/DragSortableTable/lift';
 import {rowArrows} from '@components/DragSortableTable/arrows';
 import '@components/DragSortableTable/motion.css';
+import {cellLooks, motionLooks} from '@components/DragSortableTable/looks';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
@@ -58,7 +59,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-    className={classNames(className, (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
+    className={classNames(className, ...cellLooks, ...motionLooks(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

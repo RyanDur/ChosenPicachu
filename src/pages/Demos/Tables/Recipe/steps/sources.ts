@@ -19,8 +19,9 @@ import rowSource from '@components/DragSortableTable/Row.tsx?sample';
 import headersSource from '@components/DragSortableTable/Headers.tsx?sample';
 import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
 import placingSource from '@components/DragSortableTable/placing.ts?sample';
+import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import {plain} from '../../../Recipe';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource};
 
 export const gap = plain(' ');

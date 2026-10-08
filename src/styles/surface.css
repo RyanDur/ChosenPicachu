@@ -293,7 +293,7 @@
   &:focus::after { background: var(--faded-mint); }
 }
 
-.paper-in-motion:is(.carried, .settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) { background: var(--paper); }
+.paper-in-motion { background: var(--paper); }
 
 .choice-underlined {
   color: var(--ink-muted);

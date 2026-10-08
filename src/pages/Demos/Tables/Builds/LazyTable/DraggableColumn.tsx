@@ -5,7 +5,7 @@ import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
 import {interior, Survey} from '@components/DragSortableTable/survey';
-import {ColumnDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
+import {ColumnDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
 import {lifted, columnLandingFound, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {movedTo} from '@components/DragSortableTable/arrangement';
@@ -14,6 +14,7 @@ import {Grab, columnLift} from '@components/DragSortableTable/lift';
 import {columnArrows} from '@components/DragSortableTable/arrows';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
+import {headerLooks, motionLooks} from '@components/DragSortableTable/looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
@@ -58,7 +59,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(className, travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
+    className={classNames(className, ...headerLooks, travels && 'grabbable', ...motionLooks(carried, settlingFrom, shoved), has(width) && 'shared')}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

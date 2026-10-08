@@ -5,12 +5,13 @@ import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
 import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from './selectors';
 import {rowUnder, Survey} from './survey';
 import {RowGrip} from './RowGrip';
-import {RowDrag, pixels, shoveDistance, shovedClass} from './table-state';
+import {RowDrag, pixels, shoveDistance} from './table-state';
 import {lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, rowLift} from './lift';
 import {rowArrows} from './arrows';
 import './motion.css';
+import {cellLooks, motionLooks} from './looks';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
@@ -51,7 +52,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-    className={classNames(className, 'muted-rule-after', 'muted-rule-below', 'paper-in-motion', (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
+    className={classNames(className, ...cellLooks, ...motionLooks(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

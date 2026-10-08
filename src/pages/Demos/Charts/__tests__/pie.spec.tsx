@@ -17,7 +17,7 @@ describe('the pie', () => {
   });
 
   test('weights cut the circle into consecutive shares', () => {
-    const cut = slices([3, 1]);
+    const cut = slices([{weight: 3}, {weight: 1}]);
 
     expect(cut[0].share).toBe(0.75);
     expect(cut[0].from).toBe(0);
@@ -27,19 +27,25 @@ describe('the pie', () => {
     expect(cut[1].to).toBeCloseTo(2 * Math.PI);
   });
 
+  test('each slice keeps the part it was cut from', () => {
+    const cut = slices([{side: 'bought', weight: 3}, {side: 'sold', weight: 1}]);
+
+    expect(cut.map(({side, share}) => ({side, share}))).toEqual([{side: 'bought', share: 0.75}, {side: 'sold', share: 0.25}]);
+  });
+
   test('nothing traded cuts nothing', () => {
-    expect(slices([0, 0])).toEqual([]);
+    expect(slices([{weight: 0}, {weight: 0}])).toEqual([]);
   });
 
   test('a share opens its gates in degrees', () => {
-    const [threeQuarters, quarter] = slices([3, 1]);
+    const [threeQuarters, quarter] = slices([{weight: 3}, {weight: 1}]);
 
     expect(sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
     expect(sweepGates(quarter)).toEqual({opening: -90, closing: 0});
   });
 
   test('a slice explodes along its own middle', () => {
-    const [rightHalf] = slices([1, 1]);
+    const [rightHalf] = slices([{weight: 1}, {weight: 1}]);
 
     const {dx, dy} = explodedBy(rightHalf, 4);
 
@@ -64,7 +70,7 @@ describe('the pie', () => {
   });
 
   test('a one-sided session opens both gates fully', () => {
-    expect(sweepGates(slices([2, 0])[0])).toEqual({opening: 0, closing: 180});
+    expect(sweepGates(slices([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
   });
 
   test('the card reads a one-sided session as all bought', () => {

@@ -5,13 +5,14 @@ import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from './selectors';
 import {columnUnder, interior, Survey} from './survey';
-import {ColumnDrag, pixels, shoveDistance, shovedClass} from './table-state';
+import {ColumnDrag, pixels, shoveDistance} from './table-state';
 import {lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, columnLift} from './lift';
 import {columnArrows} from './arrows';
 import './Header.css';
 import './motion.css';
+import {headerLooks, motionLooks} from './looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
@@ -51,7 +52,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(className, 'muted-rule-after', 'muted-bar-below', 'paper-in-motion', 'focus-ringed', travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
+    className={classNames(className, ...headerLooks, travels && 'grabbable', ...motionLooks(carried, settlingFrom, shoved), has(width) && 'shared')}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

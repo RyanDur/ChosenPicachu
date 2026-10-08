@@ -26,7 +26,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
   const Heading = useContext(ChartHeading);
   const heading = `heading${useId()}`;
   const totals = sideTotals(trades);
-  const cut = slices([totals.bought, totals.sold]).map((slice, at) => ({...slice, side: sides[at]}));
+  const cut = slices(sides.map(side => ({side, weight: totals[side]})));
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <Heading id={heading} className="off-screen">pie</Heading>
     <header className="chart-header">

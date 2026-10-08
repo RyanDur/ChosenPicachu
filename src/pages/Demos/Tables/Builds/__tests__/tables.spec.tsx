@@ -167,6 +167,17 @@ describe('columns by hand', () => {
     windows.forEach(window => expect(rowOf(window).cells[2].classList).toContain('carried'));
   });
 
+  test.each([['eager', EagerTable], ['lazy', LazyTable]])('a %s carried column is papered, every cell of it, and its neighbour is not', (_pace, Table) => {
+    seat(Table, 'hide static');
+
+    liftColumn('buys');
+
+    expect(header('buys')).toHaveClass('paper-in-motion');
+    windows.forEach(window => expect(rowOf(window).cells[2]).toHaveClass('paper-in-motion'));
+    expect(header('sells')).not.toHaveClass('paper-in-motion');
+    dropColumn();
+  });
+
   test('a dropped column lands as itself', () => {
     seat(EagerTable, 'hide static');
     liftColumn('buys');
@@ -998,6 +1009,21 @@ describe('animated moves', () => {
 
     columnCells('trades').forEach(cell => expect(cell).not.toHaveClass('settling'));
     columnCells('buys').forEach(cell => expect(cell).not.toHaveClass('shoved-start'));
+  });
+
+  test.each([['eager', EagerTable], ['lazy', LazyTable]])('a %s walk papers the settling and shoved cells, and the paper goes when the marks clear', async (_pace, Table) => {
+    seat(Table, 'keep animated');
+    columnsSurveyed();
+    header('trades').focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    [...columnCells('trades'), ...columnCells('buys')].forEach(cell => expect(cell).toHaveClass('paper-in-motion'));
+    columnCells('sells').forEach(cell => expect(cell).not.toHaveClass('paper-in-motion'));
+
+    fireEvent.animationEnd(header('trades'));
+    fireEvent.animationEnd(header('buys'));
+
+    [...columnCells('trades'), ...columnCells('buys')].forEach(cell => expect(cell).not.toHaveClass('paper-in-motion'));
   });
 
   test('a second walk marks again', async () => {

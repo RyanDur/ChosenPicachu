@@ -205,7 +205,7 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getAllByRole('code')[1]).toHaveTextContent(/\.bottom \{[^]*\.right \{/);
+    expect(placing).toHaveTextContent(/\.bottom \{[^]*\.right \{/);
   });
 
   test('should carve the panel’s own line, and say the class names the dials chose', async () => {
@@ -213,8 +213,18 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getAllByRole('code')[0]).toHaveTextContent("className={classNames('banners', 'borderless', 'unfilled', side, align");
+    expect(placing).toHaveTextContent("className={classNames('banners', 'borderless', 'unfilled', side, align");
     expect(placing).toHaveTextContent('The sample is the component’s line: the two class names the dials choose arrive as side and align, and the browser’s element reads, for this page’s choice, bottom right.');
+  });
+
+  test('should label the panel’s carved line TS, in the step and in the explanation', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+    const placing = recipeFolds.steps(news)[2];
+    const explained = screen.getByRole('region', {name: 'Why a fixed banner still loses'});
+
+    expect(placing).toHaveTextContent(/TSreturn <section id="banners"/);
+    expect(explained).toHaveTextContent(/TSreturn <section id="banners"/);
   });
 
   test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {

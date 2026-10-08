@@ -16,13 +16,6 @@ const fourTrades = [
   tradeFrame(50004, now, '0.01', 'bought')
 ];
 
-const dragSortRecipe = async (): Promise<HTMLElement> => {
-  const feed = await listeningFeed();
-  render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-  await feedIsSubscribed(feed);
-  return await screen.findByRole('region', {name: 'build the drag sort yourself'});
-};
-
 describe('the tables demo', () => {
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
     const feed = await listeningFeed();
@@ -230,7 +223,10 @@ describe('the tables demo', () => {
   });
 
   test('the recipe opens on the need with its stories closed', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
@@ -240,7 +236,10 @@ describe('the tables demo', () => {
   });
 
   test('the recipe walks from need to design to interpretation', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
@@ -256,7 +255,10 @@ describe('the tables demo', () => {
   });
 
   test('the recipe’s tables name their rows and columns', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     const clues = within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByRole('table', {name: 'the clues'});
     expect(within(clues).getAllByRole('columnheader')).toHaveLength(2);
@@ -273,7 +275,10 @@ describe('the tables demo', () => {
   });
 
   test('the slices point at their stations', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
@@ -295,14 +300,20 @@ describe('the tables demo', () => {
   });
 
   test('the recipe links out to the user story', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
   });
 
   test('the still table and the living table each tell their part', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     const still = screen.getByRole('region', {name: 'the still table'});
     expect(still).toBeVisible();
@@ -325,7 +336,10 @@ describe('the tables demo', () => {
   });
 
   test('layering keeps both axes', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
     expect(screen.getByText(/Both axes, every layer, or the layer is not done/)).toBeVisible();
@@ -334,7 +348,10 @@ describe('the tables demo', () => {
   });
 
   test('each layer’s facts say their heading in their own words, so they pair without the table', async () => {
-    await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('cell', {name: 'by mouse drag the edge'})).toBeInTheDocument();
     expect(screen.getByRole('cell', {name: 'by keyboard arrows on the handle'})).toBeInTheDocument();
@@ -342,7 +359,10 @@ describe('the tables demo', () => {
   });
 
   test('opening the sort by column story shows the drag build with its steps closed', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
 
@@ -352,7 +372,10 @@ describe('the tables demo', () => {
   });
 
   test('the drag build shows the code and links out to it', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
 
@@ -377,7 +400,10 @@ describe('the tables demo', () => {
   });
 
   test('the carry step declares the four numbers the carried cells read, and says what @property is', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
 
@@ -387,7 +413,10 @@ describe('the tables demo', () => {
   });
 
   test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
@@ -399,7 +428,10 @@ describe('the tables demo', () => {
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
 
@@ -601,7 +633,10 @@ describe('the tables demo', () => {
   });
 
   test('the address holds every story the trader opens', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
     const row = await recipeFolds.press(recipe, 'The trader can sort by row');
@@ -612,7 +647,10 @@ describe('the tables demo', () => {
   });
 
   test("a story card's tally matches the steps the recipe renders", async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
 
@@ -620,7 +658,10 @@ describe('the tables demo', () => {
   });
 
   test('a story card with one step says step, not steps', async () => {
-    const recipe = await dragSortRecipe();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(within(recipeFolds.story(recipe, 'The trader can sort by row')).getByText('1 step')).toBeVisible();
   });
@@ -835,13 +876,6 @@ describe('the tables demo', () => {
 });
 
 describe('the living table’s terms', () => {
-  const livingTable = async (): Promise<HTMLElement> => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    return screen.findByRole('region', {name: 'the living table'});
-  };
-
   test.each([
     ['store', 'one object that holds the state. You read the state from it, send it an action with dispatch to change it, and subscribe to be told when it has changed'],
     ['action', 'a plain record of something that happened: a type that names it, and the facts about it. dispatch hands it to the reducer'],
@@ -854,24 +888,39 @@ describe('the living table’s terms', () => {
     ['effect', 'code React runs after it has updated the page'],
     ['hydrate', 'fill the table with the recent past, fetched once, and join it to the live trades']
   ])('should define %s in plain words where the living table first uses it', async (term, definition) => {
-    const [defined] = within(await livingTable()).getAllByLabelText(term);
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const [defined] = within(livingTable).getAllByLabelText(term);
 
     expect(defined).toHaveTextContent(definition);
   });
 
   test('should define the ledger in plain words where the still table first uses it', async () => {
-    await livingTable();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'the living table'});
     const [defined] = within(screen.getByRole('region', {name: 'the still table'})).getAllByLabelText('ledger');
 
     expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
   });
 
   test('should say what Redux is where the store story first names it', async () => {
-    expect(await livingTable()).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    expect(livingTable).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
   });
 
   test('should open the store story with the terms its steps lean on', async () => {
-    const story = recipeFolds.story(await livingTable(), 'The page is a store, and so is the table');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const story = recipeFolds.story(livingTable, 'The page is a store, and so is the table');
     const opening = within(story).getByText(/^One value holds the trades/);
 
     ['action', 'reducer', 'selector', 'middleware'].forEach(term => expect(within(opening).getByLabelText(term)).toBeInTheDocument());
@@ -883,17 +932,29 @@ describe('the living table’s terms', () => {
     ['the exchange fetches candles', 'On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or candlesRefused.'],
     ['the table’s reducer combines four', 'The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and sorting.']
   ])('should say %s, as the code does', async (_fact, sentence) => {
-    expect(await livingTable()).toHaveTextContent(sentence);
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    expect(livingTable).toHaveTextContent(sentence);
   });
 
   test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {
-    expect(await livingTable()).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    expect(livingTable).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
   });
 });
 
 describe('the drag sort recipe’s words', () => {
   test('should title the slots drawing where a switch counts', async () => {
-    expect(within(await dragSortRecipe()).getByRole('figure', {name: /^Where a switch counts\. /})).toBeInTheDocument();
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    expect(within(recipe).getByRole('figure', {name: /^Where a switch counts\. /})).toBeInTheDocument();
   });
 
   test.each([
@@ -902,53 +963,83 @@ describe('the drag sort recipe’s words', () => {
     ['the dead zone', 'The dead zone is a quarter of that column’s width, or half the difference between it and the carried column when that is more,'],
     ['the plain boundary', 'switch a narrow column past a wide one at first touch, and the wide one lands back under the resting pointer, ready to switch straight back.']
   ])('should say where a switch counts as the code decides it, in %s', async (_where, sentence) => {
-    expect(await dragSortRecipe()).toHaveTextContent(sentence);
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipe).toHaveTextContent(sentence);
   });
 
   test('should not say only the inner half switches', async () => {
-    expect(await dragSortRecipe()).not.toHaveTextContent(/inner half/);
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipe).not.toHaveTextContent(/inner half/);
   });
 
   test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
-    const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const [defined] = within(recipe).getAllByLabelText('reconcile');
 
     expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
 });
 
 describe('the classes the table wears, as its recipes tell them', () => {
-  const recipeAt = async (search: string, name: string): Promise<HTMLElement> => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt(search)} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    return screen.findByRole('region', {name}, untilTheTablesTabRenders);
-  };
-
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {
-    const recipe = await recipeAt(`?tab=tables&tut=menu&world=${world}`, 'build the sort menu yourself');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The toggle sits itself at the header’s end edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it shows under keyboard focus is focus-ringed, the site’s.');
-    expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.focus-ringed \{/);
+    expect(recipe).toHaveTextContent('The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive lights it under the hand and draws the site’s ring when the keyboard reaches it.');
+    expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
   });
 
   test.each(['react', 'vanilla'])('should name the resize handle’s classes in the %s world, with their blocks after its rule', async world => {
-    const recipe = await recipeAt(`?tab=tables&tut=resize&world=${world}`, 'build the drag resize yourself');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('so the painted line is the hit area. The line wears held-bar-after, leather while a pointer hovers it and mint while it holds focus; the button itself is borderless and unfilled, and its keyboard ring is focus-ringed.');
+    expect(recipe).toHaveTextContent('The handle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus. focus-ringed draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
   });
 
-  test.each(['react', 'vanilla'])('should say the carried cells wear paper-in-motion in the %s world, with its block after their rules', async world => {
-    const recipe = await recipeAt(`?tab=tables&world=${world}`, 'build the drag sort yourself');
+  test.each(['react', 'vanilla'])('should say a moving cell wears paper-in-motion in the %s world, with its block after the carried cells’ rules', async world => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling, so they cover whatever they pass.');
-    expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion:is\(/);
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved, so a moving cell covers whatever it passes.');
+    expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
+  });
+
+  test.each(['react', 'vanilla'])('should say which cells paper-in-motion covers in the keep step, in the %s world', async world => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved. Under keep the carried cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they settle.');
+    expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
   test.each(['react', 'vanilla'])('should say the keyboard ring is focus-ringed in the %s world, with its block after the header’s rule', async world => {
-    const recipe = await recipeAt(`?tab=tables&world=${world}&track=keyboard`, 'build the drag sort yourself');
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}&track=keyboard`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, the site’s ring, which every header and grip wears.');
+    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, a shared class, the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
   });
 });

@@ -259,15 +259,16 @@ const rankStory = (build: Build) => {
         <Reveal>
           {world === 'react'
             ? <Says>The header never hears your press. The toggle sits itself at the header’s end
-              edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it
-              shows under keyboard focus is focus-ringed, the site’s. And not every column offers a menu: a menu
+              edge. And not every column offers a menu: a menu
               exists only where the page writes one inside the header, and the cell pads for it
               by asking the cascade what it holds.</Says>
             : <Says>The header never hears your press. The toggle sits itself at the header’s end
-              edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it
-              shows under keyboard focus is focus-ringed, the site’s. And not every column offers a menu: menus
+              edge. And not every column offers a menu: menus
               exist only where the markup writes them, the cell pads for them by asking the
               cascade what it holds, and the page itself declares the sortable set.</Says>}
+          <Says>The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element
+            wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
+            attentive lights it under the hand and draws the site’s ring when the keyboard reaches it.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
@@ -293,7 +294,7 @@ const rankStory = (build: Build) => {
               ...unit(surfaceCss, '.borderless {'), gap,
               ...unit(surfaceCss, '.unfilled {'), gap,
               ...unit(surfaceCss, '.muted-ink {'), gap,
-              ...unit(surfaceCss, '.focus-ringed {')
+              ...unit(surfaceCss, '.attentive:where(')
             ]}/>
           </Codes>
         </Reveal>
