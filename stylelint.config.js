@@ -3,8 +3,33 @@ import {fileURLToPath} from 'node:url';
 
 const root = dirname(fileURLToPath(import.meta.url));
 
+const structure = [
+  'display', '/^grid/', '/^flex/', 'gap', 'row-gap', 'column-gap', 'order',
+  'position', '/^inset/', 'top', 'right', 'bottom', 'left', 'z-index', '/^position-/', 'anchor-name',
+  '/^padding/', '/^margin/', 'box-sizing',
+  'width', 'height', '/^min-/', '/^max-/', 'inline-size', 'block-size', 'aspect-ratio',
+  '/^align-/', '/^justify-/', '/^place-/',
+  '/^overflow/', 'white-space', 'writing-mode', 'contain', '/^container/', 'isolation', 'resize',
+  '/^transform/', 'translate', 'rotate', 'scale', '/^transition/', '/^animation/', '/^interpolate/',
+  '/^--/', 'syntax', 'inherits', 'initial-value',
+  'content', 'visibility', 'opacity', 'pointer-events', 'cursor', 'touch-action', 'user-select', '/^scroll-/',
+  'vertical-align', 'text-align', 'text-indent', 'text-wrap', 'text-overflow',
+  'table-layout', 'border-collapse', 'border-spacing', '/^border(-(block|inline|top|right|bottom|left)(-(start|end))?)?-width$/',
+  'counter-reset', 'counter-increment', 'list-style-type',
+  'stroke-width', 'vector-effect', 'stroke-dasharray', 'stroke-linejoin', 'stroke-linecap'
+];
+
 export default {
   overrides: [
+    {
+      files: ['src/**/*.css'],
+      rules: {
+        'property-allowed-list': [structure, {
+          message: property => `"${property}" is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class`
+        }]
+      }
+    },
+    {files: ['src/styles/**/*.css', 'src/index.css'], rules: {'property-allowed-list': null}},
     {files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}},
     {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}}
   ],

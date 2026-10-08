@@ -59,7 +59,7 @@
         display: grid;
         gap: var(--base-x-0_5);
         padding-inline-start: var(--base-x-2_5);
-        list-style: decimal;
+        list-style-type: decimal;
     }
 
     .context-choice {
