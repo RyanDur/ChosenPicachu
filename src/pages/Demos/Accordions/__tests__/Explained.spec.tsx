@@ -709,7 +709,7 @@ describe('the platform build’s bars', () => {
     expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
   });
 
-  test('should keep the bar’s own run to the row, the words it wears and its focus', async () => {
+  test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
@@ -717,7 +717,7 @@ describe('the platform build’s bars', () => {
     expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, wearing the same classes: inverse-filled for its colours, attentive for the approach colour, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\./);
   });
 
-  test('should show the words the details bar wears beside its own rule', async () => {
+  test('should show the classes the details bar wears beside its own rule', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
@@ -727,7 +727,7 @@ describe('the platform build’s bars', () => {
 });
 
 describe('the known-height build’s bars', () => {
-  test('should say the label wears prior-approached, a word that reads an earlier sibling', async () => {
+  test('should say the label wears prior-approached, a shared class that reads an earlier sibling', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
@@ -769,6 +769,11 @@ describe('the known-height build’s bars', () => {
 
     expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: field on inverse field. That look is shared with the rest of the site, so it does not live in the bar’s own sheet. It is a class in a shared sheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the sheet’s rule and then the shared class.');
     expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^\.inverse-filled \{/);
+    expect(outOfReadingOrder([
+      run,
+      explanation.runTelling(oldWay, /Each bar shows an arrow/),
+      explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)
+    ])).toEqual([]);
   });
 
   test('should show the arrow’s classes in the order its run names them: the sheet’s rules, the corner, then the turns', async () => {
@@ -781,7 +786,7 @@ describe('the known-height build’s bars', () => {
   });
 });
 
-describe('the words the bars wear', () => {
+describe('the classes the bars wear', () => {
   test('should say the Close bar’s ground and text are two plain colour classes, and show them beside its rule', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
