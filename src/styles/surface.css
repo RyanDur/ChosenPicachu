@@ -58,6 +58,8 @@
 .hung { box-shadow: var(--shadow-far) var(--shadow), var(--shadow-near) var(--dark-shadow); }
 .backdrop { background: var(--backdrop); }
 
+.veiled::backdrop { background: var(--charcoal-veil); }
+
 .backdrop-below { box-shadow: 0 var(--base) 0 var(--backdrop); }
 
 .backdrop-above { box-shadow: 0 calc(var(--base) * -1) 0 var(--backdrop); }
@@ -67,6 +69,23 @@
 
   &:has(> [aria-current="page"]) {
     box-shadow: none;
+  }
+}
+
+.approached:has(~ :hover, ~ :focus) { background-color: var(--approach); }
+
+.inverse-filled {
+  color: var(--field);
+  background: var(--field-inverse);
+
+  &:hover,
+  &:focus {
+    color: var(--ink);
+  }
+
+  &:disabled {
+    color: var(--field);
+    background: var(--smoke);
   }
 }
 
@@ -81,6 +100,8 @@
 .hairline-outline { border: var(--hairline) solid currentcolor; }
 
 .alarm-ink { color: var(--alarm-ink); }
+
+.ink { color: var(--ink); }
 
 .muted-ink { color: var(--ink-muted); }
 
@@ -100,6 +121,7 @@
   &:focus-visible,
   &:has(:focus-visible) {
     outline: var(--hairline-x-2) solid var(--ring);
+    outline-offset: calc(var(--hairline-x-2) * -1);
   }
 }
 

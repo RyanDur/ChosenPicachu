@@ -6,7 +6,6 @@
   > .feedback-open {
     inline-size: 100%;
     padding: var(--base-x-2);
-    border: none;
     cursor: pointer;
   }
 }
@@ -29,11 +28,6 @@
 .feedback-dialog {
   inline-size: 100%;
   max-inline-size: 60ch;
-  color: var(--ink);
-
-  &::backdrop {
-    background: var(--charcoal-veil);
-  }
 }
 
 .feedback-form {
@@ -62,15 +56,10 @@
 
 .feedback-field {
   display: grid;
-  color: var(--ink);
 }
 
 .feedback-label {
   padding: var(--base) var(--base-x-2);
-}
-
-.feedback-field:has(.feedback-words:hover, .feedback-words:focus, .feedback-reach:hover, .feedback-reach:focus) .feedback-label {
-  background-color: var(--approach);
 }
 
 .feedback-field:has(.feedback-words) {
@@ -84,7 +73,6 @@
 .feedback-words,
 .feedback-reach {
   padding: var(--base) var(--base-x-2);
-  color: var(--ink);
 }
 
 .feedback-words {
@@ -108,27 +96,10 @@
 .feedback-cancel {
   padding: var(--base) var(--base-x-2);
   cursor: pointer;
-
-  &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--ring);
-    outline-offset: calc(var(--hairline-x-2) * -1);
-  }
 }
 
-.feedback-send {
-  color: var(--field);
-  background: var(--field-inverse);
-
-  &:hover,
-  &:focus {
-    color: var(--ink);
-  }
-
-  &:disabled {
-    color: var(--field);
-    background: var(--smoke);
-    cursor: default;
-  }
+.feedback-send:disabled {
+  cursor: default;
 }
 
 .feedback-actions {
@@ -138,10 +109,6 @@
   align-content: end;
   gap: var(--base);
   padding: var(--base);
-}
-
-.feedback-cancel {
-  color: var(--ink);
 }
 
 @media (width <= 600px), (height <= 500px) {

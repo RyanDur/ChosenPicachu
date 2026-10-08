@@ -112,10 +112,10 @@ export const Feedback: FC = () => {
 
   return <>
     <p className="feedback-item field">
-      <button type="button" className="feedback-open path rail-aside bold attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
+      <button type="button" className="feedback-open path rail-aside bold attentive field borderless reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    <dialog id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
@@ -123,20 +123,20 @@ export const Feedback: FC = () => {
         </hgroup>
         <p className="feedback-thread field paragraph">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
         <label className="feedback-field">
-          <span className="feedback-label field bold">What did you find?</span>
-          <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" value={draft.words}
+          <span className="feedback-label field bold ink approached">What did you find?</span>
+          <textarea className="feedback-words bare card borderless paragraph ink" name="words" required enterKeyHint="send" value={draft.words}
             onChange={event => dispatch(wordsEdited(event.currentTarget.value))} onKeyDown={sendsOnEnter}/>
         </label>
         <label className="feedback-field">
-          <span className="feedback-label field bold">A way to reach you, if you like</span>
-          <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
+          <span className="feedback-label field bold ink approached">A way to reach you, if you like</span>
+          <input className="feedback-reach bare card borderless paragraph ink" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
-          <button type="submit" className="feedback-send path sub-title bold attentive borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+          <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
     </dialog>
