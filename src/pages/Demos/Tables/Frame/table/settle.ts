@@ -10,15 +10,17 @@ type Toward = ColumnShove['toward'] | RowShove['toward'];
 
 type Motion = 'carried' | 'settling' | `shoved-${Toward}`;
 
-const shoveOf: Record<Toward, Motion> = {start: 'shoved-start', end: 'shoved-end', up: 'shoved-up', down: 'shoved-down'};
+const shoveOf: {[T in Toward]: `shoved-${T}`} = {start: 'shoved-start', end: 'shoved-end', up: 'shoved-up', down: 'shoved-down'};
 const shoves = Object.values(shoveOf);
 const marks: readonly Motion[] = ['settling', ...shoves];
 const motions: readonly Motion[] = ['carried', ...marks];
 
 export const changeMotion = (cell: Element, {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}): void => {
-  cell.classList.remove(...off);
-  cell.classList.add(...on);
-  cell.classList.toggle('paper-in-motion', motions.some(motion => cell.classList.contains(motion)));
+  const wearing = motions.filter(motion => on.includes(motion) || (cell.classList.contains(motion) && !off.includes(motion)));
+  cell.classList.remove('paper-in-motion', ...motions);
+  if (wearing.length > 0) {
+    cell.classList.add('paper-in-motion', ...wearing);
+  }
 };
 
 const undressed = (cells: readonly HTMLTableCellElement[]): void =>

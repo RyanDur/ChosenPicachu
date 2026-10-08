@@ -623,8 +623,10 @@ describe('the frame table', () => {
       const {trades, buys} = tradesCarriedPastBuys();
       fireEvent.pointerUp(surface(), {pointerId: 1});
 
-      fireEvent.animationEnd(trades);
-      fireEvent.animationEnd(buys);
+      [trades, buys].forEach(header => {
+        const at = columnOrder().indexOf(header.getAttribute('aria-label') ?? '');
+        screen.getAllByRole('row').forEach(lane => fireEvent.animationEnd(lane.children[at]));
+      });
 
       const cells = [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')];
       ['carried', 'settling', 'shoved-start', 'shoved-end', 'shoved-up', 'shoved-down'].forEach(motion =>

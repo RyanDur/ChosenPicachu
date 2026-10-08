@@ -1016,7 +1016,17 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('After a trade the header wears shared, a class of the table’s own sheet, not one of the site’s shared classes, and its share rides a custom property');
+    expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet, and it switches the table to the layout the ledger apportions. Its share rides a custom property');
+  });
+
+  test('should say every motion class changes through changeMotion in the vanilla world, with it carved after the reconcile', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent('Every motion class changes through changeMotion, which adds or removes the class and keeps paper-in-motion on while any motion class is present.');
+    expect(recipe).toHaveTextContent(/export const dressCarried[^]*export const changeMotion/);
   });
 
   test.each(['react', 'vanilla'])('should say a moving cell wears paper-in-motion in the %s world, with its block after the carried cells’ rules', async world => {
@@ -1025,7 +1035,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved, so a moving cell covers whatever it passes.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque. The sheet raises the carried cells with a z-index of 1, so they ride over whatever they pass, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1038,7 +1048,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they settle.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it. Under keep the carried cells stay put and the sheet raises them with a z-index of 1, so the neighbours slide beneath them; the paper keeps either from showing through the other.');
     expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1048,7 +1058,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, the site’s ring, which every movable column header and every grip wears.');
+    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by name. focus-ringed is one: the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
   });
 });

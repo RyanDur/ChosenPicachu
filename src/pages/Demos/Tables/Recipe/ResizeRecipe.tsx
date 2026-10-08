@@ -175,9 +175,10 @@ const widenStory = (world: World) =>
         <Reveal>
           <Says>Pixel widths are the first ledger you reach for, and every entry in it is a lie
             waiting for a resize: the sum answers to nobody.</Says>
-          <Says>After a trade the header wears <code>shared</code>, a class of the table’s own sheet, not one of the
-            site’s shared classes, and its share rides a custom
-            property, and fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
+          <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
+            in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
+            is a class of the table’s own sheet, and it switches the table to the layout the ledger apportions. Its
+            share rides a custom property, and fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
             opening widths in that same stylesheet, keeps the table exactly its container: every
             column a fraction of it, one record keeping one promise.</Says>
           {ledgerCodes[world]}

@@ -47,11 +47,17 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
           column or its row is carried, and where its seat and its drift are, and sets the class
           and the properties from the answer. The table wears the word hide, and the sheet reads
           it. A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that
-          an element wears by name, while it is carried, settling or shoved, so a moving cell covers whatever it passes.</Says>
+          an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper,
+          so a cell in motion is opaque. The sheet raises the carried cells with a z-index of 1, so they ride over
+          whatever they pass, and the paper keeps what is beneath from showing through.</Says>
         : <Says>There is no flag anywhere in the build: when the drag in the store changes, the
           reconcile dresses the carried cells with the class and the properties, and undresses
           them when the drag is gone. The table wears the word hide, and the sheet reads it. A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that
-          an element wears by name, while it is carried, settling or shoved, so a moving cell covers whatever it passes.</Says>}
+          an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper,
+          so a cell in motion is opaque. The sheet raises the carried cells with a z-index of 1, so they ride over
+          whatever they pass, and the paper keeps what is beneath from showing through. Every motion class
+          changes through changeMotion, which adds or removes the class and keeps paper-in-motion on while any motion
+          class is present.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -100,17 +106,17 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
           the table wears the word keep, and no rule in the sheet translates a carried cell
           under it. A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a
           look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the
-          page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried
-          cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they
-          settle.</Says>
+          page’s paper, so a cell in motion is opaque and shows nothing through it. Under keep the carried cells stay
+          put and the sheet raises them with a z-index of 1, so the neighbours slide beneath them; the paper keeps either
+          from showing through the other.</Says>
         : <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
           What answers the hand is the order: the neighbours move around it as it is struck, or
           at the drop. The build dispatches the same drift and dresses the same cells; the table
           wears the word keep, and no rule in the sheet translates a carried cell under it. A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a
           look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the
-          page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried
-          cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they
-          settle.</Says>}
+          page’s paper, so a cell in motion is opaque and shows nothing through it. Under keep the carried cells stay
+          put and the sheet raises them with a z-index of 1, so the neighbours slide beneath them; the paper keeps either
+          from showing through the other.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),
