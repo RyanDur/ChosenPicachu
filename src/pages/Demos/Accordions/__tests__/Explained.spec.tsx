@@ -772,7 +772,8 @@ describe('the known-height build’s bars', () => {
     expect(outOfReadingOrder([
       run,
       explanation.runTelling(oldWay, /Each bar shows an arrow/),
-      explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)
+      explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/),
+      explanation.runTelling(oldWay, /paints the sign in its background instead/)
     ])).toEqual([]);
   });
 
