@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {tableControls, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
+import {aggregations, tableControls, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
@@ -49,13 +49,13 @@ describe('the tables demo', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('the aggregations say plainly that the grid never grows, only its numbers change', async () => {
+  test('the aggregations say plainly that the grid never grows, and that a sorted column reseats its rows', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(screen.getByText(/trades land\. The grid never grows: no row or column is added or removed, only the numbers change\./)).toBeInTheDocument();
+    expect(screen.getByText(/trades land\. The grid never grows: no row or column is added or removed\. Only the numbers change, and while a column is sorted, the rows reseat as their numbers do\./)).toBeInTheDocument();
   });
 
   test('the glider offers a pace, an origin and a motion, eager by default', async () => {
@@ -136,18 +136,30 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
     broadcast(feed, fourTrades);
-    const labels = () => within(card).getAllByRole('row').slice(1)
-      .map(row => within(row).getByRole('rowheader').textContent);
-    const menuFor = (label: string) => within(card).getByLabelText(`${label} by`);
-    await waitFor(() => expect(within(card).getAllByText('4')).not.toHaveLength(0));
+    await aggregations.counted(fourTrades.length);
 
-    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+    await aggregations.sort('trades', 'descending');
 
-    expect(labels()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
-    expect(within(card).getByRole('columnheader', {name: /^trades/}))
+    expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
+    expect(within(aggregations.card()).getByRole('columnheader', {name: /^trades/}))
       .toHaveAttribute('aria-sort', 'descending');
+  });
+
+  test('while a column is sorted, the windows reseat as trades change their numbers', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed(feed);
+    broadcast(feed, fourTrades);
+    await aggregations.counted(fourTrades.length);
+    await aggregations.sort('vwap', 'descending');
+    expect(aggregations.windows()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+
+    broadcast(feed, [tradeFrame(40000, now, '10', 'sold')]);
+
+    await waitFor(() => expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']));
   });
 
   test('the controls fold behind their readout', async () => {

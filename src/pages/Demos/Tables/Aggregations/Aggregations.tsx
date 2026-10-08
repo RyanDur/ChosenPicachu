@@ -46,7 +46,8 @@ export const Aggregations: FC<Props> = ({world, ...dials}) => {
       trades arrived, the split of buys and sells, the bitcoin traded, the
       volume-weighted average price paid, and how far the price moved. Every
       window is measured from the newest trade, and every cell updates as
-      trades land. The grid never grows: no row or column is added or removed, only the numbers change.
+      trades land. The grid never grows: no row or column is added or removed. Only the numbers change,
+      and while a column is sorted, the rows reseat as their numbers do.
     </Explainer>
   </section>;
 };
