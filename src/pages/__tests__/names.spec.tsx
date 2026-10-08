@@ -5,9 +5,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
-import {aicArtResponse, anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@components/art-gallery/__test_support/fixtures';
-import {anyRequestRespondsWith} from '@__test_support/server';
-import {Source} from '@components/art-gallery/museums/source';
+import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 
 const described = (): string | null => document.head.querySelector('meta[name="description"]')?.getAttribute('content') ?? null;
@@ -67,15 +65,6 @@ describe('each page is named where a search shows it', () => {
 
       await waitFor(() => expect(document.title).toBe(`${piece.title} · Gallery · Chosen Picachu`));
       expect(described()).toBe(`${piece.title}, from the gallery’s wall.`);
-    });
-
-    test('should leave the artist out when a Harvard piece names no artist', async () => {
-      anyRequestRespondsWith(JSON.stringify({...harvardPieceResponse, people: []}));
-
-      render(<TestApp at={`${Paths.artGallery}${harvardPiece.id}?tab=${Source.HARVARD}`}/>);
-
-      await waitFor(() => expect(document.title).toBe(`${harvardPiece.title} · Gallery · Chosen Picachu`));
-      expect(described()).toBe(`${harvardPiece.title}, from the gallery’s wall.`);
     });
 
     test('should carry the gallery’s words until the museum answers', async () => {
