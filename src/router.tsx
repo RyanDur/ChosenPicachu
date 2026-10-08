@@ -15,11 +15,12 @@ import {PageError} from '@pages/PageError';
 import {NoRoom} from '@pages/NoRoom';
 import {Header} from '@pages/BasePage/Header';
 import {useFrameMeasures} from '@pages/BasePage/useFrameMeasures';
+import names from '@pages/names.json';
 import {Demos} from '@pages/Demos/routes';
 
 const NoHeader = () => null;
-const ClosedRoomHeader = () => <Header title="Closed room"/>;
-const NoRoomHeader = () => <Header title="No such room"/>;
+const ClosedRoomHeader = () => <Header title="Closed room" named={names.home}/>;
+const NoRoomHeader = () => <Header title="No such room" named={names.home}/>;
 
 type Arrival = 'left alone' | 'at the top of the page';
 

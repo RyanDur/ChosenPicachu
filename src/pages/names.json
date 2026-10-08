@@ -1,0 +1,46 @@
+{
+  "home": {
+    "title": "Chosen Picachu",
+    "description": "Tutorials on accordions, z-index, drag sort, charts and tables, built from this site’s own code, and a record of how the web got its three languages."
+  },
+  "demos": {
+    "accordions": {
+      "title": "Accordions · Chosen Picachu",
+      "description": "An accordion in HTML alone, the old ways it was built, what the platform gives now and the two together, and which of the three languages each job needed."
+    },
+    "z-index": {
+      "title": "Z-index · Chosen Picachu",
+      "description": "Why a z-index of 9999 can still lose: stacking contexts, what they trap, and the top layer as the browser’s way out."
+    },
+    "dragAndDrop": {
+      "title": "Drag sort · Chosen Picachu",
+      "description": "A list arranged by hand, by pointer on the platform’s own drag and drop and by keyboard, built step by step."
+    },
+    "charts": {
+      "title": "Charts · Chosen Picachu",
+      "description": "A price line, candles, pressure and a pie built from a live trade feed, each as a story with the real code beside it."
+    },
+    "tables": {
+      "title": "Tables · Chosen Picachu",
+      "description": "A trader’s table that keeps itself current, built in React and in vanilla script, step by step from the need."
+    }
+  },
+  "charts": {
+    "price": {"title": "Price line · Charts · Chosen Picachu", "description": "The trader can watch the price move, live."},
+    "candles": {"title": "Candles · Charts · Chosen Picachu", "description": "The trader can read the same trades as candles."},
+    "pressure": {"title": "Pressure · Charts · Chosen Picachu", "description": "The trader can see who is driving the move."},
+    "pie": {"title": "Pie · Charts · Chosen Picachu", "description": "The trader can see who owns the session."}
+  },
+  "users": {
+    "title": "Users · Chosen Picachu",
+    "description": "A roster of candidates and the form that adds one, with the platform’s own validation."
+  },
+  "gallery": {
+    "title": "Gallery · Chosen Picachu",
+    "description": "A wall of artworks from the Art Institute of Chicago, the Victoria and Albert Museum and Harvard’s collections."
+  },
+  "games": {
+    "title": "Games · Chosen Picachu",
+    "description": "One game so far."
+  }
+}

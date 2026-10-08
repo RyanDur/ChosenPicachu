@@ -5,8 +5,9 @@ import {Header} from '@pages/BasePage/Header';
 import {ThreeInARow} from './ThreeInARow';
 import {GamesPage} from './GamesPage';
 import {GamePaths} from './GamePaths';
+import names from '@pages/names.json';
 
-const GamesHeader = () => <Header title="Play Games"/>;
+const GamesHeader = () => <Header title="Play Games" named={names.games}/>;
 
 const ColorGame = {
   path: GamePaths.colorGame,

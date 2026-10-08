@@ -13,6 +13,7 @@ import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
 import {Search} from '@components/art-gallery/Search';
 import {GalleryAside, GallerySettings} from '@components/art-gallery/Settings';
 import {GalleryNav} from '@components/art-gallery/Nav';
+import names from '@pages/names.json';
 
 const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
   <GalleryLinks.Provider value={{gallery: Paths.artGallery}}>
@@ -22,13 +23,13 @@ const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
   </GalleryLinks.Provider>;
 
 const GalleryHeader = () =>
-  <Header title="Gallery">
+  <Header title="Gallery" named={names.gallery}>
     <GallerySettings/>
   </Header>;
 
 const PieceHeader = () => {
   const {easel} = useArtPiece();
-  return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'}>
+  return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'} named={names.gallery}>
     <Search id="gallery-search" className="header-settings"/>
   </Header>;
 };
