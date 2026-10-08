@@ -62,6 +62,7 @@
   --approach: var(--mint);
   --ink: var(--void);
   --ink-muted: var(--charcoal);
+  --ink-faint: rgb(from var(--ink-muted) r g b / 0.8);
   --ink-inverse: var(--white);
   --alarm-ink: var(--international-orange-engineering);
   --ring: var(--charcoal);

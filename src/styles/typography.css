@@ -23,8 +23,7 @@
 .caption {
   font-size: var(--text-caption);
   line-height: 1.4;
-  color: var(--ink-muted);
-  opacity: 0.8;
+  color: var(--ink-faint);
 }
 
 /* registered, so every engine computes the column to pixels before dividing */
