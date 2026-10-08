@@ -23,10 +23,13 @@ const runDrawing = (part: HTMLElement, drawing: RegExp): HTMLElement =>
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure').filter(figure => within(figure).queryByRole('code') === null);
 
-const everyCodeIn = (run: HTMLElement): string[] => within(run).getAllByRole('code').map(code => code.textContent);
+const samplesIn = (run: HTMLElement): HTMLElement[] =>
+  within(run).getAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
+
+const everyCodeIn = (run: HTMLElement): string[] => samplesIn(run).map(code => code.textContent);
 
 const sampleBeside = (part: HTMLElement, words: RegExp): HTMLElement => {
-  const samples = within(runTelling(part, words)).getAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
+  const samples = samplesIn(runTelling(part, words));
   if (samples.length !== 1) {
     throw new Error(`${samples.length} samples beside ${words}`);
   }
