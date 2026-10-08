@@ -50,11 +50,11 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
   };
   return <li>
     <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={storyAnchor({param, id})}>
-      <summary className="opener" onClick={toggled}>
+      <summary className="opener sub-title" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
-          <Can className="can" id={storyAnchor({param, id})}>{can}</Can>
-          <p className="so-that">so that {soThat}</p>
-          {steps > 0 && <p className="step-tally">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
+          <Can className="can paragraph bold" id={storyAnchor({param, id})}>{can}</Can>
+          <p className="so-that paragraph italic muted-ink">so that {soThat}</p>
+          {steps > 0 && <p className="step-tally caption muted-ink">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
         </hgroup>
       </summary>
       {children}

@@ -38,3 +38,5 @@
     color: var(--code-call);
   }
 }
+
+.comment-ink { color: var(--code-comment); }

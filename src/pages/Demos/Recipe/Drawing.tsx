@@ -9,8 +9,19 @@ type Sized = At & {width: number; height: number};
 export const Diagram: FC<PropsWithChildren<{title: string; says: string; height: number}>> = ({title, says, height, children}) =>
   <Figure className="diagram" viewBox={`0 0 320 ${height}`} title={title} says={says}>{children}</Figure>;
 
+const looksOf: Record<Kind, string> = {
+  piece: 'paper-filled drawn',
+  native: 'faded-mint-filled drawn',
+  unseen: 'hollow drawn',
+  clipped: 'hollow drawn',
+  clip: 'hollow drawn',
+  ring: 'approach-filled ring-drawn',
+  'unseen-ring': 'approach-filled ring-drawn',
+  topmost: 'paper-filled drawn'
+};
+
 export const Box: FC<Sized & {kind: Kind}> = ({x, y, width, height, kind}) =>
-  <rect className={kind} x={x} y={y} width={width} height={height}/>;
+  <rect className={`${kind} ${looksOf[kind]}`} x={x} y={y} width={width} height={height}/>;
 
 export const Part: FC<Sized & {kind: Kind; name: string}> = ({name, ...box}) => <>
   <Box {...box}/>
@@ -27,9 +38,9 @@ const head = (from: At, to: At): string => {
 };
 
 export const Arrow: FC<{through: [At, At, ...At[]]}> = ({through}) => <>
-  <polyline className="arrow" points={through.map(({x, y}) => `${x},${y}`).join(' ')}/>
-  <polygon className="arrow-head" points={head(through[through.length - 2], through[through.length - 1])}/>
+  <polyline className="arrow hollow drawn" points={through.map(({x, y}) => `${x},${y}`).join(' ')}/>
+  <polygon className="arrow-head drawn-filled" points={head(through[through.length - 2], through[through.length - 1])}/>
 </>;
 
 export const Chevron: FC<At & {turn: number}> = ({x, y, turn}) =>
-  <polyline className="chevron" points="-10,-10 10,-10 10,10" transform={`translate(${x} ${y}) rotate(${turn})`}/>;
+  <polyline className="chevron hollow drawn" points="-10,-10 10,-10 10,10" transform={`translate(${x} ${y}) rotate(${turn})`}/>;

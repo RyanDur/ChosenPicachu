@@ -97,11 +97,11 @@ export const OneNameOneChoice: FC = () =>
     says="Radios that share a name make one group, so choosing one part unchooses the last, and Close is the choice that shows nothing.">
     {['Close', 'first part', 'second part', 'third part'].map((part, at) =>
       <g key={part}>
-        <circle className="piece" cx={40} cy={26 + at * 30} r={9}/>
-        {at === 1 && <circle className="chosen" cx={40} cy={26 + at * 30} r={4}/>}
+        <circle className="piece paper-filled drawn" cx={40} cy={26 + at * 30} r={9}/>
+        {at === 1 && <circle className="chosen drawn-filled" cx={40} cy={26 + at * 30} r={4}/>}
         <Label x={60} y={30 + at * 30} anchor="start">{part}</Label>
       </g>)}
-    <polyline className="arrow" points="180,17 190,17 190,125 180,125"/>
+    <polyline className="arrow hollow drawn" points="180,17 190,17 190,125 180,125"/>
     <Label x={200} y={75} anchor="start">name="group"</Label>
   </Diagram>;
 
@@ -122,7 +122,7 @@ export const SizedToTheText: FC = () =>
   <Diagram title="Sized to the text" height={130}
     says="Closed, the part a details hides has no height, and open, it takes exactly its text’s height.">
     <Part x={20} y={20} width={120} height={26} kind="piece" name="summary"/>
-    <line className="edge" x1={20} y1={50} x2={140} y2={50}/>
+    <line className="edge drawn" x1={20} y1={50} x2={140} y2={50}/>
     <Label x={80} y={66}>block-size: 0</Label>
     <Label x={80} y={124}>closed</Label>
     <Part x={180} y={20} width={120} height={26} kind="piece" name="summary"/>
@@ -154,7 +154,7 @@ export const RowToItsContent: FC = () =>
   <Diagram title="A row that grows to its content" height={130}
     says="The text’s row is 0fr while the fold is closed and 1fr while it is open, and 1fr is the height its content asks for.">
     <Part x={20} y={20} width={120} height={26} kind="piece" name="bar"/>
-    <line className="edge" x1={20} y1={50} x2={140} y2={50}/>
+    <line className="edge drawn" x1={20} y1={50} x2={140} y2={50}/>
     <Label x={80} y={66}>0fr</Label>
     <Label x={80} y={124}>closed</Label>
     <Part x={180} y={20} width={120} height={26} kind="piece" name="bar"/>
@@ -182,7 +182,7 @@ export const RidesTheEdge: FC = () =>
         <Box x={x} y={edge - 50} width={88} height={50} kind="clipped"/>
         <Box x={x} y={88} width={88} height={edge - 88} kind="native"/>
         <Part x={x} y={62} width={88} height={26} kind="piece" name="bar"/>
-        <line className="edge" x1={x - 6} y1={edge} x2={x + 94} y2={edge}/>
+        <line className="edge drawn" x1={x - 6} y1={edge} x2={x + 94} y2={edge}/>
         <Label x={x + 44} y={162}>{stage}</Label>
       </g>;
     })}

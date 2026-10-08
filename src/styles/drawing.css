@@ -6,6 +6,18 @@
 
 .swapping-filled { fill: var(--faded-mint); }
 
+.faded-mint-filled { fill: var(--faded-mint); }
+
+.drawn-filled { fill: var(--charcoal); }
+
+.approach-filled { fill: var(--approach); }
+
+.ring-drawn { stroke: var(--ring); }
+
+.ink-filled { fill: var(--ink); }
+
+.hollow { fill: none; }
+
 .buy-side {
   --side-face: var(--mint-shade);
   --side-wall: var(--mint-ink);

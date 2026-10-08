@@ -9,9 +9,6 @@
     position: absolute;
     top: var(--base);
     right: var(--base-x-1_5);
-    font-size: var(--text-caption);
-    letter-spacing: 0.08em;
-    color: var(--code-comment);
   }
 
   .line {
@@ -32,8 +29,6 @@
   .sources {
     display: grid;
     justify-items: start;
-    font-size: var(--text-caption);
-    line-height: 1.4;
     overflow-wrap: anywhere;
   }
 }

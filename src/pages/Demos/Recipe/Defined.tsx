@@ -26,7 +26,7 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
   const [intent, setIntent] = useState<number>();
   return <>
     <button type="button"
-      className="term"
+      className="term borderless unfilled dotted-underlined focus-ringed"
       popoverTarget={id}
       popoverTargetAction="show"
       style={{'--term-anchor': anchor}}
@@ -44,7 +44,7 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
       role="definition"
       aria-label={term}
       popover="auto"
-      className="term-definition card rounded-corners lifted"
+      className="term-definition card rounded-corners lifted paragraph"
       style={{'--term-anchor': anchor}}
       onToggle={() => window.clearTimeout(intent)}>{definition}</span>
   </>;

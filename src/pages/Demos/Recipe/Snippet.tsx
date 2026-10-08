@@ -37,7 +37,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   return <figure className="sample">
     <pre className={classNames('snippet', 'code', 'rounded-corners')}>
-      <span className="lang" aria-hidden="true">{label}</span>
+      <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({text, dim = false}, at) =>
         <span className={classNames('line', dim && 'comment')} key={at}>
           {dim
@@ -47,7 +47,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
           {'\n'}
         </span>)}</code>
     </pre>
-    <figcaption className="sources">
+    <figcaption className="sources caption ink">
       {sources.length > 0
         ? sources.map(({path, url, first, last}) =>
           <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"

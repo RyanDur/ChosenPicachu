@@ -123,6 +123,11 @@
 
 .ink-underline { border-block-end: var(--hairline-x-2) solid var(--ink); }
 
+.dotted-underlined {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
 .hairline-separated > * + * { border-block-start: var(--hairline) solid var(--shadow); }
 
 .backdrop-separated > * + * {
@@ -156,6 +161,26 @@
   background: var(--void);
   color: var(--ink-inverse);
   font-weight: 600;
+}
+
+.shadow-badge-before::before {
+  background: var(--shadow);
+  border-radius: 50%;
+  font-weight: 600;
+
+  @media (width <= 600px) {
+    font-size: var(--text-caption);
+  }
+}
+
+.mint-badge-before::before {
+  background: var(--mint);
+  border-radius: 50%;
+  font-weight: 600;
+
+  @media (width <= 600px) {
+    font-size: var(--text-caption);
+  }
 }
 
 .muted-dashed-outline { border: var(--hairline-x-2) dashed var(--ink-muted); }
@@ -240,6 +265,8 @@
 .field-after::after { background: var(--field); }
 
 .field-inverse { background: var(--field-inverse); }
+
+.faded-mint { background: var(--faded-mint); }
 
 .field-ink { color: var(--field); }
 

@@ -3,59 +3,40 @@
   --widest-drawing: var(--base-x-60);
 
   .piece {
-    fill: var(--paper);
-    stroke: var(--charcoal);
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
   }
 
   .native {
-    fill: var(--faded-mint);
-    stroke: var(--charcoal);
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
   }
 
   .unseen,
   .clipped {
-    fill: none;
-    stroke: var(--charcoal);
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
   }
 
   .topmost {
-    fill: var(--paper);
-    stroke: var(--charcoal);
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
   }
 
   .clip {
-    fill: none;
-    stroke: var(--charcoal);
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
   }
 
   .arrow,
   .chevron {
-    fill: none;
-    stroke: var(--charcoal);
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
   }
 
-  .arrow-head,
-  .chosen {
-    fill: var(--charcoal);
-  }
-
   .ring,
   .unseen-ring {
-    fill: var(--approach);
-    stroke: var(--ring);
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
   }
@@ -65,7 +46,6 @@
   }
 
   .edge {
-    stroke: var(--charcoal);
     vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
   }

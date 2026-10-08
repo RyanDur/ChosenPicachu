@@ -102,6 +102,8 @@
   font-size: var(--base-x-2_5);
 }
 
+.body-glyph-before::before { font-size: var(--text-body); }
+
 .bold {
   font-weight: 600;
 }
