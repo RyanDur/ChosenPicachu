@@ -5,7 +5,7 @@ import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {Listing} from '@pages/BasePage/useListing';
 import {Art} from '@components/art-gallery/museums/art';
-import {empty} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {GalleryContext} from '@components/art-gallery/Art/Context';
 import {ArtPieceContext, useArtPiece} from '@components/art-gallery/ArtPiece/Context';
@@ -32,7 +32,7 @@ const GalleryHeader = () =>
 
 const listingOf = ({title, artistInfo}: Art): Listing => ({
   title: `${title} · ${names.gallery.title}`,
-  description: empty(artistInfo) ? `${title}, from the gallery’s wall.` : `${title}, by ${artistInfo}, from the gallery’s wall.`
+  description: maybe(artistInfo).map(artist => `${title}, by ${artist}, from the gallery’s wall.`).orElse(`${title}, from the gallery’s wall.`)
 });
 
 const PieceHeader = () => {

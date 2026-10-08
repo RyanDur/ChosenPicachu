@@ -15,6 +15,7 @@ import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/source';
 import {pictured} from '@components/art-gallery/museums/pictured';
+import {attributed} from '@components/art-gallery/museums/attributed';
 
 const {harvardAPIKey, harvardDomain} = env;
 
@@ -67,6 +68,6 @@ const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
   title: maybe(record.title).orElse('Untitled'),
   ...pictured(record.primaryimageurl),
-  artistInfo: maybe(record.people?.find(person => person.role === 'Artist')?.displayname).orElse('Unknown'),
+  ...attributed(record.people?.find(person => person.role === 'Artist')?.displayname),
   altText: maybe(record.title).orElse('Untitled')
 });

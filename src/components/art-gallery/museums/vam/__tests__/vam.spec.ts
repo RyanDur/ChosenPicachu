@@ -22,6 +22,14 @@ describe('VAM as a source of art', () => {
       expect(actual).toEqual(fromVAMArt);
     });
 
+    test('names no artist on a work VAM credits to no maker', async () => {
+      anyRequestRespondsWith(JSON.stringify({...vamArtResponse, records: vamArtResponse.records.map(({_primaryMaker: _, ...record}) => record)}));
+
+      const actual = await art.getAll({page: 1, size: 8, source: Source.VAM}).orNull();
+
+      expect(actual?.pieces.filter(piece => 'artistInfo' in piece)).toEqual([]);
+    });
+
     test('asks VAM for the works matching a search term', async () => {
       setupVAMAllArtResponse(vamArtResponse, {limit: 8, page: 1, search: 'rad'});
 
@@ -38,6 +46,14 @@ describe('VAM as a source of art', () => {
       const actual = await art.get({id: fromVAMToPiece.id, source: Source.VAM}).orNull();
 
       expect(actual).toEqual(fromVAMToPiece);
+    });
+
+    test('names no artist when VAM credits no maker', async () => {
+      anyRequestRespondsWith(JSON.stringify({record: {...vamPieceResponse.record, artistMakerPerson: []}}));
+
+      const actual = await art.get({id: fromVAMToPiece.id, source: Source.VAM}).orNull();
+
+      expect(actual).not.toHaveProperty('artistInfo');
     });
   });
 

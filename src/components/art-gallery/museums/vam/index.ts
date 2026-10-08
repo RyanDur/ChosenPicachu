@@ -13,6 +13,7 @@ import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/source';
+import {attributed} from '@components/art-gallery/museums/attributed';
 
 const {vamDomain, vamPictures} = env;
 
@@ -28,7 +29,7 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
     image: iiifImage(base, 800),
     srcSet: iiifSrcSet(base)
   })).orElse({}),
-  artistInfo: maybe(record._primaryMaker?.name).orElse('Unknown'),
+  ...attributed(record._primaryMaker?.name),
   altText: record._primaryTitle || 'Untitled'
 });
 
@@ -61,7 +62,7 @@ export const vam = {
       id: record.systemNumber,
       title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
       ...maybe(record.images?.[0]).map(first => ({image: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)})).orElse({}),
-      artistInfo: maybe(record.artistMakerPerson?.[0]?.name.text).orElse('Unknown'),
+      ...attributed(record.artistMakerPerson?.[0]?.name.text),
       altText: maybe(record.titles?.[0]?.title).orElse(record.objectType)
     })),
 

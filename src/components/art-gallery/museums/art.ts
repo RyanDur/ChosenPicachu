@@ -10,7 +10,7 @@ export type Art = {
   image?: string;
   srcSet?: string;
   altText: string;
-  artistInfo: string;
+  artistInfo?: string;
 };
 
 export type AllArt = {

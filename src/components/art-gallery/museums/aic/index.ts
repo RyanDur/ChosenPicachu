@@ -15,6 +15,7 @@ import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/source';
+import {attributed} from '@components/art-gallery/museums/attributed';
 
 const {aicDomain, aicPictures} = env;
 
@@ -75,6 +76,6 @@ const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
   ...pictured(data.image_id, width),
-  artistInfo: data.artist_display,
+  ...attributed(data.artist_display),
   altText: maybe(data.thumbnail?.alt_text).orElse(data.term_titles.join(' '))
 });

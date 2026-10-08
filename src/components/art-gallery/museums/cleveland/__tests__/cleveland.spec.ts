@@ -47,6 +47,15 @@ describe('Cleveland as a source of art', () => {
 
       expect(actual).toEqual(fromClevelandToPiece);
     });
+
+    test('names no artist when Cleveland has no creator and no tombstone', async () => {
+      const {tombstone: _, ...untold} = clevelandPieceResponse.data;
+      anyRequestRespondsWith(JSON.stringify({data: {...untold, creators: []}}));
+
+      const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
+
+      expect(actual).not.toHaveProperty('artistInfo');
+    });
   });
 
   describe('suggestions', () => {

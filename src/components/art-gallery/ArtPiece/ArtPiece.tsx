@@ -39,7 +39,7 @@ export const ArtPiece = () => {
     {awaited(easel) && <Loading label="loading piece"/>}
     {easel.reply === 'answered' && <figure className="art-work">
       <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
-      <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo}</figcaption>
+      <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo ?? 'Unknown'}</figcaption>
     </figure>}
     {easel.reply === 'refused' && <img className="stand-in" src={noImage} alt="the museum refused to answer"/>}
   </>;

@@ -45,6 +45,14 @@ describe('Harvard as a source of art', () => {
 
       expect(actual).toEqual(harvardPiece);
     });
+
+    test('names no artist when Harvard credits none', async () => {
+      anyRequestRespondsWith(JSON.stringify({...harvardPieceResponse, people: []}));
+
+      const actual = await art.get({id: harvardPiece.id, source: Source.HARVARD}).orNull();
+
+      expect(actual).not.toHaveProperty('artistInfo');
+    });
   });
 
   describe('suggestions', () => {

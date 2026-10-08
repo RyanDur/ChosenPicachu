@@ -5,7 +5,7 @@ import {HTTPError} from '@transport/types';
 import {Paths} from '@pages/Paths';
 import {Source} from '@components/art-gallery/museums/source';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
-import {anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
+import {anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 
 describe('viewing a piece', () => {
   const pieceResponse = anAICPieceResponse();
@@ -32,6 +32,14 @@ describe('viewing a piece', () => {
 
     expect(await screen.findByText(pieceResponse.data.artist_display)).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByAltText('the museum refused to answer')).not.toBeInTheDocument());
+  });
+
+  test('says the artist is unknown when the museum names none', async () => {
+    anyRequestRespondsWith(JSON.stringify({...harvardPieceResponse, people: []}));
+
+    render(<TestApp at={`${Paths.artGallery}${harvardPiece.id}?tab=${Source.HARVARD}`}/>);
+
+    expect(await screen.findByText('Unknown')).toBeInTheDocument();
   });
 
   test('shows nothing but an error and says the museum is having trouble', async () => {

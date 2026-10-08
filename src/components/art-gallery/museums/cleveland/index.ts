@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {
   ClevelandAllArtResponse,
   ClevelandAllArtSchema,
@@ -16,6 +16,7 @@ import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/source';
+import {attributed} from '@components/art-gallery/museums/attributed';
 
 const {clevelandDomain} = env;
 
@@ -29,15 +30,15 @@ const srcSetOf = (record: ClevelandRecord): string | undefined => {
   return sources.length > 0 ? sources.join(', ') : undefined;
 };
 
-const artistInfoOf = (record: ClevelandRecord): string =>
-  (record.creators ?? []).map(({description}) => description).filter(has).join(', ') || maybe(record.tombstone).orElse('Unknown');
+const artistOf = (record: ClevelandRecord): string | null | undefined =>
+  (record.creators ?? []).map(({description}) => description).filter(has).join(', ') || record.tombstone;
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
   image: record.images?.web?.url,
   srcSet: srcSetOf(record),
-  artistInfo: artistInfoOf(record),
+  ...attributed(artistOf(record)),
   altText: record.title
 });
 
