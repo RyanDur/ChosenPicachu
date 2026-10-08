@@ -372,7 +372,7 @@ describe('a list of charts', () => {
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await candlesStory())).toEqual([
         'Make the candles the way the price line does',
-        'Draw each candle as a body and a wick',
+        'Draw each candle as a body, a wall and a wick',
         'Draw the volume under each candle',
         'Use the same axes'
       ]);
@@ -382,10 +382,10 @@ describe('a list of charts', () => {
       ['charts on the same period agree', 'So two charts set to the same period are drawn from the same candles and cannot disagree.'],
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
       ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
-      ['a candle is three shapes', 'candleShapes turns each candle into three shapes. The body runs from the open to the close, and a second rectangle, the wall, sits just behind it and gives it an edge. The wick, a thin line through the body, runs from the high to the low.'],
+      ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
       ['the classes up and down', 'A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
-      ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps the structure.'],
-      ['each candle wears its side, and the wick drawn', 'Each candle wears a side with its state, buy-side or sell-side, a shared class that sets a side’s colours. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke; the chart’s sheet gives the wick its hairline width.'],
+      ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look, the wick’s width and how the shapes move.'],
+      ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class, up or down: buy-side or sell-side, a shared class that sets a side’s colours. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke; the chart’s sheet gives the wick its hairline width.'],
       ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colours travel as custom properties, values a stylesheet names once and other rules read, and a side class sets them: volume-side sets leather for the bar and drab for its edge, and the bars read them through side-face and side-wall.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
@@ -415,7 +415,7 @@ describe('a list of charts', () => {
     test.each([
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
       ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
-      ['the bars wear their sides and the middle line drawn', 'The bought bars wear buy-side and the sold bars sell-side, shared classes, looks that live in the site’s shared sheet and that an element wears by name, which set a side’s colours; side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge, read them. The middle line wears drawn, which gives it its charcoal stroke.']
+      ['the bars wear their sides and the middle line drawn', 'The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in the site’s shared sheet and that an element wears by name. A side class sets a side’s colours as custom properties, values a stylesheet names once and other rules read; side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge, read them. The middle line wears drawn, which gives it its charcoal stroke.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
     });

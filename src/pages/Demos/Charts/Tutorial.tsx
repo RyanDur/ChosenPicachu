@@ -175,18 +175,20 @@ const candlesStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Draw each candle as a body and a wick">
+      <Step title="Draw each candle as a body, a wall and a wick">
         <Words want="Open, high, low, close: four numbers for each span, drawn as one mark.">
-          <Says>candleShapes turns each candle into three shapes. The body runs from the open to the close, and a second
-            rectangle, the wall, sits just behind it and gives it an edge. The wick, a thin line through the body, runs
-            from the high to the low.</Says>
+          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a
+            thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body
+            moved 1 right and 1.5 down, which gives the body an edge.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
           <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
-            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps the structure.</Says>
-          <Says>Each candle wears a side with its state, buy-side or sell-side, a shared class that sets a side’s colours.
+            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look,
+            the wick’s width and how the shapes move.</Says>
+          <Says>Each candle wears a side beside its class, up or down: buy-side or sell-side, a shared class that sets a
+            side’s colours.
             The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn,
             which gives it its charcoal stroke; the chart’s sheet gives the wick its hairline width.</Says>
         </Words>
@@ -294,10 +296,11 @@ const pressureStory =
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
-            below. The bought bars wear buy-side and the sold bars sell-side, shared classes, looks that live in the
-            site’s shared sheet and that an element wears by name, which set a side’s colours; side-face on the bar and
-            side-wall on the second rectangle set just behind it, which gives it an edge, read them. The middle line
-            wears drawn, which gives it its charcoal stroke.</Says>
+            below. The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in
+            the site’s shared sheet and that an element wears by name. A side class sets a side’s colours as custom
+            properties, values a stylesheet names once and other rules read; side-face on the bar and side-wall on the
+            second rectangle set just behind it, which gives it an edge, read them. The middle line wears drawn, which
+            gives it its charcoal stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
             caption says how many minutes are on show, and that the count began when you arrived.</Says>
