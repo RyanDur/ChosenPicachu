@@ -6,16 +6,16 @@ const headOf = (html: string) => ({
   description: html.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1]
 });
 
-for (const {page, route, named} of [
-  {page: 'the home page', route: '', named: names.home},
-  {page: 'the demos, on their first tab', route: 'demos/', named: names.demos.accordions},
-  {page: 'the users page', route: 'users/', named: names.users},
-  {page: 'the gallery', route: 'gallery/', named: names.gallery},
-  {page: 'the games page', route: 'games/', named: names.games}
-]) {
-  test(`a search engine that runs no script reads ${page}'s own title and description`, async ({request}) => {
-    const served = await request.get(route);
+const listed = {
+  '': names.home,
+  'demos/': names.demos.accordions,
+  'users/': names.users,
+  'gallery/': names.gallery,
+  'games/': names.games
+};
 
-    expect(headOf(await served.text())).toEqual({title: named.title, description: named.description});
-  });
-}
+test('a search engine that runs no script reads each page’s own title and description', async ({request}) => {
+  const read = await Promise.all(Object.keys(listed).map(async route => [route, headOf(await (await request.get(route)).text())]));
+
+  expect(Object.fromEntries(read)).toEqual(listed);
+});
