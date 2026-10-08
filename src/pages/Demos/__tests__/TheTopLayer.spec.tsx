@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, outOfReadingOrder} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs, outOfReadingOrder} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';
@@ -12,8 +12,7 @@ const troublesIn = (alert: HTMLElement): HTMLElement[] =>
 
 const openZIndexTab = async () => {
   render(<TestApp at={demosAt()}/>);
-  const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-  await userEvent.click(within(demoTabs).getByText('Z-index'));
+  await demoTabs.open('Z-index');
 };
 
 describe('the top layer', () => {
@@ -320,10 +319,10 @@ describe('the banner tutorial’s second story', () => {
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[1]).toHaveTextContent(/transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\) 0\.3s, grid-template-rows 0\.3s, margin-block-end 0\.3s; @starting-style/);
-    expect(steps[1]).toHaveTextContent(/\.news \{ min-block-size: 0; transition: padding 0\.3s, border-width 0\.3s; @starting-style \{ padding-block: 0; border-block-width: 0; \} \}/);
+    expect(steps[1]).toHaveTextContent(/\.news \{ min-block-size: 0; transition: padding 0\.3s, border-width 0\.3s; @starting-style \{ padding-block: 0; border-block-width: 0; } }/);
     expect(steps[2]).not.toHaveTextContent(/transition:/);
-    expect(steps[3]).toHaveTextContent(/margin-block-end: 0;[^]*grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; \}/);
-    expect(steps[3]).toHaveTextContent(/\.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; \}/);
+    expect(steps[3]).toHaveTextContent(/margin-block-end: 0;[^]*grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; }/);
+    expect(steps[3]).toHaveTextContent(/\.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; }/);
   });
 
   test('should say where the banner starts, for the entrance chosen', async () => {

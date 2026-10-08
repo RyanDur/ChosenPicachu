@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {chartPageAt, demosAt, Feed} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt, demoTabs, Feed} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed, outOfReadingOrder} from '@pages/Demos/__test_support';
@@ -266,7 +266,10 @@ describe('a list of charts', () => {
     expect(await screen.findByText(/read the same trades as candles/)).toBeVisible();
   });
 
-  test('the candles story shows the markup and the dress, not just the arithmetic', async () => {
+  test.each([
+    ['shows the markup and the dress, not just the arithmetic', ['className="candlesticks"', '.up .body', 'className="volumes"', '.volume']],
+    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']]
+  ])('the candles story %s', async (_claim, shown) => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
@@ -274,11 +277,9 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'candles'});
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
+
     expect(story).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent('className="candlesticks"');
-    expect(recipe).toHaveTextContent('.up .body');
-    expect(recipe).toHaveTextContent('className="volumes"');
-    expect(recipe).toHaveTextContent('.volume');
+    for (const text of shown) expect(recipe).toHaveTextContent(text);
   });
 
   test('a story the trader opened folds shut when they press its summary again', async () => {
@@ -505,20 +506,6 @@ describe('a list of charts', () => {
     expect(recipe).toHaveTextContent('export const Axes');
   });
 
-  test('the candles story stands on its own feet', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
-    const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
-    const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
-    expect(story).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent('export const bucketTrades');
-    expect(recipe).toHaveTextContent('export const mergeLive');
-    expect(recipe).toHaveTextContent('<Axes');
-  });
-
   test('the pressure story proves the side is a fact, not a guess', async () => {
     const feed = await listeningFeed();
 
@@ -626,8 +613,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt()} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await demoTabs.open('Charts');
 
       expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
     });
@@ -639,8 +625,7 @@ describe('the demos page', () => {
 
       await feedIsSubscribed(feed);
       broadcast(feed, [tradeFrame(50001)]);
-      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await demoTabs.open('Charts');
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
     });
 
@@ -653,9 +638,8 @@ describe('the demos page', () => {
       broadcast(feed, [tradeFrame(50001)]);
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
       const opened = feed.connections();
-      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-      await userEvent.click(within(demoTabs).getByText('Accordions'));
-      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await demoTabs.open('Accordions');
+      await demoTabs.open('Charts');
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
       expect(feed.connections()).toBe(opened);
     });

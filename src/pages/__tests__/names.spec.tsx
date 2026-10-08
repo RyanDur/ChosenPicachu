@@ -1,7 +1,7 @@
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
@@ -86,7 +86,7 @@ describe('each page is named where a search shows it', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
     await waitFor(() => expect(document.title).toBe(names.demos.accordions.title));
 
-    await userEvent.click(within(await screen.findByRole('navigation', {name: 'demos'})).getByText('Z-index'));
+    await demoTabs.open('Z-index');
 
     await waitFor(() => expect(document.title).toBe(names.demos['z-index'].title));
     expect(described()).toBe(names.demos['z-index'].description);

@@ -1,7 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
@@ -15,13 +14,12 @@ describe('The Demos page', () => {
     const foldLabels = async () => (await screen.findAllByRole<HTMLInputElement>('checkbox'))
       .map(toggle => toggle.labels?.[0]?.textContent);
     const before = await foldLabels();
-    const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-    await userEvent.click(within(demoTabs).getByText('Charts'));
+    await demoTabs.open('Charts');
     await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
     await feedIsSubscribed(feed);
     broadcast(feed, [tradeFrame(50001)]);
     expect(await within(screen.getByRole('region', {name: 'live trades'})).findByText('$50,001.00')).toBeVisible();
-    await userEvent.click(within(demoTabs).getByText('Accordions'));
+    await demoTabs.open('Accordions');
     expect(await foldLabels()).toEqual(before);
   });
 
@@ -37,8 +35,7 @@ describe('The Demos page', () => {
   test('the z-index door leads to its demo and titles the page', async () => {
     render(<TestApp at={demosAt()}/>);
 
-    const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
-    await userEvent.click(within(demoTabs).getByText('Z-index'));
+    await demoTabs.open('Z-index');
 
     await waitFor(() => {
       const main = screen.getByRole('main');
