@@ -199,6 +199,14 @@ describe('the banner tutorial’s first story', () => {
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
   });
 
+  test('should show the panel wearing borderless and unfilled with the dials chosen', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+    const placing = recipeFolds.steps(news)[2];
+
+    expect(within(placing).getAllByRole('code')[0]).toHaveTextContent('<section class="banners borderless unfilled bottom right">');
+  });
+
   test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
