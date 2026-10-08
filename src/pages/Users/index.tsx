@@ -4,7 +4,7 @@ import {Header} from '@pages/BasePage/Header';
 import {UsersPage} from '@pages/Users/UsersPage';
 import names from '@pages/names.json';
 
-const UsersHeader = () => <Header title="Users" named={names.users}/>;
+const UsersHeader = () => <Header title="Users" listed={names.users}/>;
 
 export const Users = {
   path: Paths.users,

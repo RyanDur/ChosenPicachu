@@ -23,13 +23,13 @@ const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
   </GalleryLinks.Provider>;
 
 const GalleryHeader = () =>
-  <Header title="Gallery" named={names.gallery}>
+  <Header title="Gallery" listed={names.gallery}>
     <GallerySettings/>
   </Header>;
 
 const PieceHeader = () => {
   const {easel} = useArtPiece();
-  return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'} named={names.gallery}>
+  return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'} listed={names.gallery}>
     <Search id="gallery-search" className="header-settings"/>
   </Header>;
 };

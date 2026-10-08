@@ -9,12 +9,12 @@ import {isChartKind} from './Charts/kinds';
 
 const DemosHeader = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
-  return <Header title={`Demos ${capitalized(tab)}`} named={names.demos[tab]}/>;
+  return <Header title={`Demos ${capitalized(tab)}`} listed={names.demos[tab]}/>;
 };
 
 const ChartsHeader = () => {
   const {kind} = useParams();
-  return <Header title="Demos Charts" named={isChartKind(kind) ? names.charts[kind] : names.demos.charts}/>;
+  return <Header title="Demos Charts" listed={isChartKind(kind) ? names.charts[kind] : names.demos.charts}/>;
 };
 
 export const Demos = {

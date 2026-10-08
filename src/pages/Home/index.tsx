@@ -4,7 +4,7 @@ import {Header} from '@pages/BasePage/Header';
 import {HomePage} from './HomePage';
 import names from '@pages/names.json';
 
-const HomeHeader = () => <Header title="The three languages" named={names.home}/>;
+const HomeHeader = () => <Header title="The three languages" listed={names.home}/>;
 
 export const Home = {
   path: Paths.home,
