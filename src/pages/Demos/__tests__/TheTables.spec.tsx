@@ -49,6 +49,15 @@ describe('the tables demo', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
+  test('the aggregations say plainly that the grid never grows, only its numbers change', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed(feed);
+    expect(screen.getByText(/trades land\. The grid never grows: no row or column is added or removed, only the numbers change\./)).toBeInTheDocument();
+  });
+
   test('the glider offers a pace, an origin and a motion, eager by default', async () => {
     const feed = await listeningFeed();
 
