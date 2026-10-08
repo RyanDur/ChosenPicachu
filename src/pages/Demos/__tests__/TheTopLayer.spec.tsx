@@ -189,7 +189,7 @@ describe('the banner tutorial’s first story', () => {
       .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
   });
 
-  test('should tell step 3 in three paragraphs: the centring, the classes, then the margins for the dials chosen', async () => {
+  test('should tell step 3 in four paragraphs: the centring, the classes, the margins for the dials chosen, then the sample', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
@@ -197,14 +197,16 @@ describe('the banner tutorial’s first story', () => {
     expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border and a background; the panel wears borderless and unfilled, which take them off, so only the banners inside it show\.$/);
     expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
+    expect(within(placing).getByText(/^The sample is the component’s line/)).toBeInTheDocument();
   });
 
-  test('should show the panel wearing borderless and unfilled with the dials chosen', async () => {
+  test('should carve the panel’s own line, and say the class names the dials chose', async () => {
     render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getAllByRole('code')[0]).toHaveTextContent('<section class="banners borderless unfilled bottom right">');
+    expect(within(placing).getAllByRole('code')[0]).toHaveTextContent("className={classNames('banners', 'borderless', 'unfilled', side, align");
+    expect(placing).toHaveTextContent('The sample is the component’s line: the two class names the dials choose arrive as side and align, and the browser’s element reads, for this page’s choice, bottom right.');
   });
 
   test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {

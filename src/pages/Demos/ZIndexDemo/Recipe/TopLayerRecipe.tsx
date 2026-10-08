@@ -83,11 +83,11 @@ export const TopLayerRecipe: FC = () => {
             they are there so the choice shows in the class names.</Says>
           <Says>On this page margin-block is the margins above and below the panel, and margin-inline is the ones to
             its left and right. Here, {sideFact[side]} And {alignFact[align]}</Says>
+          <Says>The sample is the component’s line: the two class names the dials choose arrive as side and align, and
+            the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={[
-            plain(`<section class="banners borderless unfilled ${side} ${align}">`)
-          ]}/>
+          <Snippet label="HTML" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
             ...unit(placementCss, `.${side} {`), gap,
             ...unit(placementCss, `.${align} {`)
