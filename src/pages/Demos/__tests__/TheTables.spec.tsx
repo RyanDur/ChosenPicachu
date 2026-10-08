@@ -99,9 +99,7 @@ describe('the tables demo', () => {
     fireEvent.pointerMove(header('vwap'), {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
     fireEvent.pointerUp(header('vwap'), {pointerId: 1});
 
-    const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
-    ['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change'].forEach((name, at) =>
-      expect(headerTexts[at]).toMatch(new RegExp(`^${name}`)));
+    expect(aggregations.columns()).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
   });
 
   test('the windows can trade places by hand', async () => {
@@ -214,7 +212,6 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed(feed);
     const card = aggregations.card();
-    const headers = () => within(card).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
     expect(aggregations.windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
     within(card).getByRole('button', {name: 'move row 1'}).focus();
@@ -229,7 +226,7 @@ describe('the tables demo', () => {
 
     expect(screen.getByText('<LazyTable className="hide static"/>')).toBeVisible();
     expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
-    expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
+    expect(aggregations.columns().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
   test('the recipe opens on the need with its stories closed', async () => {
