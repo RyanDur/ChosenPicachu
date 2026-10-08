@@ -23,7 +23,11 @@ const types = {
 };
 const compressible = new Set(['.html', '.js', '.css', '.json', '.svg', '.txt', '.map']);
 
-const server = createServer((request, response) => {
+/**
+ * @param {import('node:http').IncomingMessage} request
+ * @param {import('node:http').ServerResponse} response
+ */
+const answers = (request, response) => {
   const send = (status, body, contentType, compress) => {
     const headers = {'content-type': contentType, 'cache-control': 'public, max-age=600'};
     if (is(compress) && (request.headers['accept-encoding'] ?? '').includes('gzip')) {
@@ -79,17 +83,21 @@ const server = createServer((request, response) => {
   if (extname(path)) {
     return send(404, 'not found', 'text/plain', false);
   }
-  send(200, readFileSync(join(dist, 'index.html')), 'text/html', true);
-});
+  const entry = join(file, 'index.html');
+  send(200, readFileSync(existsSync(entry) ? entry : join(dist, 'index.html')), 'text/html', true);
+};
+const server = createServer(answers);
 
 const feed = new WebSocketServer({server, path: '/ws-feed'});
-feed.on('connection', socket => {
+/** @param {import('ws').WebSocket} socket */
+const replaysTo = socket => {
   let at = 0;
   socket.on('error', error => console.error(`a feed client sent what the stage cannot read: ${error.message}`));
   socket.once('message', () => {
     const replay = setInterval(() => socket.send(frames[at++ % frames.length]), 80);
     socket.on('close', () => clearInterval(replay));
   });
-});
+};
+feed.on('connection', replaysTo);
 
 server.listen(port, () => console.log(`stub ready on ${server.address().port}`));
