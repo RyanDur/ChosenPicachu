@@ -11,7 +11,17 @@
 .floating { box-shadow: var(--raised); }
 .bare { appearance: none; }
 .borderless { border: none; }
-.unfilled { background: none; }
+.unfilled {
+  background: none;
+
+  &::-webkit-progress-bar {
+    background: none;
+  }
+
+  &::-moz-progress-bar {
+    background: none;
+  }
+}
 .shrinkable { min-inline-size: 0; }
 .contained { overscroll-behavior-x: contain; }
 

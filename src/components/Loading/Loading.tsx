@@ -8,4 +8,4 @@ type LoadingProps = {
 };
 
 export const Loading: FC<LoadingProps> = ({className, label = 'loading'}) =>
-  <progress className={classNames('loading', className)} aria-label={label}/>;
+  <progress className={classNames('loading', 'bare', 'borderless', 'unfilled', 'circular', 'ink', 'spinning-dots', className)} aria-label={label}/>;
