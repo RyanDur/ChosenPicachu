@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Arrow, Box, Chevron, Diagram, Part, Label} from '../Recipe/Drawing';
+import {Arrow, Box, Chevron, Circle, Diagram, Part, Label} from '../Recipe/Drawing';
 import {FoldInput} from './fold-type';
 import './Diagrams.css';
 
@@ -97,7 +97,7 @@ export const OneNameOneChoice: FC = () =>
     says="Radios that share a name make one group, so choosing one part unchooses the last, and Close is the choice that shows nothing.">
     {['Close', 'first part', 'second part', 'third part'].map((part, at) =>
       <g key={part}>
-        <circle className="piece paper-filled drawn" cx={40} cy={26 + at * 30} r={9}/>
+        <Circle kind="piece" cx={40} cy={26 + at * 30} r={9}/>
         {at === 1 && <circle className="chosen drawn-filled" cx={40} cy={26 + at * 30} r={4}/>}
         <Label x={60} y={30 + at * 30} anchor="start">{part}</Label>
       </g>)}

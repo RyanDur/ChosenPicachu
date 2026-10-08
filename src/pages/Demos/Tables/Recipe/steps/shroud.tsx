@@ -52,8 +52,9 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
             and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s
             paper, so a cell in motion is opaque.</Says>
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
-            z-index orders boxes that overlap, the higher on top, and it works only on a positioned box, so the sheet
-            gives the carried cell position: relative as well. Raised, the carried cells ride over whatever they pass,
+            z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
+            given a <code>position</code> other than static, so the sheet gives the carried
+            cell <code>position: relative</code> as well. Raised, the carried cells ride over whatever they pass,
             and the paper keeps what is beneath from showing through.</Says>
         </>
         : <>
@@ -64,8 +65,9 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
             and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s
             paper, so a cell in motion is opaque.</Says>
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
-            z-index orders boxes that overlap, the higher on top, and it works only on a positioned box, so the sheet
-            gives the carried cell position: relative as well. Raised, the carried cells ride over whatever they pass,
+            z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
+            given a <code>position</code> other than static, so the sheet gives the carried
+            cell <code>position: relative</code> as well. Raised, the carried cells ride over whatever they pass,
             and the paper keeps what is beneath from showing through.</Says>
           <Says>Every motion class changes through <code>changeMotion</code>, which adds or removes the class and
             keeps <code>paper-in-motion</code> on while any motion class is present.</Says>
@@ -123,7 +125,8 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
           <Says>Under keep the carried cells stay put, and the sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and it works only on a positioned box, which is why the carried cell is also position: relative. So the
+            and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
+            which is why the carried cell is also <code>position: relative</code>. So the
             neighbours slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>
@@ -137,7 +140,8 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
           <Says>Under keep the carried cells stay put, and the sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and it works only on a positioned box, which is why the carried cell is also position: relative. So the
+            and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
+            which is why the carried cell is also <code>position: relative</code>. So the
             neighbours slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>}

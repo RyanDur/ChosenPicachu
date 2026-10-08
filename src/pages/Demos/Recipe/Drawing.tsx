@@ -23,6 +23,9 @@ const looksOf: Record<Kind, string> = {
 export const Box: FC<Sized & {kind: Kind}> = ({x, y, width, height, kind}) =>
   <rect className={`${kind} ${looksOf[kind]}`} x={x} y={y} width={width} height={height}/>;
 
+export const Circle: FC<{cx: number; cy: number; r: number; kind: Kind}> = ({kind, ...circle}) =>
+  <circle className={`${kind} ${looksOf[kind]}`} {...circle}/>;
+
 export const Part: FC<Sized & {kind: Kind; name: string}> = ({name, ...box}) => <>
   <Box {...box}/>
   <text className="drawn-caption" x={box.x + box.width / 2} y={box.y + box.height / 2 + 4} textAnchor="middle">{name}</text>

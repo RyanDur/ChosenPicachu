@@ -50,7 +50,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
   };
   return <li>
     <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={storyAnchor({param, id})}>
-      <summary className="opener sub-title" onClick={toggled}>
+      <summary className="opener sub-title-glyph-before" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
           <Can className="can paragraph bold" id={storyAnchor({param, id})}>{can}</Can>
           <p className="so-that paragraph italic muted-ink">so that {soThat}</p>

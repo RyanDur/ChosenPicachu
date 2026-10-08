@@ -215,9 +215,10 @@ const widenStory = (world: World) =>
         </Words>
         <Reveal>
           {handleSays[world]}
-          <Says>The handle’s look is shared classes. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the
-            line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus.
-            focus-ringed draws the site’s ring when the keyboard reaches it.</Says>
+          <Says>The handle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
+            browser’s button chrome. <code>held-bar-after</code> paints the line: faded leather, a tan, while a pointer
+            hovers it, and faded mint, a pale green, while it holds focus. <code>focus-ringed</code> draws the site’s
+            ring when the keyboard reaches it.</Says>
           <Codes>
             {handleMarkup[world]}
             {spokenLabel}

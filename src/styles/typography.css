@@ -104,6 +104,8 @@
 
 .body-glyph-before::before { font-size: var(--text-body); }
 
+.sub-title-glyph-before::before { font-size: var(--text-title); }
+
 .bold {
   font-weight: 600;
 }

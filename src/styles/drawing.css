@@ -2,9 +2,7 @@
 
 .paper-filled { fill: var(--paper); }
 
-.resting-filled { fill: var(--faded-leather); }
-
-.swapping-filled { fill: var(--faded-mint); }
+.faded-leather-filled { fill: var(--faded-leather); }
 
 .faded-mint-filled { fill: var(--faded-mint); }
 

@@ -1,11 +1,13 @@
 import {FC} from 'react';
 import {classNames} from '@components/class-names';
 
-const stations: [string, string][] = [
-  ['fetch', 'the last thousand trades, once, at open'],
-  ['socket', 'every trade after that, kept under a cap'],
-  ['fold', 'the same trades refolded into windows on every pass'],
-  ['table', 'one cell per measure per window']
+type Station = {name: string; does: string; ground: 'field' | 'faded-mint'};
+
+const stations: readonly Station[] = [
+  {name: 'fetch', does: 'the last thousand trades, once, at open', ground: 'field'},
+  {name: 'socket', does: 'every trade after that, kept under a cap', ground: 'field'},
+  {name: 'fold', does: 'the same trades refolded into windows on every pass', ground: 'faded-mint'},
+  {name: 'table', does: 'one cell per measure per window', ground: 'field'}
 ];
 
 export const DataPath: FC = () =>
@@ -14,8 +16,8 @@ export const DataPath: FC = () =>
       <span className="reel-title caption uppercase muted-ink">where a number comes from</span>
     </figcaption>
     <ol className="data-path-stations">
-      {stations.map(([name, does]) =>
-        <li className={classNames('data-path-station', name === 'fold' ? 'faded-mint' : 'field', 'rounded-corners')} key={name}>
+      {stations.map(({name, does, ground}) =>
+        <li className={classNames('data-path-station', ground, 'rounded-corners')} key={name}>
           <strong className="data-path-name">{name}</strong>
           <p className="data-path-does caption muted-ink">{does}</p>
         </li>)}

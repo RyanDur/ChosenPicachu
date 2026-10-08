@@ -163,8 +163,7 @@
   font-weight: 600;
 }
 
-.shadow-badge-before::before {
-  background: var(--shadow);
+.badge-before::before {
   border-radius: 50%;
   font-weight: 600;
 
@@ -173,15 +172,9 @@
   }
 }
 
-.mint-badge-before::before {
-  background: var(--mint);
-  border-radius: 50%;
-  font-weight: 600;
+.shadow-badge-before::before { background: var(--shadow); }
 
-  @media (width <= 600px) {
-    font-size: var(--text-caption);
-  }
-}
+.mint-badge-before::before { background: var(--mint); }
 
 .muted-dashed-outline { border: var(--hairline-x-2) dashed var(--ink-muted); }
 
