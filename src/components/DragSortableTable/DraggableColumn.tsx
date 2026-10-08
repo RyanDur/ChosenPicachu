@@ -51,7 +51,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(className, travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
+    className={classNames(className, 'muted-rule-after', 'muted-bar-below', 'paper-in-motion', 'focus-ringed', travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

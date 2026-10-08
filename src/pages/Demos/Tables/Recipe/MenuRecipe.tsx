@@ -14,7 +14,7 @@ import demosSource from '@pages/Demos/store.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
-import {menuSource} from './steps/sources';
+import {menuSource, surfaceCss} from './steps/sources';
 import {theImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
@@ -191,7 +191,7 @@ const rankStory = (build: Build) => {
                 ...span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<th scope="col" class="cell trades header-cell"', 'aria-label="sort trades"></button>')
+                ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -259,11 +259,13 @@ const rankStory = (build: Build) => {
         <Reveal>
           {world === 'react'
             ? <Says>The header never hears your press. The toggle sits itself at the header’s end
-              edge, undressed of its button chrome. And not every column offers a menu: a menu
+              edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it
+              shows under keyboard focus is focus-ringed, the site’s. And not every column offers a menu: a menu
               exists only where the page writes one inside the header, and the cell pads for it
               by asking the cascade what it holds.</Says>
             : <Says>The header never hears your press. The toggle sits itself at the header’s end
-              edge, undressed of its button chrome. And not every column offers a menu: menus
+              edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it
+              shows under keyboard focus is focus-ringed, the site’s. And not every column offers a menu: menus
               exist only where the markup writes them, the cell pads for them by asking the
               cascade what it holds, and the page itself declares the sortable set.</Says>}
           <Codes>
@@ -287,7 +289,11 @@ const rankStory = (build: Build) => {
                 ...span(buildSrc, 'const sortable = order.filter', 'sort-${column}`)));')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .header-cell > .menu-toggle {')
+              ...unit(headerCss, '.sortable .header-cell > .menu-toggle {'), gap,
+              ...unit(surfaceCss, '.borderless {'), gap,
+              ...unit(surfaceCss, '.unfilled {'), gap,
+              ...unit(surfaceCss, '.muted-ink {'), gap,
+              ...unit(surfaceCss, '.focus-ringed {')
             ]}/>
           </Codes>
         </Reveal>

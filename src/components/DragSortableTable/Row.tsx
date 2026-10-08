@@ -1,10 +1,11 @@
+import {classNames} from '@components/class-names';
 import {ComponentProps, FC} from 'react';
 import {useTableSelector} from './context';
 import {selectOrder} from './selectors';
 import {placed} from './placing';
 
-export const Row: FC<ComponentProps<'tr'>> = ({children, ...tr}) => {
+export const Row: FC<ComponentProps<'tr'>> = ({className, children, ...tr}) => {
   const order = useTableSelector(selectOrder);
 
-  return <tr {...tr}>{placed(children, order, 'column')}</tr>;
+  return <tr {...tr} className={classNames(className, 'hover-approached')}>{placed(children, order, 'column')}</tr>;
 };

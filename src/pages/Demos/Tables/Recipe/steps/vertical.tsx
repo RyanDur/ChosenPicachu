@@ -40,7 +40,7 @@ export const carryVertical = (world: World, rowSource: Sample, buildSrc: Sample)
             aside('{/* focusable by birth; the keyboard track will thank you */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...span(frameHtml, '<button type="button" tabindex="0" class="grip grabbable" aria-label="move row 1">', '</button>'),
+            ...span(frameHtml, '<button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed" aria-label="move row 1">', '</button>'),
             aside('<!-- focusable by birth; the keyboard track will thank you -->')
           ]}/>}
         {world === 'react'

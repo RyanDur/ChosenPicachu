@@ -8,6 +8,7 @@ import sharesSource from '@components/Table/shares.ts?sample';
 import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample';
 import stateSource from '@components/DragSortableTable/table-state.ts?sample';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
+import surfaceCss from '../../../../styles/surface.css?sample';
 import tableSource from '../Frame/table.html?sample';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
@@ -51,7 +52,7 @@ const edgeMarkup: Record<World, ReactNode> = {
     ...span(buildSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<th scope="col" class="cell trades header-cell"', 'aria-label="sort trades"></button>'), gap,
+    ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>'), gap,
     ...span(tableSource, 'aria-label="resize trades"></button>', '</th>')
   ]}/>
 };
@@ -66,7 +67,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<button type="button" tabindex="0" class="resize-handle"', 'aria-label="resize window"></button>')
+    ...span(tableSource, '<button type="button" tabindex="0" class="resize-handle', 'aria-label="resize window"></button>')
   ]}/>
 };
 
@@ -77,7 +78,9 @@ const handleSays: Record<World, ReactNode> = {
     exists its label speaks the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
     own: it is a grid container whose only item is the 8px line its ::after paints, so the
-    painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    painted line is the hit area. The line wears held-bar-after, leather while a pointer hovers it and mint
+    while it holds focus; the button itself is borderless and unfilled, and its keyboard ring is focus-ringed. The
+    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
   vanilla: <Says>The handle is focusable by birth, announcing the name the markup gives it, and
@@ -85,7 +88,8 @@ const handleSays: Record<World, ReactNode> = {
     the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
     whose only item is the 8px line its ::after paints, so the painted line is the hit area. The
-    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    line wears held-bar-after, leather while a pointer hovers it and mint while it holds focus; the button itself
+    is borderless and unfilled, and its keyboard ring is focus-ringed. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>
 };
@@ -215,7 +219,11 @@ const widenStory = (world: World) =>
             {handleMarkup[world]}
             {spokenLabel}
             <Snippet label="CSS" lines={[
-              ...unit(baseCss, '.resize-handle {')
+              ...unit(baseCss, '.resize-handle {'), gap,
+              ...unit(surfaceCss, '.borderless {'), gap,
+              ...unit(surfaceCss, '.unfilled {'), gap,
+              ...unit(surfaceCss, '.held-bar-after {'), gap,
+              ...unit(surfaceCss, '.focus-ringed {')
             ]}/>
           </Codes>
         </Reveal>

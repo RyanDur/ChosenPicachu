@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, gripSource, headerCss, surveySource} from './sources';
+import {gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
@@ -18,11 +18,12 @@ export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample)
       {world === 'react'
         ? <Says>The row grip is already a button, and the headers ask with a tabIndex, so Tab
           walks every movable piece of the table in order. The focus-visible ring draws for the
-          keyboard only.</Says>
+          keyboard only: it is focus-ringed, the site’s ring, which every header and grip wears.</Says>
         : <Says>The row grip is already a button in the markup, and JavaScript asks each movable
           header for focus with a tabindex as it dresses the grips (the anchored edges hold the
           table, so their headers ask for nothing), so Tab walks every movable piece of the
-          table in order. The focus-visible ring draws for the keyboard only.</Says>}
+          table in order. The focus-visible ring draws for the keyboard only: it is focus-ringed, the site’s
+          ring, which every header and grip wears.</Says>}
       <Says>The buttons say their tab stop outright: a tabindex of zero on an element that is
         focusable by birth. That is Safari’s doing. Its plain Tab visits text fields and anything
         that writes a tabindex, and skips buttons and links unless you hold Option; every other
@@ -40,7 +41,8 @@ export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample)
             aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[
-          ...unit(headerCss, '.sortable .header-cell {')
+          ...unit(headerCss, '.sortable .header-cell {'), gap,
+          ...unit(surfaceCss, '.focus-ringed {')
         ]}/>
       </Codes>
     </Reveal>

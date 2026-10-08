@@ -12,13 +12,14 @@ type Props<T extends string> = {
   options: readonly Option<T>[];
   chosen: T;
   onPicked: (value: T) => void;
+  size?: 'sub-title' | 'paragraph';
 };
 
-export const Picks = <T extends string>({label, className, options, chosen, onPicked}: Props<T>) =>
-  <fieldset className={classNames('picks', className)}>
+export const Picks = <T extends string>({label, className, options, chosen, onPicked, size = 'sub-title'}: Props<T>) =>
+  <fieldset className={classNames('picks', 'borderless', 'veiled-rule-below', className)}>
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
-      <label key={value} className="pick">
+      <label key={value} className={classNames('pick', size, 'choice-underlined', 'focus-ringed')}>
         {display}
         <input type="radio"
           className="off-screen"

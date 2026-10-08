@@ -7,7 +7,7 @@ export const RowGrip: FC<ComponentProps<'button'> & {position: number}> = ({posi
   <button {...button}
     type="button"
     tabIndex={0}
-    className="grip grabbable"
+    className="grip grabbable borderless unfilled focus-ringed"
     aria-label={gripLabel(position)}>
     <Handle/>
   </button>;

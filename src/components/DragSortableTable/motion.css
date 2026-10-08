@@ -55,15 +55,10 @@
 .sortable .carried {
   position: relative;
   z-index: 1;
-  background: var(--paper);
 }
 
 .sortable.hide .carried {
   translate: calc(var(--seat-x) + var(--drift-x)) calc(var(--seat-y) + var(--drift-y));
-}
-
-.sortable :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {
-  background: var(--paper);
 }
 
 .sortable.animated .settling {

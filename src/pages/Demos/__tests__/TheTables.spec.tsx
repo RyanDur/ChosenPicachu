@@ -915,3 +915,40 @@ describe('the drag sort recipe’s words', () => {
     expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
 });
+
+describe('the classes the table wears, as its recipes tell them', () => {
+  const recipeAt = async (search: string, name: string): Promise<HTMLElement> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(search)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    return screen.findByRole('region', {name}, untilTheTablesTabRenders);
+  };
+
+  test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {
+    const recipe = await recipeAt(`?tab=tables&tut=menu&world=${world}`, 'build the sort menu yourself');
+
+    expect(recipe).toHaveTextContent('The toggle sits itself at the header’s end edge, undressed of its button chrome by borderless and unfilled, its glyph in muted-ink, and the ring it shows under keyboard focus is focus-ringed, the site’s.');
+    expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.focus-ringed \{/);
+  });
+
+  test.each(['react', 'vanilla'])('should name the resize handle’s classes in the %s world, with their blocks after its rule', async world => {
+    const recipe = await recipeAt(`?tab=tables&tut=resize&world=${world}`, 'build the drag resize yourself');
+
+    expect(recipe).toHaveTextContent('so the painted line is the hit area. The line wears held-bar-after, leather while a pointer hovers it and mint while it holds focus; the button itself is borderless and unfilled, and its keyboard ring is focus-ringed.');
+    expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
+  });
+
+  test.each(['react', 'vanilla'])('should say the carried cells wear paper-in-motion in the %s world, with its block after their rules', async world => {
+    const recipe = await recipeAt(`?tab=tables&world=${world}`, 'build the drag sort yourself');
+
+    expect(recipe).toHaveTextContent('The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling, so they cover whatever they pass.');
+    expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion:is\(/);
+  });
+
+  test.each(['react', 'vanilla'])('should say the keyboard ring is focus-ringed in the %s world, with its block after the header’s rule', async world => {
+    const recipe = await recipeAt(`?tab=tables&world=${world}&track=keyboard`, 'build the drag sort yourself');
+
+    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, the site’s ring, which every header and grip wears.');
+    expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
+  });
+});

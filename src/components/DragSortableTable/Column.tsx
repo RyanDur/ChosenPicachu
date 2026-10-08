@@ -11,7 +11,7 @@ export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, cla
   const width = useTableSelector(widthOfColumn(column));
 
   return <th {...th}
-    className={classNames(className, has(width) && 'shared')}
+    className={classNames(className, 'muted-rule-after', 'muted-bar-below', 'paper-in-motion', 'focus-ringed', has(width) && 'shared')}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

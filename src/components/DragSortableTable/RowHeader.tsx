@@ -51,7 +51,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-    className={classNames(className, (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
+    className={classNames(className, 'muted-rule-after', 'muted-rule-below', 'paper-in-motion', (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

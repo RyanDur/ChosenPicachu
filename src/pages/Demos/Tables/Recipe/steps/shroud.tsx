@@ -4,7 +4,7 @@ import {aside, Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameCarry, gap, selectorsSource, stateSource} from './sources';
+import {frameCarry, gap, selectorsSource, stateSource, surfaceCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 
@@ -46,10 +46,12 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
         ? <Says>There is no flag anywhere in the table: each cell asks the selectors whether its
           column or its row is carried, and where its seat and its drift are, and sets the class
           and the properties from the answer. The table wears the word hide, and the sheet reads
-          it.</Says>
+          it. The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling,
+          so they cover whatever they pass.</Says>
         : <Says>There is no flag anywhere in the build: when the drag in the store changes, the
           reconcile dresses the carried cells with the class and the properties, and undresses
-          them when the drag is gone. The table wears the word hide, and the sheet reads it.</Says>}
+          them when the drag is gone. The table wears the word hide, and the sheet reads it. The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling,
+          so they cover whatever they pass.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -72,7 +74,8 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),
           ...unit(cssSource, '.sortable .carried {'), gap,
-          ...unit(cssSource, '.sortable.hide .carried {'),
+          ...unit(cssSource, '.sortable.hide .carried {'), gap,
+          ...unit(surfaceCss, '.paper-in-motion:is('),
           aside('/* the real cells ride the pointer; their layout box stays as the gap; the sheet adds seat and drift */')
         ]}/>
       </Codes>
@@ -92,16 +95,19 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
           What answers the hand is the order: the neighbours move around it as it is struck, or
           at the drop. The table dispatches the same drift and the cells wear the same numbers;
           the table wears the word keep, and no rule in the sheet translates a carried cell
-          under it.</Says>
+          under it. The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling,
+          so they cover whatever they pass.</Says>
         : <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
           What answers the hand is the order: the neighbours move around it as it is struck, or
           at the drop. The build dispatches the same drift and dresses the same cells; the table
-          wears the word keep, and no rule in the sheet translates a carried cell under it.</Says>}
+          wears the word keep, and no rule in the sheet translates a carried cell under it. The carried cells wear paper-in-motion, which grounds them in the page’s paper while they are carried or settling,
+          so they cover whatever they pass.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),
           ...unit(cssSource, '.sortable .carried {'), gap,
-          ...unit(cssSource, '.sortable.hide .carried {'),
+          ...unit(cssSource, '.sortable.hide .carried {'), gap,
+          ...unit(surfaceCss, '.paper-in-motion:is('),
           aside('/* the carried cell rises above its neighbours in every table; only under hide does it move */')
         ]}/>
       </Codes>

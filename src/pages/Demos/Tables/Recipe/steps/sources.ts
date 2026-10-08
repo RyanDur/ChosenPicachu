@@ -6,6 +6,7 @@ import gripSource from '@components/DragSortableTable/RowGrip.tsx?sample';
 import sortableCss from '@components/DragSortableTable/sortable.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
 import frameHtml from '../../Frame/table.html?sample';
+import surfaceCss from '../../../../../styles/surface.css?sample';
 import stateSource from '@components/DragSortableTable/table-state.ts?sample';
 import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import elementSource from '@components/DragSortableTable/DragSortableTable.tsx?sample';
@@ -20,6 +21,6 @@ import arrangementSource from '@components/DragSortableTable/arrangement.ts?samp
 import placingSource from '@components/DragSortableTable/placing.ts?sample';
 import {plain} from '../../../Recipe';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource};
 
 export const gap = plain(' ');

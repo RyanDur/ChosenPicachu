@@ -279,6 +279,32 @@
 
 .muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
+.muted-rule-after { border-inline-end: var(--hairline) solid var(--ink-muted); }
+
+.muted-bar-below { border-block-end: var(--hairline-x-3) solid var(--ink-muted); }
+
+.veiled-rule-below { border-block-end: var(--hairline) solid var(--charcoal-veil); }
+
+.hover-approached:hover { background: var(--approach); }
+
+.held-bar-after {
+  &:hover::after { background: var(--faded-leather); }
+
+  &:focus::after { background: var(--faded-mint); }
+}
+
+.paper-in-motion:is(.carried, .settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) { background: var(--paper); }
+
+.choice-underlined {
+  color: var(--ink-muted);
+  border-block-end: var(--hairline-x-3) solid transparent;
+
+  &:has(:checked) {
+    color: var(--ink);
+    border-block-end-color: var(--ink-muted);
+  }
+}
+
 .handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
 
 .focal-ringed:has(.focal:focus-visible) { outline: var(--hairline-x-2) solid var(--ring); }

@@ -3,17 +3,7 @@
   --widest-drawing: var(--base-x-60);
 
   .slot {
-    fill: var(--paper);
-    stroke: var(--charcoal);
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
-  }
-
-  .part.still {
-    fill: var(--faded-leather);
-  }
-
-  .part.swaps {
-    fill: var(--faded-mint);
   }
 }

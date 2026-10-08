@@ -2,10 +2,6 @@
   display: grid;
   gap: var(--base-x-3);
 
-  .track-picks {
-    --pick-size: var(--text-body);
-  }
-
   .steps {
     list-style: none;
     counter-reset: recipe-step;

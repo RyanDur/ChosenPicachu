@@ -22,7 +22,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
 
   return <button type="button"
     tabIndex={0}
-    className="resize-handle"
+    className="resize-handle borderless unfilled held-bar-after focus-ringed"
     aria-label={resizeLabel(column, namedShare)}
     onFocus={(event: FocusEvent<HTMLElement>) =>
       maybe(event.currentTarget.closest('table')).map(awaken)}
