@@ -689,6 +689,19 @@ describe('the word attribute', () => {
   });
 });
 
+describe('the word display', () => {
+  test('should be said first where display none is weighed against hiding the input off screen, and no run before it says display', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    const told = oldWay.textContent;
+
+    expect(told.search(/display/i)).toBeGreaterThan(told.indexOf('far off the page'));
+    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the part.');
+  });
+});
+
 describe('the platform build’s bars', () => {
   test('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
@@ -708,14 +721,6 @@ describe('the platform build’s bars', () => {
 
     expect(explanation.runTelling(platform, /The arrow points right while the part is closed/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
     expect(explanation.everyCodeBeside(platform, /The arrow points right while the part is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
-  });
-
-  test('should say what display is where display none is first weighed against hiding the input off screen', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-
-    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the part.');
   });
 
   test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {
@@ -770,8 +775,8 @@ describe('the known-height build’s bars', () => {
     expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The arrow is an empty box drawn after the label’s words. The bar wears corner-after, a shared class that gives that box only its top and right borders; the sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
   });
 
-  test('should say what wearing a shared class means before any class is named, with the class beside it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+  test.each(['inclusive', 'exclusive'])('should say, with %s chosen, what wearing a shared class means before any class is named, with the class beside it', async type => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const run = explanation.runTelling(oldWay, /The bar’s colours are the page’s the other way round/);
@@ -782,7 +787,8 @@ describe('the known-height build’s bars', () => {
       run,
       explanation.runTelling(oldWay, /Each bar shows an arrow/),
       explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/),
-      explanation.runTelling(oldWay, /paints the sign in its background instead/)
+      explanation.runTelling(oldWay, /paints the sign in its background instead/),
+      ...type === 'exclusive' ? [explanation.runTelling(oldWay, /The Close bar is shorter than the others/)] : []
     ])).toEqual([]);
   });
 
