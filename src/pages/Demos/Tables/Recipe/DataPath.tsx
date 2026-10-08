@@ -13,12 +13,12 @@ const stations: readonly Station[] = [
 export const DataPath: FC = () =>
   <figure className="data-path card rounded-corners lifted">
     <figcaption className="reel-heading">
-      <span className="reel-title caption uppercase muted-ink">where a number comes from</span>
+      <span className="caption uppercase muted-ink">where a number comes from</span>
     </figcaption>
     <ol className="data-path-stations">
       {stations.map(({name, does, ground}) =>
         <li className={classNames('data-path-station', ground, 'rounded-corners')} key={name}>
-          <strong className="data-path-name">{name}</strong>
+          <strong>{name}</strong>
           <p className="data-path-does caption muted-ink">{does}</p>
         </li>)}
     </ol>

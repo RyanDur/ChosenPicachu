@@ -60,7 +60,7 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
     <aside className="unanswered field rounded-corners" aria-label="what a design cannot tell you">
       <h4 className="unanswered-title caption muted-ink uppercase">what a design cannot tell you</h4>
       <ul className="unanswered-list">
-        {unanswered.map(question => <li className="unanswered-question" key={question}>{question}</li>)}
+        {unanswered.map(question => <li key={question}>{question}</li>)}
       </ul>
     </aside>
     <p className="overview paragraph muted-ink">
@@ -98,7 +98,7 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
     <ul className="sliced" aria-label="the slices">
       {sliced.map(([slice, station]) =>
         <li className="slice italic muted-ink" key={slice}>
-          <span className="slice-name">{slice}</span>
+          <span>{slice}</span>
           <a className="slice-station signpost caption upright" href={`#${stationId(station)}`}>station {station}</a>
         </li>)}
     </ul>

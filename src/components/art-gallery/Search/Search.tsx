@@ -69,7 +69,7 @@ export const Search: FC<Props> = ({id, className}) => {
       <button className="submit-query button icon-button borderless field attentive reachable" disabled={!searchString.length}
         type="submit"
         aria-label="submit search"><img className="icon" src={searchIcon} width="24" height="24" alt=""/></button>
-      <datalist id="search-options" className="search-options field">
+      <datalist id="search-options" className="field">
         {searchOptions.map((searchOption, index) =>
           <option value={searchOption} key={index}>{searchOption}</option>)}
       </datalist>

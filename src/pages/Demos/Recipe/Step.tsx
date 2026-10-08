@@ -14,7 +14,7 @@ export const Step: FC<Props> = ({title, dial, id, children}) => {
   return <li className={classNames('step', 'badge-before', has(dial) ? 'mint-badge-before' : 'shadow-badge-before')} id={id}>
     <article className="step-body">
       <header className="step-heading">
-        <Title className="step-title sub-title">{title}</Title>
+        <Title className="sub-title">{title}</Title>
         {dial}
       </header>
       {children}

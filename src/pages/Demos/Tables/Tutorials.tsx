@@ -39,7 +39,7 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <header className="tutorials-header">
-      <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
+      <h2 id={titled} className="title">let’s build this feature</h2>
       <PillGlider label="world"
         name="table-world"
         options={[

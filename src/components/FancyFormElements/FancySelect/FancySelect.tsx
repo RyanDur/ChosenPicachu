@@ -32,7 +32,7 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
   <label id={id} className={classNames('fancy-select', 'fancy', 'soft-cornered', className)}>
     <span className={classNames('fancy-title', 'bold', 'card-banded', required && 'alarm-starred')}>{children}</span>
     <select id={selectId}
-      className={classNames('fancy-select-box', 'fancy-text', 'bare', 'writable', 'soft-cornered', 'chevroned', 'lifted', 'raisable')}
+      className={classNames('fancy-text', 'bare', 'writable', 'soft-cornered', 'chevroned', 'lifted', 'raisable')}
       {...(value ? {value} : {defaultValue: ''})}
       required={required}
       disabled={disabled || readOnly}

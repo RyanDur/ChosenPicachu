@@ -46,7 +46,7 @@ export const Timeline: FC = () =>
       <Html5SaysIt/>
       <DocumentComesBack/>
     </ol>
-    <p className="coda sub-title">
+    <p className="sub-title">
       Read the titles again, top to bottom: it is one sentence said thirteen ways. Someone
       needs something, the community answers, and the platform learns the answer. That
       feedback loop built an ecosystem where elegant solutions keep coming from places no

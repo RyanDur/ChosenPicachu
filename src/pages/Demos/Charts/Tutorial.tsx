@@ -504,7 +504,7 @@ export const ChartStories: FC<{kind: ChartKind}> = ({kind}) =>
 export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
-    <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
+    <h2 id={titled} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use
       this page: every card below is a feature, told as a <a className="signpost"

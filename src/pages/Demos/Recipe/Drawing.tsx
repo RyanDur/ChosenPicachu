@@ -42,7 +42,7 @@ const head = (from: At, to: At): string => {
 
 export const Arrow: FC<{through: [At, At, ...At[]]}> = ({through}) => <>
   <polyline className="arrow hollow drawn" points={through.map(({x, y}) => `${x},${y}`).join(' ')}/>
-  <polygon className="arrow-head drawn-filled" points={head(through[through.length - 2], through[through.length - 1])}/>
+  <polygon className="drawn-filled" points={head(through[through.length - 2], through[through.length - 1])}/>
 </>;
 
 export const Chevron: FC<At & {turn: number}> = ({x, y, turn}) =>

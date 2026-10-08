@@ -16,7 +16,7 @@ const Readout: FC = () => {
   const pages = paginationOf(useGallery().wall).map(({totalPages}) => ` of ${totalPages}`).orElse('');
   const where = has(search) ? search : maybe(tab).map(museumNamed).orElse('the gallery');
   return <span className="readout">
-    <span className="where bold ellipsis">{where}</span><span className="page">, page {page}{pages}</span>
+    <span className="bold ellipsis">{where}</span><span className="page">, page {page}{pages}</span>
   </span>;
 };
 

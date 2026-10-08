@@ -11,8 +11,8 @@ export const CrossingFigure: FC = () =>
     <rect className="item paper-filled drawn" x="140" y="20" width="120" height="70"/>
     <rect className="item paper-filled drawn" x="260" y="20" width="100" height="70"/>
     <rect className="item paper-filled drawn" x="360" y="20" width="110" height="70"/>
-    <rect className="part still faded-leather-filled" x="140" y="20" width="30" height="70"/>
-    <rect className="part swaps faded-mint-filled" x="170" y="20" width="90" height="70"/>
+    <rect className="faded-leather-filled" x="140" y="20" width="30" height="70"/>
+    <rect className="faded-mint-filled" x="170" y="20" width="90" height="70"/>
     <text className="drawn-caption" x="75" y="60" textAnchor="middle">carried</text>
     <text className="drawn-caption" x="155" y="12" textAnchor="middle">still</text>
     <text className="drawn-caption" x="215" y="110" textAnchor="middle">a swap counts</text>

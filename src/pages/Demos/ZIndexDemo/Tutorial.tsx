@@ -14,7 +14,7 @@ export const TopLayerTutorial: FC = () => {
 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
-    <h2 id={titled} className="tutorials-title title">let’s build this feature</h2>
+    <h2 id={titled} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble; on this page the button

@@ -60,7 +60,7 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(tableSource, '<thead class="header">', '</th>'), gap,
+      ...span(tableSource, '<thead>', '</th>'), gap,
       ...span(tableSource, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[

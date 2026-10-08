@@ -74,7 +74,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const standing = (): readonly string[] => standingOf(arrangement.state, valueOf);
 
   const report = (said: Report): void => {
-    const output = document.querySelector('output.move-report');
+    const output = document.querySelector('output[aria-label="move report"]');
     const text = moveReport(said);
     if (output !== null && output.textContent !== text) {
       output.textContent = text;

@@ -76,7 +76,7 @@ export const ChartPage: FC = () => {
     return <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
       <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
       <Chart/>
-      <h3 className="tutorials-title title">let’s build this feature</h3>
+      <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">
         We are going to build the <a
           className="signpost"

@@ -98,7 +98,7 @@ export const OneNameOneChoice: FC = () =>
     {['Close', 'first part', 'second part', 'third part'].map((part, at) =>
       <g key={part}>
         <Circle kind="piece" cx={40} cy={26 + at * 30} r={9}/>
-        {at === 1 && <circle className="chosen drawn-filled" cx={40} cy={26 + at * 30} r={4}/>}
+        {at === 1 && <circle className="drawn-filled" cx={40} cy={26 + at * 30} r={4}/>}
         <Label x={60} y={30 + at * 30} anchor="start">{part}</Label>
       </g>)}
     <polyline className="arrow hollow drawn" points="180,17 190,17 190,125 180,125"/>

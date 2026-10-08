@@ -54,7 +54,7 @@ export const FriendsList: FC<Props> = ({users, user, onFriendAdded, onFriendRemo
     <legend className="off-screen">friends of {fullNameOf(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map((friend, at) =>
       <li className="friend warmed" key={friend.id}>
-        <span className="friend-title ellipsis">{fullNameOf(friend)}</span>
+        <span className="ellipsis">{fullNameOf(friend)}</span>
         <button id={removeButtonId(user.id, friend.id)} className="remove borderless unfilled" type="button"
           onClick={remove(friend, at)}>
           <img className="icon" src={cancelIcon} width="24" height="24"

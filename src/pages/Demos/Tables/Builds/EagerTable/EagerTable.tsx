@@ -16,7 +16,7 @@ type Props = ComponentProps<'table'> & HeaderEvents & BodyEvents & {
 
 export const EagerTable: FC<Props> = ({caption, columns, rows, onColumnMoved, onSorted, onRowMoved, className, ...table}) =>
   <DragSortableTable {...table} caption={caption} className={classNames('fancy-table sortable apportioned', className)} columns={columns} rows={seated(rows)}>
-    <thead className="header">
+    <thead>
       <Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>
         <Column column="window" className="cell window header-cell">window<ResizeHandle column="window"/></Column>
         <DraggableColumn column="trades" className="cell trades header-cell">trades<SortMenu column="trades"/><ResizeHandle column="trades"/></DraggableColumn>

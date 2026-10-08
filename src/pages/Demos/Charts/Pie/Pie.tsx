@@ -57,7 +57,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       </svg>
       <ul className="legend caption">
         {cut.map(slice =>
-          <li key={slice.side} className={classNames('share', sideOf[slice.side], 'side-ink', slice.side)}>
+          <li key={slice.side} className={classNames(sideOf[slice.side], 'side-ink', slice.side)}>
             <data value={slice.share}>{`${Math.round(slice.share * 100)}% ${slice.side}`}</data>
           </li>)}
       </ul>

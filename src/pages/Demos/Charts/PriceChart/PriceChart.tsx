@@ -99,8 +99,8 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
         </svg>
       </Axes>
       <p className="headline monospaced">{view.map(({first, last}) => <>
-        <data className="price title bold ink" value={last}>{cents.format(last)}</data>
-        <data className="delta side-ink" value={last - first}>{deltaLabel(first, last)}</data>
+        <data className="title bold ink" value={last}>{cents.format(last)}</data>
+        <data className="side-ink" value={last - first}>{deltaLabel(first, last)}</data>
       </>).orNull()}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
