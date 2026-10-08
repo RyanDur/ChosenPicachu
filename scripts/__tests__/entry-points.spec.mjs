@@ -1,5 +1,5 @@
 import {readFileSync} from 'node:fs';
-import {baseOf, demosLinks, preloaded, staticRoutesOf} from '../entry-points.mjs';
+import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf} from '../entry-points.mjs';
 import {Paths} from '@pages/Paths';
 import {not} from '@ryandur/sand';
 
@@ -65,6 +65,25 @@ describe('the entry points', () => {
     };
 
     expect(demosLinks(circling, 'https://site.test/app/')).toEqual([preloadOf('Demos-abc.js'), preloadOf('a-abc.js'), preloadOf('b-abc.js')]);
+  });
+
+  describe('a page’s listing', () => {
+    const head = '<head><title></title><meta name="description" content=""/></head>';
+
+    test('should be written into the title and description, escaped', () => {
+      expect(listedIn(head, {title: 'Tom & Jerry', description: 'A "cat" <and> a mouse.'}))
+        .toBe('<head><title>Tom &amp; Jerry</title><meta name="description" content="A &quot;cat&quot; &lt;and&gt; a mouse."/></head>');
+    });
+
+    test('should stop the build and name the tag when the shell has no one-line description tag', () => {
+      expect(() => listedIn('<head><title></title><meta name="description"\n  content=""/></head>', {title: 'a', description: 'b'}))
+        .toThrow('index.html has no one-line description tag for the build to fill');
+    });
+
+    test('should stop the build and name the tag when the shell has no title tag', () => {
+      expect(() => listedIn('<head><meta name="description" content=""/></head>', {title: 'a', description: 'b'}))
+        .toThrow('index.html has no one-line title tag for the build to fill');
+    });
   });
 });
 

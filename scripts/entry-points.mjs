@@ -37,3 +37,24 @@ export const demosLinks = (manifest, base) => {
 export const preloaded = (shell, links, route) => route.startsWith('/demos/')
   ? shell.replace('</head>', `${links.join('\n')}\n  </head>`)
   : shell;
+
+const escaped = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const untagged = tag => {
+  throw new Error(`index.html has no one-line ${tag} tag for the build to fill`);
+};
+/**
+ * @param {string} html
+ * @param {string} tag
+ * @param {RegExp} found
+ * @param {string} written
+ */
+const filled = (html, tag, found, written) => found.test(html) ? html.replace(found, written) : untagged(tag);
+
+/**
+ * @param {string} shell
+ * @param {{title: string, description: string}} listing
+ */
+export const listedIn = (shell, {title, description}) => {
+  const titled = filled(shell, 'title', /<title>[^<]*<\/title>/, `<title>${escaped(title)}</title>`);
+  return filled(titled, 'description', /<meta name="description" content="[^"]*"\/>/, `<meta name="description" content="${escaped(description)}"/>`);
+};
