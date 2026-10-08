@@ -57,10 +57,11 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const view = viewOf(candles, trades[trades.length - 1]);
   const points = sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
-  const trend = view.map(trendOf).orElse(undefined);
-  const side = view.map(trendOf).map(heading => sideOf[heading]).orElse(undefined);
+  const trending = view.map(trendOf);
+  const trend = trending.orElse(undefined);
+  const side = trending.map(direction => sideOf[direction]).orElse(undefined);
   return <section aria-labelledby={`${id}-heading`}
-    className={classNames('price-chart chart card rounded-corners lifted padded', trend, side)}>
+    className={classNames('price-chart chart card rounded-corners lifted padded', side, trend)}>
     <Heading id={`${id}-heading`} className="off-screen">live trades</Heading>
     <header className="chart-header">
       {actions}
