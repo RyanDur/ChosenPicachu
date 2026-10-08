@@ -1,5 +1,6 @@
 import stylistic from '@stylistic/eslint-plugin';
 import parser from '@babel/eslint-parser';
+import classes from './scripts/lint/classes.mjs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -63,5 +64,15 @@ export default [
     },
     plugins: {'@stylistic': stylistic},
     rules: {...shape, ...presence}
+  },
+  {
+    files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],
+    plugins: {classes},
+    rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}
+  },
+  {
+    files: ['src/**/*.html'],
+    plugins: {classes},
+    processor: 'classes/html'
   }
 ];

@@ -15,7 +15,6 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     readOnly
   }) =>
   <label id="details-cell" className={classNames(
-    'fancy-textarea',
     'details-cell',
     'fancy',
     'soft-cornered'

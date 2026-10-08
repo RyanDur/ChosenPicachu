@@ -36,7 +36,6 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     value = ''
   }
 ) => <label id={id} className={classNames(
-  'fancy-input',
   'fancy',
   'soft-cornered',
   className
