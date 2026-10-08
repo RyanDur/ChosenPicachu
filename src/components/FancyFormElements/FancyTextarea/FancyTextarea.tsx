@@ -17,10 +17,11 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
   <label id="details-cell" className={classNames(
     'fancy-textarea',
     'details-cell',
-    'fancy'
+    'fancy',
+    'soft-cornered'
   )}>
-    <span id="details-label" className="fancy-title bold">Details</span>
-    <textarea name="details" className="fancy-text lifted raisable" id="details"
+    <span id="details-label" className="fancy-title bold card-banded">Details</span>
+    <textarea name="details" className="fancy-text writable rounded-corners lifted raisable" id="details"
       placeholder=" "
       value={value}
       readOnly={readOnly}

@@ -104,7 +104,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
       disabled={draft.sameAsHome}
       onEdited={address => dispatch(workAddressEdited(address))}>
-      {!readOnly && <label className="same-as-home attentive">
+      {!readOnly && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
         <input id="same-as-home" className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
           onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>

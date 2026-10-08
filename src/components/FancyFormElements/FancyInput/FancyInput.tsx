@@ -38,11 +38,12 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
 ) => <label id={id} className={classNames(
   'fancy-input',
   'fancy',
+  'soft-cornered',
   className
 )}>
-  <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
+  <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', 'card-banded', required && 'alarm-starred', labelClass)}>{children}</span>
   <input id={inputId}
-    className={classNames('fancy-text', 'lifted', 'raisable', inputClass)}
+    className={classNames('fancy-text', 'writable', 'soft-cornered', 'lifted', 'raisable', inputClass)}
     pattern={pattern}
     placeholder={type === 'date' ? undefined : ' '}
     readOnly={readOnly}

@@ -155,6 +155,78 @@
 
 .hairline-edged { border: var(--hairline) solid var(--shadow); }
 
+.soft-cornered { border-radius: var(--radius-soft); }
+
+.pill-cornered { border-radius: var(--radius-pill); }
+
+.square-cornered { border-radius: 0; }
+
+.writable {
+  border: var(--hairline) solid var(--focus-blue);
+
+  &:user-invalid {
+    border-color: var(--alarm-ink);
+    box-shadow: var(--drop-shadow);
+  }
+
+  &[type='date'] {
+    background-color: var(--white);
+
+    &:invalid { color: transparent; }
+
+    &:focus { color: var(--ink); }
+  }
+
+  &:disabled,
+  &:read-only:not(.chevroned) {
+    border: none;
+    border-block-end: var(--hairline) solid var(--focus-blue);
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.card-banded { background: linear-gradient(var(--card-clear), var(--card), var(--card-clear)); }
+
+.alarm-starred::after {
+  content: '*';
+  color: var(--alarm-ink);
+}
+
+.chevroned {
+  --arrow-half: calc(var(--base-x-0_5) + var(--hairline));
+  --arrow-from-end: var(--base-x-2_5);
+  --arrow-drop: var(--base-x-2_25);
+
+  background-color: var(--white);
+  background-image: linear-gradient(45deg, transparent 50%, var(--gray) 50%),
+    linear-gradient(135deg, var(--gray) 50%, transparent 50%),
+    linear-gradient(to right, var(--silver), var(--silver));
+  background-position: calc(100% - var(--arrow-from-end)) var(--arrow-drop),
+    calc(100% - var(--arrow-from-end) + var(--arrow-half)) var(--arrow-drop),
+    calc(100% - var(--arrow-from-end) - 3 * var(--arrow-half)) var(--base-x-0_75);
+  background-size: var(--arrow-half) var(--arrow-half), var(--arrow-half) var(--arrow-half),
+    var(--hairline) var(--base-x-3);
+  background-repeat: no-repeat;
+}
+
+.next-approached:has(+ :hover, + :focus) { background-color: var(--approach); }
+
+:is(:hover, :focus) > .liftable { box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow); }
+
+.warmed:is(:hover, :focus-within) { background-color: var(--faded-international-orange-engineering); }
+
+.looking-glassed:is(:hover, :focus)::after { background: url('../assets/icons/looking.svg') no-repeat center; }
+
+.three-dotted {
+  background-image: radial-gradient(circle, var(--black) 0.2rem, transparent 0.1rem);
+  background-size: 100% 33.33%;
+}
+
+.field-before::before { background: var(--field); }
+
+.field-after::after { background: var(--field); }
+
 .padded {
   padding: var(--base-x-4);
 

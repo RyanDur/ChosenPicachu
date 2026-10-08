@@ -10,8 +10,6 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: url("../../../assets/icons/looking.svg")
-        no-repeat center;
     }
   }
 }

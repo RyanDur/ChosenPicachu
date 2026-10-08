@@ -14,8 +14,6 @@
   .frame {
     position: relative;
 
-      outline: none;
-
     .loading {
       position: absolute;
       inset: 0;
@@ -46,7 +44,6 @@
       .scrim:focus .piece,
     .scrim:hover .piece {
       transform: translateY(calc(var(--base) * -1));
-      box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow);
     }
 
     .placard {
@@ -54,7 +51,6 @@
       margin: var(--base-x-2) auto 0;
       padding: 0 var(--base-x-2);
       text-align: center;
-      font-size: var(--text-caption);
     }
   }
 }

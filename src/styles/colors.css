@@ -37,6 +37,7 @@
   --veil-opacity: 0.5;
   --charcoal-veil: rgb(from var(--charcoal) r g b / var(--veil-opacity));
   --white-clear: rgb(from var(--white) r g b / 0);
+  --card-clear: rgb(from var(--card) r g b / 0);
   --faint-shadow: rgb(from var(--black) r g b / 0.12);
   --shadow: rgb(from var(--black) r g b / 0.19);
   --dark-shadow: rgb(from var(--black) r g b / 0.23);

@@ -32,7 +32,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     total
   }));
 
-  return <nav className="pagination backdrop" aria-label="pagination" id={id}>
+  return <nav className="pagination backdrop field-before field-after" aria-label="pagination" id={id}>
     {hasPrevPage && <>
       <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage}
         className="page first field attentive bold">

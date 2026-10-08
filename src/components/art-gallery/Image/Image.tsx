@@ -22,7 +22,7 @@ type ImageProps = {
 };
 
 const Framed: FC<PropsWithChildren<{door: Maybe<string>; title: string}>> = ({door, title, children}) => door.either(
-  to => <Link to={to} aria-label={title} className="scrim">{children}</Link>,
+  to => <Link to={to} aria-label={title} className="scrim looking-glassed">{children}</Link>,
   () => <>{children}</>
 );
 

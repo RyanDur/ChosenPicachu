@@ -19,7 +19,6 @@
   &:not(:has(.prev))::before,
   &:not(:has(.next))::after {
     content: '';
-    background: var(--field);
   }
 
   .first {

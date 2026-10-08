@@ -11,8 +11,9 @@
 
   .query-label {
     grid-area: query-label;
-    line-height: var(--base-x-4);
+    min-block-size: var(--base-x-4);
     padding: 0 var(--base-x-2);
+    padding-block-start: calc((var(--base-x-4) - 1lh) / 2);
   }
 
   .query {
@@ -26,11 +27,6 @@
 
   .submit-query {
     grid-area: submit;
-  }
-
-  &:has(.query:hover) .query-label,
-  &:has(.query:focus) .query-label {
-    background-color: var(--approach);
   }
 }
 

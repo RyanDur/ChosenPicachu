@@ -44,9 +44,9 @@ export const ArtGallery: FC = () => {
       {wall.reply === 'answered' && wall.answer.pieces.map((piece, index) => <li className="frame" key={piece.id}>
         <figure>
           <div className="wall-slot">
-            <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
+            <Image className="piece hung liftable" piece={piece} priority={index < 4} lazy={index >= 6}/>
           </div>
-          <figcaption className="placard trim hairline-outline italic">{piece.title}</figcaption>
+          <figcaption className="placard trim hairline-outline italic caption ink">{piece.title}</figcaption>
         </figure>
       </li>)}
     </ul>

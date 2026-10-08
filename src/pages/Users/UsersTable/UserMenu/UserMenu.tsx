@@ -21,7 +21,7 @@ export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
   };
 
   return <>
-    <button type="button" className="menu-toggle rounded-corners raisable reachable"
+    <button type="button" className="menu-toggle borderless field three-dotted rounded-corners raisable reachable"
       popoverTarget={id}
       aria-label={`Actions for ${name}`}/>
     <menu id={id} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
