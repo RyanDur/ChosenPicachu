@@ -78,6 +78,41 @@ export const views: readonly View[] = [
     held: /\/vam\//
   },
   {
+    name: 'its form with a field written wrong',
+    page: {...named('users'), ready: 'alert'},
+    withoutWorkers: true,
+    into: async page => {
+      await page.getByRole('form', {name: 'User Information'}).getByLabel('Email').fill('not an address');
+      await page.getByRole('form', {name: 'User Information'}).getByLabel('First Name').focus();
+      await page.mouse.move(0, 0);
+    }
+  },
+  {
+    name: 'a piece hovered',
+    page: named('gallery'),
+    into: async page => {
+      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await hovered(page, () => page.getByRole('figure').first().getByRole('link'));
+    }
+  },
+  {
+    name: 'its page field focused',
+    page: named('gallery'),
+    into: async page => {
+      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await page.getByLabel(/^Page #/).focus();
+      await page.mouse.move(0, 0);
+    }
+  },
+  {
+    name: 'its search hovered',
+    page: named('gallery'),
+    into: async page => {
+      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await hovered(page, () => page.getByRole('combobox', {name: /Search For/}));
+    }
+  },
+  {
     name: 'a pill hovered',
     page: named('tables'),
     into: page => hovered(page, () => page.getByText('Vanilla', {exact: true}).first())
