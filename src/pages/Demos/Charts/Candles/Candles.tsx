@@ -65,7 +65,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-          {candles.map((candle, at) => <g key={candle.openedAt} className={classNames(bodies[at].direction, sideOf[bodies[at].direction])}>
+          {candles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
             <rect className="wall side-wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
               width={bodies[at].width} height={bodies[at].bodyHeight}/>
             <line className="wick drawn" x1={bodies[at].center} y1={bodies[at].wickTop}
