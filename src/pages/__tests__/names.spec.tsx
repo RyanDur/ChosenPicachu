@@ -41,5 +41,6 @@ describe('each page is named where a search shows it', () => {
     render(<TestApp at={chartPageAt(kind, `?graph=${kind}`)}/>);
 
     expect(await screen.findByRole('heading', {name: description.replace(/\.$/, '')})).toBeInTheDocument();
+    await waitFor(() => expect(described()).toBe(description));
   });
 });
