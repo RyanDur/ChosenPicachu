@@ -9,6 +9,7 @@ import bannersSource from '@components/Banners/Banners.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import placementCss from '../../../../styles/placement.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
+import typographyCss from '../../../../styles/typography.css?sample';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -75,7 +76,8 @@ export const TopLayerRecipe: FC = () => {
           <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
             size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
             It takes only the room its content needs, and the auto margins share the rest, which centres it in the
-            window.</Says>
+            window. That stylesheet also gives a popover a border and a background; the panel wears borderless and
+            unfilled, which take them off, so only the banners inside it show.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
             they are there so the choice shows in the class names.</Says>
@@ -84,7 +86,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            plain(`<section class="banners ${side} ${align}">`)
+            plain(`<section class="banners borderless unfilled ${side} ${align}">`)
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(placementCss, `.${side} {`), gap,
@@ -97,7 +99,9 @@ export const TopLayerRecipe: FC = () => {
           <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
             site: field for the background, rounded-corners, floating for the shadow, and hairline-outline for a thin
             border in the colour of the message’s text. The dismiss button is a square of fixed size that does not
-            shrink when the message is long.</Says>
+            shrink when the message is long. Its look is shared classes too: borderless and unfilled take off the
+            browser’s own button border and ground, glyph-icon sets the ✕ at the size the site’s icons are drawn, and
+            muted-ink greys it.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
@@ -106,7 +110,11 @@ export const TopLayerRecipe: FC = () => {
             ...unit(surfaceCss, '.rounded-corners {'), gap,
             ...unit(surfaceCss, '.floating {'), gap,
             ...unit(surfaceCss, '.hairline-outline {'), gap,
-            ...unit(bannersCss, '.dismiss {')
+            ...unit(bannersCss, '.dismiss {'), gap,
+            ...unit(surfaceCss, '.borderless {'), gap,
+            ...unit(surfaceCss, '.unfilled {'), gap,
+            ...unit(typographyCss, '.glyph-icon {'), gap,
+            ...unit(surfaceCss, '.muted-ink {')
           ]}/>
         </Codes>
       </Step>

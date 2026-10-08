@@ -194,9 +194,18 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\.$/);
+    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border and a background; the panel wears borderless and unfilled, which take them off, so only the banners inside it show\.$/);
     expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
+  });
+
+  test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+    const styling = recipeFolds.steps(news)[3];
+
+    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the ✕ at the size the site’s icons are drawn, and muted-ink greys it\.$/);
+    expect(within(styling).getByRole('code')).toHaveTextContent(/\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
   test('should name MDN as Mozilla’s web reference', async () => {
