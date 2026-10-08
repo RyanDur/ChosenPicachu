@@ -57,6 +57,17 @@ export const views: readonly View[] = [
     }
   },
   {
+    name: 'every fold open',
+    page: named('home'),
+    into: async page => {
+      await page.evaluate(() => document.querySelectorAll('details').forEach(fold => {
+        fold.removeAttribute('name');
+        fold.open = true;
+      }));
+      await page.waitForTimeout(400);
+    }
+  },
+  {
     name: 'a rail link hovered',
     page: named('home'),
     into: page => hovered(page, () => page.getByRole('navigation', {name: 'site'}).getByRole('link').nth(1))
