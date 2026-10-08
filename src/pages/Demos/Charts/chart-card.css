@@ -10,15 +10,10 @@
     margin-left: auto;
     width: auto;
     height: var(--base-x-3);
-    border: none;
     padding: var(--base-x-0_25) var(--base);
 
     &::after {
       content: ' ▾';
-    }
-
-    &:focus-visible {
-      outline: var(--hairline-x-2) solid var(--ring);
     }
   }
 
@@ -35,7 +30,6 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--paper-veil);
     }
   }
 

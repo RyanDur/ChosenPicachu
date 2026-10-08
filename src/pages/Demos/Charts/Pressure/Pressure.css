@@ -7,7 +7,6 @@
     padding: var(--base) 0 var(--base-x-0_5);
 
     .midline {
-      stroke: var(--charcoal);
       stroke-width: var(--hairline);
       vector-effect: non-scaling-stroke;
     }
@@ -17,22 +16,6 @@
     .bought-wall,
     .sold-wall {
       transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
-    }
-
-    .bought {
-      fill: var(--mint-shade);
-    }
-
-    .bought-wall {
-      fill: var(--mint-ink);
-    }
-
-    .sold {
-      fill: var(--international-orange-engineering);
-    }
-
-    .sold-wall {
-      fill: var(--international-orange-engineering-shade);
     }
   }
 }

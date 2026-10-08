@@ -3,42 +3,6 @@
   align-items: center;
   justify-content: center;
 
-  &.primary {
-    color: var(--ink-inverse);
-    background: var(--primary-blue);
-  }
-
-  &.secondary {
-    background: var(--accent);
-  }
-
-  &.primary,
-  &.secondary {
-    font-size: var(--text-title);
-    font-weight: bold;
-    white-space: nowrap;
-    text-transform: uppercase;
-    padding: 0 var(--base-x-4);
-    border-radius: var(--base-x-5);
-    box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
-    border: var(--hairline) solid var(--primary-blue);
-
-    &:hover,
-    &:focus {
-      box-shadow: var(--drop-shadow);
-    }
-
-    &:hover,
-    &:active {
-      color: var(--ink-inverse);
-      background-color: var(--primary-dark-blue);
-    }
-
-    &:active {
-      box-shadow: initial;
-    }
-  }
-
   &.icon-button {
     display: grid;
     place-items: center;
@@ -50,6 +14,42 @@
     &:active {
       box-shadow: var(--press-glow);
     }
+  }
+}
+
+:where(.button).primary {
+  color: var(--ink-inverse);
+  background: var(--primary-blue);
+}
+
+:where(.button).secondary {
+  background: var(--accent);
+}
+
+:where(.button).primary,
+:where(.button).secondary {
+  font-size: var(--text-title);
+  font-weight: bold;
+  white-space: nowrap;
+  text-transform: uppercase;
+  padding: 0 var(--base-x-4);
+  border-radius: var(--base-x-5);
+  box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
+  border: var(--hairline) solid var(--primary-blue);
+
+  &:hover,
+  &:focus {
+    box-shadow: var(--drop-shadow);
+  }
+
+  &:hover,
+  &:active {
+    color: var(--ink-inverse);
+    background-color: var(--primary-dark-blue);
+  }
+
+  &:active {
+    box-shadow: initial;
   }
 }
 

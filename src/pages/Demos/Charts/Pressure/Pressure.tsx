@@ -32,21 +32,21 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     <header className="chart-header">
       {actions}
     </header>
-    <figure className="chart-stage">
+    <figure className="chart-stage paper-veiled-before">
       <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={bitcoin}
         pattern="HH:mm"
         tickEvery={TICK_EVERY_MS}
         headroomMs={2 * BUCKET_MS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
-          <line className="midline" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
+          <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
           {pressures.map((pressure, at) => <g key={pressure.openedAt}>
-            <rect className="bought-wall" x={bars[at].x + DEPTH_X} y={bars[at].boughtTop + DEPTH_Y}
+            <rect className="bought-wall buy-side side-wall" x={bars[at].x + DEPTH_X} y={bars[at].boughtTop + DEPTH_Y}
               width={bars[at].width} height={bars[at].boughtHeight}/>
-            <rect className="sold-wall" x={bars[at].x + DEPTH_X} y={bars[at].soldTop + DEPTH_Y}
+            <rect className="sold-wall sell-side side-wall" x={bars[at].x + DEPTH_X} y={bars[at].soldTop + DEPTH_Y}
               width={bars[at].width} height={bars[at].soldHeight}/>
-            <rect className="bought" x={bars[at].x} y={bars[at].boughtTop}
+            <rect className="bought buy-side side-face" x={bars[at].x} y={bars[at].boughtTop}
               width={bars[at].width} height={bars[at].boughtHeight}/>
-            <rect className="sold" x={bars[at].x} y={bars[at].soldTop}
+            <rect className="sold sell-side side-face" x={bars[at].x} y={bars[at].soldTop}
               width={bars[at].width} height={bars[at].soldHeight}/>
           </g>)}
         </svg>

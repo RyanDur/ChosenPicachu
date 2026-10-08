@@ -6,6 +6,7 @@ import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
 import {ChartHeading} from '../heading';
+import {sideOf} from '../sides';
 
 const SIZE = 120;
 const RADIUS = 56;
@@ -14,7 +15,7 @@ const EXPLODE = 4;
 
 const HALF = `M 0 0 L 0 ${-RADIUS} A ${RADIUS} ${RADIUS} 0 0 1 0 ${RADIUS} Z`;
 
-const sides = ['bought', 'sold'];
+const sides = ['bought', 'sold'] as const;
 
 type Props = {
   trades: readonly Trade[];
@@ -31,15 +32,15 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     <header className="chart-header">
       {actions}
     </header>
-    <figure className="chart-stage">
+    <figure className="chart-stage paper-veiled-before">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
         {['wall', 'face'].map(dressed => cut.map((slice, at) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
           const drop = dressed === 'wall' ? DEPTH : 0;
-          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sides[at])}
+          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sides[at], sideOf[sides[at]])}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
-            <g className={dressed} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
+            <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
                   viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
@@ -54,9 +55,9 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           </g>;
         }))}
       </svg>
-      <p className="legend">
+      <p className="legend caption">
         {cut.map((slice, at) =>
-          <data key={sides[at]} value={slice.share} className={sides[at]}>
+          <data key={sides[at]} value={slice.share} className={classNames(sides[at], sideOf[sides[at]], 'side-ink')}>
             {`${Math.round(slice.share * 100)}% ${sides[at]}`}
           </data>)}
       </p>

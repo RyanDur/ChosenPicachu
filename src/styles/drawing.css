@@ -26,7 +26,16 @@
 
 .side-ink { color: var(--side-ink); }
 
-.side-line { stroke: var(--side-line); }
+.volume-side {
+  --side-face: var(--faded-leather);
+  --side-wall: var(--field-drab);
+}
+
+.side-line { stroke: var(--side-line, var(--primary-blue)); }
+
+.side-dot { fill: var(--side-line, var(--primary-blue)); }
+
+.line-shadowed { filter: drop-shadow(0 var(--hairline-x-2) var(--hairline) var(--shadow)); }
 
 .spinning-dots {
   --dots-trailing: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em,

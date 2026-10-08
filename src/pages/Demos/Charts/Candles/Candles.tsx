@@ -9,6 +9,8 @@ import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
 import {ChartHeading} from '../heading';
+import {classNames} from '@components/class-names';
+import {sideOf} from '../sides';
 
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
@@ -41,7 +43,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     <Heading id={`${id}-heading`} className="off-screen">candles</Heading>
     <header className="chart-header">
       {actions}
-      <button type="button" className="menu-toggle rounded-corners period-toggle field attentive caption"
+      <button type="button" className="menu-toggle rounded-corners period-toggle field borderless attentive focus-ringed caption"
         popoverTarget={`${id}-period`}>
         <span className="off-screen">candle period</span>{' '}{period}
       </button>
@@ -57,26 +59,26 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         )}
       </menu>
     </header>
-    <figure className="chart-stage">
+    <figure className="chart-stage paper-veiled-before">
       <Axes range={range}
         pattern={timePattern[period]}
         tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-          {candles.map((candle, at) => <g key={candle.openedAt} className={bodies[at].direction}>
-            <rect className="wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
+          {candles.map((candle, at) => <g key={candle.openedAt} className={classNames(bodies[at].direction, sideOf[bodies[at].direction])}>
+            <rect className="wall side-wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
               width={bodies[at].width} height={bodies[at].bodyHeight}/>
-            <line className="wick" x1={bodies[at].center} y1={bodies[at].wickTop}
+            <line className="wick drawn" x1={bodies[at].center} y1={bodies[at].wickTop}
               x2={bodies[at].center} y2={bodies[at].wickBottom}/>
-            <rect className="body" x={bodies[at].x} y={bodies[at].bodyTop}
+            <rect className="body side-face" x={bodies[at].x} y={bodies[at].bodyTop}
               width={bodies[at].width} height={bodies[at].bodyHeight}/>
           </g>)}
         </svg>
-        <svg className="volumes" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
+        <svg className="volumes volume-side" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
           {candles.map((candle, at) => <g key={candle.openedAt}>
-            <rect className="volume-wall" x={bars[at].x + DEPTH_X} y={bars[at].top + DEPTH_Y}
+            <rect className="volume-wall side-wall" x={bars[at].x + DEPTH_X} y={bars[at].top + DEPTH_Y}
               width={bars[at].width} height={bars[at].height}/>
-            <rect className="volume" x={bars[at].x} y={bars[at].top}
+            <rect className="volume side-face" x={bars[at].x} y={bars[at].top}
               width={bars[at].width} height={bars[at].height}/>
           </g>)}
         </svg>

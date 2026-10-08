@@ -81,6 +81,19 @@
   }
 }
 
+.monospaced {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.tracked {
+  letter-spacing: 0.05em;
+}
+
+.round-glyph {
+  font-size: var(--base-x-4);
+  line-height: 1;
+}
+
 .display-figure {
   font-size: var(--base-x-10);
 }

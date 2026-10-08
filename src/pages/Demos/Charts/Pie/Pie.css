@@ -48,22 +48,6 @@
         transition: transform 300ms ease-out;
       }
     }
-
-    .bought .face .half {
-      fill: var(--mint-shade);
-    }
-
-    .bought .wall .half {
-      fill: var(--mint-ink);
-    }
-
-    .sold .face .half {
-      fill: var(--international-orange-engineering);
-    }
-
-    .sold .wall .half {
-      fill: var(--international-orange-engineering-shade);
-    }
   }
 
   .legend {
@@ -71,14 +55,5 @@
     display: flex;
     justify-content: center;
     gap: var(--base-x-3);
-    font-size: var(--text-caption);
-
-    .bought {
-      color: var(--mint-ink);
-    }
-
-    .sold {
-      color: var(--international-orange-engineering);
-    }
   }
 }

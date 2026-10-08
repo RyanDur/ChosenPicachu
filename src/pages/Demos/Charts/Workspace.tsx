@@ -3,7 +3,7 @@ import {generatePath, Link} from 'react-router';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
-import {statusCopy} from './live-trades';
+import {lampOf, statusCopy} from './live-trades';
 import {classNames} from '@components/class-names';
 import {useDemosSelector} from '../Provider';
 import {selectFeedStatus, selectLiveTrades} from '../store';
@@ -67,12 +67,12 @@ export const Workspace: FC<Props> = ({product}) => {
 
   return <>
     <header className="charts-heading">
-      <h3 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h3>
-      <output className={classNames('status', status)} aria-label="feed">{statusCopy[status]}</output>
+      <h3 className="headline title bold ink">{`Bitcoin, live — every ${product} trade on Coinbase`}</h3>
+      <output className={classNames('status', 'muted-ink', 'tracked', lampOf[status])} aria-label="feed">{statusCopy[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&
           <>
-            <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
+            <button type="button" className="menu-toggle rounded-corners add-chart button secondary circular round-glyph"
               popoverTarget="add-chart"
               aria-label="Add a chart">+
             </button>
@@ -101,7 +101,7 @@ export const Workspace: FC<Props> = ({product}) => {
           onDragOver={travel}
           onDrop={event => event.preventDefault()}
           onDragEnd={release}>
-          <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
+          <Link id={doorwayId(kind)} className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
             <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
           </Link>
           {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}

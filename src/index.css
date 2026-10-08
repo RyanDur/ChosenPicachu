@@ -1,12 +1,12 @@
 @import "styles/reset.css";
 @import "styles/colors.css";
 @import "styles/spacing.css";
+@import "styles/button.css";
 @import "styles/typography.css";
 @import "styles/surface.css";
 @import "styles/drawing.css";
 @import "styles/pills.css";
 @import "styles/placement.css";
-@import "styles/button.css";
 @import "styles/menu.css";
 @import "styles/glide.css";
 @import "styles/code.css";

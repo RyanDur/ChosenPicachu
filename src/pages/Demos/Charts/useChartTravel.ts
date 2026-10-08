@@ -23,7 +23,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
 
   const disarm = () => setArmed(nothing());
 
-  const dress = (at: number) => classNames('chart-slot',
+  const dress = (at: number) => classNames('chart-slot', 'focal-ringed',
     aloft.map(seat => seat === at).orElse(false) && 'hide',
     pushed[at] && 'chart-pushed',
     pushed[at] === 'up' && 'upward',

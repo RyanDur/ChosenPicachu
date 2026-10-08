@@ -16,6 +16,7 @@ import pressureCss from './Pressure/Pressure.css?sample';
 import pieSource from './Pie/shapes.ts?sample';
 import pieComponent from './Pie/Pie.tsx?sample';
 import pieCss from './Pie/Pie.css?sample';
+import drawingCss from '../../../styles/drawing.css?sample';
 import moneySource from './money.ts?sample';
 import slotsSource from './slots.ts?sample';
 import coinbaseSource from './coinbase/index.ts?sample';
@@ -177,12 +178,15 @@ const candlesStory =
       <Step title="Draw each candle as a body and a wick">
         <Words want="Open, high, low, close: four numbers for each span, drawn as one mark.">
           <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close. The wick, a thin
-            line through the body, runs from the high to the low.</Says>
+            line through the body, runs from the high to the low. It wears drawn, the shared class for a charcoal
+            hairline; the sheet keeps its width.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. The
-            stylesheet gives each class its colour.</Says>
+          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. Each
+            wears a side with it, buy-side or sell-side, a shared class that sets a side’s colours; the body wears
+            side-face and the wall side-wall, so the shared sheet paints them. A shared class is a look that lives in
+            the site’s shared sheet and that an element wears by name.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -194,8 +198,11 @@ const candlesStory =
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(candlesCss, '.wick {'), gap,
-            ...unit(candlesCss, '.up .body {'), gap,
-            ...unit(candlesCss, '.down .body {')
+            ...unit(drawingCss, '.drawn {'), gap,
+            ...unit(drawingCss, '.buy-side {'), gap,
+            ...unit(drawingCss, '.sell-side {'), gap,
+            ...unit(drawingCss, '.side-face {'), gap,
+            ...unit(drawingCss, '.side-wall {')
           ]}/>
         </Codes>
       </Step>
@@ -204,16 +211,21 @@ const candlesStory =
           <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
             busiest span on the chart, and every other bar is in proportion to it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
+          <Says>The volume bars wear volume-side with side-face and side-wall: leather for the bar and drab for its
+            edge, the same slots the sides fill.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...unit(shapesSource, 'export const volumeShapes')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(candlesSource, '<svg className="volumes"', '</svg>')
+            ...span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(candlesCss, '.volume {')
+            ...unit(candlesCss, '.volume,\n    .volume-wall {'), gap,
+            ...unit(drawingCss, '.volume-side {'), gap,
+            ...unit(drawingCss, '.side-face {'), gap,
+            ...unit(drawingCss, '.side-wall {')
           ]}/>
         </Codes>
       </Step>
@@ -279,7 +291,8 @@ const pressureStory =
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
-            below. Each bar has a second rectangle set just behind it, which gives it an edge.</Says>
+            below. The bought bars wear buy-side and the sold bars sell-side, with side-face on the bar and side-wall on
+            the second rectangle set just behind it, which gives it an edge. The middle line wears drawn.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
             caption says how many minutes are on show, and that the count began when you arrived.</Says>
@@ -290,8 +303,11 @@ const pressureStory =
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(pressureCss, '.midline {'), gap,
-            ...unit(pressureCss, '.bought {'), gap,
-            ...unit(pressureCss, '.sold {')
+            ...unit(drawingCss, '.drawn {'), gap,
+            ...unit(drawingCss, '.buy-side {'), gap,
+            ...unit(drawingCss, '.sell-side {'), gap,
+            ...unit(drawingCss, '.side-face {'), gap,
+            ...unit(drawingCss, '.side-wall {')
           ]}/>
           <Snippet label="TS" lines={[
             ...unit(moneySource, 'export const bitcoin')
@@ -374,7 +390,7 @@ const pieStory =
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, '<p className="legend">', '</p>')
+            ...span(pieComponent, '<p className="legend caption">', '</p>')
           ]}/>
         </Codes>
       </Step>

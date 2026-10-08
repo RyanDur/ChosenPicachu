@@ -10,7 +10,6 @@
       padding: var(--base) 0 var(--base-x-0_5);
 
       .baseline {
-        stroke: var(--charcoal);
         stroke-width: var(--hairline);
         stroke-dasharray: 4 4;
         opacity: 0.35;
@@ -18,39 +17,16 @@
       }
 
       .trend {
-        stroke: var(--primary-blue);
         stroke-width: var(--hairline-x-2);
         stroke-linejoin: round;
         stroke-linecap: round;
-        filter: drop-shadow(0 var(--hairline-x-2) var(--hairline) var(--shadow));
       }
 
       .marker {
-        fill: var(--primary-blue);
         transition: cx 300ms ease-out, cy 300ms ease-out;
       }
     }
 
-  }
-
-  &.rising .chart-stage .sparkline {
-    .trend {
-      stroke: var(--mint-dim);
-    }
-
-    .marker {
-      fill: var(--mint-dim);
-    }
-  }
-
-  &.falling .chart-stage .sparkline {
-    .trend {
-      stroke: var(--international-orange-engineering);
-    }
-
-    .marker {
-      fill: var(--international-orange-engineering);
-    }
   }
 
   .headline {
@@ -60,25 +36,5 @@
     justify-content: flex-end;
     gap: var(--base-x-2);
     margin-top: var(--base-x-2);
-    font-family: 'SF Mono', 'Fira Code', monospace;
-
-    .price {
-      font-size: var(--text-headline);
-      font-weight: bold;
-      color: var(--ink);
-    }
-
-    .delta {
-      font-size: var(--base-x-2);
-      font-weight: normal;
-    }
-  }
-
-  &.rising .headline .delta {
-    color: var(--mint-ink);
-  }
-
-  &.falling .headline .delta {
-    color: var(--international-orange-engineering);
   }
 }

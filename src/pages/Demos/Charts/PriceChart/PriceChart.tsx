@@ -15,6 +15,7 @@ import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
 import '../chart-card.css';
 import './PriceChart.css';
 import {ChartHeading} from '../heading';
+import {sideOf} from '../sides';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
@@ -57,12 +58,13 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const points = sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = view.map(trendOf).orElse(undefined);
+  const side = view.map(trendOf).map(heading => sideOf[heading]).orElse(undefined);
   return <section aria-labelledby={`${id}-heading`}
-    className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
+    className={classNames('price-chart chart card rounded-corners lifted padded', trend, side)}>
     <Heading id={`${id}-heading`} className="off-screen">live trades</Heading>
     <header className="chart-header">
       {actions}
-      <button type="button" className="menu-toggle rounded-corners period-toggle field attentive caption reachable"
+      <button type="button" className="menu-toggle rounded-corners period-toggle field borderless attentive focus-ringed caption reachable"
         popoverTarget={`${id}-period`}>
         <span className="off-screen">price period</span>{' '}{period}
       </button>
@@ -78,26 +80,26 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
         )}
       </menu>
     </header>
-    <figure className="chart-stage">
+    <figure className="chart-stage paper-veiled-before">
       <Axes range={view.mBind(({series, high, low}) => rangeOf(series.map(timed => timed.at), high, low))}
         pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
         <svg className="sparkline" aria-hidden="true"
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
           preserveAspectRatio="none">
-          {notEmpty(points) && <line className="baseline"
+          {notEmpty(points) && <line className="baseline drawn"
             x1={0} y1={points[0].y}
             x2={CHART_WIDTH} y2={points[0].y}/>}
-          <polyline className="trend" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-          {notEmpty(points) && <circle className="marker"
+          <polyline className="trend side-line line-shadowed" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+          {notEmpty(points) && <circle className="marker side-dot"
             cx={points[points.length - 1].x}
             cy={points[points.length - 1].y}
             r={3}/>}
         </svg>
       </Axes>
-      <p className="headline">{view.map(({first, last}) => <>
-        <data className="price" value={last}>{cents.format(last)}</data>
-        <data className="delta" value={last - first}>{deltaLabel(first, last)}</data>
+      <p className="headline monospaced">{view.map(({first, last}) => <>
+        <data className="price title bold ink" value={last}>{cents.format(last)}</data>
+        <data className="delta side-ink" value={last - first}>{deltaLabel(first, last)}</data>
       </>).orNull()}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>

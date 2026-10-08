@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const Grip: FC<Props> = ({onPressed, onReleased}) =>
-  <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
+  <button type="button" className="chart-grip borderless unfilled" aria-label="move chart" tabIndex={-1}
     onPointerDown={onPressed}
     onPointerUp={onReleased}
     onPointerCancel={onReleased}>

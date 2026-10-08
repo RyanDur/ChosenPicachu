@@ -267,8 +267,11 @@ describe('a list of charts', () => {
   });
 
   test.each([
-    ['shows the markup and the dress, not just the arithmetic', ['className="candlesticks"', '.up .body', 'className="volumes"', '.volume']],
-    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']]
+    ['shows the markup and the dress, not just the arithmetic', ['className="candlesticks"', '.wick {', '.drawn {', '.buy-side {', '.sell-side {', '.side-face {', '.side-wall {', 'className="volumes volume-side"', '.volume-side {']],
+    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']],
+    ['says the wick wears drawn', ['It wears drawn, the shared class for a charcoal hairline; the sheet keeps its width.']],
+    ['says each candle wears its side, and what a shared class is', ['Each wears a side with it, buy-side or sell-side, a shared class that sets a side’s colours; the body wears side-face and the wall side-wall, so the shared sheet paints them. A shared class is a look that lives in the site’s shared sheet and that an element wears by name.']],
+    ['says the volume bars wear volume-side', ['The volume bars wear volume-side with side-face and side-wall: leather for the bar and drab for its edge, the same slots the sides fill.']]
   ])('the candles story %s', async (_claim, shown) => {
     const feed = await listeningFeed();
 
@@ -399,7 +402,8 @@ describe('a list of charts', () => {
     test.each([
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
       ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
-      ['each bar has an edge', 'Each bar has a second rectangle set just behind it, which gives it an edge.']
+      ['each bar has an edge', 'with side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge.'],
+      ['the bars wear their sides and the middle line drawn', 'The bought bars wear buy-side and the sold bars sell-side, with side-face on the bar and side-wall on the second rectangle set just behind it, which gives it an edge. The middle line wears drawn.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
     });
