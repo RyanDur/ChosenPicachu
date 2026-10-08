@@ -696,7 +696,7 @@ describe('the platform build’s bars', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent('A marker is drawn only on a list item, and the bar is a flex row, so the marker goes with the display, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(run).toHaveTextContent('The browser gives a summary the display of a list item, and a marker is drawn only on a list item. Display is the property that sets how a box lays out what it holds; this bar’s display is flex, a row, so the marker goes with it, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
     expect(run).not.toHaveTextContent(/every build/);
     expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
   });
@@ -732,7 +732,7 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent('so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the checkbox while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its checkbox, so the word’s :hover rule lights the bar too.');
+    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent('so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the checkbox while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its checkbox, so the class’s :hover rule lights the bar too.');
   });
 
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
@@ -767,7 +767,7 @@ describe('the known-height build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const run = explanation.runTelling(oldWay, /The bar’s colours are the page’s the other way round/);
 
-    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: field on inverse field. That look is shared with the rest of the site, so it does not live in the bar’s own sheet. It is a class in a shared sheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the sheet’s rule and then the shared class.');
+    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own sheet. It is a class in a shared sheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the sheet’s rule and then the shared class.');
     expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^\.inverse-filled \{/);
     expect(outOfReadingOrder([
       run,

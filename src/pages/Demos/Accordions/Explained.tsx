@@ -304,8 +304,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <TheSheetReadsTheBox/>
               </li>
               <li className="run">
-                <p className="paragraph">The bar’s colours are the page’s the other way round: field on inverse
-                  field. That look is shared with the rest of the site, so it does not live in the bar’s own sheet.
+                <p className="paragraph">The bar’s colours are the page’s the other way round: light words on a
+                  dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own sheet.
                   It is a class in a shared sheet, <code>inverse-filled</code>, and the bar wears it: the class sits in
                   the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the
                   row, the padding and the height. The samples that follow show both, the sheet’s rule and then the
@@ -345,7 +345,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   :focus-visible pseudo-class picks the {input} while it has keyboard focus,
                   and <code>:focus-visible ~ .prior-approached</code> gives the bar the approach colour, ink for its
                   words and a ring inside its edge. The browser treats hovering a label as hovering
-                  its {input}, so the word’s :hover rule lights the bar too. That rule sits inside a media
+                  its {input}, so the class’s :hover rule lights the bar too. That rule sits inside a media
                   query, <code>(hover: hover)</code>, which applies its rules only on a device whose pointer can
                   hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s borders take the
                   ink colour with the words.</p>
@@ -470,8 +470,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
-                  drew one from two borders. A marker is drawn only on a list item, and the bar is a flex row, so
-                  the marker goes with the display, and the bar draws the {input} build’s
+                  drew one from two borders. The browser gives a summary the display of a list item, and a marker
+                  is drawn only on a list item. Display is the property that sets how a box lays out what it holds;
+                  this bar’s display is flex, a row, so the marker goes with it, and the bar draws the {input} build’s
                   arrow in its place, so this bar reads the same as the bars of the known-height and
                   measured builds. The arrow points right while the part is closed. When the part opens, the
                   browser adds open to the details in the page it is showing, as if it were written in the
