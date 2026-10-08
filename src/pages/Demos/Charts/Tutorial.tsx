@@ -395,7 +395,7 @@ const pieStory =
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, '<p className="legend caption">', '</p>')
+            ...span(pieComponent, '<ul className="legend caption">', '</ul>')
           ]}/>
         </Codes>
       </Step>

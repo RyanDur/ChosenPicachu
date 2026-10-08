@@ -38,7 +38,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
           const drop = dressed === 'wall' ? DEPTH : 0;
-          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sides[at], sideOf[sides[at]])}
+          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sideOf[sides[at]], sides[at])}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
@@ -55,12 +55,12 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           </g>;
         }))}
       </svg>
-      <p className="legend caption">
+      <ul className="legend caption">
         {cut.map((slice, at) =>
-          <data key={sides[at]} value={slice.share} className={classNames('share', sideOf[sides[at]], 'side-ink', sides[at])}>
-            {`${Math.round(slice.share * 100)}% ${sides[at]}`}
-          </data>)}
-      </p>
+          <li key={sides[at]} className={classNames('share', sideOf[sides[at]], 'side-ink', sides[at])}>
+            <data value={slice.share}>{`${Math.round(slice.share * 100)}% ${sides[at]}`}</data>
+          </li>)}
+      </ul>
       <figcaption className="chart-caption caption">
         {cut.length > 0
           ? 'the session’s volume by side · since you arrived'
