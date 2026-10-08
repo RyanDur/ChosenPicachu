@@ -1006,7 +1006,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The handle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus. focus-ringed draws the site’s ring when the keyboard reaches it.');
+    expect(recipe).toHaveTextContent('The handle’s look is shared classes. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus. focus-ringed draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
   });
 
@@ -1016,7 +1016,8 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet, and it switches the table to the layout the ledger apportions. Its share rides a custom property');
+    expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
+    expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share rides a custom property');
   });
 
   test('should say every motion class changes through changeMotion in the vanilla world, with it carved after the reconcile', async () => {
@@ -1035,7 +1036,8 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque. The sheet raises the carried cells with a z-index of 1, so they ride over whatever they pass, and the paper keeps what is beneath from showing through.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
+    expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top, and it works only on a positioned box, so the sheet gives the carried cell position: relative as well. Raised, the carried cells ride over whatever they pass, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1048,7 +1050,8 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it. Under keep the carried cells stay put and the sheet raises them with a z-index of 1, so the neighbours slide beneath them; the paper keeps either from showing through the other.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
+    expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and it works only on a positioned box, which is why the carried cell is also position: relative. So the neighbours slide beneath the carried cells, and the paper keeps either from showing through the other.');
     expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 

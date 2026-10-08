@@ -177,8 +177,9 @@ const widenStory = (world: World) =>
             waiting for a resize: the sum answers to nobody.</Says>
           <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
             in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
-            is a class of the table’s own sheet, and it switches the table to the layout the ledger apportions. Its
-            share rides a custom property, and fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
+            is a class of the table’s own sheet.</Says>
+          <Says>It switches the table to the layout the ledger apportions. Its share rides a custom property, and
+            fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
             opening widths in that same stylesheet, keeps the table exactly its container: every
             column a fraction of it, one record keeping one promise.</Says>
           {ledgerCodes[world]}
@@ -214,8 +215,7 @@ const widenStory = (world: World) =>
         </Words>
         <Reveal>
           {handleSays[world]}
-          <Says>The handle’s look is shared classes, looks that live in the site’s shared sheet and that an element
-            wears by name. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the
+          <Says>The handle’s look is shared classes. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the
             line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus.
             focus-ringed draws the site’s ring when the keyboard reaches it.</Says>
           <Codes>
