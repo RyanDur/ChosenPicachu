@@ -23,7 +23,7 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
 
   return <nav aria-label={label} id={id} className="tabs backdrop backdrop-above contained">
     <ul className="tab-list">{values.map(({param, display}) =>
-      <li className="tab bold field attentive" key={param}>
+      <li className="tab tab-path bold field attentive backdrop-underlined" key={param}>
         <Link to={`${pathname}${createSearchParams({tab: param})}`}
           aria-current={current === param ? 'page' : undefined}
           className="path">{display}</Link>
