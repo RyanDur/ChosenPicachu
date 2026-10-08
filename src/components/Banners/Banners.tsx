@@ -56,14 +56,14 @@ export const Banners: FC = () => {
   };
 
   return <section id="banners" popover="manual" role="alert"
-    className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
+    className={classNames('banners', 'borderless', 'unfilled', side, align, `from-${enter}`, `stack-${stack}`)}>
     <ul className="troubles">
       {banners.map(banner =>
         <li key={banner.id} onTransitionEnd={left(banner.id)}
           className={classNames('trouble', leaving.includes(banner.id) && 'leaving')}>
           <p className="news field rounded-corners floating hairline-outline alarm-ink">
             {banner.message}
-            <button type="button" className="dismiss reachable" aria-label={`dismiss ${banner.message}`}
+            <button type="button" className="dismiss borderless unfilled glyph-icon muted-ink reachable" aria-label={`dismiss ${banner.message}`}
               onClick={() => dismissed(banner.id)}>×</button>
           </p>
         </li>)}
