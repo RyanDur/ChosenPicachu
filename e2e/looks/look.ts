@@ -2,7 +2,7 @@ import type {Page} from '@playwright/test';
 
 export type Look = Record<string, string>;
 
-const frames = 40;
+const frames = 10;
 
 export const heldStill = async (page: Page): Promise<() => Promise<void>> => {
   await page.clock.setFixedTime(new Date('2026-01-01T12:00:00Z'));
@@ -28,6 +28,8 @@ export const heldStill = async (page: Page): Promise<() => Promise<void>> => {
   return async () => {
     const until = Date.now() + 8_000;
     while (opened && sent < frames && Date.now() < until) await page.waitForTimeout(100);
+    // data that lands after the page's own ready mark (the gallery's page count) would be read on one side only
+    await page.waitForLoadState('networkidle', {timeout: 10_000}).catch(() => undefined);
     await page.evaluate(async () => {
       await document.fonts.ready;
       // a lazy image below the fold never loads unless scrolled to, and Firefox leaves it waiting
@@ -38,7 +40,6 @@ export const heldStill = async (page: Page): Promise<() => Promise<void>> => {
       await Promise.race([Promise.all(loading), new Promise(done => setTimeout(done, 5_000))]);
       await new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done)));
     });
-    await page.waitForTimeout(300);
   };
 };
 

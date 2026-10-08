@@ -10,6 +10,7 @@ export default defineConfig({
   testDir: './e2e/looks',
   testMatch: '**/*.looks.ts',
   retries: 0,
+  fullyParallel: true,
   timeout: 300_000,
   use: {contextOptions: {reducedMotion: 'reduce'}},
   webServer: [

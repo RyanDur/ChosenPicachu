@@ -10,9 +10,12 @@ export type View = {
 
 // the users backend draws its roster at random inside its service worker, out of a page's reach, so that page is
 // compared without its worker: the form and the alert, never the rows
-const atRest = (page: SitePage): View => page.name === 'users'
-  ? {name: 'at rest, with no worker', page: {...page, ready: 'alert'}, withoutWorkers: true}
-  : {name: 'at rest', page};
+const atRest = (page: SitePage): View => {
+  if (page.name === 'users') return {name: 'at rest, with no worker', page: {...page, ready: 'alert'}, withoutWorkers: true};
+  // the gallery's first figure can show before its wall's page count, which the nav's NEXT waits on
+  if (page.name === 'gallery') return {name: 'at rest', page, into: next => next.getByRole('link', {name: 'NEXT'}).waitFor()};
+  return {name: 'at rest', page};
+};
 
 const missing = (name: string): never => {
   throw new Error(`no page named ${name}`);
