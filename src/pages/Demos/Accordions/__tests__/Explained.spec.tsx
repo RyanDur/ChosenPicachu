@@ -690,7 +690,7 @@ describe('the word attribute', () => {
 });
 
 describe('the word display', () => {
-  test('should be said first where display none is weighed against hiding the input off screen, and no run before it says display', async () => {
+  test('should be said first where display none is weighed against hiding the input off screen, with no text before it saying display', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
