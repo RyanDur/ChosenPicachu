@@ -30,7 +30,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const card = aggregations.card();
     for (const measure of ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
       expect(within(card).getByRole('columnheader', {name: new RegExp(`^${measure}`)})).toBeVisible();
     }
@@ -82,7 +82,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const card = aggregations.card();
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
     const table = within(card).getAllByRole('table')[0];
@@ -110,7 +110,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const card = aggregations.card();
     const rowOf = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     const stage = within(card).getAllByRole('table')[0];
     stage.getBoundingClientRect = () => ({
@@ -126,8 +126,7 @@ describe('the tables demo', () => {
     fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
     fireEvent.pointerUp(grip, {pointerId: 1});
 
-    const labels = within(card).getAllByRole('rowheader').map(header => header.getAttribute('aria-label'));
-    expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
+    expect(aggregations.windows()).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
   });
 
   test('a direction from a column menu sorts the windows', async () => {
@@ -214,23 +213,22 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
-    const windows = () => within(card).getAllByRole('rowheader').map(header => header.getAttribute('aria-label'));
+    const card = aggregations.card();
     const headers = () => within(card).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
-    expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
+    expect(aggregations.windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
     within(card).getByRole('button', {name: 'move row 1'}).focus();
     await userEvent.keyboard('{ArrowDown}');
     within(card).getByRole('columnheader', {name: /^trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+    expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
 
     const controls = await tableControls.region();
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
     expect(screen.getByText('<LazyTable className="hide static"/>')).toBeVisible();
-    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+    expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
     expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
@@ -706,7 +704,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const card = aggregations.card();
     expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });
 
@@ -738,7 +736,7 @@ describe('the tables demo', () => {
 
       const frame = await standFrame();
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
-      const card = screen.getByRole('region', {name: 'live aggregations'});
+      const card = aggregations.card();
       expect(card).toContainElement(frame);
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
@@ -750,7 +748,7 @@ describe('the tables demo', () => {
       await feedIsSubscribed(feed);
 
       await standFrame(0);
-      const card = screen.getByRole('region', {name: 'live aggregations'});
+      const card = aggregations.card();
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
 
@@ -832,7 +830,7 @@ describe('the tables demo', () => {
       await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 
       const frame = await standFrame();
-      const card = screen.getByRole('region', {name: 'live aggregations'});
+      const card = aggregations.card();
       expect(card).toContainElement(frame);
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
