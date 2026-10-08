@@ -24,7 +24,7 @@ const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure').filter(figure => within(figure).queryByRole('code') === null);
 
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
-  within(run).getAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
+  within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
 
 const everyCodeIn = (run: HTMLElement): string[] => samplesIn(run).map(code => code.textContent);
 

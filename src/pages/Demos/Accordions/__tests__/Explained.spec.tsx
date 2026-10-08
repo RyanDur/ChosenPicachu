@@ -690,23 +690,32 @@ describe('the word attribute', () => {
 });
 
 describe('the platform build’s bars', () => {
-  test('should say the bar draws the old build’s arrow in the marker’s place, beside the rule that turns it', async () => {
+  test('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent('The browser gives a summary the display of a list item, and a marker is drawn only on a list item. Display is the property that sets how a box lays out what it holds; this bar’s display is flex, a row, so the marker goes with it, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(run).toHaveTextContent('Summary also draws its own arrow, called a marker, where the checkbox build drew one from two borders. The browser gives a summary the display of a list item, and a marker is drawn only on a list item. This bar’s display is flex, a row, so the marker goes with it, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
     expect(run).not.toHaveTextContent(/every build/);
-    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
+    expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/)).toEqual([]);
   });
 
-  test('should say the browser marks an open details with the open attribute, and [open] picks it to turn the arrow', async () => {
+  test('should say the browser marks an open details with the open attribute, and [open] picks it to turn the arrow, beside the rule that turns it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+    expect(explanation.runTelling(platform, /The arrow points right while the part is closed/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+    expect(explanation.everyCodeBeside(platform, /The arrow points right while the part is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
+  });
+
+  test('should say what display is where display none is first weighed against hiding the input off screen', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the part.');
   });
 
   test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {

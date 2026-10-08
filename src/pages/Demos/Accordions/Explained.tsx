@@ -280,8 +280,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">You want the reader to see a bar, not a {input}, so you hide the {input}.
                   Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
                   hundredth of the window’s width, so a right offset of 1000vw puts the {input} ten
-                  window widths to the left, far off the page. Display none would hide it too, but it
-                  would also take the {input} out of the tab order, and a keyboard could no longer open
+                  window widths to the left, far off the page. Display is the property that sets how a box lays
+                  out what it holds, and display none would hide the {input} too, but it would also take
+                  the {input} out of the tab order, and a keyboard could no longer open
                   the part. Focus is the element the keyboard will act on. Off screen, the {input} still
                   takes focus, still answers the space bar, and
                   is still named by its label.</p>
@@ -471,10 +472,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
                   drew one from two borders. The browser gives a summary the display of a list item, and a marker
-                  is drawn only on a list item. Display is the property that sets how a box lays out what it holds;
-                  this bar’s display is flex, a row, so the marker goes with it, and the bar draws the {input} build’s
-                  arrow in its place, so this bar reads the same as the bars of the known-height and
-                  measured builds. The arrow points right while the part is closed. When the part opens, the
+                  is drawn only on a list item. This bar’s display is flex, a row, so the marker goes with it, and
+                  the bar draws the {input} build’s arrow in its place, so this bar reads the same as the bars of
+                  the known-height and measured builds.</p>
+              </li>
+              <li className="run">
+                <p className="paragraph">The arrow points right while the part is closed. When the part opens, the
                   browser adds open to the details in the page it is showing, as if it were written in the
                   opening tag. A name in that place is called an attribute. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
                   rule turns the arrow down.</p>
