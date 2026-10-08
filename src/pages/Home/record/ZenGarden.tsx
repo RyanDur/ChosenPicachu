@@ -5,7 +5,7 @@ export const ZenGarden: FC = () =>
   <Moment year="2003"
     title="The separation needs proof"
     tells={<>Dave Shea published{' '}
-      <a className="signpost" href="http://csszengarden.com/">one HTML document</a> and invited the world to
+      <a className="signpost" href="https://csszengarden.com/">one HTML document</a> and invited the world to
       restyle it. Hundreds of designs, not one change to the markup: the same structure, any
       presentation, separation as art.</>}>
     <p className="paragraph muted-ink">The garden’s rules were the argument: here is one HTML document, and you may not

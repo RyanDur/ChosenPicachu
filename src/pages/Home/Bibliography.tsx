@@ -16,7 +16,7 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Tim Berners-Lee and Robert Cailliau, 1990</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html"><cite>The original HTML tags</cite></a>
+            <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html"><cite>The original HTML tags</cite></a>
             <span className="provenance caption">info.cern.ch, as preserved in 1992</span>
           </li>
           <li className="work">
@@ -126,11 +126,11 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Jay Hoffmann, The History of the Web, 2017</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://csszengarden.com/"><cite>CSS Zen Garden</cite></a>
+            <a className="signpost" href="https://csszengarden.com/"><cite>CSS Zen Garden</cite></a>
             <span className="provenance caption">Dave Shea, 2003</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://www.css-class.com/a-brief-history-of-css/"><cite>A Brief History of CSS</cite></a>
+            <a className="signpost" href="https://www.css-class.com/a-brief-history-of-css/"><cite>A Brief History of CSS</cite></a>
             <span className="provenance caption">css-class.com</span>
           </li>
           <li className="work">

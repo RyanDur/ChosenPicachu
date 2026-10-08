@@ -51,7 +51,7 @@ export const CascadeSettlement: FC = () =>
       official four years later.</p>
     <p className="paragraph muted-ink">By the Darmstadt conference in April 1995 the discussion was openly political.
       Nine style-sheet proposals had been{' '}
-    <a className="signpost" href="http://www.css-class.com/a-brief-history-of-css/">submitted in all</a>, and Lie and Bos, who{' '}
+    <a className="signpost" href="https://www.css-class.com/a-brief-history-of-css/">submitted in all</a>, and Lie and Bos, who{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">met in person there for the first time</a>, each arrived with an
       implementation to show. Authors argued they had to control presentation, down to
       warning labels with legal requirements behind them; the other side held that the
