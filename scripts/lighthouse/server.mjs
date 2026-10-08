@@ -8,7 +8,7 @@ import {WebSocketServer} from 'ws';
 
 const port = Number(process.env.STAGE_PORT ?? 4517);
 const here = dirname(fileURLToPath(import.meta.url));
-const dist = resolve(here, '../../dist');
+const dist = resolve(process.env.STAGE_DIST ?? join(here, '../../dist'));
 const fixtures = join(here, 'fixtures');
 
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
