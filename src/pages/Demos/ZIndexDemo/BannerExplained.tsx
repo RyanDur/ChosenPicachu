@@ -34,7 +34,7 @@ export const BannerExplained: FC = () => {
         <p className="paragraph">The banner in the top layer is the site’s own banner. It is a popover shown in the top
           layer, so card one’s stacking context does not hold it. It stays at the window’s edge, over everything on the
           page, card two included.</p>
-        <Snippet label="HTML" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+        <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, <Link className="signpost"

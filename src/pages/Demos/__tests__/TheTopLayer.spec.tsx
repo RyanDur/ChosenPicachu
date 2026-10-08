@@ -200,6 +200,14 @@ describe('the banner tutorial’s first story', () => {
     expect(within(placing).getByText(/^The sample is the component’s line/)).toBeInTheDocument();
   });
 
+  test('should carve the rules for the side and align the dials chose', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+    const placing = recipeFolds.steps(news)[2];
+
+    expect(within(placing).getAllByRole('code')[1]).toHaveTextContent(/\.bottom \{[^]*\.right \{/);
+  });
+
   test('should carve the panel’s own line, and say the class names the dials chose', async () => {
     render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);

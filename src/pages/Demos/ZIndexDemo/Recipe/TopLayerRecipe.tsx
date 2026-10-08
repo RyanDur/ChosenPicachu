@@ -87,7 +87,7 @@ export const TopLayerRecipe: FC = () => {
             the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+          <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
             ...unit(placementCss, `.${side} {`), gap,
             ...unit(placementCss, `.${align} {`)
