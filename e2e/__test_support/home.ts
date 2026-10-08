@@ -8,5 +8,6 @@ export const homePage = (page: Page) => ({
   researchFold: page.getByRole('region', {name: 'The research'}).getByRole('group').first(),
   recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first(),
   fullerStoryOf: (story: Locator): Locator => story.getByText('the fuller story'),
+  doorSummaryOf: (door: Locator): Locator => door.getByText('how I organize it', {exact: true}),
   storyTold: (story: Locator): Locator => story.getByRole('paragraph').first()
 });

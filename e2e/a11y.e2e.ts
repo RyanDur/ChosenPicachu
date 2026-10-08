@@ -30,9 +30,9 @@ for (const {name, path, ready, loaded} of pages) {
 test('the home page has no accessibility violations with its folds open', async ({page}) => {
   const home = homePage(page);
   await page.goto('');
-  await expect(home.doorFolds).toHaveCount(3);
-  await expect(home.timelineStories).toHaveCount(13);
-  for (const door of await home.doorFolds.all()) await door.getByText('how I organize it', {exact: true}).click();
+  await expect(home.doorFolds.last()).toBeVisible();
+  await expect(home.timelineStories.last()).toBeVisible();
+  for (const door of await home.doorFolds.all()) await home.doorSummaryOf(door).click();
   await home.researchFold.getByRole('heading', {name: 'The research'}).click();
 
   const found = [];

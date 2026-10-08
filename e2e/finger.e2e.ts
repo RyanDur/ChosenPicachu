@@ -19,14 +19,15 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('opens and closes how I organize it with a finger that lands just off the line', async ({page}) => {
       await page.goto('');
-      const fold = homePage(page).doorFolds.first();
+      const home = homePage(page);
+      const fold = home.doorFolds.first();
       const told = fold.getByRole('paragraph', {includeHidden: true}).first();
       await expect(told).toBeHidden();
 
-      await fingerTap(page, fold.getByText('how I organize it', {exact: true}));
+      await fingerTap(page, home.doorSummaryOf(fold));
       await expect(told).toBeVisible();
 
-      await fingerTap(page, fold.getByText('how I organize it', {exact: true}));
+      await fingerTap(page, home.doorSummaryOf(fold));
       await expect(told).toBeHidden();
     });
 
