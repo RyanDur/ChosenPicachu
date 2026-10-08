@@ -81,6 +81,10 @@
   }
 }
 
+.display-figure {
+  font-size: var(--base-x-10);
+}
+
 .glyph-icon {
   font-size: var(--base-x-2_5);
 }

@@ -10,7 +10,7 @@ export const KeepItem: FC<ItemProps> = (
   const [dragging, updateDragging] = useState(false);
 
   return <li {...li}
-    className={classNames('draggable', className)}
+    className={classNames('draggable', 'soft-cornered', 'field', 'hairline-outline', 'handle-raised', className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
       onLifted(item);
@@ -27,6 +27,6 @@ export const KeepItem: FC<ItemProps> = (
     }}
     draggable={dragging}>
     <Grip item={item} order={order} onPressed={() => updateDragging(true)} onReleased={() => updateDragging(false)} onArranged={onArranged}/>
-    <span className="value">{item}</span>
+    <span className="value display-figure">{item}</span>
   </li>;
 };

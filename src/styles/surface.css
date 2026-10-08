@@ -279,6 +279,8 @@
 
 .muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
+.handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
+
 .padded {
   padding: var(--base-x-4);
 

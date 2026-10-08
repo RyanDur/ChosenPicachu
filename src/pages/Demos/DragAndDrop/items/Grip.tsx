@@ -15,7 +15,7 @@ type Props = {
 
 export const Grip: FC<Props> = ({item, order, onPressed, onReleased, onArranged}) =>
   <button type="button"
-    className="grip reachable"
+    className="grip handle borderless unfilled focus-ringed reachable"
     aria-label={`grip for ${item}`}
     onPointerDown={onPressed}
     onPointerUp={onReleased}

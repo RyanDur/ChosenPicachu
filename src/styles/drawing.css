@@ -2,6 +2,10 @@
 
 .paper-filled { fill: var(--paper); }
 
+.resting-filled { fill: var(--faded-leather); }
+
+.swapping-filled { fill: var(--faded-mint); }
+
 .buy-side {
   --side-face: var(--mint-shade);
   --side-wall: var(--mint-ink);

@@ -11,7 +11,7 @@ export const HideItem: FC<ItemProps> = (
   const [hide, updateHide] = useState(false);
 
   return <li {...li}
-    className={classNames('draggable', hide && 'hide', className)}
+    className={classNames('draggable', 'soft-cornered', 'field', 'hairline-outline', 'handle-raised', hide && 'hide', className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
       updateHide(true);
@@ -30,6 +30,6 @@ export const HideItem: FC<ItemProps> = (
     }}
     draggable={dragging}>
     <Grip item={item} order={order} onPressed={() => updateDragging(true)} onReleased={() => updateDragging(false)} onArranged={onArranged}/>
-    <span className="value">{item}</span>
+    <span className="value display-figure">{item}</span>
   </li>;
 };
