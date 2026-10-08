@@ -232,8 +232,6 @@
 
 .field-ink { color: var(--field); }
 
-.unmarked { list-style: none; }
-
 .field-outlined { border: var(--hairline) solid var(--field); }
 
 .corner-after::after {

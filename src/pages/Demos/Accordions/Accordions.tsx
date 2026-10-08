@@ -102,7 +102,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold">
-          <summary className="info-label opening-arrow unmarked inverse-filled attentive field-outlined corner-after">{key}</summary>
+          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}
@@ -121,7 +121,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordion">
-          <summary className="info-label opening-arrow unmarked inverse-filled attentive field-outlined corner-after">{key}</summary>
+          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}
