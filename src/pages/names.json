@@ -42,5 +42,13 @@
   "games": {
     "title": "Games · Chosen Picachu",
     "description": "One game so far."
+  },
+  "closedRoom": {
+    "title": "Closed room · Chosen Picachu",
+    "description": "Something in this room broke. The rest of the site is open."
+  },
+  "noRoom": {
+    "title": "No such room · Chosen Picachu",
+    "description": "Nothing was built at this address. The rest of the site is open."
   }
 }

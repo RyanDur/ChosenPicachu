@@ -19,8 +19,8 @@ import names from '@pages/names.json';
 import {Demos} from '@pages/Demos/routes';
 
 const NoHeader = () => null;
-const ClosedRoomHeader = () => <Header title="Closed room" listed={names.home}/>;
-const NoRoomHeader = () => <Header title="No such room" listed={names.home}/>;
+const ClosedRoomHeader = () => <Header title="Closed room" listed={names.closedRoom}/>;
+const NoRoomHeader = () => <Header title="No such room" listed={names.noRoom}/>;
 
 type Arrival = 'left alone' | 'at the top of the page';
 

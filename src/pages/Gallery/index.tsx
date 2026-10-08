@@ -3,6 +3,9 @@ import {Outlet} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
+import {Listing} from '@pages/BasePage/useListing';
+import {Art} from '@components/art-gallery/museums/art';
+import {empty} from '@ryandur/sand';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {GalleryContext} from '@components/art-gallery/Art/Context';
 import {ArtPieceContext, useArtPiece} from '@components/art-gallery/ArtPiece/Context';
@@ -27,9 +30,17 @@ const GalleryHeader = () =>
     <GallerySettings/>
   </Header>;
 
+const listingOf = ({title, artistInfo}: Art): Listing => ({
+  title: `${title} · ${names.gallery.title}`,
+  description: empty(artistInfo) ? `${title}, from the gallery’s wall.` : `${title}, by ${artistInfo}, from the gallery’s wall.`
+});
+
 const PieceHeader = () => {
   const {easel} = useArtPiece();
-  return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'} listed={names.gallery}>
+  const {title, listed} = easel.reply === 'answered'
+    ? {title: easel.answer.title, listed: listingOf(easel.answer)}
+    : {title: 'A piece', listed: names.gallery};
+  return <Header title={title} listed={listed}>
     <Search id="gallery-search" className="header-settings"/>
   </Header>;
 };
