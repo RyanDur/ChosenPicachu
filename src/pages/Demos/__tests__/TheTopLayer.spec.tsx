@@ -223,8 +223,8 @@ describe('the banner tutorial’s first story', () => {
     const placing = recipeFolds.steps(news)[2];
     const explained = screen.getByRole('region', {name: 'Why a fixed banner still loses'});
 
-    expect(placing).toHaveTextContent(/TSreturn <section id="banners"/);
-    expect(explained).toHaveTextContent(/TSreturn <section id="banners"/);
+    expect(within(within(placing).getByRole('figure', {name: 'Banners/Banners.tsx on GitHub'})).getByText('TS')).toBeInTheDocument();
+    expect(within(within(explained).getByRole('figure', {name: 'Banners/Banners.tsx on GitHub'})).getByText('TS')).toBeInTheDocument();
   });
 
   test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {

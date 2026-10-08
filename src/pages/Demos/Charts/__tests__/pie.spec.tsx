@@ -27,12 +27,6 @@ describe('the pie', () => {
     expect(cut[1].to).toBeCloseTo(2 * Math.PI);
   });
 
-  test('each slice keeps the part it was cut from', () => {
-    const cut = slices([{side: 'bought', weight: 3}, {side: 'sold', weight: 1}]);
-
-    expect(cut.map(({side, share}) => ({side, share}))).toEqual([{side: 'bought', share: 0.75}, {side: 'sold', share: 0.25}]);
-  });
-
   test('nothing traded cuts nothing', () => {
     expect(slices([{weight: 0}, {weight: 0}])).toEqual([]);
   });

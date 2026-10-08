@@ -6,18 +6,24 @@ export const columnCells = (mounted: MountedTable, column: string): HTMLTableCel
   return [...mounted.table.rows].map(row => row.cells[at]);
 };
 
-const shoves = ['shoved-start', 'shoved-end', 'shoved-up', 'shoved-down'];
-const marks = ['settling', ...shoves];
-const motions = ['carried', ...marks];
+type Toward = ColumnShove['toward'] | RowShove['toward'];
 
-export const papered = (cell: Element): void => {
+type Motion = 'carried' | 'settling' | `shoved-${Toward}`;
+
+const shoveOf: Record<Toward, Motion> = {start: 'shoved-start', end: 'shoved-end', up: 'shoved-up', down: 'shoved-down'};
+const shoves = Object.values(shoveOf);
+const marks: readonly Motion[] = ['settling', ...shoves];
+const motions: readonly Motion[] = ['carried', ...marks];
+
+export const changeMotion = (cell: Element, {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}): void => {
+  cell.classList.remove(...off);
+  cell.classList.add(...on);
   cell.classList.toggle('paper-in-motion', motions.some(motion => cell.classList.contains(motion)));
 };
 
 const undressed = (cells: readonly HTMLTableCellElement[]): void =>
   cells.forEach(cell => {
-    cell.classList.remove(...marks);
-    papered(cell);
+    changeMotion(cell, {off: marks});
     ['--settle-x', '--settle-y', '--settle-drift-x', '--settle-drift-y'].forEach(property => cell.style.removeProperty(property));
     cell.style.removeProperty('--shoved-by');
   });
@@ -35,18 +41,15 @@ const settling = (cells: readonly HTMLTableCellElement[], from: Settling): void 
     cell.style.setProperty('--settle-y', `${from.seat.y}px`);
     cell.style.setProperty('--settle-drift-x', `${from.drift.x}px`);
     cell.style.setProperty('--settle-drift-y', `${from.drift.y}px`);
-    cell.classList.add('settling');
-    papered(cell);
+    changeMotion(cell, {on: ['settling']});
   });
   untilSettled(cells);
 };
 
 const shoving = (cells: readonly HTMLTableCellElement[], {toward, by}: ColumnShove | RowShove): void => {
   cells.forEach(cell => {
-    cell.classList.remove(...shoves);
     cell.style.setProperty('--shoved-by', `${by}px`);
-    cell.classList.add(`shoved-${toward}`);
-    papered(cell);
+    changeMotion(cell, {off: shoves, on: [shoveOf[toward]]});
   });
   untilSettled(cells);
 };

@@ -268,7 +268,8 @@ const rankStory = (build: Build) => {
               cascade what it holds, and the page itself declares the sortable set.</Says>}
           <Says>The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element
             wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
-            attentive lights it under the hand and draws the site’s ring when the keyboard reaches it.</Says>
+            attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
+            ring when the keyboard reaches it.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[

@@ -4,7 +4,7 @@ import {aside, Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameCarry, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
+import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 
@@ -62,7 +62,9 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'const moved = '), gap,
-            ...unit(frameCarry, 'export const dressCarried'),
+            ...unit(frameCarry, 'export const dressCarried'), gap,
+            ...span(frameSettle, 'type Toward', 'const motions'), gap,
+            ...unit(frameSettle, 'export const changeMotion'),
             aside('// the reconcile dresses the carried cells; the stylesheet moves them')
           ]}/>}
         <Snippet label="TS" lines={[
@@ -96,13 +98,19 @@ export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
           What answers the hand is the order: the neighbours move around it as it is struck, or
           at the drop. The table dispatches the same drift and the cells wear the same numbers;
           the table wears the word keep, and no rule in the sheet translates a carried cell
-          under it. A cell wears paper-in-motion while it is carried, settling or shoved. Under keep the carried cells stay put, so the paper
-          shows on the neighbours that slide past them, and on the carried cells as they settle.</Says>
+          under it. A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a
+          look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the
+          page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried
+          cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they
+          settle.</Says>
         : <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
           What answers the hand is the order: the neighbours move around it as it is struck, or
           at the drop. The build dispatches the same drift and dresses the same cells; the table
-          wears the word keep, and no rule in the sheet translates a carried cell under it. A cell wears paper-in-motion while it is carried, settling or shoved. Under keep the carried cells stay put, so the paper
-          shows on the neighbours that slide past them, and on the carried cells as they settle.</Says>}
+          wears the word keep, and no rule in the sheet translates a carried cell under it. A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a
+          look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the
+          page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried
+          cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they
+          settle.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),

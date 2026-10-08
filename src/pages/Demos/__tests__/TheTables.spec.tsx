@@ -996,7 +996,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive lights it under the hand and draws the site’s ring when the keyboard reaches it.');
+    expect(recipe).toHaveTextContent('The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
   });
 
@@ -1008,6 +1008,15 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
     expect(recipe).toHaveTextContent('The handle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus. focus-ringed draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
+  });
+
+  test.each(['react', 'vanilla'])('should name the ledger’s class as the table’s own, not a shared class, in the %s world', async world => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent('After a trade the header wears shared, a class of the table’s own sheet, not one of the site’s shared classes, and its share rides a custom property');
   });
 
   test.each(['react', 'vanilla'])('should say a moving cell wears paper-in-motion in the %s world, with its block after the carried cells’ rules', async world => {
@@ -1029,7 +1038,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved. Under keep the carried cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they settle.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion while it is carried, settling or shoved: a shared class, a look that lives in the site’s shared sheet and that an element wears by name, which grounds the cell in the page’s paper, so a cell that slides past another covers it instead of showing through. Under keep the carried cells stay put, so the paper shows on the neighbours that slide past them, and on the carried cells as they settle.');
     expect(recipe).toHaveTextContent(/Leave the origin in place[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1039,7 +1048,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, a shared class, the site’s ring, which every movable column header and every grip wears.');
+    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only: it is focus-ringed, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
   });
 });

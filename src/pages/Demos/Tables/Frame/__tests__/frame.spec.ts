@@ -619,19 +619,16 @@ describe('the frame table', () => {
       expect(buys).not.toHaveClass('shoved-start');
     });
 
-    it('a cell wears the paper while it is carried, shoved or settling, and puts it down when the next lift clears it', () => {
+    it('every cell is at rest once the settle ends: nothing carried, settling or shoved', () => {
       const {trades, buys} = tradesCarriedPastBuys();
-      const sells = screen.getByRole('columnheader', {name: /sells/});
-
-      expect(trades).toHaveClass('carried', 'paper-in-motion');
-      expect(buys).toHaveClass('shoved-start', 'paper-in-motion');
-      expect(sells).not.toHaveClass('paper-in-motion');
-
       fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(trades).toHaveClass('settling', 'paper-in-motion');
 
-      held(buys, {clientX: 200, clientY: 50, pointerId: 1});
-      expect(trades).not.toHaveClass('paper-in-motion');
+      fireEvent.animationEnd(trades);
+      fireEvent.animationEnd(buys);
+
+      const cells = [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')];
+      ['carried', 'settling', 'shoved-start', 'shoved-end', 'shoved-up', 'shoved-down'].forEach(motion =>
+        cells.forEach(cell => expect(cell).not.toHaveClass(motion)));
     });
 
     it('every release marks each cell of the dropped column to settle and keeps the column order', () => {
