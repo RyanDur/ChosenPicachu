@@ -14,16 +14,16 @@ import {Html5SaysIt} from './record/Html5SaysIt';
 import {DocumentComesBack} from './record/DocumentComesBack';
 
 export const Timeline: FC = () =>
-  <section className="record" aria-labelledby="the-record">
-    <h2 className="record-title" id="the-record">How the web got its languages</h2>
+  <section className="record trim-rule-above" aria-labelledby="the-record">
+    <h2 className="record-title title" id="the-record">How the web got its languages</h2>
     <figure className="feedback">
       <blockquote>
-        <p className="quote sub-title italic">
+        <p className="quote sub-title italic trim-bar-beside">
           HyperText is a way to link and access information of various kinds as a web of nodes
           in which the user can browse at will.
         </p>
       </blockquote>
-      <figcaption className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
+      <figcaption className="attribution caption">Tim Berners-Lee and Robert Cailliau,{' '}
         <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
           the WorldWideWeb, 1990</a></figcaption>
     </figure>

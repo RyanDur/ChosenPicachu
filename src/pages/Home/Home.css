@@ -21,14 +21,11 @@
   .quote {
     margin: 0;
     padding-inline-start: var(--base-x-2);
-    border-inline-start: var(--hairline-x-3) solid var(--trim);
     text-wrap: pretty;
   }
 
   .attribution {
     padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
   }
 
   .opening {
@@ -51,7 +48,6 @@
     display: grid;
     gap: var(--base-x-1_5);
     padding-block-start: var(--base-x-2);
-    border-block-start: var(--hairline-x-3) solid var(--trim);
 
     .paragraph {
       margin: 0;
@@ -63,24 +59,20 @@
     display: grid;
     gap: var(--base-x-2_5);
     padding-block-start: var(--base-x-3);
-    border-block-start: var(--hairline-x-3) solid var(--trim);
   }
 
   .research-title {
     margin: 0;
-    font-size: var(--text-headline);
     display: inline;
   }
 
   .record-title,
   .door-title {
     margin: 0;
-    font-size: var(--text-headline);
     text-wrap: balance;
   }
 
   .timeline {
-    list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
@@ -98,7 +90,6 @@
   .moment > * {
     grid-column: 2;
     padding-inline-start: var(--base-x-2);
-    line-height: 1.55;
   }
 
   .moment::before {
@@ -108,8 +99,6 @@
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--base-x-0_5));
     width: var(--base);
     height: var(--base);
-    border-radius: 50%;
-    background: var(--void);
     z-index: 1;
   }
 
@@ -119,7 +108,6 @@
     inset-block: 0;
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--hairline));
     width: var(--hairline-x-2);
-    background: var(--trim);
   }
 
   .moment:first-child::after {
@@ -141,13 +129,11 @@
 
   .beat-title {
     margin: 0;
-    font-size: var(--text-title);
     text-wrap: balance;
   }
 
   .beat-tells {
     margin: 0;
-    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -155,14 +141,11 @@
   .door-fold {
     .prompt {
       width: fit-content;
-      font-size: var(--text-caption);
-      color: var(--ink-muted);
     }
 
     .paragraph {
       margin: 0;
       margin-block-start: var(--base-x-1_5);
-      color: var(--ink-muted);
       text-wrap: pretty;
     }
   }
@@ -172,10 +155,6 @@
     margin-block-start: var(--base-x-1_5);
     padding: var(--base-x-1_5);
     overflow-x: auto;
-    background: var(--card);
-    border: var(--hairline) solid var(--shadow);
-    border-radius: var(--radius);
-    font-size: var(--text-caption);
   }
 
   .bibliography .shelves {
@@ -194,7 +173,6 @@
 
   .shelf-title {
     margin: 0;
-    font-size: var(--text-title);
   }
 
   .works {
@@ -206,7 +184,6 @@
 
   .provenance {
     margin-inline-start: var(--base);
-    color: var(--ink-muted);
   }
 
   .tee-up {

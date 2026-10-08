@@ -10,14 +10,14 @@ export const Html5SaysIt: FC = () =>
       markup, separation of design from content, and, in one summary’s words,{' '}
       <a className="signpost" href="https://html.com/html5/">reducing the overlap between HTML, CSS, and
         JavaScript</a>.</>}>
-    <p className="paragraph">The objectives, as html.com summarizes them: encouraging semantic markup;
+    <p className="paragraph muted-ink">The objectives, as html.com summarizes them: encouraging semantic markup;
       separating design from content; promoting accessibility and responsiveness; reducing
       the overlap between the three languages; and supporting rich media without plugins.
       The reasoning is the 1994 settlement restated for new devices: content is read{' '}
     <a className="signpost" href="https://html.com/html5/">“in a lot of different contexts — desktops, laptops,
       tablets, mobile phones, RSS readers”</a>,
       so provide the meaning and let presentation adapt.</p>
-    <p className="paragraph">The W3C’s design principles, as Jeremy Keith presented them, are six: avoid
+    <p className="paragraph muted-ink">The W3C’s design principles, as Jeremy Keith presented them, are six: avoid
       needless complexity; support existing content; solve real problems; pave the cowpaths,
       adopting what is{' '}
     <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">“widely accepted”</a> instead of
@@ -27,7 +27,7 @@ export const Html5SaysIt: FC = () =>
     <a className="signpost"
       href="https://www.infoq.com/news/2011/05/html5-design/">“users &gt; authors &gt; implementors &gt; specifiers &gt; theoretical
       purity”</a>.</p>
-    <p className="paragraph">And there was a quiet break with the past: HTML5 is no longer an SGML
+    <p className="paragraph muted-ink">And there was a quiet break with the past: HTML5 is no longer an SGML
       application. The specification defines its own parsing, including what a browser must
       do with broken markup, so parsing stopped being a vendor’s guess; the doctype
       collapsed to fifteen characters because its remaining job was triggering standards

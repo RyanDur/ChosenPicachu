@@ -3,9 +3,9 @@ import {FC} from 'react';
 export const Bibliography: FC = () =>
   <section className="bibliography" aria-labelledby="the-research">
     <details className="shelves">
-      <summary className="prompt"><h2 className="research-title" id="the-research">The research</h2></summary>
+      <summary className="prompt"><h2 className="research-title title" id="the-research">The research</h2></summary>
       <section className="shelf" aria-label="the web research">
-        <h3 className="shelf-title">The web</h3>
+        <h3 className="shelf-title sub-title">The web</h3>
         <ul className="works">
           <li className="work">
             <a className="signpost" href="https://www.w3.org/History/1989/proposal.html"><cite>Information Management: A Proposal</cite></a>
@@ -34,7 +34,7 @@ export const Bibliography: FC = () =>
         </ul>
       </section>
       <section className="shelf" aria-label="structure research">
-        <h3 className="shelf-title">Structure</h3>
+        <h3 className="shelf-title sub-title">Structure</h3>
         <ul className="works">
           <li className="work">
             <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>
@@ -95,7 +95,7 @@ export const Bibliography: FC = () =>
         </ul>
       </section>
       <section className="shelf" aria-label="presentation research">
-        <h3 className="shelf-title">Presentation</h3>
+        <h3 className="shelf-title sub-title">Presentation</h3>
         <ul className="works">
           <li className="work">
             <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html"><cite>Cascading HTML style sheets: a proposal</cite></a>
@@ -172,7 +172,7 @@ export const Bibliography: FC = () =>
         </ul>
       </section>
       <section className="shelf" aria-label="dynamic interaction research">
-        <h3 className="shelf-title">Dynamic Interaction</h3>
+        <h3 className="shelf-title sub-title">Dynamic Interaction</h3>
         <ul className="works">
           <li className="work">
             <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>
@@ -225,7 +225,7 @@ export const Bibliography: FC = () =>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">
-        <h3 className="shelf-title">The concert</h3>
+        <h3 className="shelf-title sub-title">The concert</h3>
         <ul className="works">
           <li className="work">
             <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html"><cite>React: CSS in JS</cite></a>

@@ -9,12 +9,12 @@ export const StructureArrives: FC = () =>
     <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>,
       an idea hypertext already had; the new thing was what his could carry: the address
       of a document on another machine.</>}>
-    <p className="paragraph">The November 1990 proposal, written with Robert Cailliau, names the project{' '}
+    <p className="paragraph muted-ink">The November 1990 proposal, written with Robert Cailliau, names the project{' '}
       <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“WorldWideWeb (or W3)”</a> and opens on the sentence this page opens
       with. It plans three months of building, a second phase in which{' '}
       <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“authorship becomes universal”</a>, and commits to giving the software
       away <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“free of charge to anyone”</a>.</p>
-    <p className="paragraph">Anchors and hot spots already existed: Enquire had them, so did HyperCard and
+    <p className="paragraph muted-ink">Anchors and hot spots already existed: Enquire had them, so did HyperCard and
       Guide. The new thing fits in one line of the proposal:{' '}
     <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“links may point across machine boundaries”</a>. And the consequence
       was architectural: because a link is just an address a browser knows how to resolve,
@@ -22,12 +22,12 @@ export const StructureArrives: FC = () =>
     <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“can be kept simple”</a>. The anchor even carried a third, forgotten
       attribute, TYPE, for naming what a link means: the ancestor of rel, and the last
       trace of Enquire’s typed links.</p>
-    <p className="paragraph">The protocol matched the ambition by being almost nothing:{' '}
+    <p className="paragraph muted-ink">The protocol matched the ambition by being almost nothing:{' '}
       <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html">one line of ASCII beginning with GET</a>, the document address, and
       the connection closed when the message ended. There was no status line, so an error
       arrived as just another page; in the spec’s own words,{' '}
       <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html">“no way to distinguish an error response from a satisfactory response except for the content of the text”</a>.</p>
-    <p className="paragraph">The earliest surviving tags list holds about eighteen elements (eighteen if you
+    <p className="paragraph muted-ink">The earliest surviving tags list holds about eighteen elements (eighteen if you
       count all six heading levels as one), with no html, head, body, or img among them, and
       no ordered list at all. The headings were borrowed outright; the list admits their
       definition is <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">“completely historical, deriving from the AAP tag set”</a>.

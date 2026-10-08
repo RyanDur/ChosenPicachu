@@ -146,6 +146,15 @@
 
 .trim-rule-above { border-block-start: var(--hairline-x-3) solid var(--trim); }
 
+.trim-rail-along::after { background: var(--trim); }
+
+.void-dot-before::before {
+  border-radius: 50%;
+  background: var(--void);
+}
+
+.hairline-edged { border: var(--hairline) solid var(--shadow); }
+
 .padded {
   padding: var(--base-x-4);
 
