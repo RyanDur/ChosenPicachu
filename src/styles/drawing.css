@@ -25,10 +25,18 @@
 .side-line { stroke: var(--side-line); }
 
 .spinning-dots {
+  --dots-trailing: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em,
+    -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+
   font-size: var(--base-x-11);
   width: 1em;
   height: 1em;
   animation: dots-trailing 1.7s infinite ease, turning 1.7s infinite ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    box-shadow: var(--dots-trailing);
+  }
 }
 
 @keyframes dots-trailing {
@@ -57,9 +65,7 @@
   }
 
   38% {
-    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
-      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
-      -0.82em -0.09em 0 -0.477em;
+    box-shadow: var(--dots-trailing);
   }
 
   100% {
