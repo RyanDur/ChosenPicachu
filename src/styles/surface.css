@@ -178,7 +178,7 @@
   }
 
   &:disabled,
-  &:read-only:not(.chevroned) {
+  &[readonly] {
     border: none;
     border-block-end: var(--hairline) solid var(--focus-blue);
     box-shadow: none;
@@ -219,8 +219,8 @@
 .looking-glassed:is(:hover, :focus)::after { background: url('../assets/icons/looking.svg') no-repeat center; }
 
 .three-dotted {
-  background-image: radial-gradient(circle, var(--black) 0.2rem, transparent 0.1rem);
-  background-size: 100% 33.33%;
+  background-image: radial-gradient(circle, var(--black) var(--base-x-0_25), transparent var(--base-x-0_25));
+  background-size: 100% calc(100% / 3);
 }
 
 .field-before::before { background: var(--field); }

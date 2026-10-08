@@ -31,7 +31,7 @@
 
     &.fancy-select .fancy-title,
     &:focus-within .fancy-title,
-    &:has(.fancy-text:read-only:not(.fancy-select-box)) .fancy-title,
+    &:has(.fancy-text:is([readonly], :disabled)) .fancy-title,
     &:has(.fancy-text[type='date']:valid) .fancy-title,
     &:has(.fancy-text[placeholder]:not(:placeholder-shown)) .fancy-title {
       opacity: 1;
@@ -122,7 +122,7 @@
       min-height: var(--base-x-0_5);
       position: relative;
 
-      &:read-only {
+      &[readonly] {
         resize: none;
       }
     }
