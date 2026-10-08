@@ -7,7 +7,7 @@
   border: none;
 }
 
-.table-frame.veiled {
+.table-frame.concealed {
   position: absolute;
   inset-inline: 0;
   visibility: hidden;

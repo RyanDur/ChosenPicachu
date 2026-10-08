@@ -25,6 +25,9 @@
 .side-line { stroke: var(--side-line); }
 
 .spinning-dots {
+  font-size: var(--base-x-11);
+  width: 1em;
+  height: 1em;
   animation: dots-trailing 1.7s infinite ease, turning 1.7s infinite ease;
 }
 

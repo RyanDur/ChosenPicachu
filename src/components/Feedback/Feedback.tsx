@@ -123,12 +123,12 @@ export const Feedback: FC = () => {
         </hgroup>
         <p className="feedback-thread field paragraph">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
         <label className="feedback-field">
-          <span className="feedback-label field bold ink approached">What did you find?</span>
+          <span className="feedback-label field bold approached">What did you find?</span>
           <textarea className="feedback-words bare card borderless paragraph ink" name="words" required enterKeyHint="send" value={draft.words}
             onChange={event => dispatch(wordsEdited(event.currentTarget.value))} onKeyDown={sendsOnEnter}/>
         </label>
         <label className="feedback-field">
-          <span className="feedback-label field bold ink approached">A way to reach you, if you like</span>
+          <span className="feedback-label field bold approached">A way to reach you, if you like</span>
           <input className="feedback-reach bare card borderless paragraph ink" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>

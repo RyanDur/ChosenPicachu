@@ -1,11 +1,18 @@
+/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a colour */
+@property --veil-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 .pill-track {
   --chosen-color: var(--charcoal);
   --veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
 
   outline: var(--hairline-x-2) solid var(--chosen-color);
   outline-offset: calc(var(--hairline-x-2) * -1);
-  border-radius: var(--radius);
   background: var(--veil);
+  transition: --veil-alpha 0.3s;
 
   &:hover {
     --veil-alpha: var(--veil-opacity);
@@ -18,7 +25,6 @@
 }
 
 .pill-choice {
-  border-radius: var(--radius);
   background: transparent;
 
   &:has(:focus-visible) {

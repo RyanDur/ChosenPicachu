@@ -1,17 +1,9 @@
-/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a colour */
-@property --veil-alpha {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 0;
-}
-
 .pill-glider {
   width: fit-content;
   position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
-  transition: --veil-alpha 0.3s;
 
   @supports (anchor-name: --chosen) {
     &::before {

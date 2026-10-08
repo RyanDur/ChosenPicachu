@@ -1,10 +1,7 @@
 .loading {
   display: block;
-  font-size: var(--base-x-11);
   text-indent: -9999em;
   overflow: hidden;
-  width: 1em;
-  height: 1em;
   margin: var(--base-x-9) auto;
   transform: translateZ(0);
 }

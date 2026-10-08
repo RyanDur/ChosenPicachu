@@ -29,7 +29,7 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
 const VanillaStage: FC<Dials> = dials => {
   const [stage, setStage] = useState<'framing' | 'framed'>('framing');
   return <>
-    <TableFrame {...dials} veiled={stage === 'framing'} onStood={() => setStage('framed')}/>
+    <TableFrame {...dials} concealed={stage === 'framing'} onStood={() => setStage('framed')}/>
     {stage === 'framing' && <LiveTable {...dials}/>}
   </>;
 };

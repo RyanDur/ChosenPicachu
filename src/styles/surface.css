@@ -88,9 +88,14 @@
   color: var(--field);
   background: var(--field-inverse);
 
-  &:hover,
-  &:focus {
+  &:focus-visible {
     color: var(--ink);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--ink);
+    }
   }
 
   &:disabled {

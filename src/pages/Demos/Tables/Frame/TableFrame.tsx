@@ -7,7 +7,7 @@ import {Dials} from '../../Controls';
 import './TableFrame.css';
 
 type Props = Dials & {
-  veiled?: boolean;
+  concealed?: boolean;
   onStood?: () => void;
 };
 
@@ -24,7 +24,7 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
   });
 };
 
-export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onStood = () => undefined}) => {
+export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, onStood = () => undefined}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
   const {raise} = useBanners();
   const [document, setDocument] = useState<string>();
@@ -53,7 +53,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
   }, [frame]);
 
   return has(document)
-    ? <iframe className={classNames('table-frame', veiled && 'veiled')}
+    ? <iframe className={classNames('table-frame', concealed && 'concealed')}
       title="the living table, in vanilla"
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
