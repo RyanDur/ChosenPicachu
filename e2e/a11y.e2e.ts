@@ -27,6 +27,21 @@ for (const {name, path, ready, loaded} of pages) {
   });
 }
 
+test('the home page has no accessibility violations with its folds open', async ({page}) => {
+  const home = pages.find(({name}) => name === 'home');
+  await page.goto(home?.path ?? '');
+  for (const door of await page.getByText('how I organize it').all()) await door.click();
+  await page.getByRole('heading', {name: 'The research'}).click();
+
+  const found = [];
+  for (const story of await page.getByText('the fuller story').all()) {
+    await story.click();
+    found.push(...violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze()));
+  }
+
+  expect(found).toEqual([]);
+});
+
 for (const {name, path, ready, loaded} of pages) {
   test(`the ${name} page is conforming html`, async ({page}) => {
     await page.goto(path);
