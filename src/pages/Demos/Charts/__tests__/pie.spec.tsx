@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import {explodedBy, sideTotals, slices, sweepGates} from '@pages/Demos/Charts/Pie/shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
 import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
@@ -54,8 +54,7 @@ describe('the pie', () => {
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card).toHaveTextContent('75% bought');
-    expect(card).toHaveTextContent('25% sold');
+    expect(within(within(card).getByRole('list')).getAllByRole('listitem').map(({textContent}) => textContent)).toEqual(['75% bought', '25% sold']);
   });
 
   test('the card says the session started when the trader arrived', () => {

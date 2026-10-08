@@ -63,17 +63,6 @@ describe('a list of charts', () => {
     expect(within(screen.getByRole('region', {name: 'pie'})).getByRole('heading', {name: 'pie'})).toBeInTheDocument();
   });
 
-  test('the pie’s legend lists each side’s share as an item of its own', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=charts&charts=pie')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const pie = await screen.findByRole('region', {name: 'pie'});
-    broadcast(feed, [tradeFrame(50001, Date.now(), '0.30', 'bought'), tradeFrame(50002, Date.now(), '0.10', 'sold')]);
-
-    await waitFor(() => expect(within(within(pie).getByRole('list')).getAllByRole('listitem').map(({textContent}) => textContent)).toEqual(['75% bought', '25% sold']));
-  });
-
   test('the trader can remove a chart', async () => {
     const feed = await listeningFeed();
 
