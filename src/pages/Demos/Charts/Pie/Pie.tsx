@@ -26,7 +26,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
   const Heading = useContext(ChartHeading);
   const heading = `heading${useId()}`;
   const totals = sideTotals(trades);
-  const cut = slices([totals.bought, totals.sold]);
+  const cut = slices([totals.bought, totals.sold]).map((slice, at) => ({...slice, side: sides[at]}));
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <Heading id={heading} className="off-screen">pie</Heading>
     <header className="chart-header">
@@ -34,11 +34,11 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     </header>
     <figure className="chart-stage paper-veiled-before">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
-        {['wall', 'face'].map(dressed => cut.map((slice, at) => {
+        {['wall', 'face'].map(dressed => cut.map(slice => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
           const drop = dressed === 'wall' ? DEPTH : 0;
-          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sideOf[sides[at]], sides[at])}
+          return <g key={`${slice.side}-${dressed}`} className={classNames('slice', sideOf[slice.side], slice.side)}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
@@ -56,9 +56,9 @@ export const Pie: FC<Props> = ({trades, actions}) => {
         }))}
       </svg>
       <ul className="legend caption">
-        {cut.map((slice, at) =>
-          <li key={sides[at]} className={classNames('share', sideOf[sides[at]], 'side-ink', sides[at])}>
-            <data value={slice.share}>{`${Math.round(slice.share * 100)}% ${sides[at]}`}</data>
+        {cut.map(slice =>
+          <li key={slice.side} className={classNames('share', sideOf[slice.side], 'side-ink', slice.side)}>
+            <data value={slice.share}>{`${Math.round(slice.share * 100)}% ${slice.side}`}</data>
           </li>)}
       </ul>
       <figcaption className="chart-caption caption">
