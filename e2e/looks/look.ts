@@ -28,7 +28,6 @@ export const heldStill = async (page: Page): Promise<() => Promise<void>> => {
   return async () => {
     const until = Date.now() + 8_000;
     while (opened && sent < frames && Date.now() < until) await page.waitForTimeout(100);
-    // data that lands after the page's own ready mark (the gallery's page count) would be read on one side only
     await page.waitForLoadState('networkidle', {timeout: 10_000}).catch(() => undefined);
     await page.evaluate(async () => {
       await document.fonts.ready;

@@ -5,8 +5,6 @@ import {views, type View} from './views';
 const stages = {before: 'http://localhost:4530/ChosenPicachu/', after: 'http://localhost:4531/ChosenPicachu/'};
 const sizes = [{width: 1440, height: 900}, {width: 1000, height: 900}, {width: 390, height: 844}] as const;
 
-// a page still settling (the Feedback dialog moves focus into its field from its own toggle event) is read until two
-// reads in a row agree, so a difference is the change and not the moment it was read
 const steadyLookOf = async (page: Page): Promise<Look> => {
   let last = await lookOf(page);
   for (let read = 0; read < 5; read++) {
