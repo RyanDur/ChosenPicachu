@@ -27,6 +27,7 @@ describe('VAM as a source of art', () => {
 
       const actual = await art.getAll({page: 1, size: 8, source: Source.VAM}).orNull();
 
+      expect(actual?.pieces).toHaveLength(vamArtResponse.records.length);
       expect(actual?.pieces.filter(piece => 'artistInfo' in piece)).toEqual([]);
     });
 
