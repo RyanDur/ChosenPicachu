@@ -73,7 +73,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(part).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu. A component is a function that writes a piece of the page from what it is given. These three write one element each: a menu, an li, which is one item of a list, and a button, and each gives its element the classes that set its look.');
+    expect(within(part).getByText(/^Menu, Entry and Item are this site’s components/)).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu. A component is a function that writes a piece of the page from what it is given. These three write one element each: a menu, an li, which is one item of a list, and a button. A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; a menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show that each choice in the menu sample is a button', async () => {

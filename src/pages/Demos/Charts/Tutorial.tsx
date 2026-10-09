@@ -106,7 +106,8 @@ const priceStory =
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>The period menu is built from the site’s Menu, Entry and Item components. A component is a function
             that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a
-            list, and a button, and give each the classes that set its look.</Says>
+            list, and a button, and give each the classes that set its look. A class is a name written on an element
+            that a stylesheet’s rules pick out.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -432,7 +433,8 @@ const workspaceStory =
             page.</Says>
           <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
             writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a
-            button, each with the classes that set its look.</Says>
+            button, each with the classes that set its look, a class being a name on an element that a stylesheet’s
+            rules pick out.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
