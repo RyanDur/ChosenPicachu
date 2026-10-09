@@ -49,7 +49,7 @@ describe('why the popover wins', () => {
     const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/).join();
 
     expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
-    expect(sample).not.toMatch(/<menu/);
+    expect(sample).not.toMatch(/<Menu/);
     expect(run).toHaveTextContent(/That is the HTML attribute tabindex, spelled the way React spells it, and React is the JavaScript library/);
     expect(run).toHaveTextContent(/A tabindex of 0 asks the browser to stop on the element when Tab moves focus/);
     expect(run).toHaveTextContent(/by default Safari moves Tab only to text fields and to elements that ask for it/);
@@ -63,9 +63,26 @@ describe('why the popover wins', () => {
     const runs = within(part).getAllByRole('listitem');
     const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
 
-    expect(menuSample).toMatch(/<Item tabIndex=\{0\}[^\n]*popoverTargetAction="hide"[^]*export const Item[^]*<button \{\.\.\.button\} type="button"/);
+    expect(menuSample).toMatch(/<Item tabIndex=\{0\}[^\n]*popoverTargetAction="hide"/);
     expect(runs.indexOf(explanation.runTelling(part, /The button names its menu with popovertarget/)))
       .toBeLessThan(runs.indexOf(explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0/)));
+  });
+
+  test('should say Menu, Entry and Item are the site’s components, each writing one element', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+
+    expect(part).toHaveTextContent('The Popover API does all of it. Menu, Entry and Item are this site’s components for a menu: each writes one element, a menu, an li and a button, and dresses it.');
+  });
+
+  test('should show that each choice in the menu sample is a button', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
+
+    expect(menuSample).toMatch(/export const Item[^]*<button \{\.\.\.button\} type="button"/);
   });
 
   test('should name the toggle in a run after the markup that holds it', async () => {

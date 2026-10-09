@@ -60,7 +60,7 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
       choiceAt(list, next).map(focusOn);
     });
   };
-  const onListBlur = ({relatedTarget}: FocusEvent<HTMLUListElement>): void => {
+  const onListBlur = ({relatedTarget}: FocusEvent<HTMLMenuElement>): void => {
     if (!within(relatedTarget, list)) {
       updateOpen(false);
     }

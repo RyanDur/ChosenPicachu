@@ -990,6 +990,15 @@ describe('the drag sort recipe’s words', () => {
 });
 
 describe('the classes the table wears, as its recipes tell them', () => {
+  test.each(['react', 'vanilla'])('should say the react menu is built from the site’s menu components, in the %s world', async world => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components, each writing one element: a menu, an li and a button. The vanilla world writes those elements by hand.');
+  });
+
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
@@ -1018,6 +1027,17 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
     expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
     expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share rides a custom property');
+  });
+
+  test('should label the ledger’s headerStates TS, in the react world', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+    const states = within(recipe).getByRole('figure', {name: /DragSortableTable\/looks\.ts on GitHub/});
+
+    expect(within(states).getByText('TS')).toBeInTheDocument();
+    expect(states).toHaveTextContent('export const headerStates');
   });
 
   test('should carve the rule that papers a moving cell, in the react world', async () => {

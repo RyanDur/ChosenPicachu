@@ -11,7 +11,7 @@ export const Menu: FC<ComponentProps<'menu'>> = ({className, ...menu}) =>
 export const Entry: FC<ComponentProps<'li'>> = ({className, ...li}) =>
   <li {...li} className={classNames('entry', className)}/>;
 
-export const Item: FC<ComponentProps<'button'>> = ({className, ...button}) =>
+export const Item: FC<Omit<ComponentProps<'button'>, 'type'>> = ({className, ...button}) =>
   <button {...button} type="button" className={classNames('item', className, ...itemLooks)}/>;
 
 export const ItemLink: FC<ComponentProps<typeof Link>> = ({className, ...link}) =>

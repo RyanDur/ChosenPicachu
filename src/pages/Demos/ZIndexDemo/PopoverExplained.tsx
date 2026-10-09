@@ -34,7 +34,8 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
-            API</Mdn> does all of it.</p>
+            API</Mdn> does all of it. Menu, Entry and Item are this site’s components for a menu: each writes one
+          element, a menu, an li and a button, and dresses it.</p>
         <Snippet label="HTML" lines={[
           ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
           ...unit(menuSource, 'export const Item')

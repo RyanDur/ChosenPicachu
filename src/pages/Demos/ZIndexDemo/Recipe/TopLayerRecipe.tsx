@@ -3,6 +3,7 @@ import {useSearchParamsObject} from '@components/search-params';
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
+import {Sample} from '../../Recipe/sample';
 import {AlignDial, SideDial} from '../../Controls';
 import {popoverWinsHeading, stillLosesHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
@@ -24,6 +25,12 @@ const alignFact: Record<Align, string> = {
   left: 'left sets the margin to the panel’s left and leaves the one to its right at auto.',
   center: 'center sets the margins to the left and right to auto again.',
   right: 'right sets the margin to the panel’s right and leaves the one to its left at auto.'
+};
+
+const alignSheet: Record<Align, Sample> = {
+  left: bannersCss,
+  center: placementCss,
+  right: bannersCss
 };
 
 export const topLayerStory = {param: 'news', id: 'top'} as const;
@@ -90,7 +97,7 @@ export const TopLayerRecipe: FC = () => {
           <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
             ...unit(bannersCss, `.${side} {`), gap,
-            ...unit(align === 'center' ? placementCss : bannersCss, `.${align} {`)
+            ...unit(alignSheet[align], `.${align} {`)
           ]}/>
         </Codes>
       </Step>

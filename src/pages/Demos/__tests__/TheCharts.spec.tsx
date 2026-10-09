@@ -24,6 +24,25 @@ const drawnCandles = (): number => parseInt(captionOf('candles'), 10);
 
 const drawnPoints = (): number => parseInt(captionOf('live trades'), 10);
 
+describe('the charts tutorials’ menus', () => {
+  test('should say the + menu is built from the site’s menu components, on the charts tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
+
+    expect(tutorial).toHaveTextContent('The + opens a menu of the charts not yet on the page, built from the site’s Menu, Entry and Item components, which write a menu, an li and a button each.');
+  });
+
+  test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByText(/Choosing a period fetches the past again/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components; each writes one element, a menu, an li and a button.');
+  });
+});
+
 describe('a list of charts', () => {
   test('the trader starts with one chart', async () => {
     const feed = await listeningFeed();

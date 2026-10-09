@@ -99,7 +99,9 @@ const rankStory = (build: Build) => {
             along free. popover="auto" chooses
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
-            popover open at a time.</Says>
+            popover open at a time. In the React world the sample is built from the site’s Menu, Entry and Item
+            components, each writing one element: a menu, an li and a button. The vanilla world writes those elements
+            by hand.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
