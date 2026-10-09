@@ -24,13 +24,40 @@ const isShared = sheet => {
 const own = new Set();
 /** @type {Set<string>} */
 const shared = new Set();
+/** @type {Map<string, Set<string>>} */
+const bySheet = new Map();
 for (const sheet of sheets(src)) {
-  const into = isShared(sheet) ? shared : own;
-  selectorsOf(sheet).flatMap(classesIn).forEach(name => into.add(name));
+  const names = new Set(selectorsOf(sheet).flatMap(classesIn));
+  bySheet.set(sheet, names);
+  names.forEach(name => (isShared(sheet) ? shared : own).add(name));
 }
-const defined = name => own.has(name) || shared.has(name);
-/** @param {string} prefix */
-const opens = prefix => [...own, ...shared].some(name => name.startsWith(prefix));
+
+/** @param {string} directory */
+const framedBesides = directory => readdirSync(directory)
+  .filter(name => /\.tsx?$/.test(name))
+  .flatMap(name => [...readFileSync(join(directory, name), 'utf8').matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
+  .map(([, specifier]) => specifier.startsWith('@components/') ? join(src, 'components', specifier.slice('@components/'.length)) : join(directory, specifier));
+
+/**
+ * @param {string} directory
+ * @returns {string[]}
+ */
+const homesOf = directory => directory === src || !directory.startsWith(src) ? [src] : [directory, ...homesOf(dirname(directory))];
+
+/** @param {string} file */
+const nearbyOf = file => {
+  const page = file.includes('.html/') ? file.slice(0, file.indexOf('.html/') + '.html'.length) : file;
+  const directory = dirname(page);
+  const near = new Set(shared);
+  for (const [sheet, names] of bySheet) {
+    const home = dirname(sheet);
+    if (directory === home || directory.startsWith(home + '/')) names.forEach(name => near.add(name));
+  }
+  homesOf(directory).flatMap(framedBesides).forEach(sheet => bySheet.get(sheet)?.forEach(name => near.add(name)));
+  return near;
+};
+/** @param {Set<string>} near @param {string} prefix */
+const opens = (near, prefix) => [...near].some(name => name.startsWith(prefix));
 
 const htmlClass = '__htmlClass';
 
@@ -91,13 +118,16 @@ const classPositions = visit => ({
 
 const classDefined = {
   meta: {type: 'problem', messages: {
-    undefined: '"{{name}}" is read by no selector; a class an element wears is one a sheet reads',
+    undefined: '"{{name}}" is read by no sheet beside this file, above it, or in src/styles; a class an element wears is one a sheet near it reads',
     unopened: 'no class begins "{{prefix}}"; a class an element wears is one a sheet reads'
   }},
-  create: context => classPositions(node => wornClasses(node, (at, names, prefixes = []) => {
-    names.filter(name => !defined(name)).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
-    prefixes.filter(prefix => !opens(prefix)).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
-  }))
+  create: context => {
+    const near = nearbyOf(context.filename);
+    return classPositions(node => wornClasses(node, (at, names, prefixes = []) => {
+      names.filter(name => !near.has(name)).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
+      prefixes.filter(prefix => !opens(near, prefix)).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
+    }));
+  }
 };
 
 const ownClassFirst = {
