@@ -103,8 +103,10 @@ const priceStory =
             spacing for the marks on the time axis. The hour has candles of a minute, 60 of them, marked every ten minutes.
             The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them,
             marked every day.</Says>
-          <Says>Choosing a period fetches the past again at that period’s candle size. The period menu is built from the
-            site’s Menu, Entry and Item components; each writes one element, a menu, an li and a button.</Says>
+          <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
+          <Says>The period menu is built from the site’s Menu, Entry and Item components. A component is a function
+            that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a
+            list, and a button, and give each the classes that set its look.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -427,8 +429,10 @@ const workspaceStory =
             of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
             counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
-            page, built from the site’s Menu, Entry and Item components, which write a menu, an li and a button
-            each.</Says>
+            page.</Says>
+          <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
+            writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a
+            button, each with the classes that set its look.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

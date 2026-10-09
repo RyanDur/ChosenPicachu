@@ -31,7 +31,7 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
     const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
 
-    expect(tutorial).toHaveTextContent('The + opens a menu of the charts not yet on the page, built from the site’s Menu, Entry and Item components, which write a menu, an li and a button each.');
+    expect(tutorial).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button, each with the classes that set its look.');
   });
 
   test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
@@ -39,7 +39,8 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByText(/Choosing a period fetches the past again/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components; each writes one element, a menu, an li and a button.');
+    expect(await screen.findByText(/Choosing a period fetches the past again/)).toBeInTheDocument();
+    expect(screen.getByText(/^The period menu is built from the site’s Menu, Entry and Item components/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button, and give each the classes that set its look.');
   });
 });
 

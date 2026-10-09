@@ -73,7 +73,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(part).toHaveTextContent('The Popover API does all of it. Menu, Entry and Item are this site’s components for a menu: each writes one element, a menu, an li and a button, and dresses it.');
+    expect(part).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu. A component is a function that writes a piece of the page from what it is given. These three write one element each: a menu, an li, which is one item of a list, and a button, and each gives its element the classes that set its look.');
   });
 
   test('should show that each choice in the menu sample is a button', async () => {

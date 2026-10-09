@@ -99,9 +99,11 @@ const rankStory = (build: Build) => {
             along free. popover="auto" chooses
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
-            popover open at a time. In the React world the sample is built from the site’s Menu, Entry and Item
-            components, each writing one element: a menu, an li and a button. The vanilla world writes those elements
-            by hand.</Says>
+            popover open at a time.</Says>
+          <Says>In the React world the sample is built from the site’s Menu, Entry and Item components. A component
+            is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a
+            list, and a button, each with the classes that set its look. The vanilla world writes the same elements by
+            hand.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[

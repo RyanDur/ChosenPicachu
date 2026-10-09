@@ -34,8 +34,10 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
-            API</Mdn> does all of it. Menu, Entry and Item are this site’s components for a menu: each writes one
-          element, a menu, an li and a button, and dresses it.</p>
+            API</Mdn> does all of it.</p>
+        <p className="paragraph">Menu, Entry and Item are this site’s components for a menu. A component is a
+          function that writes a piece of the page from what it is given. These three write one element each: a menu,
+          an li, which is one item of a list, and a button, and each gives its element the classes that set its look.</p>
         <Snippet label="HTML" lines={[
           ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
           ...unit(menuSource, 'export const Item')
