@@ -664,7 +664,7 @@ describe('the runs in view, with the folds shut', () => {
 
   test.each([
     {type: 'inclusive', opening: /^The inclusive build is a checkbox build again/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
-    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
+    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'The exclusive build is a radio group. Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold. Radios that share a name keep one part open on their own'}
   ])('should say, with $type chosen, that only the control at the bar’s end works the fold', async ({type, opening, sentence}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
@@ -831,8 +831,8 @@ describe('the classes the bars wear', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(explanation.runTelling(together, /^The bar is named by its part/)).toHaveTextContent(`The bar is named by its part, and the control at its end is the one thing that works the fold. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such as “Open basalt, ${input}, not checked”, and someone using voice control says what they see. Its checked state is the part’s state. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and press-inverted, which inverts it while it is pressed.`);
-    expect(explanation.everyCodeBeside(together, /^The bar is named by its part/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.press-inverted:active \{/);
+    expect(explanation.runTelling(together, /^The bar is named by its part/)).toHaveTextContent(`The bar is named by its part. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such as “Open basalt, ${input}, not checked”, and someone using voice control says what they see. Its checked state is the part’s state. The word that does not apply is display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
+    expect(explanation.everyCodeBeside(together, /^The bar is named by its part/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
   });
 });
 

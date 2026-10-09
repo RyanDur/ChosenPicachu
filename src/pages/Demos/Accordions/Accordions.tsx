@@ -144,7 +144,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         <li key={key} className="grid-fold">
           <header className="fold-bar field-inverse field-ink field-outlined">
             <span className="sub-title bold">{key}</span>
-            <label className="fold-control inverse-filled attentive hairline-outline press-inverted">
+            <label className="fold-control inverse-filled attentive hairline-outline field-pressed">
               <input type="checkbox" className="off-screen"/>
               <span className="when-closed">Open</span><span className="when-open">Close</span>
               <span className="off-screen">{key}</span>
@@ -172,7 +172,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
         <li key={key} className="grid-fold">
           <header className="fold-bar field-inverse field-ink field-outlined">
             <span className="sub-title bold">{key}</span>
-            <label className="fold-control inverse-filled attentive hairline-outline press-inverted">
+            <label className="fold-control inverse-filled attentive hairline-outline field-pressed">
               <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
               <span className="when-closed">Open</span><span className="when-open">Close</span>
               <span className="off-screen">{key}</span>

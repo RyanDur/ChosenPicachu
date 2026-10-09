@@ -441,7 +441,7 @@
   }
 }
 
-.press-inverted:active {
-  background: var(--field-inverse);
-  color: var(--field);
+.field-pressed:active {
+  background: var(--field);
+  color: var(--ink);
 }

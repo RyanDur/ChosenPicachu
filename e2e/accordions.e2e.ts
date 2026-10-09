@@ -104,7 +104,7 @@ for (const {build, control} of [
     await expect(part.fold.getByRole(control, {name: `Close ${name}`, exact: true})).toBeChecked();
   });
 
-  test(`a keyboard reader tabbing into ${build} lands on its first control, and Space works it`, async ({page}) => {
+  test(`a keyboard reader reaches the first control of ${build} by Tab, named by its word and its part, and Space works it`, async ({page}) => {
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
     const name = await nameOn(part.fold).textContent() ?? '';

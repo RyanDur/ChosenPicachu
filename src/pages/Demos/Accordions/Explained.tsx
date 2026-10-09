@@ -528,11 +528,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
-          <p className="paragraph">The exclusive build is a radio group. Radios that share a name keep one part
-            open on their own, which checkboxes cannot do without script. What a radio cannot do is
-            close itself: pressed again, it stays checked. So the list adds that, with a little
-            script, and the radios stay plain. Each bar holds the part’s name and, at its end, an Open or Close
-            control; the name is only a name, and only the control works the fold. A press on a radio bubbles up to the list, which
+          <p className="paragraph">The exclusive build is a radio group. Each bar holds the part’s name and, at its
+            end, an Open or Close control; the name is only a name, and only the control works the fold. Radios that
+            share a name keep one part open on their own, which checkboxes cannot do without script. What a radio
+            cannot do is close itself: pressed again, it stays checked. So the list adds that, with a little
+            script, and the radios stay plain. A press on a radio bubbles up to the list, which
             remembers which radio is open. A press on that radio unchecks it and forgets it, and a
             press on any other remembers the new one. The arrow keys move the choice and press as
             they go, so each move is remembered too.</p>
@@ -567,18 +567,19 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="together-depth" className="opener bold">How the two work together</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The bar is named by its part, and the control at its end is the one thing
-                  that works the fold. The control is a {input} under a label that holds the Open or Close the eye
-                  sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such
-                  as “Open basalt, {input}, not checked”, and someone using voice control says what they see. Its
-                  checked state is the part’s state. The control is a box drawn by <code>hairline-outline</code>, a
-                  hairline in the text’s own colour, and <code>press-inverted</code>, which inverts it while it is
-                  pressed.</p>
+                <p className="paragraph">The bar is named by its part. The control is a {input} under a label that
+                  holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the
+                  word, the part and the state, such as “Open basalt, {input}, not checked”, and someone using voice
+                  control says what they see. Its checked state is the part’s state. The word that does not apply is
+                  display: none, which takes it out of the page and out of the name the listener hears, so the
+                  control is always called by the one word it shows. The control is a box drawn
+                  by <code>hairline-outline</code>, a hairline in the text’s own colour, and <code>field-pressed</code>,
+                  which gives it the page’s own ground and ink while it is pressed.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:has(:checked) .when-closed {'), gap,
                   ...unit(accordionsCss, '&:not(:has(:checked)) .when-open {'), gap,
                   ...unit(surfaceCss, '.hairline-outline {'), gap,
-                  ...unit(surfaceCss, '.press-inverted:active {')
+                  ...unit(surfaceCss, '.field-pressed:active {')
                 ]}/>
               </li>
               {type === 'exclusive' && <li className="run">
