@@ -25,7 +25,7 @@ const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>)
   if (ahead[0] === ':') {
     return closer === '}' && /^:\S/.test(source.slice(at + 1).trimStart());
   }
-  return !'=:{>~+'.includes(ahead[0]);
+  return !'=:{>~+['.includes(ahead[0]);
 };
 
 export const unit = (sample: Sample, anchor: string): Line[] => {

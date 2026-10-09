@@ -1020,6 +1020,15 @@ describe('the classes the table wears, as its recipes tell them', () => {
     expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share rides a custom property');
   });
 
+  test('should carve the line that gives a traded header shared, in the react world', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent(/export const headerStates[^]*has\(width\) && 'shared'/);
+  });
+
   test('should say every motion class changes through changeMotion in the vanilla world, with it carved after the reconcile', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);

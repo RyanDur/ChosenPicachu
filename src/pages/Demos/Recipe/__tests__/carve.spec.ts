@@ -36,6 +36,10 @@ const Row: FC<Props & {row: string}> = ({row: _row, children, ...tr}) => {
     return <tr {...tr}>{placed(children, order, 'column')}</tr>;
 };
 
+const looks = (carried: boolean): readonly (string | false)[] => [
+    carried && 'carried'
+];
+
 const trailing = 'never carved';
 `);
 
@@ -116,6 +120,14 @@ describe('carving examples out of the source they teach', () => {
       '    trades.reduce<readonly Candle[]>((candles, trade) => {',
       '        return candles;',
       '    }, []);'
+    ]);
+  });
+
+  test('a parenthesised element type never ends a unit early', () => {
+    expect(unit(source, 'const looks').map(({text}) => text)).toEqual([
+      'const looks = (carried: boolean): readonly (string | false)[] => [',
+      "    carried && 'carried'",
+      '];'
     ]);
   });
 
