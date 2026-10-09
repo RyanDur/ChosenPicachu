@@ -83,6 +83,11 @@ const answers = (request, response) => {
   if (extname(path)) {
     return send(404, 'not found', 'text/plain', false);
   }
+  if (!path.endsWith('/') && existsSync(file) && statSync(file).isDirectory()) {
+    const queryAt = url.indexOf('?');
+    response.writeHead(301, {location: queryAt < 0 ? `${url}/` : `${url.slice(0, queryAt)}/${url.slice(queryAt)}`});
+    return response.end();
+  }
   const entry = join(file, 'index.html');
   send(200, readFileSync(existsSync(entry) ? entry : join(dist, 'index.html')), 'text/html', true);
 };
