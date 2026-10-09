@@ -48,7 +48,6 @@
 
 .rail-path {
   font-size: var(--base-x-4);
-  font-weight: 600;
 }
 
 .tab-path {
@@ -83,8 +82,11 @@
   }
 
   .rail-path {
-    font-size: var(--text-body);
-    font-weight: normal;
+    font-size: var(--text-caption);
+  }
+
+  .rail-aside {
+    font-size: var(--text-caption);
   }
 }
 
