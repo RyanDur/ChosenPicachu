@@ -23,3 +23,35 @@ for (const {size, device} of [{size: 'a phone', device: iPhone}, {size: 'a table
     await context.close();
   });
 }
+
+for (const {size, device} of [{size: 'a phone', device: iPhone}, {size: 'a desktop', device: desktop}]) {
+  test.describe(`on ${size}, the rail says which page the reader is on`, () => {
+    test.use(device);
+
+    test('marks the page the reader lands on, even at an address typed without its slash', async ({page}) => {
+      await page.goto('users');
+
+      await expect(page).toHaveURL(/\/users\/$/);
+      const nav = siteFrame(page).nav;
+      await expect(nav.getByRole('link', {name: 'Users'})).toHaveAttribute('aria-current', 'page');
+      await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
+    });
+
+    test('moves the mark to Demos and back to Home, and the followed item keeps focus', async ({page}) => {
+      await page.goto('');
+      const nav = siteFrame(page).nav;
+      const demos = nav.getByRole('link', {name: 'Demos'});
+      await demos.focus();
+
+      await page.keyboard.press('Enter');
+
+      await expect(demos).toHaveAttribute('aria-current', 'page');
+      await expect(demos).toBeFocused();
+
+      await page.goBack();
+
+      await expect(nav.getByRole('link', {name: 'Home'})).toHaveAttribute('aria-current', 'page');
+      await expect(demos).not.toHaveAttribute('aria-current');
+    });
+  });
+}

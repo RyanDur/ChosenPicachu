@@ -90,6 +90,31 @@ describe('the skeleton', () => {
   });
 });
 
+describe('the rail says which page the reader is on', () => {
+  test.each([
+    ['Home', Paths.home],
+    ['Demos', Paths.demos],
+    ['Users', Paths.users],
+    ['Games', Paths.games]
+  ])('should announce %s as the current page, and no other', async (name, path) => {
+    render(<TestApp at={path}/>);
+    const nav = await site.nav();
+
+    expect(within(nav).getByRole('link', {name, current: 'page'})).toBeInTheDocument();
+    expect(within(nav).getAllByRole('link', {current: 'page'})).toHaveLength(1);
+  });
+
+  test('should move the mark to the page the reader follows', async () => {
+    render(<TestApp at={Paths.home}/>);
+    const nav = await site.nav();
+
+    await userEvent.click(within(nav).getByRole('link', {name: 'Demos'}));
+
+    expect(await within(nav).findByRole('link', {name: 'Demos', current: 'page'})).toBeInTheDocument();
+    expect(within(nav).getByRole('link', {name: 'Home', current: false})).toBeInTheDocument();
+  });
+});
+
 describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     render(<TestApp at="/"/>);

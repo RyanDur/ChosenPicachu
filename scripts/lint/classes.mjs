@@ -90,10 +90,14 @@ const wornClasses = (node, wear) => {
       return;
     case 'TSAsExpression':
       wornClasses(node.expression, wear);
+      return;
+    case 'ArrowFunctionExpression':
+      wornClasses(node.body, wear);
   }
 };
 
 const firstWorn = node => {
+  if (node?.type === 'ArrowFunctionExpression') return firstWorn(node.body);
   if (node?.type === 'Literal' && typeof node.value === 'string') return node.value.split(/\s+/).filter(Boolean);
   if (node?.type === 'CallExpression' && node.callee.name === 'classNames') {
     const statics = node.arguments.filter(argument => argument.type === 'Literal' && typeof argument.value === 'string');

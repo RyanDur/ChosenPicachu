@@ -26,6 +26,7 @@ tester.run('class-defined', classes.rules['class-defined'], {
     {name: 'should refuse a template prefix no class starts with', code: 'const p = <p className={`nowhere-${side}`}/>;', filename: fancyField, errors: [{messageId: 'unopened', data: {prefix: 'nowhere-'}}]},
     {name: 'should read both sides of a ternary', code: "const p = <p className={on ? 'no-such-word' : 'nor-this'}/>;", filename: fancyField, errors: [unread('no-such-word'), unread('nor-this')]},
     {name: 'should read the right side of &&', code: "const p = <p className={classNames('muted-ink', on && 'no-such-word')}/>;", filename: fancyField, errors: [unread('no-such-word')]},
+    {name: 'should read the classes a className function returns', code: "const p = <NavLink className={() => 'no-such-word'}/>;", filename: fancyField, errors: [unread('no-such-word')]},
     {name: 'should read what a classList call adds', code: "cell.classList.toggle('no-such-word', on);", filename: fancyField, errors: [unread('no-such-word')]},
     {name: 'should read what an html class attribute wears', code: "__htmlClass('muted-ink no-such-word');", filename: fancyField, errors: [unread('no-such-word')]},
     {name: 'should read both sides of || and ??', code: "const p = <p className={classNames('no-such-word' || 'nor-this', 'nor-that' ?? 'nor-these')}/>;", filename: fancyField, errors: [unread('no-such-word'), unread('nor-this'), unread('nor-that'), unread('nor-these')]}
@@ -40,6 +41,7 @@ tester.run('own-class-first', classes.rules['own-class-first'], {
   ],
   invalid: [
     {name: 'should refuse an own class behind a shared word', code: '<p className="muted-ink fancy"/>', filename: fancyField, errors: [{messageId: 'behind', data: {name: 'fancy'}}]},
+    {name: 'should refuse it in a className function too', code: "const p = <NavLink className={() => 'muted-ink fancy'}/>;", filename: fancyField, errors: [{messageId: 'behind', data: {name: 'fancy'}}]},
     {name: 'should refuse it in a classNames call too', code: "const p = <p className={classNames('muted-ink', 'fancy')}/>;", filename: fancyField, errors: [{messageId: 'behind', data: {name: 'fancy'}}]},
     {name: 'should refuse it in an html class attribute too', code: "__htmlClass('muted-ink fancy');", filename: fancyField, errors: [{messageId: 'behind', data: {name: 'fancy'}}]}
   ]

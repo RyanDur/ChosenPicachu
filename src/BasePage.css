@@ -37,8 +37,13 @@
 
   .side-nav {
     grid-area: nav;
-    overflow: auto;
+    overflow: visible;
     min-height: 0;
+
+    @media (height <= 600px) {
+      overflow: auto;
+    }
+
     display: flex;
     flex-direction: column;
 
