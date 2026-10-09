@@ -31,7 +31,16 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
     const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
 
-    expect(within(tutorial).getByText(/^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button, each with the classes that set its look, a class being a name on an element that a stylesheet’s rules pick out.');
+    expect(within(tutorial).getByText(/^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
+  });
+
+  test('should say what a class is, and that the page passes Menu the menu’s own, on the charts tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
+
+    expect(within(tutorial).getByText(/^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
   test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
@@ -39,7 +48,15 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByText(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button, and give each the classes that set its look. A class is a name written on an element that a stylesheet’s rules pick out.');
+    expect(await screen.findByText(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
+  });
+
+  test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByText(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 });
 

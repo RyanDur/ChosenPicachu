@@ -106,8 +106,10 @@ const priceStory =
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>The period menu is built from the site’s Menu, Entry and Item components. A component is a function
             that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a
-            list, and a button, and give each the classes that set its look. A class is a name written on an element
-            that a stylesheet’s rules pick out.</Says>
+            list, and a button.</Says>
+          <Says>A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the
+            site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
+            those classes, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -187,7 +189,8 @@ const candlesStory =
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
+          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. A class
+            is a name written on an element that a stylesheet’s rules pick out.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
             in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
             the chart’s size, the wick’s hairline width and how the shapes move.</Says>
@@ -355,7 +358,8 @@ const pieStory =
       <Step title="Cut the circle with rotations only">
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
           <Says>You could paint the split with a conic gradient, a background that sweeps colour round a point. But a
-            painted background has no parts: nothing to give a class, nothing to label, nothing for a test to find.</Says>
+            painted background has no parts: nothing to give a class, which is a name a stylesheet’s rules pick an
+            element out by, nothing to label, and nothing for a test to find.</Says>
           <Says>Arc paths were the next try. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
@@ -433,8 +437,9 @@ const workspaceStory =
             page.</Says>
           <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
             writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a
-            button, each with the classes that set its look, a class being a name on an element that a stylesheet’s
-            rules pick out.</Says>
+            button.</Says>
+          <Says>A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared
+            classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

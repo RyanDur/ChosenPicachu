@@ -996,7 +996,16 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a list, and a button, each with the classes that set its look. The vanilla world writes the same elements by hand.');
+    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a list, and a button.');
+  });
+
+  test.each(['react', 'vanilla'])('should say the page passes Menu the menu’s own classes, in the %s world', async world => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent('Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows. The vanilla world writes the same elements by hand.');
   });
 
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {

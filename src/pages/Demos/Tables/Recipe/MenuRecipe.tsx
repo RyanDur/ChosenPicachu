@@ -102,8 +102,9 @@ const rankStory = (build: Build) => {
             popover open at a time.</Says>
           <Says>In the React world the sample is built from the site’s Menu, Entry and Item components. A component
             is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a
-            list, and a button, each with the classes that set its look. The vanilla world writes the same elements by
-            hand.</Says>
+            list, and a button.</Says>
+          <Says>Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s
+            own, as the sample shows. The vanilla world writes the same elements by hand.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
