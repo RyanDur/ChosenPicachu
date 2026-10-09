@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {classNames} from '@components/class-names';
-import {highlight} from './highlight';
+import {Kind, highlight} from './highlight';
 import {Sample} from './sample';
 import './Snippet.css';
 
@@ -33,17 +33,28 @@ const sourcesOf = (lines: readonly Line[]): Source[] =>
 
 const shortName = (path: string): string => path.split('/').slice(-2).join('/');
 
+const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
+  keyword: 'keyword-ink bold',
+  string: 'string-ink',
+  number: 'number-ink',
+  comment: 'comment-ink italic',
+  tag: 'tag-ink',
+  attribute: 'attribute-ink',
+  type: 'type-ink',
+  call: 'call-ink'
+};
+
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   return <figure className="sample">
-    <pre className={classNames('snippet', 'code', 'rounded-corners')}>
+    <pre className={classNames('snippet', 'code-paper-filled', 'code-ink', 'listing', 'rounded-corners')}>
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({text, dim = false}, at) =>
-        <span className={classNames('line', dim && 'comment')} key={at}>
+        <span className={classNames('line', dim && inkOf.comment)} key={at}>
           {dim
             ? text
             : highlight(label, text).map(({text: piece, kind}, part) =>
-              kind === 'plain' ? piece : <span className={kind} key={part}>{piece}</span>)}
+              kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
         </span>)}</code>
     </pre>

@@ -126,6 +126,26 @@
 
 .muted-ink { color: var(--ink-muted); }
 
+.code-paper-filled { background: var(--code-paper); }
+
+.code-ink { color: var(--code-ink); }
+
+.keyword-ink { color: var(--code-keyword); }
+
+.string-ink { color: var(--code-string); }
+
+.number-ink { color: var(--code-number); }
+
+.comment-ink { color: var(--code-comment); }
+
+.tag-ink { color: var(--code-tag); }
+
+.attribute-ink { color: var(--code-attribute); }
+
+.type-ink { color: var(--code-type); }
+
+.call-ink { color: var(--code-call); }
+
 .ink-underline { border-block-end: var(--hairline-x-2) solid var(--ink); }
 
 .dotted-underlined {

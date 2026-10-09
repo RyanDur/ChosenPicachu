@@ -26,6 +26,11 @@
   color: var(--ink-faint);
 }
 
+.listing {
+  font-size: var(--text-caption);
+  line-height: 1.8;
+}
+
 /* registered, so every engine computes the column to pixels before dividing */
 @property --drawing-column {
   syntax: '<length>';
