@@ -121,6 +121,12 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
   });
 
+  test('should quote the CSS working group where the record tells of CSS3’s modules', () => {
+    expect(screen.getByText(/module system, begun in 1999/)).toHaveTextContent('module system, begun in 1999 so the language could advance a piece at a time instead of as “a single monolithic specification”.');
+    expect(screen.getByRole('link', {name: '“a single monolithic specification”'}))
+      .toHaveAttribute('href', 'https://www.w3.org/TR/css-2023/');
+  });
+
   test('the research stands collected, closed until asked', () => {
     const bibliography = screen.getByRole('region', {name: 'The research'});
 

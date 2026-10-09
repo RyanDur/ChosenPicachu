@@ -20,7 +20,8 @@ export const ZenGarden: FC = () =>
       at 70%, and the presentation is{' '}
     <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html">“a mix”</a>. Swap the sheet, keep the document. The garden was that
       example, industrialized, running on doctype-switched standards mode and on CSS3’s
-      module system, begun in 1999 so the language could advance a piece at a time.</p>
+      module system, begun in 1999 so the language could advance a piece at a time instead of as{' '}
+    <a className="signpost" href="https://www.w3.org/TR/css-2023/">“a single monolithic specification”</a>.</p>
     <p className="paragraph muted-ink hyphenated">What it proved was the settlement’s upside. Separation had been argued as hygiene:
       maintainability, sharing, adaptation. The garden demonstrated it as power. Structure
       held constant is not a constraint on design; it is what makes unlimited redesign
