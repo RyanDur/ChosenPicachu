@@ -6,6 +6,11 @@
 
 .rounded-corners { border-radius: var(--radius); }
 
+.black-rounded-before::before {
+  border-radius: var(--radius);
+  background: var(--black);
+}
+
 .lifted { box-shadow: var(--light-box-shadow); }
 
 .floating { box-shadow: var(--raised); }
@@ -144,6 +149,16 @@
     outline: var(--hairline-x-2) solid var(--ring);
     outline-offset: calc(var(--hairline-x-2) * -1);
   }
+}
+
+.ringed {
+  outline: var(--hairline-x-2) solid var(--ring);
+  outline-offset: calc(var(--hairline-x-2) * -1);
+}
+
+.focus-haloed:has(:focus-visible) {
+  outline: var(--hairline-x-2) solid var(--ring);
+  outline-offset: var(--base-x-0_25);
 }
 
 .circular { border-radius: 50%; }
@@ -316,7 +331,27 @@
 
 .veiled-rule-below { border-block-end: var(--hairline) solid var(--charcoal-veil); }
 
+/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a colour */
+@property --veil-alpha {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.hover-veiled {
+  --hover-veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
+
+  background: var(--hover-veil);
+  transition: --veil-alpha 0.3s;
+
+  &:hover {
+    --veil-alpha: var(--veil-opacity);
+  }
+}
+
 .hover-approached:hover { background: var(--approach); }
+
+.hover-inverse-ink:hover { color: var(--ink-inverse); }
 
 .held-bar-after {
   &:hover::after { background: var(--faded-leather); }
@@ -334,6 +369,11 @@
     color: var(--ink);
     border-block-end-color: var(--ink-muted);
   }
+}
+
+.choice-inverse-filled:has(:checked) {
+  color: var(--ink-inverse);
+  background: var(--field-inverse);
 }
 
 .handle-raised:has(.handle:hover) { box-shadow: var(--raised); }

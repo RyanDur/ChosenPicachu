@@ -15,10 +15,10 @@ type Props<T extends string> = {
 };
 
 export const PillGlider = <T extends string>({label, name, options, chosen, onChosen}: Props<T>) =>
-  <fieldset className="pill-glider pill-track rounded-corners">
+  <fieldset className="pill-glider rounded-corners ringed hover-veiled black-rounded-before">
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
-      <label className="pill pill-choice rounded-corners reachable"
+      <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink choice-inverse-filled"
         key={value}>
         {display}
         <input type="radio"
