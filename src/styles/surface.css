@@ -176,6 +176,21 @@
   outline-offset: calc(var(--hairline-x-2) * -1);
 }
 
+.shadow-ringed {
+  &:hover,
+  &:focus {
+    outline: var(--hairline-x-2) solid var(--shadow);
+    outline-offset: calc(var(--hairline-x-2) * -1);
+  }
+}
+
+.soft-press-glowing {
+  &:active,
+  &[aria-current="true"] {
+    box-shadow: var(--press-glow-soft);
+  }
+}
+
 .focus-haloed:has(:focus-visible) {
   outline: var(--hairline-x-2) solid var(--ring);
   outline-offset: var(--base-x-0_25);

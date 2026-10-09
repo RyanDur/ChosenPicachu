@@ -1,5 +1,5 @@
+import {Entry, Item, ItemLink, Menu} from '@components/Menu';
 import {FC} from 'react';
-import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {User} from '@components/Users/UserInfo/user';
 import {copyingAt, userAt} from '../../mode';
@@ -24,24 +24,24 @@ export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
     <button type="button" className="menu-toggle borderless field three-dotted rounded-corners raisable reachable"
       popoverTarget={id}
       aria-label={`Actions for ${name}`}/>
-    <menu id={id} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
-      <li className="entry">
-        <Link to={userAt(user.id, 'view')}
-          onClick={dismissed} className="item sub-title">View</Link>
-      </li>
-      <li className="entry">
-        <Link to={userAt(user.id, 'edit')}
-          onClick={dismissed} className="item sub-title">Edit</Link>
-      </li>
-      <li className="entry">
-        <button type="button" className="item sub-title"
+    <Menu id={id} tabIndex={-1} popover="auto" className="card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
+      <Entry>
+        <ItemLink to={userAt(user.id, 'view')}
+          onClick={dismissed} className="sub-title">View</ItemLink>
+      </Entry>
+      <Entry>
+        <ItemLink to={userAt(user.id, 'edit')}
+          onClick={dismissed} className="sub-title">Edit</ItemLink>
+      </Entry>
+      <Entry>
+        <Item className="sub-title"
           popoverTarget={id} popoverTargetAction="hide"
-          onClick={onRemoved}>Remove</button>
-      </li>
-      <li className="entry">
-        <Link to={copyingAt(user.id)}
-          onClick={dismissed} className="item sub-title">Clone</Link>
-      </li>
-    </menu>
+          onClick={onRemoved}>Remove</Item>
+      </Entry>
+      <Entry>
+        <ItemLink to={copyingAt(user.id)}
+          onClick={dismissed} className="sub-title">Clone</ItemLink>
+      </Entry>
+    </Menu>
   </>;
 };

@@ -5,7 +5,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
-import menuCss from '../../../../styles/menu.css?sample';
+import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
 import sortingSource from '@components/DragSortableTable/sorting.ts?sample';
 import tableSource from '../Frame/table.html?sample';
@@ -104,7 +104,7 @@ const rankStory = (build: Build) => {
             {world === 'react'
               ? <Snippet label="HTML" lines={[
                 ...span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), gap,
-                ...span(menuSrc, '<menu id={`sort-${column}`}', '</menu>')
+                ...span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, 'class="menu-toggle', '</menu>')

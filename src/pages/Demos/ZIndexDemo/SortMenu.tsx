@@ -1,3 +1,4 @@
+import {Entry, Item, Menu} from '@components/Menu';
 import {FC, FocusEvent, KeyboardEvent, useEffect, useId, useState} from 'react';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {SortChoice, sortChoices, sortByWords} from './sort-choices';
@@ -71,17 +72,17 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
       aria-label={`${words}, the old way`}
       onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()} onKeyDown={onButtonKey}>{words}</button>
-    {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices menu card rounded-corners lifted" onBlur={onListBlur}>
+    {open && <Menu id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
       {sortChoices.map((choice, at) =>
-        <li key={choice} role="none" className="entry">
-          <button type="button" role="menuitem" tabIndex={-1} className="item sub-title reachable"
+        <Entry key={choice} role="none">
+          <Item role="menuitem" tabIndex={-1} className="sub-title reachable"
             aria-current={chosen.map(picked => picked === choice).orElse(false)}
             onClick={() => {
               updateChosen(some(choice));
               closeToButton();
             }}
-            onKeyDown={onChoiceKey(at)}>{choice}</button>
-        </li>)}
-    </ul>}
+            onKeyDown={onChoiceKey(at)}>{choice}</Item>
+        </Entry>)}
+    </Menu>}
   </>;
 };

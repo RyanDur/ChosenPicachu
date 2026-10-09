@@ -1,3 +1,4 @@
+import {Entry, Item, Menu} from '@components/Menu';
 import {FC, useEffect, useState} from 'react';
 import {generatePath, Link} from 'react-router';
 import {Maybe, nothing, some} from '@ryandur/sand';
@@ -76,18 +77,18 @@ export const Workspace: FC<Props> = ({product}) => {
               popoverTarget="add-chart"
               aria-label="Add a chart">+
             </button>
-            <menu id="add-chart" tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+            <Menu id="add-chart" tabIndex={-1} popover="auto" className="card rounded-corners lifted"
               aria-label="charts to add">
               {absentKinds.map(kind =>
-                <li className="entry" key={kind}>
-                  <button type="button" className="item sub-title"
+                <Entry key={kind}>
+                  <Item className="sub-title"
                     popoverTarget="add-chart" popoverTargetAction="hide"
                     onClick={() => {
                       add(kind);
                       setReport(`${chartNames[kind]} added`);
-                    }}>{chartNames[kind]}</button>
-                </li>)}
-            </menu>
+                    }}>{chartNames[kind]}</Item>
+                </Entry>)}
+            </Menu>
           </>}
     </header>
     <ChartHeading.Provider value="h4">

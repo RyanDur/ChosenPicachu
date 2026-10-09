@@ -4,7 +4,8 @@ import {span, unit} from '../Recipe/carve';
 import {AboveThePage} from './Diagrams';
 import {popoverWinsHeading} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
-import menuCss from '../../../styles/menu.css?sample';
+import menuCss from '@components/Menu/Menu.css?sample';
+import menuSource from '@components/Menu/Menu.tsx?sample';
 import '../Runs.css';
 
 const gap = plain(' ');
@@ -34,7 +35,10 @@ export const PopoverExplained: FC = () =>
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
             API</Mdn> does all of it.</p>
-        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</menu>')}/>
+        <Snippet label="HTML" lines={[
+          ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
+          ...unit(menuSource, 'export const Item')
+        ]}/>
       </li>
       <li className="run">
         <p className="paragraph">The button that opens the menu carries a tabIndex of 0, and so does each choice in the
@@ -56,9 +60,9 @@ export const PopoverExplained: FC = () =>
           layer is placed against the window, not its card, so it no longer sits under its button by itself.</p>
       </li>
       <li className="run">
-        <p className="paragraph">The site’s
-          menu.css places it with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened
-          it, and where a browser has no position-area, it centres the menu on the screen.
+        <p className="paragraph">The menu’s own sheet places it
+          with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened it, and where a
+          browser has no position-area, it centres the menu on the screen.
           In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
           The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is
           not a popover, like the old list above, has no anchor, so it is left out.</p>

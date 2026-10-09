@@ -1,3 +1,4 @@
+import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
 import {choices} from './sorting';
 import {useHeaderEvents, useTableDispatch} from './context';
@@ -12,17 +13,17 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
       popoverTarget={`sort-${column}`}
       onPointerDown={event => event.stopPropagation()}
       aria-label={`sort ${column}`}/>
-    <menu id={`sort-${column}`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`sort ${column} by`}
+    <Menu id={`sort-${column}`} tabIndex={-1} popover="auto" className="card rounded-corners lifted" aria-label={`sort ${column} by`}
       onPointerDown={event => event.stopPropagation()}>
       {choices.map(({display, direction}) =>
-        <li className="entry" key={display}>
-          <button type="button" tabIndex={0} className="item sub-title"
+        <Entry key={display}>
+          <Item tabIndex={0} className="sub-title"
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               onSorted?.({column, direction});
               dispatch(sortChosen(column, direction));
-            }}>{display}</button>
-        </li>)}
-    </menu>
+            }}>{display}</Item>
+        </Entry>)}
+    </Menu>
   </>;
 };

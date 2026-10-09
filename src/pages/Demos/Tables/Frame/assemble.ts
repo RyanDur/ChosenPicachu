@@ -3,6 +3,7 @@ import headerCss from '@components/DragSortableTable/Header.css?frame';
 import sortableCss from '@components/DragSortableTable/sortable.css?frame';
 import rowGripCss from '@components/DragSortableTable/RowGrip.css?frame';
 import motionCss from '@components/DragSortableTable/motion.css?frame';
+import menuCss from '@components/Menu/Menu.css?frame';
 import {Dials} from '../../Controls';
 import {Exchange} from '@pages/Demos/exchange';
 import aggregationsCss from '../Aggregations.css?frame';
@@ -18,6 +19,7 @@ export const sheets: Sheet[] = [
   {name: 'sortable.css', css: sortableCss},
   {name: 'RowGrip.css', css: rowGripCss},
   {name: 'motion.css', css: motionCss},
+  {name: 'Menu.css', css: menuCss},
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 

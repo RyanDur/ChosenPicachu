@@ -1,0 +1,30 @@
+.menu {
+  width: var(--base-x-25);
+  overflow: clip;
+
+  &[popover] {
+    inset: auto;
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: var(--base-x-5);
+  }
+
+  .entry:last-child .item {
+    border-block-end-width: 0;
+  }
+}
+
+@supports not (position-area: block-end) {
+  .menu:popover-open {
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+  }
+}

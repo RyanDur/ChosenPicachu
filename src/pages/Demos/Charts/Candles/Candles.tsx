@@ -1,3 +1,4 @@
+import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useContext, useId} from 'react';
 import {Trade} from '../coinbase';
@@ -48,17 +49,17 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         popoverTarget={`${id}-period`}>
         <span className="off-screen">candle period</span>{' '}{period}
       </button>
-      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+      <Menu id={`${id}-period`} tabIndex={-1} popover="auto" className="card rounded-corners lifted"
         aria-label="candle period by">
         {Object.values(Period).map(option =>
-          <li className="entry" key={option}>
-            <button type="button" className="item sub-title"
+          <Entry key={option}>
+            <Item className="sub-title"
               popoverTarget={`${id}-period`} popoverTargetAction="hide"
               aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriodChosen(option)}>{option}</button>
-          </li>
+              onClick={() => onPeriodChosen(option)}>{option}</Item>
+          </Entry>
         )}
-      </menu>
+      </Menu>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes range={range}

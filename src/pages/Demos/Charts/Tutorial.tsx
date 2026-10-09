@@ -111,7 +111,7 @@ const priceStory =
             ...unit(periodSource, 'export const periodCap')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(priceSource, '{actions}', '</menu>')
+            ...span(priceSource, '{actions}', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -435,7 +435,7 @@ const workspaceStory =
             ...unit(deskSource, 'export const added')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(workspaceSource, '<menu id="add-chart"', '</menu>')
+            ...span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
           ]}/>
         </Codes>
       </Step>
