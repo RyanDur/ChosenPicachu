@@ -7,18 +7,20 @@ type FancyTextareaProps = {
   onChange: Consumer<ChangeEvent<HTMLTextAreaElement>>;
   value?: string;
   readOnly?: boolean;
+  className?: string;
 };
 
 export const FancyTextarea: FC<FancyTextareaProps> = (
   {
     onChange,
     value = '',
-    readOnly
+    readOnly,
+    className
   }) =>
   <label id="details-cell" className={classNames(
-    'details-cell',
     'fancy',
-    'soft-cornered'
+    'soft-cornered',
+    className
   )}>
     <span id="details-label" className="fancy-title bold card-banded">Details</span>
     <textarea name="details" className="fancy-text writable rounded-corners lifted raisable" id="details"

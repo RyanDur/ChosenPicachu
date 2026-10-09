@@ -111,7 +111,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       </label>}
     </Address>
 
-    <FancyTextarea value={user.details} readOnly={readOnly}
+    <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(detailsEdited(event.currentTarget.value))}/>
 
     {!readOnly &&

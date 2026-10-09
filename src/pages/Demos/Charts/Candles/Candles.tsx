@@ -43,7 +43,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     <Heading id={`${id}-heading`} className="off-screen">candles</Heading>
     <header className="chart-header">
       {actions}
-      <button type="button" className="menu-toggle rounded-corners period-toggle field borderless attentive focus-ringed caption"
+      <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption"
         popoverTarget={`${id}-period`}>
         <span className="off-screen">candle period</span>{' '}{period}
       </button>

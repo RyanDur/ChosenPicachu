@@ -92,7 +92,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         onChosen={onStackChosen}
         reading={copy.stack[stack]}/>
     </DialGroup>
-    <p className="readout caption">
+    <p className="caption">
       <code>{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
   </section>;

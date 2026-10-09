@@ -72,7 +72,7 @@ export const Workspace: FC<Props> = ({product}) => {
       <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&
           <>
-            <button type="button" className="menu-toggle rounded-corners add-chart button secondary circular round-glyph"
+            <button type="button" className="add-chart rounded-corners button secondary circular round-glyph"
               popoverTarget="add-chart"
               aria-label="Add a chart">+
             </button>

@@ -65,7 +65,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <Heading id={`${id}-heading`} className="off-screen">live trades</Heading>
     <header className="chart-header">
       {actions}
-      <button type="button" className="menu-toggle rounded-corners period-toggle field borderless attentive focus-ringed caption reachable"
+      <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption reachable"
         popoverTarget={`${id}-period`}>
         <span className="off-screen">price period</span>{' '}{period}
       </button>
