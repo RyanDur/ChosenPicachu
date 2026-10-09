@@ -7,9 +7,17 @@ describe('the home page', () => {
     render(<TestApp at={Paths.home}/>);
   });
 
-  test('the page opens on the thesis', () => {
-    expect(screen.getByText(/three languages working in concert/)).toBeVisible();
-    expect(screen.getByText(/That argument is this whole site/)).toBeVisible();
+  test('should open on the thesis in one paragraph, and say what the site holds in the next', () => {
+    expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose, and when one could not yet do a job another covered for it until the standard caught up, as HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
+    expect(screen.getByText(/^That argument is this whole site/)).toHaveTextContent('That argument is this whole site: a door per language, the record of how the web got them, and the demos where I work the practice.');
+  });
+
+  test('should carry one quotation in the opening, linked to HTML’s design principles', () => {
+    const thesis = within(screen.getByText(/^A webpage is three languages working in concert/));
+
+    expect(thesis.getAllByRole('link')).toHaveLength(1);
+    expect(thesis.getByRole('link', {name: '“consider adopting it rather than forbidding it or inventing something new”'}))
+      .toHaveAttribute('href', 'https://www.w3.org/TR/html-design-principles/');
   });
 
   test('the record says why the languages arrived', () => {
