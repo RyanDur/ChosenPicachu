@@ -1,4 +1,4 @@
-import {RuleTester} from 'eslint';
+import {ESLint, RuleTester} from 'eslint';
 import classes from '../lint/classes.mjs';
 
 const tester = new RuleTester({languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}}});
@@ -19,7 +19,7 @@ tester.run('class-defined', classes.rules['class-defined'], {
     {name: 'should read the right side of &&', code: "const p = <p className={classNames('muted-ink', on && 'no-such-word')}/>;", errors: [unread('no-such-word')]},
     {name: 'should read what a classList call adds', code: "cell.classList.toggle('no-such-word', on);", errors: [unread('no-such-word')]},
     {name: 'should read what an html class attribute wears', code: "__htmlClass('muted-ink no-such-word');", errors: [unread('no-such-word')]},
-    {name: 'should read both sides of || and ??', code: "const p = <p className={classNames(chosen || 'no-such-word', given ?? 'nor-this')}/>;", errors: [unread('no-such-word'), unread('nor-this')]}
+    {name: 'should read both sides of || and ??', code: "const p = <p className={classNames('no-such-word' || 'nor-this', 'nor-that' ?? 'nor-these')}/>;", errors: [unread('no-such-word'), unread('nor-this'), unread('nor-that'), unread('nor-these')]}
   ]
 });
 
@@ -36,10 +36,29 @@ tester.run('own-class-first', classes.rules['own-class-first'], {
   ]
 });
 
-describe('the html processor', () => {
-  test('should hand each class attribute to the rule on its own line', () => {
-    const [{text}] = classes.processors.html.preprocess('<p>\n  <span class="fancy muted-ink"></span>\n</p>');
+describe('the class rules over html', () => {
+  const eslint = new ESLint({overrideConfigFile: true, overrideConfig: [
+    {files: ['**/*.html'], plugins: {classes}, processor: 'classes/html'},
+    {files: ['**/*.html/*.htmlclasses'], plugins: {classes}, rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}}
+  ]});
+  const linted = async html => {
+    const [{messages}] = await eslint.lintText(html, {filePath: 'src/frame.html'});
+    return messages.map(({line, message}) => ({line, message}));
+  };
 
-    expect(text.split('\n')).toEqual(['', '__htmlClass("fancy muted-ink");', '']);
+  test('should refuse a class no sheet reads, on the line that wears it', async () => {
+    expect(await linted('<p>\n  <span class="muted-ink no-such-word"></span>\n</p>')).toEqual([
+      {line: 2, message: '"no-such-word" is read by no selector; a class an element wears is one a sheet reads'}
+    ]);
+  });
+
+  test('should refuse an own class behind a shared word, on the line that wears it', async () => {
+    expect(await linted('<p>\n  <span class="muted-ink fancy"></span>\n</p>')).toEqual([
+      {line: 2, message: '"fancy" is this element\'s own class and comes first, before the shared words it wears'}
+    ]);
+  });
+
+  test('should accept a class list a sheet reads, own class first', async () => {
+    expect(await linted('<span class="fancy muted-ink"></span>')).toEqual([]);
   });
 });
