@@ -1,0 +1,5 @@
+.stand-in {
+  display: block;
+  margin: auto;
+  padding: var(--base-x-5);
+}

@@ -13,6 +13,7 @@ import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
+import {StandIn} from '@components/art-gallery/StandIn';
 
 export const ArtGallery: FC = () => {
   const {wall, asked, answered, refused, abandoned} = useGallery();
@@ -52,7 +53,7 @@ export const ArtGallery: FC = () => {
     </ul>
     {awaited(wall) && <Loading label="loading gallery"/>}
     {wall.reply === 'answered' && empty(wall.answer.pieces) &&
-        <img className="stand-in" src={noImageGallery} alt="the museum answered with nothing"/>}
-    {wall.reply === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
+        <StandIn src={noImageGallery} alt="the museum answered with nothing"/>}
+    {wall.reply === 'refused' && <StandIn src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

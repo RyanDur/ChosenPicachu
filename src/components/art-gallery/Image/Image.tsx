@@ -10,6 +10,7 @@ import {sourceParam} from '@components/art-gallery/museums/source';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';
+import {StandIn} from '@components/art-gallery/StandIn';
 
 type Picture = 'arriving' | 'shown' | 'missing';
 
@@ -40,11 +41,11 @@ export const Image: FC<ImageProps> = (
   const door = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
 
   return picture === 'missing' ?
-    <img alt={`${piece.title} would not load`}
-      className="image stand-in"
+    <StandIn alt={`${piece.title} would not load`}
+      className="image"
       src={noImage}/> : empty(piece.image) ?
-      <img alt={`${piece.title} has nothing to show`}
-        className="image stand-in"
+      <StandIn alt={`${piece.title} has nothing to show`}
+        className="image"
         src={noImage}/> :
       (<>
         <Framed door={door} title={piece.title}>

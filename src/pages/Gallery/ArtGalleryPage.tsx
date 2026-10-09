@@ -9,6 +9,7 @@ import {sourceParam} from '@components/art-gallery/museums/source';
 import {museums} from '@components/art-gallery/museums/museums';
 import {HTTPError} from '@transport/types';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
+import {StandIn} from '@components/art-gallery/StandIn';
 
 type Answers = Partial<Record<Source, boolean>>;
 
@@ -55,7 +56,7 @@ export const ArtGalleryPage: FC = () => {
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
     {{
       wall: <ArtGallery/>,
-      noMuseumOpen: <img className="stand-in" src={missingWall} alt="no museum is open"/>,
+      noMuseumOpen: <StandIn src={missingWall} alt="no museum is open"/>,
       movingToAnOpenMuseum: <Loading label="loading gallery"/>,
       loading: <Loading label="loading gallery"/>
     }[shown.shown]}

@@ -10,22 +10,3 @@
   position: absolute;
   right: 1000vw;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .when-motion-allowed { display: none; }
-}
-
-@media not (prefers-reduced-motion: reduce) {
-  .when-less-motion { display: none; }
-}
-
-.stand-in {
-  display: block;
-  margin: auto;
-  padding: var(--base-x-5);
-}
-
-.stick-to-bottom {
-  position: sticky;
-  bottom: 0;
-}

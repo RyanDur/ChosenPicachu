@@ -12,6 +12,7 @@ import {troubleWith} from '@transport/trouble';
 import {art} from '@components/art-gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
+import {StandIn} from '@components/art-gallery/StandIn';
 
 export const ArtPiece = () => {
   const {easel, asked, answered, refused, abandoned} = useArtPiece();
@@ -41,6 +42,6 @@ export const ArtPiece = () => {
       <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
       <figcaption className="artist-display trim hairline-outline italic caption ink">{easel.answer.artistInfo ?? 'Unknown'}</figcaption>
     </figure>}
-    {easel.reply === 'refused' && <img className="stand-in" src={noImage} alt="the museum refused to answer"/>}
+    {easel.reply === 'refused' && <StandIn src={noImage} alt="the museum refused to answer"/>}
   </>;
 };
