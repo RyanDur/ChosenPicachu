@@ -104,10 +104,11 @@ const rankStory = (build: Build) => {
             is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a
             list, and a button.</Says>
           {world === 'react'
-            ? <Says>Item gives its button the site’s shared classes that set its look, and the page passes Menu the
-              menu’s own, as the sample shows.</Says>
-            : <Says>In the vanilla world the buttons carry the same shared classes Item gives them in React, and the
-              menu’s own classes are written on it by hand, as the sample shows.</Says>}
+            ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
+              that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>
+            : <Says>In the vanilla world the buttons carry the same shared classes Item gives them in React, looks
+              that live in the site’s shared sheet and that an element wears by name, and the menu’s own classes are
+              written on it by hand, as the sample shows.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
@@ -274,8 +275,7 @@ const rankStory = (build: Build) => {
               edge. And not every column offers a menu: menus
               exist only where the markup writes them, the cell pads for them by asking the
               cascade what it holds, and the page itself declares the sortable set.</Says>}
-          <Says>The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element
-            wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
+          <Says>The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
             attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>
           <Codes>

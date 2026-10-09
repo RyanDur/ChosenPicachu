@@ -1011,8 +1011,8 @@ describe('the classes the table wears, as its recipes tell them', () => {
   });
 
   test.each([
-    ['react', /^Item gives its button/, 'Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
-    ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
+    ['react', /^Item gives its button/, 'Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
+    ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, looks that live in the site’s shared sheet and that an element wears by name, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
   ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, opening, sentence, classedMenu) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
@@ -1029,7 +1029,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The toggle’s look is shared classes, looks that live in the site’s shared sheet and that an element wears by name. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
+    expect(recipe).toHaveTextContent('The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
   });
 
