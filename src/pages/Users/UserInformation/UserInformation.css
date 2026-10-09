@@ -12,40 +12,6 @@
     'details details details details details details details details details details details details'
     'reset reset reset cancel cancel cancel submit submit submit submit submit submit';
 
-  .fancy {
-    min-height: var(--base-x-5);
-    position: relative;
-    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-    .fancy-title {
-      pointer-events: none;
-      position: absolute;
-      margin-left: var(--base-x-2_25);
-      padding: 0 var(--base-x-0_25);
-      top: var(--base-x-1_25);
-      max-width: 80%;
-      opacity: 0.6;
-      z-index: 1;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    &.fancy-select .fancy-title,
-    &:focus-within .fancy-title,
-    &:has(.fancy-text:is([readonly], :disabled)) .fancy-title,
-    &:has(.fancy-text[type='date']:valid) .fancy-title,
-    &:has(.fancy-text[placeholder]:not(:placeholder-shown)) .fancy-title {
-      opacity: 1;
-      top: calc(-1 * var(--base-x-1_25));
-    }
-
-    .fancy-text {
-      padding: var(--base-x-1_25) var(--base-x-2_5);
-      width: 100%;
-      height: 100%;
-      position: absolute;
-    }
-  }
-
   .form-title {
     grid-area: title;
   }

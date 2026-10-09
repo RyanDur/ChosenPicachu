@@ -2,6 +2,7 @@ import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
+import '../Fancy.css';
 
 type FancySelectProps = {
   selectId: string;

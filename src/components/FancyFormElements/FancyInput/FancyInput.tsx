@@ -1,6 +1,7 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {format} from 'date-fns';
+import '../Fancy.css';
 
 type FancyTextInputProps = {
   inputId: string;

@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import '../BasePage.css';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {toQueryString} from '@transport/url';

@@ -2,6 +2,7 @@ import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
 import {NavigationType, Outlet, useLocation, useMatches, useNavigationType} from 'react-router';
 import {FC, Fragment, useEffect, useState} from 'react';
+import './BasePage.css';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {Feedback} from '@components/Feedback';
 import {PageNameProvider} from '@components/PageName';
