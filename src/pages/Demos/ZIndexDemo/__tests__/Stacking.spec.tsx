@@ -13,6 +13,14 @@ describe('the stacking pile', () => {
     expect(within(part).getByRole('figure', {name: 'The pile. Raise a card over the others with the pills above it.'})).toBeInTheDocument();
   });
 
+  test('should say what a class is where the tab first names one', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why Third is on top'});
+
+    expect(within(part).getByText(/^Choose a card with the pills/)).toHaveTextContent('Choose a card with the pills above the pile, and the page adds the class raised to it: a class is a name written on an element that a stylesheet’s rules pick out. The stylesheet gives raised a z-index of 1.');
+  });
+
   test('should open with no card raised', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 

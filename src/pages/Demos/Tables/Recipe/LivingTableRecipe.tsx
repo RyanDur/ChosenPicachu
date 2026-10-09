@@ -23,8 +23,8 @@ const gap = plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
-    <Says>The columns are declared once, each with a name and a class; how wide they open is CSS.
-      You could let the browser size the columns by their content, but a live table
+    <Says>The columns are declared once, each with a name and a class, a name written on an element that a
+      stylesheet’s rules pick out; how wide they open is CSS. You could let the browser size the columns by their content, but a live table
       would never hold still: every new number re-negotiates the layout. And you could carry widths in
       the data, but they are layout, not data. So the page’s stylesheet deals the opening
       widths, and with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header
@@ -35,8 +35,8 @@ const dealPlans: Record<World, ReactNode> = {
       measuring the headers as they stand, and the drag surveys them at the lift; a value
       that changes at runtime is state, and until then nothing has changed.</Says>
   </>,
-  vanilla: <Says>The columns are declared once, each a header cell with a name and a class; how
-    wide they open is CSS. You could let the browser size the columns by their content,
+  vanilla: <Says>The columns are declared once, each a header cell with a name and a class, a name written
+    on the cell that a stylesheet’s rules pick out; how wide they open is CSS. You could let the browser size the columns by their content,
     but a live table would never hold still: every new number re-negotiates the layout. And you
     could carry widths in the markup, but they are layout, not content. So the page’s
     stylesheet deals the opening widths, and

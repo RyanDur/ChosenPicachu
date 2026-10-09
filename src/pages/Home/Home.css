@@ -149,10 +149,6 @@
     }
   }
 
-  .door-fold .paragraph {
-    text-wrap: pretty;
-  }
-
   .period-markup {
     margin: 0;
     margin-block-start: var(--base-x-1_5);

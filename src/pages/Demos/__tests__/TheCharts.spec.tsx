@@ -43,6 +43,16 @@ describe('the charts tutorials’ menus', () => {
     expect(within(tutorial).getByText(/^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
+  test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const story = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
+    const step = recipeFolds.steps(story).filter(each => within(each).queryByText(/^A class is a name on an element/) !== null)[0];
+
+    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(/<Menu [^>]*className="/);
+  });
+
   test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
@@ -57,6 +67,16 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByText(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+  });
+
+  test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
+    await screen.findByRole('heading', {name: 'price line tutorial', level: 2});
+    const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
+    const step = recipeFolds.steps(story).filter(each => within(each).queryByText(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/) !== null)[0];
+
+    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(/<Menu [^>]*className="/);
   });
 });
 
@@ -408,7 +428,7 @@ describe('a list of charts', () => {
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
       ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
-      ['the classes up and down', 'A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
+      ['the classes up and down', 'A class is a name written on an element that a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
       ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
       ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colours. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
       ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colours travel as custom properties, values a stylesheet names once and other rules read, and a side class sets them: volume-side sets leather for the bar and drab for its edge, and the bars read them through side-face and side-wall.']
@@ -469,7 +489,8 @@ describe('a list of charts', () => {
 
     test.each([
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
-      ['what a rotation is', 'A rotation asks for less: the shape stays the same, and only where it is drawn changes.']
+      ['what a rotation is', 'A rotation asks for less: the shape stays the same, and only where it is drawn changes.'],
+      ['what a class is', 'nothing to give a class, which is a name a stylesheet’s rules pick an element out by, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);
     });

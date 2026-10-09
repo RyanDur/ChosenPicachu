@@ -897,6 +897,17 @@ describe('the living table’s terms', () => {
     expect(defined).toHaveTextContent(definition);
   });
 
+  test.each([
+    ['react', 'The columns are declared once, each with a name and a class, a name written on an element that a stylesheet’s rules pick out; how wide they open is CSS.'],
+    ['vanilla', 'The columns are declared once, each a header cell with a name and a class, a name written on the cell that a stylesheet’s rules pick out; how wide they open is CSS.']
+  ])('should define class in plain words where the still table first uses it, in the %s world', async (world, sentence) => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'the still table'}, untilTheTablesTabRenders)).toHaveTextContent(sentence);
+  });
+
   test('should define the ledger in plain words where the still table first uses it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -999,13 +1010,17 @@ describe('the classes the table wears, as its recipes tell them', () => {
     expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a list, and a button.');
   });
 
-  test.each(['react', 'vanilla'])('should say the page passes Menu the menu’s own classes, in the %s world', async world => {
+  test.each([
+    ['react', 'Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
+    ['vanilla', 'The menu and each of its buttons carry the same shared classes, written on them by hand, as the sample shows.', /<menu [^>]*class="/]
+  ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, sentence, classedMenu) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+    const step = recipeFolds.steps(recipe).filter(each => within(each).queryByText(sentence) !== null)[0];
 
-    expect(recipe).toHaveTextContent('Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows. The vanilla world writes the same elements by hand.');
+    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(classedMenu);
   });
 
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {

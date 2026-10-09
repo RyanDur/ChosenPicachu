@@ -189,8 +189,8 @@ const candlesStory =
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down. A class
-            is a name written on an element that a stylesheet’s rules pick out.</Says>
+          <Says>A class is a name written on an element that a stylesheet’s rules pick out. A candle that closed at or
+            above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
             in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
             the chart’s size, the wick’s hairline width and how the shapes move.</Says>

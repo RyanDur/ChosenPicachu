@@ -76,12 +76,12 @@ describe('why the popover wins', () => {
     expect(within(part).getByText(/^Menu, Entry and Item are this site’s components/)).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu. A component is a function that writes a piece of the page from what it is given. These three write one element each: a menu, an li, which is one item of a list, and a button.');
   });
 
-  test('should say what a class is, and that the page passes Menu the menu’s look', async () => {
+  test('should say the page passes Menu the menu’s look', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(within(part).getByText(/^A class is a name written on an element/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; a menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(within(part).getByText(/^Item gives its button/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look; a menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {
