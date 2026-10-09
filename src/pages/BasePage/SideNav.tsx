@@ -5,7 +5,7 @@ import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/source';
 
-const railPath = () => 'path rail-path bold attentive field page-joined reachable';
+const railPath = () => 'path rail-path attentive field page-joined reachable';
 
 export const SideNav: FC = () =>
   <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
@@ -19,6 +19,6 @@ export const SideNav: FC = () =>
         tab: Source.AIC
       })}`}>Gallery</NavLink>
     <NavLink id="navigate-games" className={railPath} to={Paths.games}>Games</NavLink>
-    <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}
+    <a id="navigate-repo" className="path rail-path attentive field reachable" href={Paths.repo}
       rel="noopener noreferrer" target="_blank">Repo</a>
   </nav>;

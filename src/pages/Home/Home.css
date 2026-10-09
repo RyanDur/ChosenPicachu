@@ -92,11 +92,11 @@
     padding-inline-start: var(--base-x-2);
   }
 
-  .moment::before {
+  .beat-title::before {
     content: '';
     position: absolute;
-    inset-block-start: calc(var(--base-x-2) + var(--base-x-0_5));
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--base-x-0_5));
+    margin-block-start: calc((1lh - var(--base)) / 2);
     width: var(--base);
     height: var(--base);
     z-index: 1;
@@ -123,18 +123,19 @@
     grid-column: 1;
     grid-row: 1;
     justify-self: end;
-    align-self: start;
+    align-self: baseline;
     padding-inline-start: 0;
   }
 
   .beat-title {
+    align-self: baseline;
     margin: 0;
     text-wrap: balance;
   }
 
   .beat-tells {
     margin: 0;
-    text-wrap: pretty;
+    text-wrap: wrap;
   }
 
   .fuller-story,
@@ -148,6 +149,10 @@
       margin-block-start: var(--base-x-1_5);
       text-wrap: pretty;
     }
+  }
+
+  .fuller-story .paragraph {
+    text-wrap: wrap;
   }
 
   .period-markup {

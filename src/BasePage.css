@@ -304,6 +304,11 @@
 
     .side-nav {
       flex-wrap: wrap;
+      padding-inline-start: var(--base);
+    }
+
+    .feedback-item {
+      padding-inline-end: var(--base);
     }
   }
 

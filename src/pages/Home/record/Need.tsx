@@ -11,15 +11,15 @@ export const Need: FC = () =>
       Berners-Lee{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">proposed a web of notes
       with links between them</a>, so what was known could be found.</>}>
-    <p className="paragraph muted-ink">Berners-Lee’s proposal begins by measuring the loss. CERN held several thousand
+    <p className="paragraph muted-ink hyphenated">Berners-Lee’s proposal begins by measuring the loss. CERN held several thousand
       creative people, the typical stay was two years, and the knowledge walked out the door
       faster than it could be written down. The sharpest sentence in the document is not
       about technology at all: <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“often, the information has been recorded, it just cannot be found.”</a></p>
-    <p className="paragraph muted-ink">He had solved this once before, for himself. In 1980 he wrote Enquire, a program
+    <p className="paragraph muted-ink hyphenated">He had solved this once before, for himself. In 1980 he wrote Enquire, a program
       that stored snippets of information and linked related pieces together in any way, so
       that finding something meant following links <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“rather like in the old computer game ‘adventure’”</a>.
       He built it, he admits, before he knew the idea already had a name: hypertext.</p>
-    <p className="paragraph muted-ink">The proposal’s argument is against trees. CERNDOC, the Unix file system, VMS/HELP:
+    <p className="paragraph muted-ink hyphenated">The proposal’s argument is against trees. CERNDOC, the Unix file system, VMS/HELP:
       every hierarchy forced knowledge into one shape and could not model how work really
       connected. His alternative was a diagram anyone could draw: circles and arrows, where
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“circles and arrows can stand for anything”</a>: call the circles
@@ -27,7 +27,7 @@ export const Need: FC = () =>
       people, not the software: the organisation’s real structure was already{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“a multiply connected ‘web’”</a>; the system just needed to match
       it.</p>
-    <p className="paragraph muted-ink">Nothing in it said World Wide Web; the only name in the air was “Mesh.”
+    <p className="paragraph muted-ink hyphenated">Nothing in it said World Wide Web; the only name in the air was “Mesh.”
       Berners-Lee’s manager, Mike Sendall, pencilled onto the cover the most quoted margin
       note in computing: <a className="signpost" href="https://worldwideweb.cern.ch/history/">“Vague, but exciting.”</a> The conclusion asked
       for the opposite of excitement: a universal linked information system in which{' '}

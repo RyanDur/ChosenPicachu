@@ -25,6 +25,12 @@
   }
 }
 
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  .feedback-item > .feedback-open {
+    padding-inline: var(--base);
+  }
+}
+
 .feedback-dialog {
   inline-size: 100%;
   max-inline-size: 60ch;
