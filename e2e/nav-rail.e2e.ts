@@ -34,7 +34,6 @@ for (const {size, device} of [{size: 'a phone', device: iPhone}, {size: 'a deskt
       await expect(page).toHaveURL(/\/users\/$/);
       const nav = siteFrame(page).nav;
       await expect(nav.getByRole('link', {name: 'Users'})).toHaveAttribute('aria-current', 'page');
-      await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
     });
 
     test('moves the mark to Demos and back to Home, and the followed item keeps focus', async ({page}) => {

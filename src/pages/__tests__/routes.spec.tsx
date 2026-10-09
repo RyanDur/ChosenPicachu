@@ -5,6 +5,7 @@ import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
+import {chartPageAt} from '@pages/Demos/__test_support';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -95,7 +96,9 @@ describe('the rail says which page the reader is on', () => {
     ['Home', Paths.home],
     ['Demos', Paths.demos],
     ['Users', Paths.users],
-    ['Games', Paths.games]
+    ['Gallery', `${Paths.artGallery}?page=3&size=8&tab=aic`],
+    ['Games', Paths.games],
+    ['Demos', chartPageAt('price')]
   ])('should announce %s as the current page, and no other', async (name, path) => {
     render(<TestApp at={path}/>);
     const nav = await site.nav();
