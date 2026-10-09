@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {Figure} from './Figure';
-import './Drawing.css';
+import '../Drawing.css';
 
 export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring' | 'topmost';
 export type At = {x: number; y: number};

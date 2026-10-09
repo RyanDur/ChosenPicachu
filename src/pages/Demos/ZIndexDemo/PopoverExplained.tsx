@@ -5,7 +5,7 @@ import {AboveThePage} from './Diagrams';
 import {popoverWinsHeading} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '../../../styles/menu.css?sample';
-import '../Recipe/Runs.css';
+import '../Runs.css';
 
 const gap = plain(' ');
 

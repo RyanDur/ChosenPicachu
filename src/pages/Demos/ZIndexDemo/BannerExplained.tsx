@@ -8,7 +8,7 @@ import {storyOpenedIn} from '../Recipe/Story';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
-import '../Recipe/Runs.css';
+import '../Runs.css';
 
 const gap = plain(' ');
 

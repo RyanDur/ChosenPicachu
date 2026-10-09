@@ -6,7 +6,7 @@ import {OneNumberLiftsOneCard, PileFromTheSide} from './Diagrams';
 import {RaisedCard} from './raised';
 import naturalSource from './NaturalZIndex.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
-import '../Recipe/Runs.css';
+import '../Runs.css';
 
 const gap = plain(' ');
 

@@ -7,7 +7,7 @@ import {CardOne} from './card-one';
 import {stillLosesHeading} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
-import '../Recipe/Runs.css';
+import '../Runs.css';
 
 const gap = plain(' ');
 
