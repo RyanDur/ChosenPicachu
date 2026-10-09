@@ -5,7 +5,7 @@ import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} fro
 import {feedIsSubscribed, outOfReadingOrder} from '@pages/Demos/__test_support';
 import userEvent from '@testing-library/user-event';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
-import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
 import {blurFocusOnMoves} from '@__test_support/focus';
@@ -48,9 +48,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const story = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
-    const step = recipeFolds.steps(story).filter(each => within(each).queryByText(/^A class is a name on an element/) !== null)[0];
-
-    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(/<Menu [^>]*className="/);
+    expect(explanation.everyCodeBeside(story, /^A class is a name on an element/).join()).toMatch(/<Menu [^>]*className="/);
   });
 
   test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
@@ -74,9 +72,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await screen.findByRole('heading', {name: 'price line tutorial', level: 2});
     const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
-    const step = recipeFolds.steps(story).filter(each => within(each).queryByText(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/) !== null)[0];
-
-    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(/<Menu [^>]*className="/);
+    expect(explanation.everyCodeBeside(story, /^A class is a name written on an element that a stylesheet’s rules pick out\. Item/).join()).toMatch(/<Menu [^>]*className="/);
   });
 });
 

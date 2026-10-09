@@ -4,7 +4,7 @@ import {fireEvent, render, screen, waitFor, within} from '@testing-library/react
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
-import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {aggregations, tableControls, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
@@ -898,8 +898,8 @@ describe('the living table’s terms', () => {
   });
 
   test.each([
-    ['react', 'The columns are declared once, each with a name and a class, a name written on an element that a stylesheet’s rules pick out; how wide they open is CSS.'],
-    ['vanilla', 'The columns are declared once, each a header cell with a name and a class, a name written on the cell that a stylesheet’s rules pick out; how wide they open is CSS.']
+    ['react', 'A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared once, each with a name and a class; how wide they open is CSS.'],
+    ['vanilla', 'A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
   ])('should define class in plain words where the still table first uses it, in the %s world', async (world, sentence) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
@@ -1011,16 +1011,16 @@ describe('the classes the table wears, as its recipes tell them', () => {
   });
 
   test.each([
-    ['react', 'Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
-    ['vanilla', 'The menu and each of its buttons carry the same shared classes, written on them by hand, as the sample shows.', /<menu [^>]*class="/]
-  ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, sentence, classedMenu) => {
+    ['react', /^Item gives its button/, 'Item gives its button the site’s shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
+    ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
+  ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, opening, sentence, classedMenu) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
-    const step = recipeFolds.steps(recipe).filter(each => within(each).queryByText(sentence) !== null)[0];
 
-    expect(within(step).getAllByRole('code').map(code => code.textContent).join()).toMatch(classedMenu);
+    expect(within(recipe).getByText(opening)).toHaveTextContent(sentence);
+    expect(explanation.everyCodeBeside(recipe, opening).join()).toMatch(classedMenu);
   });
 
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {

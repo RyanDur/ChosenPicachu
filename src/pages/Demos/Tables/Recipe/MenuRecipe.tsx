@@ -106,8 +106,8 @@ const rankStory = (build: Build) => {
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes that set its look, and the page passes Menu the
               menu’s own, as the sample shows.</Says>
-            : <Says>The menu and each of its buttons carry the same shared classes, written on them by hand, as the
-              sample shows.</Says>}
+            : <Says>In the vanilla world the buttons carry the same shared classes Item gives them in React, and the
+              menu’s own classes are written on it by hand, as the sample shows.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
