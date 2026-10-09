@@ -1020,6 +1020,15 @@ describe('the classes the table wears, as its recipes tell them', () => {
     expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share rides a custom property');
   });
 
+  test('should carve the rule that papers a moving cell, in the react world', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+
+    expect(recipe).toHaveTextContent(/export const motionLooks[^]*\(carried \|\| has\(settlingFrom\) \|\| has\(shove\)\) && 'paper-in-motion'/);
+  });
+
   test('should carve the line that gives a traded header shared, in the react world', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);

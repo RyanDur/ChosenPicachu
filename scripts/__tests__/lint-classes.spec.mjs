@@ -5,6 +5,7 @@ import classes from '../lint/classes.mjs';
 const fancyField = join(process.cwd(), 'src/components/FancyFormElements/Probe.tsx');
 const banners = join(process.cwd(), 'src/components/Banners/Probe.tsx');
 const frameBuild = join(process.cwd(), 'src/pages/Demos/Tables/Frame/builds/Probe.ts');
+const candle = join(process.cwd(), 'src/pages/Demos/Charts/Candles/Probe.tsx');
 
 const tester = new RuleTester({languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}}});
 const unread = name => ({messageId: 'undefined', data: {name}});
@@ -16,6 +17,7 @@ tester.run('class-defined', classes.rules['class-defined'], {
     {name: 'should read a comparison as no class', code: "const p = <p className={classNames(state === 'refused' && 'muted-ink')}/>;", filename: fancyField},
     {name: 'should accept a class a classList call adds', code: "cell.classList.add('muted-ink');", filename: fancyField},
     {name: 'should accept a class an html class attribute wears', code: "__htmlClass('fancy muted-ink');", filename: fancyField},
+    {name: 'should accept a class a sheet in a folder above reads', code: '<header className="chart-header"/>', filename: candle},
     {name: 'should accept a class the frame world imports, in a file inside the frame', code: "cell.classList.add('grabbable');", filename: frameBuild}
   ],
   invalid: [

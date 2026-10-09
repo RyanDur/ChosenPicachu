@@ -22,11 +22,11 @@ const gap = plain(' ');
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(sharesSource, 'export const measuredWidths')
+      ...unit(sharesSource, 'export const measuredWidths'), gap,
+      ...unit(looksSource, 'export const headerStates')
     ]}/>
     <Snippet label="HTML" lines={[
       ...span(buildSource, '...headerStates(travels, width)', '...headerStates(travels, width)'), gap,
-      ...unit(looksSource, 'export const headerStates'), gap,
       ...span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[
