@@ -5,7 +5,6 @@ import {Moved, crossingOver} from '../session';
 import {HideItem} from '../items/HideItem';
 import {MoveReport} from '../items/MoveReport';
 import '../sortable-list.css';
-import './EagerHideStaticList.css';
 
 type Props = {
   list: Set<string>;

@@ -16,7 +16,6 @@ import {
 import gripSource from '../items/Grip.tsx?sample';
 import listSource from '../LazyHideAnimatedList/LazyHideAnimatedList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
-import cssSource from '../LazyHideAnimatedList/LazyHideAnimatedList.css?sample';
 
 export const LazyHideAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -30,7 +29,7 @@ export const LazyHideAnimatedRecipe: FC = () => <>
       {holdTheAloft(listSource)}
       {acceptTheDrop(listSource)}
       {stashLanding(listSource)}
-      {fadeOrigin(itemSource, cssSource)}
+      {fadeOrigin(itemSource)}
       {glideSettle(listSource)}
       {roadEnd}
     </Steps>

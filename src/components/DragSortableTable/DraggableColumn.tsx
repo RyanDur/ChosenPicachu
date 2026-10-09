@@ -12,7 +12,7 @@ import {Grab, columnLift} from './lift';
 import {columnArrows} from './arrows';
 import './Header.css';
 import './motion.css';
-import {headerLooks, motionLooks} from './looks';
+import {headerCell, headerLooks, headerStates, motionLooks} from './looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
@@ -52,7 +52,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(className, ...headerLooks, travels && 'grabbable', ...motionLooks(carried, settlingFrom, shoved), has(width) && 'shared')}
+    className={classNames(...headerCell, className, ...headerLooks, ...headerStates(travels, width), ...motionLooks(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

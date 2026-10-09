@@ -17,7 +17,6 @@ import {
 import gripSource from '../items/Grip.tsx?sample';
 import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
-import cssSource from '../EagerHideStaticList/EagerHideStaticList.css?sample';
 
 export const EagerHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -32,7 +31,7 @@ export const EagerHideStaticRecipe: FC = () => <>
       {acceptTheDrop(listSource)}
       {innerHalf}
       {commitCrossing(listSource)}
-      {fadeOrigin(itemSource, cssSource)}
+      {fadeOrigin(itemSource)}
       {directState(listSource)}
       {roadEnd}
     </Steps>

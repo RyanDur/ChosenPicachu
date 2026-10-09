@@ -7,8 +7,9 @@ import {DialGroup, DialRow} from './DialRow';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
-export type Origin = 'keep' | 'hide';
-export type Motion = 'animated' | 'static';
+import type {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
+
+export type {Motion, Origin};
 
 export const paceParam: schema.Decoder<Pace> = schema.literalUnion('eager', 'lazy');
 export const originParam: schema.Decoder<Origin> = schema.literalUnion('keep', 'hide');

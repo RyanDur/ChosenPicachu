@@ -1,3 +1,4 @@
+import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useContext, useId} from 'react';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
@@ -86,15 +87,12 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
-    <details className="explainer">
-      <summary className="prompt">what am I looking at?</summary>
-      <p className="explanation">
-        The same measurement, bundled: each candle summarizes one bucket of trades —
-        the body spans the first to the last price (green when it rose, orange when
-        it fell) and the wicks reach the extremes. The bars beneath show how much
-        bitcoin changed hands in each bundle. New trades keep filling the newest
-        candle; the period menu resizes the window — every size stays live.
-      </p>
-    </details>
+    <Explainer>
+      The same measurement, bundled: each candle summarizes one bucket of trades —
+      the body spans the first to the last price (green when it rose, orange when
+      it fell) and the wicks reach the extremes. The bars beneath show how much
+      bitcoin changed hands in each bundle. New trades keep filling the newest
+      candle; the period menu resizes the window — every size stays live.
+    </Explainer>
   </section>;
 };

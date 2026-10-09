@@ -3,6 +3,7 @@ import {classNames} from '@components/class-names';
 import {ItemProps} from './props';
 import {Grip} from './Grip';
 import '../Item.css';
+import './HideItem.css';
 
 export const HideItem: FC<ItemProps> = (
   {item, order, className, onLifted, onReleased, onDragOver, onArranged, ...li}

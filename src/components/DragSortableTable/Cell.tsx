@@ -21,7 +21,7 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
-    className={classNames(className, ...cellLooks, ...motionLooks(columnCarried || rowCarried, from, shove))}
+    className={classNames('cell', className, ...cellLooks, ...motionLooks(columnCarried || rowCarried, from, shove))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

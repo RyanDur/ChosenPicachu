@@ -7,5 +7,5 @@ import {placed} from './placing';
 export const Row: FC<ComponentProps<'tr'>> = ({className, children, ...tr}) => {
   const order = useTableSelector(selectOrder);
 
-  return <tr {...tr} className={classNames(className, 'hover-approached')}>{placed(children, order, 'column')}</tr>;
+  return <tr {...tr} className={classNames('row', className, 'hover-approached')}>{placed(children, order, 'column')}</tr>;
 };

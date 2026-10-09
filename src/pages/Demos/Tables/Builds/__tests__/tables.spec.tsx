@@ -11,9 +11,12 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
+import {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
 import {ColumnInHand, RowInHand, liftedColumn, liftedRow, noColumnInHand, noRowInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 
-type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
+type Dials = {origin: Origin; motion: Motion};
+
+type Table = FC<HeaderEvents & BodyEvents & Dials & {caption: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
@@ -21,26 +24,26 @@ const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(windows[at]
 
 const windowOf = (row: Measures): string => row.window.display;
 
-const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Table, rows, dials}) => {
+const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(
     arrangementReducer,
     arrangementOf(measures.map(({name}) => name), rows.map(windowOf)));
   const arranged = arrangementReducer(arrangement, arrived(rows.map(windowOf)));
 
-  return <Table caption="live aggregations" className={dials} columns={columnsOf(arranged)} rows={rowsOf(arranged, rows)}
+  return <Table caption="live aggregations" {...dials} columns={columnsOf(arranged)} rows={rowsOf(arranged, rows)}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
     onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
 };
 
-const seated = (Table: Table, rows: readonly Measures[], dials = 'hide animated') => <Page Table={Table} rows={rows} dials={dials}/>;
+const seated = (Table: Table, rows: readonly Measures[], dials: Dials = {origin: 'hide', motion: 'animated'}) => <Page Table={Table} rows={rows} dials={dials}/>;
 
-const seat = (Table: Table, dials = 'hide animated', rows: readonly Measures[] = startingRows) => render(seated(Table, rows, dials));
+const seat = (Table: Table, dials: Dials = {origin: 'hide', motion: 'animated'}, rows: readonly Measures[] = startingRows) => render(seated(Table, rows, dials));
 
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
-    render(<DragSortableTable caption="a table" columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
-      <thead><tr><Column column="ghost" className="cell">a header</Column></tr></thead>
+    render(<DragSortableTable caption="a table" origin="hide" motion="animated" columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
+      <thead><tr><Column column="ghost">a header</Column></tr></thead>
     </DragSortableTable>);
 
     expect(screen.getByRole('columnheader', {name: 'ghost'})).toBeVisible();
@@ -138,7 +141,7 @@ describe('columns by hand', () => {
   const surface = (): HTMLElement => header(heldColumn);
 
   test('an eager column follows the pointer as it crosses its neighbors', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -148,7 +151,7 @@ describe('columns by hand', () => {
   });
 
   test('a lazy column waits for the drop', () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -159,7 +162,7 @@ describe('columns by hand', () => {
   });
 
   test('a hiding column is carried, every cell of it', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
 
     liftColumn('buys');
 
@@ -168,7 +171,7 @@ describe('columns by hand', () => {
   });
 
   test('a dropped column lands as itself', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
     liftColumn('buys');
 
     carryColumnOver('trades');
@@ -179,7 +182,7 @@ describe('columns by hand', () => {
   });
 
   test('the carried column wears its offset from home', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOn({x: 20, y: 15});
@@ -192,7 +195,7 @@ describe('columns by hand', () => {
   });
 
   test('a settle mid-drag moves home under the carried column', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
     liftColumn('trades');
     carryColumnOn({x: 20, y: 15});
 
@@ -207,7 +210,7 @@ describe('columns by hand', () => {
   });
 
   test('losing the pointer mid-drag keeps the column aloft', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftColumn('trades');
     const captured: number[] = [];
     surface().setPointerCapture = id => captured.push(id);
@@ -221,7 +224,7 @@ describe('columns by hand', () => {
   });
 
   test('a pointer lost with no button held drops the column where it is', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftColumn('trades');
     carryColumnOver('buys');
 
@@ -232,7 +235,7 @@ describe('columns by hand', () => {
   });
 
   test('a column that loses the pointer keeps crossing its neighbours', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftColumn('trades');
     surface().setPointerCapture = () => undefined;
     carryColumnOver('buys');
@@ -248,7 +251,7 @@ describe('columns by hand', () => {
   });
 
   test('a column carried back without dropping comes home', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -261,7 +264,7 @@ describe('columns by hand', () => {
   });
 
   test('a lazy column carried home lands nowhere', () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -272,7 +275,7 @@ describe('columns by hand', () => {
   });
 
   test('the switch waits until the column is a quarter into an even neighbor', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnInto('buys', 0.2);
@@ -285,7 +288,7 @@ describe('columns by hand', () => {
 
   test('a slim column reaches deeper into a wide neighbor before switching', () => {
     widths = {...even(), trades: 40, buys: 360};
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnInto('buys', 1 / 3);
@@ -297,7 +300,7 @@ describe('columns by hand', () => {
   });
 
   test('the first and last columns hold their posts', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('window');
     expect(carried()).toEqual([]);
@@ -309,7 +312,7 @@ describe('columns by hand', () => {
   });
 
   test('a keyboard walk says the move', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -319,7 +322,7 @@ describe('columns by hand', () => {
   });
 
   test('the lazy table says a column move', async () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -329,7 +332,7 @@ describe('columns by hand', () => {
   });
 
   test('a dropped column says where it landed', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -339,7 +342,7 @@ describe('columns by hand', () => {
   });
 
   test('a column carried past three neighbours says nothing until it lands, then says where once', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -354,7 +357,7 @@ describe('columns by hand', () => {
   });
 
   test('a column carried away and back to its own seat says nothing', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -366,7 +369,7 @@ describe('columns by hand', () => {
   });
 
   test('the lazy table says a dropped column once, where it landed', () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -377,7 +380,7 @@ describe('columns by hand', () => {
   });
 
   test('a menu appears only where the column asks for one', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(screen.queryByRole('button', {name: 'sort window'})).not.toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'sort trades'})).toBeVisible();
@@ -386,7 +389,7 @@ describe('columns by hand', () => {
   });
 
   test('every column offers a resize handle', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(within(header('trades')).getByRole('button', {name: /resize trades/})).toBeVisible();
     expect(within(header('window')).getByRole('button', {name: /resize window/})).toBeVisible();
@@ -396,7 +399,7 @@ describe('columns by hand', () => {
 describe('rows by hand', () => {
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftRow('this minute');
     carryRowOver('last 15 minutes');
@@ -405,7 +408,7 @@ describe('rows by hand', () => {
   });
 
   test('every control says its tab stop outright, so a browser that tabs only to fields still reaches it', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(grip('this minute')).toHaveAttribute('tabindex', '0');
     expect(screen.getByRole('button', {name: 'sort trades'})).toHaveAttribute('tabindex', '0');
@@ -414,7 +417,7 @@ describe('rows by hand', () => {
   });
 
   test('a retaken pointer lands on the grip that lifted the row, never on the header cell', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     const retaken: string[] = [];
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -428,7 +431,7 @@ describe('rows by hand', () => {
   });
 
   test('a row that lost the pointer keeps crossing its neighbours', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftRow('this minute');
     grip('this minute').setPointerCapture = () => undefined;
     carryRowOver('last 5 minutes');
@@ -440,7 +443,7 @@ describe('rows by hand', () => {
   });
 
   test('a pointer lost with no button held drops the row where it is', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftRow('this minute');
     carryRowOver('last 5 minutes');
 
@@ -451,7 +454,7 @@ describe('rows by hand', () => {
   });
 
   test('a lazy row waits for the drop', () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     liftRow('this minute');
     carryRowOver('last 15 minutes');
@@ -462,7 +465,7 @@ describe('rows by hand', () => {
   });
 
   test('a hiding row is carried, every cell of it', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
 
     liftRow('last 5 minutes');
 
@@ -470,7 +473,7 @@ describe('rows by hand', () => {
   });
 
   test('a dropped row lands as itself', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
     liftRow('last 5 minutes');
 
     carryRowOver('this minute');
@@ -481,7 +484,7 @@ describe('rows by hand', () => {
   });
 
   test('a row carried back without dropping comes home', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -493,7 +496,7 @@ describe('rows by hand', () => {
   });
 
   test('the carried row wears its offset from home on every cell', () => {
-    seat(EagerTable, 'hide static');
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
 
     liftRow('last 5 minutes');
     carryRowOn(15);
@@ -507,7 +510,7 @@ describe('rows by hand', () => {
   });
 
   test('the keyboard walks a row down and back up', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -517,7 +520,7 @@ describe('rows by hand', () => {
   });
 
   test('the top row cannot walk off the table', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowUp}');
@@ -526,8 +529,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still walk', async () => {
-    const {rerender} = render(seated(EagerTable, [], 'keep static'));
-    rerender(seated(EagerTable, startingRows, 'keep static'));
+    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
+    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -536,8 +539,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still say the move', async () => {
-    const {rerender} = render(seated(EagerTable, [], 'keep static'));
-    rerender(seated(EagerTable, startingRows, 'keep static'));
+    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
+    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -546,8 +549,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still walk and say the move on the animated table', async () => {
-    const {rerender} = render(seated(EagerTable, [], 'keep animated'));
-    rerender(seated(EagerTable, startingRows, 'keep animated'));
+    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'animated'}));
+    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'animated'}));
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -557,8 +560,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still drag', () => {
-    const {rerender} = render(seated(EagerTable, [], 'keep static'));
-    rerender(seated(EagerTable, startingRows, 'keep static'));
+    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
+    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
 
     liftRow('this minute');
     carryRowOver('last 15 minutes');
@@ -568,7 +571,7 @@ describe('rows by hand', () => {
   });
 
   test('a keyboard nudge says the move', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -577,7 +580,7 @@ describe('rows by hand', () => {
   });
 
   test('the lazy table says a row move', async () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -587,7 +590,7 @@ describe('rows by hand', () => {
   });
 
   test('a dropped row says where it landed', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftRow('this minute');
     carryRowOver('last 15 minutes');
@@ -597,7 +600,7 @@ describe('rows by hand', () => {
   });
 
   test('a row carried past two neighbours says nothing until it lands, then says where once', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -615,7 +618,7 @@ describe('sort criteria menus', () => {
   const tradesHeader = (): HTMLElement => header('trades');
 
   test('a direction chosen from the column menu sorts the rows', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
@@ -624,17 +627,17 @@ describe('sort criteria menus', () => {
   });
 
   test('the sort keeps sorting as the values change', async () => {
-    const {rerender} = seat(EagerTable, 'keep static');
+    const {rerender} = seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true}));
     expect(windowNames()).toEqual(['session', 'this minute', 'last 15 minutes', 'this hour', 'last 5 minutes']);
 
-    rerender(seated(EagerTable, retraded(10), 'keep static'));
+    rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
     expect(windowNames()).toEqual(['session', 'last 15 minutes', 'this hour', 'last 5 minutes', 'this minute']);
   });
 
   test('an arrow at the edge of a sorted table keeps the sort and adds no report', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     grip('last 5 minutes').focus();
@@ -646,7 +649,7 @@ describe('sort criteria menus', () => {
   });
 
   test('choosing a sort says it', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     expect(announced()).toEqual(['trades sorted descending']);
@@ -656,7 +659,7 @@ describe('sort criteria menus', () => {
   });
 
   test('a sort on a second column replaces what the page said about the first', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     await userEvent.click(within(menuFor('sort buys')).getByRole('button', {name: 'ascending', hidden: true}));
@@ -665,13 +668,13 @@ describe('sort criteria menus', () => {
   });
 
   test('a table speaks through one move report', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(screen.getAllByRole('status', {name: 'move report'})).toHaveLength(1);
   });
 
   test('an arrow at the edge of a sorted lazy table keeps the sort and adds no report', async () => {
-    seat(LazyTable, 'keep static');
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     grip('last 5 minutes').focus();
@@ -683,7 +686,7 @@ describe('sort criteria menus', () => {
   });
 
   test('reset restores the starting order', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'reset', hidden: true}));
@@ -693,7 +696,7 @@ describe('sort criteria menus', () => {
   });
 
   test('a hand on a row ends the sort and keeps the standing order', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
@@ -706,18 +709,18 @@ describe('sort criteria menus', () => {
   });
 
   test('the ended sort does not return when the values change', async () => {
-    const {rerender} = seat(EagerTable, 'keep static');
+    const {rerender} = seat(EagerTable, {origin: 'keep', motion: 'static'});
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowUp}');
 
-    rerender(seated(EagerTable, retraded(10), 'keep static'));
+    rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
   });
 
   test('the menu toggle never lifts the column', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     fireEvent.pointerDown(screen.getByRole('button', {name: 'sort trades'}), {clientX: 100, clientY: 20, pointerId: 1});
 
@@ -725,7 +728,7 @@ describe('sort criteria menus', () => {
   });
 
   test('choosing a direction never lifts the column', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
@@ -743,7 +746,7 @@ describe('resizable columns', () => {
   };
 
   test('a column takes no width of its own until a hand resizes it', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(header('window').style.width).toBe('');
     expect(header('trades').style.width).toBe('');
@@ -751,7 +754,7 @@ describe('resizable columns', () => {
   });
 
   test('the first touch of a handle gives every column its share', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     fireEvent.focus(screen.getByRole('button', {name: 'resize window'}));
@@ -762,7 +765,7 @@ describe('resizable columns', () => {
   });
 
   test('a resize whose pointer is cancelled stops following the pointer', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: 'resize window'});
     fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
@@ -777,7 +780,7 @@ describe('resizable columns', () => {
   });
 
   test('pressing a handle without moving it reports nothing', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: 'resize window'});
 
@@ -789,7 +792,7 @@ describe('resizable columns', () => {
   });
 
   test('an arrow right moves the boundary and the total holds', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
@@ -802,7 +805,7 @@ describe('resizable columns', () => {
   });
 
   test('an arrow left moves the boundary back', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: 'resize window'});
     await userEvent.click(handle);
@@ -815,7 +818,7 @@ describe('resizable columns', () => {
   });
 
   test('dragging the handle trades share between neighbors', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
@@ -828,7 +831,7 @@ describe('resizable columns', () => {
   });
 
   test('a handle dragged through several shares says nothing on the way and only the share it landed on', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: 'resize window'});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
@@ -842,7 +845,7 @@ describe('resizable columns', () => {
   });
 
   test('a handle dragged away and back to where it began says nothing', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: 'resize window'});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
@@ -855,7 +858,7 @@ describe('resizable columns', () => {
   });
 
   test('a dragged handle keeps the name it had until it is let go', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     const handle = screen.getByRole('button', {name: /^resize window/});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
@@ -869,7 +872,7 @@ describe('resizable columns', () => {
 
   test('an arrow key held through its repeats says the share once, when it is let go', async () => {
     const keys = userEvent.setup();
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     await keys.click(screen.getByRole('button', {name: /^resize window/}));
 
@@ -882,7 +885,7 @@ describe('resizable columns', () => {
 
   test('a keyboard move ends when the handle loses focus', async () => {
     const keys = userEvent.setup();
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     await keys.click(screen.getByRole('button', {name: /^resize window/}));
 
@@ -895,7 +898,7 @@ describe('resizable columns', () => {
 
   test('a handle pressed while another holds focus says its own share once, when it is let go', async () => {
     const hands = userEvent.setup();
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     await hands.click(screen.getByRole('button', {name: /^resize window/}));
     const trades = screen.getByRole('button', {name: /^resize trades/});
@@ -912,7 +915,7 @@ describe('resizable columns', () => {
   });
 
   test('a second trade replaces what the page said about the first', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
     await userEvent.click(screen.getByRole('button', {name: 'resize window'}));
     await userEvent.keyboard('{ArrowRight}');
@@ -924,7 +927,7 @@ describe('resizable columns', () => {
   });
 
   test('a resize says the new share', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
@@ -935,7 +938,7 @@ describe('resizable columns', () => {
   });
 
   test('a boundary can never starve a column', async () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
@@ -946,7 +949,7 @@ describe('resizable columns', () => {
   });
 
   test('arrow keys on the resize handle never move the column', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
     surveyed();
 
     const handle = screen.getByRole('button', {name: /resize trades/});
@@ -957,7 +960,7 @@ describe('resizable columns', () => {
   });
 
   test('a widened column clips its overflow without marking its cells', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(sourceTable().classList).toContain('apportioned');
     expect(header('window').classList).not.toContain('clipped');
@@ -971,7 +974,7 @@ describe('animated moves', () => {
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
 
   test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     columnsSurveyed();
 
     header('trades').focus();
@@ -988,7 +991,7 @@ describe('animated moves', () => {
   });
 
   test('the marks clear when the animation ends', async () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     columnsSurveyed();
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -1001,7 +1004,7 @@ describe('animated moves', () => {
   });
 
   test('a second walk marks again', async () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     columnsSurveyed();
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -1017,7 +1020,7 @@ describe('animated moves', () => {
 
   test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     columnsSurveyed();
 
     header('trades').focus();
@@ -1044,7 +1047,7 @@ describe('animated moves', () => {
 
   test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     settledRows();
 
     grip('this minute').focus();
@@ -1072,7 +1075,7 @@ describe('animated moves', () => {
   });
 
   test('a keyboard nudge settles every cell of the walked row', async () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     settledRows();
 
     grip('this minute').focus();
@@ -1085,7 +1088,7 @@ describe('animated moves', () => {
   });
 
   test('the row a keyboard nudge passed is shoved up', async () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     settledRows();
 
     grip('this minute').focus();
@@ -1097,7 +1100,7 @@ describe('animated moves', () => {
   });
 
   test('a strike shoves the neighbour toward the side it gave up', () => {
-    seat(EagerTable, 'hide animated');
+    seat(EagerTable, {origin: 'hide', motion: 'animated'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1110,7 +1113,7 @@ describe('animated moves', () => {
   });
 
   test('a strike back shoves the neighbour the other way', () => {
-    seat(EagerTable, 'hide animated');
+    seat(EagerTable, {origin: 'hide', motion: 'animated'});
     liftColumn('trades');
     carryColumnOver('buys');
 
@@ -1124,7 +1127,7 @@ describe('animated moves', () => {
   });
 
   test('on release every cell of the carried column settles, and the column it passed is shoved', () => {
-    seat(EagerTable, 'hide animated');
+    seat(EagerTable, {origin: 'hide', motion: 'animated'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1139,7 +1142,7 @@ describe('animated moves', () => {
   });
 
   test('the next lift clears every settling and shoved mark', () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1153,7 +1156,7 @@ describe('animated moves', () => {
   });
 
   test('a lazy column settles on the slot it takes at the drop, shoving everything it passed', () => {
-    seat(LazyTable, 'keep animated');
+    seat(LazyTable, {origin: 'keep', motion: 'animated'});
 
     liftColumn('trades');
     carryColumnOver('sells');
@@ -1169,7 +1172,7 @@ describe('animated moves', () => {
   });
 
   test('a static release leaves the same marks as an animated one', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1182,14 +1185,14 @@ describe('animated moves', () => {
   });
 
   test('the table wears the word the sheet reads', () => {
-    seat(EagerTable, 'keep static');
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     expect(sourceTable()).toHaveClass('static');
     expect(sourceTable()).not.toHaveClass('animated');
   });
 
   test('a carried row shoves the row it passes up', () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
 
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -1202,7 +1205,7 @@ describe('animated moves', () => {
   });
 
   test('on release every cell of the dropped row settles', () => {
-    seat(EagerTable, 'keep animated');
+    seat(EagerTable, {origin: 'keep', motion: 'animated'});
     liftRow('this minute');
     carryRowOver('last 5 minutes');
 

@@ -16,7 +16,6 @@ import {
 import gripSource from '../items/Grip.tsx?sample';
 import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
-import cssSource from '../LazyHideStaticList/LazyHideStaticList.css?sample';
 
 export const LazyHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -30,7 +29,7 @@ export const LazyHideStaticRecipe: FC = () => <>
       {holdTheAloft(listSource)}
       {acceptTheDrop(listSource)}
       {stashLanding(listSource)}
-      {fadeOrigin(itemSource, cssSource)}
+      {fadeOrigin(itemSource)}
       {directState(listSource)}
       {roadEnd}
     </Steps>

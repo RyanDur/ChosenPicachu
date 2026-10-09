@@ -4,7 +4,6 @@ import {Moved, landedMove, landedOrder} from '../session';
 import {HideItem} from '../items/HideItem';
 import {MoveReport} from '../items/MoveReport';
 import '../sortable-list.css';
-import './LazyHideStaticList.css';
 
 type Props = {
   list: Set<string>;

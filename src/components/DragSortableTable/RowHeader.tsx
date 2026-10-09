@@ -11,7 +11,7 @@ import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, rowLift} from './lift';
 import {rowArrows} from './arrows';
 import './motion.css';
-import {cellLooks, motionLooks} from './looks';
+import {cellLooks, motionLooks, rowHeaderCell} from './looks';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
@@ -52,7 +52,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-    className={classNames(className, ...cellLooks, ...motionLooks(columnCarried || carried, settlingFrom, shoved))}
+    className={classNames(...rowHeaderCell, className, ...cellLooks, ...motionLooks(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

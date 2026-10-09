@@ -11,8 +11,9 @@ import baseCss from '@components/DragSortableTable/Table.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
 import tableSource from '../Frame/table.html?sample';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
-import widthsSource from '../Aggregations/Aggregations.css?sample';
+import widthsSource from '../Aggregations.css?sample';
 import {theImplementation} from './steps';
 import '../../Recipe/Recipe.css';
 
@@ -24,7 +25,8 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...unit(sharesSource, 'export const measuredWidths')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(buildSource, "has(width) && 'shared'", "has(width) && 'shared'"), gap,
+      ...span(buildSource, '...headerStates(travels, width)', '...headerStates(travels, width)'), gap,
+      ...unit(looksSource, 'export const headerStates'), gap,
       ...span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[

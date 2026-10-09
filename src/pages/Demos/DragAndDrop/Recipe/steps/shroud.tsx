@@ -2,10 +2,10 @@ import {ReactNode} from 'react';
 import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
-import {gap} from './sources';
+import {gap, hideItemCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const fadeOrigin = (itemSource: Sample, cssSource: Sample): ReactNode =>
+export const fadeOrigin = (itemSource: Sample): ReactNode =>
   <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
     <Words want="With the drag image in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
       <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
@@ -19,7 +19,7 @@ export const fadeOrigin = (itemSource: Sample, cssSource: Sample): ReactNode =>
         ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...unit(cssSource, '.sortable-list .hide {'),
+        ...unit(hideItemCss, '.draggable.hide {'),
         aside('/* not visibility; the session dies with its source */')
       ]}/>
     </Codes>

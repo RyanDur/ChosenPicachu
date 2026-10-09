@@ -32,7 +32,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
       {acceptTheDrop(listSource)}
       {innerHalf}
       {commitCrossing(listSource)}
-      {fadeOrigin(itemSource, cssSource)}
+      {fadeOrigin(itemSource)}
       {slideCrossed(listSource, cssSource)}
       {roadEnd}
     </Steps>

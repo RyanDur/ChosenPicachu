@@ -39,8 +39,8 @@ export const orderInState = (world: World, tableSource: Sample, buildSrc: Sample
           ]}/>
           <Snippet label="HTML" lines={[
             ...span(tableSource, '<DragSortableTable {...table}', 'rows={seated(rows)}>'), gap,
-            ...span(tableSource, '<Headers className="row"', '</Headers>'), gap,
-            ...span(tableSource, '<Body className="body"', '</Body>')
+            ...span(tableSource, '<Headers onColumnMoved', '</Headers>'), gap,
+            ...span(tableSource, '<Body onRowMoved', '</Body>')
           ]}/>
           <Snippet label="TS" lines={[
             ...unit(headersSource, 'export const Headers'), gap,

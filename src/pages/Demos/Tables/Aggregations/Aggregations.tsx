@@ -1,6 +1,5 @@
 import {Explainer} from '@components/Explainer';
 import {FC, useEffect, useState} from 'react';
-import {classNames} from '@components/class-names';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials} from '../../Controls';
@@ -9,7 +8,7 @@ import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
 import {selectColumns, selectRows} from '../../store';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
-import './Aggregations.css';
+import '../Aggregations.css';
 
 type Props = Dials & {
   world: World;
@@ -20,7 +19,7 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const dispatch = useDemosDispatch();
   const columns = useDemosSelector(selectColumns);
   const rows = useDemosSelector(selectRows);
-  return <Table caption="Live aggregations by window" className={classNames(origin, motion)} columns={columns} rows={rows}
+  return <Table caption="Live aggregations by window" origin={origin} motion={motion} columns={columns} rows={rows}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
     onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>;

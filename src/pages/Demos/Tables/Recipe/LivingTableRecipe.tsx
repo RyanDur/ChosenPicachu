@@ -13,7 +13,7 @@ import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?samp
 import cellSource from '@components/DragSortableTable/Cell.tsx?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?sample';
-import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?sample';
+import widthsSource from '@pages/Demos/Tables/Aggregations.css?sample';
 import tableSource from '../Frame/table.html?sample';
 import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
@@ -48,7 +48,7 @@ const dealPlans: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<Headers className="row"', '</Headers>')
+      ...span(dealSource, '<Headers onColumnMoved', '</Headers>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')

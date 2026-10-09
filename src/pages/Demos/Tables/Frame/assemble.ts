@@ -5,7 +5,7 @@ import rowGripCss from '@components/DragSortableTable/RowGrip.css?frame';
 import motionCss from '@components/DragSortableTable/motion.css?frame';
 import {Dials} from '../../Controls';
 import {Exchange} from '@pages/Demos/exchange';
-import aggregationsCss from '../Aggregations/Aggregations.css?frame';
+import aggregationsCss from '../Aggregations.css?frame';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
 import {startingTable} from './starting';

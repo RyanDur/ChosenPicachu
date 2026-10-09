@@ -6,12 +6,12 @@ import lazyStaticList from '@pages/Demos/DragAndDrop/LazyKeepStaticList/LazyKeep
 import lazyAnimatedList from '@pages/Demos/DragAndDrop/LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
 import sessionSource from '@pages/Demos/DragAndDrop/session.ts?raw';
 import draggableSource from '@pages/Demos/DragAndDrop/items/KeepItem.tsx?raw';
-import whisperCss from '@pages/Demos/DragAndDrop/EagerHideStaticList/EagerHideStaticList.css?raw';
+import whisperCss from '@pages/Demos/DragAndDrop/items/HideItem.css?raw';
 import pushedCss from '@pages/Demos/DragAndDrop/EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
 
 describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
-    ['headers are placed by the order', pageSource, '<Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>'],
+    ['headers are placed by the order', pageSource, '<Headers onColumnMoved={onColumnMoved} onSorted={onSorted}>'],
     ['the lifted header wears its seat and its drift', headerSource, "'--seat-x': pixels(seat?.x)"],
     ['the lifted column is carried across rows', cellSource, "'--drift-x': pixels(drift?.x)"],
     ['the carried cell moves only under hide', motionCss, '.sortable.hide .carried {'],

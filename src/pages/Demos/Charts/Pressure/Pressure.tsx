@@ -1,3 +1,4 @@
+import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useContext, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
@@ -57,15 +58,12 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
           : 'waiting for the first trade'}
       </figcaption>
     </figure>
-    <details className="explainer">
-      <summary className="prompt">what am I looking at?</summary>
-      <p className="explanation">
-        Every trade has two orders: one that was waiting, and one that came and took it. When the one that came was a
-        buyer, the trade counts as bought. When it was a seller, it counts as sold. Each bar is one minute. Bought size
-        rises above the line and sold size falls below it, both on the same scale, so the taller side is the side that
-        was pushing. The fetched past doesn’t say who took each trade, so this chart counts only the trades that arrive
-        while you watch.
-      </p>
-    </details>
+    <Explainer>
+      Every trade has two orders: one that was waiting, and one that came and took it. When the one that came was a
+      buyer, the trade counts as bought. When it was a seller, it counts as sold. Each bar is one minute. Bought size
+      rises above the line and sold size falls below it, both on the same scale, so the taller side is the side that
+      was pushing. The fetched past doesn’t say who took each trade, so this chart counts only the trades that arrive
+      while you watch.
+    </Explainer>
   </section>;
 };

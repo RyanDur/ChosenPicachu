@@ -1,18 +1,17 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useTableSelector} from './context';
 import {columnNamed, unknownColumn, widthOfColumn} from './selectors';
 import './Header.css';
-import {headerLooks} from './looks';
+import {headerCell, headerLooks, headerStates} from './looks';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
   const width = useTableSelector(widthOfColumn(column));
 
   return <th {...th}
-    className={classNames(className, ...headerLooks, has(width) && 'shared')}
+    className={classNames(...headerCell, className, ...headerLooks, ...headerStates(false, width))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}
