@@ -39,4 +39,19 @@ describe('the two worlds deal the same table', () => {
 
     expect(frame).toEqual(react);
   });
+
+  it('the frame\'s sort menus wear what the react table\'s sort menus wear', () => {
+    const menusOf = (root: HTMLElement): string[][] =>
+      within(root).getAllByLabelText(/^sort .+ by$/).map(menu => [...menu.classList].sort());
+    const rows = windowedAggregates([]).map(cells);
+    const {unmount} = render(<EagerTable caption="live aggregations" origin="hide" motion="animated" columns={measures} rows={rows}/>);
+    const react = menusOf(document.body);
+    unmount();
+
+    vanillaFrame.stand();
+    const frame = menusOf(document.body);
+    document.body.innerHTML = '';
+
+    expect(frame).toEqual(react);
+  });
 });
