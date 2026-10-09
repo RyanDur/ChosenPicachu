@@ -15,7 +15,7 @@ export {fingerTap, fingertipMiss} from './finger';
 export {dialRow, pillSwitch} from './pills';
 export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
-export {accordionsTab, builds, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
+export {accordionsTab, builds, controlWord, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab, tabsTo} from './keyboard';

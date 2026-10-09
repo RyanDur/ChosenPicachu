@@ -357,18 +357,6 @@
   background-attachment: local, scroll;
 }
 
-.outlined-before {
-  &::before {
-    border: var(--hairline) solid;
-  }
-
-  &:active::before {
-    background: var(--field-inverse);
-    color: var(--field);
-    outline: var(--hairline) solid var(--field);
-    outline-offset: calc(var(--hairline-x-3) * -1);
-  }
-}
 
 .muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
@@ -451,4 +439,9 @@
   @media (width <= 1100px) {
     padding: var(--base-x-2) var(--base-x-0_5);
   }
+}
+
+.press-inverted:active {
+  background: var(--field-inverse);
+  color: var(--field);
 }

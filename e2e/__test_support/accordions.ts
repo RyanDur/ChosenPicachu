@@ -76,6 +76,16 @@ const radioPart = ({page, fold, article, index}: Where): Omit<Part, 'showsText'>
   isOpen: () => fold.getByRole('radio').isChecked()
 });
 
+export const controlWord = (fold: Locator, word: 'Open' | 'Close'): Locator => fold.getByText(word, {exact: true});
+
+const gridPart = (fold: Locator, control: 'checkbox' | 'radio', openByKeyboard: () => Promise<void>): Omit<Part, 'showsText'> => ({
+  fold,
+  open: () => controlWord(fold, 'Open').click(),
+  close: () => controlWord(fold, 'Close').click(),
+  openByKeyboard,
+  isOpen: () => fold.getByRole(control).isChecked()
+});
+
 const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   'the measured checkbox build': ({page, fold}) => checkboxPart(page, fold),
   'the measured radio build': where => radioPart(where),
@@ -83,16 +93,10 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   'the radio build': where => radioPart(where),
   'the inclusive details build': ({page, fold}) => detailsPart(page, fold),
   'the details build': ({page, fold}) => detailsPart(page, fold),
-  'the grid checkbox build': ({page, fold}) => checkboxPart(page, fold),
-  'the grid radio build': ({page, fold, article, index}) => ({
-    fold,
-    open: () => nameOn(fold).click(),
-    close: () => nameOn(fold).click(),
-    openByKeyboard: () => index === 0
-      ? focusAndPress(page, fold.getByRole('radio'), 'Space')
-      : focusAndPress(page, article.getByRole('radio').first(), 'ArrowDown', index),
-    isOpen: () => fold.getByRole('radio').isChecked()
-  })
+  'the grid checkbox build': ({page, fold}) => gridPart(fold, 'checkbox', () => focusAndPress(page, fold.getByRole('checkbox'), 'Space')),
+  'the grid radio build': ({page, fold, article, index}) => gridPart(fold, 'radio', () => index === 0
+    ? focusAndPress(page, fold.getByRole('radio'), 'Space')
+    : focusAndPress(page, article.getByRole('radio').first(), 'ArrowDown', index))
 };
 
 const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build', 'the grid radio build'];

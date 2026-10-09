@@ -142,10 +142,14 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <ul className="new-accordion">
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
-          <label className="info-label inverse-filled attentive field-outlined outlined-before">
+          <header className="fold-bar field-inverse field-ink field-outlined">
             <span className="sub-title bold">{key}</span>
-            <input type="checkbox" className="off-screen"/>
-          </label>
+            <label className="fold-control inverse-filled attentive hairline-outline press-inverted">
+              <input type="checkbox" className="off-screen"/>
+              <span className="when-closed">Open</span><span className="when-open">Close</span>
+              <span className="off-screen">{key}</span>
+            </label>
+          </header>
           <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
         </li>)}
     </ul>
@@ -166,10 +170,14 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
-          <label className="info-label inverse-filled attentive field-outlined outlined-before">
+          <header className="fold-bar field-inverse field-ink field-outlined">
             <span className="sub-title bold">{key}</span>
-            <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
-          </label>
+            <label className="fold-control inverse-filled attentive hairline-outline press-inverted">
+              <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
+              <span className="when-closed">Open</span><span className="when-open">Close</span>
+              <span className="off-screen">{key}</span>
+            </label>
+          </header>
           <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
         </li>)}
     </ul>

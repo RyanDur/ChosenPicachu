@@ -521,16 +521,18 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios} motion={motion}/>}
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
-          <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
-            label holding the part’s name and its checkbox, and the checkbox remembers whether the
-            part is open, as it did in the known-height build. What is new is the way the text opens, below.</p>
-          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
+          <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar holds the
+            part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is
+            open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the
+            control works the fold. What is new is the way the text opens, below.</p>
+          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build is a radio group. Radios that share a name keep one part
             open on their own, which checkboxes cannot do without script. What a radio cannot do is
             close itself: pressed again, it stays checked. So the list adds that, with a little
-            script, and the radios stay plain. A press on a radio bubbles up to the list, which
+            script, and the radios stay plain. Each bar holds the part’s name and, at its end, an Open or Close
+            control; the name is only a name, and only the control works the fold. A press on a radio bubbles up to the list, which
             remembers which radio is open. A press on that radio unchecks it and forgets it, and a
             press on any other remembers the new one. The arrow keys move the choice and press as
             they go, so each move is remembered too.</p>
@@ -565,18 +567,18 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="together-depth" className="opener bold">How the two work together</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The bar is named by its part. The label holds the part’s name, and that
-                  name is what the {input} is called. Its checked state is the part’s state, so a listener
-                  hears the part and whether it is open, such as “basalt, {input}, checked”. The
-                  stylesheet writes Open or Close at the bar’s end, for the eye, to say what a press will
-                  do. It marks the word as decoration with an empty alternative, so the word is not read.
-                  Someone using voice control says the part’s name. The Open or Close sits in a box drawn
-                  by <code>outlined-before</code>, a class that gives it a hairline in the text’s own colour and
-                  inverts it while the bar is pressed.</p>
+                <p className="paragraph">The bar is named by its part, and the control at its end is the one thing
+                  that works the fold. The control is a {input} under a label that holds the Open or Close the eye
+                  sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such
+                  as “Open basalt, {input}, not checked”, and someone using voice control says what they see. Its
+                  checked state is the part’s state. The control is a box drawn by <code>hairline-outline</code>, a
+                  hairline in the text’s own colour, and <code>press-inverted</code>, which inverts it while it is
+                  pressed.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&::before {\n        order: 1;'), gap,
-                  ...unit(accordionsCss, '&:has(:checked) .info-label::before {'), gap,
-                  ...unit(surfaceCss, '.outlined-before {')
+                  ...unit(accordionsCss, '&:has(:checked) .when-closed {'), gap,
+                  ...unit(accordionsCss, '&:not(:has(:checked)) .when-open {'), gap,
+                  ...unit(surfaceCss, '.hairline-outline {'), gap,
+                  ...unit(surfaceCss, '.press-inverted:active {')
                 ]}/>
               </li>
               {type === 'exclusive' && <li className="run">

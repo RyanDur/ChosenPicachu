@@ -5,7 +5,7 @@ import {ExclusiveAccordion, ExclusiveRadioToggleAccordion, InclusiveAccordion, I
 const folds = [{key: 'Alpha', value: 'the first fold'}, {key: 'Beta', value: 'the second fold'}];
 
 const controlOf = (control: 'checkbox' | 'radio', part: string): HTMLElement =>
-  screen.getByRole(control, {name: part});
+  screen.getByRole(control, {name: new RegExp(part)});
 
 describe('the inclusive toggle accordion using checkboxes', () => {
   test('should keep every fold it opens open', async () => {
@@ -79,6 +79,19 @@ describe('the exclusive toggle accordion using a radio group', () => {
     await userEvent.keyboard('[Space>]');
 
     expect(controlOf('radio', 'Alpha')).not.toBeChecked();
+  });
+});
+
+describe.each([
+  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
+  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
+])('$accordion', ({Accordion, control}) => {
+  test('should leave the fold as it was when the reader presses the part’s name', async () => {
+    render(<Accordion content={folds} motion="reveal"/>);
+
+    await userEvent.click(screen.getAllByText('Alpha')[0]);
+
+    expect(controlOf(control, 'Alpha')).not.toBeChecked();
   });
 });
 

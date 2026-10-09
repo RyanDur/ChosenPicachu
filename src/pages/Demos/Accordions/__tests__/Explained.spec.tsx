@@ -662,6 +662,17 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(together).getByText(/The inclusive build is a checkbox build again/)).toHaveTextContent(/the checkbox remembers whether the part is open, as it did in the known-height build\./);
   });
 
+  test.each([
+    {type: 'inclusive', opening: /^The inclusive build is a checkbox build again/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
+    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
+  ])('should say, with $type chosen, that only the control at the bar’s end works the fold', async ({type, opening, sentence}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(opening)).toHaveTextContent(sentence);
+  });
+
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
@@ -812,13 +823,16 @@ describe('the classes the bars wear', () => {
     expect(explanation.everyCodeBeside(oldWay, /The Close bar is shorter than the others/).join()).toMatch(/&\.close \{[^]*\.field-inverse \{[^]*\.field-ink \{/);
   });
 
-  test('should say, last in its run, that the Open or Close sits in a box drawn by outlined-before', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+  test.each([
+    {type: 'inclusive', input: 'checkbox'},
+    {type: 'exclusive', input: 'radio'}
+  ])('should say, with $type chosen, what the eye and the ear meet on the control, beside the rules that show its word', async ({type, input}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(explanation.runTelling(together, /It marks the word as decoration/)).getByText(/It marks the word as decoration/)).toHaveTextContent(/so the word is not read\. Someone using voice control says the part’s name\. The Open or Close sits in a box drawn by outlined-before, a class that gives it a hairline in the text’s own colour and inverts it while the bar is pressed\.$/);
-    expect(explanation.everyCodeBeside(together, /It marks the word as decoration/).join()).toMatch(/&:has\(:checked\) \.info-label::before \{[^]*\.outlined-before \{/);
+    expect(explanation.runTelling(together, /^The bar is named by its part/)).toHaveTextContent(`The bar is named by its part, and the control at its end is the one thing that works the fold. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such as “Open basalt, ${input}, not checked”, and someone using voice control says what they see. Its checked state is the part’s state. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and press-inverted, which inverts it while it is pressed.`);
+    expect(explanation.everyCodeBeside(together, /^The bar is named by its part/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.press-inverted:active \{/);
   });
 });
 

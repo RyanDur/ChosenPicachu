@@ -2,6 +2,7 @@ import {expect} from '@playwright/test';
 import {
   accordionsTab,
   builds,
+  controlWord,
   desktop,
   dialRow,
   heightOnceSettled,
@@ -9,6 +10,7 @@ import {
   pressTab,
   nameOn,
   showing,
+  tabsTo,
   textOf
 } from './__test_support';
 import {everyBuildJourneys, test} from './__test_support/fold-journeys';
@@ -91,15 +93,28 @@ for (const {build, control} of [
   {build: 'the grid checkbox build', control: 'checkbox'},
   {build: 'the grid radio build', control: 'radio'}
 ] as const) {
-  test(`the control of ${build} is named by its part, and checked while the part is open`, async ({page}) => {
+  test(`the control of ${build} is named by the word it shows and its part, and checked while the part is open`, async ({page}) => {
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
     const name = await nameOn(part.fold).textContent() ?? '';
-    await expect(part.fold.getByRole(control, {name, exact: true})).not.toBeChecked();
+    await expect(part.fold.getByRole(control, {name: `Open ${name}`, exact: true})).not.toBeChecked();
 
     await part.open();
 
-    await expect(part.fold.getByRole(control, {name, exact: true})).toBeChecked();
+    await expect(part.fold.getByRole(control, {name: `Close ${name}`, exact: true})).toBeChecked();
+  });
+
+  test(`a keyboard reader tabbing into ${build} lands on its first control, and Space works it`, async ({page}) => {
+    await page.goto(showing(build));
+    const part = accordionsTab(page).firstPartOf(build);
+    const name = await nameOn(part.fold).textContent() ?? '';
+    await tabsTo(page, part.fold.getByRole(control));
+    await expect(part.fold.getByRole(control, {name: `Open ${name}`, exact: true})).toBeFocused();
+
+    await page.keyboard.press('Space');
+
+    await expect(part.fold.getByRole(control, {name: `Close ${name}`, exact: true})).toBeChecked();
+    await expect.poll(part.showsText).toBe(true);
   });
 }
 
@@ -182,26 +197,36 @@ test('a fold of the accordion in HTML alone opens by pointer and closes by keybo
   await expect.poll(fold.showsText).toBe(false);
 });
 
-test.describe('a desktop', () => {
-  test.use(desktop);
+for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
+  test.describe(reader, () => {
+    test.use(device);
 
-  for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-    test(`a press at the start, middle or end of a bar of ${build} opens its fold`, async ({page}) => {
-      for (const spot of ['start', 'middle', 'end'] as const) {
+    for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+      test(`a press on a part's name in ${build} leaves its fold shut`, async ({page}) => {
         await page.goto(showing(build));
         const part = accordionsTab(page).firstPartOf(build);
-        await part.fold.scrollIntoViewIfNeeded();
-        const bar = await part.fold.boundingBox();
-        if (bar === null) throw new Error(`${build} shows no bar`);
-        await expect.poll(part.isOpen, `shut before the press at the ${spot}`).toBe(false);
 
-        await page.mouse.click(bar.x + {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot], bar.y + Math.min(bar.height, 40) / 2);
+        await nameOn(part.fold).click();
 
-        await expect.poll(part.isOpen, `opened by the press at the ${spot}`).toBe(true);
-      }
-    });
-  }
-});
+        await expect.poll(part.isOpen).toBe(false);
+        await expect.poll(part.showsText).toBe(false);
+      });
+
+      test(`a press on Open in ${build} opens the fold and shows Close, and Close shuts it again`, async ({page}) => {
+        await page.goto(showing(build));
+        const part = accordionsTab(page).firstPartOf(build);
+        await controlWord(part.fold, 'Open').click();
+        await expect.poll(part.showsText).toBe(true);
+        await expect(controlWord(part.fold, 'Open')).toBeHidden();
+
+        await controlWord(part.fold, 'Close').click();
+
+        await expect.poll(part.showsText).toBe(false);
+        await expect(controlWord(part.fold, 'Open')).toBeVisible();
+      });
+    }
+  });
+}
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
   test.describe(reader, () => {

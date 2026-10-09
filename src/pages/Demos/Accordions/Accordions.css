@@ -73,21 +73,23 @@
       grid-template-rows: 1fr;
     }
 
-    .info-label {
+    .fold-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: var(--base);
-
-      &::before {
-        order: 1;
-        content: 'Open' / '';
-        padding: var(--base);
-      }
     }
 
-    &:has(:checked) .info-label::before {
-      content: 'Close' / '';
+    .fold-control {
+      padding: var(--base);
+    }
+
+    &:has(:checked) .when-closed {
+      display: none;
+    }
+
+    &:not(:has(:checked)) .when-open {
+      display: none;
     }
   }
 }
