@@ -529,11 +529,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>}
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build is a radio group. Each bar holds the part’s name and, at its
-            end, an Open or Close control; the name is only a name, and only the control works the fold. Radios that
-            share a name keep one part open on their own, which checkboxes cannot do without script. What a radio
-            cannot do is close itself: pressed again, it stays checked. So the list adds that, with a little
-            script, and the radios stay plain. A press on a radio bubbles up to the list, which
-            remembers which radio is open. A press on that radio unchecks it and forgets it, and a
+            end, an Open or Close control; the name is only a name, and only the control works the fold.</p>
+          <p className="paragraph">Radios that share a name keep one part open on their own, which checkboxes cannot do
+            without script. What a radio cannot do is close itself: pressed again, it stays checked. So the list adds
+            that, with a little script, and the radios stay plain. A press on a radio is an event, a message the
+            browser sends from the element pressed and then up through each of its ancestors in turn, which is called
+            bubbling, so the press reaches the list, which remembers which radio is open. A press on that radio unchecks it and forgets it, and a
             press on any other remembers the new one. The arrow keys move the choice and press as
             they go, so each move is remembered too.</p>
           <Snippet label="TS" lines={[

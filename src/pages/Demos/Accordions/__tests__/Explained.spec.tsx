@@ -664,13 +664,21 @@ describe('the runs in view, with the folds shut', () => {
 
   test.each([
     {type: 'inclusive', opening: /^The inclusive build is a checkbox build again/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
-    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'The exclusive build is a radio group. Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold. Radios that share a name keep one part open on their own'}
+    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'The exclusive build is a radio group. Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
   ])('should say, with $type chosen, that only the control at the bar’s end works the fold', async ({type, opening, sentence}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
     expect(within(together).getByText(opening)).toHaveTextContent(sentence);
+  });
+
+  test('should say, with exclusive chosen, what an event and bubbling are where the press first reaches the list', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/^Radios that share a name keep one part open on their own/)).toHaveTextContent('A press on a radio is an event, a message the browser sends from the element pressed and then up through each of its ancestors in turn, which is called bubbling, so the press reaches the list, which remembers which radio is open.');
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
