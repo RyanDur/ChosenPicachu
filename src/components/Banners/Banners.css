@@ -158,3 +158,9 @@
     place-items: center;
   }
 }
+
+.top { margin-block: var(--base-x-2) auto; }
+.middle { margin-block: auto; }
+.bottom { margin-block: auto var(--base-x-2); }
+.left { margin-inline: var(--base-x-2) auto; }
+.right { margin-inline: auto var(--base-x-2); }

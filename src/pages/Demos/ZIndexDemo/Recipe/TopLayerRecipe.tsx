@@ -89,8 +89,8 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
-            ...unit(placementCss, `.${side} {`), gap,
-            ...unit(placementCss, `.${align} {`)
+            ...unit(bannersCss, `.${side} {`), gap,
+            ...unit(align === 'center' ? placementCss : bannersCss, `.${align} {`)
           ]}/>
         </Codes>
       </Step>
