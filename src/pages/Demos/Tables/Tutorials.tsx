@@ -7,7 +7,7 @@ import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {LayerMap} from './Recipe/LayerMap';
-import {DialNote, Exercise, stationId} from '../Recipe';
+import {DialNote, Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
 import {StoryClues} from './Recipe/StoryClues';
 import {DesignAsk} from './Recipe/DesignAsk';
@@ -52,23 +52,23 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine" aria-label="the stations">
-      <li className="station void-badge-before shadow-rail-along" id={stationId(1)} tabIndex={-1}>
+      <Station at={1}>
         <StoryClues/>
-      </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(2)} tabIndex={-1}>
+      </Station>
+      <Station at={2}>
         <DesignAsk/>
-      </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(3)} tabIndex={-1}>
+      </Station>
+      <Station at={3}>
         <StorySlices/>
         <Exercise/>
-      </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(4)} tabIndex={-1}>
+      </Station>
+      <Station at={4}>
         <StillTableRecipe/>
-      </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(5)} tabIndex={-1}>
+      </Station>
+      <Station at={5}>
         <FlowTableRecipe/>
-      </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(6)} tabIndex={-1}>
+      </Station>
+      <Station at={6}>
         <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"
@@ -88,7 +88,7 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
         {shown === 'sort' && <Recipe track={track} onTrackChosen={onTrackChosen}/>}
         {shown === 'menu' && <MenuRecipe/>}
         {shown === 'resize' && <ResizeRecipe/>}
-      </li>
+      </Station>
     </ol>
   </section>;
 };

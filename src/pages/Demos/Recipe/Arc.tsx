@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {stationId} from './station';
+import {stationId} from './Station';
 
 type CluesProps = {
   quote: string;
