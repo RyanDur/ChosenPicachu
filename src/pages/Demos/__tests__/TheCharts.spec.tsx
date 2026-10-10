@@ -918,6 +918,7 @@ describe('the workspace story', () => {
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
     ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the pointer with that mark.'],
+    ['where the drag starts', 'A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.'],
     ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
     ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
     ['the last chart', 'With one chart left there is no grip and no remove button, and Delete does nothing. The + is still there.']

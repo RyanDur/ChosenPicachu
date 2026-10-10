@@ -27,7 +27,7 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
     <Steps>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource)}
+      {acceptTheDrop(listSource, itemSource)}
       {stashLanding(listSource)}
       {keepStanding(listSource)}
       {glideSettle(listSource)}

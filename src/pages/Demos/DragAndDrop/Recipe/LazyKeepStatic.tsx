@@ -27,7 +27,7 @@ export const LazyKeepStaticRecipe: FC = () => <>
     <Steps>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource)}
+      {acceptTheDrop(listSource, itemSource)}
       {stashLanding(listSource)}
       {keepStanding(listSource)}
       {directState(listSource)}

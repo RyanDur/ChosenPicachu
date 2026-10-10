@@ -28,7 +28,7 @@ export const EagerKeepStaticRecipe: FC = () => <>
     <Steps>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource)}
+      {acceptTheDrop(listSource, itemSource)}
       {innerHalf}
       {commitCrossing(listSource)}
       {keepStanding(listSource)}

@@ -27,7 +27,7 @@ export const LazyHideAnimatedRecipe: FC = () => <>
     <Steps>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource)}
+      {acceptTheDrop(listSource, itemSource)}
       {stashLanding(listSource)}
       {fadeOrigin(itemSource)}
       {glideSettle(listSource)}

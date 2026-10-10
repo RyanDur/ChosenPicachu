@@ -348,13 +348,13 @@ describe('the fold motion', () => {
 
   const partOneSays = {
     reveal: /With reveal, the panel’s height moves over 300 milliseconds/,
-    drawer: /With the drawer, the height and visibility move on the same 300 milliseconds/,
+    drawer: /With the drawer, the height moves on the same 300 milliseconds/,
     static: /With static, nothing moves/
   };
 
   test.each([
     {style: 'reveal', others: ['drawer', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height'], omits: ['.drawer & .info']},
-    {style: 'drawer', others: ['reveal', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height', '.drawer & .info { display: flex;', '.drawer & .info-text { flex-shrink: 0;'], omits: []},
+    {style: 'drawer', others: ['reveal', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height'], omits: ['.drawer & .info']},
     {style: 'static', others: ['reveal', 'drawer'], carves: knownHeight, omits: [':is(.reveal, .drawer) & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
@@ -371,6 +371,45 @@ describe('the fold motion', () => {
     for (const rule of omits) {
       expect(explanation.codeBeside(oldWay, partOneSays[style])).not.toHaveTextContent(rule);
     }
+  });
+
+  const sectionSays = {
+    reveal: /With reveal, the section sits at the panel’s top/,
+    drawer: /With the drawer, the panel lays the section out as a column set at its end/
+  };
+
+  const visibilitySays = {
+    reveal: /With reveal, visibility moves on the same 300 milliseconds/,
+    drawer: /With the drawer, visibility moves with the height/
+  };
+
+  test.each([
+    {style: 'reveal', other: 'drawer', carves: [], omits: ['.drawer & .info']},
+    {style: 'drawer', other: 'reveal', carves: ['.drawer & .info { display: flex;', '.drawer & .info-text { flex-shrink: 0;'], omits: []}
+  ] as const)('should tell, with $style chosen, what that motion does to the section and to visibility, each in its own run', async ({style, other, carves, omits}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent(sectionSays[style]);
+    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent(visibilitySays[style]);
+    expect(within(oldWay).queryByText(sectionSays[other])).not.toBeInTheDocument();
+    expect(within(oldWay).queryByText(visibilitySays[other])).not.toBeInTheDocument();
+    for (const rule of carves) {
+      expect(explanation.codeBeside(oldWay, sectionSays[style])).toHaveTextContent(rule);
+    }
+    for (const rule of omits) {
+      expect(explanation.codeBeside(oldWay, sectionSays[style])).not.toHaveTextContent(rule);
+    }
+  });
+
+  test('should tell, with static chosen, nothing about motion in the section’s run or the visibility run', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).not.toHaveTextContent(/With static/);
+    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).not.toHaveTextContent(/With static/);
   });
 
   test.each([

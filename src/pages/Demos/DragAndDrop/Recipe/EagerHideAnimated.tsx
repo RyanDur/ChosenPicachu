@@ -29,7 +29,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
     <Steps>
       {armTheDrag(itemSource)}
       {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource)}
+      {acceptTheDrop(listSource, itemSource)}
       {innerHalf}
       {commitCrossing(listSource)}
       {fadeOrigin(itemSource)}
