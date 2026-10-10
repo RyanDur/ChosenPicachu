@@ -163,7 +163,7 @@ const widenStory = (world: World) =>
       change.</Tell>
     <Tell>The header cell lets each control find its own edge, and pads for whatever it holds,
       so the handle sits at the boundary without a box to arrange it. It captures its pointer and measures the
-      table once, pixels per share. A press on the handle would bubble, which means the browser hands it on to the
+      table once, pixels per share. A press on the handle would bubble, which means the browser passes it on to the
       header around it, and the header would start a column drag. So the handle stops the press there, and a
       boundary drag never becomes a column drag. Arrow keys on a focused handle make the same trade, one fixed step
       per arrow. The handle stops those keys from bubbling too, so the header’s own arrow keys never move the

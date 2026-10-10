@@ -13,7 +13,7 @@ const origins: Record<Origin, string> = {
 };
 
 const motions: Record<Motion, string> = {
-  animated: 'And the swap slides into place, so the eye never loses a column.',
+  animated: 'And the swap slides into place, so the reader never loses a column.',
   static: 'And the swap lands instantly, with no motion, so nothing competes with the pointer.'
 };
 

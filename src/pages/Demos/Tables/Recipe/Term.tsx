@@ -23,7 +23,7 @@ const definitions: Record<Word, ReactNode> = {
   standing: 'the rows’ order on screen: the seats as they stand, ranked by the sort while one holds',
   store: 'one object that holds the state. You read the state from it, send it an action with dispatch to change it, and subscribe to be told when it has changed',
   slice: 'a reducer together with the state it starts from. A store with more than one concern joins several slices, each under its own key and each seeing only its own part',
-  action: 'a plain record of something that happened: a type that names it, and the facts about it. dispatch hands it to the reducer',
+  action: 'a plain record of something that happened: a type that names it, and the facts about it. dispatch passes it to the reducer',
   reducer: 'the function that takes the state as it was and an action, and returns the state as it now is. It never changes the old state',
   selector: 'a named function that takes the state and returns one answer from it. Its name says what is being asked',
   middleware: 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own',

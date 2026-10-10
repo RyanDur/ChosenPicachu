@@ -587,7 +587,7 @@ describe('the tables demo', () => {
     await userEvent.click(await screen.findByRole('radio', {name: 'Drag resize'}));
 
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
-    expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser hands it on to the header around it/);
+    expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser passes it on to the header around it/);
     expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
     expect(resize).toHaveTextContent(/The handle stops those keys from bubbling too, so the header’s own arrow keys never move the column/);
     expect(resize).toHaveTextContent(/It should stop those keys there as well, because the header handles arrow keys by moving the column/);
@@ -894,7 +894,7 @@ describe('the tables demo', () => {
 describe('the living table’s terms', () => {
   test.each([
     ['store', 'one object that holds the state. You read the state from it, send it an action with dispatch to change it, and subscribe to be told when it has changed'],
-    ['action', 'a plain record of something that happened: a type that names it, and the facts about it. dispatch hands it to the reducer'],
+    ['action', 'a plain record of something that happened: a type that names it, and the facts about it. dispatch passes it to the reducer'],
     ['reducer', 'the function that takes the state as it was and an action, and returns the state as it now is. It never changes the old state'],
     ['slice', 'a reducer together with the state it starts from. A store with more than one concern joins several slices, each under its own key and each seeing only its own part'],
     ['selector', 'a named function that takes the state and returns one answer from it. Its name says what is being asked'],

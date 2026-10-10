@@ -30,7 +30,7 @@ export const namesInTheCode =
     pointer moves. The survey is the measurement of the header row the code takes when a drag starts.</Tell>;
 
 export const twoRoads =
-  <Tell>There are two roads to dragging something across a page, and this site walks
+  <Tell>There are two roads to dragging something across a page, and this site builds
     both. The <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> takes
     the native API, where the platform brings most of the behavior for very little code;

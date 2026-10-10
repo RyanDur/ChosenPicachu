@@ -42,7 +42,7 @@ const oneState = (world: World): ReactNode =>
         subscribes. That is the last step of this story.</Says>
       {world === 'react'
         ? <>
-          <Says>The page creates its store once, with the exchange as its middleware, and hands it to
+          <Says>The page creates its store once, with the exchange as its middleware, and passes it to
             a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades and the
             same arrangement.</Says>
           <Says>The table element creates its own store once, empty, and every part inside it reads and writes
@@ -94,15 +94,15 @@ const actionsAreData =
       <Says>The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and
         sorting. Each is a short switch that handles the actions it cares about and returns the state untouched
         for the rest.</Says>
-      <Says>Each case hands the state and the facts to one verb of the table’s own, the way a move hands its
+      <Says>Each case passes the state and the facts to one verb of the table’s own, the way a move passes its
         neighbours a shove and the thing that moved a <Term word="settle">settle</Term>.</Says>
       <Says>The marks a move leaves are measured from the order the page showed, which is carried in the action,
         because the table keeps no order of its own.</Says>
       <Says>The drag is a key on the same state, absent from a table that never lifts, and dragging is the only
         reducer that writes it.</Says>
       <Says>The parts hold no state and compose no reducers: they ask the store, and they dispatch to it.</Says>
-      <Says>The table is never handed the trades. The page projects them into rows, a key and the value under each
-        column, ranked by the sort while one holds, and hands that projection to the table element beside its
+      <Says>The table is never given the trades. The page projects them into rows, a key and the value under each
+        column, ranked by the sort while one holds, and passes that projection to the table element beside its
         markup in the order it should stand.</Says>
       <Says>What the table shows is what it was given, and what the hand does to it comes back as an event.</Says>
       <Codes>
@@ -117,7 +117,7 @@ const actionsAreData =
           ...unit(storeSource, 'export type Slice'), gap,
           ...unit(arrangementSource, 'const answering = '), gap,
           ...unit(reducerSource, 'export const tableReducer'),
-          aside('// three slices by key; the arrangement answers the hand and the menu; four table reducers read the type in turn')
+          aside('// three slices by key; the arrangement handles the hand and the menu; four table reducers read the type in turn')
         ]}/>
       </Codes>
     </Reveal>
@@ -168,7 +168,7 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
       <Says>A store built with no middleware has a chain of one.</Says>
       <Says>A layer holds two dispatches. next sends an action down to the layer beneath it, and at last to the
         reducer.</Says>
-      <Says>The other is the store’s own dispatch, on the view the layer was handed. It sends an action back in at
+      <Says>The other is the store’s own dispatch, on the view the layer was given. It sends an action back in at
         the top, so an action a layer raises itself is seen by every layer, including its own.</Says>
     </Words>
     <Reveal>
@@ -209,7 +209,7 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
 const whoSubscribes = (world: World): ReactNode =>
   <Step title="Who subscribes">
     <Words want="The page must follow the state, and each world has its own way to follow.">
-      <Says>The store hands out one subscribe and never learns who took it.</Says>
+      <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
       <Says>React subscribes a component and ignores all four. The vanilla build subscribes
