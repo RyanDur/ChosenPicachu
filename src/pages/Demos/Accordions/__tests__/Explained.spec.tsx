@@ -344,7 +344,7 @@ describe('the fold motion', () => {
     expect(explanation.everyCodeBeside(platform, /A pseudo-element is a part of an element/).join()).not.toContain('.drawer &::details-content');
   });
 
-  const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-text { overflow-y: auto;', '.info-paragraph { box-sizing', '.info-toggle:not(:checked) ~ .info { height: 0;'];
+  const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { height: 0;'];
 
   const partOneSays = {
     reveal: /With reveal, the panel’s height moves over 300 milliseconds/,
@@ -889,6 +889,6 @@ describe('the known-height build’s scroll sign', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits.');
-    expect(explanation.everyCodeBeside(oldWay, /The section has a tabindex of 0/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{/);
+    expect(explanation.everyCodeBeside(oldWay, /Whether a tall part’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
   });
 });

@@ -353,19 +353,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines
                   tall: the lh unit is the height of one line, so the panel grows with the text size. Closed, the
-                  panel’s height is 0 and overflow hidden hides the text.</p>
-              </li>
-              <li className="run">
-                <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what does
-                  not fit. Whether a tall part’s last line is cut off depends on where its lines fall, so the section
-                  wears <code>foot-shadowed</code>, which paints a shadow at its foot and a cover in the panel’s colour
-                  that scrolls with the text and hides the shadow at the end, or when the text fits.</p>
-              </li>
-              <li className="run">
-                <p className="paragraph">The section has a tabindex of 0, so a keyboard can reach it and scroll it,
-                  wears <code>focus-ringed</code> so a keyboard reader sees when they have reached it, and is named by
-                  its bar with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility
-                  hidden takes the text out of the tab order and out of what a screen reader reads.
+                  panel’s height is 0 and overflow hidden hides the text.
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
@@ -374,21 +362,35 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
                   ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
-                  ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
-                  ...unit(surfaceCss, '.foot-shadowed {'), gap,
-                  ...unit(surfaceCss, '.focus-ringed {'), gap,
-                  ...unit(accordionsCss, '.info-paragraph {'), gap,
-                  ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
+                  ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'),
                   ...{
-                    reveal: unit(accordionsCss, '& .info {\n      transition: height'),
+                    reveal: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
                     drawer: [
-                      ...unit(accordionsCss, '& .info {\n      transition: height'), gap,
+                      gap, ...unit(accordionsCss, '& .info {\n      transition: height'), gap,
                       ...unit(accordionsCss, '.drawer & .info {'), gap,
                       ...unit(accordionsCss, '.drawer & .info-text {')
                     ],
                     static: []
                   }[motion]
                 ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what does
+                  not fit. Whether a tall part’s last line is cut off depends on where its lines fall, so the section
+                  wears <code>foot-shadowed</code>, which paints a shadow at its foot and a cover in the panel’s colour
+                  that scrolls with the text and hides the shadow at the end, or when the text fits.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
+                  ...unit(accordionsCss, '.info-paragraph {'), gap,
+                  ...unit(surfaceCss, '.foot-shadowed {')
+                ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">The section has a tabindex of 0, so a keyboard can reach it and scroll it,
+                  wears <code>focus-ringed</code> so a keyboard reader sees when they have reached it, and is named by
+                  its bar with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility
+                  hidden takes the text out of the tab order and out of what a screen reader reads.</p>
+                <Snippet label="CSS" lines={unit(surfaceCss, '.focus-ringed {')}/>
               </li>
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the
