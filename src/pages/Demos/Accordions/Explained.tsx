@@ -294,10 +294,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Now the stylesheet needs to know whether the {input} is checked. A selector
                   is the part of a CSS rule that picks which elements the rule styles,
                   and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
-                  by its state: here, a checked {input}. The <Mdn path="Web/CSS/Subsequent-sibling_combinator">~
-                    combinator</Mdn> picks the siblings that come after it, the elements with the same parent. That is
-                  why the order is fixed: the stylesheet can only look forward from the {input}. While it is not
-                  checked, this rule collapses the text. No script watches the {input}; the stylesheet reads it.</p>
+                  by its state: here, a checked {input}. The ~ is
+                  a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
+                  that says how their elements relate; it picks the siblings that come after it, the elements with the
+                  same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
+                  While it is not checked, this rule collapses the text. No script watches the {input}; the stylesheet
+                  reads it.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
                 <TheSheetReadsTheBox/>
               </li>

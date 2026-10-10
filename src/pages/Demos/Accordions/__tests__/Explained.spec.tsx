@@ -797,6 +797,14 @@ describe('the known-height build’s bars', () => {
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
   });
 
+  test('should say what a selector, a pseudo-class and a combinator are where the stylesheet first reads the checkbox', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after it, the elements with the same parent.');
+  });
+
   test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes colour with the words', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
