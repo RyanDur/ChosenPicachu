@@ -48,6 +48,7 @@
     flex-direction: column;
 
     .path {
+      position: relative;
       height: var(--base-x-8);
       width: 100%;
       padding-inline: var(--base-x-2);
@@ -55,6 +56,16 @@
 
     .path + .path {
       height: calc(var(--base-x-8) + var(--base));
+    }
+
+    .path[aria-current="page"]::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: var(--base-x-0_5);
+      top: 50%;
+      width: var(--base);
+      height: var(--base);
+      translate: 0 -50%;
     }
   }
 
@@ -223,6 +234,12 @@
 
       .path + .path {
         height: unset;
+      }
+
+      .path[aria-current="page"]::before {
+        inset-inline-start: 50%;
+        top: calc(50% + 0.5lh + var(--base-x-0_5));
+        translate: -50% 0;
       }
     }
   }
