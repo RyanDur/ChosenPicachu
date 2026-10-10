@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const StructureArrives: FC = () =>
-  <Moment year="1990"
-    title="Researchers need to collaborate"
+  <Moment of={moments.structureArrives}
     tells={<>Berners-Lee wrote all three of specification, server, and browser, and based HTML on
       SGML so the documents world would recognize it. The one tag of his own was{' '}
     <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>,

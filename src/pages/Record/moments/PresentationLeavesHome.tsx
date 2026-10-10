@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const PresentationLeavesHome: FC = () =>
-  <Moment year="1994"
-    title="Authors need control of the look"
+  <Moment of={moments.presentationLeavesHome}
     tells={<>Håkon Wium Lie{' '}
       <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html">drafted Cascading HTML
         Style Sheets</a>, encouraged by Dave Raggett, who had realized HTML should{' '}

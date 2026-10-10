@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const SomeoneNeedsComponents: FC = () =>
-  <Moment year="2013"
-    title="Someone needs components"
+  <Moment of={moments.someoneNeedsComponents}
     tells={<>Interfaces had grown into applications, and their builders needed components:
       self-contained pieces that carry structure, style, and behavior together, and styles
       that stay where they are put. The platform did not have them yet, so JavaScript built

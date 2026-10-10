@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {NavigationType, useLocation, useNavigationType} from 'react-router';
 import {maybe, notEmpty} from '@ryandur/sand';
-import {useOpeningFragment} from '@components/OpeningFragment';
+import {useOpeningFragment} from './OpeningFragmentProvider';
 
 const foldsOpeningAround = (target: Element): Animation[] =>
   document.getAnimations().filter(({effect}) =>

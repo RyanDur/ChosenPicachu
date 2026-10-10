@@ -1,7 +1,8 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners/params';
-import {Stories, useArrival} from '../Recipe';
+import {Stories} from '../Recipe';
+import {useArrival} from '@components/OpeningFragment';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
 import {MultipleRecipe} from './Recipe/MultipleRecipe';

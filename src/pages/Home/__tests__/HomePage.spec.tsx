@@ -78,6 +78,33 @@ describe('the home page', () => {
     expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction', 'The record']);
   });
 
+  test('should list the record\'s thirteen moments in its door, year and title, in the record\'s order', () => {
+    const moments = within(screen.getByRole('list', {name: 'the moments'})).getAllByRole('link');
+
+    expect(moments.map(moment => moment.textContent)).toEqual([
+      '1989 Someone needs something',
+      '1990 Researchers need to collaborate',
+      '1994 Authors need control of the look',
+      '1994 Author and reader need a referee',
+      '1995 Pages need to respond',
+      '1996 The need outruns the standards',
+      '1998 The browsers need to agree',
+      '2003 The separation needs proof',
+      '2004 The standard needs the real world',
+      '2005 The page needs to update in place',
+      '2013 Someone needs components',
+      '2014 The philosophy needs writing down',
+      '2016 The document needs to come first'
+    ]);
+  });
+
+  test('should send each of the record\'s moments straight to that moment on the record\'s page', () => {
+    const moments = within(screen.getByRole('list', {name: 'the moments'}));
+
+    expect(moments.getByRole('link', {name: '1989 Someone needs something'})).toHaveAttribute('href', `${Paths.record}#someone-needs-something`);
+    expect(moments.getByRole('link', {name: '1994 Author and reader need a referee'})).toHaveAttribute('href', `${Paths.record}#author-and-reader-need-a-referee`);
+  });
+
   test('should lead to the record through a door of its own', () => {
     const door = screen.getByRole('region', {name: 'The record'});
 

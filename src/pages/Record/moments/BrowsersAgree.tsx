@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const BrowsersAgree: FC = () =>
-  <Moment year="1998"
-    title="The browsers need to agree"
+  <Moment of={moments.browsersAgree}
     tells={<>The specifications ran ahead of the browsers, and{' '}
       <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm">the Acid
         Test</a> drew the line pixel by pixel; in the beginning, most browsers failed it. The

@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const BehaviorBorn: FC = () =>
-  <Moment year="1995"
-    title="Pages need to respond"
+  <Moment of={moments.behaviorBorn}
     tells={<>Brendan Eich{' '}
       <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/">wrote the
         interpreter in about ten days</a>, for{' '}

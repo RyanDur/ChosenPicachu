@@ -13,6 +13,23 @@ import {PageBecomesApplication} from './moments/PageBecomesApplication';
 import {SomeoneNeedsComponents} from './moments/SomeoneNeedsComponents';
 import {Html5SaysIt} from './moments/Html5SaysIt';
 import {DocumentComesBack} from './moments/DocumentComesBack';
+import {inOrder, MomentKey} from './moments/moments';
+
+const stories: Record<MomentKey, FC> = {
+  need: Need,
+  structureArrives: StructureArrives,
+  presentationLeavesHome: PresentationLeavesHome,
+  cascadeSettlement: CascadeSettlement,
+  behaviorBorn: BehaviorBorn,
+  needOutrunsStandards: NeedOutrunsStandards,
+  browsersAgree: BrowsersAgree,
+  zenGarden: ZenGarden,
+  browsersTakePen: BrowsersTakePen,
+  pageBecomesApplication: PageBecomesApplication,
+  someoneNeedsComponents: SomeoneNeedsComponents,
+  html5SaysIt: Html5SaysIt,
+  documentComesBack: DocumentComesBack
+};
 
 export const Timeline: FC = () =>
   <section className="record trim-rule-above" aria-labelledby="the-record">
@@ -28,19 +45,10 @@ export const Timeline: FC = () =>
       documents. Everything on the web is layered onto that one need.
     </p>
     <ol className="timeline" aria-label="the timeline">
-      <Need/>
-      <StructureArrives/>
-      <PresentationLeavesHome/>
-      <CascadeSettlement/>
-      <BehaviorBorn/>
-      <NeedOutrunsStandards/>
-      <BrowsersAgree/>
-      <ZenGarden/>
-      <BrowsersTakePen/>
-      <PageBecomesApplication/>
-      <SomeoneNeedsComponents/>
-      <Html5SaysIt/>
-      <DocumentComesBack/>
+      {inOrder.map(key => {
+        const Story = stories[key];
+        return <Story key={key}/>;
+      })}
     </ol>
     <p className="sub-title">
       Read the titles again, top to bottom: it is one sentence said thirteen ways. Someone

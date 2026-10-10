@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const Html5SaysIt: FC = () =>
-  <Moment year="2014"
-    title="The philosophy needs writing down"
+  <Moment of={moments.html5SaysIt}
     tells={<>The specification era restated the philosophy:{' '}
       <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">design principles</a>{' '}
       for how a standard should behave, and stated objectives for the language: semantic

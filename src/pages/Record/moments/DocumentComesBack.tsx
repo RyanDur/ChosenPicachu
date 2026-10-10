@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const DocumentComesBack: FC = () =>
-  <Moment year="2016"
-    title="The document needs to come first"
+  <Moment of={moments.documentComesBack}
     tells={<>The question this time was where. Server-side rendering returned,
       sending real HTML first and attaching behavior after; static generation, islands, and
       server components are the same instinct refined: the document first, the program only

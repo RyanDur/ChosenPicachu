@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const BrowsersTakePen: FC = () =>
-  <Moment year="2004"
-    title="The standard needs the real world"
+  <Moment of={moments.browsersTakePen}
     tells={<>Mozilla and Opera{' '}
       <a className="signpost" href="https://whatwg.org/position-paper">put a counter-proposal in writing</a>:
       evolve HTML, backwards compatible. The W3C voted it down and held course for XML

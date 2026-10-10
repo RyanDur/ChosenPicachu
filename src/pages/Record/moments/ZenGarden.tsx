@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const ZenGarden: FC = () =>
-  <Moment year="2003"
-    title="The separation needs proof"
+  <Moment of={moments.zenGarden}
     tells={<>Dave Shea published{' '}
       <a className="signpost" href="https://csszengarden.com/">one HTML document</a> and invited the world to
       restyle it. Hundreds of designs, not one change to the markup: the same structure, any

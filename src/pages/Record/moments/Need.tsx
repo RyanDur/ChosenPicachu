@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const Need: FC = () =>
-  <Moment year="1989"
-    title="Someone needs something"
+  <Moment of={moments.need}
     tells={<>Thousands of researchers at CERN, two-year stays, and the technical details of
       past projects{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“sometimes lost forever,

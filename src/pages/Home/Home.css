@@ -35,6 +35,25 @@
     }
   }
 
+  .moments {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: grid;
+    row-gap: var(--base-x-1_5);
+  }
+
+  .moment-line {
+    display: grid;
+    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
+    column-gap: var(--base-x-2);
+    align-items: baseline;
+  }
+
+  .moment-year {
+    justify-self: end;
+  }
+
   .door-title {
     margin: 0;
     text-wrap: balance;

@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {moments} from './moments';
 
 export const PageBecomesApplication: FC = () =>
-  <Moment year="2005"
-    title="The page needs to update in place"
+  <Moment of={moments.pageBecomesApplication}
     tells={<>Ajax let a page fetch data and rewrite itself without reloading: Eich’s livelier
       web, realized. Garrett named the approach and pointed at Google’s newest products,
       most of them betas, as its highest-profile examples. jQuery followed, and then the
