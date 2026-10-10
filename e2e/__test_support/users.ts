@@ -26,6 +26,7 @@ export const usersPage = (page: Page) => {
     actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),
     homeState,
     tapTheHomeStateAt: async (end: 'start' | 'end'): Promise<void> => {
+      await homeState.scrollIntoViewIfNeeded();
       const box = await homeState.boundingBox();
       if (box === null) throw new Error('the home address has no State choice');
       await page.touchscreen.tap(end === 'start' ? box.x + 4 : box.x + box.width - 4, box.y + box.height / 2);
