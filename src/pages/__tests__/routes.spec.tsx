@@ -25,6 +25,17 @@ describe('page error boundaries', () => {
     expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
   });
 
+  test('a page that crashes inside the gallery says the room is closed under the gallery\'s own header', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(<TestApp at={Paths.artGallery}><Boom/></TestApp>, {onCaughtError: () => undefined});
+
+    expect(await site.roomSays('This room is closed.')).toBeVisible();
+    expect(site.pageTitle()).toHaveTextContent('Gallery');
+    expect(await site.nav()).toBeInTheDocument();
+  });
+
   test('a crash no page catches is reported and announced', async () => {
     const boom = new Error('boom');
     const Boom = () => {
