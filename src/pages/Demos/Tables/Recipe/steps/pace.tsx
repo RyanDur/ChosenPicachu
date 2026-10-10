@@ -27,11 +27,11 @@ export const eagerPace = (world: World, headerSource: Sample, buildSrc: Sample):
           story.</Says>}
       {world === 'react'
         ? <Says>This is the whole of the eager table’s travel, and there is no landing to keep
-          anywhere in it: the header keeps the pointer capture, columnUnder answers from the
-          survey, and a strike dispatches on the spot. Eager listens on the move.</Says>
+          anywhere in it: the header keeps the pointer capture, columnUnder reads the
+          survey, and a strike dispatches on the spot. Eager acts on the move.</Says>
         : <Says>This is the whole travel of the eager build, and there is no landing state to keep
-          anywhere in it: columnUnder answers from the survey, and a strike dispatches on the
-          spot; the buttons-at-zero healing lives in the shared pointer travel, once, for every
+          anywhere in it: columnUnder reads the survey, and a strike dispatches on the
+          spot; the buttons-at-zero recovery is in the shared pointer travel, once, for every
           build.</Says>}
       <Codes>
         {world === 'react'
@@ -65,7 +65,7 @@ export const lazyPace = (world: World, headerSource: Sample, paceSource: Sample,
   <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the
-        release dispatches it. The landing rides in the drag slice, never in the order:
+        release dispatches it. The landing is kept in the drag slice, never in the order:
         drifting back over home must clear it, and release and cancel must resolve it the same
         way.</Says>
     </Words>
@@ -77,10 +77,10 @@ export const lazyPace = (world: World, headerSource: Sample, paceSource: Sample,
           your own slot clears the landing, so a drop at home changes nothing.</Says>}
       {world === 'react'
         ? <Says>The lazy table is its own file, not a flag on the eager one: its travel only ever
-          dispatches the landing into the drag, and its release, which also answers cancel,
-          dispatches the order. Lazy listens on the drop.</Says>
+          dispatches the landing into the drag, and its release, which also handles cancel,
+          dispatches the order. Lazy acts on the drop.</Says>
         : <Says>The lazy build is its own file, not a flag on the eager one: its travel records the
-          landing in the drag, and its release, which also answers cancel, dispatches whatever
+          landing in the drag, and its release, which also handles cancel, dispatches whatever
           the drag is holding.</Says>}
       <Codes>
         {world === 'react'

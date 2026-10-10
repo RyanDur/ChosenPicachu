@@ -76,8 +76,8 @@ const handleMarkup: Record<World, ReactNode> = {
 const labelHoldsItsShare = ' While a drag or a held arrow key is under way the label keeps the share it began with and takes the new one when the move ends, so the name under focus does not change at every step.';
 
 const handleSays: Record<World, ReactNode> = {
-  react: <Says>The handle is focusable by birth, announcing itself by name, and once the ledger
-    exists its label speaks the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
+  react: <Says>The handle is focusable from the start and announced by name, and once the ledger
+    exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
     own: it is a grid container whose only item is the 8px line its ::after paints, so the
     painted line is the hit area. The
@@ -169,21 +169,21 @@ const widenStory = (world: World) =>
       column.</Tell>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
-        <Words want="Absolute pixel widths break the promise that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
+        <Words want="Absolute pixel widths break the guarantee that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
           <Says>Widths should be <Term word="share">shares</Term> of a hundred, born by
             measuring the rendered headers at the first touch; until a hand arrives, the
             stylesheet owns the widths and no ledger exists.</Says>
         </Words>
         <Reveal>
           <Says>Pixel widths are the first ledger you reach for, and every entry in it is a lie
-            waiting for a resize: the sum answers to nobody.</Says>
+            waiting for a resize: nothing keeps the sum equal to the width.</Says>
           <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
             in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
             is a class of the table’s own sheet.</Says>
-          <Says>It switches the table to the layout the ledger apportions. Its share rides a custom property, and
+          <Says>It switches the table to the layout the ledger apportions. Its share is written as a custom property, and
             fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
             opening widths in that same stylesheet, keeps the table exactly its container: every
-            column a fraction of it, one record keeping one promise.</Says>
+            column a fraction of it, one record keeping one guarantee.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
@@ -253,7 +253,7 @@ const widenStory = (world: World) =>
         </Reveal>
       </Step>
       <Step title="Capture the pointer, measure once">
-        <Words want="Pointer positions arrive in pixels while the ledger speaks in shares, and asking the DOM for the table’s width on every move brings back layout thrash.">
+        <Words want="Pointer positions arrive in pixels while the ledger holds shares, and asking the DOM for the table’s width on every move forces a layout each time.">
           <Says>Capture on the handle, which is safe here because unlike the sort’s cells the
             handle never moves in the DOM, and measure the table once: pixels per share, the
             resize’s own <Term word="survey">survey</Term>.</Says>
@@ -267,10 +267,10 @@ const widenStory = (world: World) =>
         <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
           <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop its press from bubbling</Mdn> up to
             the header, and arrow keys on the handle should make the same trade as a drag, a fixed step per arrow. It should stop those keys there
-            as well, because the header answers arrow keys by moving the column.</Says>
+            as well, because the header handles arrow keys by moving the column.</Says>
         </Words>
         <Reveal>
-          <Says>The sort never hears the press, and the arrow keys trade a fixed step with no
+          <Says>The sort never gets the press, and the arrow keys move a fixed step with no
             pointer required: focus the handle and tap.</Says>
           {gestureCodes[world]}
         </Reveal>

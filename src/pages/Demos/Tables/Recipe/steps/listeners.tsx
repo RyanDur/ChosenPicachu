@@ -25,8 +25,8 @@ export const listenersOnce = (world: World, buildSrc: Sample): ReactNode =>
         onColumnMoved, onRowMoved, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, and it is one plain object that both worlds mount unchanged. What differs is
         who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
-        a reconcile, which moves nodes. Every listener from here on speaks to the store and nothing
-        else, which is why each lives in one shared file and every shared block below appears in
+        a reconcile, which moves nodes. Every listener from here on dispatches to the store and nothing
+        else, which is why each is in one shared file and every shared block below appears in
         both worlds unchanged.</Says>
       <Codes>
         <Snippet label="TS" lines={[

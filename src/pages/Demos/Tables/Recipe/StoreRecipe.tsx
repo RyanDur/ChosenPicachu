@@ -50,7 +50,7 @@ const oneState = (world: World): ReactNode =>
         </>
         : <Says>The mount creates the same stores: the trades, with the same exchange as
           middleware; the arrangement, seeded from the markup it was given; and the hand, empty.
-          Every listener it wires speaks to one of them.</Says>}
+          Every listener it wires dispatches to one of them.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
@@ -81,22 +81,22 @@ const actionsAreData =
     <Reveal>
       <Says>The first draft dispatched functions from state to state and called them reducers. They were not: a
         reducer interprets an action it did not write.</Says>
-      <Says>Making the action data costs a union of types and one switch. It buys what the shape promises: the
+      <Says>Making the action data costs a union of types and one switch. It gets what the shape guarantees: the
         store knows nothing about tables, a layer of middleware can read what kind of action is passing, and a
         dispatch can be logged or replayed as a record.</Says>
       <Says>A <Term word="slice">slice</Term> is a reducer with the state it starts from, and a store starts from its slice’s
         beginning, so nobody names an initial state.</Says>
       <Says>Slices combine by key when a state has more than one concern, each seeing only its own. The page’s
         store is three: the trades, the candles and the arrangement.</Says>
-      <Says>The arrangement’s reducer answers what the hand and the menu decided: a column moved to a seat, a row
+      <Says>The arrangement’s reducer handles what the hand and the menu decided: a column moved to a seat, a row
         moved in the standing it was shown, a sort chosen or cleared, keys that arrived. A moved row ends the sort
         first, so the ranked order becomes the real one and the move lands in it.</Says>
       <Says>The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and
-        sorting. Each is a short switch that answers the actions it cares about and returns the state untouched
+        sorting. Each is a short switch that handles the actions it cares about and returns the state untouched
         for the rest.</Says>
       <Says>Each case hands the state and the facts to one verb of the table’s own, the way a move hands its
         neighbours a shove and the thing that moved a <Term word="settle">settle</Term>.</Says>
-      <Says>The marks a move leaves are measured from the order the page showed, which rides in the action,
+      <Says>The marks a move leaves are measured from the order the page showed, which is carried in the action,
         because the table keeps no order of its own.</Says>
       <Says>The drag is a key on the same state, absent from a table that never lifts, and dragging is the only
         reducer that writes it.</Says>
@@ -125,7 +125,7 @@ const actionsAreData =
 
 const selectorsAnswer = (world: World): ReactNode =>
   <Step title="Selectors answer questions">
-    <Words want="A component should ask for what it means, not walk the state to find it.">
+    <Words want="A component should ask for what it means, not search the state to find it.">
       <Says>Every read is a named <Term word="selector">selector</Term>: columnNamed, positionOfRow, columnTravels,
         neighbourOfColumn. The name carries the question, and the state’s shape is known in one
         file.</Says>
@@ -172,7 +172,7 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
         the top, so an action a layer raises itself is seen by every layer, including its own.</Says>
     </Words>
     <Reveal>
-      <Says>The exchange is that layer, in both worlds, and it answers three actions.</Says>
+      <Says>The exchange is that layer, in both worlds, and it handles three actions.</Says>
       <Says>On feedRequested it fetches the recent history and opens the socket. From then on it dispatches what the
         exchange did: historyArrived, feedOpened, tradeArrived, feedFailed.</Says>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
@@ -230,9 +230,9 @@ const whoSubscribes = (world: World): ReactNode =>
         </>
         : <>
           <Says>The mount subscribes three times.</Says>
-          <Says>A reconcile on the arrangement walks the page’s elements from the previous order to the current one,
-            moving only the cells whose place changed.</Says>
-          <Says>A dresser on the hand paints the carried cells and the widths.</Says>
+          <Says>A reconcile on the arrangement moves the page’s elements from the previous order to the current one,
+            touching only the cells whose place changed.</Says>
+          <Says>A dresser on the hand sets the carried cells’ classes and the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
           <Says>The store hands every listener the state before the change and a way to read the state now, so the

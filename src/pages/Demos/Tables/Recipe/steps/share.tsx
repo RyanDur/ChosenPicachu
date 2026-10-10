@@ -26,8 +26,8 @@ export const cssShare = (world: World): ReactNode =>
         fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
         on a touchscreen instead of scrolling it,
         and <Mdn path="Web/CSS/user-select">user-select</Mdn>: none keeps a fast drag from
-        sweeping selections. Anything the hand or the keyboard must find should be a
-        real <Mdn path="Web/HTML/Element/button">button</Mdn>, which arrives named and
+        sweeping selections. Anything the pointer or the keyboard must find should be a
+        real <Mdn path="Web/HTML/Element/button">button</Mdn>, which comes named and
         focusable.</Says>
     </Words>
     <Reveal>

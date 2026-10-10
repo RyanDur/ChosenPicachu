@@ -17,12 +17,12 @@ export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample)
     <Reveal>
       {world === 'react'
         ? <Says>The row grip is already a button, and the headers ask with a tabIndex, so Tab
-          walks every movable piece of the table in order. The focus-visible ring draws for the
+          reaches every movable piece of the table in order. The focus-visible ring draws for the
           keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by
           name. <code>focus-ringed</code> is one: the site’s ring, which every movable column header and every grip wears.</Says>
         : <Says>The row grip is already a button in the markup, and JavaScript asks each movable
-          header for focus with a tabindex as it dresses the grips (the anchored edges hold the
-          table, so their headers ask for nothing), so Tab walks every movable piece of the
+          header for focus with a tabindex as it adds the grips’ classes (the anchored edges hold the
+          table, so their headers ask for nothing), so Tab reaches every movable piece of the
           table in order. The focus-visible ring draws for the keyboard only. A shared class is a look
           that lives in the site’s shared sheet and that an element wears by name. <code>focus-ringed</code> is one: the site’s ring,
           which every movable column header and every grip wears.</Says>}

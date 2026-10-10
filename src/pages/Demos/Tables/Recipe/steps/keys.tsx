@@ -8,14 +8,14 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const walkSlides = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
-    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
+    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbour slid, the walked column would simply jump.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
         where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
         one for the column that walked.</Says>
     </Words>
     <Reveal>
       <Says>The arrow measures the header row at the keypress, the way the lift takes its
-        survey, and hands the widths to the walk. The walk dispatches the reorder with two
+        survey, and passes the widths to the walk. The walk dispatches the reorder with two
         marks: the neighbour is shoved by the walked column’s width, and the walked column
         settles from across the neighbour’s. The stylesheet slides both, and each clears its
         own mark when its keyframe ends, so a held key walks the column step by step, sliding
@@ -68,13 +68,13 @@ export const cutKey = (world: World, headerSource: Sample, buildSrc: Sample): Re
 
 export const gripArrows = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Turn the arrows vertical">
-    <Words want="A row is the same walk turned vertical, and the grip is already a button under the fingers.">
+    <Words want="A row is the same walk turned vertical, and the grip is already a button.">
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
-        up and down claim the vertical walk the way left and right claimed the horizontal one,
+        up and down make the vertical walk the way left and right make the horizontal one,
         with the same anchors holding.</Says>
     </Words>
     <Reveal>
-      <Says>The grip listens for the arrows itself, and the walk is the column walk with the
+      <Says>The grip handles the arrows itself, and the walk is the column walk with the
         axis turned: the seats shuffle instead of the order, and the outer edges hold.</Says>
       <Codes>
         {world === 'react'

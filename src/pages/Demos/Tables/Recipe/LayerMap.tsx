@@ -17,7 +17,7 @@ const CellHeading: FC<{children: string}> = ({children}) =>
 export const LayerMap: FC = () =>
   <>
     <p className="overview paragraph">
-      Now the table earns features, each one traceable to something the trader said. The
+      Now the table gains features, each one traceable to something the trader said. The
       machine has a mouse and a keyboard, so every arrangement a hand can make, a key can make
       too. Both axes, every layer, or the layer is not done.
     </p>

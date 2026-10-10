@@ -11,8 +11,8 @@ export const orderInState = (world: World, tableSource: Sample, buildSrc: Sample
     <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
       <Says>So the order is the page’s state, the columns and the rows as they stand, held beside
         the data and never inside it; a trade rewrites a row’s values and never touches its seat.
-        The table shows what it is handed, and what the hand does to it comes back as an event
-        the page answers. The open
+        The table shows what it is given, and what the hand does to it comes back as an event
+        the page handles. The open
         question is how each world makes the page follow a value: React renders the markup
         through it; a vanilla build has to <Term word="reconcile">reconcile</Term> the DOM against
         it by hand.</Says>

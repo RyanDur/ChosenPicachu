@@ -8,9 +8,9 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
-    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps home on release, over a neighbour that has already jumped, leaves the eye to work out both.">
-      <Says>The reorder has to land instantly for the drag math to stay true, and the hand is
-        done the moment you let go. What should move is the real thing, from where it is: the
+    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps home on release, over a neighbour that has already jumped, leaves the reader to work out both.">
+      <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the hand is
+        empty the moment you let go. What should move is the real thing, from where it is: the
         column you dropped starts where you dropped it and settles into its slot, and every
         column it shoved aside starts where it stood and slides one carried width over.</Says>
     </Words>
@@ -19,14 +19,14 @@ export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sa
         which way, so the same dispatch that reorders them marks each one shoved toward the
         start or the end, by the carried column’s width from the survey. The drop marks the
         dropped column settling from the offset it was carried to, the same offset the drift
-        slice already holds, so the hand and the settle agree to the pixel.
+        slice already holds, so the drag and the settle agree to the pixel.
         Every cell reads its mark from the state and wears it as a class and a custom property,
         and CSS owns the motion from there: a keyframe puts the cell where it came from on the
         first frame and lets it slide home.</Says>
-      <Says>The direction lives in the class, not the property, on purpose. A column carried
+      <Says>The direction is in the class, not the property, on purpose. A column carried
         back over the same neighbour shoves it the other way, the class changes, and the
         browser plays the new keyframe. A mark lives exactly as long as its animation: when the
-        keyframe ends, the element hears its own animationend and dispatches that it has
+        keyframe ends, the element gets its own animationend and dispatches that it has
         settled, so the same walk can play again on the next keypress. The lift clears whatever
         is still mid-flight, so a new drag starts clean.</Says>
       {world === 'react'
@@ -34,8 +34,8 @@ export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sa
           the stylesheet, and settling is a dispatch the element makes when its keyframe ends.
           The static table dispatches the reorder and the release outright: no marks, no
           classes, nothing to animate.</Says>
-        : <Says>The strike, the walk and the drop dress the cells, the slides are keyframes in
-          the stylesheet, and the cells undress themselves when the keyframe ends. The static
+        : <Says>The strike, the walk and the drop set the cells’ classes, the slides are keyframes in
+          the stylesheet, and the cells clear their own classes when the keyframe ends. The static
           build releases and stops: no marks, no classes, nothing to animate.</Says>}
       <Says>Rows are the same motion turned vertical: a shoved row slides up or down by the
         carried row’s height, and the dropped row settles from the drop height.</Says>
@@ -88,7 +88,7 @@ export const staticMotion = (world: World, cssSource: Sample): ReactNode =>
           nothing competes with the pointer, and no motion for prefers-reduced-motion users to
           endure.</Says>
         : <Says>The static build is the animated build wearing a different word. Every drop and
-          every walk still dresses what settles and what is shoved, because the marks are what
+          every walk still marks what settles and what is shoved, because the marks are what
           happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
           it starts and the cells undress in the same breath. There is real value beyond taste:
           nothing competes with the pointer, and no motion for prefers-reduced-motion users to

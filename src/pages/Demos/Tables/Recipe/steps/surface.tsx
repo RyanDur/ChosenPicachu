@@ -30,8 +30,8 @@ export const dragSurface = (world: World, headerSource: Sample, buildSrc: Sample
           handled as the move it is, and the header takes the pointer back in the same
           breath.</Says>
         : <Says>While something is <Term word="aloft">aloft</Term>, the header that lifted, or the grip
-          for a row, answers the move and the release, and a guard on the store keeps the
-          listeners quiet when nothing is held. Every move retakes the capture. Treat a cancel
+          for a row, handles the move and the release, and a guard on the store stops the
+          listeners when nothing is held. Every move retakes the capture. Treat a cancel
           or a move with no buttons pressed as the drop: releases can vanish into odd corners of
           the platform. Losing the capture is not the drop. When the reconcile moves the cell in
           the DOM, the browser drops the capture with it and says so at the next move, with that

@@ -31,8 +31,8 @@ const dealPlans: Record<World, ReactNode> = {
       widths govern their whole columns: the table always fills its container, and the
       columns hold still while the values change.</Says>
     <Says>And no JavaScript knows these widths at all, because nothing needs to know the
-      size until you touch something. The resize <Term word="ledger">ledger</Term> is born at the first touch by
-      measuring the headers as they stand, and the drag surveys them at the lift; a value
+      size until you touch something. The resize <Term word="ledger">ledger</Term> is created at the first touch by
+      measuring the headers as they stand, and the drag measures them at the lift; a value
       that changes at runtime is state, and until then nothing has changed.</Says>
   </>,
   vanilla: <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are
@@ -120,7 +120,7 @@ const stillStory = (world: World) =>
       <Step title="Deal a real HTML table">
         <Words want={<>The table is more than JavaScript holding numbers; it is an
           HTML <Mdn path="Web/HTML/Element/table">table</Mdn>: header cells that declare their
-          scope, rows a reader and a screen reader both walk.</>}>
+          scope, rows a reader and a screen reader both move through.</>}>
           {dealPlans[world]}
         </Words>
         <Reveal>
@@ -133,9 +133,9 @@ const stillStory = (world: World) =>
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
             travels with every cell beside it, then a td per measure.</Says>
           <Says>You could build this out of divs and grid, and it would look identical. But the table
-            element carries behavior you would otherwise owe: readers walk it row by row and cell by
+            element brings behaviour you would otherwise have to build: readers move through it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,
-            the drags, the keyboard, hangs off these roles instead of reinventing them. This is the
+            the drags, the keyboard, builds on these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
             and accessibility stops being work you add and becomes behavior you inherit.</Says>
           {dealCodes[world]}
@@ -158,7 +158,7 @@ const flowStory = (world: World) =>
       <Step title="Start with the recent past, in one fetch">
         <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
           <Says>The recent past is not a stream problem: it is one request, and the only care is
-            the seam where the fetch and the socket overlap.</Says>
+            the overlap between the fetch and the socket.</Says>
         </Words>
         <Reveal>
           <Says>One GET for the last thousand trades, decoded and cleaned. When the stream is

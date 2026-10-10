@@ -65,19 +65,19 @@ const rankStory = (build: Build) => {
     soThat="the table ranks itself, and the hand still outranks it">
     {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
     <Tell>We could build the popup from divs, but then we owe focus, dismissal, and
-      stacking, and choosing starts to feel like fighting the menu instead of using it;
-      so the chooser leans on the platform, and the first steps below collect what that
+      stacking, and choosing starts to feel like working against the menu instead of using it;
+      so the chooser uses the platform, and the first steps below collect what that
       decision buys. Sorting state has its own trap: the glyph, the attribute, and the
       ranked rows all want their own copy of which column is chosen, and copies
       drift.</Tell>
     <Tell>And two forces pull at whatever the trader chooses. The data keeps streaming under
-      the sort, so a sort that happens once is stale by the next trade. And the hand wants
+      the sort, so a sort that happens once is stale by the next trade. And a drag changes
       the order too: the trader who drags a row mid-sort is not wrong, and the table must
       decide whose order wins.</Tell>
     <Steps>
       <Step title="A menu that is a menu">
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
-          <Says>The platform sells the whole popup: point the
+          <Says>The platform provides the whole popup: point the
             button’s <Mdn path="Web/HTML/Element/button#popovertarget">popoverTarget</Mdn> at the
             menu, and <Mdn path="Web/HTML/Global_attributes/popover">popover="auto"</Mdn> brings
             the top layer, light-dismiss, and the accessibility relationship. The plan is to
@@ -161,7 +161,7 @@ const rankStory = (build: Build) => {
         </Reveal>
       </Step>
       <Step title="The glyph derives from the sort">
-        <Words want="A sorted column must say so, to the eye and to assistive tech, without a second source of truth appearing anywhere.">
+        <Words want="A sorted column must say so, visibly and to assistive technology, without a second source of truth appearing anywhere.">
           <Says>Which column is sorted should be written once, as
             the <Term word="sort">sort</Term>, and every column should wear it from there;
             let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
@@ -174,7 +174,7 @@ const rankStory = (build: Build) => {
               only that one, so the th announces aria-sort from what it was handed and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
-              it changes, announce walks the headers asking it for each: the sorting th gains
+              it changes, announce goes through the headers asking it for each: the sorting th gains
               aria-sort, and every other column returns to rest. One value holds the sort, and the
               header cannot lie.</Says>}
           <Codes>
@@ -262,16 +262,16 @@ const rankStory = (build: Build) => {
       <Step title="The press never becomes a drag">
         <Words want="The menu lives inside a draggable header, where an unguarded press on the toggle would lift the whole column.">
           <Says>Both the toggle and the menu should <Mdn path="Web/API/Event/stopPropagation">stop a press from
-            bubbling</Mdn> up to the header around them, so the header never hears it, and a menu should exist only
+            bubbling</Mdn> up to the header around them, so the header never gets it, and a menu should exist only
             where ranking the column means something.</Says>
         </Words>
         <Reveal>
           {world === 'react'
-            ? <Says>The header never hears your press. The toggle sits itself at the header’s end
+            ? <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: a menu
               exists only where the page writes one inside the header, and the cell pads for it
               by asking the cascade what it holds.</Says>
-            : <Says>The header never hears your press. The toggle sits itself at the header’s end
+            : <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: menus
               exist only where the markup writes them, the cell pads for them by asking the
               cascade what it holds, and the page itself declares the sortable set.</Says>}

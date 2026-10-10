@@ -8,16 +8,16 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const carryVertical = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Turn the carry vertical">
-    <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
+    <Words want="A window is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
       <Says>The second axis should be bought with substitutions, not new machinery: a real
-        button for the hand, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer question
+        button for the pointer, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer question
         asked downward.</Says>
     </Words>
     <Reveal>
       <Says>Rows ride the machinery the columns built, with three substitutions. The grip is a
-        real button, so the hand has a target and the keyboard will later get one free. The
+        real button, so the pointer has a target and the keyboard will later get one for free. The
         survey learns row heights at lift, measured once like everything else. And rowUnder
-        answers which seat sits under the pointer, columnUnder turned vertical. One more word:
+        reports which seat sits under the pointer, columnUnder turned vertical. One more word:
         the <Term word="seats">seats</Term> are the seating chart, the rows’ order; a row keeps its key as the seats
         shuffle. The settle is the same story: the moved row takes its new seat, and the rest
         ride along.</Says>

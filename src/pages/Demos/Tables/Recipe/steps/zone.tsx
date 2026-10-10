@@ -6,7 +6,7 @@ import {gap, surveySource} from './sources';
 
 export const deadZone =
   <Step title="Find the neighbour under the pointer, with a dead zone" id="step-dead-zone">
-    <Words want="A drift along a boundary must not chatter the order under the hand.">
+    <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving
         hand. And a plain boundary fails: switch a narrow column past a wide one at first touch,

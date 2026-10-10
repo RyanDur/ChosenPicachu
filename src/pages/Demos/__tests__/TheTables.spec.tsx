@@ -590,7 +590,7 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/A press on the handle would bubble, which means the browser hands it on to the header around it/);
     expect(resize).toHaveTextContent(/Arrow keys on a focused handle make the same trade, one fixed step per arrow/);
     expect(resize).toHaveTextContent(/The handle stops those keys from bubbling too, so the header’s own arrow keys never move the column/);
-    expect(resize).toHaveTextContent(/It should stop those keys there as well, because the header answers arrow keys by moving the column/);
+    expect(resize).toHaveTextContent(/It should stop those keys there as well, because the header handles arrow keys by moving the column/);
   });
 
   test('the resize build no longer speaks of a descent or a road', async () => {
@@ -699,7 +699,7 @@ describe('the tables demo', () => {
     await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
 
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
-    expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never hears it/);
+    expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never gets it/);
   });
 
   test('the sort menu build no longer speaks of a descent', async () => {
@@ -955,7 +955,7 @@ describe('the living table’s terms', () => {
 
   test.each([
     ['the page’s store is three slices', 'The page’s store is three: the trades, the candles and the arrangement.'],
-    ['the exchange answers three actions', 'The exchange is that layer, in both worlds, and it answers three actions.'],
+    ['the exchange handles three actions', 'The exchange is that layer, in both worlds, and it handles three actions.'],
     ['the exchange fetches candles', 'On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or candlesRefused.'],
     ['the table’s reducer combines four', 'The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and sorting.']
   ])('should say %s, as the code does', async (_fact, sentence) => {
@@ -1066,7 +1066,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
     expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
-    expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share rides a custom property');
+    expect(recipe).toHaveTextContent('It switches the table to the layout the ledger apportions. Its share is written as a custom property');
   });
 
   test('should label the ledger’s headerStates TS, in the react world', async () => {
@@ -1114,7 +1114,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
     expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1143,7 +1143,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look that lives in the site’s shared sheet and that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
