@@ -797,6 +797,14 @@ describe('the known-height build’s bars', () => {
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
   });
 
+  test('should say the old fold moved the panel’s max-height instead of its height', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByRole('region', {name: 'The max-height guess'})).toHaveTextContent('so we moved the panel’s max-height instead, from 0 to a number taller than any part would need, such as 1000px.');
+  });
+
   test('should say what a selector, a pseudo-class and a combinator are where the stylesheet first reads the checkbox', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

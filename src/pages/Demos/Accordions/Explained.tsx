@@ -137,9 +137,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <h4 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h4>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
-          to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn>
-          instead, from 0 to a number taller than any part would need, such as 1000px. The panel stopped at its own text,
-          so nothing scrolled. The cost was the timing: the transition spent its whole time crossing the guess, so a short
+          to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
+          from 0 to a number taller than any part would need, such as 1000px. The panel stopped at its own text, so
+          nothing scrolled. The cost was the timing: the transition spent its whole time crossing the guess, so a short
           part opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text.
           The bigger the guess, the worse the rush and the wait; a guess too small cut the text off.</p>
         <Snippet label="CSS" lines={[
