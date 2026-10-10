@@ -1,9 +1,11 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {untilTheTablesTabRenders} from './controls';
 
 const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregations'});
 
 export const aggregations = {
+  arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders),
   card,
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),

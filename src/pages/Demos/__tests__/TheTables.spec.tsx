@@ -48,6 +48,8 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
+
     expect(screen.getByText(/trades land\. The grid never grows: no row or column is added or removed\. Only the numbers change, and while a column is sorted, the rows reseat as their numbers do\./)).toBeInTheDocument();
   });
 
@@ -75,6 +77,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     const card = aggregations.card();
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
@@ -101,6 +104,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     const card = aggregations.card();
     const rowOf = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     const stage = within(card).getAllByRole('table')[0];
@@ -204,6 +208,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     const card = aggregations.card();
     expect(aggregations.windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
@@ -742,6 +747,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     const card = aggregations.card();
     expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });

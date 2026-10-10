@@ -52,6 +52,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
@@ -64,6 +65,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop&origin=keep')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
@@ -83,6 +85,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
@@ -143,6 +146,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await lifted('A');
@@ -169,6 +173,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
@@ -182,6 +187,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -199,6 +205,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     screen.getByRole('button', {name: 'grip for A'}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -212,6 +219,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await screen.findByRole('list', {name: 'sortable list'});
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
