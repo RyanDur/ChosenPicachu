@@ -87,7 +87,7 @@ describe('a list of charts', () => {
     expect(screen.queryByRole('region', {name: 'candles'})).not.toBeInTheDocument();
   });
 
-  test('the trader can add a chart, and it lands at the top, next to the + that added it', async () => {
+  test('the trader can add a chart, and it goes to the front of the list', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);

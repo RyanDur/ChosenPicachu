@@ -42,7 +42,7 @@ export const chartsPage = (page: Page) => {
     await page.mouse.down();
     pointer += 10;
     await page.mouse.move(x, pointer, {steps: 5});
-    const handWhenTheyTrade = async (step: number): Promise<number> => {
+    const pointerWhenTheyTrade = async (step: number): Promise<number> => {
       const order = page.url();
       for (const start = pointer; Math.abs(pointer - start) < box.height; pointer += step) {
         await page.mouse.move(x, pointer);
@@ -50,7 +50,7 @@ export const chartsPage = (page: Page) => {
       }
       throw new Error(`the ${region} chart never traded places`);
     };
-    return {height: box.height, pointerWhenTheyTrade: handWhenTheyTrade};
+    return {height: box.height, pointerWhenTheyTrade};
   };
   return {
     carryByTheGrip,
