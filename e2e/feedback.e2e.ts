@@ -22,9 +22,9 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   });
 }
 
-for (const {name, path, title, arrived} of [
-  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
-  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts', arrived: (page: Page) => page.getByRole('article', {name: 'price line tutorial'})}
+for (const {name, path, title, chunk, arrived} of [
+  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables', chunk: '**/assets/DemosPage-*.js', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
+  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts', chunk: '**/assets/ChartPage-*.js', arrived: (page: Page) => page.getByRole('article', {name: 'price line tutorial'})}
 ]) {
   test.describe('a phone held upright', () => {
     test.use(iPhone);
@@ -35,7 +35,7 @@ for (const {name, path, title, arrived} of [
       const feedback = feedbackOn(page);
       const arriving = Promise.withResolvers<void>();
       let held = false;
-      await page.route('**/assets/Demos-*.js', async route => {
+      await page.route(chunk, async route => {
         held = true;
         await arriving.promise;
         await route.continue();

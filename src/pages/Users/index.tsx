@@ -1,14 +1,14 @@
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
+import {Page} from '@pages/BasePage/Page';
 import {UsersPage} from '@pages/Users/UsersPage';
 import names from '@pages/names.json';
 
-const UsersHeader = () => <Header title="Users" listed={names.users}/>;
+const header = <Header title="Users" listed={names.users}/>;
 
 export const Users = {
   path: Paths.users,
-  errorElement: <PageError/>,
-  handle: {header: UsersHeader},
-  element: <UsersPage/>
+  errorElement: <Page header={header} inView={false}><PageError/></Page>,
+  element: <Page header={header} inView={false}><UsersPage/></Page>
 };

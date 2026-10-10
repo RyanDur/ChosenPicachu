@@ -40,7 +40,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    const first = within(await screen.findByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
     expect(first).toHaveAttribute('draggable', 'false');
 
     await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});

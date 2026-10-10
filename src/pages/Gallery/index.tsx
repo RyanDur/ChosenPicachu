@@ -1,14 +1,12 @@
-import {FC, PropsWithChildren} from 'react';
-import {Outlet} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
+import {Page} from '@pages/BasePage/Page';
 import {Listing} from '@pages/BasePage/useListing';
 import {Art} from '@components/art-gallery/museums/art';
 import {maybe} from '@ryandur/sand';
-import {GalleryLinks} from '@components/art-gallery/Links';
-import {GalleryContext} from '@components/art-gallery/Art/Context';
-import {ArtPieceContext, useArtPiece} from '@components/art-gallery/ArtPiece/Context';
+import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
+import {GalleryProviders} from '@components/art-gallery';
 import {GalleryPaths} from './GalleryRouter/GalleryPaths';
 
 import {ArtGalleryPage} from './ArtGalleryPage';
@@ -17,13 +15,6 @@ import {Search} from '@components/art-gallery/Search';
 import {GalleryAside, GallerySettings} from '@components/art-gallery/Settings';
 import {GalleryNav} from '@components/art-gallery/Nav';
 import names from '@pages/names.json';
-
-const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
-  <GalleryLinks.Provider value={{gallery: Paths.artGallery}}>
-    <GalleryContext>
-      <ArtPieceContext>{children}</ArtPieceContext>
-    </GalleryContext>
-  </GalleryLinks.Provider>;
 
 const GalleryHeader = () =>
   <Header title="Gallery" listed={names.gallery}>
@@ -45,30 +36,21 @@ const PieceHeader = () => {
   </Header>;
 };
 
-const GalleryFooter = () => <GalleryNav id="gallery-nav"/>;
+const galleryError = <GalleryProviders gallery={Paths.artGallery}><Page header={<GalleryHeader/>}><PageError/></Page></GalleryProviders>;
 
-const GalleryHome = {
-  path: GalleryPaths.home,
-  handle: {
-    header: GalleryHeader,
-    provider: GalleryProviders,
-    aside: GalleryAside,
-    footer: GalleryFooter,
-    mainClassName: 'in-view'
+export const Gallery = [
+  {
+    path: `${Paths.artGallery}${GalleryPaths.home}`,
+    errorElement: galleryError,
+    element: <GalleryProviders gallery={Paths.artGallery}>
+      <Page header={<GalleryHeader/>} filters={<GalleryAside/>} footer={<GalleryNav id="gallery-nav"/>}>
+        <ArtGalleryPage/>
+      </Page>
+    </GalleryProviders>
   },
-  element: <ArtGalleryPage/>
-};
-
-const GalleryPiece = {
-  path: GalleryPaths.piece,
-  handle: {header: PieceHeader, provider: GalleryProviders, mainClassName: 'in-view'},
-  element: <ArtGalleryPiecePage/>
-};
-
-export const Gallery = {
-  path: Paths.artGallery,
-  errorElement: <PageError/>,
-  handle: {header: GalleryHeader, provider: GalleryProviders, mainClassName: 'in-view'},
-  element: <Outlet/>,
-  children: [GalleryHome, GalleryPiece]
-};
+  {
+    path: `${Paths.artGallery}${GalleryPaths.piece}`,
+    errorElement: galleryError,
+    element: <GalleryProviders gallery={Paths.artGallery}><Page header={<PieceHeader/>}><ArtGalleryPiecePage/></Page></GalleryProviders>
+  }
+];

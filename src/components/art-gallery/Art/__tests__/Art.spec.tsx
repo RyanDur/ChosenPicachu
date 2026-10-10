@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {GalleryProviders} from '@components/art-gallery';
 import {anyRequestFailsToConnect} from '@__test_support/server';
 import {server} from '@__test_support/server';
 import {env} from '@env';
@@ -51,7 +52,7 @@ describe('The gallery.', () => {
 
   test('a museum with nothing to show leaves the wall empty', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
-    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><ArtGallery/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
 
     expect(await screen.findByAltText('the museum answered with nothing')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
@@ -61,7 +62,7 @@ describe('The gallery.', () => {
   test('a museum that cannot be reached leaves the wall empty, and says so', async () => {
     anyRequestFailsToConnect();
 
-    render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><ArtGallery/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
 
     expect(await screen.findByAltText('the museum refused to answer')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();

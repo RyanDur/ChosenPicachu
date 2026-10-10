@@ -1,12 +1,11 @@
-import {FC} from 'react';
-import {Outlet} from 'react-router';
+import {FC, PropsWithChildren} from 'react';
 import {useExchange} from './useExchange';
 import {DemosProvider} from './Provider';
 
-export const Trading: FC = () => {
+export const Trading: FC<PropsWithChildren> = ({children}) => {
   const store = useExchange();
 
   return <DemosProvider store={store}>
-    <Outlet/>
+    {children}
   </DemosProvider>;
 };

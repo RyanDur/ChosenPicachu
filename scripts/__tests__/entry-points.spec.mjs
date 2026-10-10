@@ -13,7 +13,7 @@ const carriesNoParameter = path => path.startsWith('/') && path !== '/' && not(p
 const manifest = {
   'index.html': {file: 'assets/index-abc.js', imports: ['shared.ts']},
   'shared.ts': {file: 'assets/shared-abc.js'},
-  'src/pages/Demos/index.tsx': {file: 'assets/Demos-abc.js', imports: ['shared.ts', 'table.ts']},
+  'src/pages/Demos/DemosPage.tsx': {file: 'assets/Demos-abc.js', imports: ['shared.ts', 'table.ts']},
   'table.ts': {file: 'assets/table-abc.js'}
 };
 // language=TEXT
@@ -46,7 +46,7 @@ describe('the entry points', () => {
   });
 
   test('a hole in the manifest is named, not skipped', () => {
-    const holed = {...manifest, 'src/pages/Demos/index.tsx': {file: 'assets/Demos-abc.js', imports: ['ghost.ts']}};
+    const holed = {...manifest, 'src/pages/Demos/DemosPage.tsx': {file: 'assets/Demos-abc.js', imports: ['ghost.ts']}};
 
     expect(() => demosLinks(holed, 'https://site.test/app/')).toThrow('ghost.ts is missing from the build manifest');
   });
@@ -59,7 +59,7 @@ describe('the entry points', () => {
   test('chunks that import each other are each preloaded once', () => {
     const circling = {
       ...manifest,
-      'src/pages/Demos/index.tsx': {file: 'assets/Demos-abc.js', imports: ['a.ts']},
+      'src/pages/Demos/DemosPage.tsx': {file: 'assets/Demos-abc.js', imports: ['a.ts']},
       'a.ts': {file: 'assets/a-abc.js', imports: ['b.ts']},
       'b.ts': {file: 'assets/b-abc.js', imports: ['a.ts']}
     };

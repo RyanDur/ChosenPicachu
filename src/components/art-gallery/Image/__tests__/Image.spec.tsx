@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {GalleryProviders} from '@components/art-gallery';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {Image} from '@components/art-gallery/Image';
 import userEvent from '@testing-library/user-event';
@@ -11,14 +12,14 @@ describe('the image', () => {
   const piece = aPiece();
 
   test('shows a loading sign while the picture is on its way', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
     expect(screen.getByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
     expect(screen.queryByAltText(/would not load|has nothing to show/)).not.toBeInTheDocument();
   });
 
   test('shows the picture and drops the loading sign once it arrives', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
 
@@ -28,7 +29,7 @@ describe('the image', () => {
   });
 
   test('clicking a picture opens that piece', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(screen.getByAltText(piece.altText));
@@ -37,7 +38,7 @@ describe('the image', () => {
   });
 
   test('a piece keeps the focus it holds while its picture arrives', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
     screen.getByRole('link', {name: piece.title}).focus();
 
     fireEvent.load(screen.getByAltText(piece.altText));
@@ -46,13 +47,13 @@ describe('the image', () => {
   });
 
   test('a piece links to itself without a museum when the address names none it knows', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=louvre`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=louvre`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
     expect(screen.getByRole('link', {name: piece.title})).toHaveAttribute('href', `${Paths.artGallery}${piece.id}`);
   });
 
   test('shows a stand-in when the picture will not load', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.error(screen.getByAltText(piece.altText));
 
@@ -62,7 +63,7 @@ describe('the image', () => {
   });
 
   test('shows a stand-in when the piece has no picture', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={{...piece, image: undefined}}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><Image piece={{...piece, image: undefined}}/></GalleryProviders></TestApp>);
 
     expect(screen.getByAltText(`${piece.title} has nothing to show`)).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
@@ -70,7 +71,7 @@ describe('the image', () => {
   });
 
   test('a picture with its link off goes nowhere when clicked', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={piece} linkEnabled={false}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
     const landings = scrolling.recordLandings();

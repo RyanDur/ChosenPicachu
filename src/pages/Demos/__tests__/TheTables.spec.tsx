@@ -23,7 +23,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = aggregations.card();
+    const card = await screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders);
     for (const measure of ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
       expect(within(card).getByRole('columnheader', {name: new RegExp(`^${measure}`)})).toBeVisible();
     }

@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, MouseEvent, ReactNode, SubmitEvent, SyntheticEvent, useEffect, useReducer} from 'react';
+import {ActionDispatch, createContext, FC, KeyboardEvent, MouseEvent, PropsWithChildren, ReactNode, SubmitEvent, SyntheticEvent, useContext, useEffect, useReducer} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
@@ -6,6 +6,7 @@ import {usePageName} from '@components/PageName';
 import {troubleWith} from '@transport/trouble';
 import {sent, threadFor} from './github';
 import {
+  FeedbackAction,
   noteRefused,
   noteSent,
   noteSubmitted,
@@ -68,12 +69,19 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
   return '';
 };
 
+const Drafting = createContext<[Draft, ActionDispatch<[FeedbackAction]>]>([draftAt('/'), () => undefined]);
+
+export const FeedbackProvider: FC<PropsWithChildren> = ({children}) => {
+  const {pathname} = useLocation();
+  return <Drafting.Provider value={useReducer(feedbackReducer, pathname, draftAt)}>{children}</Drafting.Provider>;
+};
+
 export const Feedback: FC = () => {
   const {feedbackToken} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
   const pageName = usePageName();
-  const [draft, dispatch] = useReducer(feedbackReducer, pathname, draftAt);
+  const [draft, dispatch] = useContext(Drafting);
 
   useEffect(() => {
     const dialog = document.getElementById('feedback');

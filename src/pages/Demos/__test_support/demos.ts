@@ -1,5 +1,6 @@
 import {Paths} from '@pages/Paths';
-import '@pages/Demos';
+import '@pages/Demos/DemosPage';
+import '@pages/Demos/Charts/ChartPage';
 
 export const demosAt = (search = ''): string => `${Paths.demos}${search}`;
 

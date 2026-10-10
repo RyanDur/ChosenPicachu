@@ -21,7 +21,7 @@ export const closure = (manifest, key, seen = new Set()) => {
 };
 
 export const demosLinks = (manifest, base) => {
-  const demosKey = Object.keys(manifest).find(key => key.endsWith('pages/Demos/index.tsx'));
+  const demosKey = Object.keys(manifest).find(key => key.endsWith('pages/Demos/DemosPage.tsx'));
   if (empty(demosKey)) throw new Error('the demos page is missing from the build manifest');
   const shellHolds = closure(manifest, 'index.html');
   return [...closure(manifest, demosKey)]

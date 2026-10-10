@@ -52,7 +52,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)
     ? createRoutesFromElements(children)
     : maybe(roomAt(at))
-      .map(({path, errorElement, handle}): RouteObject[] => [{path, errorElement, handle, element: children}])
+      .map(({path, errorElement}): RouteObject[] => [{path, errorElement, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
 export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
