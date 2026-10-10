@@ -9,6 +9,6 @@ const RecordHeader = () => <Header title="The record" listed={names.record}/>;
 export const TheRecord = {
   path: Paths.record,
   errorElement: <PageError/>,
-  handle: {header: RecordHeader},
+  handle: {header: RecordHeader, mainClassName: 'in-view'},
   element: <RecordPage/>
 };
