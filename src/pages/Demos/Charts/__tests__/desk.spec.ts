@@ -31,7 +31,7 @@ describe('the desk', () => {
     expect(periodChosen('candles', Period.day, dealt('price'))).toBe('price,candles:day');
   });
 
-  test('a new chart lands under the hand', () => {
+  test('a new chart goes to the front of the list', () => {
     expect(added('pie', dealt('price:day,candles'))).toBe('pie,price:day,candles');
   });
 

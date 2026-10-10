@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Arrow, Box, Circle, Diagram, Label} from '../Recipe/Drawing';
 
-export const AThirdFromTheHand: FC = () =>
-  <Diagram title="A third from the hand" height={392}
-    says="The drag marks where the hand grabbed the chart. When the hand is a third of that chart’s height from the mark, up or down, the chart swaps with its neighbour, and the mark moves to where the hand is. The short chart has just dropped a whole tall chart’s height, and the hand has not moved. Had the mark stayed on the chart, the hand would now be far above it, and the two would swap straight back.">
+export const AThirdFromThePointer: FC = () =>
+  <Diagram title="A third from the pointer" height={392}
+    says="The drag marks where the pointer grabbed the chart. When the pointer is a third of that chart’s height from the mark, up or down, the chart swaps with its neighbour, and the mark moves to where the pointer is. The short chart has just dropped a whole tall chart’s height, and the pointer has not moved. Had the mark stayed on the chart, the pointer would now be far above it, and the two would swap straight back.">
     <Label x={20} y={12} anchor="start">before</Label>
     <Box kind="unseen" x={20} y={20} width={130} height={60}/>
     <Label x={28} y={54} anchor="start">short, held</Label>

@@ -87,7 +87,7 @@ describe('a list of charts', () => {
     expect(screen.queryByRole('region', {name: 'candles'})).not.toBeInTheDocument();
   });
 
-  test('the trader can add a chart, and it lands under the hand', async () => {
+  test('the trader can add a chart, and it lands at the top, next to the + that added it', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
@@ -503,7 +503,7 @@ describe('a list of charts', () => {
     });
 
     test('should say what a custom property is where the pie first names it', async () => {
-      expect(recipeFolds.steps(await pieStory())[1]).toHaveTextContent('The markup hands each number to the stylesheet as a custom property: a value set by name on the element, such as --turn, and read back in the sheet with var().');
+      expect(recipeFolds.steps(await pieStory())[1]).toHaveTextContent('The markup passes each number to the stylesheet as a custom property: a value set by name on the element, such as --turn, and read back in the sheet with var().');
     });
   });
 
@@ -906,7 +906,7 @@ describe('the workspace story', () => {
   test('should head each step with what happens', async () => {
     expect(recipeFolds.stepTitles(await workspaceStory())).toEqual([
       'Read the charts from the address',
-      'A chart swaps once the hand has moved a third of its height',
+      'A chart swaps once the pointer has moved a third of its height',
       'The arrow keys move a chart, and Delete removes it',
       'The last chart can’t be removed'
     ]);
@@ -917,7 +917,7 @@ describe('the workspace story', () => {
     ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
-    ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the hand is on the page. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand with that mark.'],
+    ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the pointer with that mark.'],
     ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
     ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
     ['the last chart', 'With one chart left there is no grip and no remove button, and Delete does nothing. The + is still there.']
@@ -925,20 +925,24 @@ describe('the workspace story', () => {
     expect(await workspaceStory()).toHaveTextContent(sentence);
   });
 
-  test('should draw the mark moving to the hand in step 2', async () => {
+  test('should draw the mark moving to the pointer in step 2', async () => {
     const swap = recipeFolds.steps(await workspaceStory())[1];
 
-    expect(within(swap).getByRole('figure', {name: /^A third from the hand\./})).toHaveTextContent(/the mark moves to where the hand is/);
+    expect(within(swap).getByRole('figure', {name: /^A third from the pointer\./})).toHaveTextContent(/the mark moves to where the pointer is/);
   });
 
-  test('should say a held chart fades where it sits while the browser draws a copy of it under the hand', async () => {
-    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the hand. It swaps with its neighbour');
+  test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
+    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the pointer. It swaps with its neighbour once the pointer has moved');
   });
 
   test('should drop the figures of speech from its words', async () => {
     const words = within(await workspaceStory()).getAllByRole('paragraph').map(paragraph => paragraph.textContent).join(' ');
 
     expect(words).not.toMatch(/dealt|whispers|slides home|strays|rides|walks|the address is the state|holds its post/);
+  });
+
+  test('should say the pointer, never a hand, wherever the drag is told or drawn', async () => {
+    expect(await workspaceStory()).not.toHaveTextContent(/\bhand\b/);
   });
 
   test('should say each chart opens its own tutorial, and name MDN as Mozilla’s web reference', async () => {

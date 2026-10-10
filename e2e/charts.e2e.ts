@@ -55,14 +55,14 @@ for (const {reader, device, press} of [
 test.describe('a mouse carrying a chart past its neighbour', () => {
   test.use(desktop);
 
-  test('the chart swaps back only once the hand has come a third of its height back', async ({page}) => {
+  test('the chart swaps back only once the pointer has come a third of its height back', async ({page}) => {
     await page.goto('demos/?tab=charts&charts=price,pie');
     const charts = chartsPage(page);
     const carried = await charts.carryByTheGrip('live trades');
 
-    const down = await carried.handWhenTheyTrade(1);
+    const down = await carried.pointerWhenTheyTrade(1);
     await expect.poll(charts.stillSliding).toBe(0);
-    const back = await carried.handWhenTheyTrade(-1);
+    const back = await carried.pointerWhenTheyTrade(-1);
     await page.mouse.up();
 
     expect(down - back).toBeGreaterThan(carried.height / 3 - 6);

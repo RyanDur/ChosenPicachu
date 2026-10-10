@@ -41,8 +41,8 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const resting = (node: Element | null | undefined) =>
     node instanceof HTMLElement && node.getAnimations().length === 0;
 
-  const swap = (held: number, to: number, hand: number) => {
-    setMark(hand);
+  const swap = (held: number, to: number, pointer: number) => {
+    setMark(pointer);
     setPushed({[held]: to > held ? 'up' : 'down'});
     onSeated(held, to, {replace: true});
     setAloft(maybe(to));
@@ -57,13 +57,13 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
       if (!seat) {
         return;
       }
-      const hand = event.clientY + scrollY;
-      const to = strayedTo(hand, mark, seat.height / 3, held);
+      const pointer = event.clientY + scrollY;
+      const to = strayedTo(pointer, mark, seat.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
       if (resting(slots?.item(to))) {
-        swap(held, to, hand);
+        swap(held, to, pointer);
       }
     });
   };

@@ -1,8 +1,8 @@
 import {FC, ReactNode, useId} from 'react';
 import {ChartKind} from './kinds';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../Recipe';
+import {Codes, Mdn, plain, Says, Snippet, Step, Steps, Stories, Story, Tell, Words} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
-import {AThirdFromTheHand} from './Diagrams';
+import {AThirdFromThePointer} from './Diagrams';
 import shapesSource from './Candles/shapes.ts?sample';
 import sparklineSource from './sparkline.ts?sample';
 import periodSource from './period.ts?sample';
@@ -167,7 +167,7 @@ const candlesStory =
     <Steps>
       <Step title="Make the candles the way the price line does">
         <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
-          <Says>The page has one live feed and hands every chart the same trades. This chart groups them into candles with
+          <Says>The page has one live feed and gives every chart the same trades. This chart groups them into candles with
             bucketTrades and joins the fetched past with mergeLive, the same two functions the price line uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
           <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the price
@@ -376,7 +376,7 @@ const pieStory =
             a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
-          <Says>The markup hands each number to the stylesheet as a custom property: a value set by name on the element,
+          <Says>The markup passes each number to the stylesheet as a custom property: a value set by name on the element,
             such as <code>--turn</code>, and read back in the sheet with <code>var()</code>. The sheet declares each one
             with <code>@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
             swing are angles, and the push out from the centre is two lengths. Before the markup sets them, a slice sits
@@ -422,8 +422,8 @@ const workspaceStory =
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
       chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
-      hand. It swaps with its neighbour once the hand has moved a third of the chart’s height from where it grabbed, up
-      or down, and the neighbour slides into the place it left.</Tell>
+      pointer. It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it
+      grabbed, up or down, and the neighbour slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
       and down arrows move it one place and focus stays on it. Delete removes it. When one chart is left it has no
       grip and no remove button, and Delete does nothing, so the workspace always has a chart.</Tell>
@@ -452,16 +452,16 @@ const workspaceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="A chart swaps once the hand has moved a third of its height">
-        <Words want="A chart is large and the hand holds only its grip. So the swap is measured from the hand, not from the chart’s far edge.">
-          <Says>On dragstart, the event the browser sends when a drag begins, the code marks where the hand is on
-            the page. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand
-            with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under it;
-            a third above, with the one over it. Then the mark is set again to where the hand is.</Says>
+      <Step title="A chart swaps once the pointer has moved a third of its height">
+        <Words want="A chart is large and the pointer holds only its grip. So the swap is measured from the pointer, not from the chart’s far edge.">
+          <Says>On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on
+            the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the
+            pointer with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under
+            it; a third above, with the one over it. Then the mark is set again to where the pointer is.</Says>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
-            one’s height. A mark left on the chart would now be far from the hand, and the two would swap straight
+            one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
-          <AThirdFromTheHand/>
+          <AThirdFromThePointer/>
           <Says>The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
             starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
             with one that is still sliding.</Says>

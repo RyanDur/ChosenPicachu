@@ -31,26 +31,26 @@ export const feedStillConnecting = async (page: Page, prices: number[]): Promise
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
-  const carryByTheGrip = async (region: string): Promise<{height: number; handWhenTheyTrade: (step: number) => Promise<number>}> => {
+  const carryByTheGrip = async (region: string): Promise<{height: number; pointerWhenTheyTrade: (step: number) => Promise<number>}> => {
     const chart = page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
     await chart.hover();
     const [box, grip] = await Promise.all([chart.boundingBox(), chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox()]);
     if (box === null || grip === null) throw new Error(`the ${region} chart has no grip`);
     const x = grip.x + grip.width / 2;
-    let hand = grip.y + grip.height / 2;
-    await page.mouse.move(x, hand);
+    let pointer = grip.y + grip.height / 2;
+    await page.mouse.move(x, pointer);
     await page.mouse.down();
-    hand += 10;
-    await page.mouse.move(x, hand, {steps: 5});
+    pointer += 10;
+    await page.mouse.move(x, pointer, {steps: 5});
     const handWhenTheyTrade = async (step: number): Promise<number> => {
       const order = page.url();
-      for (const start = hand; Math.abs(hand - start) < box.height; hand += step) {
-        await page.mouse.move(x, hand);
-        if (page.url() !== order) return hand;
+      for (const start = pointer; Math.abs(pointer - start) < box.height; pointer += step) {
+        await page.mouse.move(x, pointer);
+        if (page.url() !== order) return pointer;
       }
       throw new Error(`the ${region} chart never traded places`);
     };
-    return {height: box.height, handWhenTheyTrade};
+    return {height: box.height, pointerWhenTheyTrade: handWhenTheyTrade};
   };
   return {
     carryByTheGrip,
