@@ -6,7 +6,7 @@ import names from '@pages/names.json';
 
 const RecordHeader = () => <Header title="The record" listed={names.record}/>;
 
-export const Record = {
+export const TheRecord = {
   path: Paths.record,
   errorElement: <PageError/>,
   handle: {header: RecordHeader},

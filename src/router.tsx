@@ -12,7 +12,7 @@ import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
-import {Record} from '@pages/Record';
+import {TheRecord} from '@pages/Record';
 import {PageError} from '@pages/PageError';
 import {NoRoom} from '@pages/NoRoom';
 import {Header} from '@pages/BasePage/Header';
@@ -80,7 +80,7 @@ export const router = {
     Users,
     Gallery,
     Games,
-    Record,
+    TheRecord,
     {path: '*', handle: {header: NoRoomHeader}, element: <NoRoom/>}
   ]
 };
