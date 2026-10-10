@@ -380,13 +380,13 @@ describe('the fold motion', () => {
 
   const visibilitySays = {
     reveal: /With reveal, visibility moves on the same 300 milliseconds/,
-    drawer: /With the drawer, visibility moves with the height/
+    drawer: /With the drawer, visibility moves on the same 300 milliseconds and changes at the visible end/
   };
 
   test.each([
-    {style: 'reveal', other: 'drawer', carves: [], omits: ['.drawer & .info']},
-    {style: 'drawer', other: 'reveal', carves: ['.drawer & .info { display: flex;', '.drawer & .info-text { flex-shrink: 0;'], omits: []}
-  ] as const)('should tell, with $style chosen, what that motion does to the section and to visibility, each in its own run', async ({style, other, carves, omits}) => {
+    {style: 'reveal', other: 'drawer'},
+    {style: 'drawer', other: 'reveal'}
+  ] as const)('should tell, with $style chosen, what that motion does to the section and to visibility, each in its own run', async ({style, other}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
@@ -395,12 +395,31 @@ describe('the fold motion', () => {
     expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent(visibilitySays[style]);
     expect(within(oldWay).queryByText(sectionSays[other])).not.toBeInTheDocument();
     expect(within(oldWay).queryByText(visibilitySays[other])).not.toBeInTheDocument();
-    for (const rule of carves) {
-      expect(explanation.codeBeside(oldWay, sectionSays[style])).toHaveTextContent(rule);
-    }
-    for (const rule of omits) {
-      expect(explanation.codeBeside(oldWay, sectionSays[style])).not.toHaveTextContent(rule);
-    }
+  });
+
+  test.each(['reveal', 'drawer'] as const)('should show, with %s chosen, the rule that moves visibility beside the visibility run', async style => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.codeBeside(oldWay, visibilitySays[style])).toHaveTextContent('transition: height .3s ease-in-out, visibility .3s;');
+  });
+
+  test('should show, with drawer chosen, the drawer’s column rules beside the section’s run', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info { display: flex;');
+    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info-text { flex-shrink: 0;');
+  });
+
+  test('should show, with reveal chosen, none of the drawer’s rules beside the section’s run', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=reveal')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.codeBeside(oldWay, sectionSays.reveal)).not.toHaveTextContent('.drawer & .info');
   });
 
   test('should tell, with static chosen, nothing about motion in the section’s run or the visibility run', async () => {

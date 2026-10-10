@@ -401,10 +401,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   hidden takes the text out of the tab order and out of what a screen reader reads.
                 {{
                   reveal: ' With reveal, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
-                  drawer: ' With the drawer, visibility moves with the height on the same 300 milliseconds.',
+                  drawer: ' With the drawer, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
                   static: ''
                 }[motion]}</p>
-                <Snippet label="CSS" lines={unit(surfaceCss, '.focus-ringed {')}/>
+                <Snippet label="CSS" lines={[
+                  ...unit(surfaceCss, '.focus-ringed {'),
+                  ...{
+                    reveal: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
+                    drawer: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
+                    static: []
+                  }[motion]
+                ]}/>
               </li>
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the

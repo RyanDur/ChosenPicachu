@@ -414,7 +414,9 @@ describe('the native drag sort tutorial’s words', () => {
     ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor and the cancel.'],
     ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel, and the keyboard gets no drag at all.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
-    ['preventDefault, dropEffect and drop', 'Two calls accept the drop. The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; the default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel. The handler for drop, the event for a release over a target, calls preventDefault too. The browser’s default for a dropped link, file or address is to open it as a page; this list drags none of those, so the call changes nothing today and keeps the list safe the day a payload is added. The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move. Miss the first and the browser plays the cancel; the second guards against a payload this list does not carry.'],
+    ['preventDefault', 'One call accepts the drop: the dragover handler calls preventDefault, the method that tells the browser not to do what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel.'],
+    ['dropEffect and effectAllowed', 'The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move.'],
+    ['drop', 'The drop handler, for the event of a release over a target, calls preventDefault too. The browser’s default for a dropped link, file or address is to open it as a page; this list drags none of those, so the call changes nothing today and keeps the list safe the day a payload is added.'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
     ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
     ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor,'],
@@ -424,8 +426,18 @@ describe('the native drag sort tutorial’s words', () => {
     expect(await nativeRecipe()).toHaveTextContent(sentence);
   });
 
-  test('should show the item’s dragover setting dropEffect beside the run that names it', async () => {
-    expect(explanation.everyCodeBeside(await nativeRecipe(), /Two calls accept the/).join()).toMatch(/onDragOver=\{event => \{[^]*event\.dataTransfer\.dropEffect = 'move';/);
+  test.each([
+    'pace=eager&origin=keep&motion=animated', 'pace=eager&origin=keep&motion=static',
+    'pace=eager&origin=hide&motion=animated', 'pace=eager&origin=hide&motion=static',
+    'pace=lazy&origin=keep&motion=animated', 'pace=lazy&origin=keep&motion=static',
+    'pace=lazy&origin=hide&motion=animated', 'pace=lazy&origin=hide&motion=static'
+  ])('should show the item’s dragover setting dropEffect beside the run that names it, with %s', async choices => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+
+    expect(explanation.everyCodeBeside(recipe, /The item’s dragover handler also sets/).join()).toMatch(/onDragOver=\{event => \{[^]*event\.dataTransfer\.dropEffect = 'move';/);
   });
 
   test('should say what dragleave is where the lazy pace meets it', async () => {
