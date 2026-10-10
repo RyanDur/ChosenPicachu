@@ -8,11 +8,11 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const commitCrossing = (listSource: Sample): ReactNode =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
-    <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
-      <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>: the state updates
-        mid-drag, the markup renders through it, and the same key finds its new seat while the
-        platform still holds the drag image in your hand. Carrying the item back is just more
-        crossings, so home stays reachable.</Says>
+    <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the result until it is too late to change your mind.">
+      <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>: the state
+        updates during the drag, the markup renders from it, and the same key finds its new seat while the browser still
+        shows the drag image under the pointer. Carrying the item back is only more crossings, so the item can always
+        get home.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -26,9 +26,9 @@ export const stashLanding = (listSource: Sample): ReactNode =>
   <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
     <Words want={<>You want the list calm while the platform drags, which means the reorder must wait for a <Term word="session">session</Term> that is still alive when the drop lands.</>}>
       <Says>Each dragover only remembers the <Term word="landing">landing</Term>, the item the pointer is over at that
-        moment, and <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn>, the event for the pointer leaving an
-        item, forgets it. No quarter has to be passed here, because nothing moves until the release. The commit
-        runs from the release: the session has to finish before the list moves, because the platform is still animating its own end of the bargain.</Says>
+        moment, and <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn>, the event for the pointer leaving
+        an item, forgets it. Nothing moves until the release. The commit runs from the release, because the browser is
+        still playing the end of its own drag until then, and the list has to wait for it.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

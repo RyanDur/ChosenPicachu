@@ -12,12 +12,11 @@ export const straightToOrder = (gripSource: Sample) =>
       arrows compute the move directly.</Tell>
     <Steps>
       <Step title="Arrows go straight to the order">
-        <Words want="A keyboard user needs the same reorders, and this is the one thing the API cannot sell you: drag-and-drop only ever answers the pointer.">
-          <Says>It does not matter, because dragging was never the goal; the order changing is.
-            The grip is a real button, so focus reaches it for free, and the item owns its walk:
-            arrow keys compute the move and report the outcome up, none of the ceremony. An item
-            mid-slide keeps the keys silent until it lands. Nothing in this step touches
-            drag-and-drop, which is exactly why it works.</Says>
+        <Words want="A keyboard user needs the same reorders, and drag and drop cannot give them: it only answers the pointer.">
+          <Says>That does not matter, because dragging was never the goal; the order changing is. The grip is a real
+            button, so focus reaches it with no extra code, and the item handles its own keys: the arrow keys compute
+            the move and report the result upward, with no drag involved. An item that is still sliding ignores the keys
+            until it lands. Nothing in this step touches drag and drop, which is why it works.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

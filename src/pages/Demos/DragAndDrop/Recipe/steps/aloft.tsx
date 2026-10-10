@@ -8,12 +8,12 @@ export const holdTheAloft = (listSource: Sample) =>
       payload. It exists to carry data between windows, and mid-drag it is locked: a handler
       for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
       on whatever the pointer is over, may not read what dragstart wrote. So the payload cannot steer the sort.</>}>
-      <Says>Your first try writes the item into the payload at dragstart and reads it back in
-        dragover, and the read comes back empty. That is not a bug: the store is sealed
-        mid-drag so a hovered window cannot sniff data that was never dropped on it.</Says>
-      <Says>Steer with state instead, the values React keeps between one drawing of the page and the next. The lift
-        reports which item is held, which the code calls aloft, the release clears it, and every handler in between
-        reads the same value the render does. The payload API is still there when another window genuinely needs the
+      <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read
+        comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
+        passes over cannot read data that was never dropped on it.</Says>
+      <Says>Keep it in state instead, the values React holds between one drawing of the page and the next. The lift
+        records which item is held, which the code calls aloft; the release clears it; and every handler in between
+        reads the same value the render does. The payload is still there for the case where another window needs the
         data.</Says>
     </Words>
     <Codes>

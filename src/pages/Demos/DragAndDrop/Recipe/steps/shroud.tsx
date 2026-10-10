@@ -6,12 +6,12 @@ import {gap, hideItemCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const fadeOrigin = (itemSource: Sample): ReactNode =>
-  <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
-    <Words want="With the drag image in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
-      <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
-        its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
-        an <Mdn path="Web/CSS/opacity">opacity</Mdn> of nearly nothing: the node stays alive, the
-        session keeps its source, and the eye reads a single card riding the pointer.</Says>
+  <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>
+    <Words want="With the drag image under the pointer, the card it came from reads as a duplicate, but removing it can end the drag: some engines stop the drag when its source disappears.">
+      <Says>So the card does not disappear; it fades almost away. This is the hide list, so its own Item adds the class
+        on its lift and removes it on its release. The CSS behind the class is an{' '}
+      <Mdn path="Web/CSS/opacity">opacity</Mdn> of nearly nothing: the node stays in the page, the drag keeps its
+        source, and the reader sees one card moving with the pointer.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -27,10 +27,10 @@ export const fadeOrigin = (itemSource: Sample): ReactNode =>
 
 export const keepStanding = (listSource: Sample): ReactNode =>
   <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
-    <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
-      <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform
-        already drew the drag image, there are two of the card for the length of the drag, one
-        at rest, one dimmed under the pointer, and no hiding code exists in its directory at all.</Says>
+    <Words want="A card that vanishes can be disorienting; sometimes the reader wants to see the card both where it was and where it is going.">
+      <Says>Do nothing. This is the keep list, so its Item is the plain card: the browser already drew the drag image,
+        so for the length of the drag there are two of the card, one in place and one dimmed under the pointer, and no
+        hiding code exists in its directory.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[

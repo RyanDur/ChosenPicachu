@@ -4,7 +4,7 @@ import {Defined} from '../../Recipe/Defined';
 export type Word = 'session' | 'crossing' | 'landing';
 
 const definitions: Record<Word, ReactNode> = {
-  session: 'the platform’s drag, from dragstart to dragend: the ceremony you rent instead of build',
+  session: 'the platform’s drag, from dragstart to dragend: the part the browser does for you',
   crossing: 'the moment the carried card passes far enough over a neighbour to trade places',
   landing: 'the destination a lazy drag remembers instead of committing'
 };

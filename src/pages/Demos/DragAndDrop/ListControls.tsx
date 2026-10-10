@@ -12,7 +12,7 @@ const copy: Copy = {
   },
   origin: {
     keep: 'The item you lifted stays put beneath the platform’s drag image, so there are two of it for the length of the drag.',
-    hide: 'The item you lifted fades to a whisper at its origin; the drag image in your hand reads as the real thing.'
+    hide: 'The item you lifted fades almost away where it was; the drag image under the pointer reads as the real thing.'
   },
   motion: {
     animated: 'Eager crossings slide the crossed item to its new seat; a lazy settle glides once the drag has ended.',

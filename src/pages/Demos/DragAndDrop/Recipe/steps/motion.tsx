@@ -7,12 +7,11 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const slideCrossed = (listSource: Sample, cssSource: Sample): ReactNode =>
   <Step title="Slide the crossed item home" dial={<MotionDial name="native-motion"/>}>
-    <Words want="An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.">
-      <Says>The swap commits instantly and the crossed item is merely drawn where it used
-        to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one
-        seat over, the same slide the tables demo plays, turned horizontal, with the direction as
-        data: --toward flips the sign of one keyframe instead of naming two. The animation
-        is theater: the swap has already happened, and the slide only tells you what did.</Says>
+    <Words want="An eager swap that jumps is hard to follow, but nothing can be animated during the drag with a view transition: its capture would swallow the drag’s own events.">
+      <Says>The swap happens at once, and the crossed item is drawn where it used to be and slides to its new place on a{' '}
+        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one seat over. It is the same slide the tables demo
+        plays, turned horizontal, with the direction as data: --toward flips the sign of one keyframe instead of naming
+        two. The swap is already done when the slide starts; the slide only shows the reader what happened.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -27,14 +26,13 @@ export const slideCrossed = (listSource: Sample, cssSource: Sample): ReactNode =
   </Step>;
 
 export const glideSettle = (listSource: Sample): ReactNode =>
-  <Step title="Glide the settle, one tick after" dial={<MotionDial name="native-motion"/>}>
-    <Words want="A lazy settle happens all at once on release, the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.">
-      <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and
-        defer the settle one tick past the release. By the
-        time <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> captures
-        the page, the platform has finished its ceremony, and every item glides from where the
-        drag left it to where the order says it belongs. The animation is theater: the order
-        has already settled, and the glide only tells you what did.</Says>
+  <Step title="Glide the settle one tick after the release" dial={<MotionDial name="native-motion"/>}>
+    <Words want="A lazy settle happens all at once on release, which suits a view transition, except the drag is still running when drop fires, and a capture during the drag swallows its events.">
+      <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle one tick
+        after the release. By the time <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> takes
+        its capture, the browser has finished the drag, and every item glides from where the drag left it to where the
+        order puts it. The order is already settled when the glide starts; the glide only shows the reader what
+        happened.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
@@ -50,9 +48,9 @@ export const glideSettle = (listSource: Sample): ReactNode =>
 
 export const directState = (listSource: Sample): ReactNode =>
   <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
-    <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
-      <Says>This is the static list; no marking code exists in it. The order applies and React
-        paints next frame; a keyboard walk is applied as plainly as everything else.</Says>
+    <Words want="Motion is not free: it competes with the drag, costs a frame, and some readers ask for none.">
+      <Says>This is the static list, and it has no motion code. The order is applied and React draws it on the next
+        frame; a keyboard move is applied the same way.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
