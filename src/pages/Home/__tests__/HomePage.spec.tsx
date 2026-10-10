@@ -36,11 +36,10 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'output', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/invisible to a screen reader/)).toBeInTheDocument();
-    expect(door.getByText(/nothing to navigate by/)).toBeInTheDocument();
+    expect(door.getByText(/a page built of divs gives them nothing to move by/)).toBeInTheDocument();
     expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/, hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/reading the markup with the styles off/)).toBeInTheDocument();
+    expect(door.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
   test('the presentation door tells how I organize presentation', () => {
@@ -49,10 +48,10 @@ describe('the home page', () => {
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: 'custom property', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/Tag selectors are for resets only/)).toBeInTheDocument();
+    expect(door.getByText(/Element selectors are used only in the reset/)).toBeInTheDocument();
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
-    expect(door.getByText(/a bag of overrides/)).toBeInTheDocument();
-    expect(door.getByText(/spoken but unseen/)).toBeInTheDocument();
+    expect(door.getByText(/a pile of overrides/)).toBeInTheDocument();
+    expect(door.getByText(/still read by a screen reader but unseen/)).toBeInTheDocument();
     expect(door.getByRole('link', {name: 'prefers-reduced-motion', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'appearance: base-select', hidden: true}))
@@ -65,10 +64,10 @@ describe('the home page', () => {
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: /operable through a keyboard interface/, hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
-    expect(door.getByText(/events in, state change, projection out/)).toBeInTheDocument();
+    expect(door.getByText(/replacing it is the only way anything on screen changes/)).toBeInTheDocument();
     expect(door.getByText(/Not every event starts at the pointer/)).toBeInTheDocument();
-    expect(door.getByText(/swap the framework, or drop it entirely/)).toBeInTheDocument();
-    expect(door.getByText(/reading the state cold/)).toBeInTheDocument();
+    expect(door.getByText(/Change the framework, or remove it, and only the shell changes/)).toBeInTheDocument();
+    expect(door.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
   });
 
   test('should hold the opening, the three doors and a door to the record, in that order, and nothing else', () => {

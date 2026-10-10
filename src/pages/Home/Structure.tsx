@@ -9,45 +9,40 @@ export const Structure: FC = () =>
       purpose, and structure of text within a document.
     </Quotation>
     <p className="paragraph">
-      What things are: content, meaning, and the order a reader and a screen reader both
-      walk. The element chooses itself, and everything else layers on.
+      HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the element that means
+      what the content is, and add the look and the behaviour on top of it.
     </p>
     <details className="door-fold">
       <summary className="prompt caption">how I organize it</summary>
-      <p className="paragraph muted-ink">I start with the need and let it pick the element. That is the
-        whole method. The platform ships more vocabulary than most pages ever use: a{' '}
+      <p className="paragraph muted-ink">I start from what the content is and pick the element for it. The platform
+        has more elements than most pages use: a{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
-        a <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
+        a{' '}
+      <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
         an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
-        computed results. Before I write anything I ask what the content is, and the answer
-        is usually already an element’s name.</p>
-      <p className="paragraph muted-ink">The skeleton comes first: one header, one main, one footer, nav
-        where wayfinding lives. Landmarks are the page’s table of contents; a screen reader
-        walks them the way eyes scan headings, so every landmark gets a name and no two names
-        collide. Sections name themselves through their headings, and if a section has nothing
-        to be named by, that is the page telling me it is not a section.</p>
-      <p className="paragraph muted-ink">The elements mean something, and not just visually: a nav
-        announces wayfinding and a button promises a press to readers whose way in
-        differs from mine. The right tag hands most of that over for free,{' '}
+        a computed result. The answer to "what is this?" is usually an element’s name.</p>
+      <p className="paragraph muted-ink">The skeleton comes first: one header, one main, one footer, and a nav for the
+        links that move you around the site. Landmarks are the page’s table of contents, so every landmark gets a name
+        and no two are the same. A section is named by its heading; if there is nothing to name it by, it is not a
+        section.</p>
+      <p className="paragraph muted-ink">The elements mean something beyond how they look. A nav tells a screen reader
+        these links are for getting around; a button tells it a press will do something. The right element gives you
+        that for free, with{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“built-in keyboard accessibility, roles and states”</a> in
-        MDN’s words; repurpose a meaningless tag instead, and I become responsible for
-        rebuilding all of it in script. The field even has a saying,{' '}
-      <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better than bad ARIA”</a>; WebAIM
-        found pages using ARIA averaged{' '}
+        MDN’s words. Use a meaningless element instead and you rebuild all of it in script. The field has a saying,{' '}
+      <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better than bad ARIA”</a>: WebAIM
+        found pages using ARIA had{' '}
       <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
         pages without.</p>
-      <p className="paragraph muted-ink">The div is for when I want an element to say nothing: it is
-        invisible to a screen reader, and sometimes silence is the right answer. Still an
-        element <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of last resort, for when no other element is suitable”</a>,
-        the standard’s own words, because the silence cuts both ways:{' '}
-      <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">WebAIM’s screen reader survey</a> finds
-        71.6 percent of users navigate a long page by its headings, and a page built of
-        divs gives them nothing to navigate by. Everywhere else the name holds: figures
-        carry their captions, lists admit they are lists, buttons are buttons even when
-        they look like links.</p>
-      <p className="paragraph muted-ink">The test of the organization is reading the markup with the styles off.
-        Naked, the page should still say everything it means, in order: that reading is what
-        search engines, reader modes, and assistive tech consume. If the meaning only appears
-        when the CSS arrives, the meaning is living in the wrong language.</p>
+      <p className="paragraph muted-ink">A div is for when I want an element that says nothing. Sometimes that is
+        right, but the standard still calls it an element{' '}
+      <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of last resort, for when no other element is suitable”</a>:{' '}
+      <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">WebAIM’s survey</a> found 71.6
+        percent of screen reader users move through a long page by its headings, and a page built of divs gives them
+        nothing to move by. Everywhere else the element says what it is: a figure has its caption, a list is a list, a
+        button is a button even when it looks like a link.</p>
+      <p className="paragraph muted-ink">The test is to read the page with the styles turned off. It should still say
+        everything it means, in order, because that is what search engines, reader modes and assistive technology
+        read. If the meaning only appears once the CSS loads, it is in the wrong language.</p>
     </details>
   </section>;
