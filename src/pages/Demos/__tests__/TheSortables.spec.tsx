@@ -414,7 +414,7 @@ describe('the native drag sort tutorial’s words', () => {
     ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor and the cancel.'],
     ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel, and the keyboard gets no drag at all.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
-    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; the default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel. Setting dropEffect, a property of dataTransfer, picks the cursor, and it has to be one of the effects effectAllowed permits, which here is move. And the handler for drop, the event for a release over a target,'],
+    ['preventDefault, dropEffect and drop', 'Two calls accept the drop. The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; the default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel. The handler for drop, the event for a release over a target, calls preventDefault too, so the browser does not open the payload as a page. Between them, setting dropEffect, a property of dataTransfer, picks the cursor; it has to be one of the moves that effectAllowed permits, which dragstart sets to say what moves a drag allows, here move.'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
     ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
     ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor,'],
@@ -445,7 +445,7 @@ describe('the native drag sort tutorial’s words', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('which suits a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, except the drag is still running when drop fires, and a capture, that picture, taken during the drag swallows its events.');
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running,');
   });
 
   test('should drop the tables tab’s survey and inner half', async () => {

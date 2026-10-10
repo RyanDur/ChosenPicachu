@@ -296,8 +296,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
                   by its state: here, a checked {input}. The ~ is
                   a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
-                  that says how their elements relate; it picks the siblings that come after it, the elements with the
-                  same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
+                  that says how their elements relate; it picks the siblings that come after the element on its left, the
+                  elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
                   While it is not checked, this rule collapses the text. No script watches the {input}; the stylesheet
                   reads it.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
@@ -324,7 +324,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   laying the page out again, so it is cheap.
                 {motion === 'static'
                   ? ' With static the turn has no transition, so the corner turns at once.'
-                  : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
+                  : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
                   ...unit(accordionsCss, '.opening-arrow::after {'), gap,
@@ -353,14 +353,19 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines
                   tall: the lh unit is the height of one line, so the panel grows with the text size. Closed, the
-                  panel’s height is 0 and overflow hidden hides the text. Inside it, a section of the same height holds
-                  the paragraph and scrolls what does not fit. Whether a tall part’s last line is cut off depends on
-                  where its lines fall, so the section wears <code>foot-shadowed</code>, which paints a shadow at its
-                  foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or
-                  when the text fits. The section has a tabindex of 0, so a keyboard can reach it and scroll it,
-                  wears <code>focus-ringed</code> so a keyboard reader sees when they have, and is named by its bar
-                  with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility hidden
-                  takes the text out of the tab order and out of what a screen reader reads.
+                  panel’s height is 0 and overflow hidden hides the text.</p>
+              </li>
+              <li className="run">
+                <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what does
+                  not fit. Whether a tall part’s last line is cut off depends on where its lines fall, so the section
+                  wears <code>foot-shadowed</code>, which paints a shadow at its foot and a cover in the panel’s colour
+                  that scrolls with the text and hides the shadow at the end, or when the text fits.</p>
+              </li>
+              <li className="run">
+                <p className="paragraph">The section has a tabindex of 0, so a keyboard can reach it and scroll it,
+                  wears <code>focus-ringed</code> so a keyboard reader sees when they have reached it, and is named by
+                  its bar with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility
+                  hidden takes the text out of the tab order and out of what a screen reader reads.
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',

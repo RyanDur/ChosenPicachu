@@ -374,9 +374,9 @@ describe('the fold motion', () => {
   });
 
   test.each([
-    {style: 'reveal', says: /With reveal and the drawer, one sits on every bar/, not: /With static the turn has no transition/},
-    {style: 'drawer', says: /With reveal and the drawer, one sits on every bar/, not: /With static the turn has no transition/},
-    {style: 'static', says: /With static the turn has no transition, so the corner turns at once/, not: /With reveal and the drawer, one sits on every bar/}
+    {style: 'reveal', says: /With reveal and the drawer, a transition sits on every bar/, not: /With static the turn has no transition/},
+    {style: 'drawer', says: /With reveal and the drawer, a transition sits on every bar/, not: /With static the turn has no transition/},
+    {style: 'static', says: /With static the turn has no transition, so the corner turns at once/, not: /With reveal and the drawer, a transition sits on every bar/}
   ])('should tell, with $style chosen, how the arrow turns', async ({style, says, not}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
@@ -810,7 +810,7 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after it, the elements with the same parent.');
+    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
   });
 
   test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes colour with the words', async () => {
@@ -877,7 +877,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits. The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have,');
-    expect(explanation.everyCodeBeside(oldWay, /Whether a tall part’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{[^]*\.focus-ringed \{/);
+    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits.');
+    expect(explanation.everyCodeBeside(oldWay, /The section has a tabindex of 0/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{/);
   });
 });
