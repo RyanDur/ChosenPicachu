@@ -1,2 +1,2 @@
-export {OpeningFragmentProvider, useOpeningFragment} from './OpeningFragmentProvider';
+export {OpeningFragmentProvider} from './OpeningFragmentProvider';
 export {useArrival} from './useArrival';

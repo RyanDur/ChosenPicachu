@@ -12,7 +12,7 @@ export const RecordDoor: FC = () =>
     <ol className="moments" aria-label="the moments">
       {inOrder.map(key => moments[key]).map(({year, title, id}) =>
         <li key={id}>
-          <Link className="moment-line signpost" to={`${Paths.record}#${id}`}>
+          <Link className="moment-line paragraph signpost" to={`${Paths.record}#${id}`}>
             <time className="moment-year caption bold muted-ink" dateTime={year}>{year}</time> {title}
           </Link>
         </li>)}

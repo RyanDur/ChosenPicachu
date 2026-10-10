@@ -98,7 +98,7 @@ describe('the home page', () => {
     ]);
   });
 
-  test('should send each of the record\'s moments straight to that moment on the record\'s page', () => {
+  test('should send the first moment and the second of 1994\'s two straight to their own places on the record\'s page', () => {
     const moments = within(screen.getByRole('list', {name: 'the moments'}));
 
     expect(moments.getByRole('link', {name: '1989 Someone needs something'})).toHaveAttribute('href', `${Paths.record}#someone-needs-something`);

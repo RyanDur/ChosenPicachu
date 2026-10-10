@@ -1,10 +1,28 @@
-export type MomentKey = 'need' | 'structureArrives' | 'presentationLeavesHome' | 'cascadeSettlement' | 'behaviorBorn' | 'needOutrunsStandards' | 'browsersAgree' | 'zenGarden' | 'browsersTakePen' | 'pageBecomesApplication' | 'someoneNeedsComponents' | 'html5SaysIt' | 'documentComesBack';
+const ordered = <const Keys extends readonly string[]>(keys: Keys): Keys => keys;
 
-export type Named = {year: string; title: string; id: string};
+export const inOrder = ordered([
+  'need',
+  'structureArrives',
+  'presentationLeavesHome',
+  'cascadeSettlement',
+  'behaviorBorn',
+  'needOutrunsStandards',
+  'browsersAgree',
+  'zenGarden',
+  'browsersTakePen',
+  'pageBecomesApplication',
+  'someoneNeedsComponents',
+  'html5SaysIt',
+  'documentComesBack'
+]);
 
-const named = (year: string, title: string): Named => ({year, title, id: title.toLowerCase().split(' ').join('-')});
+export type MomentKey = typeof inOrder[number];
 
-export const moments: Record<MomentKey, Named> = {
+export type MomentHeading = {year: string; title: string; id: string};
+
+const named = (year: string, title: string): MomentHeading => ({year, title, id: title.toLowerCase().split(' ').join('-')});
+
+export const moments: Record<MomentKey, MomentHeading> = {
   need: named('1989', 'Someone needs something'),
   structureArrives: named('1990', 'Researchers need to collaborate'),
   presentationLeavesHome: named('1994', 'Authors need control of the look'),
@@ -19,19 +37,3 @@ export const moments: Record<MomentKey, Named> = {
   html5SaysIt: named('2014', 'The philosophy needs writing down'),
   documentComesBack: named('2016', 'The document needs to come first')
 };
-
-export const inOrder: MomentKey[] = [
-  'need',
-  'structureArrives',
-  'presentationLeavesHome',
-  'cascadeSettlement',
-  'behaviorBorn',
-  'needOutrunsStandards',
-  'browsersAgree',
-  'zenGarden',
-  'browsersTakePen',
-  'pageBecomesApplication',
-  'someoneNeedsComponents',
-  'html5SaysIt',
-  'documentComesBack'
-];

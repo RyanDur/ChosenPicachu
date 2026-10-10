@@ -36,7 +36,7 @@ test.describe('a phone, where the record\'s door sits below the opening', () => 
       const moment = recordPage(page).moment('The document needs to come first');
       await expect(moment.getByRole('heading')).toBeInViewport();
       await expect(recordPage(page).moment('The philosophy needs writing down').getByRole('heading')).not.toBeInViewport();
-      await expect(moment.getByRole('group')).not.toHaveAttribute('open');
+      await expect(recordPage(page).storyTold(moment.getByRole('group'))).toBeHidden();
 
       await page.goBack();
 
