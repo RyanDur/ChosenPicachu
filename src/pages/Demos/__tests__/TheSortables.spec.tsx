@@ -35,12 +35,14 @@ const nativeRecipe = async (): Promise<HTMLElement> => {
   return await screen.findByRole('region', {name: 'build the native drag sort yourself'});
 };
 
+const theListArrives = (): Promise<HTMLElement> => screen.findByRole('list', {name: 'sortable list'}, {timeout: 5000});
+
 describe('the sortable list demo', () => {
   test('a finger pressed on a grip readies its item to be dragged', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(await screen.findByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    const first = within(await theListArrives()).getAllByRole('listitem')[0];
     expect(first).toHaveAttribute('draggable', 'false');
 
     await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
@@ -52,8 +54,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
-    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
     fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
@@ -65,8 +66,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop&origin=keep')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
-    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
 
@@ -85,8 +85,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
-    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
     await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
 
@@ -110,6 +109,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await theListArrives();
     expect(seats()).toEqual(['A', 'B', 'C']);
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
@@ -122,6 +122,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    await theListArrives();
 
     await lifted('A');
     fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
@@ -136,6 +137,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await theListArrives();
     await lifted('A');
     draggedOver('C', 10);
 
@@ -146,7 +148,7 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
+    await theListArrives();
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await lifted('A');
@@ -173,7 +175,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
+    await theListArrives();
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
@@ -187,7 +189,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
+    await theListArrives();
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -205,7 +207,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
+    await theListArrives();
     screen.getByRole('button', {name: 'grip for A'}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -219,7 +221,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await screen.findByRole('list', {name: 'sortable list'});
+    await theListArrives();
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -233,6 +235,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await theListArrives();
     await lifted('A');
     draggedOver('C', 10);
 

@@ -77,8 +77,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    const card = aggregations.card();
+    const card = await aggregations.arrived();
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
     const table = within(card).getAllByRole('table')[0];
@@ -104,8 +103,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    const card = aggregations.card();
+    const card = await aggregations.arrived();
     const rowOf = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     const stage = within(card).getAllByRole('table')[0];
     stage.getBoundingClientRect = () => ({
@@ -208,8 +206,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    const card = aggregations.card();
+    const card = await aggregations.arrived();
     expect(aggregations.windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
     within(card).getByRole('button', {name: 'move row 1'}).focus();
@@ -687,6 +684,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
 
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
@@ -699,6 +697,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
 
     expect(await screen.findByRole('region', {name: 'build the sort menu yourself'})).not.toHaveTextContent(/\bdescent\b/);
@@ -710,6 +709,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await aggregations.arrived();
     await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
 
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
@@ -747,8 +747,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    const card = aggregations.card();
+    const card = await aggregations.arrived();
     expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });
 
