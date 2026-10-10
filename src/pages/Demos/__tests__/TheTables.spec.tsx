@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {itemHeadedBy} from '@__test_support/headed-item';
 import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -475,9 +476,9 @@ describe('the tables demo', () => {
     render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const heading = await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'}, untilTheTablesTabRenders);
+    await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'}, untilTheTablesTabRenders);
 
-    await waitFor(() => expect(document.activeElement).toContainElement(heading));
+    await waitFor(() => expect(itemHeadedBy('the stations', 'The trader can watch the market live, in windows')).toHaveFocus());
   });
 
   test('the keyboard track teaches the same sort by other hands', async () => {

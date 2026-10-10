@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
@@ -102,8 +103,8 @@ describe('arriving at a moment on the record', () => {
   test('should take the keyboard to the moment the address names, so the next Tab starts there', async () => {
     render(<TestApp at={`${Paths.record}#the-document-needs-to-come-first`}/>);
 
-    const heading = await screen.findByRole('heading', {name: 'The document needs to come first'});
+    await screen.findByRole('heading', {name: 'The document needs to come first'});
 
-    await waitFor(() => expect(document.activeElement).toContainElement(heading));
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
 });

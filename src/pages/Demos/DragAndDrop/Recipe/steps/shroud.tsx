@@ -26,7 +26,7 @@ export const fadeOrigin = (itemSource: Sample): ReactNode =>
   </Step>;
 
 export const keepStanding = (listSource: Sample): ReactNode =>
-  <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
+  <Step title="Leave the lifted card where it was" dial={<OriginDial name="native-origin"/>}>
     <Words want="A card that vanishes can be disorienting; sometimes the reader wants to see the card both where it was and where it is going.">
       <Says>Do nothing. This is the keep list, so its Item is the plain card: the browser already drew the drag image,
         so for the length of the drag there are two of the card, one in place and one dimmed under the pointer, and no

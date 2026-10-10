@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {itemHeadedBy} from '@__test_support/headed-item';
 import {demosAt} from '@pages/Demos/__test_support';
 import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -326,7 +327,7 @@ describe('the sortable list demo', () => {
     const recipe = await byHandStoryDialledLazyKeep();
 
     expect(recipe).toHaveTextContent(/Stash the landing, settle after the drag/);
-    expect(recipe).toHaveTextContent(/Leave the origin standing/);
+    expect(recipe).toHaveTextContent(/Leave the lifted card where it was/);
     expect(recipe).toHaveTextContent(/Glide the settle one tick after the release/);
     expect(recipe).not.toHaveTextContent(/Commit inside the crossing/);
   });
@@ -346,9 +347,9 @@ describe('arriving at a station', () => {
     render(<TestApp at={`${demosAt('?tab=dragAndDrop')}#station-4`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const heading = await screen.findByRole('heading', {name: 'Layer on functionality, in the order it was asked for'}, {timeout: 5000});
+    await screen.findByRole('heading', {name: 'Layer on functionality, in the order it was asked for'}, {timeout: 5000});
 
-    await waitFor(() => expect(document.activeElement).toContainElement(heading));
+    await waitFor(() => expect(itemHeadedBy('the stations', 'Layer on functionality, in the order it was asked for')).toHaveFocus());
   });
 });
 
@@ -412,10 +413,12 @@ describe('the native drag sort tutorial’s words', () => {
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
     ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor, the macOS cancel.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
-    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default, and here the default is to refuse the drop. dropEffect, a property of dataTransfer, names the action, such as move or copy, so the cursor matches. And the handler for drop, the event for a release over a target,'],
+    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; here the default is to refuse the drop, so cancelling it accepts. Setting dropEffect, a property of dataTransfer, to move or copy picks the cursor. And the handler for drop, the event for a release over a target,'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
     ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
-    ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor, the cancel.']
+    ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor,'],
+    ['the cancel', 'and the cancel, the animation that carries the card back when no target accepts the drop.'],
+    ['a view transition and its capture', 'a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture,']
   ])('should say what %s is where the reader meets it', async (_term, sentence) => {
     expect(await nativeRecipe()).toHaveTextContent(sentence);
   });
@@ -426,6 +429,14 @@ describe('the native drag sort tutorial’s words', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and dragleave, the event for the pointer leaving an item, forgets it.');
+  });
+
+  test('should say what a tick is where the lazy glide meets it', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('run the settle a tick after the release, a setTimeout with no delay, which runs once the drag has ended.');
   });
 
   test('should drop the tables tab’s survey and inner half', async () => {
