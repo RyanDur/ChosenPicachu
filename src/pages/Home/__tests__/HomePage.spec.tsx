@@ -28,6 +28,14 @@ describe('the home page', () => {
     expect(screen.getByText(/a much livelier Web/)).toBeVisible();
   });
 
+  test.each([
+    ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the element that means what the content is, and add the look and the behaviour on top of it.'],
+    ['Presentation', 'CSS says how things look. Shared looks get shared class names, each component’s layout lives in its own sheet, and nothing is styled to say what the HTML already says.'],
+    ['Dynamic Interaction', 'JavaScript says how things respond. The state is what is true right now, an event is what just happened, and the page is drawn from the two.']
+  ])('should open the %s door with a plain line on what its language does', (door, line) => {
+    expect(within(screen.getByRole('region', {name: door})).getByText(line.slice(0, 20), {exact: false})).toHaveTextContent(line);
+  });
+
   test('the structure door tells how I organize structure', () => {
     const door = within(screen.getByRole('region', {name: 'Structure'}));
 
