@@ -84,8 +84,8 @@ const handleSays: Record<World, ReactNode> = {
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
-  vanilla: <Says>The handle is focusable by birth, announcing the name the markup gives it, and
-    once the ledger exists dressColumn rewrites that label to speak
+  vanilla: <Says>The handle is focusable from the start, announced by the name the markup gives it, and
+    once the ledger exists dressColumn rewrites that label to state
     the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
     whose only item is the 8px line its ::after paints, so the painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
@@ -137,7 +137,7 @@ const gestureCodes: Record<World, ReactNode> = {
       aside('// …the press measures; the bubbling stops here'), gap,
       ...unit(sharesSource, 'export const resizeArrows'), gap,
       ...span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
-      aside('// the column drag above never hears a thing')
+      aside('// the column drag above never gets the press')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -145,7 +145,7 @@ const gestureCodes: Record<World, ReactNode> = {
       ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       aside('// …the press measures; the bubbling stops here'), gap,
       ...unit(frameResize, "handle.addEventListener('keydown'"),
-      aside('// the column drag above never hears a thing')
+      aside('// the column drag above never gets the press')
     ]}/>
   </Codes>
 };
@@ -154,9 +154,10 @@ const widenStory = (world: World) =>
   <Story param="resize" id="widen"
     can="The trader can widen a column"
     soThat="what they read most gets the room, and the table keeps its shape">
+    <Tell>The ledger is the table’s record of each column’s share of the width.</Tell>
     {theImplementation(world, 'Builds', 'Frame/table/resize.ts')}
     <Tell>We could resize with absolute pixel widths, but one drag would break the
-      table’s promise to fill its container; so widths are shares of a hundred, born by
+      table’s guarantee to fill its container; so widths are shares of a hundred, created by
       measuring the rendered headers at the first touch, and every resize is a trade
       between neighbours: whatever one column gains, the next gives, and the sum cannot
       change.</Tell>
@@ -170,13 +171,13 @@ const widenStory = (world: World) =>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the guarantee that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
-          <Says>Widths should be <Term word="share">shares</Term> of a hundred, born by
-            measuring the rendered headers at the first touch; until a hand arrives, the
+          <Says>Widths should be <Term word="share">shares</Term> of a hundred, created by
+            measuring the rendered headers at the first touch; until a pointer arrives, the
             stylesheet owns the widths and no ledger exists.</Says>
         </Words>
         <Reveal>
-          <Says>Pixel widths are the first ledger you reach for, and every entry in it is a lie
-            waiting for a resize: nothing keeps the sum equal to the width.</Says>
+          <Says>Pixel widths are the first record you reach for, and every entry in it is wrong as soon as the window
+            changes size: nothing keeps the sum equal to the width.</Says>
           <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
             in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
             is a class of the table’s own sheet.</Says>

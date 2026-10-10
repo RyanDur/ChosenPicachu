@@ -12,7 +12,7 @@ const copy: Copy = {
   },
   origin: {
     keep: 'The lifted row or column stays where it was, so you can see the gap it will leave.',
-    hide: 'The lifted row or column rides the pointer, cells and all, leaving its gap where it came from.'
+    hide: 'The lifted row or column moves with the pointer, cells and all, leaving its gap where it came from.'
   },
   motion: {
     animated: 'The swap itself is instant; displaced cells slide to their new seats.',

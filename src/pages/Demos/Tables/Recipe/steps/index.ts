@@ -1,7 +1,7 @@
 export type {Track, World} from '../../params';
 export {trackParam} from '../../params';
 export {frameCarry, gap, gripSource, headerCss, selectorsSource, sortableCss, stateSource, surveySource, travelSource, liftSource, arrowsSource} from './sources';
-export {accessTrack, againstTheStream, ownedPixels, quietDials, theImplementation, theWholeBuild, turnedVertical, twoRoads} from './tells';
+export {accessTrack, againstTheStream, namesInTheCode, ownedPixels, quietDials, theImplementation, theWholeBuild, turnedVertical, twoRoads} from './tells';
 export {cssShare} from './share';
 export {deadZone} from './zone';
 export {orderInState} from './order';

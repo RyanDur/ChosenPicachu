@@ -26,8 +26,8 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
   <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
     <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
       <Says>Copying the column would go stale on the next trade, and a copy never has
-        the real buttons in it. So nothing is copied: the carried cells themselves ride the
-        pointer with <Mdn path="Web/CSS/translate">translate</Mdn>, and the layout box they left
+        the real buttons in it. So nothing is copied: the carried cells themselves move with the
+        pointer by <Mdn path="Web/CSS/translate">translate</Mdn>, and the layout box they left
         behind stays exactly where it was, empty, as the gap. Nothing unmounts and nothing is
         hidden.</Says>
     </Words>
@@ -54,7 +54,7 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
             given a <code>position</code> other than static, so the sheet gives the carried
-            cell <code>position: relative</code> as well. Raised, the carried cells ride over whatever they pass,
+            cell <code>position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
         </>
         : <>
@@ -67,7 +67,7 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
             given a <code>position</code> other than static, so the sheet gives the carried
-            cell <code>position: relative</code> as well. Raised, the carried cells ride over whatever they pass,
+            cell <code>position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
           <Says>Every motion class changes through <code>changeMotion</code>, which adds or removes the class and
             keeps <code>paper-in-motion</code> on while any motion class is present.</Says>
@@ -85,21 +85,21 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
             ...unit(frameCarry, 'export const dressCarried'), gap,
             ...span(frameSettle, 'type Toward', 'const motions'), gap,
             ...unit(frameSettle, 'export const changeMotion'),
-            aside('// the reconcile dresses the carried cells; the stylesheet moves them')
+            aside('// the reconcile sets the carried cells’ classes; the stylesheet moves them')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(stateSource, 'export const drift'), gap,
           ...unit(stateSource, 'export const seatOffset'), gap,
           ...unit(selectorsSource, 'export const seatOfColumn'), gap,
           ...unit(selectorsSource, 'export const driftOfColumn'),
-          aside('// the drift rides in the drag; the seat is a selector over it and the order')
+          aside('// the drift is carried in the drag; the seat is a selector over it and the order')
         ]}/>
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),
           ...unit(cssSource, '.sortable .carried {'), gap,
           ...unit(cssSource, '.sortable.hide .carried {'), gap,
           ...unit(surfaceCss, '.paper-in-motion {'),
-          aside('/* the real cells ride the pointer; their layout box stays as the gap; the sheet adds seat and drift */')
+          aside('/* the real cells move with the pointer; their layout box stays as the gap; the sheet adds seat and drift */')
         ]}/>
       </Codes>
     </Reveal>

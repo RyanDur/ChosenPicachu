@@ -53,7 +53,7 @@ export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sa
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...unit(buildSrc, 'const drop = '), gap,
             ...unit(frameSettle, 'const untilSettled = '),
-            aside('// the marks dress the cells; the stylesheet moves them; the cells undress when the keyframe ends')
+            aside('// the marks set the cells’ classes; the stylesheet moves them; the cells clear them when the keyframe ends')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const displacedBetween'), gap,
@@ -90,7 +90,7 @@ export const staticMotion = (world: World, cssSource: Sample): ReactNode =>
         : <Says>The static build is the animated build wearing a different word. Every drop and
           every walk still marks what settles and what is shoved, because the marks are what
           happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
-          it starts and the cells undress in the same breath. There is real value beyond taste:
+          it starts and the cells clear their classes at once. There is real value beyond taste:
           nothing competes with the pointer, and no motion for prefers-reduced-motion users to
           endure.</Says>}
       <Codes>

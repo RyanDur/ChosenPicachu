@@ -24,6 +24,11 @@ export const theWholeBuild = (world: World, tableSource: Sample, buildSrc: Sampl
       : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
   </Codes>;
 
+export const namesInTheCode =
+  <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the code’s name for the reorder a
+    drag commits when the pointer crosses a neighbour. The drift is the carried cell’s offset from its seat while the
+    pointer moves. The survey is the measurement of the header row the code takes when a drag starts.</Tell>;
+
 export const twoRoads =
   <Tell>There are two roads to dragging something across a page, and this site walks
     both. The <Link className="signpost"
@@ -56,9 +61,9 @@ export const ownedPixels = (world: World): ReactNode =>
 
 export const turnedVertical =
   <Tell>We could build rows their own machinery, but the need is the same motion
-    turned vertical; so rows ride what the columns built. The differences that remain
+    turned vertical; so rows reuse what the columns built. The differences that remain
     are honest ones: a grip button to grab, row heights in the survey, and a vertical
-    hit test. The promises the dials set ride along unchanged; the turn changes the
+    hit test. The promises the dials set carry over unchanged; the turn changes the
     axis, nothing else.</Tell>;
 
 export const accessTrack =

@@ -51,7 +51,7 @@ export const focusLands = (world: World, headerSource: Sample, buildSrc: Sample)
   </Step>;
 
 export const arrowsSpeak = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
-  <Step title="Arrows speak direction">
+  <Step title="The arrows give the direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
       <Says>The verb gets claimed with
         a <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener that takes the two

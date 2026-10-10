@@ -186,7 +186,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const controls = await tableControls.region();
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
-    expect(controls).toHaveTextContent(/rides the pointer, cells and all/);
+    expect(controls).toHaveTextContent(/moves with the pointer, cells and all/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
@@ -481,7 +481,7 @@ describe('the tables demo', () => {
     await waitFor(() => expect(itemHeadedBy('the stations', 'The trader can watch the market live, in windows')).toHaveFocus());
   });
 
-  test('the keyboard track teaches the same sort by other hands', async () => {
+  test('the keyboard track teaches the same sort with the arrow keys', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -491,7 +491,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByRole('radio', {name: 'By keyboard'}));
 
     expect(recipe).toHaveTextContent(/Give focus a place to land/);
-    expect(recipe).toHaveTextContent(/Arrows speak direction/);
+    expect(recipe).toHaveTextContent(/The arrows give the direction/);
     expect(recipe).toHaveTextContent(/Both parties slide/);
     expect(recipe).toHaveTextContent(/the stylesheet slides them/);
     await recipeFolds.press(recipe, 'The trader can sort by column');
@@ -538,7 +538,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    expect(recipe).toHaveTextContent(/Arrows speak direction/);
+    expect(recipe).toHaveTextContent(/The arrows give the direction/);
     expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
   });
 
@@ -1124,7 +1124,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the sheet gives the carried cell position: relative as well. Raised, the carried cells ride over whatever they pass, and the paper keeps what is beneath from showing through.');
+    expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the sheet gives the carried cell position: relative as well. Raised, the carried cells pass over whatever they cross, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
@@ -1155,5 +1155,68 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
     expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by name. focus-ringed is one: the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
+  });
+});
+
+describe('the tables tutorials’ vocabulary', () => {
+  const builds = [
+    {at: 'tut=sort&track=pointer&world=react', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=pointer&world=vanilla', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=keyboard&world=react', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=keyboard&world=vanilla', region: 'build the drag sort yourself'},
+    {at: 'tut=menu&world=react', region: 'build the sort menu yourself'},
+    {at: 'tut=menu&world=vanilla', region: 'build the sort menu yourself'},
+    {at: 'tut=resize&world=react', region: 'build the drag resize yourself'},
+    {at: 'tut=resize&world=vanilla', region: 'build the drag resize yourself'},
+    {at: 'world=react', region: 'the living table'},
+    {at: 'world=vanilla', region: 'the living table'}
+  ];
+
+  const prose = async (at: string, region: string): Promise<HTMLElement[]> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&${at}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const build = await screen.findByRole('region', {name: region}, untilTheTablesTabRenders);
+    return [...within(build).getAllByRole('paragraph'), ...within(build).getAllByRole('heading')];
+  };
+
+  const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
+    blocks.find(block => word.test(block.textContent));
+
+  test.each(builds)('should say no figure of speech in $region, with $at', async ({at, region}) => {
+    const words = (await prose(at, region)).map(block => block.textContent).join(' ');
+
+    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born)\b/);
+  });
+
+  test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
+    const blocks = await prose(`tut=sort&track=${track}`, 'build the drag sort yourself');
+
+    expect(firstSaying(blocks, /\b(walk|strike|drift|survey)\b/)).toHaveTextContent('A walk is the code’s name for a move made with the arrow keys. A strike is the code’s name for the reorder a drag commits when the pointer crosses a neighbour. The drift is the carried cell’s offset from its seat while the pointer moves. The survey is the measurement of the header row the code takes when a drag starts.');
+  });
+
+  test('should say what a dial’s promise is where the drag sort first names the promises', async () => {
+    const blocks = await prose('tut=sort', 'build the drag sort yourself');
+
+    expect(firstSaying(blocks, /\bpromises?\b/)).toHaveTextContent('This particular table keeps three more promises. A dial’s promise is what the table guarantees under that setting.');
+  });
+
+  test('should name the ledger before the resize build uses it', async () => {
+    const blocks = await prose('tut=resize', 'build the drag resize yourself');
+
+    expect(firstSaying(blocks, /\bledger\b/)).toHaveTextContent('The ledger is the table’s record of each column’s share of the width.');
+  });
+
+  test.each(['react', 'vanilla'])('should name the hand and the reconcile where the living table first uses them, in the %s world', async world => {
+    const blocks = await prose(`world=${world}`, 'the living table');
+
+    expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('The hand is the code’s name for the store that holds what the pointer is carrying and the marks a move leaves.');
+    expect(firstSaying(blocks, /\breconcile\b/)).toHaveTextContent('A reconcile is the function that moves the page’s cells from the old order to the new one.');
+  });
+
+  test('should name the dresser where the vanilla living table first uses it', async () => {
+    const blocks = await prose('world=vanilla', 'the living table');
+
+    expect(firstSaying(blocks, /\bdresser\b/)).toHaveTextContent('A dresser is the code’s name for the function that adds and removes the moving cells’ classes and custom properties.');
   });
 });

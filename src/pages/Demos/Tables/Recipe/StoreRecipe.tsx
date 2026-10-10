@@ -213,7 +213,8 @@ const whoSubscribes = (world: World): ReactNode =>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
       <Says>React subscribes a component and ignores all four. The vanilla build subscribes
-        a <Term word="reconcile">reconcile</Term> and uses the first two. A listener that mirrored the state to a backend
+        a <Term word="reconcile">reconcile</Term> and uses the first two. A reconcile is the function that moves the
+        page’s cells from the old order to the new one. A listener that mirrored the state to a backend
         would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
@@ -232,7 +233,8 @@ const whoSubscribes = (world: World): ReactNode =>
           <Says>The mount subscribes three times.</Says>
           <Says>A reconcile on the arrangement moves the page’s elements from the previous order to the current one,
             touching only the cells whose place changed.</Says>
-          <Says>A dresser on the hand sets the carried cells’ classes and the widths.</Says>
+          <Says>A dresser is the code’s name for the function that adds and removes the moving cells’ classes and
+            custom properties. A dresser on the hand sets the carried cells’ classes and the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
           <Says>The store hands every listener the state before the change and a way to read the state now, so the
@@ -262,7 +264,8 @@ export const storeStory = (world: World): ReactNode =>
     <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
       records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
-    <Tell>Each table is a store of the same shape. It holds only what the hand does to it, and it raises what the
+    <Tell>The hand is the code’s name for the store that holds what the pointer is carrying and the marks a move
+      leaves. Each table is a store of the same shape. It holds only what the hand does to it, and it raises what the
       hand did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>

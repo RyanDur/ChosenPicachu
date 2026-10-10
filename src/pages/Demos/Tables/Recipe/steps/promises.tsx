@@ -9,7 +9,7 @@ const paces: Record<Pace, string> = {
 
 const origins: Record<Origin, string> = {
   keep: 'The column stays where it stands while you drag, so nothing moves but the order while you decide.',
-  hide: 'The column rides in your hand and a gap opens where it left, so the landing is never a guess.'
+  hide: 'The column moves with the pointer and a gap opens where it left, so the landing is never a guess.'
 };
 
 const motions: Record<Motion, string> = {
@@ -19,4 +19,4 @@ const motions: Record<Motion, string> = {
 
 export const promises = (pace: Pace, origin: Origin, motion: Motion): ReactNode =>
   <Tell>This particular table keeps three more
-    promises. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;
+    promises. A dial’s promise is what the table guarantees under that setting. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;

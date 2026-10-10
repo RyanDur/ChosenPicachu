@@ -9,11 +9,11 @@ export type Word =
   | 'provider' | 'hook' | 'effect' | 'hydrate' | 'ledger';
 
 const definitions: Record<Word, ReactNode> = {
-  aloft: 'whatever the hand is carrying, a column by its name or a row by its key; the store holds it as the drag, absent until a lift',
+  aloft: 'whatever the pointer is carrying, a column by its name or a row by its key; the store holds it as the drag, absent until a lift',
   survey: 'the one measurement taken at the grab: the table’s box, every column’s width, later the row heights',
   drift: 'how far the pointer has moved since the grab; state on the drag, dispatched on every move',
   strike: 'the moment the pointer crosses far enough into a neighbour to count',
-  settle: 'what a strike does: the reorder, and the shove it hands the neighbours it passed',
+  settle: 'what a strike does: the reorder, and the shove it passes to the neighbours it crossed',
   landing: 'the destination a lazy drag remembers instead of settling',
   seats: 'the rows’ order: a row keeps its key while its seat changes',
   share: 'a column’s slice of the table’s width: a fraction, not a pixel',

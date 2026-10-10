@@ -64,10 +64,10 @@ const rankStory = (build: Build) => {
     can="The trader can sort the windows by any measure, or take the order back"
     soThat="the table ranks itself, and the hand still outranks it">
     {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
-    <Tell>We could build the popup from divs, but then we owe focus, dismissal, and
-      stacking, and choosing starts to feel like working against the menu instead of using it;
+    <Tell>We could build the popup from divs, but then we would have to build focus, dismissal and
+      stacking ourselves, and choosing starts to feel like working against the menu instead of using it;
       so the chooser uses the platform, and the first steps below collect what that
-      decision buys. Sorting state has its own trap: the glyph, the attribute, and the
+      decision gives us. Sorting state has its own trap: the glyph, the attribute, and the
       ranked rows all want their own copy of which column is chosen, and copies
       drift.</Tell>
     <Tell>And two forces pull at whatever the trader chooses. The data keeps streaming under
@@ -138,7 +138,7 @@ const rankStory = (build: Build) => {
             this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:
             flip-block is the escape hatch: when the row below has no room, the whole area flips
             above. You measure nothing and write no JavaScript.</Says>
-          <Says>A popover also ships dressed in auto margins, a border, and padding, but none of
+          <Says>A popover also comes with auto margins, a border and padding by default, but none of
             that is this rule’s business: your site reset already zeroes menu, and author styles
             beat user-agent styles no matter the specificity. The list markers are the reset’s
             job too; this site’s reset drops them for menu alongside ol and ul. One line remains

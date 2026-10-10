@@ -80,12 +80,12 @@ export const gripArrows = (world: World, rowSource: Sample, buildSrc: Sample): R
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...span(rowSource, 'onKeyDown={rowArrows(', 'onKeyDown={rowArrows('),
-            aside('// the grip hears its own arrows; the walk is shared')
+            aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, "grip.addEventListener('keydown'", "grip.addEventListener('keydown'"), gap,
             ...unit(buildSrc, 'const rowTo = '),
-            aside('// the grip hears its own arrows; the walk is shared')
+            aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(arrowsSource, 'export const rowArrows')

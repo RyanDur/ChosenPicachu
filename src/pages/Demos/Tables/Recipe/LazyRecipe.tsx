@@ -28,6 +28,7 @@ import {
   turnedVertical,
   theImplementation,
   theWholeBuild,
+  namesInTheCode,
   twoRoads,
   walkSlides
 } from './steps';
@@ -45,6 +46,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
+      {namesInTheCode}
       {twoRoads}
       {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
       {theWholeBuild(world, tableSource, buildSrc)}
@@ -76,6 +78,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
+      {namesInTheCode}
       {accessTrack}
       {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
       {quietDials}
