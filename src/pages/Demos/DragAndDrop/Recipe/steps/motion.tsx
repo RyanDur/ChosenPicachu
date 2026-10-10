@@ -27,7 +27,7 @@ export const slideCrossed = (listSource: Sample, cssSource: Sample): ReactNode =
 
 export const glideSettle = (listSource: Sample): ReactNode =>
   <Step title="Glide the settle one tick after the release" dial={<MotionDial name="native-motion"/>}>
-    <Words want="A lazy settle happens all at once on release, which suits a view transition, except the drag is still running when drop fires, and a capture during the drag swallows its events.">
+    <Words want="A lazy settle happens all at once on release, which suits a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, except the drag is still running when drop fires, and a capture, that picture, taken during the drag swallows its events.">
       <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle a tick
         after the release, a setTimeout with no delay, which runs once the drag has ended. By the time{' '}
       <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> takes its capture, the browser has

@@ -411,9 +411,10 @@ describe('the native drag sort tutorial’s words', () => {
     ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler says what move is about to be made'],
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
-    ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor, the macOS cancel.'],
+    ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor and the cancel.'],
+    ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel, and the keyboard gets no drag at all.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
-    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; here the default is to refuse the drop, so cancelling it accepts. Setting dropEffect, a property of dataTransfer, to move or copy picks the cursor. And the handler for drop, the event for a release over a target,'],
+    ['preventDefault, dropEffect and drop', 'The dragover handler calls preventDefault, the method that tells the browser not to do what it would by default; the default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel. Setting dropEffect, a property of dataTransfer, picks the cursor, and it has to be one of the effects effectAllowed permits, which here is move. And the handler for drop, the event for a release over a target,'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
     ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
     ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor,'],
@@ -437,6 +438,14 @@ describe('the native drag sort tutorial’s words', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('run the settle a tick after the release, a setTimeout with no delay, which runs once the drag has ended.');
+  });
+
+  test('should say what a view transition is where the lazy glide meets it', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('which suits a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, except the drag is still running when drop fires, and a capture, that picture, taken during the drag swallows its events.');
   });
 
   test('should drop the tables tab’s survey and inner half', async () => {

@@ -11,7 +11,7 @@ export const platformCurrency =
     the steps below are those handlers.</Tell>;
 
 export const neverOurs =
-  <Tell>Three things stay the browser’s with its own drag and drop: the drag image, the cursor, the macOS cancel.
+  <Tell>Three things stay the browser’s with its own drag and drop: the drag image, the cursor and the cancel.
     The steps name them instead of faking them, and the <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> shows the pointer-events drag that
     owns them.</Tell>;

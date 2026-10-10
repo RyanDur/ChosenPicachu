@@ -8,10 +8,12 @@ export const acceptTheDrop = (listSource: Sample) =>
       <Says>A bare list looks finished. Then you release over it, the card flies back, and your drop handler never ran.</Says>
       <Says>Accepting a <Mdn path="Web/API/HTMLElement/drop_event">drop</Mdn> takes three things. The dragover handler
         calls <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn>, the method that tells the browser not to do
-        what it would by default; here the default is to refuse the drop, so cancelling it accepts. Setting{' '}
-      <Mdn path="Web/API/DataTransfer/dropEffect">dropEffect</Mdn>, a property of dataTransfer, to move or copy picks
-        the cursor. And the handler for drop, the event for a release over a target, calls preventDefault so the browser
-        does not open the payload as a page. Miss any of the three and the browser plays the cancel.</Says>
+        what it would by default; the default is to refuse the drop, so preventing it accepts the drop, and nothing else
+        stops the cancel. Setting <Mdn path="Web/API/DataTransfer/dropEffect">dropEffect</Mdn>, a property of
+        dataTransfer, picks the cursor, and it has to be one of the effects effectAllowed permits, which here is move.
+        And the handler for drop, the event for a release over a target, calls preventDefault so the browser does not
+        open the payload as a page. Miss the first and the browser plays the cancel; miss the last and it opens the
+        payload.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
