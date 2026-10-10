@@ -1,5 +1,5 @@
 import {expect, Locator, Page, test} from '@playwright/test';
-import {homePage, iPhone, recordPage, tabsTo} from './__test_support';
+import {homePage, iPhone, pressTab, recordPage, tabsTo} from './__test_support';
 
 test('opening one fuller story closes the one that was open', async ({page}) => {
   const record = recordPage(page);
@@ -62,4 +62,16 @@ test.describe('a phone, where the record\'s door sits below the opening', () => 
       await expect(homePage(page).linkToTheRecord).toBeInViewport();
     });
   }
+});
+
+test('a keyboard reader who follows a moment\'s line reaches that moment\'s fuller story with one Tab', async ({page}) => {
+  await page.goto('');
+  await tabsTo(page, homePage(page).momentLine('2016 The document needs to come first'));
+  await page.keyboard.press('Enter');
+  const moment = recordPage(page).moment('The document needs to come first');
+  await expect(moment.getByRole('heading')).toBeInViewport();
+
+  await pressTab(page);
+
+  await expect(recordPage(page).fullerStoryOf(moment)).toBeFocused();
 });

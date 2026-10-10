@@ -52,23 +52,23 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine" aria-label="the stations">
-      <li className="station void-badge-before shadow-rail-along" id={stationId(1)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(1)} tabIndex={-1}>
         <StoryClues/>
       </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(2)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(2)} tabIndex={-1}>
         <DesignAsk/>
       </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(3)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(3)} tabIndex={-1}>
         <StorySlices/>
         <Exercise/>
       </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(4)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(4)} tabIndex={-1}>
         <StillTableRecipe/>
       </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(5)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(5)} tabIndex={-1}>
         <FlowTableRecipe/>
       </li>
-      <li className="station void-badge-before shadow-rail-along" id={stationId(6)}>
+      <li className="station void-badge-before shadow-rail-along" id={stationId(6)} tabIndex={-1}>
         <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"

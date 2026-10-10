@@ -62,6 +62,10 @@ input, button, textarea, select {
   font: inherit;
 }
 
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 button {
   outline: none;
   cursor: pointer;

@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
 describe('the record', () => {
@@ -95,5 +95,16 @@ describe('the record', () => {
     expect(cited.some(href => href.includes('w3.org/Style/LieBos2e'))).toBe(true);
     expect(cited.some(href => href.includes('web.archive.org'))).toBe(true);
     expect(cited.some(href => href.includes('w3.org/History/1989'))).toBe(true);
+  });
+});
+
+describe('arriving at a moment on the record', () => {
+  test('should take the keyboard to the moment the address names, so the next Tab starts there', async () => {
+    render(<TestApp at={`${Paths.record}#the-document-needs-to-come-first`}/>);
+    const moments = within(await screen.findByRole('list', {name: 'the timeline'})).getAllByRole('listitem');
+
+    const named = moments.filter(moment => within(moment).queryByRole('heading', {name: 'The document needs to come first'}) !== null);
+
+    await waitFor(() => expect(named[0]).toHaveFocus());
   });
 });

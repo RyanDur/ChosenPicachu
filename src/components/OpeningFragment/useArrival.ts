@@ -10,7 +10,10 @@ const foldsOpeningAround = (target: Element): Animation[] =>
 const landOnceItsFoldsHaveOpened = (hash: string): void => {
   maybe(hash.slice(1), notEmpty).mBind(id => maybe(document.getElementById(id))).map(target =>
     Promise.allSettled(foldsOpeningAround(target).map(({finished}) => finished)).then(() => {
-      if (window.location.hash === hash) target.scrollIntoView();
+      if (window.location.hash === hash) {
+        target.scrollIntoView();
+        if (target instanceof HTMLElement) target.focus({preventScroll: true});
+      }
     }));
 };
 
