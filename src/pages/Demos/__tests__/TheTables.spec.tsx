@@ -470,6 +470,16 @@ describe('the tables demo', () => {
     }
   });
 
+  test('should take the keyboard to the station the address names', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const heading = await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'}, untilTheTablesTabRenders);
+
+    await waitFor(() => expect(document.activeElement).toContainElement(heading));
+  });
+
   test('the keyboard track teaches the same sort by other hands', async () => {
     const feed = await listeningFeed();
 

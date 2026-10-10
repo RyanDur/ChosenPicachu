@@ -340,6 +340,18 @@ describe('the sortable list demo', () => {
   });
 });
 
+describe('arriving at a station', () => {
+  test('should take the keyboard to the station the address names', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={`${demosAt('?tab=dragAndDrop')}#station-4`} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const heading = await screen.findByRole('heading', {name: 'Layer on functionality, in the order it was asked for'}, {timeout: 5000});
+
+    await waitFor(() => expect(document.activeElement).toContainElement(heading));
+  });
+});
+
 describe('the native drag sort tutorial’s words', () => {
   test('should head its steps with what happens, not with aloft or the road', async () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');

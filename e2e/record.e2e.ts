@@ -69,7 +69,7 @@ test('a keyboard reader who follows a moment\'s line reaches that moment\'s full
   await tabsTo(page, homePage(page).momentLine('2016 The document needs to come first'));
   await page.keyboard.press('Enter');
   const moment = recordPage(page).moment('The document needs to come first');
-  await expect(moment.getByRole('heading')).toBeInViewport();
+  await expect(moment).toBeFocused();
 
   await pressTab(page);
 

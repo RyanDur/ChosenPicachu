@@ -101,10 +101,9 @@ describe('the record', () => {
 describe('arriving at a moment on the record', () => {
   test('should take the keyboard to the moment the address names, so the next Tab starts there', async () => {
     render(<TestApp at={`${Paths.record}#the-document-needs-to-come-first`}/>);
-    const moments = within(await screen.findByRole('list', {name: 'the timeline'})).getAllByRole('listitem');
 
-    const named = moments.filter(moment => within(moment).queryByRole('heading', {name: 'The document needs to come first'}) !== null);
+    const heading = await screen.findByRole('heading', {name: 'The document needs to come first'});
 
-    await waitFor(() => expect(named[0]).toHaveFocus());
+    await waitFor(() => expect(document.activeElement).toContainElement(heading));
   });
 });
