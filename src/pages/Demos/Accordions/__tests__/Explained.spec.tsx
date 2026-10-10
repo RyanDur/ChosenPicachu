@@ -489,6 +489,14 @@ describe('the accordions diagrams', () => {
 });
 
 describe('the max-height guess', () => {
+  test('should say the old fold moved the panel’s max-height instead of its height', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByRole('region', {name: 'The max-height guess'})).toHaveTextContent('so we moved the panel’s max-height instead, from 0 to a number taller than any part would need, such as 1000px.');
+  });
+
   test('should open part one on the code of the guess, beside its heading', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -770,6 +778,16 @@ describe('the platform build’s bars', () => {
   });
 });
 
+describe('the known-height build’s stylesheet reading the checkbox', () => {
+  test('should say what a selector, a pseudo-class and a combinator are', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
+  });
+});
+
 describe('the known-height build’s bars', () => {
   test('should say the label wears prior-approached, a shared class that reads an earlier sibling', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
@@ -797,28 +815,12 @@ describe('the known-height build’s bars', () => {
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
   });
 
-  test('should say the old fold moved the panel’s max-height instead of its height', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-
-    expect(within(oldWay).getByRole('region', {name: 'The max-height guess'})).toHaveTextContent('so we moved the panel’s max-height instead, from 0 to a number taller than any part would need, such as 1000px.');
-  });
-
-  test('should say what a selector, a pseudo-class and a combinator are where the stylesheet first reads the checkbox', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
-
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-
-    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
-  });
-
   test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes colour with the words', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The arrow is an empty box drawn after the label’s words, with only its top and right borders, from the shared class corner-after; the sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own text colour, so the arrow changes colour with the words. When the');
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The borders are drawn in currentcolor, the element’s own text colour, so the arrow changes colour with the words.');
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, what wearing a shared class means before any class is named, with the class beside it', async type => {
@@ -872,6 +874,15 @@ describe('the classes the bars wear', () => {
 });
 
 describe('the known-height build’s scroll sign', () => {
+  test('should say a keyboard reaches and scrolls the section, sees its ring and hears it named by its bar, beside the ring', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent('The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have reached it, and is named by its bar with aria-labelledby, so a screen reader says which part it is reading.');
+    expect(explanation.everyCodeBeside(oldWay, /The section has a tabindex of 0/).join()).toMatch(/\.focus-ringed \{/);
+  });
+
   test('should say the sign is a shadow at the panel’s foot, under a cover that scrolls with the text', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
