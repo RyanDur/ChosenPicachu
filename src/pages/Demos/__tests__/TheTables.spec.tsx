@@ -1183,10 +1183,10 @@ describe('the tables tutorials’ vocabulary', () => {
   const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
     blocks.find(block => word.test(block.textContent));
 
-  test.each(builds)('should say no figure of speech in $region, with $at', async ({at, region}) => {
+  test.each(builds)('should say no figure of speech, and no hands as a verb, in $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
-    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born)\b/);
+    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born|hands|handed)\b/);
   });
 
   test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
