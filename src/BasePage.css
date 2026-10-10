@@ -338,8 +338,6 @@
   #root .side-nav {
     display: grid;
     grid-template-columns: repeat(4, auto);
-    justify-content: space-around;
-    align-items: center;
   }
 
   #root .app-header {
