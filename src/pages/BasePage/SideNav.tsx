@@ -19,6 +19,7 @@ export const SideNav: FC = () =>
         tab: Source.AIC
       })}`}>Gallery</NavLink>
     <NavLink id="navigate-games" className={railPath} to={Paths.games}>Games</NavLink>
+    <NavLink id="navigate-record" className={railPath} to={Paths.record}>Record</NavLink>
     <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}
       rel="noopener noreferrer" target="_blank">Repo</a>
   </nav>;

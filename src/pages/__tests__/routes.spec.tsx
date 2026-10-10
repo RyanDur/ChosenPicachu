@@ -102,6 +102,26 @@ describe('the skeleton', () => {
   });
 });
 
+describe('the rail lists the site’s pages', () => {
+  test('should list Home, Demos, Users, Gallery, Games, Record and Repo, in that order', async () => {
+    render(<TestApp at={Paths.users}/>);
+
+    const nav = await site.nav();
+
+    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Demos', 'Users', 'Gallery', 'Games', 'Record', 'Repo']);
+  });
+
+  test('should take the reader to the record from the rail', async () => {
+    render(<TestApp at={Paths.users}/>);
+    const nav = await site.nav();
+
+    await userEvent.click(within(nav).getByRole('link', {name: 'Record'}));
+
+    expect(await within(await site.nav()).findByRole('link', {name: 'Record', current: 'page'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'The record', level: 1})).toBeInTheDocument();
+  });
+});
+
 describe('the rail says which page the reader is on', () => {
   test.each([
     ['Home', Paths.home],
@@ -109,6 +129,7 @@ describe('the rail says which page the reader is on', () => {
     ['Users', Paths.users],
     ['Gallery', `${Paths.artGallery}?page=3&size=8&tab=aic`],
     ['Games', Paths.games],
+    ['Record', Paths.record],
     ['Demos', chartPageAt('price')]
   ])('should announce %s as the current page, and no other', async (name, path) => {
     render(<TestApp at={path}/>);
