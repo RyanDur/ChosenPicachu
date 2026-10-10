@@ -23,6 +23,7 @@ describe('each page is named where a search shows it', () => {
     ['the users page', Paths.users, names.users],
     ['the gallery', `${Paths.artGallery}?page=1&size=8&tab=aic`, names.gallery],
     ['the games page', Paths.games, names.games],
+    ['the record', Paths.record, names.record],
     ['an address with no room', '/nowhere/', names.noRoom]
   ])('should give %s its own title and description', async (_page, path, {title, description}) => {
     render(<TestApp at={path}/>);

@@ -1,17 +1,13 @@
 import {FC} from 'react';
+import {Quotation} from '@components/Quotation';
 
 export const Structure: FC = () =>
   <section className="door trim-rule-above" aria-labelledby="structure">
     <h2 className="door-title title" id="structure">Structure</h2>
-    <figure className="feedback">
-      <blockquote>
-        <p className="quote paragraph italic trim-bar-beside">
-          It is not a programming language, but rather a language that identifies the meaning,
-          purpose, and structure of text within a document.
-        </p>
-      </blockquote>
-      <figcaption className="attribution caption"><a className="signpost" href="https://html.com/html5/">html.com, on HTML</a></figcaption>
-    </figure>
+    <Quotation voice="paragraph" source={<a className="signpost" href="https://html.com/html5/">html.com, on HTML</a>}>
+      It is not a programming language, but rather a language that identifies the meaning,
+      purpose, and structure of text within a document.
+    </Quotation>
     <p className="paragraph">
       What things are: content, meaning, and the order a reader and a screen reader both
       walk. The element chooses itself, and everything else layers on.

@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, feedbackOn, homePage, iPadSideways, iPadUpright, phone, phoneSideways} from './__test_support';
+import {clickWhereItIs, desktop, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -20,16 +20,16 @@ for (const {reader, use} of readers) {
     test.use(use);
 
     test('going back shows the link the reader left from', async ({page}) => {
-      await page.goto('');
-      const away = homePage(page).linkToTheDemos;
+      await page.goto('record/');
+      const away = recordPage(page).linkToTheDemos;
       await away.scrollIntoViewIfNeeded();
-      await expect(homePage(page).opener).not.toBeInViewport();
+      await expect(recordPage(page).timelineStories.first()).not.toBeInViewport();
 
       await away.click();
       await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
       await page.goBack();
 
-      await expect(homePage(page).linkToTheDemos).toBeInViewport();
+      await expect(recordPage(page).linkToTheDemos).toBeInViewport();
     });
   });
 }

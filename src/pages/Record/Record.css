@@ -1,0 +1,148 @@
+.record-page {
+  display: grid;
+  gap: var(--base-x-3);
+  padding: var(--base-x-3);
+
+  .record {
+    display: grid;
+    gap: var(--base-x-2_5);
+    padding-block-start: var(--base-x-3);
+  }
+
+  .lede {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .record-title {
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .research-title {
+    margin: 0;
+    display: inline;
+  }
+
+  .timeline {
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .moment {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
+    column-gap: var(--base-x-2);
+    row-gap: var(--base-x-1_5);
+    padding-block: var(--base-x-3);
+  }
+
+  .moment > * {
+    grid-column: 2;
+    padding-inline-start: var(--base-x-2);
+  }
+
+  .beat-title::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--base-x-0_5));
+    margin-block-start: calc((1lh - var(--base)) / 2);
+    width: var(--base);
+    height: var(--base);
+    z-index: 1;
+  }
+
+  .moment::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--hairline));
+    width: var(--hairline-x-2);
+  }
+
+  .moment:first-child::after {
+    inset-block-start: var(--base-x-2);
+  }
+
+  .moment:last-child::after {
+    inset-block-end: auto;
+    height: var(--base-x-2);
+  }
+
+  .year {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    align-self: baseline;
+    padding-inline-start: 0;
+  }
+
+  .beat-title {
+    align-self: baseline;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .beat-tells {
+    margin: 0;
+  }
+
+  .fuller-story {
+    .prompt {
+      width: fit-content;
+    }
+
+    .paragraph {
+      margin: 0;
+      margin-block-start: var(--base-x-1_5);
+    }
+  }
+
+  .period-markup {
+    margin: 0;
+    margin-block-start: var(--base-x-1_5);
+    padding: var(--base-x-1_5);
+    overflow-x: auto;
+  }
+
+  .bibliography .shelves {
+    display: grid;
+    gap: var(--base-x-2_5);
+
+    .prompt {
+      width: fit-content;
+    }
+  }
+
+  .shelf {
+    display: grid;
+    gap: var(--base-x-1_5);
+  }
+
+  .shelf-title {
+    margin: 0;
+  }
+
+  .works {
+    margin: 0;
+    padding-inline-start: var(--base-x-2_5);
+    display: grid;
+    gap: var(--base);
+  }
+
+  .provenance {
+    margin-inline-start: var(--base);
+  }
+
+  .tee-up {
+    display: grid;
+    gap: var(--base-x-1_5);
+
+    .sub-title {
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+}

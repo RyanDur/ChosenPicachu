@@ -1,11 +1,9 @@
 import {FC} from 'react';
 import {Opener} from './Opener';
-import {Timeline} from './Timeline';
 import {Structure} from './Structure';
 import {Presentation} from './Presentation';
 import {DynamicInteraction} from './DynamicInteraction';
-import {Bibliography} from './Bibliography';
-import {TeeUp} from './TeeUp';
+import {RecordDoor} from './RecordDoor';
 import './Home.css';
 
 export const HomePage: FC = () =>
@@ -14,8 +12,5 @@ export const HomePage: FC = () =>
     <Structure/>
     <Presentation/>
     <DynamicInteraction/>
-    <Timeline/>
-    <TeeUp>
-      <Bibliography/>
-    </TeeUp>
+    <RecordDoor/>
   </article>;

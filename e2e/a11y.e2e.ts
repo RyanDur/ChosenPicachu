@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {chartsPage, homePage, markets, scriptedMarket, violationsOf} from './__test_support';
+import {chartsPage, homePage, markets, recordPage, scriptedMarket, violationsOf} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -31,14 +31,21 @@ test('the home page has no accessibility violations with its folds open', async 
   const home = homePage(page);
   await page.goto('');
   await expect(home.doorFolds.last()).toBeVisible();
-  await expect(home.timelineStories.last()).toBeVisible();
   for (const door of await home.doorFolds.all()) await home.doorSummaryOf(door).click();
-  await home.researchFold.getByRole('heading', {name: 'The research'}).click();
+
+  expect(violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze())).toEqual([]);
+});
+
+test('the record has no accessibility violations with its folds open', async ({page}) => {
+  const record = recordPage(page);
+  await page.goto('record/');
+  await expect(record.timelineStories.last()).toBeVisible();
+  await record.researchFold.getByRole('heading', {name: 'The research'}).click();
 
   const found = violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze());
-  for (const story of await home.timelineStories.all()) {
-    await home.fullerStoryOf(story).click();
-    found.push(...violationsOf(await new AxeBuilder({page}).include(home.timelineScope).withTags(['wcag2a', 'wcag2aa']).analyze()));
+  for (const story of await record.timelineStories.all()) {
+    await record.fullerStoryOf(story).click();
+    found.push(...violationsOf(await new AxeBuilder({page}).include(record.timelineScope).withTags(['wcag2a', 'wcag2aa']).analyze()));
   }
 
   expect(found).toEqual([]);

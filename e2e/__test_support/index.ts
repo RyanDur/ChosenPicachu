@@ -1,5 +1,6 @@
 export {chartsPage, feedStillConnecting, markets, scriptedMarket} from './charts';
 export {homePage} from './home';
+export {recordPage} from './record';
 export {galleryPage} from './gallery';
 export {piecePage} from './piece';
 export {dragSortTable, stages, type Stage} from './frame';

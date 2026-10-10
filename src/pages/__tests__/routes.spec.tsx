@@ -124,7 +124,7 @@ describe('leaving a page', () => {
     await site.pageTitled();
     const landings = scrolling.recordLandings();
 
-    await userEvent.click(site.signpost(/Start where the demos start/));
+    await userEvent.click(site.signpost(/read the record/));
 
     await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
   });
@@ -132,7 +132,7 @@ describe('leaving a page', () => {
   test('arriving at a place on the page keeps that place', async () => {
     const landings = scrolling.recordLandings();
 
-    render(<TestApp at="/#the-record"/>);
+    render(<TestApp at={`${Paths.record}#the-record`}/>);
     await site.pageTitled();
 
     expect(landings).toEqual([]);
@@ -140,10 +140,10 @@ describe('leaving a page', () => {
 });
 
 describe('the root path', () => {
-  test('opens the front door, which tees up the demos', async () => {
+  test('opens the front door, which leads to the record', async () => {
     render(<TestApp at="/"/>);
 
     expect(await site.pageTitled()).toHaveTextContent('The three languages');
-    expect(site.signpost(/Start where the demos start/)).toBeVisible();
+    expect(site.signpost(/read the record/)).toBeVisible();
   });
 });

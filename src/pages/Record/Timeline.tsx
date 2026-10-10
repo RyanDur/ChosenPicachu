@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {Quotation} from '@components/Quotation';
 import {Need} from './record/Need';
 import {StructureArrives} from './record/StructureArrives';
 import {PresentationLeavesHome} from './record/PresentationLeavesHome';
@@ -16,17 +17,12 @@ import {DocumentComesBack} from './record/DocumentComesBack';
 export const Timeline: FC = () =>
   <section className="record trim-rule-above" aria-labelledby="the-record">
     <h2 className="record-title title" id="the-record">How the web got its languages</h2>
-    <figure className="feedback">
-      <blockquote>
-        <p className="quote sub-title italic trim-bar-beside">
-          HyperText is a way to link and access information of various kinds as a web of nodes
-          in which the user can browse at will.
-        </p>
-      </blockquote>
-      <figcaption className="attribution caption">Tim Berners-Lee and Robert Cailliau,{' '}
-        <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-          the WorldWideWeb, 1990</a></figcaption>
-    </figure>
+    <Quotation voice="sub-title" source={<>Tim Berners-Lee and Robert Cailliau,{' '}
+      <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
+        the WorldWideWeb, 1990</a></>}>
+      HyperText is a way to link and access information of various kinds as a web of nodes
+      in which the user can browse at will.
+    </Quotation>
     <p className="lede sub-title">
       Someone needed something: researchers, scattered across institutes, losing each other’s
       documents. Everything on the web is layered onto that one need.

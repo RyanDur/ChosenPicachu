@@ -11,7 +11,8 @@ const listed = {
   'demos/': names.demos.accordions,
   'users/': names.users,
   'gallery/': names.gallery,
-  'games/': names.games
+  'games/': names.games,
+  'record/': names.record
 };
 
 test('a search engine that runs no script reads each page’s own title and description', async ({request}) => {

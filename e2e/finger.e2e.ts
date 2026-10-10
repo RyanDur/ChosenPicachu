@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, galleryPage, homePage, iPhone, nameOn, phoneSideways, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, galleryPage, homePage, iPhone, nameOn, phoneSideways, recordPage, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFinger = async (page: Page, fold: Locator): Promise<void> => {
   await fingerTap(page, fold.getByText(/\S/).first());
   await expect(fold).toHaveAttribute('open', '');
@@ -93,10 +93,20 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     test('opens every fold on home from a finger that lands just off its bar', async ({page}) => {
       await page.goto('');
       const home = homePage(page);
-      await expect(home.timelineStories.first()).toBeVisible();
-      await expect(home.researchFold).toBeVisible();
+      await expect(home.doorFolds.first()).toBeVisible();
 
-      for (const fold of [...await home.timelineStories.all(), ...await home.doorFolds.all(), home.researchFold]) {
+      for (const fold of await home.doorFolds.all()) {
+        await opensFromAFinger(page, fold);
+      }
+    });
+
+    test('opens every fold on the record from a finger that lands just off its bar', async ({page}) => {
+      await page.goto('record/');
+      const record = recordPage(page);
+      await expect(record.timelineStories.first()).toBeVisible();
+      await expect(record.researchFold).toBeVisible();
+
+      for (const fold of [...await record.timelineStories.all(), record.researchFold]) {
         await opensFromAFinger(page, fold);
       }
     });
