@@ -7,7 +7,7 @@ describe('the record', () => {
     render(<TestApp at={Paths.record}/>);
   });
 
-  test('should open on its title, then tell the record, then collect the research, then walk into the demos', () => {
+  test('should open on its title, then tell the record, then walk into the demos, then collect the research', () => {
     const title = screen.getByRole('heading', {name: 'The record', level: 1});
     const record = screen.getByRole('heading', {name: 'How the web got its languages', level: 2});
     const research = screen.getByRole('heading', {name: 'The research', level: 2});
@@ -16,8 +16,11 @@ describe('the record', () => {
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(demos.compareDocumentPosition(research) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(screen.getByText(/The projection is the difference/)).toBeVisible();
     expect(demos).toHaveAttribute('href', expect.stringContaining(Paths.demos));
+  });
+
+  test('should say, after the record, that the history above is the argument for keeping the seam visible', () => {
+    expect(screen.getByText(/The projection is the difference/)).toHaveTextContent('The projection is the difference, and the history above is the argument for keeping the seam visible.');
   });
 
   test('the record says why the languages arrived', () => {
