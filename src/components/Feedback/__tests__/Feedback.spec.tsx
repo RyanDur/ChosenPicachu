@@ -3,6 +3,8 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {site} from '@pages/__test_support';
 import {githubFindingNoThread, githubHoldingItsAnswer, githubLosingThePageThread} from '../__test_support/github';
+import {setupAICAllArtResponse} from '@components/art-gallery/__test_support';
+import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 
 describe('Feedback in a browser without invoker commands', () => {
   beforeEach(() => {
@@ -16,6 +18,21 @@ describe('Feedback in a browser without invoker commands', () => {
     await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
 
     expect(screen.getByRole('dialog', {name: 'Feedback'})).toBeVisible();
+  });
+
+  test('should keep the words a reader wrote after they follow the rail to the gallery', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The rail moved.');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Gallery'}));
+    await within(await site.nav()).findByRole('link', {name: 'Gallery', current: 'page'});
+
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    expect(screen.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The rail moved.');
   });
 
   test('should close the dialog from Cancel', async () => {
