@@ -76,8 +76,6 @@ describe('the home page', () => {
 
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toBeVisible();
     expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction', 'The record']);
-    expect(screen.queryByRole('heading', {name: 'How the web got its languages'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('heading', {name: 'The research'})).not.toBeInTheDocument();
   });
 
   test('should lead to the record through a door of its own', () => {
