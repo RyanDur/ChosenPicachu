@@ -374,9 +374,9 @@ describe('the fold motion', () => {
   });
 
   test.each([
-    {style: 'reveal', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
-    {style: 'drawer', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
-    {style: 'static', says: /With static there is none, so the corner turns at once/, not: /With reveal and the drawer, one sits on every bar/}
+    {style: 'reveal', says: /With reveal and the drawer, one sits on every bar/, not: /With static the turn has no transition/},
+    {style: 'drawer', says: /With reveal and the drawer, one sits on every bar/, not: /With static the turn has no transition/},
+    {style: 'static', says: /With static the turn has no transition, so the corner turns at once/, not: /With reveal and the drawer, one sits on every bar/}
   ])('should tell, with $style chosen, how the arrow turns', async ({style, says, not}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
@@ -802,7 +802,7 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The arrow is an empty box drawn after the label’s words. The bar wears corner-after, a shared class that gives that box only its top and right borders; the sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The arrow is an empty box drawn after the label’s words, with only its top and right borders, from the shared class corner-after; the sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own text colour, so the arrow changes colour with the words. When the');
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, what wearing a shared class means before any class is named, with the class beside it', async type => {
@@ -817,7 +817,7 @@ describe('the known-height build’s bars', () => {
       run,
       explanation.runTelling(oldWay, /Each bar shows an arrow/),
       explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/),
-      explanation.runTelling(oldWay, /paints the sign in its background instead/),
+      explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/),
       ...type === 'exclusive' ? [explanation.runTelling(oldWay, /The Close bar is shorter than the others/)] : []
     ])).toEqual([]);
   });
@@ -856,12 +856,12 @@ describe('the classes the bars wear', () => {
 });
 
 describe('the known-height build’s scroll sign', () => {
-  test('should say the sign is a shadow held at the panel’s foot, darkest at the edge, under a cover that scrolls with the text', async () => {
+  test('should say the sign is a shadow at the panel’s foot, under a cover that scrolls with the text', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /paints the sign in its background instead/)).toHaveTextContent('so the section wears foot-shadowed, which paints the sign in its background instead: a shadow held at its foot, darkest at the edge, and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits. It wears focus-ringed too, so a keyboard reader sees when they have reached it.');
-    expect(explanation.everyCodeBeside(oldWay, /paints the sign in its background instead/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{[^]*\.focus-ringed \{/);
+    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits. The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have,');
+    expect(explanation.everyCodeBeside(oldWay, /Whether a tall part’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.foot-shadowed \{[^]*\.focus-ringed \{/);
   });
 });

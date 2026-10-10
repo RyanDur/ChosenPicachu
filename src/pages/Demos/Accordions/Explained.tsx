@@ -137,13 +137,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <h4 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h4>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
-          to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
-          than any part would ever need, like 1000px. The panel stopped at its own text, so nothing
-          scrolled and nothing was left empty. The cost was the timing. The transition spent its whole
-          time crossing the guess, and the text filled only the start of it. So a short part opened in a
-          rush and then sat still. On closing, it waited, unmoving, while the guess fell to its text,
-          then shut at once. The bigger the guess, the worse the rush and the wait. A guess too small
-          cut the text off.</p>
+          to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn>
+          instead, from 0 to a number taller than any part would need, such as 1000px. The panel stopped at its own text,
+          so nothing scrolled. The cost was the timing: the transition spent its whole time crossing the guess, so a short
+          part opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text.
+          The bigger the guess, the worse the rush and the wait; a guess too small cut the text off.</p>
         <Snippet label="CSS" lines={[
           plain('.info {'),
           plain('  max-height: 0;'),
@@ -294,16 +292,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">Now the stylesheet needs to know whether the {input} is checked. A selector
-                  is the part of a CSS rule that picks which elements the rule styles. A pseudo-class is a
-                  selector that picks an element by its state rather than by its name,
-                  and <Mdn path="Web/CSS/:checked">:checked</Mdn> picks a checked {input}. Elements with
-                  the same parent are siblings. A combinator is a symbol between two selectors that says
-                  how their elements relate. The ~ is
-                  the <Mdn path="Web/CSS/Subsequent-sibling_combinator">subsequent-sibling
-                    combinator</Mdn>: it picks the siblings that come after the first element. That is why
-                  the order is fixed, because the stylesheet can only look forward from the {input}. While
-                  the {input} is not checked, this rule collapses the text. No script watches the {input};
-                  the stylesheet reads it.</p>
+                  is the part of a CSS rule that picks which elements the rule styles,
+                  and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
+                  by its state: here, a checked {input}. The <Mdn path="Web/CSS/Subsequent-sibling_combinator">~
+                    combinator</Mdn> picks the siblings that come after it, the elements with the same parent. That is
+                  why the order is fixed: the stylesheet can only look forward from the {input}. While it is not
+                  checked, this rule collapses the text. No script watches the {input}; the stylesheet reads it.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
                 <TheSheetReadsTheBox/>
               </li>
@@ -318,22 +312,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">Each bar shows an arrow that points right while its part is closed and down
-                  while it is open. The label is a flex row, which lays its children side by side: the
-                  part’s name sits at one end and the arrow at the other, both centred on the bar’s height.
-                  The arrow is an empty box drawn after the label’s words. The bar wears <code>corner-after</code>, a shared
-                  class that gives that box only its top and right borders; the sheet sizes it and turns it 45 degrees so the
-                  corner points right. The borders are drawn in currentcolor, a keyword for the element’s own text
-                  colour, so the arrow changes colour with the bar’s words. When
-                  the {input} is checked, the
-                  ~ combinator picks the label after it, and the corner turns to 135 degrees and points
-                  down. The turn is a transition, which runs whenever the value changes.
+                  while it is open. The label is a flex row, which lays its children side by side: the name at one
+                  end, the arrow at the other. The arrow is an empty box drawn after the label’s words, with only its
+                  top and right borders, from the shared class <code>corner-after</code>; the sheet sizes it and turns
+                  it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own
+                  text colour, so the arrow changes colour with the words. When the {input} is checked, the ~
+                  combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn
+                  is a transition, and a transform: a transform moves pixels the browser has already painted without
+                  laying the page out again, so it is cheap.
                 {motion === 'static'
-                  ? ' With static there is none, so the corner turns at once.'
-                  : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
-                {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
-                  so a turn is cheap. The bar has a set height and side padding, so every bar is the same
-                  size whatever its word. The arrow’s width and height size the box its borders outline, and its
-                  right margin keeps the corner off the bar’s edge.</p>
+                  ? ' With static the turn has no transition, so the corner turns at once.'
+                  : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
                   ...unit(accordionsCss, '.opening-arrow::after {'), gap,
@@ -360,21 +349,16 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <FocusOnTheBar/>
               </li>
               <li className="run">
-                <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines tall. The lh unit is the height of one line,
-                  so the panel grows with the text size. It is the one size in the sheet off the page’s
-                  spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
-                  hidden hides the text. Inside it, a section of the same height holds the paragraph and
-                  scrolls what does not fit. The paragraph is at least as tall as the section and pads
-                  its text with the page’s spacing on every side. Whether a tall part’s last line is cut at
-                  the foot depends on where its lines fall, so the section wears <code>foot-shadowed</code>, which
-                  paints the sign in its background instead: a shadow held at its foot, darkest at the edge, and a
-                  cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when
-                  the text fits. It wears <code>focus-ringed</code> too, so a keyboard reader sees when they have
-                  reached it.
-                  The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
-                  scroll it, and aria-labelledby names it by its bar, so a screen reader says which part
-                  it is reading. Closed, visibility hidden takes the text out of the tab order and out of
-                  what a screen reader reads.
+                <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines
+                  tall: the lh unit is the height of one line, so the panel grows with the text size. Closed, the
+                  panel’s height is 0 and overflow hidden hides the text. Inside it, a section of the same height holds
+                  the paragraph and scrolls what does not fit. Whether a tall part’s last line is cut off depends on
+                  where its lines fall, so the section wears <code>foot-shadowed</code>, which paints a shadow at its
+                  foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or
+                  when the text fits. The section has a tabindex of 0, so a keyboard can reach it and scroll it,
+                  wears <code>focus-ringed</code> so a keyboard reader sees when they have, and is named by its bar
+                  with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility hidden
+                  takes the text out of the tab order and out of what a screen reader reads.
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
