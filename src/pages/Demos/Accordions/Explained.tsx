@@ -203,8 +203,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
-                  when the change event fires, so the script first pins where the motion starts, with a second
-                  class, <code>unmoving</code>, that switches the height’s transition off for that moment.</p>
+                  by the time the change event fires. An event is a message the browser sends when something happens,
+                  and change is the one it sends when a {input}’s checked state changes. So the script first pins where
+                  the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
+                  off for that moment.</p>
                 <Snippet label="TS" lines={[
                   ...unit(measuredSource, 'const setsHeight'), gap,
                   ...unit(measuredSource, 'const startsAt'), gap,
@@ -532,11 +534,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             end, an Open or Close control; the name is only a name, and only the control works the fold.</p>
           <p className="paragraph">Radios that share a name keep one part open on their own, which checkboxes cannot do
             without script. What a radio cannot do is close itself: pressed again, it stays checked. So the list adds
-            that, with a little script, and the radios stay plain. A press on a radio is an event, a message the
-            browser sends from the element pressed and then up through each of its ancestors in turn, which is called
-            bubbling, so the press reaches the list, which remembers which radio is open. A press on that radio unchecks it and forgets it, and a
-            press on any other remembers the new one. The arrow keys move the choice and press as
-            they go, so each move is remembered too.</p>
+            that, with a little script, and the radios stay plain.</p>
+          <p className="paragraph">A press on a radio is an event, a message the browser sends from the element that
+            was pressed. The event then bubbles: it is passed up to each element that contains the pressed one, its
+            ancestors, one after another, until it reaches the list. The list remembers which radio is open. A press
+            on that radio unchecks it and forgets it, and a press on any other remembers the new one. The arrow keys
+            move the choice and press as they go, so each move is remembered too.</p>
           <Snippet label="TS" lines={[
             ...unit(accordionsSource, 'const openAfter'), gap,
             ...unit(accordionsSource, 'const radioPressed'), gap,

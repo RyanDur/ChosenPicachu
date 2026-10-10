@@ -678,7 +678,18 @@ describe('the runs in view, with the folds shut', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(together).getByText(/^Radios that share a name keep one part open on their own/)).toHaveTextContent('A press on a radio is an event, a message the browser sends from the element pressed and then up through each of its ancestors in turn, which is called bubbling, so the press reaches the list, which remembers which radio is open.');
+    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends from the element that was pressed. The event then bubbles: it is passed up to each element that contains the pressed one, its ancestors, one after another, until it reaches the list. The list remembers which radio is open.');
+  });
+
+  test.each([
+    {type: 'inclusive', input: 'checkbox'},
+    {type: 'exclusive', input: 'radio'}
+  ])('should say, with $type chosen, what an event is where the measured build first names one', async ({type, input}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires. An event is a message the browser sends when something happens, and change is the one it sends when a ${input}’s checked state changes. So the script first pins where the motion starts`);
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
