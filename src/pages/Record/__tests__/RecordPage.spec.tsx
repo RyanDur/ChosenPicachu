@@ -20,7 +20,11 @@ describe('the record', () => {
   });
 
   test('should say, after the record, that the history above is the argument for keeping the seam visible', () => {
-    expect(screen.getByText(/The projection is the difference/)).toHaveTextContent('The projection is the difference, and the history above is the argument for keeping the seam visible.');
+    const record = screen.getByRole('heading', {name: 'How the web got its languages', level: 2});
+    const seam = screen.getByText(/The projection is the difference/);
+
+    expect(record.compareDocumentPosition(seam) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(seam).toHaveTextContent('The projection is the difference, and the history above is the argument for keeping the seam visible.');
   });
 
   test('the record says why the languages arrived', () => {

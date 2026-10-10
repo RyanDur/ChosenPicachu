@@ -204,7 +204,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
                   by the time the change event fires. An event is a message the browser sends when something happens,
-                  and change is the one it sends when a {input}’s checked state changes. So the script first pins where
+                  and change is the one it sends to the {input} a press has just checked or unchecked, and to no
+                  other. So the script first pins where
                   the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
                   off for that moment.</p>
                 <Snippet label="TS" lines={[
@@ -537,7 +538,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             that, with a little script, and the radios stay plain.</p>
           <p className="paragraph">A press on a radio is an event, a message the browser sends from the element that
             was pressed. The event then bubbles: it is passed up to each element that contains the pressed one, its
-            ancestors, one after another, until it reaches the list. The list remembers which radio is open. A press
+            ancestors, one after another, all the way to the top of the page, and the list hears it on the way. The
+            list remembers which radio is open. A press
             on that radio unchecks it and forgets it, and a press on any other remembers the new one. The arrow keys
             move the choice and press as they go, so each move is remembered too.</p>
           <Snippet label="TS" lines={[
