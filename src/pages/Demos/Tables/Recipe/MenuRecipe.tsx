@@ -91,7 +91,7 @@ const rankStory = (build: Build) => {
             telling that the button owns a popup. And somewhere above your table,
             a <Mdn path="Web/CSS/CSS_positioned_layout/Stacking_context">stacking context</Mdn> is
             already beating z-index: 999.</Says>
-          <Says>Naming the relationship takes all of that off your hands. Give
+          <Says>Naming the relationship does all of that for you. Give
             the menu an id and point the button’s popoverTarget at it;
             that is the whole wiring. Pressing the button toggles the popover (the
             default <Mdn path="Web/HTML/Element/button#popovertargetaction">popovertargetaction</Mdn>)
@@ -101,7 +101,7 @@ const rankStory = (build: Build) => {
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
           <Says>In the React world the sample is built from the site’s Menu, Entry and Item components. A component
-            is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a
+            is a function that writes a piece of the page from what it is given; here a menu, an li, one item of a
             list, and a button.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
@@ -170,8 +170,8 @@ const rankStory = (build: Build) => {
         <Reveal>
           {world === 'react'
             ? <Says>The sort is one value in the page’s arrangement, a column name and a
-              direction. When the page hands the table its columns it marks the sorting one, and
-              only that one, so the th announces aria-sort from what it was handed and the toggle
+              direction. When the page gives the table its columns it marks the sorting one, and
+              only that one, so the th announces aria-sort from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
               it changes, announce goes through the headers asking it for each: the sorting th gains

@@ -20,7 +20,7 @@ export const orderInState = (world: World, tableSource: Sample, buildSrc: Sample
     <Reveal>
       {world === 'react'
         ? <Says>Rows and columns arrive in whatever order the fold produced. The page holds the
-          columns and the <Term word="seats">seats</Term>, each in the order it stands, and hands the
+          columns and the <Term word="seats">seats</Term>, each in the order it stands, and passes the
           table both, the rows already in their standing. The page writes its header cells once,
           in any order it likes, and the header row places them by the columns as they stand;
           each row places its cells the same way. A moved column or row is an event the page

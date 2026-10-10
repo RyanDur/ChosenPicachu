@@ -237,7 +237,7 @@ const whoSubscribes = (world: World): ReactNode =>
             custom properties. A dresser on the hand sets the carried cells’ classes and the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
-          <Says>The store hands every listener the state before the change and a way to read the state now, so the
+          <Says>The store gives every listener the state before the change and a way to read the state now, so the
             mount keeps nothing of its own.</Says>
         </>}
       <Codes>

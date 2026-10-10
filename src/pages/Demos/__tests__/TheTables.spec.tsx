@@ -1023,7 +1023,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
-    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is handed; here a menu, an li, one item of a list, and a button.');
+    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; here a menu, an li, one item of a list, and a button.');
   });
 
   test.each([

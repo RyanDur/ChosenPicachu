@@ -53,7 +53,7 @@ export const liftOnce = (world: World, headerSource: Sample, buildSrc: Sample): 
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(liftSource, 'export const columnLift'),
-          aside('// one lift; each world grabs with its own hands')
+          aside('// one lift; each world grabs in its own way')
         ]}/>
         <Snippet label="CSS" lines={[
           ...unit(sortableCss, '.grabbable {')
