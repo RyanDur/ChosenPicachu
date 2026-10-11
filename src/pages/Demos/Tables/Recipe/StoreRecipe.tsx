@@ -25,8 +25,8 @@ const oneState = (world: World): ReactNode =>
       <Says>The page’s state is the trades it holds, the candles the charts have asked for, and the arrangement
         it shows the trades in: the columns and the rows, each in the order they stand, and the sort while one
         holds.</Says>
-      <Says>A table’s state is only what the hand does to it: what it is carrying, the marks a move leaves, the
-        widths once measured. Never the data, and never the order.</Says>
+      <Says>A table’s state is only what the trader does to it: what the pointer is carrying, the marks a move leaves,
+        the widths once measured. Never the data, and never the order.</Says>
       <Says>A <Term word="store">store</Term> holds each value, and its dispatch is the only way in.</Says>
       <Says>The charts and the tables read the page’s store. Every part inside a table reads the table’s
         own.</Says>
@@ -104,7 +104,7 @@ const actionsAreData =
       <Says>The table is never given the trades. The page projects them into rows, a key and the value under each
         column, ranked by the sort while one holds, and passes that projection to the table element beside its
         markup in the order it should stand.</Says>
-      <Says>What the table shows is what it was given, and what the hand does to it comes back as an event.</Says>
+      <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
           ...span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), gap,
@@ -213,7 +213,7 @@ const whoSubscribes = (world: World): ReactNode =>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
       <Says>React subscribes a component and ignores all four. The vanilla build subscribes
-        a <Term word="reconcile">reconcile</Term> and uses the first two. A reconcile is the function that moves the
+        a reconcile and uses the first two. A reconcile is the function that moves the
         page’s cells from the old order to the new one. A listener that mirrored the state to a backend
         would read the action and know exactly what to send.</Says>
     </Words>
@@ -222,10 +222,10 @@ const whoSubscribes = (world: World): ReactNode =>
         ? <>
           <Says>The page’s provider and the table element each subscribe through useSyncExternalStore, React’s hook
             for reading a store kept outside React.</Says>
-          <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the hand’s marks. The markup
+          <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the carried cells’ marks. The markup
             renders through the new state, and React reconciles the page’s elements, moving only the ones whose
             place changed.</Says>
-          <Says>The table raises what the hand did as an event, onColumnMoved, onRowMoved or onSorted, and the page
+          <Says>The table raises what the trader did as an event, onColumnMoved, onRowMoved or onSorted, and the page
             dispatches it.</Says>
           <Says>You never touch the page’s elements yourself. You only dispatch what happened.</Says>
         </>
@@ -233,8 +233,8 @@ const whoSubscribes = (world: World): ReactNode =>
           <Says>The mount subscribes three times.</Says>
           <Says>A reconcile on the arrangement moves the page’s elements from the previous order to the current one,
             touching only the cells whose place changed.</Says>
-          <Says>A dresser is the code’s name for the function that adds and removes the moving cells’ classes and
-            custom properties. A dresser on the hand sets the carried cells’ classes and the widths.</Says>
+          <Says>The code names this listener dress: it adds and removes the moving cells’ classes and custom
+            properties. A dress on the hand sets the carried cells’ classes and the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
           <Says>The store gives every listener the state before the change and a way to read the state now, so the
@@ -264,9 +264,9 @@ export const storeStory = (world: World): ReactNode =>
     <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
       records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
-    <Tell>The hand is the code’s name for the store that holds what the pointer is carrying and the marks a move
-      leaves. Each table is a store of the same shape. It holds only what the hand does to it, and it raises what the
-      hand did back to the page.</Tell>
+    <Tell>In the vanilla build, the hand is the code’s name for the store that holds what the pointer is carrying
+      and the marks a move leaves. The React build names it store. Each table has one. It holds only what the trader
+      does to it, and it raises what the trader did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>
       {oneState(world)}

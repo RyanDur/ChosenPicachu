@@ -62,7 +62,7 @@ const rankStory = (build: Build) => {
   const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
   return <Story param="menu" id="rank"
     can="The trader can sort the windows by any measure, or take the order back"
-    soThat="the table ranks itself, and the hand still outranks it">
+    soThat="the table ranks itself, and the trader still outranks it">
     {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
     <Tell>We could build the popup from divs, but then we would have to build focus, dismissal and
       stacking ourselves, and choosing starts to feel like working against the menu instead of using it;
@@ -231,9 +231,9 @@ const rankStory = (build: Build) => {
         </Reveal>
       </Step>
       {sortedDirectly(build)}
-      <Step title="A hand ends the sort">
+      <Step title="A move ends the sort">
         <Words want="Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is it?">
-          <Says>The hand should win: the moment a hand moves a row, the sorted order must become
+          <Says>The trader should win: the moment the trader moves a row, the sorted order must become
             the real order, and the sort must end.</Says>
         </Words>
         <Reveal>

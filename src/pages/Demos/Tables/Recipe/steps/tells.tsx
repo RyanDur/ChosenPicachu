@@ -25,9 +25,9 @@ export const theWholeBuild = (world: World, tableSource: Sample, buildSrc: Sampl
   </Codes>;
 
 export const namesInTheCode =
-  <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the code’s name for the reorder a
-    drag commits when the pointer crosses a neighbour. The drift is the carried cell’s offset from its seat while the
-    pointer moves. The survey is the measurement of the header row the code takes when a drag starts.</Tell>;
+  <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far
+    enough into a neighbour to count. The drift is how far the pointer has moved since the grab. The survey is the one
+    measurement taken at the grab: the table’s box, every column’s width, and later the row heights.</Tell>;
 
 export const twoRoads =
   <Tell>There are two roads to dragging something across a page, and this site builds

@@ -9,8 +9,8 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const animatedMotion = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
   <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="The trader must see where the column went and what it pushed aside. A column that snaps home on release, over a neighbour that has already jumped, leaves the reader to work out both.">
-      <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the hand is
-        empty the moment you let go. What should move is the real thing, from where it is: the
+      <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
+        carries nothing the moment you let go. What should move is the real thing, from where it is: the
         column you dropped starts where you dropped it and settles into its slot, and every
         column it shoved aside starts where it stood and slides one carried width over.</Says>
     </Words>

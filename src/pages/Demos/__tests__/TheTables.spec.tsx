@@ -728,7 +728,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/popover/);
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The sort keeps sorting/);
-    expect(recipe).toHaveTextContent(/A hand ends the sort/);
+    expect(recipe).toHaveTextContent(/A move ends the sort/);
     expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction}\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
@@ -1191,13 +1191,13 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
-    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born|hands|handed)\b/i);
+    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)|undress\w*|buys|owes?|sells|born|hands|handed)\b/i);
   });
 
   test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
     const blocks = await prose(`tut=sort&track=${track}`, 'build the drag sort yourself');
 
-    expect(firstSaying(blocks, /\b(walk|strike|drift|survey)\b/)).toHaveTextContent('A walk is the code’s name for a move made with the arrow keys. A strike is the code’s name for the reorder a drag commits when the pointer crosses a neighbour. The drift is the carried cell’s offset from its seat while the pointer moves. The survey is the measurement of the header row the code takes when a drag starts.');
+    expect(firstSaying(blocks, /\b(walk|strike|drift|survey)\b/)).toHaveTextContent('A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far enough into a neighbour to count. The drift is how far the pointer has moved since the grab. The survey is the one measurement taken at the grab: the table’s box, every column’s width, and later the row heights.');
   });
 
   test('should say what a dial’s promise is where the drag sort first names the promises', async () => {
@@ -1215,13 +1215,13 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each(['react', 'vanilla'])('should name the hand and the reconcile where the living table first uses them, in the %s world', async world => {
     const blocks = await prose(`world=${world}`, 'the living table');
 
-    expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('The hand is the code’s name for the store that holds what the pointer is carrying and the marks a move leaves.');
+    expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('In the vanilla build, the hand is the code’s name for the store that holds what the pointer is carrying and the marks a move leaves. The React build names it store.');
     expect(firstSaying(blocks, /\breconcile\b/)).toHaveTextContent('A reconcile is the function that moves the page’s cells from the old order to the new one.');
   });
 
-  test('should name the dresser where the vanilla living table first uses it', async () => {
+  test('should name dress where the vanilla living table first uses it', async () => {
     const blocks = await prose('world=vanilla', 'the living table');
 
-    expect(firstSaying(blocks, /\bdresser\b/)).toHaveTextContent('A dresser is the code’s name for the function that adds and removes the moving cells’ classes and custom properties.');
+    expect(firstSaying(blocks, /\bdress\b/)).toHaveTextContent('The code names this listener dress: it adds and removes the moving cells’ classes and custom properties.');
   });
 });
