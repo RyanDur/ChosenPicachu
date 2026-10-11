@@ -1,5 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs, outOfReadingOrder} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';

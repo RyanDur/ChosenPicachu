@@ -1,10 +1,14 @@
+:root {
+  --page-control-row: var(--base-x-8);
+}
+
 .page-control {
   position: sticky;
   bottom: 0;
   display: grid;
   gap: var(--base);
   inline-size: 100%;
-  grid-template-rows: repeat(3, var(--base-x-8));
+  grid-template-rows: repeat(3, var(--page-control-row));
   grid-template-areas:
     'go-to'
     'per-page'
@@ -61,7 +65,6 @@
 
 @media (width <= 1100px) {
   :root {
-    --page-control-row: var(--base-x-8);
     --page-control-block: calc(var(--page-control-row) * 2 + var(--base));
   }
 

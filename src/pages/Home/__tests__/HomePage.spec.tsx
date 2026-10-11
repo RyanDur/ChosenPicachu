@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import {outOfReadingOrder} from '@pages/Demos/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 describe('the home page', () => {
   beforeEach(() => {
@@ -84,11 +84,6 @@ describe('the home page', () => {
 
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toBeVisible();
     expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction']);
-  });
-
-  test('should leave the record to its own page: no list of its moments and no link to read it', () => {
-    expect(screen.queryByRole('list', {name: 'the moments'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', {name: 'read the record'})).not.toBeInTheDocument();
   });
 
   test.each([

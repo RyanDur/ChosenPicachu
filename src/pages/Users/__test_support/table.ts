@@ -51,7 +51,6 @@ export const usersTable = {
   sortMenu: (column: string): HTMLElement | null => within(table()).queryByRole('button', {name: `sort ${column}`}),
 
   addNewUser: (): HTMLElement => screen.getByRole('link', {name: 'Add New User'}),
-  offersAddNewUser: (): boolean => screen.queryByRole('link', {name: 'Add New User'}) !== null,
 
   worksFromHomeColumn: (): string[] => rows().map(worksFromHome),
 

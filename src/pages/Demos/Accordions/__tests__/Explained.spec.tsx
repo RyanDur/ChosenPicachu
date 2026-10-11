@@ -1,7 +1,8 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, outOfReadingOrder} from '@pages/Demos/__test_support';
+import {demosAt} from '@pages/Demos/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const htmlAlone = 'An accordion in HTML alone';

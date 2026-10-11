@@ -228,7 +228,7 @@ describe('the users page', () => {
     });
 
     test('editing a user offers no door to add another', () => {
-      expect(usersTable.offersAddNewUser()).toBe(false);
+      expect(screen.queryByRole('link', {name: 'Add New User'})).not.toBeInTheDocument();
     });
 
     test('the date of birth is picked from a date field', () => {
