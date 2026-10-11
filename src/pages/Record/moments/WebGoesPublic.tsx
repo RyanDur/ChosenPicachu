@@ -19,6 +19,6 @@ export const WebGoesPublic: FC = () =>
     <p className="paragraph muted-ink hyphenated">The public took it up before anyone standardised it. W3C counts <a className="signpost" href="https://www.w3.org/History.html">“Around 50 known HTTP servers”</a> in
       January 1993 and <a className="signpost" href="https://www.w3.org/History.html">“Over 200 known HTTP servers”</a> by
       October, the month after NCSA released <a className="signpost" href="https://www.w3.org/History.html">“working versions of Mosaic browser for all common platforms: X, PC/Windows and Macintosh”</a>.
-      Every one of those servers was serving HTML that no standard yet defined. That is the problem the next moment
-      answers.</p>
+      Every one of those servers was serving HTML that no standard yet defined; HTML 2.0, in 1995, is the answer to
+      that.</p>
   </Moment>;

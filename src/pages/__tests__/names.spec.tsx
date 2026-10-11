@@ -5,6 +5,8 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
+import {inOrder} from '@pages/Record/moments/moments';
+import {spelledOut} from '@pages/Record/moments/spelled-out';
 import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 
@@ -99,4 +101,8 @@ describe('each page is named where a search shows it', () => {
     expect(await screen.findByRole('heading', {name: description.replace(/\.$/, '')})).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(description));
   });
+});
+
+test('should describe the record by as many moments as its timeline holds', () => {
+  expect(names.record.description).toContain(`in ${spelledOut(inOrder.length)} moments`);
 });

@@ -16,6 +16,7 @@ import {DocumentComesBack} from './moments/DocumentComesBack';
 import {WebGoesPublic} from './moments/WebGoesPublic';
 import {HtmlTwo} from './moments/HtmlTwo';
 import {inOrder, MomentKey} from './moments/moments';
+import {spelledOut} from './moments/spelled-out';
 
 const stories: Record<MomentKey, FC> = {
   need: Need,
@@ -55,7 +56,7 @@ export const Timeline: FC = () =>
       })}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said fifteen ways. Someone
+      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone
       needs something, the community answers, and the platform learns the answer. That
       feedback loop built an ecosystem where elegant solutions keep coming from places no
       specification thought to look. And the needs have not stopped arriving.
