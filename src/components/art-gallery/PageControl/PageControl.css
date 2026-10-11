@@ -60,6 +60,14 @@
 }
 
 @media (width <= 1100px) {
+  :root {
+    --page-control-block: calc(var(--base-x-8) * 2 + var(--base));
+  }
+
+  :root:has(.filter .page-control) {
+    --filter-block: var(--page-control-block);
+  }
+
   .page-control {
     grid-template-rows: repeat(2, var(--base-x-8));
     grid-template-columns: 1fr 1fr;

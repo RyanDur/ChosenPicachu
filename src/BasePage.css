@@ -1,3 +1,7 @@
+:root {
+  --header-block: var(--base-x-12);
+}
+
 #root {
   min-height: 100dvh;
   width: 100%;
@@ -5,7 +9,7 @@
   gap: var(--base);
   grid-template-columns: max-content var(--base-x-16_5) 1fr repeat(2, var(--base-x-16_5));
   grid-template-rows:
-    var(--base-x-12)
+    var(--header-block)
     1fr
     var(--base-x-12);
   grid-template-areas:
@@ -117,7 +121,7 @@
 }
 
 #root:not(:has(.app-footer)) {
-  grid-template-rows: var(--base-x-12) 1fr auto;
+  grid-template-rows: var(--header-block) 1fr auto;
   grid-template-areas:
     'nav      header header header filter'
     'nav      ...... main   ...... filter'
@@ -157,7 +161,7 @@
   }
 
   #root:not(:has(.app-footer)) {
-    grid-template-rows: var(--base-x-12) 1fr auto;
+    grid-template-rows: var(--header-block) 1fr auto;
     grid-template-areas:
       'nav      header filter'
       'nav      main   filter'
@@ -166,12 +170,17 @@
 }
 
 @media (width <= 1100px) {
+  :root {
+    --header-block: var(--base-x-10);
+    --filter-block: 0px;
+  }
+
   #root {
     grid-template-columns: 1fr auto;
     grid-template-rows:
-      minmax(var(--base-x-10), auto)
+      var(--header-block)
       var(--base-x-6)
-      auto
+      var(--filter-block)
       1fr
       var(--base);
     grid-template-areas:
@@ -246,9 +255,9 @@
 
   #root:not(:has(.app-footer)) {
     grid-template-rows:
-      minmax(var(--base-x-10), auto)
+      var(--header-block)
       var(--base-x-6)
-      auto
+      var(--filter-block)
       1fr;
     grid-template-areas:
       'header header'
@@ -363,23 +372,21 @@
   }
 }
 
-@property --main-reach {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
-@property --header-block {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
 @media not (pointer: coarse) {
+  @media (width > 1100px) {
+    :root {
+      --frame-reach: calc(var(--header-block) + var(--base));
+    }
+  }
+
+  @media (601px <= width <= 1100px) and (height > 600px) {
+    :root {
+      --frame-reach: calc(var(--header-block) + var(--base-x-6) + var(--filter-block) + var(--base) * 3);
+    }
+  }
+
   @media (width > 1100px), (601px <= width <= 1100px) and (height > 600px) {
     :root {
-      --frame-reach: var(--main-reach);
-
       scroll-padding-block-start: calc(var(--frame-reach) + var(--base-x-2));
     }
 

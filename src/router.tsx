@@ -14,7 +14,6 @@ import {PageError} from '@pages/PageError';
 import {NoRoom} from '@pages/NoRoom';
 import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
-import {useFrameMeasures} from '@pages/BasePage/useFrameMeasures';
 import names from '@pages/names.json';
 import {Demos} from '@pages/Demos/routes';
 
@@ -36,7 +35,6 @@ const Site: FC<{room: ReactNode}> = ({room}) => {
     setPlace({pathname, hash, arrival: arrivalOf(hash, navigation)});
   }
   useEffect(() => arrive[place.arrival](), [place]);
-  useFrameMeasures();
 
   return <BannerProvider><PageNameProvider><FeedbackProvider>
     {room}
