@@ -285,10 +285,10 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['down', ':where(.stack-down, .stack-up) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
-    ['up', ':where(.stack-down, .stack-up) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
-    ['right', ':where(.stack-left, .stack-right) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
-    ['left', ':where(.stack-left, .stack-right) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
+    ['down', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
+    ['up', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
+    ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
+    ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
     render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());
@@ -327,7 +327,7 @@ describe('the banner tutorial’s second story', () => {
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[4]).toHaveTextContent(/@property --news-block-size \{[^]*initial-value: auto;[^]*block-size: var\(--news-block-size\)/);
-    expect(steps[4]).toHaveTextContent('The number travels in a custom property named --news-block-size. The stylesheet declares it with @property, a rule that gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
+    expect(steps[4]).toHaveTextContent('The number travels in a custom property named --news-block-size. The stylesheet declares it with @property, an at-rule: a rule that starts with @ and sets something up for the sheet without picking out elements. This one gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
   });
 
   test('should open on the two moves, and say what a transition and a starting style are', async () => {

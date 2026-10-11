@@ -22,11 +22,13 @@ const stackFact: Record<Stack, string> = {
 type Axis = 'vertical' | 'sideways';
 
 const axisFact: Record<Axis, ReactNode> = {
-  vertical: <><code>:where(.stack-down, .stack-up)</code> is the selector, and it matches the panel with either class, so
-    the sheet writes the <code>grid-template-rows</code> rule once for the downward and upward stacks, and
-    a <code>grid-template-columns</code> rule once for the two sideways stacks.</>,
-  sideways: <><code>:where(.stack-left, .stack-right)</code> is the selector, and it matches the panel with either class,
-    so the sheet writes the <code>grid-template-columns</code> rule once for the leftward and rightward stacks, and
+  vertical: <><code>:where(.stack-down, .stack-up)</code> is the part of the rule’s selector that matches the panel with
+    either class, and the rule applies to each banner in it, so the sheet writes the <code>grid-template-rows</code> rule
+    once for the downward and upward stacks, and a <code>grid-template-columns</code> rule once for the two sideways
+    stacks.</>,
+  sideways: <><code>:where(.stack-left, .stack-right)</code> is the part of the rule’s selector that matches the panel
+    with either class, and the rule applies to each banner in it, so the sheet writes
+    the <code>grid-template-columns</code> rule once for the leftward and rightward stacks, and
     a <code>grid-template-rows</code> rule once for the two vertical stacks.</>
 };
 
@@ -63,9 +65,10 @@ const settleStep = (
     <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
       <Says>A <code>ResizeObserver</code>, a browser object that calls back when an element changes size, sets each message’s
         height to a measured number of pixels. The number travels in a custom property
-        named <code>--news-block-size</code>. The stylesheet declares it with <code>@property</code>, a rule that
-        gives a custom property a type and a starting value: a
-        length or auto, starting as auto, so a message that has not been measured keeps its own height. A rewrap then
+        named <code>--news-block-size</code>. The stylesheet declares it with <code>@property</code>, an at-rule: a rule
+        that starts with @ and sets something up for the sheet without picking out elements. This one gives a custom
+        property a type and a starting value: a length or auto, starting as auto, so a message that has not been
+        measured keeps its own height. A rewrap then
         changes one number to another, and the transition on <code>block-size</code>, the CSS name for height on this
         page, runs between them. Before it measures, the code removes the height it set last
         time. <code>scrollHeight</code> is never less than the element’s own height, so a message measured with the old
