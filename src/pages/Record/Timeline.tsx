@@ -13,14 +13,18 @@ import {PageBecomesApplication} from './moments/PageBecomesApplication';
 import {SomeoneNeedsComponents} from './moments/SomeoneNeedsComponents';
 import {Html5SaysIt} from './moments/Html5SaysIt';
 import {DocumentComesBack} from './moments/DocumentComesBack';
+import {WebGoesPublic} from './moments/WebGoesPublic';
+import {HtmlTwo} from './moments/HtmlTwo';
 import {inOrder, MomentKey} from './moments/moments';
 
 const stories: Record<MomentKey, FC> = {
   need: Need,
   structureArrives: StructureArrives,
+  webGoesPublic: WebGoesPublic,
   presentationLeavesHome: PresentationLeavesHome,
   cascadeSettlement: CascadeSettlement,
   behaviorBorn: BehaviorBorn,
+  htmlTwo: HtmlTwo,
   needOutrunsStandards: NeedOutrunsStandards,
   browsersAgree: BrowsersAgree,
   zenGarden: ZenGarden,
@@ -51,7 +55,7 @@ export const Timeline: FC = () =>
       })}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said thirteen ways. Someone
+      Read the titles again, top to bottom: it is one sentence said fifteen ways. Someone
       needs something, the community answers, and the platform learns the answer. That
       feedback loop built an ecosystem where elegant solutions keep coming from places no
       specification thought to look. And the needs have not stopped arriving.

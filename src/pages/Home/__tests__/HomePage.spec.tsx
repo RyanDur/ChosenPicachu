@@ -90,6 +90,8 @@ describe('the home page', () => {
     ['Structure', [
       '1989 Someone needs something',
       '1990 Researchers need to collaborate',
+      '1991 The web needs the public',
+      '1995 The browsers’ tags need a standard',
       '1996 The need outruns the standards',
       '2004 The standard needs the real world',
       '2013 Someone needs components',
@@ -120,6 +122,8 @@ describe('the home page', () => {
     const presentation = within(screen.getByRole('list', {name: 'Presentation, from the record'}));
 
     expect(presentation.getByRole('link', {name: '1994 Author and reader need a referee'})).toHaveAttribute('href', `${Paths.record}#author-and-reader-need-a-referee`);
+    expect(within(screen.getByRole('list', {name: 'Structure, from the record'})).getByRole('link', {name: '1995 The browsers’ tags need a standard'}))
+      .toHaveAttribute('href', `${Paths.record}#the-browsers-tags-need-a-standard`);
   });
 
   test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should set %s\'s moments between its paragraph and how I organize it, and end them with the whole record', section => {

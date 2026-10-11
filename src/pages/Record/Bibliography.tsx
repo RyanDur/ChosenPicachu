@@ -31,11 +31,27 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://worldwideweb.cern.ch/history/"><cite>A short history of the browser</cite></a>
             <span className="provenance caption">CERN, 2019</span>
           </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt"><cite>The WorldWideWeb project, posted to alt.hypertext</cite></a>
+            <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/History.html"><cite>A Little History of the World Wide Web</cite></a>
+            <span className="provenance caption">W3C</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="structure research">
         <h3 className="shelf-title sub-title">Structure</h3>
         <ul className="works">
+          <li>
+            <a className="signpost" href="https://www.w3.org/People/Raggett/book4/ch02.html"><cite>A history of HTML</cite></a>
+            <span className="provenance caption">Dave Raggett, from Raggett on HTML 4, 1998</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.rfc-editor.org/rfc/rfc1866"><cite>RFC 1866: Hypertext Markup Language 2.0</cite></a>
+            <span className="provenance caption">Tim Berners-Lee and Dan Connolly, IETF, November 1995</span>
+          </li>
           <li>
             <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>
             <span className="provenance caption">html.com</span>
