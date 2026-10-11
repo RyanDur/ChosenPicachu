@@ -61,7 +61,8 @@
 
 @media (width <= 1100px) {
   :root {
-    --page-control-block: calc(var(--base-x-8) * 2 + var(--base));
+    --page-control-row: var(--base-x-8);
+    --page-control-block: calc(var(--page-control-row) * 2 + var(--base));
   }
 
   :root:has(.filter .page-control) {
@@ -69,7 +70,7 @@
   }
 
   .page-control {
-    grid-template-rows: repeat(2, var(--base-x-8));
+    grid-template-rows: repeat(2, var(--page-control-row));
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       'go-to per-page'
