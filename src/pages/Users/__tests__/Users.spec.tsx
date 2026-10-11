@@ -227,6 +227,10 @@ describe('the users page', () => {
       expect(userForm.field('Last Name')).toHaveDisplayValue(kai.info.lastName);
     });
 
+    test('editing a user offers no door to add another', () => {
+      expect(usersTable.offersAddNewUser()).toBe(false);
+    });
+
     test('the date of birth is picked from a date field', () => {
       expect(userForm.field('Date Of Birth')).toHaveAttribute('type', 'date');
     });
