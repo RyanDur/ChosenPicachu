@@ -62,9 +62,11 @@ test.describe('a phone, where the page itself scrolls', () => {
 
 test('a keyboard reader who follows the tutorial below reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
   await page.goto('demos/?tab=z-index');
-  await tabsTo(page, page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}));
+  const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
+  await tabsTo(page, link);
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#news-top-story$/);
+  await expect(link).not.toBeFocused();
 
   await expect(page.getByText('Make the panel a popover')).toBeVisible();
 
