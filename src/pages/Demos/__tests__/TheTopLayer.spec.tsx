@@ -265,9 +265,9 @@ describe('the banner tutorial’s second story', () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/The margin between banners opens over the same time\.$/);
+    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/The same rule carries the upward stack’s selector, where the end is the first child\.$/);
     expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/its padding and border start at 0 as well\.$/);
-    expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, and the slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
+    expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, written once for all four stacks: both track sizes and both margins over 0.3 seconds, and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
     expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
     expect(within(steps[2]).getAllByRole('paragraph')).toHaveLength(3);
   });
@@ -280,6 +280,20 @@ describe('the banner tutorial’s second story', () => {
     expect(steps[1]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.news \{ @starting-style \{ padding-inline: 0; border-inline-width: 0; } }/);
     expect(steps[1]).toHaveTextContent('&:where(.stack-right) .trouble:where(:not(:last-child)), &:where(.stack-left) .trouble:where(:not(:first-child)) { margin-inline-end: var(--base); }');
     expect(steps[1]).not.toHaveTextContent(/\.stack-down, \.stack-up/);
+  });
+
+  test.each([
+    ['down', ':where(.stack-down, .stack-up) is a selector that matches the list with either class', 'a margin after every banner but the last', 'carries the upward stack’s selector'],
+    ['up', ':where(.stack-down, .stack-up) is a selector that matches the list with either class', 'a margin after every banner but the first', 'carries the downward stack’s selector'],
+    ['right', ':where(.stack-left, .stack-right) is a selector that matches the list with either class', 'a margin after every banner but the last', 'carries the leftward stack’s selector'],
+    ['left', ':where(.stack-left, .stack-right) is a selector that matches the list with either class', 'a margin after every banner but the first', 'carries the rightward stack’s selector']
+  ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
+    render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(steps[1]).toHaveTextContent(axis);
+    expect(steps[1]).toHaveTextContent(gap);
+    expect(steps[1]).toHaveTextContent(shared);
   });
 
   test('should show the chosen entrance’s distance in step 3’s sample', async () => {
@@ -328,7 +342,7 @@ describe('the banner tutorial’s second story', () => {
   test.each([
     ['a grid and a track', 'Each banner is a grid, a layout of rows and columns, with a single row or column, called a track.'],
     ['fr', 'A track’s size can be given in fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none.'],
-    ['why the message shrinks to nothing', 'A track closes only as far as what is inside it can shrink, so the message has a minimum size of 0, and its padding and border start at 0 as well.'],
+    ['why the message shrinks to nothing', 'A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both directions, and on the stack’s axis its padding and border start at 0 as well.'],
     ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
     ['the leaving class', 'Dismissing a banner gives it the class leaving. That rule sends the banner back the way it came at once, and holds the track, the margin and the message’s padding and border for 0.6 seconds, the time the slide takes, before closing them.'],
     ['raise', 'raise is the function a page calls with a message.']
