@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
+import {FromTheRecord} from './FromTheRecord';
 
 export const Structure: FC = () =>
   <section className="door trim-rule-above" aria-labelledby="structure">
@@ -12,6 +13,7 @@ export const Structure: FC = () =>
       HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the element that means
       what the content is, and add the look and the behaviour on top of it.
     </p>
+    <FromTheRecord language="Structure" keys={['need', 'structureArrives', 'needOutrunsStandards', 'browsersTakePen', 'someoneNeedsComponents', 'html5SaysIt', 'documentComesBack']}/>
     <details className="door-fold">
       <summary className="prompt caption">how I organize it</summary>
       <p className="paragraph muted-ink">I start from what the content is and pick the element for it. The platform

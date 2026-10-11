@@ -1,6 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
+import {outOfReadingOrder} from '@pages/Demos/__test_support';
 
 describe('the home page', () => {
   beforeEach(() => {
@@ -88,5 +89,56 @@ describe('the home page', () => {
   test('should leave the record to its own page: no list of its moments and no link to read it', () => {
     expect(screen.queryByRole('list', {name: 'the moments'})).not.toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'read the record'})).not.toBeInTheDocument();
+  });
+
+  test.each([
+    ['Structure', [
+      '1989 Someone needs something',
+      '1990 Researchers need to collaborate',
+      '1996 The need outruns the standards',
+      '2004 The standard needs the real world',
+      '2013 Someone needs components',
+      '2014 The philosophy needs writing down',
+      '2016 The document needs to come first'
+    ]],
+    ['Presentation', [
+      '1994 Authors need control of the look',
+      '1994 Author and reader need a referee',
+      '1996 The need outruns the standards',
+      '1998 The browsers need to agree',
+      '2003 The separation needs proof',
+      '2013 Someone needs components'
+    ]],
+    ['Dynamic Interaction', [
+      '1995 Pages need to respond',
+      '2005 The page needs to update in place',
+      '2013 Someone needs components',
+      '2016 The document needs to come first'
+    ]]
+  ] as const)('should list %s\'s moments from the record, in the record\'s order', (section, lines) => {
+    const moments = within(screen.getByRole('list', {name: `${section}, from the record`})).getAllByRole('link');
+
+    expect(moments.map(moment => moment.textContent)).toEqual(lines);
+  });
+
+  test('should send a moment\'s line straight to that moment on the record', () => {
+    const presentation = within(screen.getByRole('list', {name: 'Presentation, from the record'}));
+
+    expect(presentation.getByRole('link', {name: '1994 Author and reader need a referee'})).toHaveAttribute('href', `${Paths.record}#author-and-reader-need-a-referee`);
+  });
+
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should set %s\'s moments between its paragraph and how I organize it, and end them with the whole record', section => {
+    const door = screen.getByRole('region', {name: section});
+    const list = within(door).getByRole('list', {name: `${section}, from the record`});
+    const wholeRecord = within(door).getByRole('link', {name: 'the whole record'});
+
+    expect(within(door).getByText('from the record')).toBeVisible();
+    expect(wholeRecord).toHaveAttribute('href', Paths.record);
+    expect(outOfReadingOrder([
+      within(door).getByText(/^(HTML|CSS|JavaScript) says/),
+      list,
+      wholeRecord,
+      within(door).getByText('how I organize it')
+    ])).toEqual([]);
   });
 });

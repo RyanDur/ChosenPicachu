@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
+import {FromTheRecord} from './FromTheRecord';
 
 export const Presentation: FC = () =>
   <section className="door trim-rule-above" aria-labelledby="presentation">
@@ -12,6 +13,7 @@ export const Presentation: FC = () =>
       CSS says how things look. Shared looks get shared class names, each component’s layout lives in its own sheet,
       and nothing is styled to say what the HTML already says.
     </p>
+    <FromTheRecord language="Presentation" keys={['presentationLeavesHome', 'cascadeSettlement', 'needOutrunsStandards', 'browsersAgree', 'zenGarden', 'someoneNeedsComponents']}/>
     <details className="door-fold">
       <summary className="prompt caption">how I organize it</summary>
       <p className="paragraph muted-ink">I write CSS in two kinds of sheet. A component’s sheet holds its structure,
