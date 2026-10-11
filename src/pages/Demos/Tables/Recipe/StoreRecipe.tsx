@@ -88,7 +88,7 @@ const actionsAreData =
         beginning, so nobody names an initial state.</Says>
       <Says>Slices combine by key when a state has more than one concern, each seeing only its own. The page’s
         store is three: the trades, the candles and the arrangement.</Says>
-      <Says>The arrangement’s reducer handles what the hand and the menu decided: a column moved to a seat, a row
+      <Says>The arrangement’s reducer handles what a drag and the menu decided: a column moved to a seat, a row
         moved in the standing it was shown, a sort chosen or cleared, keys that arrived. A moved row ends the sort
         first, so the ranked order becomes the real one and the move lands in it.</Says>
       <Says>The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and
@@ -117,7 +117,7 @@ const actionsAreData =
           ...unit(storeSource, 'export type Slice'), gap,
           ...unit(arrangementSource, 'const answering = '), gap,
           ...unit(reducerSource, 'export const tableReducer'),
-          aside('// three slices by key; the arrangement handles the hand and the menu; four table reducers read the type in turn')
+          aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers read the type in turn')
         ]}/>
       </Codes>
     </Reveal>

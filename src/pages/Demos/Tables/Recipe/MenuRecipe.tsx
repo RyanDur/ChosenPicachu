@@ -33,9 +33,9 @@ type Build = {
 
 const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
   <Step title="Sort directly">
-    <Words want="A sort reorders everything at once, and no hand is on the table to explain it.">
+    <Words want="A sort reorders everything at once, and nothing is being dragged to explain it.">
       <Says>The answer is the sort alone: dispatch it and let the rows cut to their ranked
-        seats. Motion in these tables belongs to the hand, and a menu click has none.</Says>
+        seats. Motion in these tables belongs to a drag, and a menu click is not one.</Says>
     </Words>
     <Reveal>
       {world === 'react'

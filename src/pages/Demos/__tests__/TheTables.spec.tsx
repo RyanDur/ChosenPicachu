@@ -739,7 +739,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     expect(recipe).toHaveTextContent(/Sort directly/);
-    expect(recipe).toHaveTextContent(/a menu click has none/);
+    expect(recipe).toHaveTextContent(/Motion in these tables belongs to a drag, and a menu click is not one/);
   });
 
   test('the chosen tutorial travels in the url', async () => {
