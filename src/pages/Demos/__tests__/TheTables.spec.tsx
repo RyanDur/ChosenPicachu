@@ -1164,6 +1164,10 @@ describe('the tables tutorials’ vocabulary', () => {
     {at: 'tut=sort&track=pointer&world=vanilla', region: 'build the drag sort yourself'},
     {at: 'tut=sort&track=keyboard&world=react', region: 'build the drag sort yourself'},
     {at: 'tut=sort&track=keyboard&world=vanilla', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=pointer&world=react&pace=lazy&origin=keep&motion=static', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=pointer&world=vanilla&pace=lazy&origin=keep&motion=static', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=keyboard&world=react&pace=lazy&origin=keep&motion=static', region: 'build the drag sort yourself'},
+    {at: 'tut=sort&track=keyboard&world=vanilla&pace=lazy&origin=keep&motion=static', region: 'build the drag sort yourself'},
     {at: 'tut=menu&world=react', region: 'build the sort menu yourself'},
     {at: 'tut=menu&world=vanilla', region: 'build the sort menu yourself'},
     {at: 'tut=resize&world=react', region: 'build the drag resize yourself'},
@@ -1177,16 +1181,17 @@ describe('the tables tutorials’ vocabulary', () => {
     render(<TestApp at={demosAt(`?tab=tables&${at}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const build = await screen.findByRole('region', {name: region}, untilTheTablesTabRenders);
-    return [...within(build).getAllByRole('paragraph'), ...within(build).getAllByRole('heading')];
+    return [...within(build).getAllByRole('paragraph'), ...within(build).getAllByRole('heading')]
+      .sort((one, other) => one.compareDocumentPosition(other) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
   };
 
   const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
     blocks.find(block => word.test(block.textContent));
 
-  test.each(builds)('should say no figure of speech, and no hands as a verb, in $region, with $at', async ({at, region}) => {
+  test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
-    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born|hands|handed)\b/);
+    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)?|undress\w*|buys|owes?|sells|born|hands|handed)\b/i);
   });
 
   test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
