@@ -36,7 +36,8 @@
 
 @media (width <= 1100px) {
   :root {
-    --search-block: calc(var(--base-x-4) + var(--base-x-5) * 2);
+    --search-actions: var(--base-x-5);
+    --search-block: calc(var(--base-x-4) + var(--base-x-5) + var(--search-actions));
   }
 
   :root:has(.app-header .search) {
@@ -46,7 +47,7 @@
   .search {
     column-gap: unset;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: var(--base-x-4) var(--base-x-5) var(--base-x-5);
+    grid-template-rows: var(--base-x-4) var(--base-x-5) var(--search-actions);
     grid-template-areas:
       'query-label query-label'
       'query query'
@@ -55,5 +56,11 @@
     .submit-query {
       margin-left: var(--base);
     }
+  }
+}
+
+@media (width <= 1100px) and (pointer: coarse) {
+  :root {
+    --search-actions: var(--finger-reach);
   }
 }
