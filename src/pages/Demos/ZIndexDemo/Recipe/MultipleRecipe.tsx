@@ -5,7 +5,6 @@ import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../.
 import {span, unit} from '../../Recipe/carve';
 import {EntranceDial, StackDial} from '../../Controls';
 import {popoverWinsHeading} from '../part-headings';
-import {arrivalLines, leavingLines, slotLines} from './decided';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import providerSource from '@components/Banners/BannerProvider.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
@@ -28,6 +27,12 @@ const enterFact: Record<Entrance, string> = {
 };
 
 const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right';
+
+const axis = (stack: Stack): string => sideways(stack) ? '&:where(.stack-left, .stack-right)' : '&:where(.stack-down, .stack-up)';
+
+const ownedGap = (stack: Stack): string => sideways(stack)
+  ? '&:where(.stack-right) .trouble:where(:not(:last-child)),'
+  : '&:where(.stack-down) .trouble:where(:not(:last-child)),';
 
 const settleStep = (
   <Step title="Change a banner’s height smoothly when its text rewraps">
@@ -93,7 +98,13 @@ export const MultipleRecipe: FC = () => {
             transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={slotLines(stack)}/>
+          <Snippet label="CSS" lines={[
+            ...unit(bannersCss, '.trouble {'), gap,
+            ...unit(bannersCss, `${axis(stack)} .trouble {`), gap,
+            ...span(bannersCss, ownedGap(stack), '}'), gap,
+            ...unit(bannersCss, '.news {'), gap,
+            ...unit(bannersCss, `${axis(stack)} .news {`)
+          ]}/>
         </Codes>
       </Step>
       <Step title="Slide in from off screen" dial={<EntranceDial name="journey-entrance"/>}>
@@ -109,7 +120,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...arrivalLines(enter), gap,
+            ...unit(bannersCss, `&.from-${enter} {`), gap,
             ...span(bannersCss, "/* the browser's own stylesheet", 'overflow: visible;')
           ]}/>
         </Codes>
@@ -122,7 +133,11 @@ export const MultipleRecipe: FC = () => {
             transition has ended. Taken out any sooner, it would leave the others to jump into its place.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={leavingLines(stack)}/>
+          <Snippet label="CSS" lines={[
+            ...unit(bannersCss, '.trouble.leaving {'), gap,
+            ...unit(bannersCss, `${axis(stack)} .trouble.leaving {`), gap,
+            ...unit(bannersCss, `${axis(stack)} .trouble.leaving .news {`)
+          ]}/>
           <Snippet label="TS" lines={[
             ...unit(bannersSource, 'const left = ')
           ]}/>

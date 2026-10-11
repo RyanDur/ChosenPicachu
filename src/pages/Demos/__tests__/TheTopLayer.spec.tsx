@@ -272,12 +272,22 @@ describe('the banner tutorial’s second story', () => {
     expect(within(steps[2]).getAllByRole('paragraph')).toHaveLength(3);
   });
 
-  test('should let a sideways stack’s message shrink across, in step 2’s sample', async () => {
+  test('should show a sideways stack’s own rules in step 2’s sample, and none of a column’s', async () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(steps[1]).toHaveTextContent(/\.news \{ min-inline-size: 0;[^]*padding-inline: 0; border-inline-width: 0;/);
-    expect(steps[1]).not.toHaveTextContent(/min-block-size/);
+    expect(steps[1]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.trouble \{ grid-template-columns: 1fr;/);
+    expect(steps[1]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.news \{ @starting-style \{ padding-inline: 0; border-inline-width: 0; } }/);
+    expect(steps[1]).toHaveTextContent('&:where(.stack-right) .trouble:where(:not(:last-child)), &:where(.stack-left) .trouble:where(:not(:first-child)) { margin-inline-end: var(--base); }');
+    expect(steps[1]).not.toHaveTextContent(/\.stack-down, \.stack-up/);
+  });
+
+  test('should show the chosen entrance’s distance in step 3’s sample', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(steps[2]).toHaveTextContent('&.from-left { --arrive: -100dvw 0; }');
+    expect(steps[2]).not.toHaveTextContent(/from-above|from-below|from-right/);
   });
 
   test('should say the slide waits for the gap, in the transition list of step 2’s sample', async () => {
@@ -351,15 +361,16 @@ describe('the banner tutorial’s second story', () => {
     expect(within(many).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why the popover wins'}).id}`);
   });
 
-  test('should show the banner’s one transition list and the message’s rules in step 2’s sample, none in step 3’s, and the whole leaving rules in step 4’s', async () => {
+  test('should show the banner’s one transition list and a column’s rules in step 2’s sample, none in step 3’s, and a column’s leaving rules in step 4’s', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(steps[1]).toHaveTextContent(/transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\) 0\.3s, grid-template-rows 0\.3s, margin-block-end 0\.3s; @starting-style/);
-    expect(steps[1]).toHaveTextContent(/\.news \{ min-block-size: 0; transition: padding 0\.3s, border-width 0\.3s; @starting-style \{ padding-block: 0; border-block-width: 0; } }/);
+    expect(steps[1]).toHaveTextContent(/\.trouble \{ display: grid; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\) 0\.3s, grid-template-rows 0\.3s, grid-template-columns 0\.3s, margin-block-end 0\.3s, margin-inline-end 0\.3s; @starting-style/);
+    expect(steps[1]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble \{ grid-template-rows: 1fr;/);
+    expect(steps[1]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.news \{ @starting-style \{ padding-block: 0; border-block-width: 0; } }/);
     expect(steps[2]).not.toHaveTextContent(/transition:/);
-    expect(steps[3]).toHaveTextContent(/margin-block-end: 0;[^]*grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; }/);
-    expect(steps[3]).toHaveTextContent(/\.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; }/);
+    expect(steps[3]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble\.leaving \{ grid-template-rows: 0fr; margin-block-end: 0; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\), grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; }/);
+    expect(steps[3]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; }/);
   });
 
   test('should say where the banner starts, for the entrance chosen', async () => {
