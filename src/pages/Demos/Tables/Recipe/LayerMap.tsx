@@ -18,7 +18,7 @@ export const LayerMap: FC = () =>
   <>
     <p className="overview paragraph">
       Now the table gains features, each one traceable to something the trader said. The
-      machine has a mouse and a keyboard, so every arrangement a hand can make, a key can make
+      machine has a mouse and a keyboard, so every arrangement a pointer can make, a key can make
       too. Both axes, every layer, or the layer is not done.
     </p>
     <table className="tutorial-table contained">

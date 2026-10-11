@@ -9,7 +9,7 @@ export const deadZone =
     <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving
-        hand. And a plain boundary fails: switch a narrow column past a wide one at first touch,
+        pointer. And a plain boundary fails: switch a narrow column past a wide one at first touch,
         and the wide one lands back under the resting pointer, ready to switch straight back. The
         cure is hysteresis: a crossing has to earn some dead ground before it counts.</Says>
     </Words>

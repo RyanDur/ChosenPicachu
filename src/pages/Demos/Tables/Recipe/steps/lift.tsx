@@ -16,7 +16,7 @@ export const liftOnce = (world: World, headerSource: Sample, buildSrc: Sample): 
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
+        ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown, the
           header takes the survey, takes the pointer, and lifts: one dispatch, and the store
           holds the drag beside the columns and the seats, the one mark of what
@@ -27,7 +27,7 @@ export const liftOnce = (world: World, headerSource: Sample, buildSrc: Sample): 
           target="_blank"
           rel="noreferrer">sand</a>: has, its null check, false for nothing and for
           empty.</Says>
-        : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
+        : <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
           JavaScript takes the survey and the pointer, and one dispatch puts the drag in the
           store beside the columns and the seats, the one mark of what is carried. One word in the code

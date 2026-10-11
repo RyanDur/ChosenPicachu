@@ -69,7 +69,7 @@ export const turnedVertical =
 export const accessTrack =
   <Tell>We could build the keyboard its own sorting system, but the state, the clamps,
     and the slides already exist; so this track is about access. Focus reaches every grip
-    and every header, and two arrow keys get everything the hand has.</Tell>;
+    and every header, and two arrow keys get everything a drag has.</Tell>;
 
 export const quietDials =
   <Tell>Two of the dials go quiet here: pace and origin describe a drag session, what happens
