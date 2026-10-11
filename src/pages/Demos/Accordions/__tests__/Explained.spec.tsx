@@ -405,6 +405,14 @@ describe('the fold motion', () => {
     expect(explanation.codeBeside(oldWay, visibilitySays[style])).toHaveTextContent('transition: height .3s ease-in-out, visibility .3s;');
   });
 
+  test('should show, with static chosen, no transition rule beside the visibility run', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.codeBeside(oldWay, /The section has a tabindex of 0/)).not.toHaveTextContent('transition:');
+  });
+
   test('should show, with drawer chosen, the drawer’s column rules beside the section’s run', async () => {
     render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
 
