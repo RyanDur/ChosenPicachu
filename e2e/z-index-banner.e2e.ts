@@ -60,13 +60,16 @@ test.describe('a phone, where the page itself scrolls', () => {
   });
 });
 
-test('a keyboard reader who follows the tutorial below carries on inside that story with one Tab', async ({page}) => {
+test('a keyboard reader who follows the tutorial below reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   await tabsTo(page, page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}));
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#news-top-story$/);
 
-  await pressTab(page);
+  await expect(page.getByText('Make the panel a popover')).toBeVisible();
 
-  await expect.poll(() => page.evaluate(() => document.activeElement?.textContent ?? '')).toMatch(/^The user sees the news above everything/);
+  await pressTab(page);
+  await page.keyboard.press('Enter');
+
+  await expect(page.getByText('Make the panel a popover')).toBeHidden();
 });

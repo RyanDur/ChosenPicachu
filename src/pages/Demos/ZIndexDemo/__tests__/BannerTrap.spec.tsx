@@ -1,9 +1,8 @@
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {not} from '@ryandur/sand';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {controlsBeforeTheSteps, wayLabelled} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const oldBanner = /^An old banner\./;
@@ -122,9 +121,7 @@ describe('why a fixed banner still loses', () => {
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
-    const story = screen.getByRole('group', {name: 'The user sees the news above everything'});
-    const itsItem = screen.getAllByRole('listitem').find(item =>
-      item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story))));
-    await waitFor(() => expect(itsItem).toHaveFocus());
+    const story = recipeFolds.story(document.body, 'The user sees the news above everything');
+    await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
   });
 });

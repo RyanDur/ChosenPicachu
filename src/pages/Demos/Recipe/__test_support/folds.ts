@@ -1,8 +1,11 @@
 import {within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {not} from '@ryandur/sand';
 
 export const recipeFolds = {
   story: (root: HTMLElement, title: string): HTMLElement => within(root).getByRole('group', {name: title}),
+  itemOf: (story: HTMLElement): HTMLElement | undefined => within(document.body).getAllByRole('listitem').find(item =>
+    item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story)))),
   steps: (story: HTMLElement): HTMLElement[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem'),
   stepTitles: (story: HTMLElement): string[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem')
     .map(step => within(step).getAllByRole('heading')[0].textContent),
