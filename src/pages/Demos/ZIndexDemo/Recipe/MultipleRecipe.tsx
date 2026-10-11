@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Entrance, Stack, enterParam, stackParam} from '@components/Banners/params';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
@@ -19,18 +19,22 @@ const stackFact: Record<Stack, string> = {
   right: 'the stack grows rightward, so the track is a column.'
 };
 
-const axisFact: Record<Stack, string> = {
-  down: ':where(.stack-down, .stack-up) is a selector that matches the list with either class, so the sheet writes the rows rule once for the downward and upward stacks, and a columns rule once for the two sideways stacks.',
-  up: ':where(.stack-down, .stack-up) is a selector that matches the list with either class, so the sheet writes the rows rule once for the downward and upward stacks, and a columns rule once for the two sideways stacks.',
-  left: ':where(.stack-left, .stack-right) is a selector that matches the list with either class, so the sheet writes the columns rule once for the leftward and rightward stacks, and a rows rule once for the two vertical stacks.',
-  right: ':where(.stack-left, .stack-right) is a selector that matches the list with either class, so the sheet writes the columns rule once for the leftward and rightward stacks, and a rows rule once for the two vertical stacks.'
+type Axis = 'vertical' | 'sideways';
+
+const axisFact: Record<Axis, ReactNode> = {
+  vertical: <><code>:where(.stack-down, .stack-up)</code> is a selector, the part of a rule that names which elements it
+    applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once for
+    the downward and upward stacks, and a grid-template-columns rule once for the two sideways stacks.</>,
+  sideways: <><code>:where(.stack-left, .stack-right)</code> is a selector, the part of a rule that names which elements
+    it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once
+    for the leftward and rightward stacks, and a grid-template-rows rule once for the two vertical stacks.</>
 };
 
 const gapFact: Record<Stack, string> = {
-  down: 'The gap is a margin after every banner but the last, the one at the stack’s end, and it opens over the same 0.3 seconds. The same rule carries the upward stack’s selector, where the end is the first child.',
-  up: 'The gap is a margin after every banner but the first, the one at the stack’s end, and it opens over the same 0.3 seconds. The same rule carries the downward stack’s selector, where the end is the last child.',
-  right: 'The gap is a margin after every banner but the last, the one at the stack’s end, and it opens over the same 0.3 seconds. The same rule carries the leftward stack’s selector, where the end is the first child.',
-  left: 'The gap is a margin after every banner but the first, the one at the stack’s end, and it opens over the same 0.3 seconds. The same rule carries the rightward stack’s selector, where the end is the last child.'
+  down: 'The gap is a margin below every banner but the bottom one, the last child when the stack grows downward, and it opens over the same 0.3 seconds. The same rule carries the upward stack’s selector, where the bottom banner is the first child.',
+  up: 'The gap is a margin below every banner but the bottom one, the first child when the stack grows upward, and it opens over the same 0.3 seconds. The same rule carries the downward stack’s selector, where the bottom banner is the last child.',
+  right: 'The gap is a margin to the right of every banner but the one at the right, the last child when the stack grows rightward, and it opens over the same 0.3 seconds. The same rule carries the leftward stack’s selector, where the banner at the right is the first child.',
+  left: 'The gap is a margin to the right of every banner but the one at the right, the first child when the stack grows leftward, and it opens over the same 0.3 seconds. The same rule carries the rightward stack’s selector, where the banner at the right is the last child.'
 };
 
 const enterFact: Record<Entrance, string> = {
@@ -41,6 +45,8 @@ const enterFact: Record<Entrance, string> = {
 };
 
 const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right';
+
+const axisOf = (stack: Stack): Axis => sideways(stack) ? 'sideways' : 'vertical';
 
 const axis = (stack: Stack): string => sideways(stack) ? '&:where(.stack-left, .stack-right)' : '&:where(.stack-down, .stack-up)';
 
@@ -101,10 +107,11 @@ export const MultipleRecipe: FC = () => {
       <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
         <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
           <Says>Each banner is a grid, a layout of rows and columns, with a single row or column, called a
-            track. Here {stackFact[stack]} {axisFact[stack]} A track’s size can be given in fr, its share of the grid’s
-            room: at 1fr this one track takes all of it, and at 0fr it takes none. The starting style sets the track
-            to 0fr and the banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.{' '}
-          {gapFact[stack]}</Says>
+            track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
+            one track takes all of it, and at 0fr it takes none. The starting style sets the track to 0fr and the
+            banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.</Says>
+          <Says>{axisFact[axisOf(stack)]}</Says>
+          <Says>{gapFact[stack]}</Says>
           <Says>A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both
             directions, and on the stack’s axis its padding and border start at 0 as well.</Says>
           <Says>The banner has one transition list, written once for all four stacks: both track sizes and both margins
@@ -127,8 +134,7 @@ export const MultipleRecipe: FC = () => {
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
           <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving
-            rule reads it again to send the banner back. In the transition list in step 2’s sample, the slide waits
-            0.3 seconds, the time the gap takes to open.</Says>
+            rule reads it again to send the banner back.</Says>
           <Says>The slide can be seen only because the panel sets overflow to visible. The panel is a popover,
             as <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains,
             and the browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s

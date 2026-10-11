@@ -262,11 +262,12 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
-  test('should tell step 2 in three paragraphs, and step 3 in two after its want', async () => {
+  test('should tell step 2 in five paragraphs, and step 3 in two after its want', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/The same rule carries the upward stack’s selector, where the end is the first child\.$/);
+    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/so the transition opens the gap over 0\.3 seconds\.$/);
+    expect(within(steps[1]).getAllByRole('paragraph')).toHaveLength(6);
     expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/its padding and border start at 0 as well\.$/);
     expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, written once for all four stacks: both track sizes and both margins over 0.3 seconds, and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
     expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
@@ -284,10 +285,10 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['down', ':where(.stack-down, .stack-up) is a selector that matches the list with either class', 'a margin after every banner but the last', 'carries the upward stack’s selector'],
-    ['up', ':where(.stack-down, .stack-up) is a selector that matches the list with either class', 'a margin after every banner but the first', 'carries the downward stack’s selector'],
-    ['right', ':where(.stack-left, .stack-right) is a selector that matches the list with either class', 'a margin after every banner but the last', 'carries the leftward stack’s selector'],
-    ['left', ':where(.stack-left, .stack-right) is a selector that matches the list with either class', 'a margin after every banner but the first', 'carries the rightward stack’s selector']
+    ['down', ':where(.stack-down, .stack-up) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
+    ['up', ':where(.stack-down, .stack-up) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
+    ['right', ':where(.stack-left, .stack-right) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
+    ['left', ':where(.stack-left, .stack-right) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
     render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());
@@ -305,10 +306,13 @@ describe('the banner tutorial’s second story', () => {
     expect(steps[2]).not.toHaveTextContent(/from-above|from-below|from-right/);
   });
 
-  test('should say the slide waits for the gap, in the transition list of step 2’s sample', async () => {
-    await openZIndexTab();
+  test('should show a sideways stack’s own leaving rules in step 4’s sample, and none of a column’s', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    const steps = recipeFolds.steps(await secondStory());
 
-    expect(recipeFolds.steps(await secondStory())[2]).toHaveTextContent('In the transition list in step 2’s sample, the slide waits 0.3 seconds, the time the gap takes to open.');
+    expect(steps[3]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.trouble\.leaving \{ grid-template-columns: 0fr; margin-inline-end: 0; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\), grid-template-columns 0\.3s 0\.6s, margin-inline-end 0\.3s 0\.6s; }/);
+    expect(steps[3]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.trouble\.leaving \.news \{ padding-inline: 0; border-inline-width: 0;/);
+    expect(steps[3]).not.toHaveTextContent(/\.stack-down, \.stack-up/);
   });
 
   test('should leave out the height step for a stack that grows down', async () => {
@@ -383,6 +387,7 @@ describe('the banner tutorial’s second story', () => {
     expect(steps[1]).toHaveTextContent(/\.trouble \{ display: grid; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\) 0\.3s, grid-template-rows 0\.3s, grid-template-columns 0\.3s, margin-block-end 0\.3s, margin-inline-end 0\.3s; @starting-style/);
     expect(steps[1]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble \{ grid-template-rows: 1fr;/);
     expect(steps[1]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.news \{ @starting-style \{ padding-block: 0; border-block-width: 0; } }/);
+    expect(steps[1]).toHaveTextContent('&:where(.stack-down) .trouble:where(:not(:last-child)), &:where(.stack-up) .trouble:where(:not(:first-child)) { margin-block-end: var(--base); }');
     expect(steps[2]).not.toHaveTextContent(/transition:/);
     expect(steps[3]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble\.leaving \{ grid-template-rows: 0fr; margin-block-end: 0; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\), grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; }/);
     expect(steps[3]).toHaveTextContent(/&:where\(\.stack-down, \.stack-up\) \.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; }/);
