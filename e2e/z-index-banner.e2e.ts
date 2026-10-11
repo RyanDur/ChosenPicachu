@@ -67,6 +67,7 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#news-top-story$/);
   await expect(link).not.toBeFocused();
+  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news above everything'})}).last()).toBeFocused();
 
   await expect(page.getByText('Make the panel a popover')).toBeVisible();
 
