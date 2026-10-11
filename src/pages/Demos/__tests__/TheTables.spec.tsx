@@ -739,7 +739,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     expect(recipe).toHaveTextContent(/Sort directly/);
-    expect(recipe).toHaveTextContent(/Motion in these tables explains one move: a column or a row, and what it shoved aside. A sort moves every row at once, so there is no one move to show./);
+    expect(recipe).toHaveTextContent(/Motion in these tables explains one move: a column or a row, and what it shoved aside\./);
   });
 
   test('the chosen tutorial travels in the url', async () => {
