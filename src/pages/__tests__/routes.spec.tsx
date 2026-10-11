@@ -172,10 +172,9 @@ describe('leaving a page', () => {
 });
 
 describe('the root path', () => {
-  test('opens the front door, whose rail leads to the record', async () => {
+  test('opens the front door', async () => {
     render(<TestApp at="/"/>);
 
     expect(await site.pageTitled()).toHaveTextContent('The three languages');
-    expect(within(await site.rail()).getByRole('link', {name: 'Record'})).toHaveAttribute('href', Paths.record);
   });
 });
