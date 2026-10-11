@@ -33,23 +33,23 @@ describe('the record', () => {
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
     expect(record.getByText(/Tim Berners-Lee and Robert Cailliau/)).toBeVisible();
     expect(record.getByText(/Someone needed something/)).toBeVisible();
-    expect(screen.getByText(/one sentence said fifteen ways/)).toBeVisible();
+    expect(screen.getByText(/one sentence said eighteen ways/)).toBeVisible();
   });
 
-  test('the timeline walks fifteen beats of the same need', () => {
+  test('the timeline walks eighteen beats of the same need', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByRole('listitem')).toHaveLength(15);
-    ['1989', '1990', '1991', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016'].forEach(year =>
+    expect(timeline.getAllByRole('listitem')).toHaveLength(18);
+    ['1989', '1990', '1991', '1995', '2002', '2011', '1996', '2003', '2004', '2005', '2013', '2014', '2016'].forEach(year =>
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
-    [/Someone needs something/, /Researchers need to collaborate/, /The web needs the public/, /Authors need control of the look/, /Author and reader need a referee/, /Pages need to respond/, /The browsers’ tags need a standard/, /The need outruns the standards/, /The browsers need to agree/, /The separation needs proof/, /The standard needs the real world/, /The page needs to update in place/, /Someone needs components/, /The philosophy needs writing down/, /The document needs to come first/]
+    [/Someone needs something/, /Researchers need to collaborate/, /The web needs the public/, /Authors need control of the look/, /Author and reader need a referee/, /Pages need to respond/, /The browsers’ tags need a standard/, /The need outruns the standards/, /The style sheet needs a standard/, /The browsers need to agree/, /Someone needs to go first/, /The separation needs proof/, /The standard needs the real world/, /The page needs to update in place/, /The specification needs its tests/, /Someone needs components/, /The philosophy needs writing down/, /The document needs to come first/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
   });
 
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(15);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
@@ -63,7 +63,10 @@ describe('the record', () => {
 
   test.each([
     ['The web needs the public', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt', '“Collaborators welcome!”'],
-    ['The browsers’ tags need a standard', 'https://www.rfc-editor.org/rfc/rfc1866', '“to distinguish it from the previous informal specifications”']
+    ['The browsers’ tags need a standard', 'https://www.rfc-editor.org/rfc/rfc1866', '“to distinguish it from the previous informal specifications”'],
+    ['The style sheet needs a standard', 'https://www.w3.org/TR/REC-CSS1-961217', '“One of the fundamental features of CSS is that style sheets cascade”'],
+    ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
+    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”']
   ])('should tell %s, its fuller story quoting its source by a link', (title, source, quotation) => {
     const moment = itemHeadedBy('the timeline', title);
 

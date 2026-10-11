@@ -102,8 +102,11 @@ describe('the home page', () => {
       '1994 Authors need control of the look',
       '1994 Author and reader need a referee',
       '1996 The need outruns the standards',
+      '1996 The style sheet needs a standard',
       '1998 The browsers need to agree',
+      '2002 Someone needs to go first',
       '2003 The separation needs proof',
+      '2011 The specification needs its tests',
       '2013 Someone needs components'
     ]],
     ['Dynamic Interaction', [

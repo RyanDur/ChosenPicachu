@@ -114,6 +114,30 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title sub-title">Presentation</h3>
         <ul className="works">
           <li>
+            <a className="signpost" href="https://www.w3.org/TR/REC-CSS1-961217"><cite>Cascading Style Sheets, level 1</cite></a>
+            <span className="provenance caption">W3C Recommendation, 17 December 1996</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/"><cite>Wired With Standards</cite></a>
+            <span className="provenance caption">Eric Meyer, 11 October 2002</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://meyerweb.com/eric/projects/ndept/home.html"><cite>Wired News Redesigns With Standards</cite></a>
+            <span className="provenance caption">Eric Meyer, Netscape DevEdge, 2002</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://stopdesign.com/archive/2012/10/11/ten-years-later.html"><cite>Wired.com: Ten years later</cite></a>
+            <span className="provenance caption">Douglas Bowman, 11 October 2012</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/2011/05/css-pr.html.en"><cite>Cascading Style Sheets Standard Boasts Unprecedented Interoperability</cite></a>
+            <span className="provenance caption">W3C, 7 June 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/TR/2001/WD-css3-roadmap-20010523/"><cite>Introduction to CSS3</cite></a>
+            <span className="provenance caption">W3C Working Draft, 23 May 2001</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html"><cite>Cascading HTML style sheets: a proposal</cite></a>
             <span className="provenance caption">Håkon Wium Lie, 10 October 1994</span>
           </li>
