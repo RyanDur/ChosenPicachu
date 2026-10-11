@@ -262,7 +262,7 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
-  test('should tell step 2 in five paragraphs, and step 3 in two after its want', async () => {
+  test('should tell step 2 in five paragraphs after its want, and step 3 in two', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
@@ -285,10 +285,10 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['down', ':where(.stack-down, .stack-up) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
-    ['up', ':where(.stack-down, .stack-up) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
-    ['right', ':where(.stack-left, .stack-right) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
-    ['left', ':where(.stack-left, .stack-right) is a selector, the part of a rule that names which elements it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
+    ['down', ':where(.stack-down, .stack-up) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
+    ['up', ':where(.stack-down, .stack-up) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
+    ['right', ':where(.stack-left, .stack-right) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
+    ['left', ':where(.stack-left, .stack-right) is the selector, and it matches the panel with either class, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
     render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());

@@ -22,12 +22,12 @@ const stackFact: Record<Stack, string> = {
 type Axis = 'vertical' | 'sideways';
 
 const axisFact: Record<Axis, ReactNode> = {
-  vertical: <><code>:where(.stack-down, .stack-up)</code> is a selector, the part of a rule that names which elements it
-    applies to. This one matches the panel with either class, so the sheet writes the grid-template-rows rule once for
-    the downward and upward stacks, and a grid-template-columns rule once for the two sideways stacks.</>,
-  sideways: <><code>:where(.stack-left, .stack-right)</code> is a selector, the part of a rule that names which elements
-    it applies to. This one matches the panel with either class, so the sheet writes the grid-template-columns rule once
-    for the leftward and rightward stacks, and a grid-template-rows rule once for the two vertical stacks.</>
+  vertical: <><code>:where(.stack-down, .stack-up)</code> is the selector, and it matches the panel with either class, so
+    the sheet writes the <code>grid-template-rows</code> rule once for the downward and upward stacks, and
+    a <code>grid-template-columns</code> rule once for the two sideways stacks.</>,
+  sideways: <><code>:where(.stack-left, .stack-right)</code> is the selector, and it matches the panel with either class,
+    so the sheet writes the <code>grid-template-columns</code> rule once for the leftward and rightward stacks, and
+    a <code>grid-template-rows</code> rule once for the two vertical stacks.</>
 };
 
 const gapFact: Record<Stack, string> = {
@@ -48,11 +48,15 @@ const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right
 
 const axisOf = (stack: Stack): Axis => sideways(stack) ? 'sideways' : 'vertical';
 
-const axis = (stack: Stack): string => sideways(stack) ? '&:where(.stack-left, .stack-right)' : '&:where(.stack-down, .stack-up)';
+const axisSelector: Record<Axis, string> = {
+  vertical: '&:where(.stack-down, .stack-up)',
+  sideways: '&:where(.stack-left, .stack-right)'
+};
 
-const ownedGap = (stack: Stack): string => sideways(stack)
-  ? '&:where(.stack-right) .trouble:where(:not(:last-child)),'
-  : '&:where(.stack-down) .trouble:where(:not(:last-child)),';
+const ownedGap: Record<Axis, string> = {
+  vertical: '&:where(.stack-down) .trouble:where(:not(:last-child)),',
+  sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)),'
+};
 
 const settleStep = (
   <Step title="Change a banner’s height smoothly when its text rewraps">
@@ -123,10 +127,10 @@ export const MultipleRecipe: FC = () => {
         <Codes>
           <Snippet label="CSS" lines={[
             ...unit(bannersCss, '.trouble {'), gap,
-            ...unit(bannersCss, `${axis(stack)} .trouble {`), gap,
-            ...span(bannersCss, ownedGap(stack), '}'), gap,
+            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
+            ...span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
             ...unit(bannersCss, '.news {'), gap,
-            ...unit(bannersCss, `${axis(stack)} .news {`)
+            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .news {`)
           ]}/>
         </Codes>
       </Step>
@@ -157,8 +161,8 @@ export const MultipleRecipe: FC = () => {
         <Codes>
           <Snippet label="CSS" lines={[
             ...unit(bannersCss, '.trouble.leaving {'), gap,
-            ...unit(bannersCss, `${axis(stack)} .trouble.leaving {`), gap,
-            ...unit(bannersCss, `${axis(stack)} .trouble.leaving .news {`)
+            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`), gap,
+            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving .news {`)
           ]}/>
           <Snippet label="TS" lines={[
             ...unit(bannersSource, 'const left = ')

@@ -18,7 +18,7 @@ describe('the stacking pile', () => {
 
     const part = await screen.findByRole('region', {name: 'Why Third is on top'});
 
-    expect(within(part).getByText(/^Choose a card with the pills/)).toHaveTextContent('Choose a card with the pills above the pile, and the page adds the class raised to it: a class is a name written on an element that a stylesheet’s rules pick out. The stylesheet gives raised a z-index of 1.');
+    expect(within(part).getByText(/^Choose a card with the pills/)).toHaveTextContent('Choose a card with the pills above the pile, and the page adds the class raised to it: a class is a name written on an element that a stylesheet’s rules pick out. A rule is a selector, which names the elements it applies to, and the properties it sets on them. The stylesheet gives raised a z-index of 1.');
   });
 
   test('should open with no card raised', async () => {
