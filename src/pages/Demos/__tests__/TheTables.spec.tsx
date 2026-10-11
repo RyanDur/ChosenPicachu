@@ -739,7 +739,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     expect(recipe).toHaveTextContent(/Sort directly/);
-    expect(recipe).toHaveTextContent(/Motion in these tables belongs to a drag, and a menu click is not one/);
+    expect(recipe).toHaveTextContent(/Motion in these tables explains one move: a column or a row, and what it shoved aside. A sort moves every row at once, so there is no one move to show./);
   });
 
   test('the chosen tutorial travels in the url', async () => {
@@ -1222,6 +1222,6 @@ describe('the tables tutorials’ vocabulary', () => {
   test('should name dress where the vanilla living table first uses it', async () => {
     const blocks = await prose('world=vanilla', 'the living table');
 
-    expect(firstSaying(blocks, /\bdress\b/)).toHaveTextContent('The code names this listener dress: it adds and removes the moving cells’ classes and custom properties.');
+    expect(firstSaying(blocks, /\bdress\b/)).toHaveTextContent('A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and custom properties and sets the widths.');
   });
 });

@@ -233,8 +233,8 @@ const whoSubscribes = (world: World): ReactNode =>
           <Says>The mount subscribes three times.</Says>
           <Says>A reconcile on the arrangement moves the page’s elements from the previous order to the current one,
             touching only the cells whose place changed.</Says>
-          <Says>The code names this listener dress: it adds and removes the moving cells’ classes and custom
-            properties. A dress on the hand sets the carried cells’ classes and the widths.</Says>
+          <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
+            custom properties and sets the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
           <Says>The store gives every listener the state before the change and a way to read the state now, so the

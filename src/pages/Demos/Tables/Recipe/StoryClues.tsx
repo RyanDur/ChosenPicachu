@@ -6,7 +6,7 @@ const clues: [string, string][] = [
   ['comparing side by side', 'Several measures over one shared set of periods. Two dimensions, not a list.'],
   ['what matters most on top', 'The order is the trader’s, not yours. Ranking is a feature, not a default.'],
   ['arranged the way I think', 'Both axes move. Columns and rows can both be dragged.'],
-  ['it should just happen', 'No submit, no reload. The arrangement changes as the pointer moves.']
+  ['it should just happen', 'No submit, no reload. A sort takes effect the moment it is chosen.']
 ];
 
 export const StoryClues: FC = () =>
