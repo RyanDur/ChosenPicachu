@@ -7,12 +7,15 @@ const foldsOpeningAround = (target: Element): Animation[] =>
   document.getAnimations().filter(({effect}) =>
     effect instanceof KeyframeEffect && effect.target instanceof Element && effect.target.contains(target));
 
+const landingAround = (target: Element): Element => target.closest('[tabindex="-1"]') ?? target;
+
 const landOnceItsFoldsHaveOpened = (hash: string): void => {
   maybe(hash.slice(1), notEmpty).mBind(id => maybe(document.getElementById(id))).map(target =>
     Promise.allSettled(foldsOpeningAround(target).map(({finished}) => finished)).then(() => {
       if (window.location.hash === hash) {
         target.scrollIntoView();
-        if (target instanceof HTMLElement) target.focus({preventScroll: true});
+        const landing = landingAround(target);
+        if (landing instanceof HTMLElement) landing.focus({preventScroll: true});
       }
     }));
 };

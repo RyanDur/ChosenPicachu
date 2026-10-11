@@ -1,5 +1,6 @@
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {not} from '@ryandur/sand';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
@@ -113,5 +114,17 @@ describe('why a fixed banner still loses', () => {
 
     expect(screen.getByText('Make the panel a popover')).toBeVisible();
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('raised=second');
+  });
+
+  test('should take the keyboard to the story the tutorial below names', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
+
+    await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
+
+    const story = screen.getByRole('group', {name: 'The user sees the news above everything'});
+    const itsItem = screen.getAllByRole('listitem').find(item =>
+      item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story))));
+    await waitFor(() => expect(itsItem).toHaveFocus());
   });
 });

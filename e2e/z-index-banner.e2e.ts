@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, desktop, iPhone} from './__test_support';
+import {bannerTrap, desktop, iPhone, pressTab, tabsTo} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
@@ -58,4 +58,15 @@ test.describe('a phone, where the page itself scrolls', () => {
     await page.goForward();
     await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
   });
+});
+
+test('a keyboard reader who follows the tutorial below carries on inside that story with one Tab', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  await tabsTo(page, page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}));
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#news-top-story$/);
+
+  await pressTab(page);
+
+  await expect.poll(() => page.evaluate(() => document.activeElement?.textContent ?? '')).toMatch(/^The user sees the news above everything/);
 });
