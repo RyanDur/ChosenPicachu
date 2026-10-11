@@ -78,44 +78,15 @@ describe('the home page', () => {
     expect(door.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
   });
 
-  test('should hold the opening, the three doors and a door to the record, in that order, and nothing else', () => {
+  test('should hold the opening and the three languages, one after another, and nothing else', () => {
     const sections = within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent);
 
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toBeVisible();
-    expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction', 'The record']);
+    expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction']);
   });
 
-  test('should list the record\'s thirteen moments in its door, year and title, in the record\'s order', () => {
-    const moments = within(screen.getByRole('list', {name: 'the moments'})).getAllByRole('link');
-
-    expect(moments.map(moment => moment.textContent)).toEqual([
-      '1989 Someone needs something',
-      '1990 Researchers need to collaborate',
-      '1994 Authors need control of the look',
-      '1994 Author and reader need a referee',
-      '1995 Pages need to respond',
-      '1996 The need outruns the standards',
-      '1998 The browsers need to agree',
-      '2003 The separation needs proof',
-      '2004 The standard needs the real world',
-      '2005 The page needs to update in place',
-      '2013 Someone needs components',
-      '2014 The philosophy needs writing down',
-      '2016 The document needs to come first'
-    ]);
-  });
-
-  test('should send the first moment and the second of 1994\'s two straight to their own places on the record\'s page', () => {
-    const moments = within(screen.getByRole('list', {name: 'the moments'}));
-
-    expect(moments.getByRole('link', {name: '1989 Someone needs something'})).toHaveAttribute('href', `${Paths.record}#someone-needs-something`);
-    expect(moments.getByRole('link', {name: '1994 Author and reader need a referee'})).toHaveAttribute('href', `${Paths.record}#author-and-reader-need-a-referee`);
-  });
-
-  test('should lead to the record through a door of its own', () => {
-    const door = screen.getByRole('region', {name: 'The record'});
-
-    expect(within(door).getByText('How the web got the three languages: thirteen moments from 1989 on, each with its fuller story and its sources.')).toBeVisible();
-    expect(within(door).getByRole('link', {name: 'read the record'})).toHaveAttribute('href', Paths.record);
+  test('should leave the record to its own page: no list of its moments and no link to read it', () => {
+    expect(screen.queryByRole('list', {name: 'the moments'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', {name: 'read the record'})).not.toBeInTheDocument();
   });
 });

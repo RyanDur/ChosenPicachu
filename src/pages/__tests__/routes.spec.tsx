@@ -156,7 +156,7 @@ describe('leaving a page', () => {
     await site.pageTitled();
     const landings = scrolling.recordLandings();
 
-    await userEvent.click(site.signpost(/read the record/));
+    await userEvent.click(within(await site.rail()).getByRole('link', {name: 'Record'}));
 
     await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
   });
@@ -172,10 +172,10 @@ describe('leaving a page', () => {
 });
 
 describe('the root path', () => {
-  test('opens the front door, which leads to the record', async () => {
+  test('opens the front door, whose rail leads to the record', async () => {
     render(<TestApp at="/"/>);
 
     expect(await site.pageTitled()).toHaveTextContent('The three languages');
-    expect(site.signpost(/read the record/)).toBeVisible();
+    expect(within(await site.rail()).getByRole('link', {name: 'Record'})).toHaveAttribute('href', Paths.record);
   });
 });

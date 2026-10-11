@@ -1,16 +1,7 @@
 .home {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--base-x-3);
   padding: var(--base-x-3);
-
-  > * {
-    grid-column: 1 / -1;
-  }
-
-  > .door {
-    grid-column: auto;
-  }
 
   .opening {
     display: grid;
@@ -22,8 +13,7 @@
     text-wrap: pretty;
   }
 
-  .door,
-  .record-door {
+  .door {
     align-content: start;
     display: grid;
     gap: var(--base-x-1_5);
@@ -33,22 +23,6 @@
       margin: 0;
       text-wrap: pretty;
     }
-  }
-
-  .moments {
-    display: grid;
-    row-gap: var(--base-x-1_5);
-  }
-
-  .moment-line {
-    display: grid;
-    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
-    column-gap: var(--base-x-2);
-    align-items: baseline;
-  }
-
-  .moment-year {
-    justify-self: end;
   }
 
   .door-title {
@@ -65,11 +39,5 @@
       margin: 0;
       margin-block-start: var(--base-x-1_5);
     }
-  }
-}
-
-@media (width <= 600px) {
-  .home {
-    grid-template-columns: 1fr;
   }
 }

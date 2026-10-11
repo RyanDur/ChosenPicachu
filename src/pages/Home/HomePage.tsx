@@ -3,7 +3,6 @@ import {Opener} from './Opener';
 import {Structure} from './Structure';
 import {Presentation} from './Presentation';
 import {DynamicInteraction} from './DynamicInteraction';
-import {RecordDoor} from './RecordDoor';
 import './Home.css';
 
 export const HomePage: FC = () =>
@@ -12,5 +11,4 @@ export const HomePage: FC = () =>
     <Structure/>
     <Presentation/>
     <DynamicInteraction/>
-    <RecordDoor/>
   </article>;
