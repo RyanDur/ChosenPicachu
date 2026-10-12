@@ -33,7 +33,7 @@ import '../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-const priceStory =
+const PriceStory: FC = () =>
   <Story param="graph" id="price"
     can="The trader can watch the price move, live"
     soThat="the session reads at a glance">
@@ -155,7 +155,7 @@ const priceStory =
     </Steps>
   </Story>;
 
-const candlesStory =
+const CandlesStory: FC = () =>
   <Story param="graph" id="candles"
     can="The trader can read the same trades as candles"
     soThat="each span of time shows its open, its close, its high and low, and its volume">
@@ -256,7 +256,7 @@ const candlesStory =
     </Steps>
   </Story>;
 
-const pressureStory =
+const PressureStory: FC = () =>
   <Story param="graph" id="pressure"
     can="The trader can see who is driving the move"
     soThat="a push and a retreat stop looking alike">
@@ -332,7 +332,7 @@ const pressureStory =
     </Steps>
   </Story>;
 
-const pieStory =
+const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
@@ -413,7 +413,7 @@ const pieStory =
     </Steps>
   </Story>;
 
-const workspaceStory =
+const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
@@ -505,10 +505,10 @@ const workspaceStory =
   </Story>;
 
 const chartStories: Record<ChartKind, ReactNode> = {
-  price: priceStory,
-  candles: candlesStory,
-  pressure: pressureStory,
-  pie: pieStory
+  price: <PriceStory/>,
+  candles: <CandlesStory/>,
+  pressure: <PressureStory/>,
+  pie: <PieStory/>
 };
 
 export const ChartStories: FC<{kind: ChartKind}> = ({kind}) =>
@@ -542,7 +542,7 @@ export const ChartsTutorial: FC = () => {
       Open one to see how we built it, or to compare it with yours.
     </p>
     <section aria-label="build the charts yourself" className="build-steps">
-      <Stories>{workspaceStory}</Stories>
+      <Stories><WorkspaceStory/></Stories>
     </section>
   </section>;
 };
