@@ -161,7 +161,7 @@ describe('the two together', () => {
 });
 
 describe('the measured build', () => {
-  test('should say what React state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
+  test('should say what React, a component, React state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
