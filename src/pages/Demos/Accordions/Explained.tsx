@@ -185,6 +185,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="measured-depth" className="opener bold">How the measured height works</summary>
             <ol className="runs">
               <li className="run">
+                <p className="paragraph">The script keeps what it knows in React state, a value a component holds and renders
+                  from: whether a part is open, and, while it moves, the height it is moving to and whether the motion has
+                  started. A ref, a handle on the element itself, is used only to measure: the text’s height, the
+                  transition’s duration, and whether the height is still moving. The moves are made in layout effects,
+                  code React runs after it has updated the elements and before the browser paints them, so the panel is
+                  measured and its start pinned with no frame showing in between.</p>
                 <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
                   value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
                   property with <code>@property</code>, a rule that tells the browser what kind of value a custom
@@ -222,7 +228,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all, so
-                  the script asks the whole list which parts are open. </>}This page lets its other folds move to auto,
+                  the script keeps the open part’s key in React state: the change event names the part that opened, and
+                  the part whose key is no longer the open one closes from that state. </>}This page lets its other folds move to auto,
                   and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
                   the trick was for browsers that could only move between numbers.</p>
                 {type === 'exclusive' && <Snippet label="TS" lines={[

@@ -151,6 +151,24 @@ describe('the two together', () => {
 });
 
 describe('the measured build', () => {
+  test('should say what React state, a ref and a layout effect are before the measured height’s first run uses them', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explained).toHaveTextContent('The script keeps what it knows in React state, a value a component holds and renders from');
+    expect(explained).toHaveTextContent('A ref, a handle on the element itself, is used only to measure');
+    expect(explained).toHaveTextContent('The moves are made in layout effects, code React runs after it has updated the elements and before the browser paints them');
+  });
+
+  test('should say, with exclusive chosen, that the part losing its check closes from React state', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explained).toHaveTextContent('so the script keeps the open part’s key in React state: the change event names the part that opened, and the part whose key is no longer the open one closes from that state.');
+  });
+
   test('should show the script that measures, then lets go, beside the run that opens a part', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
