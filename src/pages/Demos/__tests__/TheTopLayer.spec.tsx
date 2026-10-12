@@ -371,7 +371,7 @@ describe('the banner tutorial’s second story', () => {
   test('should say the code removes the old height before it measures, for a sideways stack', async () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
 
-    expect(await secondStory()).toHaveTextContent('Before it measures, the code removes the height it set last time. scrollHeight is never less than the element’s own height');
+    expect(await secondStory()).toHaveTextContent('Before it measures, the code removes the height it set last time. scrollHeight, the height of everything inside the element even where it overflows, is never less than the element’s own height');
   });
 
   test('should point the popover up to Why the popover wins, where it is taught', async () => {

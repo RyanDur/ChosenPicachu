@@ -72,8 +72,8 @@ const settleStep = (
         rewrap then changes one number to another, and the transition on <code>block-size</code>, the CSS name for
         height on this page, runs between them.</Says>
       <Says>Before it measures, the code removes the height it set last
-        time. <code>scrollHeight</code> is never less than the element’s own height, so a message measured with the old
-        height still on it could only grow.</Says>
+        time. <code>scrollHeight</code>, the height of everything inside the element even where it overflows, is never
+        less than the element’s own height, so a message measured with the old height still on it could only grow.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
