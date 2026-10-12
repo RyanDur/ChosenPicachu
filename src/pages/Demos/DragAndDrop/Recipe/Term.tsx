@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
-import {Defined} from '../../Recipe/Defined';
+import {Defined} from '@pages/Demos/Recipe';
 
 export type Word = 'session' | 'crossing' | 'landing';
 
