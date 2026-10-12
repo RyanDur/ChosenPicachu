@@ -9,8 +9,7 @@ const moves = (panel: HTMLElement): boolean => parseFloat(getComputedStyle(panel
 
 const textHeight = (panel: HTMLElement): number => panel.firstElementChild?.getBoundingClientRect().height ?? 0;
 
-const heightMoving = (panel: HTMLElement): boolean =>
-  panel.getAnimations().some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
+const movingTo = (from: number, to: number): Motion => from === to ? resting : {moving: true, height: to, still: false};
 
 export const MeasuredPanel: FC<PropsWithChildren<{open: boolean; namedBy: string}>> = ({open, namedBy, children}) => {
   const panel = useRef<HTMLElement>(null);
@@ -23,7 +22,7 @@ export const MeasuredPanel: FC<PropsWithChildren<{open: boolean; namedBy: string
     setShown(open);
     if (!moves(measured)) return;
     setMotion(now => now.moving
-      ? {moving: true, height: open ? textHeight(measured) : 0, still: false}
+      ? movingTo(now.height, open ? textHeight(measured) : 0)
       : {moving: true, height: open ? 0 : textHeight(measured), still: true});
   }, [open, shown]);
 
@@ -31,14 +30,8 @@ export const MeasuredPanel: FC<PropsWithChildren<{open: boolean; namedBy: string
     const measured = panel.current;
     if (!motion.moving || !motion.still || !measured) return;
     void measured.offsetHeight;
-    setMotion({moving: true, height: open ? textHeight(measured) : 0, still: false});
+    setMotion(movingTo(motion.height, open ? textHeight(measured) : 0));
   }, [motion, open]);
-
-  useLayoutEffect(() => {
-    const measured = panel.current;
-    if (!motion.moving || motion.still || !measured) return;
-    if (!heightMoving(measured)) setMotion(resting);
-  }, [motion]);
 
   const settled = ({target, currentTarget, propertyName}: TransitionEvent<HTMLElement>): void => {
     if (target === currentTarget && propertyName === 'height') setMotion(resting);

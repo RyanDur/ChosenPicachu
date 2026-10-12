@@ -222,8 +222,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   panel turns around from where it is. If that end is where the panel already stands, no motion is left
                   to run, and the script takes the number away at once.</p>
                 <Snippet label="TS" lines={[
-                  ...unit(panelSource, 'const heightMoving'), gap,
-                  ...span(panelSource, 'if (!motion.moving || motion.still', '}, [motion]);')
+                  ...unit(panelSource, 'const movingTo')
                 ]}/>
               </li>
               <li className="run">

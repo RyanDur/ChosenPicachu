@@ -247,7 +247,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toMatch(/const heightMoving[^]*if \(!heightMoving\(measured\)\) setMotion\(resting\)/);
+    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toMatch(/const movingTo = \(from: number, to: number\): Motion => from === to \? resting/);
   });
 });
 
