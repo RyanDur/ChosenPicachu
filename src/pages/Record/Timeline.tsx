@@ -18,6 +18,9 @@ import {HtmlTwo} from './moments/HtmlTwo';
 import {CssOne} from './moments/CssOne';
 import {WiredRedesign} from './moments/WiredRedesign';
 import {CssTwoOne} from './moments/CssTwoOne';
+import {EcmaScript} from './moments/EcmaScript';
+import {EsFive} from './moments/EsFive';
+import {Frameworks} from './moments/Frameworks';
 import {inOrder, MomentKey} from './moments/moments';
 import {spelledOut} from './moments/spelled-out';
 
@@ -31,11 +34,14 @@ const stories: Record<MomentKey, FC> = {
   htmlTwo: HtmlTwo,
   needOutrunsStandards: NeedOutrunsStandards,
   cssOne: CssOne,
+  ecmaScript: EcmaScript,
   browsersAgree: BrowsersAgree,
   wiredRedesign: WiredRedesign,
   zenGarden: ZenGarden,
   browsersTakePen: BrowsersTakePen,
   pageBecomesApplication: PageBecomesApplication,
+  esFive: EsFive,
+  frameworks: Frameworks,
   cssTwoOne: CssTwoOne,
   someoneNeedsComponents: SomeoneNeedsComponents,
   html5SaysIt: Html5SaysIt,

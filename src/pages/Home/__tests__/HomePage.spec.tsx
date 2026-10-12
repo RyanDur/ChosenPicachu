@@ -111,7 +111,10 @@ describe('the home page', () => {
     ]],
     ['Dynamic Interaction', [
       '1995 Pages need to respond',
+      '1997 The language needs a standard',
       '2005 The page needs to update in place',
+      '2009 The standard needs to move again',
+      '2010 The application needs a frame',
       '2013 Someone needs components',
       '2016 The document needs to come first'
     ]]

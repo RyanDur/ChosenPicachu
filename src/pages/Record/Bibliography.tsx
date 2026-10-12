@@ -215,6 +215,42 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title sub-title">Dynamic Interaction</h3>
         <ul className="works">
           <li>
+            <a className="signpost" href="https://ecma-international.org/publications-and-standards/standards/ecma-262/"><cite>ECMA-262, the editions</cite></a>
+            <span className="provenance caption">Ecma International</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://262.ecma-international.org/5.1/"><cite>ECMAScript Language Specification, 5.1 edition, Introduction</cite></a>
+            <span className="provenance caption">Ecma International, June 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/JavaScript"><cite>JavaScript</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/JScript"><cite>JScript</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/ECMAScript_version_history"><cite>ECMAScript version history</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS"><cite>AngularJS</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Vue.js"><cite>Vue.js</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)"><cite>Angular</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>
             <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008</span>
           </li>

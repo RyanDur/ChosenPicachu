@@ -14,7 +14,7 @@ export const DynamicInteraction: FC = () =>
       JavaScript says how things respond. The state is what is true right now, an event is what just happened, and the
       page is drawn from the two.
     </p>
-    <FromTheRecord language="Dynamic Interaction" keys={['behaviorBorn', 'pageBecomesApplication', 'someoneNeedsComponents', 'documentComesBack']}/>
+    <FromTheRecord language="Dynamic Interaction" keys={['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']}/>
     <details className="door-fold">
       <summary className="prompt caption">how I organize it</summary>
       <p className="paragraph muted-ink">Behaviour splits into what is true and what happened. The state is what is
