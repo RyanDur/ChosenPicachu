@@ -60,7 +60,7 @@ const ownedGap: Record<Axis, string> = {
   sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)),'
 };
 
-const settleStep = (
+const SettleStep: FC = () => (
   <Step title="Change a banner’s height smoothly when its text rewraps">
     <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
       <Says>A <code>ResizeObserver</code>, a browser object that calls back when an element changes size, sets each message’s
@@ -112,7 +112,7 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
+      <Step title="Open a gap in the stack first" dial=<StackDial name="journey-stack"/>>
         <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
           <Says>Each banner is a grid, a layout of rows and columns, with a single row or column, called a
             track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
@@ -138,7 +138,7 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Slide in from off screen" dial={<EntranceDial name="journey-entrance"/>}>
+      <Step title="Slide in from off screen" dial=<EntranceDial name="journey-entrance"/>>
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
           <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving
@@ -173,7 +173,7 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      {sideways(stack) && settleStep}
+      {sideways(stack) && <SettleStep/>}
     </Steps>
   </Story>;
 };
