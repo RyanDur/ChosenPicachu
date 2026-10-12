@@ -196,10 +196,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">A ref is a handle on the element itself. The panel’s one ref is used only to
-                  measure: the text’s height, and whether the stylesheet gives the height a transition at all.</p>
+                  measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a
+                  transition at all.</p>
                 <Snippet label="TS" lines={[
                   ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
                   ...unit(panelSource, 'const textHeight'), gap,
+                  ...unit(panelSource, 'const standing'), gap,
                   ...unit(panelSource, 'const moves')
                 ]}/>
               </li>

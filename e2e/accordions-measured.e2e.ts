@@ -93,6 +93,7 @@ for (const build of measuredBuilds) {
     });
 
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
+      await page.emulateMedia({reducedMotion: 'no-preference'});
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
       await part.open();

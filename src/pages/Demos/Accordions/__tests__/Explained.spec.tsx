@@ -166,11 +166,15 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
     const state = explanation.runTelling(explained, /The script keeps what it knows in React state/);
-    const ref = explanation.runTelling(explained, /A ref is a handle on the element itself/);
+    const ref = explanation.runTelling(explained, /The panel’s one ref is used only to/);
     const effects = explanation.runTelling(explained, /The moves are made in two layout effects/);
 
+    expect(state).toHaveTextContent('React is the library this site’s script is written in, and a component is a function that returns the elements it draws');
+    expect(state).toHaveTextContent('React state, a value a component holds and renders from');
+    expect(ref).toHaveTextContent('A ref is a handle on the element itself');
+    expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
     expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toMatch(/useState/);
-    expect(explanation.everyCodeBeside(explained, /A ref is a handle on the element itself/).join()).toMatch(/useRef/);
+    expect(explanation.everyCodeBeside(explained, /The panel’s one ref is used only to/).join()).toMatch(/useRef[^]*const standing/);
     expect(explanation.everyCodeBeside(explained, /The moves are made in two layout effects/).join()).toMatch(/useLayoutEffect\(\(\) => \{[^]*\}, \[open, shown\]\);[^]*useLayoutEffect\(\(\) => \{[^]*\}, \[motion, open\]\);/);
     expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The script hands each height to the stylesheet/)])).toEqual([]);
   });
