@@ -11,7 +11,7 @@ const unanswered = [
   'Which measures are worth ranking at all.'
 ];
 
-const sketch =
+const Sketch: FC = () =>
   <table className="design-table">
     <thead>
       <tr>
@@ -31,6 +31,6 @@ const sketch =
   </table>;
 
 export const DesignAsk: FC = () =>
-  <Design sketch={sketch}
+  <Design sketch=<Sketch/>
     answers="The design answers shape: which measures, which windows, how much precision, how dense."
     unanswered={unanswered}/>;

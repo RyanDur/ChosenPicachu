@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
@@ -6,7 +6,7 @@ import {Term} from '../Term';
 import {frameHtml, gap, gripSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const carryVertical = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
+export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
       <Says>The second axis should come from substitutions, not new machinery: a real

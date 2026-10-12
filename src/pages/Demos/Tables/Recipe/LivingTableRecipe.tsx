@@ -3,8 +3,8 @@ import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
-import {theImplementation} from './steps';
-import {storeStory} from './StoreRecipe';
+import {TheImplementation} from './steps';
+import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
 import demosSource from '@pages/Demos/store.ts?sample';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?sample';
@@ -107,11 +107,11 @@ const refolds: Record<World, string> = {
   vanilla: 'Then every arrival refolds every trade the page holds into the windows, and the page writes what changed.'
 };
 
-const stillStory = (world: World) =>
+const StillStory: FC<{world: World}> = ({world}) =>
   <Story param="living" id="still"
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
-    {theImplementation(world, 'Aggregations', 'Frame/frame.main.ts')}
+    <TheImplementation world={world} react="Aggregations" vanilla="Frame/frame.main.ts"/>
     <Tell>The shape comes from the design, in the element the story chose: a few measures
       across a few time windows, numbers on two axes; that is what a table is for. It stands
       first as a still, built from whatever trades the page holds: headers on both axes, and the
@@ -144,7 +144,7 @@ const stillStory = (world: World) =>
     </Steps>
   </Story>;
 
-const flowStory = (world: World) =>
+const FlowStory: FC<{world: World}> = ({world}) =>
   <Story param="living" id="flow"
     can="The trader can watch the market live, in windows"
     soThat="the numbers stay current without a single refresh">
@@ -209,13 +209,13 @@ const flowStory = (world: World) =>
 export const StillTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the still table" className="build-steps">
-    <Stories>{stillStory(world)}</Stories>
+    <Stories><StillStory world={world}/></Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the living table" className="build-steps">
-    <Stories>{flowStory(world)}{storeStory(world)}</Stories>
+    <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
   </section>;
 };

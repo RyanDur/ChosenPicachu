@@ -14,7 +14,7 @@ import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sampl
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
-import {theImplementation} from './steps';
+import {TheImplementation} from './steps';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -59,7 +59,7 @@ const edgeMarkup: Record<World, ReactNode> = {
   ]}/>
 };
 
-const spokenLabel =
+const SpokenLabel: FC = () =>
   <Snippet label="TS" lines={[
     ...unit(sharesSource, 'export const resizeLabel')
   ]}/>;
@@ -104,7 +104,7 @@ const captureSays: Record<World, ReactNode> = {
     accumulates error.</Says>
 };
 
-const gripWords =
+const GripWords: FC = () =>
   <Snippet label="TS" lines={[
     ...unit(sharesSource, 'export const grippedAt'), gap,
     ...unit(sharesSource, 'export const soughtTrade'), gap,
@@ -119,14 +119,14 @@ const captureCodes: Record<World, ReactNode> = {
       ...unit(resizeSource, 'onPointerDown={(event'), gap,
       ...unit(resizeSource, 'const followed')
     ]}/>
-    {gripWords}
+    <GripWords/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(frameResize, "handle.addEventListener('pointerdown'"), gap,
       ...unit(frameResize, "handle.addEventListener('pointermove'")
     ]}/>
-    {gripWords}
+    <GripWords/>
   </Codes>
 };
 
@@ -150,12 +150,12 @@ const gestureCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const widenStory = (world: World) =>
+const WidenStory: FC<{world: World}> = ({world}) =>
   <Story param="resize" id="widen"
     can="The trader can widen a column"
     soThat="what they read most gets the room, and the table keeps its shape">
     <Tell>The ledger is the table’s record of each column’s share of the width.</Tell>
-    {theImplementation(world, 'Builds', 'Frame/table/resize.ts')}
+    <TheImplementation world={world} react="Builds" vanilla="Frame/table/resize.ts"/>
     <Tell>We could resize with absolute pixel widths, but one drag would break the
       table’s guarantee to fill its container; so widths are shares of a hundred, created by
       measuring the rendered headers at the first touch, and every resize is a trade
@@ -224,7 +224,7 @@ const widenStory = (world: World) =>
             ring when the keyboard reaches it.</Says>
           <Codes>
             {handleMarkup[world]}
-            {spokenLabel}
+            <SpokenLabel/>
             <Snippet label="CSS" lines={[
               ...unit(baseCss, '.resize-handle {'), gap,
               ...unit(surfaceCss, '.borderless {'), gap,
@@ -282,6 +282,6 @@ const widenStory = (world: World) =>
 export const ResizeRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="build the drag resize yourself" className="build-steps">
-    <Stories>{widenStory(world)}</Stories>
+    <Stories><WidenStory world={world}/></Stories>
   </section>;
 };

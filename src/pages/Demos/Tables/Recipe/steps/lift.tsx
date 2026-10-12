@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
@@ -6,7 +6,7 @@ import {Term} from '../Term';
 import {gap, sortableCss, stateSource, liftSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const liftOnce = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
+export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
       <Says>Asking the DOM where things are mid-drag causes the layout thrash you came here to

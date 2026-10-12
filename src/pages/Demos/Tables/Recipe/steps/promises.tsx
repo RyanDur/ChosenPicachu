@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Motion, Origin, Pace} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
@@ -17,6 +17,6 @@ const motions: Record<Motion, string> = {
   static: 'And the swap lands instantly, with no motion, so nothing competes with the pointer.'
 };
 
-export const promises = (pace: Pace, origin: Origin, motion: Motion): ReactNode =>
+export const Promises: FC<{pace: Pace; origin: Origin; motion: Motion}> = ({pace, origin, motion}) =>
   <Tell>This particular table keeps three more
     promises. A dial’s promise is what the table guarantees under that setting. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;

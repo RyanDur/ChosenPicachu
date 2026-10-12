@@ -1,10 +1,11 @@
+import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {SlotsFigure} from '../SlotsFigure';
 import {Term} from '../Term';
 import {gap, surveySource} from './sources';
 
-export const deadZone =
+export const DeadZone: FC = () =>
   <Step title="Find the neighbour under the pointer, with a dead zone" id="step-dead-zone">
     <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,

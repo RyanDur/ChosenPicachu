@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
 import {aside, Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
@@ -22,8 +22,8 @@ const carriedProperties = (cssSource: Sample): Line[] => [
   ...unit(cssSource, '@property --drift-y {'), gap
 ];
 
-export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample, buildSrc: Sample): ReactNode =>
-  <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
+export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> = ({world, headerSource, cssSource, buildSrc}) =>
+  <Step title="Carry the real thing" dial=<OriginDial name="step-origin"/>>
     <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
       <Says>Copying the column would go stale on the next trade, and a copy never has
         the real buttons in it. So nothing is copied: the carried cells themselves move with the
@@ -105,8 +105,8 @@ export const hideOrigin = (world: World, headerSource: Sample, cssSource: Sample
     </Reveal>
   </Step>;
 
-export const keepOrigin = (world: World, cssSource: Sample): ReactNode =>
-  <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
+export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
+  <Step title="Keep the origin in place and let only the order move" dial=<OriginDial name="step-origin"/>>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
         carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep

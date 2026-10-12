@@ -2,7 +2,7 @@ import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} 
 import {StoryKey, storyAnchor} from './story-anchor';
 import {useSearchParams} from 'react-router';
 import {useRanks} from './ranks';
-import {Step} from './Step';
+import {Steps} from './Steps';
 
 const openedIn = (params: URLSearchParams, param: string): Set<string> =>
   new Set((params.get(param) ?? '').split(',').filter(part => part !== ''));
@@ -16,7 +16,9 @@ export const storyOpenedIn = (params: URLSearchParams, {param, id}: StoryKey): U
 const stepsIn = (children: ReactNode): number =>
   Children.toArray(children).reduce<number>((count, child) => {
     if (!isValidElement<PropsWithChildren>(child)) return count;
-    return child.type === Step ? count + 1 : count + stepsIn(child.props.children);
+    return child.type === Steps
+      ? count + Children.toArray(child.props.children).filter(isValidElement).length
+      : count + stepsIn(child.props.children);
   }, 0);
 
 type Props = PropsWithChildren<{

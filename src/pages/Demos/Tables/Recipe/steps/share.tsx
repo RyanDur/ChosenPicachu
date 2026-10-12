@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
@@ -18,7 +18,7 @@ const shareMarkup: Record<World, ReactNode> = {
   ]}/>
 };
 
-export const cssShare = (world: World): ReactNode =>
+export const CssShare: FC<{world: World}> = ({world}) =>
   <Step title="Let CSS carry its share">
     <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first, and most of them are declarations, not code.">
       <Says>Your first pass writes no behavior: the stylesheet already covers most of

@@ -4,33 +4,33 @@ import {Steps, Story} from '../../Recipe';
 import {
   Track,
   World,
-  accessTrack,
-  againstTheStream,
-  animatedMotion,
-  arrowsSpeak,
-  cssShare,
-  cutKey,
-  deadZone,
-  dragSurface,
-  lazyPace,
-  focusLands,
-  gripArrows,
-  hideOrigin,
-  keepOrigin,
-  liftOnce,
-  listenersOnce,
-  orderInState,
-  ownedPixels,
-  promises,
-  quietDials,
-  carryVertical,
-  staticMotion,
-  turnedVertical,
-  theImplementation,
-  theWholeBuild,
-  namesInTheCode,
-  twoRoads,
-  walkSlides
+  AccessTrack,
+  AgainstTheStream,
+  AnimatedMotion,
+  ArrowsSpeak,
+  CssShare,
+  CutKey,
+  DeadZone,
+  DragSurface,
+  LazyPace,
+  FocusLands,
+  GripArrows,
+  HideOrigin,
+  KeepOrigin,
+  LiftOnce,
+  ListenersOnce,
+  OrderInState,
+  OwnedPixels,
+  Promises,
+  QuietDials,
+  CarryVertical,
+  StaticMotion,
+  TurnedVertical,
+  TheImplementation,
+  TheWholeBuild,
+  NamesInTheCode,
+  TwoRoads,
+  WalkSlides
 } from './steps';
 import buildSrc from '../Frame/builds/Lazy.ts?sample';
 import tableSource from '../Builds/LazyTable/LazyTable.tsx?sample';
@@ -46,31 +46,35 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
-      {namesInTheCode}
-      {twoRoads}
-      {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
-      {theWholeBuild(world, tableSource, buildSrc)}
-      {againstTheStream}
-      {ownedPixels(world)}
-      {promises('lazy', origin, motion)}
+      <NamesInTheCode/>
+      <TwoRoads/>
+      <TheImplementation world={world} react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+      <TheWholeBuild world={world} tableSource={tableSource} buildSrc={buildSrc}/>
+      <AgainstTheStream/>
+      <OwnedPixels world={world}/>
+      <Promises pace="lazy" origin={origin} motion={motion}/>
       <Steps>
-        {cssShare(world)}
-        {orderInState(world, tableSource, buildSrc)}
-        {listenersOnce(world, buildSrc)}
-        {liftOnce(world, headerSource, buildSrc)}
-        {dragSurface(world, headerSource, buildSrc)}
-        {deadZone}
-        {lazyPace(world, headerSource, paceSource, buildSrc)}
-        {origin === 'hide' ? hideOrigin(world, headerSource, cssSource, buildSrc) : keepOrigin(world, cssSource)}
-        {motion === 'animated' ? animatedMotion(world, headerSource, cssSource, buildSrc) : staticMotion(world, cssSource)}
+        <CssShare world={world}/>
+        <OrderInState world={world} tableSource={tableSource} buildSrc={buildSrc}/>
+        <ListenersOnce world={world} buildSrc={buildSrc}/>
+        <LiftOnce world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <DragSurface world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <DeadZone/>
+        <LazyPace world={world} headerSource={headerSource} paceSource={paceSource} buildSrc={buildSrc}/>
+        {origin === 'hide'
+          ? <HideOrigin world={world} headerSource={headerSource} cssSource={cssSource} buildSrc={buildSrc}/>
+          : <KeepOrigin world={world} cssSource={cssSource}/>}
+        {motion === 'animated'
+          ? <AnimatedMotion world={world} headerSource={headerSource} cssSource={cssSource} buildSrc={buildSrc}/>
+          : <StaticMotion world={world} cssSource={cssSource}/>}
       </Steps>
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the windows they watch closest sit on top">
-      {turnedVertical}
+      <TurnedVertical/>
       <Steps>
-        {carryVertical(world, rowSource, buildSrc)}
+        <CarryVertical world={world} rowSource={rowSource} buildSrc={buildSrc}/>
       </Steps>
     </Story>
   </>
@@ -78,21 +82,23 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
-      {namesInTheCode}
-      {accessTrack}
-      {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
-      {quietDials}
+      <NamesInTheCode/>
+      <AccessTrack/>
+      <TheImplementation world={world} react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+      <QuietDials/>
       <Steps>
-        {focusLands(world, headerSource, buildSrc)}
-        {arrowsSpeak(world, headerSource, buildSrc)}
-        {motion === 'animated' ? walkSlides(world, headerSource, buildSrc) : cutKey(world, headerSource, buildSrc)}
+        <FocusLands world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <ArrowsSpeak world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        {motion === 'animated'
+          ? <WalkSlides world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+          : <CutKey world={world} headerSource={headerSource} buildSrc={buildSrc}/>}
       </Steps>
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc)}
+        <GripArrows world={world} rowSource={rowSource} buildSrc={buildSrc}/>
       </Steps>
     </Story>
   </>;

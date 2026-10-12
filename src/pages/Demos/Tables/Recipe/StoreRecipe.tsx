@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World} from '../params';
@@ -19,7 +19,7 @@ import buildSrc from '../Frame/builds/Eager.ts?sample';
 
 const gap = plain(' ');
 
-const oneState = (world: World): ReactNode =>
+const OneState: FC<{world: World}> = ({world}) =>
   <Step title="Two states, two stores">
     <Words want="A live table is state before it is pixels, and two worlds have to agree on what that state is before either can render it.">
       <Says>The page’s state is the trades it holds, the candles the charts have asked for, and the arrangement
@@ -69,7 +69,7 @@ const oneState = (world: World): ReactNode =>
     </Reveal>
   </Step>;
 
-const actionsAreData =
+const ActionsAreData: FC = () =>
   <Step title="Actions are data, and one reducer reads them">
     <Words want="A change must say what happened, not how to poke the state, and it must leave the old value untouched.">
       <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries the
@@ -123,7 +123,7 @@ const actionsAreData =
     </Reveal>
   </Step>;
 
-const selectorsAnswer = (world: World): ReactNode =>
+const SelectorsAnswer: FC<{world: World}> = ({world}) =>
   <Step title="Selectors answer questions">
     <Words want="A component should ask for what it means, not search the state to find it.">
       <Says>Every read is a named <Term word="selector">selector</Term>: columnNamed, positionOfRow, columnTravels,
@@ -158,7 +158,7 @@ const selectorsAnswer = (world: World): ReactNode =>
     </Reveal>
   </Step>;
 
-const exchangeIsMiddleware = (world: World): ReactNode =>
+const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
   <Step title="The exchange is middleware">
     <Words want="Trades must reach the store without any chart or table knowing where they come from.">
       <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its state and its
@@ -206,7 +206,7 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
     </Reveal>
   </Step>;
 
-const whoSubscribes = (world: World): ReactNode =>
+const WhoSubscribes: FC<{world: World}> = ({world}) =>
   <Step title="Who subscribes">
     <Words want="The page must follow the state, and each world has its own way to follow.">
       <Says>The store gives out one subscribe and never learns who took it.</Says>
@@ -253,7 +253,7 @@ const whoSubscribes = (world: World): ReactNode =>
     </Reveal>
   </Step>;
 
-export const storeStory = (world: World): ReactNode =>
+export const StoreStory: FC<{world: World}> = ({world}) =>
   <Story param="living" id="store"
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
@@ -269,10 +269,10 @@ export const storeStory = (world: World): ReactNode =>
       does to it, and it raises what the trader did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>
-      {oneState(world)}
-      {actionsAreData}
-      {selectorsAnswer(world)}
-      {exchangeIsMiddleware(world)}
-      {whoSubscribes(world)}
+      <OneState world={world}/>
+      <ActionsAreData/>
+      <SelectorsAnswer world={world}/>
+      <ExchangeIsMiddleware world={world}/>
+      <WhoSubscribes world={world}/>
     </Steps>
   </Story>;

@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../../types';
@@ -10,26 +10,26 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 const sourceOf = (world: World, path: string): string =>
   `${Paths.repo}/${world === 'react' ? 'tree' : 'blob'}/main/src/pages/Demos/Tables/${path}`;
 
-export const theImplementation = (world: World, react: string, vanilla: string): ReactNode =>
+export const TheImplementation: FC<{world: World; react: string; vanilla: string}> = ({world, react, vanilla}) =>
   <Tell>Every block below is carved from the source as it stands, so it cannot drift from the
     build. To read the whole thing in one place, here is <a className="signpost"
     href={sourceOf(world, world === 'react' ? react : vanilla)}
     target="_blank"
     rel="noreferrer">the implementation</a>.</Tell>;
 
-export const theWholeBuild = (world: World, tableSource: Sample, buildSrc: Sample): ReactNode =>
+export const TheWholeBuild: FC<{world: World; tableSource: Sample; buildSrc: Sample}> = ({world, tableSource, buildSrc}) =>
   <Codes>
     {world === 'react'
       ? <Snippet label="TS" lines={withoutImports(tableSource)}/>
       : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
   </Codes>;
 
-export const namesInTheCode =
+export const NamesInTheCode: FC = () =>
   <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far
     enough into a neighbour to count. The drift is how far the pointer has moved since the grab. The survey is the one
     measurement taken at the grab: the table’s box, every column’s width, and later the row heights.</Tell>;
 
-export const twoRoads =
+export const TwoRoads: FC = () =>
   <Tell>There are two roads to dragging something across a page, and this site builds
     both. The <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> takes
@@ -39,7 +39,7 @@ export const twoRoads =
     road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
     yours to own and no drag-and-drop library is anywhere in the build.</Tell>;
 
-export const againstTheStream =
+export const AgainstTheStream: FC = () =>
   <Tell>The trader needs to move a column while the trades keep landing. We could reorder
     the data itself, but every trade that lands would fight every drag; so the columns and
     the seats are the state, in their order, a trade rewrites a row’s values under its key,
@@ -48,7 +48,7 @@ export const againstTheStream =
     but layout queries during a drag cause the jank you are trying to avoid; so
     everything the drag needs gets measured once, when you grab.</Tell>;
 
-export const ownedPixels = (world: World): ReactNode =>
+export const OwnedPixels: FC<{world: World}> = ({world}) =>
   <Tell>And owning the pixels does not mean building in JavaScript. The markup stays a
     normal table; every visible change (the cursors, the hiding, every slide) is a CSS
     rule a class switches on; JavaScript only decides what the state is,
@@ -59,19 +59,19 @@ export const ownedPixels = (world: World): ReactNode =>
     events, the state is a value. Each code block below is labeled with which of the
     three languages is doing the work.</Tell>;
 
-export const turnedVertical =
+export const TurnedVertical: FC = () =>
   <Tell>We could build rows their own machinery, but the need is the same motion
     turned vertical; so rows reuse what the columns built. The differences that remain
     are honest ones: a grip button to grab, row heights in the survey, and a vertical
     hit test. The promises the dials set carry over unchanged; the turn changes the
     axis, nothing else.</Tell>;
 
-export const accessTrack =
+export const AccessTrack: FC = () =>
   <Tell>We could build the keyboard its own sorting system, but the state, the clamps,
     and the slides already exist; so this track is about access. Focus reaches every grip
     and every header, and two arrow keys get everything a drag has.</Tell>;
 
-export const quietDials =
+export const QuietDials: FC = () =>
   <Tell>Two of the dials go quiet here: pace and origin describe a drag session, what happens
     while something is held aloft, and a keyboard nudge holds nothing aloft. Only motion
     still chooses, and the motion step below is written the way that dial sits.</Tell>;

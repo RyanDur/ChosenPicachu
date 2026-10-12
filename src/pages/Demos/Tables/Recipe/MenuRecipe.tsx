@@ -15,7 +15,7 @@ import frameMenus from '../Frame/table/menus.ts?sample';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
 import {menuSource, surfaceCss} from './steps/sources';
-import {theImplementation} from './steps';
+import {TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 import {Sample} from '@pages/Demos/Recipe/sample';
@@ -31,7 +31,7 @@ type Build = {
   buildSrc: Sample;
 };
 
-const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
+const SortedDirectly: FC<Build> = ({world, menuSrc, buildSrc}) =>
   <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
       <Says>The answer is the sort alone: dispatch it and let the rows cut to their ranked
@@ -58,12 +58,12 @@ const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
     </Reveal>
   </Step>;
 
-const rankStory = (build: Build) => {
+const RankStory: FC<{build: Build}> = ({build}) => {
   const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
   return <Story param="menu" id="rank"
     can="The trader can sort the windows by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
-    {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
+    <TheImplementation world={world} react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>We could build the popup from divs, but then we would have to build focus, dismissal and
       stacking ourselves, and choosing starts to feel like working against the menu instead of using it;
       so the chooser uses the platform, and the first steps below collect what that
@@ -230,7 +230,7 @@ const rankStory = (build: Build) => {
           </Codes>
         </Reveal>
       </Step>
-      {sortedDirectly(build)}
+      <SortedDirectly {...build}/>
       <Step title="A move ends the sort">
         <Words want="Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is it?">
           <Says>The trader should win: the moment the trader moves a row, the sorted order must become
@@ -323,6 +323,6 @@ export const MenuRecipe: FC = () => {
     buildSrc: buildSources[pace]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
-    <Stories>{rankStory(build)}</Stories>
+    <Stories><RankStory build={build}/></Stories>
   </section>;
 };

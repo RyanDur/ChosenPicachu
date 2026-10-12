@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
@@ -6,8 +6,8 @@ import {World} from '../../params';
 import {arrowsSource, frameSettle, gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const walkSlides = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
-  <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
+export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
+  <Step title="Both parties slide" dial=<MotionDial name="step-motion"/>>
     <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbour slid, the walked column would simply jump.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
         where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
@@ -38,8 +38,8 @@ export const walkSlides = (world: World, headerSource: Sample, buildSrc: Sample)
     </Reveal>
   </Step>;
 
-export const cutKey = (world: World, headerSource: Sample, buildSrc: Sample): ReactNode =>
-  <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
+export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
+  <Step title="Cut on the keypress" dial=<MotionDial name="step-motion"/>>
     <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
       <Says>Motion off should cost nothing extra: no marks, no waiting. The static walk should
         be the arrow handler with the slides simply absent.</Says>
@@ -66,7 +66,7 @@ export const cutKey = (world: World, headerSource: Sample, buildSrc: Sample): Re
     </Reveal>
   </Step>;
 
-export const gripArrows = (world: World, rowSource: Sample, buildSrc: Sample): ReactNode =>
+export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the arrows vertical">
     <Words want="A row is the same walk turned vertical, and the grip is already a button.">
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
