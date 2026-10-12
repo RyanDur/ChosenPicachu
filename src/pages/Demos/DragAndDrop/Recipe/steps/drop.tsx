@@ -1,9 +1,10 @@
+import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
 import {gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const acceptTheDrop = (listSource: Sample, itemSource: Sample) =>
+export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step title="Accept the drop, or the platform takes it back">
     <Words want="By default nothing accepts a drop: release over the list and the browser plays the cancel, carrying the card back to where it came from, and you cannot stop it.">
       <Says>A bare list looks finished. Then you release over it, the card flies back, and your drop handler never ran.</Says>

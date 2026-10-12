@@ -1,9 +1,10 @@
+import {FC} from 'react';
 import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const straightToOrder = (gripSource: Sample) =>
+export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
   <Story param="native" id="keyboard"
     can="The user can arrange the list from the keyboard"
     soThat="the keys go straight to the order">

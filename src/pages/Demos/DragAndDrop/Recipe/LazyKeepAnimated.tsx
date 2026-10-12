@@ -1,17 +1,17 @@
 import {FC} from 'react';
 import {Steps, Story} from '../../Recipe';
 import {
-  acceptTheDrop,
-  armTheDrag,
-  glideSettle,
-  holdTheAloft,
-  keepStanding,
-  neverOurs,
-  platformCurrency,
-  promises,
-  roadEnd,
-  stashLanding,
-  straightToOrder
+  AcceptTheDrop,
+  ArmTheDrag,
+  GlideSettle,
+  HoldTheAloft,
+  KeepStanding,
+  NeverOurs,
+  PlatformCurrency,
+  Promises,
+  RoadEnd,
+  StashLanding,
+  StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
 import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?sample';
@@ -21,18 +21,18 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
-    {platformCurrency}
-    {promises('lazy', 'keep', 'animated')}
-    {neverOurs}
+    <PlatformCurrency/>
+    <Promises pace="lazy" origin="keep" motion="animated"/>
+    <NeverOurs/>
     <Steps>
-      {armTheDrag(itemSource)}
-      {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource, itemSource)}
-      {stashLanding(listSource)}
-      {keepStanding(listSource)}
-      {glideSettle(listSource)}
-      {roadEnd}
+      <ArmTheDrag itemSource={itemSource}/>
+      <HoldTheAloft listSource={listSource}/>
+      <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
+      <StashLanding listSource={listSource}/>
+      <KeepStanding listSource={listSource}/>
+      <GlideSettle listSource={listSource}/>
+      <RoadEnd/>
     </Steps>
   </Story>
-  {straightToOrder(gripSource)}
+  <StraightToOrder gripSource={gripSource}/>
 </>;

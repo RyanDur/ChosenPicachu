@@ -1,8 +1,9 @@
+import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const armTheDrag = (itemSource: Sample) =>
+export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Arm the drag from its handle">
     <Words want="The browser will drag anything marked draggable, but marking the whole card turns every press into a lift and stops text selection inside it.">
       <Says>draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the

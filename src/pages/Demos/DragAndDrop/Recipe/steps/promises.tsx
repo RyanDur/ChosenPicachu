@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {FC} from 'react';
 import {Motion, Origin, Pace} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
@@ -23,6 +23,6 @@ const motions: Record<Motion, Record<Pace, string>> = {
   }
 };
 
-export const promises = (pace: Pace, origin: Origin, motion: Motion): ReactNode =>
+export const Promises: FC<{pace: Pace; origin: Origin; motion: Motion}> = ({pace, origin, motion}) =>
   <Tell>This particular list keeps three more
     promises. {paces[pace]} {origins[origin]} {motions[motion][pace]}</Tell>;

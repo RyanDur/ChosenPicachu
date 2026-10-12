@@ -1,18 +1,18 @@
 import {FC} from 'react';
 import {Steps, Story} from '../../Recipe';
 import {
-  acceptTheDrop,
-  armTheDrag,
-  commitCrossing,
-  directState,
-  holdTheAloft,
-  innerHalf,
-  keepStanding,
-  neverOurs,
-  platformCurrency,
-  promises,
-  roadEnd,
-  straightToOrder
+  AcceptTheDrop,
+  ArmTheDrag,
+  CommitCrossing,
+  DirectState,
+  HoldTheAloft,
+  InnerHalf,
+  KeepStanding,
+  NeverOurs,
+  PlatformCurrency,
+  Promises,
+  RoadEnd,
+  StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
 import listSource from '../EagerKeepStaticList/EagerKeepStaticList.tsx?sample';
@@ -22,19 +22,19 @@ export const EagerKeepStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
-    {platformCurrency}
-    {promises('eager', 'keep', 'static')}
-    {neverOurs}
+    <PlatformCurrency/>
+    <Promises pace="eager" origin="keep" motion="static"/>
+    <NeverOurs/>
     <Steps>
-      {armTheDrag(itemSource)}
-      {holdTheAloft(listSource)}
-      {acceptTheDrop(listSource, itemSource)}
-      {innerHalf}
-      {commitCrossing(listSource)}
-      {keepStanding(listSource)}
-      {directState(listSource)}
-      {roadEnd}
+      <ArmTheDrag itemSource={itemSource}/>
+      <HoldTheAloft listSource={listSource}/>
+      <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
+      <InnerHalf/>
+      <CommitCrossing listSource={listSource}/>
+      <KeepStanding listSource={listSource}/>
+      <DirectState listSource={listSource}/>
+      <RoadEnd/>
     </Steps>
   </Story>
-  {straightToOrder(gripSource)}
+  <StraightToOrder gripSource={gripSource}/>
 </>;

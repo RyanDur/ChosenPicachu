@@ -15,7 +15,7 @@ const clues: [string, string][] = [
   ['see it stay where I dropped it', 'The drop is the commit, and the landing has to be visible.']
 ];
 
-const sketch =
+const Sketch: FC = () =>
   <div className="design-sketch" aria-hidden="true">
     {['first', 'second', 'third', 'fourth'].map(item =>
       <div className="design-item card hairline-edged rounded-corners" key={item}>
@@ -46,7 +46,7 @@ export const ListTutorials: FC = () => {
           verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says. Everything after this point is layered onto that one choice."/>
       </Station>
       <Station at={2}>
-        <Design sketch={sketch}
+        <Design sketch=<Sketch/>
           answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack."
           unanswered={unanswered}/>
       </Station>
