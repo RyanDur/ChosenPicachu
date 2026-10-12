@@ -1,6 +1,13 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {ExclusiveAccordion, ExclusiveRadioToggleAccordion, InclusiveAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
+import {
+  ExclusiveAccordion,
+  ExclusiveMeasuredAccordion,
+  ExclusiveRadioToggleAccordion,
+  InclusiveAccordion,
+  InclusiveCheckboxToggleAccordion,
+  InclusiveMeasuredAccordion
+} from '../Accordions';
 
 const folds = [{key: 'Alpha', value: 'the first fold'}, {key: 'Beta', value: 'the second fold'}];
 
@@ -118,7 +125,9 @@ describe.each([
 describe('the builds we used to make', () => {
   test.each([
     {build: 'checkbox', Build: InclusiveAccordion},
-    {build: 'radio', Build: ExclusiveAccordion}
+    {build: 'radio', Build: ExclusiveAccordion},
+    {build: 'measured checkbox', Build: InclusiveMeasuredAccordion},
+    {build: 'measured radio', Build: ExclusiveMeasuredAccordion}
   ])('should name each part’s text by its bar in the $build build', ({Build}) => {
     render(<Build content={folds} motion="reveal"/>);
 

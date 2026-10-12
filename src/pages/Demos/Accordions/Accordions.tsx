@@ -204,8 +204,8 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
           <li key={key} className="fold"
             onChange={event => setOpen(now => toggledTo(event) ? [...now, key] : now.filter(part => part !== key))}>
             <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-            <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
-            <MeasuredPanel open={open.includes(key)}>
+            <label id={`measured-fold-${id}-checkbox-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
+            <MeasuredPanel open={open.includes(key)} namedBy={`measured-fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{value}</p>
             </MeasuredPanel>
           </li>)}
@@ -235,8 +235,8 @@ export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
         {content.map(({value, key}, id) =>
           <li className="fold" key={key} onChange={() => setOpen(key)}>
             <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
-            <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
-            <MeasuredPanel open={open === key}>
+            <label id={`measured-fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
+            <MeasuredPanel open={open === key} namedBy={`measured-fold-${id}-radio-label`}>
               <p className="info-paragraph">{value}</p>
             </MeasuredPanel>
           </li>)}

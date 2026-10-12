@@ -12,8 +12,8 @@ const textHeight = (panel: HTMLElement): number => panel.firstElementChild?.getB
 const heightMoving = (panel: HTMLElement): boolean =>
   panel.getAnimations().some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
 
-export const MeasuredPanel: FC<PropsWithChildren<{open: boolean}>> = ({open, children}) => {
-  const panel = useRef<HTMLDivElement>(null);
+export const MeasuredPanel: FC<PropsWithChildren<{open: boolean; namedBy: string}>> = ({open, namedBy, children}) => {
+  const panel = useRef<HTMLElement>(null);
   const [shown, setShown] = useState(open);
   const [motion, setMotion] = useState<Motion>(resting);
 
@@ -40,14 +40,14 @@ export const MeasuredPanel: FC<PropsWithChildren<{open: boolean}>> = ({open, chi
     if (!heightMoving(measured)) setMotion(resting);
   }, [motion]);
 
-  const settled = ({target, currentTarget, propertyName}: TransitionEvent<HTMLDivElement>): void => {
+  const settled = ({target, currentTarget, propertyName}: TransitionEvent<HTMLElement>): void => {
     if (target === currentTarget && propertyName === 'height') setMotion(resting);
   };
 
-  return <div ref={panel}
+  return <section ref={panel} aria-labelledby={namedBy}
     className={classNames('info-measured', motion.moving && 'sized', motion.moving && motion.still && 'unmoving')}
     style={motion.moving ? {'--measured-height': `${motion.height}px`} : undefined}
     onTransitionEnd={settled}>
     {children}
-  </div>;
+  </section>;
 };

@@ -207,7 +207,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   off for that moment.</p>
                 <Snippet label="TS" lines={[
                   ...span(panelSource, 'if (!motion.moving || !motion.still', '}, [motion, open]);'), gap,
-                  ...unit(panelSource, 'return <div ref={panel}')
+                  ...unit(panelSource, 'return <section ref={panel}')
                 ]}/>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
               </li>
@@ -227,7 +227,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the trick was for browsers that could only move between numbers.</p>
                 {type === 'exclusive' && <Snippet label="TS" lines={[
                   ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
-                  ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}>')
+                  ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
                 ]}/>}
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
               </li>
