@@ -161,22 +161,26 @@ describe('the two together', () => {
 });
 
 describe('the measured build', () => {
-  test('should say what React state, a ref and a layout effect are before the measured height’s first run uses them', async () => {
+  test('should say what React state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
+    const state = explanation.runTelling(explained, /The script keeps what it knows in React state/);
+    const ref = explanation.runTelling(explained, /A ref is a handle on the element itself/);
+    const effects = explanation.runTelling(explained, /The moves are made in two layout effects/);
 
-    expect(explained).toHaveTextContent('The script keeps what it knows in React state, a value a component holds and renders from');
-    expect(explained).toHaveTextContent('A ref, a handle on the element itself, is used only to measure');
-    expect(explained).toHaveTextContent('The moves are made in layout effects, code React runs after it has updated the elements and before the browser paints them');
+    expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toMatch(/useState/);
+    expect(explanation.everyCodeBeside(explained, /A ref is a handle on the element itself/).join()).toMatch(/useRef/);
+    expect(explanation.everyCodeBeside(explained, /The moves are made in two layout effects/).join()).toMatch(/useLayoutEffect\(\(\) => \{[^]*\}, \[open, shown\]\);[^]*useLayoutEffect\(\(\) => \{[^]*\}, \[motion, open\]\);/);
+    expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The script hands each height to the stylesheet/)])).toEqual([]);
   });
 
-  test('should say, with exclusive chosen, that the part losing its check closes from React state', async () => {
+  test('should say, with exclusive chosen, that the change bubbles to the part that records its own key', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explained).toHaveTextContent('so the script keeps the open part’s key in React state: the change event names the part that opened, and the part whose key is no longer the open one closes from that state.');
+    expect(explained).toHaveTextContent('rises from it through the elements around it, which is called bubbling, and the list item around the radio handles it by recording its own key in React state as the open one');
   });
 
   test('should show the script that measures, then lets go, beside the run that opens a part', async () => {

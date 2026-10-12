@@ -167,7 +167,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             ends, the script takes the number away, and the panel is auto again. A number left in place goes
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
           <Snippet label="TS" lines={[
-            ...span(panelSource, 'if (open === shown', '}, [open, shown]);'), gap,
+            ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [open, shown]);'), gap,
             ...unit(panelSource, 'const settled')
           ]}/>
         </li>
@@ -185,12 +185,35 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="measured-depth" className="opener bold">How the measured height works</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The script keeps what it knows in React state, a value a component holds and renders
-                  from: whether a part is open, and, while it moves, the height it is moving to and whether the motion has
-                  started. A ref, a handle on the element itself, is used only to measure: the text’s height, the
-                  transition’s duration, and whether the height is still moving. The moves are made in layout effects,
-                  code React runs after it has updated the elements and before the browser paints them, so the panel is
-                  measured and its start pinned with no frame showing in between.</p>
+                <p className="paragraph">React is the library this site’s script is written in, and a component is a function
+                  that returns the elements it draws. The script keeps what it knows in React state, a value a component
+                  holds and renders from: whether a part is open, and, while it moves, first the height the motion starts
+                  from, then the height it ends at, and whether it has started.</p>
+                <Snippet label="TS" lines={[
+                  ...unit(panelSource, 'type Motion ='), gap,
+                  ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
+                ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">A ref is a handle on the element itself. The panel’s one ref is used only to
+                  measure: the text’s height, and whether the stylesheet gives the height a transition at all.</p>
+                <Snippet label="TS" lines={[
+                  ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
+                  ...unit(panelSource, 'const textHeight'), gap,
+                  ...unit(panelSource, 'const moves')
+                ]}/>
+              </li>
+              <li className="run">
+                <p className="paragraph">The moves are made in two layout effects, code React runs after it has updated the
+                  elements and before the browser paints them: the first answers a press by pinning where the motion
+                  starts, and the second, once that start is on the page, sets where it ends. The panel is measured and its
+                  start pinned with no frame showing in between.</p>
+                <Snippet label="TS" lines={[
+                  ...unit(panelSource, 'const pressed'), gap,
+                  ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);')
+                ]}/>
+              </li>
+              <li className="run">
                 <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
                   value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
                   property with <code>@property</code>, a rule that tells the browser what kind of value a custom
@@ -212,7 +235,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
                   off for that moment.</p>
                 <Snippet label="TS" lines={[
-                  ...span(panelSource, 'if (!motion.moving || !motion.still', '}, [motion, open]);'), gap,
+                  ...span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
                   ...unit(panelSource, 'return <section ref={panel}')
                 ]}/>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
@@ -226,9 +249,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 ]}/>
               </li>
               <li className="run">
-                <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all, so
-                  the script keeps the open part’s key in React state: the change event names the part that opened, and
-                  the part whose key is no longer the open one closes from that state. </>}This page lets its other folds move to auto,
+                <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all. The
+                  change event the pressed radio gets rises from it through the elements around it, which is called
+                  bubbling, and the list item around the radio handles it by recording its own key in React state as the
+                  open one; the part whose key is no longer the open one closes from that state. </>}This page lets its other folds move to auto,
                   and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
                   the trick was for browsers that could only move between numbers.</p>
                 {type === 'exclusive' && <Snippet label="TS" lines={[

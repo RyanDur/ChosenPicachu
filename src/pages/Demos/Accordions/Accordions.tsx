@@ -186,6 +186,9 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
 
 const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean => target instanceof HTMLInputElement && target.checked;
 
+const withPart = (open: readonly string[], key: string, opened: boolean): readonly string[] =>
+  opened ? [...open, key] : open.filter(part => part !== key);
+
 export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
   content,
@@ -202,7 +205,7 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
       <ul className="accordion trim">
         {content.map(({value, key}, id) =>
           <li key={key} className="fold"
-            onChange={event => setOpen(now => toggledTo(event) ? [...now, key] : now.filter(part => part !== key))}>
+            onChange={event => setOpen(now => withPart(now, key, toggledTo(event)))}>
             <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
             <label id={`measured-fold-${id}-checkbox-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
             <MeasuredPanel open={open.includes(key)} namedBy={`measured-fold-${id}-checkbox-label`}>
