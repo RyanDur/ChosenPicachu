@@ -95,6 +95,15 @@ describe('the record', () => {
     expect(within(within(moment).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
+  test('should keep every source a fuller story links to on the research shelf', () => {
+    const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
+      .map(work => work.getAttribute('href'));
+    const linked = within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
+      .flatMap(story => within(story).queryAllByRole('link', {hidden: true}).map(link => link.getAttribute('href')));
+
+    expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
+  });
+
   test('the history cites its sources', () => {
     expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));

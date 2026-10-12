@@ -15,11 +15,11 @@ export const Frameworks: FC = () =>
       your code calls. A single-page application is a page that never reloads; the script rewrites it. AngularJS’s one
       idea was <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS">“two-way data-binding that allowed for the automatic synchronization of models and views”</a>:
       change the data and the page changes, change the page and the data changes.</p>
-    <p className="paragraph muted-ink hyphenated">The answers multiplied. React, open-sourced at <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software">“JSConf US, in May 2013”</a>),
+    <p className="paragraph muted-ink hyphenated">The answers multiplied. React, open-sourced at <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)">“JSConf US, in May 2013”</a>,
       is the 2013 moment. Vue, <a className="signpost" href="https://en.wikipedia.org/wiki/Vue.js">“first publicly announced the following February, in 2014”</a>,
       began as a reaction to AngularJS; Evan You: <a className="signpost" href="https://en.wikipedia.org/wiki/Vue.js">“what if I could just extract the part that I really liked about Angular and build something really lightweight”</a>.
-      Angular, <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework">“a complete rewrite from the same team that built AngularJS”</a>),
-      shipped its 2.0 release on <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework">14 September 2016</a>),
+      Angular, <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)">“a complete rewrite from the same team that built AngularJS”</a>,
+      shipped its 2.0 release on <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)">14 September 2016</a>,
       and <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS">“As of January 1, 2022, Google no longer updates AngularJS”</a>.</p>
     <p className="paragraph muted-ink hyphenated">Each framework moved more of the page into script: structure, style and behaviour composed in one place,
       rendered by the program. That is the need the 2013 moment names, and the price the 2016 moment pays back.</p>

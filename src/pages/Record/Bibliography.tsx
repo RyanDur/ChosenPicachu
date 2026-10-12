@@ -28,6 +28,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">CERN, 2019</span>
           </li>
           <li>
+            <a className="signpost" href="https://worldwideweb.cern.ch/worldwideweb/"><cite>The Browser: WorldWideWeb NeXT Application</cite></a>
+            <span className="provenance caption">CERN, 2019</span>
+          </li>
+          <li>
             <a className="signpost" href="https://worldwideweb.cern.ch/history/"><cite>A short history of the browser</cite></a>
             <span className="provenance caption">CERN, 2019</span>
           </li>
