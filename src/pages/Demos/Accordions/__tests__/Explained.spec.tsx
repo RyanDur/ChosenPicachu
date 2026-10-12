@@ -1,6 +1,7 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {demosAt} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
@@ -12,6 +13,15 @@ const parts = ['How we used to build a fold', 'What the platform gives now', 'Th
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
 
 describe('the accordions tab', () => {
+  test.each(['inclusive', 'exclusive'])('should name no two regions the same, with %s chosen, so every landmark is its own', async type => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    await screen.findByRole('region', {name: 'Accordions'});
+    const names = screen.getAllByRole('region').map(region => computeAccessibleName(region));
+
+    expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
+  });
+
   test('should open on the three languages and the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

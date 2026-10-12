@@ -104,6 +104,7 @@ export const randZipCode = (): string => String(randNumber({min: 10000, max: 999
 export const randEmail = (): string =>
   `${rand(firstNames).toLowerCase()}.${rand(lastNames).toLowerCase()}@example.com`;
 export const randWord = (): string => rand(words);
+export const wordDeck = (): () => string => decked(words);
 
 export const randSentence = (): string => {
   const length = randNumber({min: 6, max: 12});

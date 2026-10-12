@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {randParagraph, randWord} from '@components/fibs';
+import {randParagraph, wordDeck} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
@@ -28,11 +28,10 @@ import {Workspace} from './Charts/Workspace';
 import {ChartsIntroduction} from './Charts/Introduction';
 import {useEnv} from '@components/Env';
 
-const paragraphs = (count: number) =>
-  [...new Set(Array.from({length: count * 3}, () => randWord()))].slice(0, count).map(key => ({
-    key,
-    value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
-  }));
+const paragraphs = (count: number, dealt: () => string) => Array.from({length: count}, () => ({
+  key: dealt(),
+  value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
+}));
 
 const topics = [
   {display: 'Accordions', param: DemoTopics.accordions},
@@ -47,16 +46,19 @@ export const DemosPage = () => {
     useSearchParamsObject(
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam},
       {tab: DemoTopics.accordions});
-  const [accordionContents] = useState(() => ({
-    measuredCheckbox: paragraphs(5),
-    measuredRadio: paragraphs(5),
-    knownCheckbox: paragraphs(5),
-    knownRadio: paragraphs(5),
-    inclusiveDetails: paragraphs(5),
-    exclusiveDetails: paragraphs(5),
-    inclusiveCheckboxes: paragraphs(5),
-    exclusiveRadios: paragraphs(5)
-  }));
+  const [accordionContents] = useState(() => {
+    const dealt = wordDeck();
+    return {
+      measuredCheckbox: paragraphs(5, dealt),
+      measuredRadio: paragraphs(5, dealt),
+      knownCheckbox: paragraphs(5, dealt),
+      knownRadio: paragraphs(5, dealt),
+      inclusiveDetails: paragraphs(5, dealt),
+      exclusiveDetails: paragraphs(5, dealt),
+      inclusiveCheckboxes: paragraphs(5, dealt),
+      exclusiveRadios: paragraphs(5, dealt)
+    };
+  });
   const {tradeProduct} = useEnv();
 
   return <>
