@@ -1,9 +1,9 @@
-import {FC, KeyboardEvent, MouseEvent, ReactNode} from 'react';
+import {ChangeEvent, FC, KeyboardEvent, MouseEvent, ReactNode, useState} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {PropsWithClassName} from '../types';
 import {FoldMotion} from './fold-motion';
-import {foldMeasured} from './measured';
+import {MeasuredPanel} from './MeasuredPanel';
 import './Accordions.css';
 
 const openAfter = (pressed: string, open?: string): Maybe<string> => open === pressed ? nothing() : some(pressed);
@@ -184,54 +184,63 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   </fieldset>
 </article>;
 
+const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean => target instanceof HTMLInputElement && target.checked;
+
 export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
   content,
   motion
-}) => <article className={classNames('inclusive-accordion', motion, className)}>
-  <hgroup>
-    <h4 className="sub-title bold">Accordion using checkboxes and a measured height</h4>
-    <p>a few lines of script measure each part’s height.</p>
-  </hgroup>
-  <fieldset>
-    <legend className="off-screen">parts</legend>
-    <ul className="accordion trim" onChange={foldMeasured}>
-      {content.map(({value, key}, id) =>
-        <li key={key} className="fold">
-          <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
-          <div className="info-measured">
-            <p className="info-paragraph">{value}</p>
-          </div>
-        </li>)}
-    </ul>
-  </fieldset>
-</article>;
+}) => {
+  const [open, setOpen] = useState<readonly string[]>([]);
+  return <article className={classNames('inclusive-accordion', motion, className)}>
+    <hgroup>
+      <h4 className="sub-title bold">Accordion using checkboxes and a measured height</h4>
+      <p>a few lines of script measure each part’s height.</p>
+    </hgroup>
+    <fieldset>
+      <legend className="off-screen">parts</legend>
+      <ul className="accordion trim">
+        {content.map(({value, key}, id) =>
+          <li key={key} className="fold"
+            onChange={event => setOpen(now => toggledTo(event) ? [...now, key] : now.filter(part => part !== key))}>
+            <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
+            <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
+            <MeasuredPanel open={open.includes(key)}>
+              <p className="info-paragraph">{value}</p>
+            </MeasuredPanel>
+          </li>)}
+      </ul>
+    </fieldset>
+  </article>;
+};
 
 export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
   content,
   motion
-}) => <article className={classNames('exclusive-accordion', motion, className)}>
-  <hgroup>
-    <h4 className="sub-title bold">Accordion using a radio group and a measured height</h4>
-    <p>a few lines of script measure each part’s height.</p>
-  </hgroup>
-  <fieldset>
-    <legend className="off-screen">parts</legend>
-    <ul className="accordion trim" onChange={foldMeasured}>
-      <li className="fold close field-inverse">
-        <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
-        <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
-      </li>
-      {content.map(({value, key}, id) =>
-        <li className="fold" key={key}>
-          <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
-          <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
-          <div className="info-measured">
-            <p className="info-paragraph">{value}</p>
-          </div>
-        </li>)}
-    </ul>
-  </fieldset>
-</article>;
+}) => {
+  const [open, setOpen] = useState<string>();
+  return <article className={classNames('exclusive-accordion', motion, className)}>
+    <hgroup>
+      <h4 className="sub-title bold">Accordion using a radio group and a measured height</h4>
+      <p>a few lines of script measure each part’s height.</p>
+    </hgroup>
+    <fieldset>
+      <legend className="off-screen">parts</legend>
+      <ul className="accordion trim">
+        <li className="fold close field-inverse" onChange={() => setOpen(undefined)}>
+          <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
+          <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
+        </li>
+        {content.map(({value, key}, id) =>
+          <li className="fold" key={key} onChange={() => setOpen(key)}>
+            <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
+            <label className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
+            <MeasuredPanel open={open === key}>
+              <p className="info-paragraph">{value}</p>
+            </MeasuredPanel>
+          </li>)}
+      </ul>
+    </fieldset>
+  </article>;
+};

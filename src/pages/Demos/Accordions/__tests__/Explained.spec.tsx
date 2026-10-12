@@ -9,7 +9,7 @@ const htmlAlone = 'An accordion in HTML alone';
 
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
-const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /export const foldMeasured/];
+const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
 
 describe('the accordions tab', () => {
   test('should open on the three languages and the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
@@ -156,7 +156,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/const opened[^]*const settled[^]*const letsGo/);
+    expect(explanation.codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/if \(open === shown[^]*textHeight\(measured\)[^]*const settled[^]*setMotion\(resting\)/);
   });
 
   test('should show @property beside the run that declares it, .sized beside the run that names the class, and .unmoving beside the run that closes', async () => {
@@ -219,7 +219,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toMatch(/const movesTo[^]*const stillMoving/);
+    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toMatch(/const heightMoving[^]*if \(!heightMoving\(measured\)\) setMotion\(resting\)/);
   });
 });
 

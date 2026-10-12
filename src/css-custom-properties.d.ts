@@ -22,5 +22,6 @@ declare module 'csstype' {
     '--turn'?: `${number}deg`;
     '--swing'?: `${number}deg`;
     '--term-anchor'?: string;
+    '--measured-height'?: `${number}px`;
   }
 }

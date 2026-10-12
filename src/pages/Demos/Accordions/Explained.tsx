@@ -15,7 +15,7 @@ import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import accordionsSource from './Accordions.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
-import measuredSource from './measured.ts?sample';
+import panelSource from './MeasuredPanel.tsx?sample';
 import htmlAloneSource from './HtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
@@ -167,9 +167,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             ends, the script takes the number away, and the panel is auto again. A number left in place goes
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
           <Snippet label="TS" lines={[
-            ...unit(measuredSource, 'const opened'), gap,
-            ...unit(measuredSource, 'const settled'), gap,
-            ...unit(measuredSource, 'const letsGo')
+            ...span(panelSource, 'if (open === shown', '}, [open, shown]);'), gap,
+            ...unit(panelSource, 'const settled')
           ]}/>
         </li>
         <li className="run">
@@ -207,9 +206,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
                   off for that moment.</p>
                 <Snippet label="TS" lines={[
-                  ...unit(measuredSource, 'const setsHeight'), gap,
-                  ...unit(measuredSource, 'const startsAt'), gap,
-                  ...unit(measuredSource, 'const closed')
+                  ...span(panelSource, 'if (!motion.moving || !motion.still', '}, [motion, open]);'), gap,
+                  ...unit(panelSource, 'return <div ref={panel}')
                 ]}/>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
               </li>
@@ -218,8 +216,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   panel turns around from where it is. If that end is where the panel already stands, no motion is left
                   to run, and the script takes the number away at once.</p>
                 <Snippet label="TS" lines={[
-                  ...unit(measuredSource, 'const movesTo'), gap,
-                  ...unit(measuredSource, 'const stillMoving')
+                  ...unit(panelSource, 'const heightMoving'), gap,
+                  ...span(panelSource, 'if (!motion.moving || motion.still', '}, [motion]);')
                 ]}/>
               </li>
               <li className="run">
@@ -227,7 +225,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the script asks the whole list which parts are open. </>}This page lets its other folds move to auto,
                   and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
                   the trick was for browsers that could only move between numbers.</p>
-                {type === 'exclusive' && <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>}
+                {type === 'exclusive' && <Snippet label="TS" lines={[
+                  ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
+                  ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}>')
+                ]}/>}
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
               </li>
             </ol>
