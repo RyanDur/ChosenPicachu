@@ -327,7 +327,9 @@ describe('the banner tutorial’s second story', () => {
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[4]).toHaveTextContent(/@property --news-block-size \{[^]*initial-value: auto;[^]*block-size: var\(--news-block-size\)/);
-    expect(steps[4]).toHaveTextContent('The number travels in a custom property named --news-block-size. The stylesheet declares it with @property, an at-rule: a rule that starts with @ and sets something up for the sheet without picking out elements. This one gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
+    expect(within(steps[4]).getByText(/a browser object that calls back when an element changes size/)).toHaveTextContent(/The number travels in a custom property named --news-block-size\.$/);
+    expect(within(steps[4]).getByText(/^The stylesheet declares it with/)).toHaveTextContent('The stylesheet declares it with @property, an at-rule: a rule that starts with @ and sets something up for the sheet without picking out elements. This one gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
+    expect(within(steps[4]).getByText(/^Before it measures/)).toHaveTextContent(/so a message measured with the old height still on it could only grow\.$/);
   });
 
   test('should open on the two moves, and say what a transition and a starting style are', async () => {
