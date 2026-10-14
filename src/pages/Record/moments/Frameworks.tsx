@@ -21,6 +21,6 @@ export const Frameworks: FC = () =>
       Angular, <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)">“a complete rewrite from the same team that built AngularJS”</a>,
       shipped its 2.0 release on <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)">14 September 2016</a>,
       and <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS">“As of January 1, 2022, Google no longer updates AngularJS”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">Each framework moved more of the page into script: structure, style and behaviour composed in one place,
-      rendered by the program. That is the need the 2013 moment names, and the price the 2016 moment pays back.</p>
+    <p className="paragraph muted-ink hyphenated">Each framework moved more of the page into script, with structure, style and behaviour composed in one
+      place and rendered by the program. The 2013 moment names that need; the 2016 moment counts its cost.</p>
   </Moment>;

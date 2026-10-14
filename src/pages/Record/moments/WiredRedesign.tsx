@@ -15,6 +15,6 @@ export const WiredRedesign: FC = () =>
       not. Bowman, <a className="signpost" href="https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/">“the point man on the Wired redesign”</a> in
       Meyer’s words, moved a daily news site off them. Ten years on he called it the moment that <a className="signpost" href="https://stopdesign.com/archive/2012/10/11/ten-years-later.html">“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”</a>.
       Meyer’s verdict at the time: <a className="signpost" href="https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/">“the site is a stunning example of how standards can be made to work today”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">The proof was commercial before it was artistic. Wired showed a business could ship on CSS; the Zen Garden, in
-      May 2003, showed what the separation was for.</p>
+    <p className="paragraph muted-ink hyphenated">Wired showed a business could ship on CSS; the Zen Garden, in May 2003, showed what
+      the separation was for.</p>
   </Moment>;

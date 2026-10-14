@@ -16,7 +16,7 @@ export const EcmaScript: FC = () =>
       and the first edition was <a className="signpost" href="https://262.ecma-international.org/5.1/">“adopted by the Ecma General Assembly of June 1997”</a>.
       Ecma’s own list gives the <a className="signpost" href="https://ecma-international.org/publications-and-standards/standards/ecma-262/">1st edition as June 1997</a>,
       the second as August 1998, and the third as December 1999, the edition that <a className="signpost" href="https://262.ecma-international.org/5.1/">“introduced powerful regular expressions, better string handling, new control statements”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">The third edition is the JavaScript the web ran on for a decade. The standard had done what HTML 2.0 did for
-      markup: written down the practice so two browsers could agree on it. What it had not done was move, and that is
-      the 2009 moment.</p>
+    <p className="paragraph muted-ink hyphenated">The third edition is the JavaScript the web ran on for a decade. The standard had written the practice down
+      so two browsers could agree on it, as HTML 2.0 had for markup. It then stood still for ten years, which is the
+      2009 moment.</p>
   </Moment>;
