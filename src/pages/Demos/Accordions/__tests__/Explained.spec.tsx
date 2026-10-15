@@ -793,23 +793,31 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(together).getByText(opening)).toHaveTextContent(sentence);
   });
 
-  test('should name, with exclusive chosen, the event and bubbling bare where the press reaches the list, since the measured build has said what they are', async () => {
+  test('should say, with exclusive chosen, what an event and a handler are where the press reaches the list, and that the list keeps the open radio in its data-open attribute', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
-    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event. The event then bubbles up through the elements around the radio, and a handler on the list runs for it on the way. The list’s state holds which radio is open.');
+    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler. The list keeps the open radio’s value in its own data-open attribute. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
+  });
+
+  test('should say, with exclusive chosen, what keydown is where the list catches the space bar', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+
+    const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
+
+    expect(explanation.runTelling(together, /^The space bar is the keyboard’s press/)).toHaveTextContent('So a handler on the list for keydown, the event a key press sends, catches the space bar too, and closes the fold when the key lands on the open radio.');
   });
 
   test.each([
     {type: 'inclusive', input: 'checkbox', pressed: 'checked or unchecked'},
     {type: 'exclusive', input: 'radio', pressed: 'checked'}
-  ])('should say, with $type chosen, what an event is where the measured build first names one', async ({type, input, pressed}) => {
+  ])('should say, with $type chosen, which event change is where the measured build first names it', async ({type, input, pressed}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires. An event is a message the browser sends when something happens, and change is the one it sends to the ${input} a press has just ${pressed}, and to no other. So the script first pins where the motion starts`);
+    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires, the event the browser sends to the ${input} a press has just ${pressed}, and to no other. So the script first pins where the motion starts`);
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a fold is open', async () => {

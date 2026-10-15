@@ -231,8 +231,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
-                  by the time the change event fires. An event is a message the browser sends when something happens,
-                  and change is the one it sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to no
+                  by the time the change event fires, the event the browser sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to no
                   other. So the script first pins where
                   the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
                   off for that moment.</p>
@@ -334,8 +333,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
                   that says how their elements relate; it picks the siblings that come after the element on its left, the
                   elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
-                  While it is not checked, this rule collapses the text. No script is involved; the rule matches the unchecked {input} and collapses the
-                  text after it.</p>
+                  While it is not checked, this rule collapses the text. No script is involved.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
                 <TheRuleMatchesTheBox/>
               </li>
@@ -590,10 +588,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <p className="paragraph">Radios that share a name keep one fold open on their own, which checkboxes cannot do
             without script. What a radio cannot do is close itself: pressed again, it stays checked. So the list adds
             that, with a little script, and the radios stay plain.</p>
-          <p className="paragraph">A press on a radio is an event. The event then bubbles up through the elements around the radio, and a handler on the list
-            runs for it on the way. The list’s state holds which radio is open. A press
-            on that radio unchecks it and forgets it, and a press on any other remembers the new one. The arrow keys
-            move the choice and press as they go, so each move is remembered too.</p>
+          <p className="paragraph">A press on a radio is an event, a message the browser sends when something happens. The
+            event then bubbles up through the elements around the radio, and the list runs a function for it on the
+            way, which is called a handler. The list keeps the open radio’s value in its own data-open attribute. A
+            press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
+            arrow keys move the choice and press as they go, so each move is written too.</p>
           <Snippet label="TS" lines={[
             ...unit(accordionsSource, 'const openAfter'), gap,
             ...unit(accordionsSource, 'const radioPressed'), gap,
@@ -642,8 +641,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
-                  nothing with it, so no press reaches the list. So a keydown handler on the list catches the space bar
-                  too, and closes the fold when the key lands on the open radio.</p>
+                  nothing with it, so no press reaches the list. So a handler on the list for keydown, the event a key press sends,
+                  catches the space bar too, and closes the fold when the key lands on the open radio.</p>
                 <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
               </li>}
               <li className="run">
