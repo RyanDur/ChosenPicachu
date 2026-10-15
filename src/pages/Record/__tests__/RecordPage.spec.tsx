@@ -21,16 +21,12 @@ describe('the record', () => {
     expect(demos).toHaveAttribute('href', expect.stringContaining(Paths.demos));
   });
 
-  test('should say, after the record, that the history above is the argument for keeping the seam visible', () => {
+  test('should say, after the record, that the tables are built twice and the history above is the argument for keeping the seam visible', () => {
     const record = screen.getByRole('region', {name: 'How the web got its languages'});
     const seam = screen.getByText(/The projection is the difference/);
 
     expect(record.compareDocumentPosition(seam)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(seam).toHaveTextContent('The projection is the difference, and the history above is the argument for keeping the seam visible.');
-  });
-
-  test('should say only the tables are built twice, since only they have a world without React', () => {
-    expect(screen.getByText(/The projection is the difference/)).toHaveTextContent(/^The tables are built twice: once with the three languages raw/);
+    expect(seam).toHaveTextContent('The tables are built twice: once with the three languages raw, no framework standing anywhere in the frame, and once with React speaking the same three. The projection is the difference, and the history above is the argument for keeping the seam visible.');
   });
 
   test('the record says why the languages arrived', () => {
