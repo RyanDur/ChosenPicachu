@@ -4,7 +4,7 @@ import {span, unit} from '../Recipe/carve';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer, Where9999IsCompared} from './Diagrams';
 import {CardOne} from './card-one';
-import {stillLosesHeading} from './part-headings';
+import {stillLosesHeading, whatElseFormsHeading} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
@@ -41,7 +41,9 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are compared in the
-          nearest context that holds them both: here the tab’s panel. There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so card two is painted over card one, list and all. No
+          nearest context that holds them both: here the tab’s panel, which{' '}
+        <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> explains.
+          There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so card two is painted over card one, list and all. No
           number on the list can change that, because the list is never compared with card two.</p>
         <Where9999IsCompared/>
       </li>

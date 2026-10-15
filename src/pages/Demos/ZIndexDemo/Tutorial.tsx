@@ -19,14 +19,18 @@ export const TopLayerTutorial: FC = () => {
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble; on this page the button
-      raises random nonsense so you can watch the mechanics. Here is how to use this page:
+      raises random nonsense so you can watch the mechanics.
+    </p>
+    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting; the banner sets none.</p>
+    <p className="overview paragraph">
+      Here is how to use this page:
       every card below is a feature, told as a <a
         className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature
       and the steps that build it, with the real code from this site, so what you read is
-      what runs. The parts above show what a z-index does and where it stops counting; the banner sets none. The dials below place the stack, choose its entrance,
+      what runs. The dials below place the stack, choose its entrance,
       and pick how it grows, and where a step depends on a dial, that dial sits on the
       step. The links go to MDN, if you want more.
     </p>

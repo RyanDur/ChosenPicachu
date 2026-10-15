@@ -83,7 +83,8 @@ export const TopLayerRecipe: FC = () => {
             size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
             It takes only the room its content needs, and the auto margins share the rest, which centres it in the
             window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
-            and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
+            and unfilled, which take off the first two, and padding: 0, so only the banners inside it show. That stylesheet also gives a popover overflow:
+            auto, which would clip the banners as they slide, so the panel sets overflow: visible.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
             they are there so the choice shows in the class names.</Says>
