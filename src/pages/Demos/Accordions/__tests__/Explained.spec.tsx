@@ -799,7 +799,7 @@ describe('the runs in view, with the folds shut', () => {
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
     expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
-    expect(within(together).getByText(/^The list keeps the open radio’s value/)).toHaveTextContent('The list keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute, a name the script sets on the list element to that string. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
+    expect(within(together).getByText(/^The list keeps the open radio’s value/)).toHaveTextContent('The list keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute, a name the script sets on the list element to that string. In the script it is dataset.open: dataset is the browser’s name for an element’s data- attributes, with the prefix dropped. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
   });
 
   test('should say, with exclusive chosen, what keydown is where the list catches the space bar', async () => {

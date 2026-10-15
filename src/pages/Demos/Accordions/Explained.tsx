@@ -592,7 +592,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             event then bubbles up through the elements around the radio, and the list runs a function for it on the
             way, which is called a handler.</p>
           <p className="paragraph">The list keeps the open radio’s value, the string each radio carries to tell it apart,
-            in a <code>data-open</code> attribute, a name the script sets on the list element to that string. A
+            in a <code>data-open</code> attribute, a name the script sets on the list element to that string. In the script it
+            is <code>dataset.open</code>: <Mdn path="Web/API/HTMLElement/dataset">dataset</Mdn> is the browser’s name
+            for an element’s data- attributes, with the prefix dropped. A
             press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
             arrow keys move the choice and press as they go, so each move is written too.</p>
           <Snippet label="TS" lines={[
