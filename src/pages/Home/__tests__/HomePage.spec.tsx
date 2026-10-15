@@ -8,9 +8,15 @@ describe('the home page', () => {
     render(<TestApp at={Paths.home}/>);
   });
 
-  test('should open on the thesis in one paragraph, and say what the site holds in the next', () => {
+  test('should open on the thesis, then say who the site is for, then what the doors, the record and the demos give', () => {
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose, and when one could not yet do a job another covered for it until the standard caught up, as HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
-    expect(screen.getByText(/^That argument is this whole site/)).toHaveTextContent('That argument is this whole site: a door per language, the record of how the web got them, and the demos where I work the practice.');
+    expect(screen.getByText(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit is a div where a button was meant, a class that names a margin instead of the reason for it, a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
+    expect(screen.getByText(/^Each language has a door below/)).toHaveTextContent('Each language has a door below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty-one moments and a closing essay. The demos are where I work the practice; the tables are built twice, once with the three languages raw and once in React, so the seam between the languages and the framework stays visible.');
+    expect(outOfReadingOrder([
+      screen.getByText(/^A webpage is three languages working in concert/),
+      screen.getByText(/^This site is for the developer/),
+      screen.getByText(/^Each language has a door below/)
+    ])).toEqual([]);
   });
 
   test('should carry one quotation in the opening, linked to HTML’s design principles', () => {

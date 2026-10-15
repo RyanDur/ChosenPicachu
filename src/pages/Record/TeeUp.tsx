@@ -9,7 +9,7 @@ export const TeeUp: FC<PropsWithChildren> = ({children}) =>
       slice thin; the feature layers on. That is how every page here is built.
     </p>
     <p className="sub-title">
-      Every feature is built twice: once with the three languages raw, no framework standing
+      The tables are built twice: once with the three languages raw, no framework standing
       anywhere in the frame, and once with React speaking the same three. The projection is
       the difference, and the history above is the argument for keeping the seam visible.
     </p>

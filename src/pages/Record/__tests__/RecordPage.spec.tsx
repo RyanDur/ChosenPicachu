@@ -29,6 +29,10 @@ describe('the record', () => {
     expect(seam).toHaveTextContent('The projection is the difference, and the history above is the argument for keeping the seam visible.');
   });
 
+  test('should say only the tables are built twice, since only they have a world without React', () => {
+    expect(screen.getByText(/The projection is the difference/)).toHaveTextContent(/^The tables are built twice: once with the three languages raw/);
+  });
+
   test('the record says why the languages arrived', () => {
     const record = within(screen.getByRole('region', {name: 'How the web got its languages'}));
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
