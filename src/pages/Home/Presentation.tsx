@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
 import {HowIOrganizeIt} from './HowIOrganizeIt';
+import {DoorSection} from './DoorSection';
 import {MomentLink} from './MomentLink';
 
 export const Presentation: FC = () =>
-  <section className="door trim-rule-above" aria-labelledby="presentation">
-    <h2 className="door-title title" id="presentation">Presentation</h2>
+  <DoorSection door="Presentation">
     <Quotation voice="paragraph" source={<a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">the W3C, on HTML and CSS</a>}>
       The separation of HTML from CSS makes it easier to maintain sites, share style
       sheets across pages, and tailor pages to different environments.
@@ -55,4 +55,4 @@ export const Presentation: FC = () =>
         element is and what it needs, in the names the design uses, the sheet has become a pile of overrides.
         Chedeau’s talk, in the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>, catalogued what a pile of overrides costs at scale.</p>
     </HowIOrganizeIt>
-  </section>;
+  </DoorSection>;

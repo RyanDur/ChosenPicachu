@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
 import {HowIOrganizeIt} from './HowIOrganizeIt';
+import {DoorSection} from './DoorSection';
 import {MomentLink} from './MomentLink';
 
 export const DynamicInteraction: FC = () =>
-  <section className="door trim-rule-above" aria-labelledby="dynamic-interaction">
-    <h2 className="door-title title" id="dynamic-interaction">Dynamic Interaction</h2>
+  <DoorSection door="Dynamic Interaction">
     <Quotation voice="paragraph" source={<a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan Eich, in Computerworld’s A-Z of Programming Languages</a>}>
       With a scripting language like JS that could touch elements of the page, change
       their properties, and respond to events, we envisioned a much livelier Web
@@ -49,4 +49,4 @@ export const DynamicInteraction: FC = () =>
         language tells its whole story alone.
         The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three responsibilities do not.</p>
     </HowIOrganizeIt>
-  </section>;
+  </DoorSection>;
