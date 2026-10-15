@@ -11,8 +11,8 @@ import {
 
 const folds = [{key: 'Alpha', value: 'the first fold'}, {key: 'Beta', value: 'the second fold'}];
 
-const controlOf = (control: 'checkbox' | 'radio', part: string): HTMLElement =>
-  screen.getByRole(control, {name: new RegExp(part)});
+const controlOf = (control: 'checkbox' | 'radio', fold: string): HTMLElement =>
+  screen.getByRole(control, {name: new RegExp(fold)});
 
 describe('the inclusive toggle accordion using checkboxes', () => {
   test('should keep every fold it opens open', async () => {
@@ -128,7 +128,7 @@ describe('the builds we used to make', () => {
     {build: 'radio', Build: ExclusiveAccordion},
     {build: 'measured checkbox', Build: InclusiveMeasuredAccordion},
     {build: 'measured radio', Build: ExclusiveMeasuredAccordion}
-  ])('should name each part’s text by its bar in the $build build', ({Build}) => {
+  ])('should name each fold’s text by its bar in the $build build', ({Build}) => {
     render(<Build content={folds} motion="reveal"/>);
 
     expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
@@ -136,7 +136,7 @@ describe('the builds we used to make', () => {
   });
 });
 
-describe('a build that names what it needs under its heading', () => {
+describe('a build that names what it needs', () => {
   test.each([
     {build: 'checkboxes and a known height', Build: InclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
     {build: 'a radio group and a known height', Build: ExclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
