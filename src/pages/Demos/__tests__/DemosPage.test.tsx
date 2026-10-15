@@ -28,7 +28,7 @@ describe('The Demos page', () => {
 
     const opening = await screen.findByText(/^Each tab below is one feature a page needs/);
 
-    expect(opening).toHaveTextContent('Each tab below is one feature a page needs, built here and explained. The tabs run from simple to expert: an accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns and rows you drag while trades keep landing. A tab shows the thing first, with dials wherever the build has a choice; then the explanation, with what the platform gives now beside the tricks we used before it; then the steps that build it, each beside the code that runs on this page. Start with the accordions if the three languages are new to you, or go to the tab whose bug you came with.');
+    expect(opening).toHaveTextContent('Each tab below is one feature a page needs, built here and explained. The tabs run from simple to expert: an accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns and rows you drag while trades keep landing. A tab shows the thing first, with dials wherever the build has a choice; then the explanation, with what the platform gives now beside the tricks we used before it; then the steps that build it, each beside the code that runs on this page. Start with the accordions if HTML, CSS and JavaScript are new to you, or go to the tab whose bug you came with.');
     expect(opening.compareDocumentPosition(screen.getByRole('navigation', {name: 'demos'})) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
