@@ -4,3 +4,5 @@ export {MenuExplained} from './MenuExplained';
 export {cardOneParam} from './card-one';
 export {PopoverExplained} from './PopoverExplained';
 export {BannerExplained} from './BannerExplained';
+export {FormsContextExplained} from './FormsContextExplained';
+export {wornParam} from './worn';

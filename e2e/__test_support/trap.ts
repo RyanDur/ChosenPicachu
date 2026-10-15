@@ -3,22 +3,15 @@ import {clickWhereItIs} from './scrolling';
 
 export type SortChoice = 'name' | 'date' | 'size';
 
-export const trappedMenu = (page: Page) => {
-  const trap = page.getByRole('figure', {name: /^The trap\./});
-  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, the old way$/});
-  const choice = (name: SortChoice) => trap.getByRole('menuitem', {name});
+export type Worn = 'nothing' | 'position' | 'outline' | 'z-index' | 'opacity' | 'transform' | 'isolation';
+
+const oldWaySortBy = (figure: Locator) => {
+  const sortBy = figure.getByRole('button', {name: /^Sort by(: \w+)?, the old way$/});
+  const choice = (name: SortChoice) => figure.getByRole('menuitem', {name});
   return {
     sortBy,
     choice,
-    contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
-    contextWords: trap.getByText('Card one has z-index: 1', {exact: true}),
-    caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
-    said: trap.getByRole('status', {name: 'where the list opened'}),
     open: (): Promise<void> => sortBy.click(),
-    openByKeyboard: async (): Promise<void> => {
-      await sortBy.focus();
-      await page.keyboard.press('Enter');
-    },
     onTopAt: async (name: SortChoice): Promise<string> => choice(name).evaluate((element, cardTwo) => {
       element.scrollIntoView({block: 'center'});
       const {left, top, width, height} = element.getBoundingClientRect();
@@ -27,7 +20,32 @@ export const trappedMenu = (page: Page) => {
         return 'the choice';
       }
       return cardTwo?.contains(topmost) ?? false ? 'card two' : 'something else';
-    }, await trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle())
+    }, await figure.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle())
+  };
+};
+
+export const trappedMenu = (page: Page) => {
+  const trap = page.getByRole('figure', {name: /^The trap\./});
+  const menu = oldWaySortBy(trap);
+  return {
+    ...menu,
+    contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
+    contextWords: trap.getByText('Card one has z-index: 1', {exact: true}),
+    caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
+    said: trap.getByRole('status', {name: 'where the list opened'}),
+    openByKeyboard: async (): Promise<void> => {
+      await menu.sortBy.focus();
+      await page.keyboard.press('Enter');
+    }
+  };
+};
+
+export const contextChooser = (page: Page) => {
+  const chooser = page.getByRole('figure', {name: /^The menu part’s two cards again/});
+  return {
+    ...oldWaySortBy(chooser),
+    wears: (worn: Worn): string => `demos/?tab=z-index&wears=${worn}`,
+    said: chooser.getByRole('status', {name: 'what card one formed'})
   };
 };
 

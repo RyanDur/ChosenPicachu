@@ -18,7 +18,7 @@ export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
 export {accordionsTab, builds, controlWord, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
-export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
+export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
 export {definedTerm, timesShut, whatHappened} from './terms';

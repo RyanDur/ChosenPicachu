@@ -1,0 +1,125 @@
+import {render, screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {TestApp} from '@__test_support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
+
+const heading = 'What else forms a stacking context';
+
+const theChooser = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The menu part’s two cards again/});
+
+describe('the part on what else forms a stacking context', () => {
+  test('should sit after the fixed banner part and before the tutorial', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(outOfReadingOrder([
+      screen.getByRole('region', {name: 'Why a fixed banner still loses'}),
+      part,
+      screen.getByRole('heading', {name: /let’s build this feature/i})
+    ])).toEqual([]);
+  });
+
+  test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const wears = within(await theChooser()).getByRole('group', {name: 'What card one wears'});
+
+    expect(within(wears).getAllByRole('radio').map(choice => choice.closest('label')?.textContent)).toEqual([
+      'nothing', 'position: relative', 'outline', 'z-index: 1', 'opacity: 0.9', 'transform: rotate(-1deg)', 'isolation: isolate'
+    ]);
+    expect(within(wears).getByRole('radio', {name: 'nothing'})).toBeChecked();
+  });
+
+  test('should say nothing until Sort by is pressed', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const chooser = await theChooser();
+
+    expect(within(chooser).getByRole('status', {name: 'what card one formed'})).toBeEmptyDOMElement();
+  });
+
+  test('should say the list opened under card two, and why, once card one wears opacity and Sort by is pressed', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const chooser = await theChooser();
+
+    await userEvent.click(within(chooser).getByRole('radio', {name: 'opacity: 0.9'}));
+    await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
+
+    expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
+      .toHaveTextContent('The list opened under card two. An opacity below 1 forms a stacking context, so a card that fades traps what it holds.');
+  });
+
+  test('should say the list opened over card two, and that position alone forms no context, once card one is positioned', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const chooser = await theChooser();
+
+    await userEvent.click(within(chooser).getByRole('radio', {name: 'position: relative'}));
+    await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
+
+    expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
+      .toHaveTextContent('The list opened over card two. Position alone forms no stacking context; a positioned element forms one only with a z-index other than auto.');
+  });
+
+  test('should go quiet when another choice is made after Sort by was pressed', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const chooser = await theChooser();
+    await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
+    await userEvent.keyboard('{Escape}');
+
+    await userEvent.click(within(chooser).getByRole('radio', {name: 'isolation: isolate'}));
+
+    expect(within(chooser).getByRole('status', {name: 'what card one formed'})).toBeEmptyDOMElement();
+  });
+
+  test('should write the choice into the address, and bring it back from there', async () => {
+    const {unmount} = render(<TestApp at={demosAt('?tab=z-index')}/>);
+    await userEvent.click(within(await theChooser()).getByRole('radio', {name: 'transform: rotate(-1deg)'}));
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('wears=transform');
+    unmount();
+
+    render(<TestApp at={demosAt('?tab=z-index&wears=transform')}/>);
+
+    expect(within(await theChooser()).getByRole('radio', {name: 'transform: rotate(-1deg)'})).toBeChecked();
+  });
+
+  test('should leave the menu part’s own checkbox as it was', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&wears=opacity')}/>);
+
+    expect(within(await screen.findByRole('figure', {name: /^The trap\./})).getByRole('checkbox', {name: 'Card one has z-index: 1'})).toBeChecked();
+  });
+
+  test.each([
+    ['position', /^alone forms no context\. A positioned element/, '.positioned {'],
+    ['outline', /^is paint, and paint forms no context/, '.outlined {'],
+    ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.layered {'],
+    ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
+    ['transform', /^forms a context, as any transform does/, '.turned {'],
+    ['isolation', /^forms a context and changes nothing else/, '.isolated {']
+  ])('should open the %s run on its property, linked to MDN, with its rule beside it', async (property, words, rule) => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    const run = explanation.runTelling(part, words);
+
+    expect(within(run).getAllByRole('link')[0]).toHaveAttribute('href', `https://developer.mozilla.org/en-US/docs/Web/CSS/${property}`);
+    expect(explanation.codeBeside(part, words)).toHaveTextContent(rule);
+  });
+
+  test('should show the grid and the anchor beside the run on a card that wears nothing', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.menu-anchor \{[^]*position: relative;/);
+  });
+
+  test('should open its run on MDN’s whole list', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(within(part).getByRole('link', {name: 'the whole list'}))
+      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Stacking_context');
+  });
+});

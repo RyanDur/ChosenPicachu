@@ -15,7 +15,7 @@ import {
   LazyKeepStaticList
 } from './DragAndDrop';
 import {demoTopicParam, DemoTopics} from './types';
-import {BannerExplained, cardOneParam, MenuExplained, PopoverExplained, raisedParam, StackingExplained} from './ZIndexDemo';
+import {BannerExplained, cardOneParam, FormsContextExplained, MenuExplained, PopoverExplained, raisedParam, StackingExplained, wornParam} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
@@ -42,9 +42,9 @@ const topics = [
 ];
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => {
     const dealt = wordDeck();
@@ -78,6 +78,7 @@ export const DemosPage = () => {
           <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
           <PopoverExplained/>
           <BannerExplained/>
+          <FormsContextExplained worn={wears} onWornChosen={next => updateSearchParams({wears: next})}/>
           <TopLayerTutorial/>
         </>,
         [DemoTopics.charts]: <>
