@@ -53,6 +53,6 @@ export const Presentation: FC = () =>
         Custom properties are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson learned by the platform: the theme variables came home from script.</p>
       <p className="paragraph">The test is to read a class list on its own. If it does not say what the
         element is and what it needs, in the names the design uses, the sheet has become a pile of overrides.
-        Chedeau’s seven problems, in the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>, are what a pile of overrides costs at scale.</p>
+        Chedeau’s talk, in the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>, catalogued what a pile of overrides costs at scale.</p>
     </HowIOrganizeIt>
   </section>;
