@@ -29,6 +29,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.sort-choices {'), gap,
           ...unit(zIndexCss, '.old-way-card {'), gap,
+          ...unit(zIndexCss, '.positioned {'), gap,
           ...unit(zIndexCss, '.forms-context {')
         ]}/>
       </li>

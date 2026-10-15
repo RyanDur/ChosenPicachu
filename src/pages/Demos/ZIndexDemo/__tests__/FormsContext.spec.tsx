@@ -3,11 +3,12 @@ import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const heading = 'What else forms a stacking context';
 
-const theChooser = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The menu part’s two cards again/});
+const theChooser = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^What card one wears decides/});
 
 describe('the part on what else forms a stacking context', () => {
   test('should sit after the fixed banner part and before the tutorial', async () => {
@@ -27,7 +28,7 @@ describe('the part on what else forms a stacking context', () => {
 
     const wears = within(await theChooser()).getByRole('group', {name: 'What card one wears'});
 
-    expect(within(wears).getAllByRole('radio').map(choice => choice.closest('label')?.textContent)).toEqual([
+    expect(within(wears).getAllByRole('radio').map(choice => computeAccessibleName(choice))).toEqual([
       'nothing', 'position: relative', 'outline', 'z-index: 1', 'opacity: 0.9', 'transform: rotate(-1deg)', 'isolation: isolate'
     ]);
     expect(within(wears).getByRole('radio', {name: 'nothing'})).toBeChecked();
@@ -49,7 +50,7 @@ describe('the part on what else forms a stacking context', () => {
     await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
 
     expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
-      .toHaveTextContent('The list opened under card two. An opacity below 1 forms a stacking context, so a card that fades traps what it holds.');
+      .toHaveTextContent('The list opened under card two. opacity: 0.9 formed a stacking context.');
   });
 
   test('should say the list opened over card two, and that position alone forms no context, once card one is positioned', async () => {
@@ -60,7 +61,7 @@ describe('the part on what else forms a stacking context', () => {
     await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
 
     expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
-      .toHaveTextContent('The list opened over card two. Position alone forms no stacking context; a positioned element forms one only with a z-index other than auto.');
+      .toHaveTextContent('The list opened over card two. position: relative alone forms no stacking context.');
   });
 
   test('should go quiet when another choice is made after Sort by was pressed', async () => {
@@ -92,12 +93,12 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test.each([
-    ['position', /^alone forms no context\. A positioned element/, '.positioned {'],
-    ['outline', /^is paint, and paint forms no context/, '.outlined {'],
-    ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.layered {'],
+    ['position', /^is not enough on its own, and neither is absolute/, '.positioned {'],
+    ['outline', /^is paint\. An outline, a border/, '.outlined {'],
+    ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.forms-context {'],
     ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
     ['transform', /^forms a context, as any transform does/, '.turned {'],
-    ['isolation', /^forms a context and changes nothing else/, '.isolated {']
+    ['isolation', /^changes nothing else\. It exists for this/, '.isolated {']
   ])('should open the %s run on its property, linked to MDN, with its rule beside it', async (property, words, rule) => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
@@ -112,7 +113,7 @@ describe('the part on what else forms a stacking context', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
 
-    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.menu-anchor \{[^]*position: relative;/);
+    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.menu-anchor \{[^]*position: relative;/);
   });
 
   test('should open its run on MDN’s whole list', async () => {

@@ -19,20 +19,20 @@ const property: Record<Worn, string> = {
 const wornAs: Partial<Record<Worn, string>> = {
   position: 'positioned',
   outline: 'outlined',
-  'z-index': 'layered',
+  'z-index': 'forms-context',
   opacity: 'faded',
   transform: 'turned',
   isolation: 'isolated'
 };
 
 const whatItFormed: Record<Worn, string> = {
-  nothing: 'The list opened over card two. Card one wears nothing and forms no stacking context, so its list’s 9999 is compared with card two’s 1.',
-  position: 'The list opened over card two. Position alone forms no stacking context; a positioned element forms one only with a z-index other than auto.',
-  outline: 'The list opened over card two. An outline is paint, and paint forms no stacking context.',
-  'z-index': 'The list opened under card two. A z-index other than auto forms a stacking context on a positioned element, and on a flex or grid item too, which card one is; the 9999 counts only inside it.',
-  opacity: 'The list opened under card two. An opacity below 1 forms a stacking context, so a card that fades traps what it holds.',
-  transform: 'The list opened under card two. Any transform forms a stacking context, even one that moves nothing, so a card that slides in traps what it holds.',
-  isolation: 'The list opened under card two. isolation: isolate forms a stacking context and changes nothing else; it exists to form one on purpose.'
+  nothing: 'The list opened over card two. Card one wears nothing, so it forms no stacking context.',
+  position: 'The list opened over card two. position: relative alone forms no stacking context.',
+  outline: 'The list opened over card two. An outline forms no stacking context.',
+  'z-index': 'The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.',
+  opacity: 'The list opened under card two. opacity: 0.9 formed a stacking context.',
+  transform: 'The list opened under card two. The transform formed a stacking context.',
+  isolation: 'The list opened under card two. isolation: isolate formed a stacking context.'
 };
 
 type Props = {
@@ -50,7 +50,7 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
       <li className="paragraph">Press Sort by, built the old way, and look where its list opens.</li>
       <li className="paragraph">Choose another, and press Sort by again.</li>
     </ol>
-    <fieldset className="wears borderless">
+    <fieldset className="wears">
       <legend className="paragraph">What card one wears</legend>
       {inOrder.map(choice =>
         <label key={choice} className="context-choice reachable">
@@ -72,6 +72,6 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
       </li>
     </ol>
     <output aria-label="what card one formed" className="paragraph">{openedAsWorn.map(wearing => whatItFormed[wearing]).orElse('')}</output>
-    <figcaption className="caption">The menu part’s two cards again, with card one wearing one thing at a time.</figcaption>
+    <figcaption className="caption">What card one wears decides whether its list’s 9999 counts on the whole page or only inside the card.</figcaption>
   </figure>;
 };

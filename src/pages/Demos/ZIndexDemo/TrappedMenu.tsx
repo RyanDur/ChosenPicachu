@@ -29,7 +29,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
       <li className="paragraph">Press Sort by, in the top layer, with the box checked or not.</li>
     </ol>
     <ol className="old-way-cards">
-      <li className={classNames('old-way-card card rounded-corners floating', cardOne === 'contained' && 'forms-context')}>
+      <li className={classNames('old-way-card card rounded-corners floating positioned', cardOne === 'contained' && 'forms-context')}>
         <label className="context-choice reachable">
           <input type="checkbox" checked={cardOne === 'contained'}
             onChange={({currentTarget}) => {
@@ -44,7 +44,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
           <li className="trap-way"><p className="caption">The top layer</p><TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/></li>
         </ul>
       </li>
-      <li className="old-way-card card rounded-corners floating forms-context">
+      <li className="old-way-card card rounded-corners floating positioned forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>

@@ -22,41 +22,43 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
     <ContextChooser worn={worn} onWornChosen={onWornChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">A stacking context is formed by more properties than z-index. MDN keeps <a className="signpost"
-          href={`${mdn}CSS_positioned_layout/Stacking_context`}>the whole list</a>; these are the ones a page meets most,
-          and the three that form none are there because telling them apart is the lesson.</p>
+        <p className="paragraph">A stacking context is formed by more properties than z-index. MDN, Mozilla’s web
+          reference, keeps <a className="signpost" href={`${mdn}CSS_positioned_layout/Stacking_context`}>the whole
+            list</a>; these are the ones a page meets most, and the three that form none are there because telling them
+          apart is the lesson.</p>
       </li>
       <li className="run">
-        <p className="paragraph">With nothing on it, card one is a plain grid item and forms no context. Its list’s 9999
-          is compared with card two’s 1 in the page’s own context, so the list opens on top.</p>
+        <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
+          display is grid. Its list’s 9999 is compared with card two’s 1 in the page’s own context, so the list opens on
+          top.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.old-way-cards {'), gap,
           ...unit(zIndexCss, '.menu-anchor {')
         ]}/>
       </li>
       <li className="run">
-        <p className="paragraph"><a className="signpost" href={`${mdn}position`}><code>position: relative</code></a> alone
-          forms no context. A positioned element forms one only when it also has a z-index other than auto. The list
-          still opens on top.</p>
+        <p className="paragraph"><a className="signpost" href={`${mdn}position`}><code>position: relative</code></a> is
+          not enough on its own, and neither is absolute: an element positioned either way forms a context only when it
+          also has a z-index other than auto. Fixed and sticky are different and form one by themselves.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.positioned {')}/>
       </li>
       <li className="run">
-        <p className="paragraph"><a className="signpost" href={`${mdn}outline`}><code>outline</code></a> is paint, and
-          paint forms no context. An outline, a border, a background or a shadow changes how a box looks and not how it
-          stacks.</p>
+        <p className="paragraph"><a className="signpost" href={`${mdn}outline`}><code>outline</code></a> is paint. An
+          outline, a border, a background or a shadow changes how a box looks and not how it stacks, so none of them forms
+          a context.</p>
         <Snippet label="CSS" lines={unit(surfaceCss, '.outlined {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code>z-index: 1</code></a> forms a
-          context on a positioned element, and on a flex or grid item too, which card one is here; the menu part’s card
-          had position: relative as well, and either is enough. The 9999 now counts only inside card one, and card two,
-          at 1 and later in the code, paints over it.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.layered {')}/>
+          context on a positioned element, and on a flex or grid item too, a box laid out by a parent whose display is
+          flex or grid, which card one is here; the menu part’s card had position: relative as well, and either is
+          enough. Card two, at 1 and later in the code, paints over it.</p>
+        <Snippet label="CSS" lines={unit(zIndexCss, '.forms-context {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}opacity`}><code>opacity: 0.9</code></a>, like any
-          opacity below 1, forms a context: the card is drawn as one layer and then faded. A card that fades in traps its
-          menu, and nothing in the stylesheet says z-index.</p>
+          opacity below 1, forms a context because the card is drawn as one layer and then faded. A card that fades in
+          traps its menu, and nothing in the stylesheet says z-index.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.faded {')}/>
       </li>
       <li className="run">
@@ -66,9 +68,9 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
         <Snippet label="CSS" lines={unit(zIndexCss, '.turned {')}/>
       </li>
       <li className="run">
-        <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> forms
-          a context and changes nothing else. It exists for this: to keep a component’s z-indexes inside it on purpose,
-          instead of as a side effect of opacity or a transform.</p>
+        <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> changes
+          nothing else. It exists for this: to keep a component’s z-indexes inside it on purpose, instead of as a side
+          effect of opacity or a transform.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.isolated {')}/>
       </li>
     </ol>

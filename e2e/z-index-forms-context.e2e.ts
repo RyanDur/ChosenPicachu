@@ -1,35 +1,47 @@
 import {expect, test} from '@playwright/test';
 import {contextChooser, desktop, iPhone, type Worn} from './__test_support';
 
-const opensOver: readonly Worn[] = ['nothing', 'position', 'outline'];
-const opensUnder: readonly Worn[] = ['z-index', 'opacity', 'transform', 'isolation'];
+const whereTheListOpens: readonly [Worn, 'over' | 'under'][] = [
+  ['nothing', 'over'],
+  ['position: relative', 'over'],
+  ['outline', 'over'],
+  ['z-index: 1', 'under'],
+  ['opacity: 0.9', 'under'],
+  ['transform: rotate(-1deg)', 'under'],
+  ['isolation: isolate', 'under']
+];
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
     test.use(device);
 
-    for (const worn of opensOver) {
-      test(`with card one wearing ${worn}, the menu opens over card two`, async ({page}) => {
-        const chooser = contextChooser(page);
-        await page.goto(chooser.wears(worn));
+    test('choosing each thing card one wears in turn opens the menu over card two for the three that form no context, and under it for the four that do', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const chooser = contextChooser(page);
 
+      for (const [worn, where] of whereTheListOpens) {
+        await chooser.wearing(worn).click();
+        await expect(chooser.wearing(worn)).toBeChecked();
         await chooser.open();
 
-        await expect.poll(() => chooser.onTopAt('date')).toBe('the choice');
-        await expect(chooser.said).toContainText('over card two');
-      });
-    }
-
-    for (const worn of opensUnder) {
-      test(`with card one wearing ${worn}, the menu opens under card two`, async ({page}) => {
-        const chooser = contextChooser(page);
-        await page.goto(chooser.wears(worn));
-
-        await chooser.open();
-
-        await expect.poll(() => chooser.onTopAt('date')).toBe('card two');
-        await expect(chooser.said).toContainText('under card two');
-      });
-    }
+        await expect.poll(() => chooser.onTopAt('date')).toBe(where === 'over' ? 'the choice' : 'card two');
+        await expect(chooser.said).toContainText(`${where} card two`);
+        await page.keyboard.press('Escape');
+      }
+    });
   });
 }
+
+test('going back past a choice takes back the sentence, which no longer matches the cards', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const chooser = contextChooser(page);
+  await chooser.wearing('opacity: 0.9').click();
+  await chooser.open();
+  await expect(chooser.said).toContainText('under card two');
+  await page.keyboard.press('Escape');
+
+  await page.goBack();
+
+  await expect(chooser.wearing('nothing')).toBeChecked();
+  await expect(chooser.said).toBeEmpty();
+});

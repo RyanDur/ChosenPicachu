@@ -3,7 +3,7 @@ import {clickWhereItIs} from './scrolling';
 
 export type SortChoice = 'name' | 'date' | 'size';
 
-export type Worn = 'nothing' | 'position' | 'outline' | 'z-index' | 'opacity' | 'transform' | 'isolation';
+export type Worn = 'nothing' | 'position: relative' | 'outline' | 'z-index: 1' | 'opacity: 0.9' | 'transform: rotate(-1deg)' | 'isolation: isolate';
 
 const oldWaySortBy = (figure: Locator) => {
   const sortBy = figure.getByRole('button', {name: /^Sort by(: \w+)?, the old way$/});
@@ -41,10 +41,10 @@ export const trappedMenu = (page: Page) => {
 };
 
 export const contextChooser = (page: Page) => {
-  const chooser = page.getByRole('figure', {name: /^The menu part’s two cards again/});
+  const chooser = page.getByRole('figure', {name: /^What card one wears decides/});
   return {
     ...oldWaySortBy(chooser),
-    wears: (worn: Worn): string => `demos/?tab=z-index&wears=${worn}`,
+    wearing: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true}),
     said: chooser.getByRole('status', {name: 'what card one formed'})
   };
 };

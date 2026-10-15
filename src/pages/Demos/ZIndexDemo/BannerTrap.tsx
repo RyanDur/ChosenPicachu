@@ -22,7 +22,7 @@ export const BannerTrap: FC = () => {
       <li className="paragraph">Press Raise a banner, in the top layer, and scroll again.</li>
     </ol>
     <ol className="old-way-cards">
-      <li className="old-way-card card rounded-corners floating forms-context">
+      <li className="old-way-card card rounded-corners floating positioned forms-context">
         <p className="paragraph">Card one has z-index: 1.</p>
         <ul className="trap-ways">
           <li className="trap-way">
@@ -41,7 +41,7 @@ export const BannerTrap: FC = () => {
           <button type="button" tabIndex={0} className="dismiss borderless attentive reachable" aria-label="dismiss the old banner" onClick={dismissed}>×</button>
         </p>}
       </li>
-      <li className="old-way-card card rounded-corners floating forms-context">
+      <li className="old-way-card card rounded-corners floating positioned forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>

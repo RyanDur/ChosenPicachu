@@ -237,10 +237,11 @@ describe('the banner tutorial’s first story', () => {
     expect(within(styling).getByRole('code')).toHaveTextContent(/\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
-  test('should name MDN as Mozilla’s web reference', async () => {
+  test('should send the reader to MDN, which the tab names earlier as Mozilla’s web reference', async () => {
     await openZIndexTab();
 
-    expect(await screen.findByText(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
+    expect(await screen.findByText(/The links go to MDN, if you want more\./)).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'What else forms a stacking context'})).getByText(/MDN, Mozilla’s web reference, keeps/)).toBeInTheDocument();
   });
 });
 
