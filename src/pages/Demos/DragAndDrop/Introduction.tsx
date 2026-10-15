@@ -13,5 +13,5 @@ export const DragSortIntroduction: FC = () =>
       neighbours, or not. Each of those is a dial on the exhibit, and the keyboard has the same moves as the pointer.</p>
     <p className="paragraph">By the end you can build a sortable list on the browser’s own drag and drop, choose each of
       those three behaviours and say what it costs, and give a keyboard user the same list. The exhibit below is three
-      items; drag one, or focus it and use the arrow keys.</p>
+      items; drag one, or focus its grip and use the left and right arrows.</p>
   </header>;
