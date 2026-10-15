@@ -15,8 +15,8 @@ export const Structure: FC = () =>
       HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the element that means
       what the content is, and add the look and the behaviour on top of it.
     </p>
-    <FromTheRecord door="Structure" keys={['need', 'structureArrives', 'webGoesPublic', 'htmlTwo', 'needOutrunsStandards', 'browsersTakePen', 'someoneNeedsComponents', 'html5SaysIt', 'documentComesBack']}/>
-    <HowIOrganizeIt door="Structure">
+    <FromTheRecord keys={['need', 'structureArrives', 'webGoesPublic', 'htmlTwo', 'needOutrunsStandards', 'browsersTakePen', 'someoneNeedsComponents', 'html5SaysIt', 'documentComesBack']}/>
+    <HowIOrganizeIt>
       <p className="paragraph">I start from what the content is and pick the element for it. The platform
         has more elements than most pages use: a{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
