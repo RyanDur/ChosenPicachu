@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {DemoTopics} from '@pages/Demos/types';
 import {inOrder} from '@pages/Record/moments/moments';
 import {spelledOut} from '@pages/Record/moments/spelled-out';
 
@@ -25,7 +26,8 @@ export const Opener: FC = () =>
       Each language has a door below: what it is for, how I organize it, and the moments in the
       record where the web learned it. The record tells how the web got the three languages, in{' '}
       {spelledOut(inOrder.length)} moments and a closing essay. The demos are where I work the
-      practice; the tables are built twice, once with the three languages raw and once in React, so
-      the seam between the languages and the framework stays visible.
+      practice: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own
+      code and explained beside it, each with the tricks we used before the platform could do the
+      job and what it gives now.
     </p>
   </header>;
