@@ -18,6 +18,6 @@ export const CssTwoOne: FC = () =>
       and for small devices <a className="signpost" href="https://www.w3.org/TR/2001/WD-css3-roadmap-20010523/">“it may be impractical to support all of CSS”</a>.
       A module is one piece of the language with its own specification and its own tests.</p>
     <p className="paragraph muted-ink hyphenated">This is the shape CSS still has: modules at levels, each finished the way 2.1 was finished, against its tests.
-      CSS 1 was declared finished before any browser rendered it; since 2.1, a module is finished when the browsers
-      render it alike.</p>
+      CSS 1 was declared finished while no browser rendered all of it; since 2.1, a module is finished when the
+      browsers render it alike.</p>
   </Moment>;
