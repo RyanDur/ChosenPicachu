@@ -171,7 +171,7 @@ describe('the home page', () => {
     const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));
     const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
       .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
-      .map(link => [(link.textContent ?? '').slice(0, 4), link.getAttribute('href')]);
+      .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]);
 
     expect(cited).toEqual(meant.map(moment => [moment.slice(0, 4), listed.getByRole('link', {name: moment}).getAttribute('href')]));
   });
