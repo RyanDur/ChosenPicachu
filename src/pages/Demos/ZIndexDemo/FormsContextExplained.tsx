@@ -51,8 +51,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code>z-index: 1</code></a> forms a
-          context on a positioned element, and on a flex or grid item too, a box laid out by a parent whose display is
-          flex or grid, which card one is here. The menu part’s card had position: relative as well, and either is
+          context on a positioned element, and on a grid item too, which card one is here, and on a flex item, a box laid
+          out by a parent whose display is flex. The menu part’s card had position: relative as well, and either is
           enough. Card two, at 1 and later in the code, paints over card one.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.forms-context {')}/>
       </li>

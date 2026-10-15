@@ -91,7 +91,7 @@ describe('the part on what else forms a stacking context', () => {
   test.each([
     ['position', /^is not enough on its own, and neither is absolute/, '.positioned {'],
     ['outline', /^is paint\. An outline, a border/, '.outlined {'],
-    ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.forms-context {'],
+    ['z-index', /^forms a context on a positioned element, and on a grid item too, which card one is here/, '.forms-context {'],
     ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
     ['transform', /^forms a context, as any transform does/, '.turned {'],
     ['isolation', /^forms a context and does nothing more\. Use it to keep/, '.isolated {']
@@ -110,6 +110,14 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
 
     expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.menu-anchor \{[^]*position: relative;/);
+  });
+
+  test('should say what sticky is where the part first names it', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))
+      .toHaveTextContent('Fixed and sticky, which scrolls with the page until it reaches an edge and then stays there, are different and form one by themselves.');
   });
 
   test('should open its run on MDN’s whole list', async () => {
