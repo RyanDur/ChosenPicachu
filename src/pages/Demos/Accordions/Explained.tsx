@@ -590,8 +590,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             that, with a little script, and the radios stay plain.</p>
           <p className="paragraph">A press on a radio is an event, a message the browser sends when something happens. The
             event then bubbles up through the elements around the radio, and the list runs a function for it on the
-            way, which is called a handler. The list keeps the open radio’s value, the string each radio carries
-            to tell it apart, in a data-open attribute, a name and value set on the list element. A
+            way, which is called a handler.</p>
+          <p className="paragraph">The list keeps the open radio’s value, the string each radio carries to tell it apart,
+            in a <code>data-open</code> attribute, a name the script sets on the list element to that string. A
             press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
             arrow keys move the choice and press as they go, so each move is written too.</p>
           <Snippet label="TS" lines={[

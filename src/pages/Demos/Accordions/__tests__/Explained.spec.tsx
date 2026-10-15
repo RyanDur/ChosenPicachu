@@ -793,12 +793,13 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(together).getByText(opening)).toHaveTextContent(sentence);
   });
 
-  test('should say, with exclusive chosen, what an event and a handler are where the press reaches the list, and that the list keeps the open radio in its data-open attribute', async () => {
+  test('should say, with exclusive chosen, what an event and a handler are where the press reaches the list, then what a radio’s value and the data-open attribute are, in a paragraph of their own', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
-    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler. The list keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute, a name and value set on the list element. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
+    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
+    expect(within(together).getByText(/^The list keeps the open radio’s value/)).toHaveTextContent('The list keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute, a name the script sets on the list element to that string. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
   });
 
   test('should say, with exclusive chosen, what keydown is where the list catches the space bar', async () => {
