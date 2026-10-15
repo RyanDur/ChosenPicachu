@@ -167,13 +167,13 @@ describe('the home page', () => {
     ['Structure', ['2014 The philosophy needs writing down', '2014 The philosophy needs writing down', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
     ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The need outruns the standards', '2013 Someone needs components', '2013 Someone needs components']],
     ['Dynamic Interaction', ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
-  ])('should rest %s\'s practice on its own moments, each citation opening the moment its sentence means', (section, meant) => {
+  ])('should rest %s\'s practice on its own moments, each citation naming the year of the moment it opens', (section, meant) => {
     const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));
     const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
-      .map(link => link.getAttribute('href') ?? '')
-      .filter(address => address.startsWith(Paths.record));
+      .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
+      .map(link => [(link.textContent ?? '').slice(0, 4), link.getAttribute('href')]);
 
-    expect(cited).toEqual(meant.map(moment => listed.getByRole('link', {name: moment}).getAttribute('href')));
+    expect(cited).toEqual(meant.map(moment => [moment.slice(0, 4), listed.getByRole('link', {name: moment}).getAttribute('href')]));
   });
 });
 
