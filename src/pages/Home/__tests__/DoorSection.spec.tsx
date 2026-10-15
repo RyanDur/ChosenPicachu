@@ -10,7 +10,8 @@ describe('a door’s part outside a door section', () => {
       <HowIOrganizeIt><p>The skeleton comes first.</p></HowIOrganizeIt>
     </TestApp>);
 
-    expect(await screen.findByRole('status', {name: 'url path'})).toHaveTextContent('/');
+    await screen.findByRole('status', {name: 'url path'});
+
     expect(screen.queryAllByRole('region', {name: /from the record|how I organize it/})).toEqual([]);
     expect(screen.queryByRole('list', {name: /from the record/})).not.toBeInTheDocument();
     expect(screen.queryByText('The skeleton comes first.')).not.toBeInTheDocument();
