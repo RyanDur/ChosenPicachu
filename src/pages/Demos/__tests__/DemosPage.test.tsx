@@ -43,10 +43,16 @@ describe('The Demos page', () => {
   test('the demos page opens on the accordions', async () => {
     render(<TestApp at={demosAt()}/>);
 
-    await waitFor(() => {
-      const main = screen.getByRole('main');
-      expect(within(main).getByRole('heading', {name: 'Accordions', level: 2})).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('region', {name: 'Accordions'})).toBeInTheDocument();
+  });
+
+  test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should name the %s tab by its region, with no heading inside repeating it', async tab => {
+    render(<TestApp at={demosAt()}/>);
+
+    await demoTabs.open(tab);
+
+    const region = await screen.findByRole('region', {name: tab});
+    expect(within(region).queryByRole('heading', {name: tab})).not.toBeInTheDocument();
   });
 
   test('the z-index door leads to its demo and titles the page', async () => {
@@ -56,7 +62,7 @@ describe('The Demos page', () => {
 
     await waitFor(() => {
       const main = screen.getByRole('main');
-      expect(within(main).getByRole('heading', {level: 2, name: 'Z-index'})).toBeInTheDocument();
+      expect(within(main).getByRole('region', {name: 'Z-index'})).toBeInTheDocument();
     });
 
     expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('Demos Z-index');

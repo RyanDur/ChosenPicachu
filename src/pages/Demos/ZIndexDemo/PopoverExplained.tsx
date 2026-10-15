@@ -12,7 +12,7 @@ const gap = plain(' ');
 
 export const PopoverExplained: FC = () =>
   <section aria-labelledby={popoverWinsHeading} className="stacking-part">
-    <h3 id={popoverWinsHeading} className="title bold">Why the popover wins</h3>
+    <h2 id={popoverWinsHeading} className="title bold">Why the popover wins</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The list from Sort by, in the top layer, opens over everything around it every time, with

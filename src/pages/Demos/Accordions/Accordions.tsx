@@ -40,7 +40,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   motion
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
   <hgroup>
-    <h4 className="sub-title bold">Accordion using checkboxes and a known height</h4>
+    <h3 className="sub-title bold">Accordion using checkboxes and a known height</h3>
     <p>no Javascript needed to pull this off.</p>
   </hgroup>
   <fieldset>
@@ -66,7 +66,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   motion
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
   <hgroup>
-    <h4 className="sub-title bold">Accordion using a radio group and a known height</h4>
+    <h3 className="sub-title bold">Accordion using a radio group and a known height</h3>
     <p>no Javascript needed to pull this off.</p>
   </hgroup>
   <fieldset>
@@ -96,7 +96,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
   motion
 }) => <article className={classNames('inclusive-toggle-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Inclusive accordion using details elements</h4>
+    <h3 className="sub-title bold">Inclusive accordion using details elements</h3>
   </header>
   <ul className="new-accordion">
     {content.map(({value, key}) =>
@@ -115,7 +115,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
   motion
 }) => <article className={classNames('exclusive-toggle-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Exclusive accordion using details elements</h4>
+    <h3 className="sub-title bold">Exclusive accordion using details elements</h3>
   </header>
   <ul className="new-accordion">
     {content.map(({value, key}) =>
@@ -134,7 +134,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   motion
 }) => <article className={classNames('toggle-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
+    <h3 className="sub-title bold">Inclusive accordion using checkboxes</h3>
   </header>
 
   <fieldset>
@@ -162,7 +162,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   motion
 }) => <article className={classNames('toggle-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
+    <h3 className="sub-title bold">Exclusive accordion using radio group</h3>
   </header>
 
   <fieldset>
@@ -197,7 +197,7 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   const [open, setOpen] = useState<readonly string[]>([]);
   return <article className={classNames('inclusive-accordion', motion, className)}>
     <hgroup>
-      <h4 className="sub-title bold">Accordion using checkboxes and a measured height</h4>
+      <h3 className="sub-title bold">Accordion using checkboxes and a measured height</h3>
       <p>a few lines of script measure each part’s height.</p>
     </hgroup>
     <fieldset>
@@ -225,7 +225,7 @@ export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   const [open, setOpen] = useState<string>();
   return <article className={classNames('exclusive-accordion', motion, className)}>
     <hgroup>
-      <h4 className="sub-title bold">Accordion using a radio group and a measured height</h4>
+      <h3 className="sub-title bold">Accordion using a radio group and a measured height</h3>
       <p>a few lines of script measure each part’s height.</p>
     </hgroup>
     <fieldset>

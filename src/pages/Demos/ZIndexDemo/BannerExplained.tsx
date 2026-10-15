@@ -16,7 +16,7 @@ export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParams();
 
   return <section aria-labelledby="fixed-banner-loses-heading" className="stacking-part">
-    <h3 id="fixed-banner-loses-heading" className="title bold">Why a fixed banner still loses</h3>
+    <h2 id="fixed-banner-loses-heading" className="title bold">Why a fixed banner still loses</h2>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

@@ -1,11 +1,10 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useContext, useId} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components/class-names';
 import {Trade} from '../coinbase';
 import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
-import {ChartHeading} from '../heading';
 import {sideOf} from '../sides';
 
 const SIZE = 120;
@@ -23,12 +22,11 @@ type Props = {
 };
 
 export const Pie: FC<Props> = ({trades, actions}) => {
-  const Heading = useContext(ChartHeading);
   const heading = `heading${useId()}`;
   const totals = sideTotals(trades);
   const cut = slices(sides.map(side => ({side, weight: totals[side]})));
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
-    <Heading id={heading} className="off-screen">pie</Heading>
+    <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
       {actions}
     </header>

@@ -17,7 +17,7 @@ type Props = {
 
 export const StackingExplained: FC<Props> = ({raised, onRaised}) =>
   <section aria-labelledby="third-on-top-heading" className="stacking-part">
-    <h3 id="third-on-top-heading" className="title bold">Why Third is on top</h3>
+    <h2 id="third-on-top-heading" className="title bold">Why Third is on top</h2>
     <NaturalZIndex className="card rounded-corners lifted padded" raised={raised} onRaised={onRaised}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

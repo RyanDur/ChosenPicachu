@@ -18,7 +18,7 @@ type Props = {
 
 export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
   <section aria-labelledby={stillLosesHeading} className="stacking-part">
-    <h3 id={stillLosesHeading} className="title bold">Why 9999 still loses</h3>
+    <h2 id={stillLosesHeading} className="title bold">Why 9999 still loses</h2>
     <TrappedMenu cardOne={cardOne} onCardOneChosen={onCardOneChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

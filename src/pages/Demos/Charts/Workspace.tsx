@@ -18,7 +18,6 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import './Workspace.css';
-import {ChartHeading} from './heading';
 
 const chartNames: Record<ChartKind, string> = {
   price: 'Price line',
@@ -68,7 +67,7 @@ export const Workspace: FC<Props> = ({product}) => {
 
   return <>
     <header className="charts-heading">
-      <h3 className="headline title bold ink">{`Bitcoin, live — every ${product} trade on Coinbase`}</h3>
+      <h2 className="headline title bold ink">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
       <output className={classNames('status', 'muted-ink', 'tracked', lampOf[status])} aria-label="feed">{statusCopy[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&
@@ -91,32 +90,30 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    <ChartHeading.Provider value="h4">
-      <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-        const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
-        return <li key={kind}
-          className={dress(at)}
-          onAnimationEnd={settled}
-          draggable={isArmed(at)}
-          onDragStart={lift(at)}
-          onDragOver={travel}
-          onDrop={event => event.preventDefault()}
-          onDragEnd={release}>
-          <Link id={doorwayId(kind)} className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
-            <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
-          </Link>
-          {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
-          {matchChartKind(kind, {
-            price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
-              period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
-            candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
-              period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
-            pressure: () => <Pressure trades={trades} actions={actions}/>,
-            pie: () => <Pie trades={trades} actions={actions}/>
-          }).orNull()}
-        </li>;
-      })}
-      </ol>
-    </ChartHeading.Provider>
+    <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
+      const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
+      return <li key={kind}
+        className={dress(at)}
+        onAnimationEnd={settled}
+        draggable={isArmed(at)}
+        onDragStart={lift(at)}
+        onDragOver={travel}
+        onDrop={event => event.preventDefault()}
+        onDragEnd={release}>
+        <Link id={doorwayId(kind)} className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
+          <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
+        </Link>
+        {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
+        {matchChartKind(kind, {
+          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
+            period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
+          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
+            period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
+          pressure: () => <Pressure trades={trades} actions={actions}/>,
+          pie: () => <Pie trades={trades} actions={actions}/>
+        }).orNull()}
+      </li>;
+    })}
+    </ol>
   </>;
 };

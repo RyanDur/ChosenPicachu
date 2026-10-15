@@ -42,7 +42,7 @@ describe('the accordions tab', () => {
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
 
-    expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual([htmlAlone, 'fold choices', ...parts]);
+    expect(within(tab).getAllByRole('heading', {level: 2}).map(part => part.textContent)).toEqual([htmlAlone, 'fold choices', ...parts]);
   });
 
   test('should name the fold choices’ section by its heading, with the line and both rows inside it', async () => {
@@ -78,7 +78,7 @@ describe('the accordions tab', () => {
 
     const explained = await screen.findByRole('region', {name: part});
 
-    expect(within(explained).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 4}).textContent)).toEqual(builds);
+    expect(within(explained).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent)).toEqual(builds);
   });
 });
 
@@ -617,7 +617,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getAllByRole('heading', {level: 4}).map(heading => heading.textContent)).toEqual(['The max-height guess', measured, known]);
+    expect(within(oldWay).getAllByRole('heading', {level: 3}).map(heading => heading.textContent)).toEqual(['The max-height guess', measured, known]);
   });
 });
 

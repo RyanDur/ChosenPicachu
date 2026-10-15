@@ -77,12 +77,10 @@ export const DemosPage = () => {
       {({
         [DemoTopics.accordions]:
               <>
-                <h2 className="title bold">Accordions</h2>
                 <AccordionsExplained contents={accordionContents} type={type} onTypeChosen={next => updateSearchParams({type: next})}
                   motion={foldMotion} onMotionChosen={next => updateSearchParams({style: next})}/>
               </>,
         [DemoTopics.zIndex]: <>
-          <h2 className="title bold">Z-index</h2>
           <ZIndexIntroduction/>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
           <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
@@ -92,7 +90,6 @@ export const DemosPage = () => {
           <TopLayerTutorial/>
         </>,
         [DemoTopics.charts]: <>
-          <h2 className="title bold">Charts</h2>
           <ChartsIntroduction/>
           <Workspace product={tradeProduct}/>
           <ChartsTutorial/>

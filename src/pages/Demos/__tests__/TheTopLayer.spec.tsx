@@ -22,7 +22,7 @@ describe('the top layer', () => {
 
     const tab = await screen.findByRole('region', {name: 'Z-index'});
 
-    expect(within(tab).getAllByRole('heading', {level: 3}).map(heading => heading.textContent).slice(0, 4))
+    expect(within(tab).getAllByRole('heading', {level: 2}).map(heading => heading.textContent).slice(0, 4))
       .toEqual(['Why Third is on top', 'Why 9999 still loses', 'Why the popover wins', 'Why a fixed banner still loses']);
   });
 
@@ -417,12 +417,11 @@ describe('the z-index tab’s introduction', () => {
     'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
   ];
 
-  test('should name the tab Z-index, and tell the problem, the page’s view and what a reader can do after, before the first exhibit', async () => {
+  test('should tell the problem, the page’s view and what a reader can do after, before the first exhibit', async () => {
     await openZIndexTab();
     const tab = await screen.findByRole('region', {name: 'Z-index'});
     const firstExhibit = within(tab).getByRole('heading', {name: 'Why Third is on top'});
 
-    expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Z-index$/);
     expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit])).toEqual([]);
   });
 });

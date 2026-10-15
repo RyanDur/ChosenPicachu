@@ -96,7 +96,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         open at a time, and say which language each job needed and why. The first accordion below is HTML alone.</p>
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
-      <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>
+      <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
       <ol className={runs}>
         <li className="run">
           <HtmlAloneAccordion/>
@@ -120,7 +120,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
-      <h3 id="fold-choices-heading" className="off-screen">fold choices</h3>
+      <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
       <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
         they don’t change it.</p>
       <DialGroup>
@@ -132,9 +132,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </DialGroup>
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
-      <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
+      <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
-        <h4 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h4>
+        <h3 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h3>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
           to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
@@ -479,7 +479,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
-      <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
+      <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
       {type === 'inclusive'
         ? <InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails} motion={motion}/>
         : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails} motion={motion}/>}
@@ -565,7 +565,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
-      <h3 id="together-heading" className="title bold">The two together</h3>
+      <h2 id="together-heading" className="title bold">The two together</h2>
       {type === 'inclusive'
         ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes} motion={motion}/>
         : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios} motion={motion}/>}
@@ -687,7 +687,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">
-      <h3 id="motion-heading" className="title bold">How every fold moves</h3>
+      <h2 id="motion-heading" className="title bold">How every fold moves</h2>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab moves by transition, never by animation.

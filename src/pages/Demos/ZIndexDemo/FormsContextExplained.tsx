@@ -18,7 +18,7 @@ type Props = {
 
 export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
   <section aria-labelledby="what-else-forms-heading" className="stacking-part">
-    <h3 id="what-else-forms-heading" className="title bold">What else forms a stacking context</h3>
+    <h2 id="what-else-forms-heading" className="title bold">What else forms a stacking context</h2>
     <ContextChooser worn={worn} onWornChosen={onWornChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

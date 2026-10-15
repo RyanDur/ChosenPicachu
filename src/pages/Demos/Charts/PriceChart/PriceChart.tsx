@@ -1,6 +1,6 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useContext, useId} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components/class-names';
@@ -15,7 +15,6 @@ import {Axes, rangeOf} from '../Axes';
 import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
 import '../chart-card.css';
 import './PriceChart.css';
-import {ChartHeading} from '../heading';
 import {sideOf} from '../sides';
 
 const CHART_WIDTH = 240;
@@ -50,7 +49,6 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const Heading = useContext(ChartHeading);
   const generated = useId();
   const id = given ?? `price${generated}`;
   const history = usePeriodCandles(period);
@@ -63,7 +61,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const side = trending.map(direction => sideOf[direction]).orElse(undefined);
   return <section aria-labelledby={`${id}-heading`}
     className={classNames('price-chart chart card rounded-corners lifted padded', side, trend)}>
-    <Heading id={`${id}-heading`} className="off-screen">live trades</Heading>
+    <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
       <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption reachable"

@@ -862,8 +862,8 @@ describe('the charts’ headings', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {level: 4, name: 'live trades'})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {level: 4, name: 'candles'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {level: 3, name: 'live trades'})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {level: 3, name: 'candles'})).toBeInTheDocument();
   });
 
   test('should sit the chart under its tutorial’s title on its own page', async () => {
@@ -883,15 +883,14 @@ describe('the charts tab’s introduction', () => {
     'By the end you can draw a live line chart, candles, which show how the price opened, closed and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another, and press a chart to open the steps that build it. The last part of this page builds the workspace the charts sit in.'
   ];
 
-  test('should name the tab Charts, put the live headline under it, and tell the problem, the page’s view and what a reader can do after, before the workspace', async () => {
+  test('should tell the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     const tab = await screen.findByRole('region', {name: 'Charts'});
-    const headline = within(tab).getByRole('heading', {level: 3, name: /^Bitcoin, live/});
+    const headline = within(tab).getByRole('heading', {level: 2, name: /^Bitcoin, live/});
 
-    expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Charts$/);
     expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline])).toEqual([]);
   });
 });
