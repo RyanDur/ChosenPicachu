@@ -215,7 +215,7 @@ describe('why 9999 still loses', () => {
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
     expect(explanation.everyCodeBeside(part, /The list has a z-index of 9999, and card two/).join())
-      .toMatch(/\.sort-choices \{[^]*position: absolute[^]*z-index: 9999[^]*\.old-way-card \{[^]*position: relative[^]*\.forms-context \{[^]*z-index: 1/);
+      .toMatch(/\.sort-choices \{[^]*position: absolute[^]*z-index: 9999[^]*\.old-way-card \{[^]*\.positioned \{[^]*position: relative[^]*\.forms-context \{[^]*z-index: 1/);
   });
 
   test('should show card one, with the checkbox inside it, beside the run that says what unchecking it does', async () => {

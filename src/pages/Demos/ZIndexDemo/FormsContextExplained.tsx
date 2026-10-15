@@ -38,8 +38,9 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}position`}><code>position: relative</code></a> is
-          not enough on its own, and neither is absolute: an element positioned either way forms a context only when it
-          also has a z-index other than auto. Fixed and sticky are different and form one by themselves.</p>
+          not enough on its own, and neither is absolute: an element positioned either way forms a context only together
+          with a z-index other than auto. Fixed and sticky, which scrolls with the page until it reaches an edge and then
+          stays there, are different and form one by themselves.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.positioned {')}/>
       </li>
       <li className="run">
@@ -51,8 +52,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code>z-index: 1</code></a> forms a
           context on a positioned element, and on a flex or grid item too, a box laid out by a parent whose display is
-          flex or grid, which card one is here; the menu part’s card had position: relative as well, and either is
-          enough. Card two, at 1 and later in the code, paints over it.</p>
+          flex or grid, which card one is here. The menu part’s card had position: relative as well, and either is
+          enough. Card two, at 1 and later in the code, paints over card one.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.forms-context {')}/>
       </li>
       <li className="run">
@@ -69,8 +70,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> forms
-          a context and does nothing more. It exists for this: to keep a component’s z-indexes inside it on purpose,
-          instead of as a side effect of opacity or a transform.</p>
+          a context and does nothing more. Use it to keep a component’s z-indexes inside it on purpose, instead of as a
+          side effect of opacity or a transform.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.isolated {')}/>
       </li>
     </ol>

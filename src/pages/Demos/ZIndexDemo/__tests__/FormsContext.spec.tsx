@@ -42,26 +42,22 @@ describe('the part on what else forms a stacking context', () => {
     expect(within(chooser).getByRole('status', {name: 'what card one formed'})).toBeEmptyDOMElement();
   });
 
-  test('should say the list opened under card two, and why, once card one wears opacity and Sort by is pressed', async () => {
+  test.each([
+    ['nothing', 'The list opened over card two. Card one wears nothing, so it forms no stacking context.'],
+    ['position: relative', 'The list opened over card two. position: relative alone forms no stacking context.'],
+    ['outline', 'The list opened over card two. An outline forms no stacking context.'],
+    ['z-index: 1', 'The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.'],
+    ['opacity: 0.9', 'The list opened under card two. opacity: 0.9 formed a stacking context.'],
+    ['transform: rotate(-1deg)', 'The list opened under card two. The transform formed a stacking context.'],
+    ['isolation: isolate', 'The list opened under card two. isolation: isolate formed a stacking context.']
+  ])('should say where the list opened, and its cause, once card one wears %s and Sort by is pressed', async (worn, said) => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const chooser = await theChooser();
 
-    await userEvent.click(within(chooser).getByRole('radio', {name: 'opacity: 0.9'}));
+    await userEvent.click(within(chooser).getByRole('radio', {name: worn}));
     await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
 
-    expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
-      .toHaveTextContent('The list opened under card two. opacity: 0.9 formed a stacking context.');
-  });
-
-  test('should say the list opened over card two, and that position alone forms no context, once card one is positioned', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const chooser = await theChooser();
-
-    await userEvent.click(within(chooser).getByRole('radio', {name: 'position: relative'}));
-    await userEvent.click(within(chooser).getByRole('button', {name: 'Sort by, the old way'}));
-
-    expect(within(chooser).getByRole('status', {name: 'what card one formed'}))
-      .toHaveTextContent('The list opened over card two. position: relative alone forms no stacking context.');
+    expect(within(chooser).getByRole('status', {name: 'what card one formed'})).toHaveTextContent(said);
   });
 
   test('should go quiet when another choice is made after Sort by was pressed', async () => {
@@ -98,7 +94,7 @@ describe('the part on what else forms a stacking context', () => {
     ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.forms-context {'],
     ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
     ['transform', /^forms a context, as any transform does/, '.turned {'],
-    ['isolation', /^forms a context and does nothing more\. It exists for this/, '.isolated {']
+    ['isolation', /^forms a context and does nothing more\. Use it to keep/, '.isolated {']
   ])('should open the %s run on its property, linked to MDN, with its rule beside it', async (property, words, rule) => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
