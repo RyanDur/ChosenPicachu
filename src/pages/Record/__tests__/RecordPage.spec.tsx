@@ -96,10 +96,15 @@ describe('the record', () => {
     expect(within(within(moment).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
+  test('should open the tee-up on how every page here is built, need first', () => {
+    expect(screen.getByText(/^Someone needs something; the clues point at an element/))
+      .toHaveTextContent('Someone needs something; the clues point at an element; a design takes shape; the stories are cut thin; the feature is built on them. That is how every page here is built.');
+  });
+
   test('should tell the concert after the timeline closes and before the tee-up', () => {
     const closing = screen.getByText(/^Read the titles again, top to bottom/);
     const concert = screen.getByRole('region', {name: 'The concert'});
-    const teeUp = screen.getByText(/^Someone needs something; the element chooses itself/);
+    const teeUp = screen.getByText(/^Someone needs something; the clues point at an element/);
 
     expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();

@@ -12,8 +12,8 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
   <section className="phase card rounded-corners lifted" aria-labelledby="phase-need">
     <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>
     <p className="overview paragraph muted-ink">
-      Before any code, and before any story, someone needs something. Listen for clues, name
-      each one, and the element chooses itself.
+      Before any code, and before any story, someone needs something. Listen for what they say,
+      name each clue, and the clues point at the element to build it with.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>

@@ -271,6 +271,13 @@ describe('the sortable list demo', () => {
     expect(within(clues).getAllByRole('rowheader')).toHaveLength(4);
   });
 
+  test('should open the first step on the need, and say the clues point at the element', async () => {
+    await nativeRecipe();
+
+    expect(within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByText(/^Before any code/))
+      .toHaveTextContent('Before any code, and before any story, someone needs something. Listen for what they say, name each clue, and the clues point at the element to build it with.');
+  });
+
   test('the recipe walks the stations from need to design to slices', async () => {
     const recipe = await nativeRecipe();
 

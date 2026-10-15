@@ -5,8 +5,8 @@ import {Paths} from '@pages/Paths';
 export const TeeUp: FC<PropsWithChildren> = ({children}) =>
   <footer className="tee-up">
     <p className="sub-title">
-      Someone needs something; the element chooses itself; a design takes shape; the stories
-      slice thin; the feature layers on. That is how every page here is built.
+      Someone needs something; the clues point at an element; a design takes shape; the stories
+      are cut thin; the feature is built on them. That is how every page here is built.
     </p>
     <p className="sub-title">
       The tables are built twice: once with the three languages raw, no framework standing
