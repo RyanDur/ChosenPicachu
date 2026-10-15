@@ -12,6 +12,7 @@ export const DragSortIntroduction: FC = () =>
     <p className="paragraph">Each of those is a dial in the last part of the tutorial below, and the exhibit above the dials
       changes to match.</p>
     <p className="paragraph">By the end you can build a sortable list on the browser’s own drag and drop, choose each of those three
-      behaviours and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves as the pointer. The exhibit below is three items; drag
-      one by its grip, or focus the grip and use the left and right arrows.</p>
+      behaviours and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves
+      as the pointer. The exhibit below is three items; drag one by its grip, or focus the grip and use the left and
+      right arrows.</p>
   </header>;
