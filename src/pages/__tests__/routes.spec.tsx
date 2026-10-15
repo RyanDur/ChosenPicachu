@@ -103,12 +103,12 @@ describe('the skeleton', () => {
 });
 
 describe('the rail lists the site’s pages', () => {
-  test('should list Home, Demos, Users, Gallery, Games, Record and Repo, in that order', async () => {
+  test('should list Home, Record, Demos, Users, Gallery, Games and Repo, in that order', async () => {
     render(<TestApp at={Paths.users}/>);
 
     const nav = await site.nav();
 
-    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Demos', 'Users', 'Gallery', 'Games', 'Record', 'Repo']);
+    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Record', 'Demos', 'Users', 'Gallery', 'Games', 'Repo']);
   });
 
   test('should take the reader to the record from the rail', async () => {
