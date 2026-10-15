@@ -163,16 +163,17 @@ describe('the home page', () => {
     within(practice).getAllByRole('paragraph').forEach(paragraph => expect(paragraph).toBeVisible());
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should rest %s\'s practice on its own moments: each sentence names a year, and links to that year\'s moment in its list', section => {
-    const listed = within(screen.getByRole('list', {name: `${section}, from the record`})).getAllByRole('link');
+  test.each([
+    ['Structure', ['2014 The philosophy needs writing down', '2014 The philosophy needs writing down', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
+    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The need outruns the standards', '2013 Someone needs components', '2013 Someone needs components']],
+    ['Dynamic Interaction', ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
+  ])('should rest %s\'s practice on its own moments, each citation opening the moment its sentence means', (section, meant) => {
+    const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));
     const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
-      .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record));
-    const listedIn = (year: string): (string | null)[] => listed
-      .filter(moment => (moment.textContent ?? '').startsWith(year))
-      .map(moment => moment.getAttribute('href'));
+      .map(link => link.getAttribute('href') ?? '')
+      .filter(address => address.startsWith(Paths.record));
 
-    expect(cited).not.toEqual([]);
-    expect(cited.filter(link => !listedIn((link.textContent ?? '').slice(0, 4)).includes(link.getAttribute('href')))).toEqual([]);
+    expect(cited).toEqual(meant.map(moment => listed.getByRole('link', {name: moment}).getAttribute('href')));
   });
 });
 
