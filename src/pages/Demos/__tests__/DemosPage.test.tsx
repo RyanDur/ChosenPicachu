@@ -32,6 +32,14 @@ describe('The Demos page', () => {
     expect(opening.compareDocumentPosition(screen.getByRole('navigation', {name: 'demos'})) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
+  test('should run its tabs in the order the opening names them, simple to expert', async () => {
+    render(<TestApp at={demosAt()}/>);
+
+    const tabs = within(await screen.findByRole('navigation', {name: 'demos'})).getAllByRole('link');
+
+    expect(tabs.map(tab => tab.textContent)).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
+  });
+
   test('the demos page opens on the accordions', async () => {
     render(<TestApp at={demosAt()}/>);
 
