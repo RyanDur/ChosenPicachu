@@ -68,9 +68,9 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
         <Snippet label="CSS" lines={unit(zIndexCss, '.turned {')}/>
       </li>
       <li className="run">
-        <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> changes
-          nothing else. It exists for this: to keep a component’s z-indexes inside it on purpose, instead of as a side
-          effect of opacity or a transform.</p>
+        <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> forms
+          a context and does nothing more. It exists for this: to keep a component’s z-indexes inside it on purpose,
+          instead of as a side effect of opacity or a transform.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.isolated {')}/>
       </li>
     </ol>

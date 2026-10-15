@@ -98,7 +98,7 @@ describe('the part on what else forms a stacking context', () => {
     ['z-index', /^forms a context on a positioned element, and on a flex or grid item too/, '.forms-context {'],
     ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
     ['transform', /^forms a context, as any transform does/, '.turned {'],
-    ['isolation', /^changes nothing else\. It exists for this/, '.isolated {']
+    ['isolation', /^forms a context and does nothing more\. It exists for this/, '.isolated {']
   ])('should open the %s run on its property, linked to MDN, with its rule beside it', async (property, words, rule) => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
