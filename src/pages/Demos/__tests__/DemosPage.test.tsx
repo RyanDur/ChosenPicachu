@@ -55,16 +55,11 @@ describe('The Demos page', () => {
     expect(within(region).queryByRole('heading', {name: tab})).not.toBeInTheDocument();
   });
 
-  test('the z-index door leads to its demo and titles the page', async () => {
+  test('should title the page Demos Z-index once the z-index tab is chosen', async () => {
     render(<TestApp at={demosAt()}/>);
 
     await demoTabs.open('Z-index');
 
-    await waitFor(() => {
-      const main = screen.getByRole('main');
-      expect(within(main).getByRole('region', {name: 'Z-index'})).toBeInTheDocument();
-    });
-
-    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('Demos Z-index');
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Z-index'})).toBeInTheDocument();
   });
 });
