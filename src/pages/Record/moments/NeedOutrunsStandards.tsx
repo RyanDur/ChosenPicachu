@@ -37,6 +37,5 @@ export const NeedOutrunsStandards: FC = () =>
     <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“forced premature standardization”</a>: Ecma convened in November 1996,
       and the standard took a name nobody owned: ECMAScript, which even Eich concedes{' '}
     <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“does sound a bit like eczema”</a>. Edition 1 came in 1997, Edition 2
-      was pure paperwork, and Edition 3, in December 1999, brought regular expressions and exceptions,
-      and became the baseline the web would stand on for a decade.</p>
+      was pure paperwork, and Edition 3, in December 1999, brought regular expressions and exceptions.</p>
   </Moment>;

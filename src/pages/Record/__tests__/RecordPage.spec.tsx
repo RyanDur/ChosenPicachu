@@ -23,10 +23,10 @@ describe('the record', () => {
 
   test('should say, after the record, that the tables are built twice and the history above is the argument for keeping the seam visible', () => {
     const record = screen.getByRole('region', {name: 'How the web got its languages'});
-    const seam = screen.getByText(/The projection is the difference/);
+    const seam = screen.getByText(/^The tables are built twice/);
 
     expect(record.compareDocumentPosition(seam)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(seam).toHaveTextContent('The tables are built twice: once with the three languages raw, no framework standing anywhere in the frame, and once with React speaking the same three. The projection is the difference, and the history above is the argument for keeping the seam visible.');
+    expect(seam).toHaveTextContent('The tables are built twice: once with the three languages raw, no framework anywhere in the frame, and once in React with the same three underneath. The history above is the argument for keeping that seam visible.');
   });
 
   test('the record says why the languages arrived', () => {
@@ -72,7 +72,7 @@ describe('the record', () => {
     expect(timeline.getAllByText('the fuller story')).toHaveLength(21);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /peace treaty/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));

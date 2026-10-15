@@ -4,7 +4,7 @@ import {moments} from './moments';
 
 export const StructureArrives: FC = () =>
   <Moment of={moments.structureArrives}
-    tells={<>Berners-Lee wrote all three of specification, server, and browser, and based HTML on
+    tells={<>Berners-Lee wrote all three of proposal, server, and browser, and based HTML on
       SGML so the documents world would recognize it. The one tag of his own was{' '}
     <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>,
       an idea hypertext already had; the new thing was what his could carry: the address
@@ -27,8 +27,8 @@ export const StructureArrives: FC = () =>
       the connection closed when the message ended. There was no status line, so an error
       arrived as just another page; in the spec’s own words,{' '}
       <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html">“no way to distinguish an error response from a satisfactory response except for the content of the text”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">The earliest surviving tags list holds about eighteen elements (eighteen if you
-      count all six heading levels as one), with no html, head, body, or img among them, and
+    <p className="paragraph muted-ink hyphenated">The earliest surviving tags list holds eighteen elements, counting the
+      six heading levels as one and twenty-three otherwise, with no html, head, body, or img among them, and
       no ordered list at all. The headings were borrowed outright; the list admits their
       definition is <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">“completely historical, deriving from the AAP tag set”</a>.
       The file even preserves the editor’s fingerprint: a NEXTID tag{' '}

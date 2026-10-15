@@ -29,7 +29,8 @@ export const Structure: FC = () =>
         links that move you around the site. Landmarks are the page’s table of contents, so every landmark gets a name
         and no two are the same. A section is named by its heading; if there is nothing to name it by, it is not a
         section.
-        The landmarks are HTML5’s elements, from the same <MomentLink to="html5SaysIt">2014 moment</MomentLink>.</p>
+        The landmark elements, header, main, footer and nav, come from the standard the{' '}
+      <MomentLink to="browsersTakePen">2004 moment</MomentLink> put in the browser makers’ hands.</p>
       <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
         these links are for getting around; a button tells it a press will do something. The right element gives you
         that for free, with{' '}

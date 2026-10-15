@@ -27,7 +27,7 @@ export const DynamicInteraction: FC = () =>
       <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
         arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
         decides what is true when it arrives.
-        Ajax, in the <MomentLink to="pageBecomesApplication">2005 moment</MomentLink>, is what first made a server’s reply an event on the page.</p>
+        Ajax, in the <MomentLink to="pageBecomesApplication">2005 moment</MomentLink>, is what named that pattern and made it ordinary.</p>
       <p className="paragraph">The core is functional and the shell is imperative. The functions that move
         from one state to the next are pure, so they are tested on their own with no page involved. The shell holds
         the state, listens for events, applies the next state and updates the screen. Requests go out through the same

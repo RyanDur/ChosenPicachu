@@ -9,10 +9,7 @@ export const BrowsersAgree: FC = () =>
         Test</a> drew the line pixel by pixel; in the beginning, most browsers failed it. The
       catching-up was not a release. It was a decade of feedback: tests, hacks, and public
       scoreboards.</>}>
-    <p className="paragraph muted-ink hyphenated">The specifications were ahead of everyone. CSS1 had shipped into a market where
-      Internet Explorer 3, the first commercial browser to try CSS at all, had implemented
-      it against a spec still being changed underneath, handling color and text{' '}
-    <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“reliably”</a> and the box model barely at all. CSS2 followed in May
+    <p className="paragraph muted-ink hyphenated">The specifications were ahead of everyone. CSS2 came in May
       1998 with z-index, media types, positioning, bidirectional text, and aural style
       sheets: presentation for ears as well as eyes.</p>
     <p className="paragraph muted-ink hyphenated">The feedback ran through tests. Eric Meyer’s private compatibility
@@ -34,7 +31,7 @@ export const BrowsersAgree: FC = () =>
       switch let browsers keep old bugs for old pages while rendering new pages by the book;
       Eric Meyer has said doctype switching{' '}
     <a className="signpost" href="https://thehistoryoftheweb.com/look-back-history-css/">saved CSS</a>. The summit came in March 2000, when IE for Mac passed
-      better than 99% of CSS1, and in September 2002 Douglas Bowman’s team relaunched Wired
+      better than 99% of CSS1, and in October 2002 Douglas Bowman’s team relaunched Wired
       News on standards-compliant HTML and CSS; Hoffmann records, with audible pride, that{' '}
     <a className="signpost" href="https://thehistoryoftheweb.com/look-back-history-css/">“the site even validated”</a>. Lie and Bos had predicted{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">CSS3 “towards the end of 1999”</a>; the buggy parts of level 2 alone

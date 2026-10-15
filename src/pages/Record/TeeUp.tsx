@@ -9,9 +9,9 @@ export const TeeUp: FC<PropsWithChildren> = ({children}) =>
       are cut thin; the feature is built on them. That is how every page here is built.
     </p>
     <p className="sub-title">
-      The tables are built twice: once with the three languages raw, no framework standing
-      anywhere in the frame, and once with React speaking the same three. The projection is
-      the difference, and the history above is the argument for keeping the seam visible.
+      The tables are built twice: once with the three languages raw, no framework anywhere in the
+      frame, and once in React with the same three underneath. The history above is the argument
+      for keeping that seam visible.
     </p>
     <p className="sub-title">
       <Link className="signpost" to={Paths.demos}>Start where the demos start</Link>: the

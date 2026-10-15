@@ -31,14 +31,5 @@ export const PageBecomesApplication: FC = () =>
       broken browsers. Then the frameworks came to organize what script was now building:
       AngularJS in 2010, React in 2013, Vue in 2014. The page stopped being a document you
       fetched and started being a program you ran.</p>
-    <p className="paragraph muted-ink hyphenated">The language grew to match its new weight, painfully. ES4, with its ambitions of classes,
-      packages, and namespaces, stalled in 2003, was resurrected by Ajax in 2005, and died at
-      Oslo in 2008, three of its ideas ruled, in Eich’s summary of the meeting,{' '}
-    <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/">“off the table for good: packages, namespaces and early binding”</a>.
-      What shipped in 2009 as ES5 was not ES4’s salvage but its rival: the deliberately
-      modest ES3.1 track, renamed, while the wreck of the ill-fated ES4 waited for Harmony,
-      and surfaced years later as ES2015. That was the last big bang: since then features
-      advance one proposal at a time through TC39’s staged process, and whatever is ready
-      is ratified <a className="signpost" href="https://tc39.es/process-document/">“in July of each year”</a>, an edition a year instead
-      of a decade’s ambitions at once.</p>
+    <p className="paragraph muted-ink hyphenated">What the language’s standard did next is the 2009 moment.</p>
   </Moment>;

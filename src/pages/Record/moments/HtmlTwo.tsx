@@ -20,5 +20,5 @@ export const HtmlTwo: FC = () =>
       tags like FONT FACE and BGCOLOR <a className="signpost" href="https://www.w3.org/People/Raggett/book4/ch02.html">“which control stylistic aspects of a document”</a>,
       and in December 1995 the IETF group was dismantled because it <a className="signpost" href="https://www.w3.org/People/Raggett/book4/ch02.html">“was having difficulties coming to consensus swiftly enough”</a>.
       The W3C took the pen: HTML 3.2, January 1997, <a className="signpost" href="https://www.w3.org/People/Raggett/book4/ch02.html">“took the existing IETF HTML 2 standard and incorporated features from HTML+ and HTML 3”</a>.
-      Standardising what the browsers already did became HTML’s habit, and in 2014 its stated principle.</p>
+      Standardising what the browsers already did became HTML’s habit, and in 2007 its stated principle.</p>
   </Moment>;

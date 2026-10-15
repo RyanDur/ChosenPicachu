@@ -28,9 +28,9 @@ export const Presentation: FC = () =>
         it needs, then what is true right now. The platform already names most states, such as invalid, checked and
         hover, so the sheet uses those{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a> first.
-        I add a state name only where there is no native one: aloft for the thing being dragged, anchored for the row
-        that stays put. Each component’s sheet decides what aloft does to its own elements, so a column and a row can
-        both be aloft and look different.</p>
+        I add a state name only where there is no native one: carried for the thing being dragged, settling for the
+        one sliding back into place, shoved for a neighbour pushed aside. One sheet, the table’s, says what each does,
+        and a column and a row share the rule; only the lengths it is handed differ.</p>
       <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can
         set, so the sheet checks{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a> before
@@ -53,6 +53,7 @@ export const Presentation: FC = () =>
         Custom properties are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson learned by the platform: the theme variables came home from script.</p>
       <p className="paragraph">The test is to read a class list on its own. If it does not say what the
         element is and what it needs, in the names the design uses, the sheet has become a pile of overrides.
-        Chedeau’s talk, in the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>, catalogued what a pile of overrides costs at scale.</p>
+        Isolation, the last of the seven problems Chedeau’s talk lists in the{' '}
+      <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>, is what this test guards against.</p>
     </HowIOrganizeIt>
   </DoorSection>;
