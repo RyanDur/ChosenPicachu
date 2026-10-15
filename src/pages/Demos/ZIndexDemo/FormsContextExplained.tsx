@@ -5,6 +5,7 @@ import {ContextChooser} from './ContextChooser';
 import {Worn} from './worn';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
+import tabsCss from '@components/Tabs/Tabs.css?sample';
 import '../Runs.css';
 
 const gap = plain(' ');
@@ -29,7 +30,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
-          display is grid. Its list’s 9999 is compared with card two’s 1 in the page’s own context, so the list opens on
+          display is grid. Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens on
           top.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.old-way-cards {'), gap,
@@ -71,8 +72,12 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> forms
           a context and does nothing more. Use it to keep a component’s z-indexes inside it on purpose, instead of as a
-          side effect of opacity or a transform.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.isolated {')}/>
+          side effect of opacity or a transform. This site uses it that way: the tab’s panel wears it, in Tabs.css, so
+          nothing in a tab can reach a z-index outside it.</p>
+        <Snippet label="CSS" lines={[
+          ...unit(zIndexCss, '.isolated {'), gap,
+          ...unit(tabsCss, '.tabs ~ * {')
+        ]}/>
       </li>
     </ol>
   </section>;

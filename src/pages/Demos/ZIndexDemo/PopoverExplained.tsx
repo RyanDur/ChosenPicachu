@@ -16,13 +16,13 @@ export const PopoverExplained: FC = () =>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The list from Sort by, in the top layer, opens over everything around it every time, with
-          the box checked or not. It is a popover, an element the browser shows on top and hides again by itself, and a
-          popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
+          the box checked or not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen. Whatever the page stacks, the top layer sits
           over it.</p>
       </li>
       <li className="run">
-        <p className="paragraph">The top layer is not inside any stacking context, not even the root one, so no z-index
+        <p className="paragraph">The top layer is not inside any stacking context, not even the page’s own, the one every
+          other sits inside, so no z-index
           on the page is ever compared with it. Card one’s z-index of 1 still forms a layer around the old list, but the
           new list, though it is written inside the card, is painted in the top layer. The browser draws the top layer
           last, so the new menu is drawn over both cards.</p>
@@ -30,11 +30,11 @@ export const PopoverExplained: FC = () =>
       </li>
       <li className="run">
         <p className="paragraph">The button names its menu with popovertarget, and the menu is marked{' '}
-          <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn>. With that, the browser opens and closes it with
+          <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn>, both part of
+          the <Mdn path="Web/API/Popover_API">Popover API</Mdn>. With that, the browser opens and closes it with
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
-          button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
-            API</Mdn> does all of it.</p>
+          button that closes the menu with popovertargetaction set to hide.</p>
         <p className="paragraph">Menu, Entry and Item are this site’s components for a menu. A component is a
           function that writes a piece of the page from what it is given. These three write one element each: a menu,
           an li, which is one item of a list, and a button.</p>

@@ -126,5 +126,6 @@ describe('why the popover wins', () => {
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
     expect(explanation.runTelling(part, /The top layer is not inside any stacking context/)).toContainElement(within(part).getByRole('figure', {name: /^Above the page\./}));
+    expect(explanation.runTelling(part, /The top layer is not inside any stacking context/)).toHaveTextContent('The top layer is not inside any stacking context, not even the page’s own, the one every other sits inside, so no z-index on the page is ever compared with it.');
   });
 });

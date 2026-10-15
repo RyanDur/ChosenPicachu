@@ -7,8 +7,7 @@ export const ZIndexIntroduction: FC = () =>
     <p className="paragraph">It reads like one ranking for the whole page, where the biggest number wins. So when a menu
       opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999
       loses too.</p>
-    <p className="paragraph">This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a
-      group of boxes, called a stacking context, and most of this page is about that group: what makes one, what it traps,
+    <p className="paragraph">This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a stacking context, and most of this page is about it: what makes one, what it traps,
       and the browser’s own way out of it, the top layer.</p>
     <p className="paragraph">By the end you can say why one box is drawn over another, why a z-index of 9999 can still
       lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the

@@ -17,13 +17,13 @@ const openZIndexTab = async () => {
 };
 
 describe('the top layer', () => {
-  test('the z-index tab opens on its four parts, in order, in the heading outline', async () => {
+  test('the z-index tab opens on its five parts, in order, in the heading outline', async () => {
     await openZIndexTab();
 
     const tab = await screen.findByRole('region', {name: 'Z-index'});
 
-    expect(within(tab).getAllByRole('heading', {level: 2}).map(heading => heading.textContent).slice(0, 4))
-      .toEqual(['Why Third is on top', 'Why 9999 still loses', 'Why the popover wins', 'Why a fixed banner still loses']);
+    expect(within(tab).getAllByRole('heading', {level: 2}).map(heading => heading.textContent).slice(0, 5))
+      .toEqual(['Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses']);
   });
 
   test('the user raises a banner from the demo', async () => {
@@ -121,18 +121,13 @@ describe('the top layer', () => {
 describe('the banner tutorial’s first story', () => {
   const story = 'The user sees the news above everything';
 
-  test('should say a z-index starts a stacking context only on a positioned element or a flex or grid item, and point up to where the term is taught', async () => {
+  test('should point up to where a stacking context is taught and to the part that shows what forms one, without teaching either again', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(news).toHaveTextContent('A z-index other than auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a child of a flex or grid container');
+    expect(news).toHaveTextContent('An element around the banner forms a stacking context by the ways What else forms a stacking context shows; the banner’s own position does not save it from one. Inside that context, the banner’s 9999 is compared with nothing outside it.');
     expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
-  });
-
-  test('should say what flex and grid are where the first story first names them', async () => {
-    await openZIndexTab();
-
-    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('or that is a child of a flex or grid container, the two CSS layouts that arrange their children along a line or in rows and columns.');
+    expect(within(news).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
   });
 
   test('should say what inset: 0 does where step 3 first names it', async () => {
@@ -195,7 +190,7 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border and a background; the panel wears borderless and unfilled, which take them off, so only the banners inside it show\.$/);
+    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it show\.$/);
     expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
     expect(within(placing).getByText(/^The sample is the component’s line/)).toBeInTheDocument();
@@ -233,7 +228,7 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const styling = recipeFolds.steps(news)[3];
 
-    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the ✕ at the size the site’s icons are drawn, and muted-ink greys it\.$/);
+    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and muted-ink greys it\.$/);
     expect(within(styling).getByRole('code')).toHaveTextContent(/\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
@@ -348,7 +343,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['a grid and a track', 'Each banner is a grid, a layout of rows and columns, with a single row or column, called a track.'],
+    ['a grid and a track', 'Each banner is a grid, a layout of rows and columns, with a single row or column, called a track, a banner being the list item with the class trouble.'],
     ['fr', 'A track’s size can be given in fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none.'],
     ['why the message shrinks to nothing', 'A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both directions, and on the stack’s axis its padding and border start at 0 as well.'],
     ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
@@ -413,7 +408,7 @@ describe('the z-index tab’s introduction', () => {
   const paragraphs = [
     'Where two boxes on a page overlap, the browser draws one over the other. z-index is the CSS property for changing which.',
     'It reads like one ranking for the whole page, where the biggest number wins. So when a menu opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999 loses too.',
-    'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a group of boxes, called a stacking context, and most of this page is about that group: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
+    'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a stacking context, and most of this page is about it: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
     'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
   ];
 

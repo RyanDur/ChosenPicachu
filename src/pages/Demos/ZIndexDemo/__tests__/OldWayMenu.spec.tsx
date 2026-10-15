@@ -227,12 +227,21 @@ describe('why 9999 still loses', () => {
       .toMatch(/'old-way-card[^]*'forms-context'[^]*type="checkbox"[^]*Card one has z-index: 1/);
   });
 
+  test('should compare the cards in the tab’s panel, the nearest context that holds them both', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
+
+    expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toHaveTextContent('The cards are compared in the nearest context that holds them both: here the tab’s panel, which this site isolates on purpose with isolation: isolate. There the browser compares card one and card two, 1 against 1');
+    expect(explanation.runTelling(part, /With the box unchecked/)).toHaveTextContent('It joins the tab panel’s context, where card two is, and there 9999 is the larger number.');
+  });
+
   test('should draw the layer and the tree of contexts beside the runs that tell them', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
     expect(explanation.runTelling(part, /so it forms a stacking context/)).toContainElement(within(part).getByRole('figure', {name: /^A number inside a layer\./}));
-    expect(explanation.runTelling(part, /The page itself is a stacking context/)).toContainElement(within(part).getByRole('figure', {name: /^Where 9999 is compared\./}));
+    expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toContainElement(within(part).getByRole('figure', {name: /^Where 9999 is compared\./}));
   });
 });

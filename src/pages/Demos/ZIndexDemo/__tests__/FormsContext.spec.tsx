@@ -11,15 +11,15 @@ const heading = 'What else forms a stacking context';
 const theChooser = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^What card one wears decides/});
 
 describe('the part on what else forms a stacking context', () => {
-  test('should sit after the fixed banner part and before the tutorial', async () => {
+  test('should sit after the part where 9999 loses and before the part where the popover wins', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: heading});
 
     expect(outOfReadingOrder([
-      screen.getByRole('region', {name: 'Why a fixed banner still loses'}),
+      screen.getByRole('region', {name: 'Why 9999 still loses'}),
       part,
-      screen.getByRole('heading', {name: /let’s build this feature/i})
+      screen.getByRole('region', {name: 'Why the popover wins'})
     ])).toEqual([]);
   });
 
@@ -103,6 +103,22 @@ describe('the part on what else forms a stacking context', () => {
 
     expect(within(run).getAllByRole('link')[0]).toHaveAttribute('href', `https://developer.mozilla.org/en-US/docs/Web/CSS/${property}`);
     expect(explanation.codeBeside(part, words)).toHaveTextContent(rule);
+  });
+
+  test('should say this site isolates the tab’s panel, with the panel’s rule beside the isolation run', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+    const words = /^forms a context and does nothing more/;
+
+    expect(explanation.runTelling(part, words)).toHaveTextContent('This site uses it that way: the tab’s panel wears it, in Tabs.css, so nothing in a tab can reach a z-index outside it.');
+    expect(explanation.everyCodeBeside(part, words).join()).toMatch(/\.isolated \{[^]*\.tabs ~ \* \{\s*isolation: isolate;/);
+  });
+
+  test('should compare the bare card’s list with card two in the tab panel’s context', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/)).toHaveTextContent('Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens on top.');
   });
 
   test('should show the grid and the anchor beside the run on a card that wears nothing', async () => {

@@ -55,9 +55,9 @@ export const ANumberInsideALayer: FC = () =>
 
 export const Where9999IsCompared: FC = () =>
   <Diagram title="Where 9999 is compared" height={180}
-    says="Each card with a z-index makes its own context, a box its children are stacked in. The menu’s 9999 is compared only inside card one; at the page, card one and card two are compared at 1 and 1.">
+    says="Each card with a z-index makes its own stacking context. The menu’s 9999 is compared only inside card one; in the tab’s panel, card one and card two are compared at 1 and 1.">
     <Box kind="clip" x={10} y={10} width={300} height={150}/>
-    <Label x={20} y={26} anchor="start">the page, the root context</Label>
+    <Label x={20} y={26} anchor="start">the tab’s panel, the context that holds both cards</Label>
     <Box kind="clip" x={22} y={38} width={148} height={110}/>
     <Label x={32} y={54} anchor="start">card one, 1</Label>
     <Box kind="topmost" x={34} y={66} width={124} height={26}/>
@@ -72,13 +72,13 @@ export const Where9999IsCompared: FC = () =>
 
 export const AboveThePage: FC = () =>
   <Diagram title="Above the page" height={240}
-    says="The top layer sits over the root context and everything in it. Nothing is compared with the new menu, so it is drawn last, over both cards.">
+    says="The top layer sits over the page and every stacking context in it. Nothing is compared with the new menu, so it is drawn last, over both cards.">
     <Box kind="clip" x={10} y={10} width={300} height={44}/>
     <Label x={20} y={26} anchor="start">the top layer</Label>
     <Box kind="topmost" x={150} y={20} width={148} height={26}/>
     <Label x={224} y={37}>new menu</Label>
     <Box kind="clip" x={10} y={66} width={300} height={150}/>
-    <Label x={20} y={82} anchor="start">the page, the root context</Label>
+    <Label x={20} y={82} anchor="start">the tab’s panel, the context that holds both cards</Label>
     <Box kind="clip" x={22} y={94} width={148} height={110}/>
     <Label x={32} y={110} anchor="start">card one, 1</Label>
     <Box kind="piece" x={34} y={122} width={124} height={26}/>

@@ -43,10 +43,9 @@ export const TopLayerRecipe: FC = () => {
     soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
-      element around the banner starts a new one when its CSS gives it a transform or a filter. A z-index other than
-      auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a
-      child of a flex or grid container, the two CSS layouts that arrange their children along a line or in rows and
-      columns. Inside a new one, the banner’s 9999 is compared with nothing outside it. So
+      element around the banner forms a stacking context by the ways{' '}
+    <a className="signpost" href="#what-else-forms-heading"><cite>What else forms a stacking context</cite></a> shows;
+      the banner’s own position does not save it from one. Inside that context, the banner’s 9999 is compared with nothing outside it. So
       the panel is a popover, drawn in the top layer like the new menu
       above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
       both are.</Tell>
@@ -83,8 +82,8 @@ export const TopLayerRecipe: FC = () => {
           <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
             size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
             It takes only the room its content needs, and the auto margins share the rest, which centres it in the
-            window. That stylesheet also gives a popover a border and a background; the panel wears borderless and
-            unfilled, which take them off, so only the banners inside it show.</Says>
+            window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
+            and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
             they are there so the choice shows in the class names.</Says>
@@ -104,10 +103,9 @@ export const TopLayerRecipe: FC = () => {
       <Step title="Style each banner">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
           <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
-            site: field for the background, rounded-corners, floating for the shadow, and hairline-outline for a thin
-            border in the colour of the message’s text. The dismiss button is a square of fixed size that does not
+            site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s colour, and hairline-outline for a thin border in that colour. The dismiss button is a square of fixed size that does not
             shrink when the message is long. Its look is shared classes too: borderless and unfilled take off the
-            browser’s own button border and ground, glyph-icon sets the ✕ at the size the site’s icons are drawn, and
+            browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and
             muted-ink greys it.</Says>
         </Words>
         <Codes>
@@ -116,6 +114,7 @@ export const TopLayerRecipe: FC = () => {
             ...unit(surfaceCss, '.field {'), gap,
             ...unit(surfaceCss, '.rounded-corners {'), gap,
             ...unit(surfaceCss, '.floating {'), gap,
+            ...unit(surfaceCss, '.alarm-ink {'), gap,
             ...unit(surfaceCss, '.hairline-outline {'), gap,
             ...unit(bannersCss, '.dismiss {'), gap,
             ...unit(surfaceCss, '.borderless {'), gap,

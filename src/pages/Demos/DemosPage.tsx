@@ -78,9 +78,9 @@ export const DemosPage = () => {
           <ZIndexIntroduction/>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
           <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
+          <FormsContextExplained worn={wears} onWornChosen={next => updateSearchParams({wears: next})}/>
           <PopoverExplained/>
           <BannerExplained/>
-          <FormsContextExplained worn={wears} onWornChosen={next => updateSearchParams({wears: next})}/>
           <TopLayerTutorial/>
         </>,
         [DemoTopics.charts]: <>

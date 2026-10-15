@@ -17,7 +17,7 @@ const copy: Copy = {
   },
   align: {
     left: 'The stack holds to the left edge of the screen.',
-    center: 'The stack centers itself on the screen.',
+    center: 'The stack centres itself on the screen.',
     right: 'The stack holds to the right edge of the screen.'
   },
   enter: {
@@ -27,10 +27,10 @@ const copy: Copy = {
     right: 'Arrivals sweep in from past the right edge.'
   },
   stack: {
-    down: 'Each new trouble joins beneath the ones already standing.',
-    up: 'Each new trouble stands on top of the pile.',
-    left: 'The pile grows sideways, newest at the left.',
-    right: 'The pile grows sideways, newest at the right.'
+    down: 'Each new banner joins beneath the ones already standing.',
+    up: 'Each new banner stands on top of the stack.',
+    left: 'The stack grows sideways, newest at the left.',
+    right: 'The stack grows sideways, newest at the right.'
   }
 };
 
