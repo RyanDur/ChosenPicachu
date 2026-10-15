@@ -11,7 +11,7 @@ const htmlAlone = 'An accordion in HTML alone';
 const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
 const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('inclusive'), 'How every fold moves'];
 
-const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
+const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one fold open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
 
 describe('the accordions tab', () => {
   test.each(['inclusive', 'exclusive'])('should name no two regions the same, with %s chosen, so every landmark is its own', async type => {
@@ -196,7 +196,7 @@ describe('the measured build', () => {
     expect(explanation.runTelling(explained, /^This page lets its other folds move to auto/)).toHaveTextContent('This page lets its other folds move to auto, and this build turns that off with interpolate-size, because the trick was for browsers that could only move between numbers.');
   });
 
-  test('should show the script that measures, then lets go, beside the run that opens a part', async () => {
+  test('should show the script that measures, then lets go, beside the run that opens a fold', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
@@ -259,7 +259,7 @@ describe('the measured build', () => {
     expect(closing).toHaveTextContent('Closing runs the other way. To close, the script sets the open height, then 0, and the transition moves between them.');
   });
 
-  test('should show the script that turns a part around beside the run that tells it', async () => {
+  test('should show the script that turns a fold around beside the run that tells it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
@@ -812,12 +812,20 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires. An event is a message the browser sends when something happens, and change is the one it sends to the ${input} a press has just ${pressed}, and to no other. So the script first pins where the motion starts`);
   });
 
-  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
+  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a fold is open', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the radio and the stylesheet own that/);
+  });
+
+  test('should open the less-motion run on what the reader gets: every fold opens with no slide', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const motion = await screen.findByRole('region', {name: parts[3]});
+
+    expect(explanation.runTelling(motion, /every fold opens with no slide/)).toHaveTextContent(/^With less motion asked for, every fold opens with no slide\./);
   });
 
   test('should say that a transition turns around when the reader presses again midway', async () => {

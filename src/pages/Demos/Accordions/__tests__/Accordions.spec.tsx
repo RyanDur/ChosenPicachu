@@ -93,7 +93,7 @@ describe.each([
   {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
   {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
 ])('$accordion', ({Accordion, control}) => {
-  test('should leave the fold as it was when the reader presses the part’s name', async () => {
+  test('should leave the fold as it was when the reader presses the fold’s name', async () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
     await userEvent.click(screen.getAllByText('Alpha')[0]);
@@ -114,7 +114,7 @@ describe.each([
     expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole(control)).toHaveLength(controls);
   });
 
-  test('should make each part an item of its list, with no article of its own', () => {
+  test('should make each fold an item of its list, with no article of its own', () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
     expect(screen.getAllByRole('article')).toHaveLength(1);
@@ -133,5 +133,18 @@ describe('the builds we used to make', () => {
 
     expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
     expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
+  });
+});
+
+describe('a build that names what it needs under its heading', () => {
+  test.each([
+    {build: 'checkboxes and a known height', Build: InclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
+    {build: 'a radio group and a known height', Build: ExclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
+    {build: 'checkboxes and a measured height', Build: InclusiveMeasuredAccordion, needs: 'A few lines of script measure each fold’s height.'},
+    {build: 'a radio group and a measured height', Build: ExclusiveMeasuredAccordion, needs: 'A few lines of script measure each fold’s height.'}
+  ])('should say, for $build, what that build needs', ({Build, needs}) => {
+    render(<Build content={folds} motion="reveal"/>);
+
+    expect(screen.getByText(needs)).toBeInTheDocument();
   });
 });
