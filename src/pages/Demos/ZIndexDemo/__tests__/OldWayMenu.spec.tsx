@@ -242,6 +242,13 @@ describe('why 9999 still loses', () => {
 
     expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toHaveTextContent('The cards are compared in the nearest context that holds them both: here the tab’s panel, which What else forms a stacking context explains. There the browser compares card one and card two, 1 against 1');
     expect(within(explanation.runTelling(part, /The cards are compared in the nearest context/)).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
+  });
+
+  test('should say, with the box unchecked, that the list joins the tab panel’s context, where card two is', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
+
     expect(explanation.runTelling(part, /With the box unchecked/)).toHaveTextContent('It joins the tab panel’s context, where card two is, and there 9999 is the larger number.');
   });
 

@@ -242,6 +242,13 @@ describe('the banner tutorial’s first story', () => {
     expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*padding: 0;/);
   });
 
+  test('should carve the panel’s overflow: visible beside the step that says why it is set', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*overflow: visible;/);
+  });
+
   test('should say the message’s colour and border and the dismiss button’s look are shared classes, and carve each after its rule', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
