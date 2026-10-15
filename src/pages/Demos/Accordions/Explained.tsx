@@ -24,6 +24,7 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import {
   FocusOnTheBar,
   OffScreenNotGone,
+  OneGuessTwoFolds,
   OneJobTwoWays,
   OneNameOneChoice,
   PaddingInsideTheClip,
@@ -31,8 +32,7 @@ import {
   RowToItsContent,
   SizedToTheText,
   TheKnownHeight,
-  OneGuessTwoParts,
-  TheSheetReadsTheBox,
+  TheRuleMatchesTheBox,
   ThreeBecomeTwo,
   TwoBordersTurned,
   WhatEachPromises
@@ -88,7 +88,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         before script is needed. If you know how each one works, you can choose the best tool for the job. This page shows
         that with one small thing, built several ways.</p>
       <p className="paragraph">The thing is an accordion: a list of parts, each with a bar you press to show or hide the
-        text under it. This page calls one part a fold. HTML alone can show and hide a fold.</p>
+        text under it. This page calls one of them a fold. HTML alone can show and hide a fold.</p>
       <p className="paragraph">Sliding it open is the hard part. For years, CSS could move a height to a number but not to
         the height the text needs, so the older ways each worked around it: guess a height, measure it with script, or set
         one in advance. Each has a cost.</p>
@@ -114,14 +114,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
-            which is software that reads the page aloud. It does not slide. The parts below are about making it slide,
+            which is software that reads the page aloud. The fold does not slide. The sections below are about making it slide,
             starting with how it was done before the browser could.</p>
         </li>
       </ol>
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
+      <p className="paragraph">Two choices set the four accordions in the sections below. The one above is HTML alone, so
         they don’t change it.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
@@ -138,9 +138,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
           to auto, the height the text needs, so we moved the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
-          from 0 to a number taller than any part would need, such as 1000px. The panel stopped at its own text, so
+          from 0 to a number taller than any fold would need, such as 1000px. The panel stopped at its own text, so
           nothing scrolled. The cost was the timing: the transition spent its whole time crossing the guess, so a short
-          part opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text.
+          fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text.
           The bigger the guess, the worse the rush and the wait; a guess too small cut the text off.</p>
         <Snippet label="CSS" lines={[
           plain('.info {'),
@@ -153,7 +153,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           plain('  max-height: 1000px;'),
           plain('}')
         ]}/>
-        <OneGuessTwoParts/>
+        <OneGuessTwoFolds/>
       </section>
       {type === 'inclusive'
         ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
@@ -161,8 +161,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">Most of us reached next for script. A transition can move a height to a number,
-            so the script supplies the number: when a part opens, it measures the text’s real height and gives
-            the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every part
+            so the script supplies the number: when a fold opens, it measures the text’s real height and gives
+            the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
             moves the same way, short or tall, because the target is the text’s own height. When the motion
             ends, the script takes the number away, and the panel is auto again. A number left in place goes
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
@@ -172,8 +172,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
         </li>
         <li className="run">
-          <p className="paragraph">The cost was script. The motion needs it, but whether a part is open does not:
-            the {input} and the stylesheet own that, so if the script fails, a part still opens and closes, at
+          <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
+            the {input} and the stylesheet own that, so if the script fails, a fold still opens and closes, at
             once.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
@@ -187,7 +187,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">React is the library this site’s script is written in, and a component is a function
                   that returns the elements it draws. The script keeps what it knows in React state, a value a component
-                  holds and renders from: whether a part is open, and, while it moves, first the height the motion starts
+                  holds and renders from: whether a fold is open, and, while it moves, first the height the motion starts
                   from, then the height it ends at, and whether it has started.</p>
                 <Snippet label="TS" lines={[
                   ...unit(panelSource, 'type Motion ='), gap,
@@ -232,7 +232,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
                   the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
                   by the time the change event fires. An event is a message the browser sends when something happens,
-                  and change is the one it sends to the {input} a press has just checked or unchecked, and to no
+                  and change is the one it sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to no
                   other. So the script first pins where
                   the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
                   off for that moment.</p>
@@ -250,17 +250,20 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ...unit(panelSource, 'const movingTo')
                 ]}/>
               </li>
-              <li className="run">
-                <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all. The
-                  change event the pressed radio gets rises from it through the elements around it, which is called
-                  bubbling, and the list item around the radio handles it by recording its own key in React state as the
-                  open one; the part whose key is no longer the open one closes from that state. </>}This page lets its other folds move to auto,
-                  and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
-                  the trick was for browsers that could only move between numbers.</p>
-                {type === 'exclusive' && <Snippet label="TS" lines={[
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">A radio that loses its check gets no event at all. The change event the pressed
+                  radio gets rises from it through the elements around it, which is called bubbling. The list item around
+                  the radio handles it by recording its own key in React state as the open one, and the fold whose key is
+                  no longer the open one closes from that state.</p>
+                <Snippet label="TS" lines={[
                   ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
                   ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
-                ]}/>}
+                ]}/>
+              </li>}
+              <li className="run">
+                <p className="paragraph">This page lets its other folds move to auto, and this build turns that off
+                  with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for browsers
+                  that could only move between numbers.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
               </li>
             </ol>
@@ -274,11 +277,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it. It has
             no script. Everything below is HTML and CSS:
-            what the elements hold, and what the stylesheet can read.</p>
+            what the elements hold, and what a selector can match.</p>
         </li>
         <li className="run">
           <p className="paragraph">The way to move evenly with no script and no guess was a height you knew. Here every panel is the same height, so every
-            part travels the same distance, and a short part moves like a tall one. The cost is that a short part leaves
+            fold travels the same distance, and a short fold moves like a tall one. The cost is that a short fold leaves
             room under its text, and a tall one makes you scroll.</p>
           <TheKnownHeight/>
         </li>
@@ -288,24 +291,24 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 {type === 'inclusive'
-                  ? <p className="paragraph">To open and close a part, something has to remember which way it is.
+                  ? <p className="paragraph">To open and close a fold, something has to remember which way it is.
                     A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
-                    checked or not, and pressing it switches between the two. So each part is a list item
+                    checked or not, and pressing it switches between the two. So each fold is a list item
                     holding three things, in this order: the checkbox, its label, and the text. An attribute is a
                     name, often with a value, written inside an element’s opening tag. An id is an attribute
                     that gives an element a name no other element on the page shares. The
                     label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
                     id. That link makes a press anywhere on the label press the checkbox. Each id includes
-                    the part’s place in the list, so no two checkboxes share one.</p>
-                  : <p className="paragraph">To open and close a part, something has to remember which way it is.
+                    the fold’s place in the list, so no two checkboxes share one.</p>
+                  : <p className="paragraph">To open and close a fold, something has to remember which way it is.
                     A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> remembers: it is either checked or
                     not. Radios that share a name form a group, and checking one unchecks the others. So each
-                    part is a list item holding three things, in this order: the radio, its label, and the
+                    fold is a list item holding three things, in this order: the radio, its label, and the
                     text. An attribute is a name, often with a value, written inside an element’s opening
                     tag. An id is an attribute that gives an element a name no other element on the page
                     shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
                     radio’s id. That link makes a press anywhere on the label press the radio. Each id
-                    includes the part’s place in the list, so no two radios share one.</p>}
+                    includes the fold’s place in the list, so no two radios share one.</p>}
                 <Snippet label="TS" lines={type === 'inclusive'
                   ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
                   : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
@@ -317,39 +320,42 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   window widths to the left, far off the page. Display is the property that sets how a box lays
                   out what it holds, and display none would hide the {input} too, but it would also take
                   the {input} out of the tab order, and a keyboard could no longer open
-                  the part. Focus is the element the keyboard will act on. Off screen, the {input} still
+                  the fold. Focus is the element the keyboard will act on. Off screen, the {input} still
                   takes focus, still answers the space bar, and
                   is still named by its label.</p>
                 <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
                 <OffScreenNotGone/>
               </li>
               <li className="run">
-                <p className="paragraph">Now the stylesheet needs to know whether the {input} is checked. A selector
+                <p className="paragraph">Now a rule has to match on whether the {input} is checked. A selector
                   is the part of a CSS rule that picks which elements the rule styles,
                   and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
                   by its state: here, a checked {input}. The ~ is
                   a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
                   that says how their elements relate; it picks the siblings that come after the element on its left, the
                   elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
-                  While it is not checked, this rule collapses the text. No script watches the {input}; the stylesheet
-                  reads it.</p>
+                  While it is not checked, this rule collapses the text. No script is involved; the rule matches the unchecked {input} and collapses the
+                  text after it.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
-                <TheSheetReadsTheBox/>
+                <TheRuleMatchesTheBox/>
               </li>
               <li className="run">
                 <p className="paragraph">The bar’s colours are the page’s the other way round: light words on a
-                  dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own sheet.
-                  It is a class in a shared sheet, <code>inverse-filled</code>, and the bar wears it: the class sits in
-                  the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the
-                  row, the padding and the height. The samples that follow show both, the sheet’s rule and then the
+                  dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own stylesheet.
+                  It is a class in a shared stylesheet, <code>inverse-filled</code>, and the bar wears it: the class sits in
+                  the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the
+                  row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the
                   shared class.</p>
-                <Snippet label="CSS" lines={unit(surfaceCss, '.inverse-filled {')}/>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
+                  ...unit(surfaceCss, '.inverse-filled {')
+                ]}/>
               </li>
               <li className="run">
-                <p className="paragraph">Each bar shows an arrow that points right while its part is closed and down
+                <p className="paragraph">Each bar shows an arrow that points right while its fold is closed and down
                   while it is open. The label is a flex row, which lays its children side by side: the name at one
                   end, the arrow at the other. The arrow is an empty box drawn after the label’s words, with only its
-                  top and right borders, from the shared class <code>corner-after</code>; the sheet sizes it and turns
+                  top and right borders, from the shared class <code>corner-after</code>; the stylesheet sizes it and turns
                   it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own
                   text colour, so the arrow changes colour with the words. When the {input} is checked, the ~
                   combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn
@@ -384,12 +390,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <FocusOnTheBar/>
               </li>
               <li className="run">
-                <p className="paragraph">The text should slide open, not appear at once. Each part’s panel is ten lines
+                <p className="paragraph">The text should slide open, not appear at once. Each fold’s panel is ten lines
                   tall: the lh unit is the height of one line, so the panel grows with the text size. Closed, the
                   panel’s height is 0 and overflow hidden hides the text.
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing.',
-                  drawer: ' With the drawer, the height moves on the same 300 milliseconds, and the text slides down from under the bar.',
+                  drawer: ' With the drawer, the height moves over 300 milliseconds with ease-in-out, and the text slides down from under the bar.',
                   static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
@@ -405,7 +411,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               <li className="run">
                 <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what does
-                  not fit. Whether a tall part’s last line is cut off depends on where its lines fall, so the section
+                  not fit. Whether a tall fold’s last line is cut off depends on where its lines fall, so the section
                   wears <code>foot-shadowed</code>, which paints a shadow at its foot and a cover in the panel’s colour
                   that scrolls with the text and hides the shadow at the end, or when the text fits.
                 {{
@@ -430,7 +436,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">The section has a tabindex of 0, so a keyboard can reach it and scroll it,
                   wears <code>focus-ringed</code> so a keyboard reader sees when they have reached it, and is named by
-                  its bar with aria-labelledby, so a screen reader says which part it is reading. Closed, visibility
+                  its bar with aria-labelledby, so a screen reader says which fold it is reading. Closed, visibility
                   hidden takes the text out of the tab order and out of what a screen reader reads.
                 {{
                   reveal: ' With reveal, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
@@ -447,15 +453,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 ]}/>
               </li>
               {type === 'exclusive' && <li className="run">
-                <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the
+                <p className="paragraph">Every radio in the build has the name group, so checking a fold unchecks the
                   last one, and the rule that collapses unchecked text closes it. The arrow keys move the
-                  choice within a group, so a keyboard opens each part it passes.</p>
+                  choice within a group, so a keyboard opens each fold it passes.</p>
                 <OneNameOneChoice/>
               </li>}
               {type === 'exclusive' && <li className="run">
-                <p className="paragraph">A checked radio stays checked when you press it again, so a part cannot close
+                <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
-                  whichever part was open.</p>
+                  whichever fold was open.</p>
                 <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {type === 'exclusive' && <li className="run">
@@ -470,7 +476,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 ]}/>
               </li>}
               <li className="run">
-                <p className="paragraph">A screen reader announces each part as what its markup says it is:
+                <p className="paragraph">A screen reader announces each fold as what its markup says it is:
                   {type === 'inclusive' ? ' a checkbox, checked or not checked.' : ' a radio, one of six.'}</p>
               </li>
             </ol>
@@ -490,12 +496,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             piece in its place. Summary is the bar and the control at once, so nothing has to tie a label to a
             hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads it. The keyboard comes with it, and a screen
             reader announces the bar as a disclosure, collapsed or expanded.
-          {type === 'inclusive' && ' With nothing more, each part opens and closes on its own, as the checkbox build’s parts do. That is the inclusive build.'}
+          {type === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do. That is the inclusive build.'}
           {type === 'exclusive' && <> Give every details the same <Mdn path="Web/HTML/Element/details#name">name</Mdn>,
             and the browser closes the others when one opens. Pressing the open one closes it, so the list needs no Close
             bar. That is the exclusive build.</>} This replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.
-          {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and WebKit open it at once, and it still works.'}</p>
+          {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and Safari open it at once, and it still works.'}</p>
           <Snippet label="TS" lines={type === 'inclusive'
             ? span(accordionsSource, '<details className="fold">', '</details>')
             : span(accordionsSource, '<details className="fold" name=', '</details>')}/>
@@ -527,9 +533,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the known-height and measured builds.</p>
               </li>
               <li className="run">
-                <p className="paragraph">The arrow points right while the part is closed. When the part opens, the
-                  browser adds open to the details in the page it is showing, as if it were written in the
-                  opening tag. A name in that place is called an attribute. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
+                <p className="paragraph">The arrow points right while the fold is closed. When the fold opens, the
+                  browser adds an open attribute to the details in the page it is showing, as if it were written in the
+                  opening tag. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
                   rule turns the arrow down.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&[open] > .info-label::after {')}/>
               </li>
@@ -565,28 +571,27 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
-      <h2 id="together-heading" className="title bold">The two together</h2>
+      <h2 id="together-heading" className="title bold">A {input} and a grid row: the old control, the new slide</h2>
       {type === 'inclusive'
         ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes} motion={motion}/>
         : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios} motion={motion}/>}
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
-          <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar holds the
-            part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is
-            open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the
+          <p className="paragraph">The inclusive build keeps the checkbox from the old way, with no script, and takes its slide from the
+            grid row. Each bar holds the fold’s name and,
+            at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the
             control works the fold. What is new is the way the text opens, below.</p>
-          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '</header>')}/>
+          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
-          <p className="paragraph">The exclusive build is a radio group. Each bar holds the part’s name and, at its
+          <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from the
+            grid row. Each bar holds the fold’s name and, at its
             end, an Open or Close control; the name is only a name, and only the control works the fold.</p>
-          <p className="paragraph">Radios that share a name keep one part open on their own, which checkboxes cannot do
+          <p className="paragraph">Radios that share a name keep one fold open on their own, which checkboxes cannot do
             without script. What a radio cannot do is close itself: pressed again, it stays checked. So the list adds
             that, with a little script, and the radios stay plain.</p>
-          <p className="paragraph">A press on a radio is an event, a message the browser sends from the element that
-            was pressed. The event then bubbles: it is passed up to each element that contains the pressed one, its
-            ancestors, one after another, all the way to the top of the page, and the list hears it on the way. The
-            list remembers which radio is open. A press
+          <p className="paragraph">A press on a radio is an event. The event then bubbles up through the elements around the radio, and a handler on the list
+            runs for it on the way. The list’s state holds which radio is open. A press
             on that radio unchecks it and forgets it, and a press on any other remembers the new one. The arrow keys
             move the choice and press as they go, so each move is remembered too.</p>
           <Snippet label="TS" lines={[
@@ -617,13 +622,13 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="together-depth">
-            <summary id="together-depth" className="opener bold">How the two work together</summary>
+            <summary id="together-depth" className="opener bold">How the {input} and the grid row work together</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The bar is named by its part. The control is a {input} under a label that
-                  holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the
-                  word, the part and the state, such as “Open basalt, {input}, not checked”, and someone using voice
-                  control says what they see. Its checked state is the part’s state. The word that does not apply is
+                <p className="paragraph">The bar is named by its fold. The control is a {input} under a label that
+                  holds the Open or Close the eye sees and, for the ear, the fold’s name, so a listener hears the
+                  word, the fold and the state, such as “Open”, then the fold’s name, then “{input}, not checked”, and
+                  someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply is
                   display: none, which takes it out of the page and out of the name the listener hears, so the
                   control is always called by the one word it shows. The control is a box drawn
                   by <code>hairline-outline</code>, a hairline in the text’s own colour, and <code>field-pressed</code>,
@@ -637,15 +642,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
-                  nothing with it, so no press reaches the list. So the list listens for the space bar
-                  too, and closes the part when the key lands on the open radio.</p>
+                  nothing with it, so no press reaches the list. So a keydown handler on the list catches the space bar
+                  too, and closes the fold when the key lands on the open radio.</p>
                 <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
               </li>}
               <li className="run">
                 {type === 'inclusive'
                   ? <p className="paragraph">This build has no script to lose.</p>
                   : <p className="paragraph">Without the list’s script, the build still works as a radio group: it keeps one
-                    part open. Only the second press that closes a part is lost.</p>}
+                    fold open. Only the second press that closes a fold is lost.</p>}
               </li>
               <li className="run">
                 <p className="paragraph">A row closes only as far as its item can. The paragraph’s item is a span with
@@ -676,8 +681,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom.
                   Then <code>align-self: end</code> sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
                   on the fold’s edge the whole way, and the paragraph’s overflow hides the text above the
-                  fold. One transition moves it all, so no part can fall behind another. It answers no
-                  limit. It is there to show what grid alignment does on its own.</p>
+                  fold. One transition moves it all, so no part can fall behind another. The drawer works around no browser
+                  limit; it is here to show what grid alignment does on its own.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
                 <RidesTheEdge/>
               </li>}
@@ -695,13 +700,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
             a set of keyframes on its own clock, whatever the state does. A fold moves because the
             reader pressed it, and a reader may press again before it lands, so every build here
-            uses transitions. A reader who asks their system for less motion gets none of it, as
-            the next run explains.</p>
+            uses transitions.</p>
         </li>
         <li className="run">
-          <p className="paragraph">A reader who asks their system
-            for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold on
-            this tab open at once. The reset, the stylesheet that sets every element’s defaults, has
+          <p className="paragraph">With <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> asked
+            for, every fold opens with no slide. The reset, the stylesheet that sets every element’s defaults, has
             a reduced-motion block with three rules. The first uses the universal selector, *, which
             picks every element and reaches their before and after too. It sets each transition’s
             duration to zero, cuts each animation to 0.01 milliseconds, plays each animation once,

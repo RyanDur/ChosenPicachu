@@ -8,7 +8,8 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const htmlAlone = 'An accordion in HTML alone';
 
-const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
+const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
+const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('inclusive'), 'How every fold moves'];
 
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
 
@@ -50,7 +51,7 @@ describe('the accordions tab', () => {
 
     const choices = await screen.findByRole('region', {name: 'fold choices'});
 
-    expect(within(choices).getByText(/^Two choices set the accordions/)).toBeVisible();
+    expect(within(choices).getByText(/^Two choices set the four accordions/)).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold type'})).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold motion'})).toBeVisible();
   });
@@ -72,7 +73,7 @@ describe('the accordions tab', () => {
     ['inclusive', parts[2], ['Inclusive accordion using checkboxes']],
     ['exclusive', parts[0], ['Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']],
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
-    ['exclusive', parts[2], ['Exclusive accordion using radio group']]
+    ['exclusive', togetherHeading('exclusive'), ['Exclusive accordion using radio group']]
   ])('should show, with %s chosen, under "%s" the build of that type', async (type, part, builds) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
@@ -124,7 +125,7 @@ describe('the words and the code chosen by type', () => {
 
     expect(within(oldWay).getByText(new RegExp(`so you hide the ${input}\\.`))).toBeInTheDocument();
     expect(oldWay).toHaveTextContent(announced);
-    expect(explanation.codeBeside(oldWay, /To open and close a part/)).toHaveTextContent(carvedInput);
+    expect(explanation.codeBeside(oldWay, /To open and close a fold/)).toHaveTextContent(carvedInput);
     expect(within(platform).getByRole('figure', {name: new RegExp(`needs a ${input},`)})).toBeInTheDocument();
   });
 });
@@ -148,15 +149,15 @@ describe('the two together', () => {
 
     const explained = await screen.findByRole('region', {name: parts[2]});
 
-    expect(explanation.codeBeside(explained, /The inclusive build is a checkbox build again/)).toHaveTextContent('type="checkbox"');
+    expect(explanation.codeBeside(explained, /The inclusive build keeps the checkbox/)).toHaveTextContent('type="checkbox"');
   });
 
   test('should show, with exclusive chosen, the script that lets a radio close beside its run', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
-    const explained = await screen.findByRole('region', {name: parts[2]});
+    const explained = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
-    expect(explanation.codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const openAfter');
+    expect(explanation.codeBeside(explained, /The exclusive build keeps the radio group/)).toHaveTextContent('const openAfter');
   });
 });
 
@@ -179,12 +180,20 @@ describe('the measured build', () => {
     expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The script hands each height to the stylesheet/)])).toEqual([]);
   });
 
-  test('should say, with exclusive chosen, that the change bubbles to the part that records its own key', async () => {
+  test('should say, with exclusive chosen, that the change bubbles to the list item that records its own key, in a run of its own', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explained).toHaveTextContent('rises from it through the elements around it, which is called bubbling, and the list item around the radio handles it by recording its own key in React state as the open one');
+    expect(explanation.runTelling(explained, /^A radio that loses its check/)).toHaveTextContent('A radio that loses its check gets no event at all. The change event the pressed radio gets rises from it through the elements around it, which is called bubbling. The list item around the radio handles it by recording its own key in React state as the open one, and the fold whose key is no longer the open one closes from that state.');
+  });
+
+  test.each(['inclusive', 'exclusive'])('should say, with %s chosen, in a run of its own, that the measured build turns off the move to auto', async type => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(explained, /^This page lets its other folds move to auto/)).toHaveTextContent('This page lets its other folds move to auto, and this build turns that off with interpolate-size, because the trick was for browsers that could only move between numbers.');
   });
 
   test('should show the script that measures, then lets go, beside the run that opens a part', async () => {
@@ -278,7 +287,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const types = await screen.findByRole('group', {name: 'fold type'});
-    const line = screen.getByText('Two choices set the accordions in the three parts below. The one above is HTML alone, so they don’t change it.');
+    const line = screen.getByText('Two choices set the four accordions in the sections below. The one above is HTML alone, so they don’t change it.');
 
     expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(line.compareDocumentPosition(screen.getByRole('region', {name: 'An accordion in HTML alone'})) & Node.DOCUMENT_POSITION_PRECEDING).toBe(Node.DOCUMENT_POSITION_PRECEDING);
@@ -385,7 +394,7 @@ describe('the fold motion', () => {
 
   const partOneSays = {
     reveal: /With reveal, the panel’s height moves over 300 milliseconds/,
-    drawer: /With the drawer, the height moves on the same 300 milliseconds/,
+    drawer: /With the drawer, the height moves over 300 milliseconds with ease-in-out/,
     static: /With static, nothing moves/
   };
 
@@ -428,7 +437,7 @@ describe('the fold motion', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent(sectionSays[style]);
+    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent(sectionSays[style]);
     expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent(visibilitySays[style]);
     expect(within(oldWay).queryByText(sectionSays[other])).not.toBeInTheDocument();
     expect(within(oldWay).queryByText(visibilitySays[other])).not.toBeInTheDocument();
@@ -472,7 +481,7 @@ describe('the fold motion', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).not.toHaveTextContent(/With static/);
+    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).not.toHaveTextContent(/With static/);
     expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).not.toHaveTextContent(/With static/);
   });
 
@@ -566,8 +575,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['One guess, two parts', 'The known height', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar']],
-    ['exclusive', parts[0], ['One guess, two parts', 'The known height', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']],
+    ['inclusive', parts[0], ['One guess, two folds', 'The known height', 'Off screen, not gone', 'The rule matches the box', 'Two borders, turned', 'Focus on the box, drawn on the bar']],
+    ['exclusive', parts[0], ['One guess, two folds', 'The known height', 'Off screen, not gone', 'The rule matches the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
@@ -582,7 +591,7 @@ describe('the accordions diagrams', () => {
   test('should set out, with exclusive chosen, what each element promises, row by row, as a table', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
-    const explained = await screen.findByRole('region', {name: parts[2]});
+    const explained = await screen.findByRole('region', {name: togetherHeading('exclusive')});
     const promises = within(explained).getByRole('table', {name: 'What each element promises'});
 
     expect(within(promises).getByRole('row', {name: 'checkbox yes no'})).toBeInTheDocument();
@@ -597,7 +606,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByRole('region', {name: 'The max-height guess'})).toHaveTextContent('so we moved the panel’s max-height instead, from 0 to a number taller than any part would need, such as 1000px.');
+    expect(within(oldWay).getByRole('region', {name: 'The max-height guess'})).toHaveTextContent('so we moved the panel’s max-height instead, from 0 to a number taller than any fold would need, such as 1000px.');
   });
 
   test('should open part one on the code of the guess, beside its heading', async () => {
@@ -688,7 +697,7 @@ describe('the depth of each part', () => {
     [parts[0], 'How the measured height works', /Most of us reached next for script/, /Closing runs the other way/],
     [parts[0], 'How the known height works', /Here every panel is the same height/, /You want the reader to see a bar/],
     [parts[1], 'How details works', /This replaces the three old ways/, /A pseudo-element is a part of an element/],
-    [parts[2], 'How the two work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
+    [parts[2], 'How the checkbox and the grid row work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
   ])('should keep, under "%s", a closed fold named "%s" with the depth inside it and the point outside it', async (part, fold, point, depth) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -744,7 +753,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(within(platform).getByText(/This build uses details and summary/)).toHaveTextContent(/and the known height\. Today only Chromium slides the fold\. Firefox and WebKit open it at once, and it still works\.$/);
+    expect(within(platform).getByText(/This build uses details and summary/)).toHaveTextContent(/and the known height\. Today only Chromium slides the fold\. Firefox and Safari open it at once, and it still works\.$/);
     expect(platform).not.toHaveTextContent(/Today only Chromium moves the size/);
   });
 
@@ -770,37 +779,37 @@ describe('the runs in view, with the folds shut', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(together).getByText(/The inclusive build is a checkbox build again/)).toHaveTextContent(/the checkbox remembers whether the part is open, as it did in the known-height build\./);
+    expect(within(together).getByText(/The inclusive build keeps the checkbox/)).toHaveTextContent(/the checkbox remembers whether the fold is open, as it did in the known-height build\./);
   });
 
   test.each([
-    {type: 'inclusive', opening: /^The inclusive build is a checkbox build again/, sentence: 'Each bar holds the part’s name and, at its end, an Open or Close control, and the checkbox remembers whether the part is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
-    {type: 'exclusive', opening: /^The exclusive build is a radio group/, sentence: 'The exclusive build is a radio group. Each bar holds the part’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
+    {type: 'inclusive', opening: /^The inclusive build keeps the checkbox/, sentence: 'The inclusive build keeps the checkbox from the old way, with no script, and takes its slide from the grid row. Each bar holds the fold’s name and, at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
+    {type: 'exclusive', opening: /^The exclusive build keeps the radio group/, sentence: 'The exclusive build keeps the radio group from the old way and takes its slide from the grid row. Each bar holds the fold’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
   ])('should say, with $type chosen, that only the control at the bar’s end works the fold', async ({type, opening, sentence}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
-    const together = await screen.findByRole('region', {name: parts[2]});
+    const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
     expect(within(together).getByText(opening)).toHaveTextContent(sentence);
   });
 
-  test('should say, with exclusive chosen, what an event and bubbling are where the press first reaches the list', async () => {
+  test('should name, with exclusive chosen, the event and bubbling bare where the press reaches the list, since the measured build has said what they are', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
-    const together = await screen.findByRole('region', {name: parts[2]});
+    const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
-    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends from the element that was pressed. The event then bubbles: it is passed up to each element that contains the pressed one, its ancestors, one after another, all the way to the top of the page, and the list hears it on the way. The list remembers which radio is open.');
+    expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event. The event then bubbles up through the elements around the radio, and a handler on the list runs for it on the way. The list’s state holds which radio is open.');
   });
 
   test.each([
-    {type: 'inclusive', input: 'checkbox'},
-    {type: 'exclusive', input: 'radio'}
-  ])('should say, with $type chosen, what an event is where the measured build first names one', async ({type, input}) => {
+    {type: 'inclusive', input: 'checkbox', pressed: 'checked or unchecked'},
+    {type: 'exclusive', input: 'radio', pressed: 'checked'}
+  ])('should say, with $type chosen, what an event is where the measured build first names one', async ({type, input, pressed}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires. An event is a message the browser sends when something happens, and change is the one it sends to the ${input} a press has just checked or unchecked, and to no other. So the script first pins where the motion starts`);
+    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires. An event is a message the browser sends when something happens, and change is the one it sends to the ${input} a press has just ${pressed}, and to no other. So the script first pins where the motion starts`);
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a part is open', async () => {
@@ -826,7 +835,7 @@ describe('the word attribute', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/To open and close a part/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute that gives an element a name no other element on the page shares\. The label’s for attribute names the/);
+    expect(within(oldWay).getByText(/To open and close a fold/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute that gives an element a name no other element on the page shares\. The label’s for attribute names the/);
   });
 });
 
@@ -839,7 +848,7 @@ describe('the word display', () => {
     const told = oldWay.textContent;
 
     expect(told.search(/display/i)).toBeGreaterThan(told.indexOf('far off the page'));
-    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the part.');
+    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the fold.');
   });
 });
 
@@ -860,8 +869,8 @@ describe('the platform build’s bars', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /The arrow points right while the part is closed/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
-    expect(explanation.everyCodeBeside(platform, /The arrow points right while the part is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
+    expect(explanation.runTelling(platform, /The arrow points right while the fold is closed/)).toHaveTextContent('The arrow points right while the fold is closed. When the fold opens, the browser adds an open attribute to the details in the page it is showing, as if it were written in the opening tag. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+    expect(explanation.everyCodeBeside(platform, /The arrow points right while the fold is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
   });
 
   test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {
@@ -887,7 +896,7 @@ describe('the known-height build’s stylesheet reading the checkbox', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Now the stylesheet needs to know/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
+    expect(explanation.runTelling(oldWay, /Now a rule has to match on/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
   });
 });
 
@@ -932,13 +941,13 @@ describe('the known-height build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const run = explanation.runTelling(oldWay, /The bar’s colours are the page’s the other way round/);
 
-    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own sheet. It is a class in a shared sheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the sheet’s rule and then the shared class.');
-    expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^\.inverse-filled \{/);
+    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.');
+    expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^&:not\(\.close\) \.info-label \{[^]*\.inverse-filled \{/);
     expect(outOfReadingOrder([
       run,
       explanation.runTelling(oldWay, /Each bar shows an arrow/),
       explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/),
-      explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/),
+      explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/),
       ...type === 'exclusive' ? [explanation.runTelling(oldWay, /The Close bar is shorter than the others/)] : []
     ])).toEqual([]);
   });
@@ -969,10 +978,10 @@ describe('the classes the bars wear', () => {
   ])('should say, with $type chosen, what the eye and the ear meet on the control, beside the rules that show its word', async ({type, input}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
-    const together = await screen.findByRole('region', {name: parts[2]});
+    const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
-    expect(explanation.runTelling(together, /^The bar is named by its part/)).toHaveTextContent(`The bar is named by its part. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the part’s name, so a listener hears the word, the part and the state, such as “Open basalt, ${input}, not checked”, and someone using voice control says what they see. Its checked state is the part’s state. The word that does not apply is display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
-    expect(explanation.everyCodeBeside(together, /^The bar is named by its part/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
+    expect(explanation.runTelling(together, /^The bar is named by its fold/)).toHaveTextContent(`The bar is named by its fold. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the fold’s name, so a listener hears the word, the fold and the state, such as “Open”, then the fold’s name, then “${input}, not checked”, and someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply is display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
+    expect(explanation.everyCodeBeside(together, /^The bar is named by its fold/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
   });
 });
 
@@ -982,7 +991,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent('The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have reached it, and is named by its bar with aria-labelledby, so a screen reader says which part it is reading.');
+    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent('The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have reached it, and is named by its bar with aria-labelledby, so a screen reader says which fold it is reading.');
     expect(explanation.everyCodeBeside(oldWay, /The section has a tabindex of 0/).join()).toMatch(/\.focus-ringed \{/);
   });
 
@@ -991,7 +1000,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall part’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits.');
-    expect(explanation.everyCodeBeside(oldWay, /Whether a tall part’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
+    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits.');
+    expect(explanation.everyCodeBeside(oldWay, /Whether a tall fold’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
   });
 });

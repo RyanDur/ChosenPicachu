@@ -108,17 +108,17 @@ describe.each([
   {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const, controls: folds.length, items: folds.length},
   {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const, controls: folds.length, items: folds.length}
 ])('$accordion', ({Accordion, control, controls, items}) => {
-  test('should hold its controls in one group named parts', () => {
+  test('should hold its controls in one group named folds', () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
-    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(controls);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole(control)).toHaveLength(controls);
   });
 
   test('should make each part an item of its list, with no article of its own', () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
     expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole('listitem')).toHaveLength(items);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(items);
   });
 });
 

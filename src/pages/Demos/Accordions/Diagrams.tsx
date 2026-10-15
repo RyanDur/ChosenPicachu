@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Arrow, Box, Chevron, Circle, Diagram, Part, Label} from '../Recipe/Drawing';
+import {Arrow, Box, Chevron, Circle, Diagram, Label, Part} from '../Recipe/Drawing';
 import {FoldInput} from './fold-type';
 import './Diagrams.css';
 
@@ -32,8 +32,8 @@ export const OffScreenNotGone: FC = () =>
     <Label x={182} y={116}>right: 1000vw</Label>
   </Diagram>;
 
-export const TheSheetReadsTheBox: FC = () =>
-  <Diagram title="The sheet reads the box" height={110}
+export const TheRuleMatchesTheBox: FC = () =>
+  <Diagram title="The rule matches the box" height={110}
     says="The rule matches an unchecked box, then reaches forward to the text after it and collapses it. Nothing before the box can be reached.">
     <Label x={160} y={18}>.info-toggle:not(:checked) ~ .info</Label>
     <Part x={16} y={34} width={70} height={26} kind="unseen" name="input"/>
@@ -54,7 +54,7 @@ export const TwoBordersTurned: FC = () =>
 
 export const FocusOnTheBar: FC = () =>
   <Diagram title="Focus on the box, drawn on the bar" height={110}
-    says="The box off screen holds the keyboard’s focus, and the sheet carries it forward to the bar the reader sees.">
+    says="The box off screen holds the keyboard’s focus, and a sibling rule lights the bar the reader sees.">
     <Box x={110} y={20} width={200} height={70} kind="piece"/>
     <Label x={210} y={36}>the viewport</Label>
     <Box x={125} y={48} width={170} height={26} kind="ring"/>
@@ -65,9 +65,9 @@ export const FocusOnTheBar: FC = () =>
     <Label x={88} y={104}>:focus-visible ~</Label>
   </Diagram>;
 
-export const OneGuessTwoParts: FC = () =>
-  <Diagram title="One guess, two parts" height={170}
-    says="Both parts stop at their own text, but the motion crosses the whole guess, so the short part is open almost at once and shuts only after a wait.">
+export const OneGuessTwoFolds: FC = () =>
+  <Diagram title="One guess, two folds" height={170}
+    says="Both folds stop at their own text, but the motion crosses the whole guess, so the short fold is open almost at once and shuts only after a wait.">
     <Label x={160} y={18}>max-height: the guess</Label>
     <Box x={40} y={30} width={100} height={110} kind="unseen"/>
     <Box x={40} y={30} width={100} height={30} kind="clip"/>
@@ -81,7 +81,7 @@ export const OneGuessTwoParts: FC = () =>
 
 export const TheKnownHeight: FC = () =>
   <Diagram title="The known height" height={150}
-    says="Every panel opens to the same ten lines, so a short part leaves room under its text and a tall one scrolls inside its panel.">
+    says="Every panel opens to the same ten lines, so a short fold leaves room under its text and a tall one scrolls inside its panel.">
     <Label x={160} y={18}>height: 10lh</Label>
     <Box x={40} y={30} width={100} height={96} kind="clip"/>
     <Box x={50} y={40} width={80} height={24} kind="native"/>
@@ -94,12 +94,12 @@ export const TheKnownHeight: FC = () =>
 
 export const OneNameOneChoice: FC = () =>
   <Diagram title="One name, one choice" height={150}
-    says="Radios that share a name make one group, so choosing one part unchooses the last, and Close is the choice that shows nothing.">
-    {['Close', 'first part', 'second part', 'third part'].map((part, at) =>
-      <g key={part}>
+    says="Radios that share a name make one group, so choosing one fold unchooses the last, and Close is the choice that shows nothing.">
+    {['Close', 'first fold', 'second fold', 'third fold'].map((fold, at) =>
+      <g key={fold}>
         <Circle kind="piece" cx={40} cy={26 + at * 30} r={9}/>
         {at === 1 && <circle className="drawn-filled" cx={40} cy={26 + at * 30} r={4}/>}
-        <Label x={60} y={30 + at * 30} anchor="start">{part}</Label>
+        <Label x={60} y={30 + at * 30} anchor="start">{fold}</Label>
       </g>)}
     <polyline className="arrow hollow drawn" points="180,17 190,17 190,125 180,125"/>
     <Label x={200} y={75} anchor="start">name="group"</Label>

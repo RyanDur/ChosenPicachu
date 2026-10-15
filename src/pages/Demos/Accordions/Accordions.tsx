@@ -41,10 +41,10 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
   <hgroup>
     <h3 className="sub-title bold">Accordion using checkboxes and a known height</h3>
-    <p>no Javascript needed to pull this off.</p>
+    <p>No script: HTML and CSS alone.</p>
   </hgroup>
   <fieldset>
-    <legend className="off-screen">parts</legend>
+    <legend className="off-screen">folds</legend>
     <ul className="accordion trim">
       {content.map(({value, key}, id) =>
         <li key={key} className="fold">
@@ -67,10 +67,10 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
   <hgroup>
     <h3 className="sub-title bold">Accordion using a radio group and a known height</h3>
-    <p>no Javascript needed to pull this off.</p>
+    <p>No script: HTML and CSS alone.</p>
   </hgroup>
   <fieldset>
-    <legend className="off-screen">parts</legend>
+    <legend className="off-screen">folds</legend>
     <ul className="accordion trim">
       <li className="fold close field-inverse">
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
@@ -138,7 +138,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   </header>
 
   <fieldset>
-    <legend className="off-screen">parts</legend>
+    <legend className="off-screen">folds</legend>
     <ul className="new-accordion">
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
@@ -166,7 +166,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   </header>
 
   <fieldset>
-    <legend className="off-screen">parts</legend>
+    <legend className="off-screen">folds</legend>
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
       {content.map(({value, key}) =>
         <li key={key} className="grid-fold">
@@ -198,10 +198,10 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   return <article className={classNames('inclusive-accordion', motion, className)}>
     <hgroup>
       <h3 className="sub-title bold">Accordion using checkboxes and a measured height</h3>
-      <p>a few lines of script measure each part’s height.</p>
+      <p>A few lines of script measure each fold’s height.</p>
     </hgroup>
     <fieldset>
-      <legend className="off-screen">parts</legend>
+      <legend className="off-screen">folds</legend>
       <ul className="accordion trim">
         {content.map(({value, key}, id) =>
           <li key={key} className="fold"
@@ -226,10 +226,10 @@ export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   return <article className={classNames('exclusive-accordion', motion, className)}>
     <hgroup>
       <h3 className="sub-title bold">Accordion using a radio group and a measured height</h3>
-      <p>a few lines of script measure each part’s height.</p>
+      <p>A few lines of script measure each fold’s height.</p>
     </hgroup>
     <fieldset>
-      <legend className="off-screen">parts</legend>
+      <legend className="off-screen">folds</legend>
       <ul className="accordion trim">
         <li className="fold close field-inverse" onChange={() => setOpen(undefined)}>
           <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
