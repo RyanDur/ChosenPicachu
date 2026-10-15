@@ -119,11 +119,13 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       table.getByRole('rowheader').evaluateAll(cells =>
         cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
     dragColumnPast: async (column: string, past: string): Promise<void> => {
+      await columnHeader(column).scrollIntoViewIfNeeded();
       const from = await boxOf(columnHeader(column));
       const to = await boxOf(columnHeader(past));
       await dragTo(page, from, to.x + to.width * 0.8, from.y + from.height / 2);
     },
     dragRowPast: async (row: number, past: RegExp): Promise<void> => {
+      await table.getByRole('row', {name: past}).scrollIntoViewIfNeeded();
       const grip = await boxOf(table.getByRole('button', {name: `move row ${row}`}));
       const target = await boxOf(table.getByRole('row', {name: past}));
       await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
