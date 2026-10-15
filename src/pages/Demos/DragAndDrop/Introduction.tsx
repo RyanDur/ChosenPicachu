@@ -9,9 +9,9 @@ export const DragSortIntroduction: FC = () =>
       should be the browser’s own, with script only for what the platform does not yet do: making room as you hover,
       or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbours, or
       not.</p>
-    <p className="paragraph">Each of those is a dial in the last part of the tutorial below, and the exhibit obeys it; the keyboard has the
-      same moves as the pointer.</p>
+    <p className="paragraph">Each of those is a dial in the last part of the tutorial below, and the exhibit above the dials
+      changes to match.</p>
     <p className="paragraph">By the end you can build a sortable list on the browser’s own drag and drop, choose each of those three
-      behaviours and say what it costs, and give a keyboard user the same list. The exhibit below is three items; drag
+      behaviours and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves as the pointer. The exhibit below is three items; drag
       one by its grip, or focus the grip and use the left and right arrows.</p>
   </header>;
