@@ -227,12 +227,19 @@ describe('why 9999 still loses', () => {
       .toMatch(/'old-way-card[^]*'forms-context'[^]*type="checkbox"[^]*Card one has z-index: 1/);
   });
 
-  test('should say the cards are compared in the tab’s panel, the nearest context that holds them both', async () => {
+  test('should say card one forms a stacking context because it is positioned and has a z-index of 1', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
     expect(explanation.runTelling(part, /so it forms a stacking context/)).toHaveTextContent('Card one is positioned and has a z-index of 1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside it together.');
+  });
+
+  test('should say the cards are compared in the tab’s panel, the nearest context that holds them both', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
+
     expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toHaveTextContent('The cards are compared in the nearest context that holds them both: here the tab’s panel. There the browser compares card one and card two, 1 against 1');
     expect(explanation.runTelling(part, /With the box unchecked/)).toHaveTextContent('It joins the tab panel’s context, where card two is, and there 9999 is the larger number.');
   });

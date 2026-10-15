@@ -26,6 +26,12 @@ describe('the top layer', () => {
       .toEqual(['Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses']);
   });
 
+  test('should open the tutorial on the parts above, which show what a z-index does, and on a banner that sets none', async () => {
+    await openZIndexTab();
+
+    expect(await screen.findByText(/^We are going to build this site’s banner/)).toHaveTextContent('The parts above show what a z-index does and where it stops counting; the banner sets none.');
+  });
+
   test('the user raises a banner from the demo', async () => {
     await openZIndexTab();
     const alert = screen.getByRole('alert', {hidden: true});
@@ -266,12 +272,6 @@ describe('the banner tutorial’s second story', () => {
       'Slide out, then close the gap',
       'Change a banner’s height smoothly when its text rewraps'
     ]);
-  });
-
-  test('should open the tutorial on the parts above, which show what a z-index does, and on a banner that sets none', async () => {
-    await openZIndexTab();
-
-    expect(await screen.findByText(/^We are going to build this site’s banner/)).toHaveTextContent('The parts above show what a z-index does and where it stops counting; the banner sets none.');
   });
 
   test('should want, for a repeated message, nothing new', async () => {
