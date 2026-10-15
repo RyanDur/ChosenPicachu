@@ -4,8 +4,7 @@ import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
 import {PageError} from '@pages/PageError';
 import {useSearchParamsObject} from '@components/search-params';
-import {demoTopicParam, DemoTopics} from './types';
-import {capitalized} from './capitalized';
+import {demoTopicParam, DemoTopics, topicNames} from './types';
 import {useParams} from 'react-router';
 import names from '@pages/names.json';
 import {isChartKind} from './Charts/kinds';
@@ -16,7 +15,7 @@ const ChartPage = lazy(() => import('./Charts/ChartPage').then(({ChartPage}) => 
 
 const DemosHeader = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
-  return <Header title={`Demos ${capitalized(tab)}`} listed={names.demos[tab]}/>;
+  return <Header title={`Demos ${topicNames[tab]}`} listed={names.demos[tab]}/>;
 };
 
 const ChartsHeader = () => {

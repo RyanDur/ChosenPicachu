@@ -55,11 +55,11 @@ describe('The Demos page', () => {
     expect(within(region).queryByRole('heading', {name: tab})).not.toBeInTheDocument();
   });
 
-  test('should title the page Demos Z-index once the z-index tab is chosen', async () => {
+  test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should title the page Demos %s, the name on its tab, once that tab is chosen', async tab => {
     render(<TestApp at={demosAt()}/>);
 
-    await demoTabs.open('Z-index');
+    await demoTabs.open(tab);
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Z-index'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {level: 1, name: `Demos ${tab}`})).toBeInTheDocument();
   });
 });

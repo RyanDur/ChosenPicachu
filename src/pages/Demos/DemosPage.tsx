@@ -14,7 +14,7 @@ import {
   LazyKeepAnimatedList,
   LazyKeepStaticList
 } from './DragAndDrop';
-import {demoTopicParam, DemoTopics} from './types';
+import {demoTopicParam, DemoTopics, topicNames} from './types';
 import {BannerExplained, cardOneParam, FormsContextExplained, MenuExplained, PopoverExplained, raisedParam, StackingExplained, wornParam} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
@@ -35,13 +35,7 @@ const paragraphs = (count: number, dealt: () => string) => Array.from({length: c
   value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
 }));
 
-const topics = [
-  {display: 'Accordions', param: DemoTopics.accordions},
-  {display: 'Z-index', param: DemoTopics.zIndex},
-  {display: 'Drag sort', param: DemoTopics.dragAndDrop},
-  {display: 'Charts', param: DemoTopics.charts},
-  {display: 'Tables', param: DemoTopics.tables}
-];
+const topics = Object.values(DemoTopics).map(param => ({display: topicNames[param], param}));
 
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams} =
@@ -73,7 +67,7 @@ export const DemosPage = () => {
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" defaultTab={DemoTopics.accordions} values={topics}/>
-    <section id="about" aria-label={topics.find(({param}) => param === tab)?.display} className="about">
+    <section id="about" aria-label={topicNames[tab]} className="about">
       {({
         [DemoTopics.accordions]:
               <>

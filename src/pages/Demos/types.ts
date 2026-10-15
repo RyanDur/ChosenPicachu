@@ -8,5 +8,13 @@ export enum DemoTopics {
   tables = 'tables'
 }
 
+export const topicNames: Record<DemoTopics, string> = {
+  [DemoTopics.accordions]: 'Accordions',
+  [DemoTopics.zIndex]: 'Z-index',
+  [DemoTopics.dragAndDrop]: 'Drag sort',
+  [DemoTopics.charts]: 'Charts',
+  [DemoTopics.tables]: 'Tables'
+};
+
 export const demoTopicParam: schema.Decoder<DemoTopics> = schema.literalUnion(...Object.values(DemoTopics));
 export type PropsWithClassName = {className?: string};
