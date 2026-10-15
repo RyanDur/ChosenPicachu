@@ -3,6 +3,7 @@ import {Link, useSearchParams} from 'react-router';
 import {plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import {BannerTrap} from './BannerTrap';
+import {fixedBannerLosesHeading} from './part-headings';
 import {storyAnchor} from '../Recipe/story-anchor';
 import {storyOpenedIn} from '../Recipe/Story';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
@@ -15,8 +16,8 @@ const gap = plain(' ');
 export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParams();
 
-  return <section aria-labelledby="fixed-banner-loses-heading" className="stacking-part">
-    <h2 id="fixed-banner-loses-heading" className="title bold">Why a fixed banner still loses</h2>
+  return <section aria-labelledby={fixedBannerLosesHeading} className="stacking-part">
+    <h2 id={fixedBannerLosesHeading} className="title bold">Why a fixed banner still loses</h2>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

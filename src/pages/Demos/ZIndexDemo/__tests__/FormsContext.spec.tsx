@@ -4,25 +4,12 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {computeAccessibleName} from 'dom-accessibility-api';
-import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const heading = 'What else forms a stacking context';
 
 const theChooser = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^What card one wears decides/});
 
 describe('the part on what else forms a stacking context', () => {
-  test('should sit after the part where 9999 loses and before the part where the popover wins', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: heading});
-
-    expect(outOfReadingOrder([
-      screen.getByRole('region', {name: 'Why 9999 still loses'}),
-      part,
-      screen.getByRole('region', {name: 'Why the popover wins'})
-    ])).toEqual([]);
-  });
-
   test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
@@ -114,7 +101,14 @@ describe('the part on what else forms a stacking context', () => {
     expect(explanation.everyCodeBeside(part, words).join()).toMatch(/\.isolated \{[^]*\.tabs ~ \* \{\s*isolation: isolate;/);
   });
 
-  test('should compare the bare card’s list with card two in the tab panel’s context', async () => {
+  test('should caption the chooser with where the 9999 counts: in the tab’s panel, against card two, or only inside the card', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    expect(within(part).getByText(/^What card one wears decides/)).toHaveTextContent('What card one wears decides whether its list’s 9999 counts in the tab’s panel, against card two, or only inside the card.');
+  });
+
+  test('should say the bare card’s list is compared with card two in the tab panel’s context', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
 

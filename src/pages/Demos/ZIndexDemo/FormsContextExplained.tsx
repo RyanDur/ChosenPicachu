@@ -3,6 +3,7 @@ import {plain, Snippet} from '../Recipe';
 import {unit} from '../Recipe/carve';
 import {ContextChooser} from './ContextChooser';
 import {Worn} from './worn';
+import {whatElseFormsHeading} from './part-headings';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@components/Tabs/Tabs.css?sample';
@@ -18,8 +19,8 @@ type Props = {
 };
 
 export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
-  <section aria-labelledby="what-else-forms-heading" className="stacking-part">
-    <h2 id="what-else-forms-heading" className="title bold">What else forms a stacking context</h2>
+  <section aria-labelledby={whatElseFormsHeading} className="stacking-part">
+    <h2 id={whatElseFormsHeading} className="title bold">What else forms a stacking context</h2>
     <ContextChooser worn={worn} onWornChosen={onWornChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

@@ -26,7 +26,7 @@ export const TopLayerTutorial: FC = () => {
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature
       and the steps that build it, with the real code from this site, so what you read is
-      what runs. The cards at the top of this page each set a z-index; the banner sets none. The dials below place the stack, choose its entrance,
+      what runs. The parts above show what a z-index does and where it stops counting; the banner sets none. The dials below place the stack, choose its entrance,
       and pick how it grows, and where a step depends on a dial, that dial sits on the
       step. The links go to MDN, if you want more.
     </p>

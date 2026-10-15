@@ -114,8 +114,8 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Open a gap in the stack first" dial=<StackDial name="journey-stack"/>>
         <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
-          <Says>Each banner is a grid, a layout of rows and columns, with a single row or column, called a
-            track, a banner being the list item with the class trouble. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
+          <Says>A banner is the list item with the class trouble. Each banner is a grid, a layout of rows and
+            columns, with a single row or column, called a track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
             one track takes all of it, and at 0fr it takes none. The starting style sets the track to 0fr and the
             banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.</Says>
           <Says>{axisFact[axisOf(stack)]}</Says>

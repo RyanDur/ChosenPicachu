@@ -20,7 +20,8 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(part).toHaveTextContent('The list from Sort by, in the top layer, opens over everything around it every time, with the box checked or not.');
+    expect(part).toHaveTextContent('The list from Sort by in Why 9999 still loses, now in the top layer, opens over everything around it every time, with the box checked or not.');
+    expect(within(part).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
   });
 
   test('should show the menu’s markup beside the run that says what popover gives for free', async () => {

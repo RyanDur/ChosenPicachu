@@ -41,8 +41,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are compared in the
-          nearest context that holds them both: here the tab’s panel, which this site isolates on purpose with
-          isolation: isolate. There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so card two is painted over card one, list and all. No
+          nearest context that holds them both: here the tab’s panel. There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so card two is painted over card one, list and all. No
           number on the list can change that, because the list is never compared with card two.</p>
         <Where9999IsCompared/>
       </li>

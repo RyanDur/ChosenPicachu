@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import {AboveThePage} from './Diagrams';
-import {popoverWinsHeading} from './part-headings';
+import {popoverWinsHeading, stillLosesHeading} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import menuSource from '@components/Menu/Menu.tsx?sample';
@@ -15,8 +15,9 @@ export const PopoverExplained: FC = () =>
     <h2 id={popoverWinsHeading} className="title bold">Why the popover wins</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">The list from Sort by, in the top layer, opens over everything around it every time, with
-          the box checked or not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
+        <p className="paragraph">The list from Sort by in{' '}
+          <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>, now in the top
+          layer, opens over everything around it every time, with the box checked or not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen. Whatever the page stacks, the top layer sits
           over it.</p>
       </li>

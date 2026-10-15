@@ -5,7 +5,7 @@ import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from 
 import {span, unit} from '../../Recipe/carve';
 import {Sample} from '../../Recipe/sample';
 import {AlignDial, SideDial} from '../../Controls';
-import {popoverWinsHeading, stillLosesHeading} from '../part-headings';
+import {fixedBannerLosesHeading, popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import placementCss from '../../../../styles/placement.css?sample';
@@ -44,8 +44,8 @@ export const TopLayerRecipe: FC = () => {
     <Tell>We could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
       element around the banner forms a stacking context by the ways{' '}
-    <a className="signpost" href="#what-else-forms-heading"><cite>What else forms a stacking context</cite></a> shows;
-      the banner’s own position does not save it from one. Inside that context, the banner’s 9999 is compared with nothing outside it. So
+    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> shows; position: fixed, which pins the banner to the window, does not lift it out of that context,
+      as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
       the panel is a popover, drawn in the top layer like the new menu
       above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
       both are.</Tell>
@@ -95,6 +95,7 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
+            ...span(bannersCss, '.banners {', 'padding: 0;'), gap,
             ...unit(bannersCss, `.${side} {`), gap,
             ...unit(alignSheet[align], `.${align} {`)
           ]}/>

@@ -125,8 +125,10 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(news).toHaveTextContent('An element around the banner forms a stacking context by the ways What else forms a stacking context shows; the banner’s own position does not save it from one. Inside that context, the banner’s 9999 is compared with nothing outside it.');
+    expect(news).toHaveTextContent('An element around the banner forms a stacking context by the ways What else forms a stacking context shows; position: fixed, which pins the banner to the window, does not lift it out of that context, as Why a fixed banner still loses shows. Inside that context, the banner’s 9999 is compared with nothing outside it.');
+    expect(news).not.toHaveTextContent('the two CSS layouts that arrange their children');
     expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
+    expect(within(news).getByRole('link', {name: 'Why a fixed banner still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why a fixed banner still loses'}).id}`);
     expect(within(news).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
   });
 
@@ -223,13 +225,21 @@ describe('the banner tutorial’s first story', () => {
     expect(within(within(explained).getByRole('figure', {name: 'Banners/Banners.tsx on GitHub'})).getByText('TS')).toBeInTheDocument();
   });
 
-  test('should say the dismiss button’s look is shared classes, and carve each after its rule', async () => {
+  test('should carve the panel’s padding: 0 beside the step that says it takes the popover’s padding off', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*padding: 0;/);
+  });
+
+  test('should say the message’s colour and border and the dismiss button’s look are shared classes, and carve each after its rule', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const styling = recipeFolds.steps(news)[3];
 
+    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/^Each message sits in a paragraph with the class news\. Its look comes from classes shared across this site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s colour, and hairline-outline for a thin border in that colour\./);
     expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and muted-ink greys it\.$/);
-    expect(within(styling).getByRole('code')).toHaveTextContent(/\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
+    expect(within(styling).getByRole('code')).toHaveTextContent(/\.floating \{[^]*\.alarm-ink \{[^]*\.hairline-outline \{[^]*\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
   test('should send the reader to MDN, which the tab names earlier as Mozilla’s web reference', async () => {
@@ -258,11 +268,23 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
+  test('should open the tutorial on the parts above, which show what a z-index does, and on a banner that sets none', async () => {
+    await openZIndexTab();
+
+    expect(await screen.findByText(/^We are going to build this site’s banner/)).toHaveTextContent('The parts above show what a z-index does and where it stops counting; the banner sets none.');
+  });
+
+  test('should want, for a repeated message, nothing new', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.steps(await secondStory())[0]).toHaveTextContent('The same message twice tells me nothing new.');
+  });
+
   test('should tell step 2 in five paragraphs after its want, and step 3 in two', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(within(steps[1]).getByText(/^Each banner is a grid/)).toHaveTextContent(/so the transition opens the gap over 0\.3 seconds\.$/);
+    expect(within(steps[1]).getByText(/^A banner is the list item with the class trouble/)).toHaveTextContent(/so the transition opens the gap over 0\.3 seconds\.$/);
     expect(within(steps[1]).getAllByRole('paragraph')).toHaveLength(6);
     expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/its padding and border start at 0 as well\.$/);
     expect(within(steps[1]).getByText(/^The banner has one transition list/)).toHaveTextContent('The banner has one transition list, written once for all four stacks: both track sizes and both margins over 0.3 seconds, and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in it. A second transition declaration on the same element replaces the list; it does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its own.');
@@ -343,7 +365,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['a grid and a track', 'Each banner is a grid, a layout of rows and columns, with a single row or column, called a track, a banner being the list item with the class trouble.'],
+    ['a grid and a track', 'A banner is the list item with the class trouble. Each banner is a grid, a layout of rows and columns, with a single row or column, called a track.'],
     ['fr', 'A track’s size can be given in fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none.'],
     ['why the message shrinks to nothing', 'A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both directions, and on the stack’s axis its padding and border start at 0 as well.'],
     ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
@@ -408,7 +430,7 @@ describe('the z-index tab’s introduction', () => {
   const paragraphs = [
     'Where two boxes on a page overlap, the browser draws one over the other. z-index is the CSS property for changing which.',
     'It reads like one ranking for the whole page, where the biggest number wins. So when a menu opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999 loses too.',
-    'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a stacking context, and most of this page is about it: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
+    'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a stacking context, a group of boxes the browser stacks as one, and most of this page is about it: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
     'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
   ];
 
@@ -418,5 +440,19 @@ describe('the z-index tab’s introduction', () => {
     const firstExhibit = within(tab).getByRole('heading', {name: 'Why Third is on top'});
 
     expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), firstExhibit])).toEqual([]);
+  });
+});
+
+describe('the banner dials’ readings', () => {
+  test.each([
+    ['stack=down', 'Each new banner joins beneath the ones already standing.'],
+    ['stack=up', 'Each new banner stands on top of the stack.'],
+    ['stack=left', 'The stack grows sideways, newest at the left.'],
+    ['stack=right', 'The stack grows sideways, newest at the right.'],
+    ['align=center', 'The stack centres itself on the screen.']
+  ])('should read, with %s chosen, “%s”', async (choice, reading) => {
+    render(<TestApp at={demosAt(`?tab=z-index&${choice}`)}/>);
+
+    expect(await screen.findByText(reading)).toBeInTheDocument();
   });
 });

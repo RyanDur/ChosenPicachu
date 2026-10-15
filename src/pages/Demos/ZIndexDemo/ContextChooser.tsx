@@ -72,6 +72,6 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
       </li>
     </ol>
     <output aria-label="what card one formed" className="paragraph">{openedAsWorn.map(wearing => whatItFormed[wearing]).orElse('')}</output>
-    <figcaption className="caption">What card one wears decides whether its list’s 9999 counts on the whole page or only inside the card.</figcaption>
+    <figcaption className="caption">What card one wears decides whether its list’s 9999 counts in the tab’s panel, against card two, or only inside the card.</figcaption>
   </figure>;
 };
