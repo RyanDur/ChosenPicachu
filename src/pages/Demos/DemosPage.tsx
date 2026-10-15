@@ -26,6 +26,8 @@ import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
 import {ChartsIntroduction} from './Charts/Introduction';
+import {DragSortIntroduction} from './DragAndDrop/Introduction';
+import {TablesIntroduction} from './Tables/Introduction';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number, dealt: () => string) => Array.from({length: count}, () => ({
@@ -62,6 +64,14 @@ export const DemosPage = () => {
   const {tradeProduct} = useEnv();
 
   return <>
+    <p className="demos-opening paragraph">
+      Each tab below is one feature a page needs, built here and explained. The tabs run from simple to expert: an
+      accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns and
+      rows you drag while trades keep landing. A tab shows the thing first, with dials wherever the build has a choice;
+      then the explanation, with what the platform gives now beside the tricks we used before it; then the steps that
+      build it, each beside the code that runs on this page. Start with the accordions if the three languages are new to
+      you, or go to the tab whose bug you came with.
+    </p>
     <Tabs label="demos" defaultTab={DemoTopics.accordions} values={topics}/>
     <section id="about" aria-label={topics.find(({param}) => param === tab)?.display} className="about">
       {({
@@ -88,11 +98,13 @@ export const DemosPage = () => {
           <ChartsTutorial/>
         </>,
         [DemoTopics.tables]: <>
+          <TablesIntroduction/>
           <Aggregations pace={pace} origin={origin} motion={motion} world={world}/>
           <Tutorials shown={tut} onShown={next => updateSearchParams({tut: next})}
             track={track} onTrackChosen={next => updateSearchParams({track: next})}/>
         </>,
         [DemoTopics.dragAndDrop]: <>
+          <DragSortIntroduction/>
           {(() => {
             const lists = {
               eager: {

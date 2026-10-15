@@ -1,3 +1,4 @@
+import {outOfReadingOrder} from '@__test_support/reading-order';
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demosAt} from '@pages/Demos/__test_support';
@@ -1223,5 +1224,22 @@ describe('the tables tutorials’ vocabulary', () => {
     const blocks = await prose('world=vanilla', 'the living table');
 
     expect(firstSaying(blocks, /\bdress\b/)).toHaveTextContent('A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and custom properties and sets the widths.');
+  });
+});
+
+describe('the tables tab’s introduction', () => {
+  const paragraphs = [
+    'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
+    'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
+    'This page’s view is that the columns and the seats are the state and the data never moves: a trade rewrites a row’s values under its key, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab. Every pixel of the drag is drawn from pointer events, with no library, and the table is built twice, once with the three languages raw and once in React, with the same stores underneath.',
+    'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a column’s header, or a row’s grip, and move it.'
+  ];
+
+  test('should tell what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
+    render(<TestApp at={demosAt('?tab=tables')}/>);
+
+    const tab = await screen.findByRole('region', {name: 'Tables'});
+
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), (await within(tab).findAllByRole('table'))[0]])).toEqual([]);
   });
 });

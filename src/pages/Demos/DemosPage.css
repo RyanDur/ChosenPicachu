@@ -14,3 +14,11 @@
   display: grid;
   gap: var(--base);
 }
+
+.demos-opening {
+  padding: var(--base-x-5);
+
+  @media (width <= 600px) {
+    padding-inline: var(--base-x-2_5);
+  }
+}
