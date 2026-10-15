@@ -6,9 +6,8 @@ import {momentAddress} from './MomentLink';
 import {doorId} from './door';
 import {CurrentDoor} from './DoorSection';
 
-export const FromTheRecord: FC<{keys: readonly MomentKey[]}> = ({keys}) => {
-  const door = useContext(CurrentDoor);
-  return <section className="door-evidence" aria-labelledby={`${doorId(door)} ${doorId(door)}-record`}>
+export const FromTheRecord: FC<{keys: readonly MomentKey[]}> = ({keys}) =>
+  useContext(CurrentDoor).either(door => <section className="door-evidence" aria-labelledby={`${doorId(door)} ${doorId(door)}-record`}>
     <h3 className="sub-title" id={`${doorId(door)}-record`}>from the record</h3>
     <ol className="moments" aria-label={`${door}, from the record`}>
       {inOrder.filter(key => keys.includes(key)).map(key =>
@@ -19,5 +18,4 @@ export const FromTheRecord: FC<{keys: readonly MomentKey[]}> = ({keys}) => {
         </li>)}
     </ol>
     <p className="caption"><Link className="signpost" to={Paths.record}>the whole record</Link></p>
-  </section>;
-};
+  </section>, () => null);
