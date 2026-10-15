@@ -30,7 +30,7 @@ export const Presentation: FC = () =>
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a> first.
         I add a state name only where there is no native one: carried for the thing being dragged, settling for the
         one sliding back into place, shoved for a neighbour pushed aside. One sheet, the table’s, says what each does.
-        Carried and settling are one rule each for a column and a row, with only the lengths handed in differing;
+        Carried and settling serve a column and a row with the same rules, only the lengths handed in differing;
         shoved has a rule per direction, two across for columns and two down for rows.</p>
       <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can
         set, so the sheet checks{' '}
