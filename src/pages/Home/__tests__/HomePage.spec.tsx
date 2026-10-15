@@ -1,5 +1,7 @@
+import {itemHeadedBy} from '@__test_support/headed-item';
+import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
@@ -47,12 +49,12 @@ describe('the home page', () => {
     const door = within(screen.getByRole('region', {name: 'Structure'}));
 
     expect(door.getByText('how I organize it')).toBeVisible();
-    expect(door.getByRole('link', {name: 'search', hidden: true}))
+    expect(door.getByRole('link', {name: 'search'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByRole('link', {name: 'output', hidden: true}))
+    expect(door.getByRole('link', {name: 'output'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/a page built of divs gives them nothing to move by/)).toBeInTheDocument();
-    expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/, hidden: true}))
+    expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
@@ -61,15 +63,15 @@ describe('the home page', () => {
     const door = within(screen.getByRole('region', {name: 'Presentation'}));
 
     expect(door.getByText('how I organize it')).toBeVisible();
-    expect(door.getByRole('link', {name: 'custom property', hidden: true}))
+    expect(door.getByRole('link', {name: 'custom property'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/Element selectors are used only in the reset/)).toBeInTheDocument();
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
     expect(door.getByText(/a pile of overrides/)).toBeInTheDocument();
     expect(door.getByText(/still read by a screen reader but unseen/)).toBeInTheDocument();
-    expect(door.getByRole('link', {name: 'prefers-reduced-motion', hidden: true}))
+    expect(door.getByRole('link', {name: 'prefers-reduced-motion'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByRole('link', {name: 'appearance: base-select', hidden: true}))
+    expect(door.getByRole('link', {name: 'appearance: base-select'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
@@ -77,7 +79,7 @@ describe('the home page', () => {
     const door = within(screen.getByRole('region', {name: 'Dynamic Interaction'}));
 
     expect(door.getByText('how I organize it')).toBeVisible();
-    expect(door.getByRole('link', {name: /operable through a keyboard interface/, hidden: true}))
+    expect(door.getByRole('link', {name: /operable through a keyboard interface/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
     expect(door.getByText(/replacing it is the only way anything on screen changes/)).toBeInTheDocument();
     expect(door.getByText(/Not every event starts at the pointer/)).toBeInTheDocument();
@@ -143,13 +145,46 @@ describe('the home page', () => {
     const list = within(door).getByRole('list', {name: `${section}, from the record`});
     const wholeRecord = within(door).getByRole('link', {name: 'the whole record'});
 
-    expect(within(door).getByText('from the record')).toBeVisible();
+    expect(within(door).getByRole('heading', {level: 3, name: 'from the record'})).toBeVisible();
     expect(wholeRecord).toHaveAttribute('href', Paths.record);
     expect(outOfReadingOrder([
       within(door).getByText(/^(HTML|CSS|JavaScript) says/),
       list,
       wholeRecord,
-      within(door).getByText('how I organize it')
+      within(door).getByRole('heading', {level: 3, name: 'how I organize it'})
     ])).toEqual([]);
+  });
+
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments and its practice as regions of their own, the practice open with nothing to press', section => {
+    const evidence = screen.getByRole('region', {name: `${section} from the record`});
+    const practice = screen.getByRole('region', {name: `${section} how I organize it`});
+
+    expect(within(evidence).getByRole('list', {name: `${section}, from the record`})).toBeVisible();
+    within(practice).getAllByRole('paragraph').forEach(paragraph => expect(paragraph).toBeVisible());
+    expect(within(screen.getByRole('region', {name: section})).queryByRole('group')).not.toBeInTheDocument();
+  });
+
+  test.each([
+    ['Structure', 5],
+    ['Presentation', 5],
+    ['Dynamic Interaction', 5]
+  ])('should rest %s\'s practice on its own moments: each sentence naming a moment links to one in its list', (section, named) => {
+    const listed = within(screen.getByRole('list', {name: `${section}, from the record`})).getAllByRole('link').map(moment => moment.getAttribute('href'));
+    const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
+      .map(link => link.getAttribute('href') ?? '')
+      .filter(address => address.startsWith(Paths.record));
+
+    expect(cited).toHaveLength(named);
+    expect(cited.filter(address => !listed.includes(address))).toEqual([]);
+  });
+});
+
+describe('a moment named in how I organize it', () => {
+  test('should land the reader on that moment on the record, with focus there', async () => {
+    render(<TestApp at={Paths.home}/>);
+
+    await userEvent.click(within(screen.getByRole('region', {name: 'Structure how I organize it'})).getAllByRole('link', {name: '2016 moment'})[0]);
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
 });

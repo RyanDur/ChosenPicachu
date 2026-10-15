@@ -10,7 +10,8 @@ const ownLines: Record<string, number[]> = {
   '/src/pages/Users/UserInformation/Address/Address.css': [456],
   '/src/components/Feedback/Feedback.css': [500],
   '/src/components/PillGlider/PillGlider.css': [390],
-  '/src/pages/Demos/Charts/Workspace.css': [870]
+  '/src/pages/Demos/Charts/Workspace.css': [870],
+  '/src/pages/Home/Home.css': [900]
 };
 
 const pixels = (length: string): number => length.endsWith('rem') ? Math.round(parseFloat(length) * 10) : parseFloat(length);

@@ -23,6 +23,30 @@
       margin: 0;
       text-wrap: pretty;
     }
+
+    @media (width >= 900px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      column-gap: var(--base-x-4);
+
+      > * {
+        grid-column: 1 / -1;
+      }
+
+      .door-evidence {
+        grid-column: 1;
+      }
+
+      .door-practice {
+        grid-column: 2;
+      }
+    }
+  }
+
+  .door-evidence,
+  .door-practice {
+    align-content: start;
+    display: grid;
+    gap: var(--base-x-1_5);
   }
 
   .moments {
@@ -44,16 +68,5 @@
   .door-title {
     margin: 0;
     text-wrap: balance;
-  }
-
-  .door-fold {
-    .prompt {
-      width: fit-content;
-    }
-
-    .paragraph {
-      margin: 0;
-      margin-block-start: var(--base-x-1_5);
-    }
   }
 }

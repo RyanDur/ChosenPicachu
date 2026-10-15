@@ -27,11 +27,10 @@ for (const {name, path, ready, loaded} of pages) {
   });
 }
 
-test('the home page has no accessibility violations with its folds open', async ({page}) => {
+test('the home page has no accessibility violations with every section’s practice showing', async ({page}) => {
   const home = homePage(page);
   await page.goto('');
-  await expect(home.doorFolds.last()).toBeVisible();
-  for (const door of await home.doorFolds.all()) await home.doorSummaryOf(door).click();
+  await expect(home.practices).toHaveCount(3);
 
   expect(violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze())).toEqual([]);
 });

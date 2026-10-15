@@ -4,7 +4,6 @@ export const homePage = (page: Page) => ({
   momentLine: (section: string, name: string): Locator =>
     page.getByRole('list', {name: `${section}, from the record`}).getByRole('link', {name, exact: true}),
   opener: page.getByRole('paragraph').filter({hasText: /^A webpage is three languages/}),
-  doorFolds: page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}),
-  recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first(),
-  doorSummaryOf: (door: Locator): Locator => door.getByText('how I organize it', {exact: true})
+  practices: page.getByRole('region', {name: /how I organize it$/}),
+  recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
 });

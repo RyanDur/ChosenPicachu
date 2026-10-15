@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, galleryPage, homePage, iPhone, nameOn, phoneSideways, recordPage, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, galleryPage, iPhone, nameOn, phoneSideways, recordPage, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFinger = async (page: Page, fold: Locator): Promise<void> => {
   await fingerTap(page, fold.getByText(/\S/).first());
   await expect(fold).toHaveAttribute('open', '');
@@ -15,20 +15,6 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await fingerTap(page, page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Users'}));
 
       await expect(page).toHaveURL(/users/);
-    });
-
-    test('opens and closes how I organize it with a finger that lands just off the line', async ({page}) => {
-      await page.goto('');
-      const home = homePage(page);
-      const fold = home.doorFolds.first();
-      const told = fold.getByRole('paragraph', {includeHidden: true}).first();
-      await expect(told).toBeHidden();
-
-      await fingerTap(page, home.doorSummaryOf(fold));
-      await expect(told).toBeVisible();
-
-      await fingerTap(page, home.doorSummaryOf(fold));
-      await expect(told).toBeHidden();
     });
 
     test('opens and closes what am I looking at with a finger that lands just off the line', async ({page}) => {
@@ -88,16 +74,6 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await fingerTap(page, menu.contextWords);
 
       await expect(menu.contextChoice).not.toBeChecked();
-    });
-
-    test('opens every fold on home from a finger that lands just off its bar', async ({page}) => {
-      await page.goto('');
-      const home = homePage(page);
-      await expect(home.doorFolds.first()).toBeVisible();
-
-      for (const fold of await home.doorFolds.all()) {
-        await opensFromAFinger(page, fold);
-      }
     });
 
     test('opens every fold on the record from a finger that lands just off its bar', async ({page}) => {
