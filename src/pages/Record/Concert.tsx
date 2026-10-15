@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {moments} from './moments/moments';
 
 export const Concert: FC = () =>
-  <section className="concert" aria-labelledby="the-concert">
+  <section className="concert trim-rule-above" aria-labelledby="the-concert">
     <h2 className="record-title title" id="the-concert">The concert</h2>
     <p className="paragraph muted-ink hyphenated">In 2007 the W3C wrote down how HTML should grow. One line of the <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">HTML Design Principles</a> is
       the rule this whole record obeys: <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“When a practice is already widespread among authors, consider adopting it rather than forbidding it or inventing something new.”</a> Another

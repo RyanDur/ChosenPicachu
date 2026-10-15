@@ -22,6 +22,7 @@
   .concert {
     display: grid;
     gap: var(--base-x-1_5);
+    padding-block-start: var(--base-x-3);
   }
 
   .research-title {
