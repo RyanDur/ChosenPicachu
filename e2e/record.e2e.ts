@@ -27,13 +27,3 @@ test('a keyboard reader who follows a line in Presentation\'s list reaches that 
 
   await expect(moment.getByRole('link', {name: 'the Acid Test'})).toBeFocused();
 });
-
-test('a reader who follows the concert back to the 1996 moment lands on that moment', async ({page}) => {
-  await page.goto('record/');
-  const concert = page.getByRole('region', {name: 'The concert'});
-
-  await concert.getByRole('link', {name: 'the 1996 moment'}).click();
-
-  await expect(page).toHaveURL(/\/record\/#the-need-outruns-the-standards$/);
-  await expect(recordPage(page).moment('The need outruns the standards')).toBeFocused();
-});

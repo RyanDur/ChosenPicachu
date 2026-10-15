@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
@@ -115,9 +116,10 @@ describe('the record', () => {
     expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
   });
 
-  test('should send the concert’s reader back to the 1996 moment on this page', () => {
-    expect(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}))
-      .toHaveAttribute('href', expect.stringMatching(/\/record\/?#the-need-outruns-the-standards$/));
+  test('should land the concert’s reader on the 1996 moment, with focus there', async () => {
+    await userEvent.click(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}));
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The need outruns the standards')).toHaveFocus());
   });
 
   test('should keep every source a fuller story links to on the research shelf', () => {
