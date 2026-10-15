@@ -213,6 +213,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select"><cite>Customizable select elements</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
+          <li>
+            <a className="signpost" href="https://speakerdeck.com/vjeux/react-css-in-js"><cite>React: CSS in JS</cite></a>
+            <span className="provenance caption">Christopher Chedeau, Facebook, November 2014</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="dynamic interaction research">

@@ -19,6 +19,11 @@
     text-wrap: balance;
   }
 
+  .concert {
+    display: grid;
+    gap: var(--base-x-1_5);
+  }
+
   .research-title {
     margin: 0;
     display: inline;

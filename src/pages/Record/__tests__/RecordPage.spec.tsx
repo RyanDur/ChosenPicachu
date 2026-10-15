@@ -95,6 +95,31 @@ describe('the record', () => {
     expect(within(within(moment).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
+  test('should tell the concert after the timeline closes and before the tee-up', () => {
+    const closing = screen.getByText(/^Read the titles again, top to bottom/);
+    const concert = screen.getByRole('region', {name: 'The concert'});
+    const teeUp = screen.getByText(/^Someone needs something; the element chooses itself/);
+
+    expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  test('should keep every source the concert links to on the research shelf', () => {
+    const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
+      .map(work => work.getAttribute('href'));
+    const linked = within(screen.getByRole('region', {name: 'The concert'})).getAllByRole('link')
+      .map(link => link.getAttribute('href') ?? '')
+      .filter(source => source.startsWith('http'));
+
+    expect(linked).not.toEqual([]);
+    expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
+  });
+
+  test('should send the concert’s reader back to the 1996 moment on this page', () => {
+    expect(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}))
+      .toHaveAttribute('href', expect.stringMatching(/\/record\/?#the-need-outruns-the-standards$/));
+  });
+
   test('should keep every source a fuller story links to on the research shelf', () => {
     const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
       .map(work => work.getAttribute('href'));
