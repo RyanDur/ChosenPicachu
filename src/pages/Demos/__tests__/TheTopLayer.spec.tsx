@@ -197,7 +197,7 @@ describe('the banner tutorial’s first story', () => {
       .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
   });
 
-  test('should tell step 3 in five paragraphs: the centring, the overflow, the classes, the margins for the dials chosen, then the sample', async () => {
+  test('should tell step 3 in five paragraphs after its want: the centring, the overflow, the classes, the margins for the dials chosen, then the sample', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
@@ -210,8 +210,11 @@ describe('the banner tutorial’s first story', () => {
     expect(outOfReadingOrder([
       within(placing).getByText(/^The browser’s own stylesheet/),
       within(placing).getByText(/^That stylesheet also gives a popover overflow/),
-      within(placing).getByText(/^A class for an edge/)
+      within(placing).getByText(/^A class for an edge/),
+      within(placing).getByText(/^On this page margin-block/),
+      within(placing).getByText(/^The sample is the component’s line/)
     ])).toEqual([]);
+    expect(within(placing).getAllByRole('paragraph')).toHaveLength(6);
   });
 
   test('should carve the rules for the side and align the dials chose', async () => {
