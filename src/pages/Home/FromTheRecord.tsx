@@ -3,11 +3,12 @@ import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {MomentKey, inOrder, moments} from '@pages/Record/moments/moments';
 import {momentAddress} from './MomentLink';
+import {Door, doorId} from './door';
 
-export const FromTheRecord: FC<{language: string; door: string; keys: readonly MomentKey[]}> = ({language, door, keys}) =>
-  <section className="door-evidence" aria-labelledby={`${door} ${door}-record`}>
-    <h3 className="sub-title" id={`${door}-record`}>from the record</h3>
-    <ol className="moments" aria-label={`${language}, from the record`}>
+export const FromTheRecord: FC<{door: Door; keys: readonly MomentKey[]}> = ({door, keys}) =>
+  <section className="door-evidence" aria-labelledby={`${doorId(door)} ${doorId(door)}-record`}>
+    <h3 className="sub-title" id={`${doorId(door)}-record`}>from the record</h3>
+    <ol className="moments" aria-label={`${door}, from the record`}>
       {inOrder.filter(key => keys.includes(key)).map(key =>
         <li key={key}>
           <Link className="moment-line paragraph signpost" to={momentAddress(key)}>

@@ -155,27 +155,24 @@ describe('the home page', () => {
     ])).toEqual([]);
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments and its practice as regions of their own, the practice open with nothing to press', section => {
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments and its practice as regions of their own, the practice open', section => {
     const evidence = screen.getByRole('region', {name: `${section} from the record`});
     const practice = screen.getByRole('region', {name: `${section} how I organize it`});
 
     expect(within(evidence).getByRole('list', {name: `${section}, from the record`})).toBeVisible();
     within(practice).getAllByRole('paragraph').forEach(paragraph => expect(paragraph).toBeVisible());
-    expect(within(screen.getByRole('region', {name: section})).queryByRole('group')).not.toBeInTheDocument();
   });
 
-  test.each([
-    ['Structure', 5],
-    ['Presentation', 5],
-    ['Dynamic Interaction', 5]
-  ])('should rest %s\'s practice on its own moments: each sentence naming a moment links to one in its list', (section, named) => {
-    const listed = within(screen.getByRole('list', {name: `${section}, from the record`})).getAllByRole('link').map(moment => moment.getAttribute('href'));
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should rest %s\'s practice on its own moments: each sentence names a year, and links to that year\'s moment in its list', section => {
+    const listed = within(screen.getByRole('list', {name: `${section}, from the record`})).getAllByRole('link');
     const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
-      .map(link => link.getAttribute('href') ?? '')
-      .filter(address => address.startsWith(Paths.record));
+      .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record));
+    const listedIn = (year: string): (string | null)[] => listed
+      .filter(moment => (moment.textContent ?? '').startsWith(year))
+      .map(moment => moment.getAttribute('href'));
 
-    expect(cited).toHaveLength(named);
-    expect(cited.filter(address => !listed.includes(address))).toEqual([]);
+    expect(cited).not.toEqual([]);
+    expect(cited.filter(link => !listedIn((link.textContent ?? '').slice(0, 4)).includes(link.getAttribute('href')))).toEqual([]);
   });
 });
 

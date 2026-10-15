@@ -16,14 +16,14 @@ export const DynamicInteraction: FC = () =>
       JavaScript says how things respond. The state is what is true right now, an event is what just happened, and the
       page is drawn from the two.
     </p>
-    <FromTheRecord door="dynamic-interaction" language="Dynamic Interaction" keys={['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']}/>
-    <HowIOrganizeIt door="dynamic-interaction">
+    <FromTheRecord door="Dynamic Interaction" keys={['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']}/>
+    <HowIOrganizeIt door="Dynamic Interaction">
       <p className="paragraph">Behaviour splits into what is true and what happened. The state is what is
         true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
         cannot be worked out from something else. Events are what happened, so they are named in the past tense:
         lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
         The state is kept in one place, and replacing it is the only way anything on screen changes.
-        The frameworks of the <MomentLink to="frameworks">2010 moment</MomentLink> bound model and view both ways; this keeps one direction.</p>
+        AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways; this keeps one direction.</p>
       <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
         arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
         decides what is true when it arrives.
@@ -33,8 +33,8 @@ export const DynamicInteraction: FC = () =>
         the state, listens for events, applies the next state and updates the screen. Requests go out through the same
         path that state changes come in. Change the framework, or remove it, and only the shell changes.
         The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should outlast them.</p>
-      <p className="paragraph">The platform comes first here too. The folds on this page open and close with
-        no script, a popover closes itself, and the browser already provides the back button, scroll restoration and
+      <p className="paragraph">The platform comes first here too. An accordion on the demos page opens and closes
+        with no script, a popover closes itself, and the browser already provides the back button, scroll restoration and
         focus order. Script that rebuilds those takes on their bugs. I write behaviour only for what the platform does
         not yet do.
         The <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what rebuilding them by hand cost.</p>
