@@ -7,6 +7,7 @@ import {Axes, rangeOf} from '../Axes';
 import {bucketPressure, heaviestSide, pressureShapes} from './shapes';
 import '../chart-card.css';
 import './Pressure.css';
+import {LATEST_TRADES_CAP} from '../../store';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
@@ -52,7 +53,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       </Axes>
       <figcaption className="chart-caption caption">
         {notEmpty(pressures)
-          ? `${pressures.length} ${pressures.length === 1 ? 'minute' : 'minutes'} · the last 1,500 trades`
+          ? `${pressures.length} ${pressures.length === 1 ? 'minute' : 'minutes'} · up to the last ${LATEST_TRADES_CAP.toLocaleString('en-US')} trades`
           : 'waiting for the first trade'}
       </figcaption>
     </figure>

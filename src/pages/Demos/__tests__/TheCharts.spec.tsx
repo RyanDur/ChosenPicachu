@@ -197,6 +197,19 @@ describe('a list of charts', () => {
     expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
   });
 
+  test('the backspace key removes a chart', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'live trades'});
+
+    await chartsDesk.keys('Price line', 'Backspace');
+
+    expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
+  });
+
   test("the chart that takes the removed one's seat takes the focus", async () => {
     const feed = await listeningFeed();
 
@@ -450,8 +463,12 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
-    test('should say the chart shows up to 60 minutes, from the last 1,500 trades', async () => {
-      expect(await pressureStory()).toHaveTextContent('The chart shows up to 60 minutes, from the last 1,500 trades.');
+    test('should say the chart and its caption count from the last 1,500 trades', async () => {
+      const story = await pressureStory();
+
+      expect(story).toHaveTextContent('The chart shows up to 60 minutes, from the last 1,500 trades.');
+      expect(story).toHaveTextContent('So the chart counts only the trades that arrive while it is open, and the page keeps the newest 1,500 of those.');
+      expect(story).toHaveTextContent('The caption says how many minutes are on show, from the last 1,500 trades.');
     });
 
     test('should head each step with what happens', async () => {
@@ -484,8 +501,14 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
-    test('should say the caption counts each side across the last 1,500 trades', async () => {
-      expect(await pieStory()).toHaveTextContent('the size traded on each side across the last 1,500 trades.');
+    test('should say the pie answers for the last 1,500 trades, not the whole visit', async () => {
+      const story = await pieStory();
+
+      expect(story).toHaveTextContent('the size traded on each side across the last 1,500 trades.');
+      expect(story).toHaveTextContent('The pie answers for the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
+      expect(story).toHaveTextContent('like the pressure chart it counts only what arrives while it is open, the newest 1,500 trades.');
+      expect(story).toHaveTextContent('One number for each side, across the last 1,500 trades.');
+      expect(story).toHaveTextContent('the pie is the last 1,500 trades as a pair of totals.');
     });
 
     test('should head each step with what happens', async () => {
@@ -674,7 +697,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
       await feedIsLive(feed);
-      broadcast(feed, [tradeFrame(50001), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
+      broadcast(feed, [tradeFrame(50000), tradeFrame(50001, 1700000000500), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
       expect(await within(priceCard()).findByText('$50,005.00')).toBeVisible();
       expect(within(priceCard()).getByText('+$4.00')).toBeVisible();
     });
@@ -923,8 +946,8 @@ describe('the workspace story', () => {
     expect(story).toHaveTextContent('grip and no remove button, and the key does nothing, so the workspace always has a chart.');
   });
 
-  test('should say an address entry may carry its period after a colon', async () => {
-    expect(await workspaceStory()).toHaveTextContent('An entry may carry its period after a colon, candles:day, and the hour, the default, is left off.');
+  test('should say, in a run of its own, that a name may carry its period after a colon', async () => {
+    expect(await workspaceStory()).toHaveTextContent('A name may carry its period after a colon, candles:day; the hour is the default and is left off.');
   });
 
   test('should head each step with what happens', async () => {
@@ -973,23 +996,40 @@ describe('the workspace story', () => {
   test('should say the card below is the workspace, each chart above opens its own, and name MDN as Mozilla’s web reference', async () => {
     await workspaceStory();
 
-    expect(screen.getByText(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
+    expect(screen.getByText(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
     expect(screen.getByText(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
   });
 });
 
 describe('the charts’ audited words', () => {
-  test('should explain each chart in the words the audit settled', async () => {
+  const tabWith = async (charts: string): Promise<HTMLElement> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
+    render(<TestApp at={demosAt(`?tab=charts&charts=${charts}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tab = await screen.findByRole('region', {name: 'Charts'});
+    return screen.findByRole('region', {name: 'Charts'});
+  };
 
-    expect(within(tab).getByRole('heading', {level: 2, name: 'Bitcoin, live: every BTC-USD trade on Coinbase'})).toBeInTheDocument();
-    expect(screen.getByRole('region', {name: 'live trades'})).toHaveTextContent('The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it.');
+  test('should head the live charts with a colon, not a dash', async () => {
+    expect(within(await tabWith('price')).getByRole('heading', {level: 2, name: 'Bitcoin, live: every BTC-USD trade on Coinbase'})).toBeInTheDocument();
+  });
+
+  test('should explain the price line by its period, its first close and its colour', async () => {
+    await tabWith('price');
+
     expect(screen.getByRole('region', {name: 'live trades'})).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
-    expect(screen.getByRole('region', {name: 'candles'})).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price');
-    expect(screen.getByRole('region', {name: 'candles'})).toHaveTextContent('the period menu sets how much time the chart covers.');
-    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('The last 1,500 trades, as one circle,');
+  });
+
+  test('should explain the candles as spans grouped from the same measurement', async () => {
+    await tabWith('candles');
+    const candles = screen.getByRole('region', {name: 'candles'});
+
+    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price');
+    expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
+  });
+
+  test('should explain the pie as up to the last 1,500 trades', async () => {
+    await tabWith('pie');
+
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('Up to the last 1,500 trades, as one circle,');
   });
 });

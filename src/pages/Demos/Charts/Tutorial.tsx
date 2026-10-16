@@ -60,7 +60,7 @@ const PriceStory: FC = () =>
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...unit(coinbaseSource, 'export const decodeTrade'), gap,
-            ...unit(demosSource, 'const LATEST_TRADES_CAP'), gap,
+            ...unit(demosSource, 'export const LATEST_TRADES_CAP'), gap,
             ...unit(demosSource, 'const tradesReducer')
           ]}/>
         </Codes>
@@ -266,7 +266,7 @@ const PressureStory: FC = () =>
       came and took it, and Coinbase marks each trade with the side of the one that was waiting. A trade marked sell is
       one a buyer took. The chart sums each minute into the size buyers took and the size sellers took.</Tell>
     <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades that
-      arrive while it is open, and its caption says so. The larger side sets one scale for both directions, so a taller
+      arrive while it is open, and the page keeps the newest 1,500 of those. The larger side sets one scale for both directions, so a taller
       bar always means more size.</Tell>
     <Steps>
       <Step title="Sum each minute by who took the trade">
@@ -310,8 +310,8 @@ const PressureStory: FC = () =>
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
             stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
-          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
-            caption says how many minutes are on show, and that the count began when you arrived.</Says>
+          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The caption says how many minutes are on show, from the last 1,500
+            trades.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -337,17 +337,18 @@ const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>The pressure chart answers minute by minute. The pie answers for the whole visit: everything traded since you
-      arrived, one slice for the size buyers took and one for the size sellers took.</Tell>
-    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only
-      what arrives while it is open.</Tell>
+    <Tell>The pressure chart answers minute by minute. The pie answers for the last 1,500 trades as a
+      whole: one slice for the size buyers took and one for the size sellers took.</Tell>
+    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only what arrives while it is open, the newest 1,500
+      trades.</Tell>
     <Tell>The circle has to move as the split changes, and move smoothly. So each slice is made of two half-discs that are
       only ever rotated, and a share is how far they have turned into view.</Tell>
     <Steps>
       <Step title="Add up each side">
-        <Words want="One number for each side, for the whole visit. The pie asks nothing about time.">
+        <Words want="One number for each side, across the last 1,500 trades. The pie asks nothing about time.">
           <Says>sideTotals goes through every trade and adds its size to one of two sums, bought or sold, using
-            takerBought. There are no minutes and no spans here: the pie is the whole visit as a pair of totals.</Says>
+            takerBought. There are no minutes and no spans here: the pie is the last 1,500 trades as a pair of
+            totals.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -434,7 +435,8 @@ const WorkspaceStory: FC = () =>
             of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
             counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
-            page. An entry may carry its period after a colon, candles:day, and the hour, the default, is left off.</Says>
+            page.</Says>
+          <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
             writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a
             button.</Says>
@@ -522,7 +524,7 @@ export const ChartsTutorial: FC = () => {
       We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is the workspace, told as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>. Each chart above opens its own: click it, or press Enter on it. Open one
+        rel="noreferrer">user story</a>. Each chart above opens its own story: click it, or press Enter on it. Open one
       and you get the plan for that feature and the steps that build it, with the real code from this site, so what
       you read is what runs. The links go to MDN, Mozilla’s
       web reference, if you want more.

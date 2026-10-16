@@ -37,6 +37,15 @@ describe('pressure', () => {
     expect(shapes[1].soldHeight).toBe(0);
   });
 
+  test('the card counts the minutes on show in the plural', () => {
+    render(<Pressure trades={[
+      bought(2),
+      sold(1, {id: 2, tradedAt: 1700000060000})
+    ]}/>);
+
+    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('2 minutes · up to the last 1,500 trades');
+  });
+
   test('the card bars the sides around the midline', () => {
     render(<Pressure trades={[
       bought(2),
@@ -44,7 +53,7 @@ describe('pressure', () => {
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pressure'});
-    expect(card).toHaveTextContent('1 minute · the last 1,500 trades');
+    expect(card).toHaveTextContent('1 minute · up to the last 1,500 trades');
     expect(card).toHaveTextContent('2 BTC');
     expect(card).toHaveTextContent('-2 BTC');
   });

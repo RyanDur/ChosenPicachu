@@ -29,12 +29,13 @@ type PriceView = {
 };
 
 const viewOf = (candles: readonly Candle[], lastTrade?: Pick<Trade, 'price'>): Maybe<PriceView> => {
-  const [opening] = candles;
-  return maybe(opening).map(({close}) => ({
-    series: candles.map(candle => ({at: candle.openedAt, price: candle.close})),
+  const series = candles.map(candle => ({at: candle.openedAt, price: candle.close}));
+  const [opening] = series;
+  return maybe(opening).map(({price: first}) => ({
+    series,
     high: Math.max(...candles.map(candle => candle.high)),
     low: Math.min(...candles.map(candle => candle.low)),
-    first: close,
+    first,
     last: maybe(lastTrade).map(({price}) => price).orElse(candles[candles.length - 1].close)
   }));
 };

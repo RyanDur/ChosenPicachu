@@ -47,7 +47,7 @@ export const candlesAsked = (period: Period): DemosAction => ({type: 'candlesAsk
 export const candlesArrived = (period: Period, candles: readonly Candle[]): DemosAction => ({type: 'candlesArrived', period, candles});
 export const candlesRefused = (period: Period): DemosAction => ({type: 'candlesRefused', period});
 
-const LATEST_TRADES_CAP = 1500;
+export const LATEST_TRADES_CAP = 1500;
 
 export const folded = ({history, trades}: TradesState): Measures[] =>
   windowedAggregates(hydrated(history, trades)).map(cells);
