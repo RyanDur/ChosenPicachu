@@ -420,7 +420,7 @@ describe('the native drag sort tutorial’s words', () => {
     ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler says what move is about to be made'],
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
-    ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel, and the keyboard gets no drag at all.'],
+    ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
     ['preventDefault', 'One call accepts the drop: the dragover handler calls preventDefault, the method that tells the browser not to do what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel.'],
     ['dropEffect and effectAllowed', 'The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move.'],
@@ -546,16 +546,16 @@ describe('the drag sort tab’s audited words', () => {
     expect(recipe).toHaveTextContent(motion);
   });
 
-  test('should say a keyboard cannot reorder by drag because a drag starts only from a pointer', async () => {
+  test('should say a keyboard user needs the same reorders, which drag and drop cannot give', async () => {
     const recipe = await nativeRecipe();
 
-    expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them: a drag starts only from a pointer.');
+    expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them.');
   });
 
-  test('should link the charts demo whose keyframe the slide turns horizontal', async () => {
+  test('should say what a keyframe’s from and a custom property are, and link the charts demo whose keyframe the slide turns horizontal', async () => {
     const recipe = await nativeRecipe();
 
-    expect(explanation.runTelling(recipe, /^The swap happens at once/)).toHaveTextContent('It is the charts demo’s keyframe turned horizontal');
+    expect(explanation.runTelling(recipe, /^The swap happens at once/)).toHaveTextContent('whose from, the keyframe’s starting state, is one place over. It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
     expect(within(explanation.runTelling(recipe, /^The swap happens at once/)).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
   });
 

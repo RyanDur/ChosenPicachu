@@ -20,7 +20,7 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
       ]}/>
       <Snippet label="CSS" lines={[
         ...unit(hideItemCss, '.draggable.hide {'),
-        aside('/* not visibility: some engines end the drag when its source disappears */')
+        aside('/* opacity, not visibility: a source hidden by visibility counts as gone, and some engines end the drag */')
       ]}/>
     </Codes>
   </Step>;
