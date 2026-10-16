@@ -7,7 +7,6 @@ import {
   HoldTheAloft,
   InnerHalf,
   KeepStanding,
-  NeverOurs,
   PlatformCurrency,
   Promises,
   RoadEnd,
@@ -25,7 +24,6 @@ export const EagerKeepAnimatedRecipe: FC = () => <>
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
     <Promises pace="eager" origin="keep" motion="animated"/>
-    <NeverOurs/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft listSource={listSource}/>

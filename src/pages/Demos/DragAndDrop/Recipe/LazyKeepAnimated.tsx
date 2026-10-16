@@ -6,7 +6,6 @@ import {
   GlideSettle,
   HoldTheAloft,
   KeepStanding,
-  NeverOurs,
   PlatformCurrency,
   Promises,
   RoadEnd,
@@ -23,7 +22,6 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
     <Promises pace="lazy" origin="keep" motion="animated"/>
-    <NeverOurs/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft listSource={listSource}/>

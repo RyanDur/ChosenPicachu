@@ -11,7 +11,7 @@ import '../Tutorials.css';
 const clues: [string, string][] = [
   ['the order is mine', 'The order belongs to the user, not us. Nothing reorders on its own.'],
   ['belongs above something else', 'One dimension. Position against neighbours is the meaning.'],
-  ['pick it up and put it there', 'Direct manipulation: a drag, not a move-up button. The platform ships one.'],
+  ['pick it up and put it there', 'Direct manipulation, by pointer or by key. The platform ships the drag.'],
   ['see it stay where I dropped it', 'The drop is the commit, and the landing has to be visible.']
 ];
 
@@ -43,18 +43,18 @@ export const ListTutorials: FC = () => {
         <Clues quote="These priorities are mine, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it stay where I dropped it."
           by="a user"
           clues={clues}
-          verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says. Everything after this point is layered onto that one choice."/>
+          verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says."/>
       </Station>
       <Station at={2}>
         <Design sketch=<Sketch/>
-          answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack."
+          answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack. The exhibit lays the list across the page, so the grip’s arrows are left and right."
           unanswered={unanswered}/>
       </Station>
       <Station at={3}>
         <Slices who="user"
           can="The user can keep the list in the order they mean"
           soThat="so that what belongs above sits above"
-          slices="It slices thin: the same reorder, twice. Once by pointer, on the platform’s own drag-and-drop, and once by keyboard, moving the order directly. Both are cards in the last station, and each opens into its build."
+          slices="It slices thin: the same reorder, twice. Once by pointer, on the platform’s own drag and drop, and once by keyboard, moving the order directly. Both are cards in the last station, and each opens into its build."
           sliced={[
             ['The user can arrange the list by hand', 4],
             ['The user can arrange the list from the keyboard', 4]

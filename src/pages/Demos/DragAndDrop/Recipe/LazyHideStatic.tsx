@@ -6,7 +6,6 @@ import {
   DirectState,
   FadeOrigin,
   HoldTheAloft,
-  NeverOurs,
   PlatformCurrency,
   Promises,
   RoadEnd,
@@ -23,7 +22,6 @@ export const LazyHideStaticRecipe: FC = () => <>
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
     <Promises pace="lazy" origin="hide" motion="static"/>
-    <NeverOurs/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft listSource={listSource}/>

@@ -1,5 +1,5 @@
 export {gap} from './sources';
-export {NeverOurs, PlatformCurrency} from './tells';
+export {PlatformCurrency} from './tells';
 export {ArmTheDrag} from './arm';
 export {HoldTheAloft} from './aloft';
 export {AcceptTheDrop} from './drop';

@@ -8,7 +8,6 @@ import {
   HoldTheAloft,
   InnerHalf,
   KeepStanding,
-  NeverOurs,
   PlatformCurrency,
   Promises,
   RoadEnd,
@@ -24,7 +23,6 @@ export const EagerKeepStaticRecipe: FC = () => <>
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
     <Promises pace="eager" origin="keep" motion="static"/>
-    <NeverOurs/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft listSource={listSource}/>

@@ -6,12 +6,11 @@ import {gap, glideSource, marksSource, sessionSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
-  <Step title="Slide the crossed item home" dial=<MotionDial name="native-motion"/>>
+  <Step title="Slide the crossed item into place" dial=<MotionDial name="native-motion"/>>
     <Words want="An eager swap that jumps is hard to follow, but nothing can be animated during the drag with a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture, would swallow the drag’s own events.">
       <Says>The swap happens at once, and the crossed item is drawn where it used to be and slides to its new place on a{' '}
-        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one seat over. It is the same slide the tables demo
-        plays, turned horizontal, with the direction as data: --toward flips the sign of one keyframe instead of naming
-        two. The swap is already done when the slide starts; the slide only shows the reader what happened.</Says>
+        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one place over. It is the charts demo’s keyframe turned horizontal, with the
+        direction as data: --toward flips the sign of one keyframe instead of naming two.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -31,8 +30,7 @@ export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
       <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle a tick
         after the release, a setTimeout with no delay, which runs once the drag has ended. By the time{' '}
       <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> takes its capture, the browser has
-        finished the drag, and every item glides from where the drag left it to where the order puts it. The order is
-        already settled when the glide starts; the glide only shows the reader what happened.</Says>
+        finished the drag, and every item glides from where the drag left it to where the order puts it.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
@@ -55,7 +53,7 @@ export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
     <Codes>
       <Snippet label="TS" lines={[
         ...span(listSource, 'onArranged={(after, walker) => {', '}}/>'),
-        aside('// nothing marked, nothing competing with the session')
+        aside('// nothing marked, nothing competing with the browser’s drag')
       ]}/>
     </Codes>
   </Step>;

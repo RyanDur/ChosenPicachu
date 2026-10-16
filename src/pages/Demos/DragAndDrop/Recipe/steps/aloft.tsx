@@ -20,7 +20,7 @@ export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
     <Codes>
       <Snippet label="TS" lines={[
         ...span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
-        aside('// the item names itself; the list holds the answer')
+        aside('// the item passes its name up; the list keeps which one is held')
       ]}/>
     </Codes>
   </Step>;

@@ -3,8 +3,8 @@ import {Motion, Origin, Pace} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
 const paces: Record<Pace, string> = {
-  eager: 'The list answers as you drag, so home stays reachable until you let go.',
-  lazy: 'The list holds calm and settles on the drop, so only the destination matters.'
+  eager: 'The order changes as you drag, so the item’s old place stays reachable until you let go.',
+  lazy: 'The order does not change until you drop, so only the destination matters.'
 };
 
 const origins: Record<Origin, string> = {
@@ -14,12 +14,12 @@ const origins: Record<Origin, string> = {
 
 const motions: Record<Motion, Record<Pace, string>> = {
   animated: {
-    eager: 'And the crossed card slides home, so the eye keeps the story of the swap.',
-    lazy: 'And the whole settle glides once, so the landing explains itself.'
+    eager: 'And the crossed card slides into place, so the eye keeps the story of the swap.',
+    lazy: 'And the whole reorder on release glides once, so the landing explains itself.'
   },
   static: {
-    eager: 'And the settle lands instantly, so nothing competes with the drag session.',
-    lazy: 'And the settle lands instantly, so nothing competes with the drag session.'
+    eager: 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.',
+    lazy: 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.'
   }
 };
 

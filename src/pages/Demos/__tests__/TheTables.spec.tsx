@@ -255,7 +255,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
     expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
-    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
+    expect(screen.getByText(/What you see above is my interpretation of that/)).toBeVisible();
   });
 
   test('the recipe’s tables name their rows and columns', async () => {

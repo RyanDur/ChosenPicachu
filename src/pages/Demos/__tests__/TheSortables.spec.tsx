@@ -260,7 +260,7 @@ describe('the sortable list demo', () => {
     expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
-    expect(recipe).toHaveTextContent(/The list answers as you drag/);
+    expect(recipe).toHaveTextContent(/The order changes as you drag/);
   });
 
   test('the recipe’s clues name their rows and columns', async () => {
@@ -289,12 +289,12 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
-    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
+    expect(screen.getByText(/What you see above is my interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
     expect(recipe).toHaveTextContent(/Fade the lifted card almost away/);
-    expect(recipe).toHaveTextContent(/Slide the crossed item home/);
+    expect(recipe).toHaveTextContent(/Slide the crossed item into place/);
     expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
@@ -372,7 +372,7 @@ describe('the native drag sort tutorial’s words', () => {
       'A swap counts once the pointer is a quarter of the way into a neighbour',
       'Commit inside the crossing',
       'Fade the lifted card almost away',
-      'Slide the crossed item home',
+      'Slide the crossed item into place',
       'What drag and drop cannot give you'
     ]);
   });
@@ -383,7 +383,7 @@ describe('the native drag sort tutorial’s words', () => {
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
       'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable for that gesture only.',
-      'Then the browser fires dragstart, the event for a drag beginning, and its handler says what move is about to be made. The browser does the rest: the drag image under the pointer, the cursor, the cancel, with no more code.'
+      'Then the browser fires dragstart, the event for a drag beginning, and its handler says what move is about to be made. The browser does the rest: the drag image, the cursor and the cancel, with no more code.'
     ]));
   });
 
@@ -419,16 +419,15 @@ describe('the native drag sort tutorial’s words', () => {
     ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler says what move is about to be made'],
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
-    ['what stays the browser’s', 'Three things stay the browser’s with its own drag and drop: the drag image, the cursor and the cancel.'],
     ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel, and the keyboard gets no drag at all.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
     ['preventDefault', 'One call accepts the drop: the dragover handler calls preventDefault, the method that tells the browser not to do what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel.'],
     ['dropEffect and effectAllowed', 'The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move.'],
     ['drop', 'The drop handler, for the event of a release over a target, calls preventDefault too. The browser’s default for a dropped link, file or address is to open it as a page; this list drags none of those, so the call changes nothing today and keeps the list safe the day a payload is added.'],
     ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
-    ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter; inside that quarter nothing moves'],
-    ['the drag image', 'Mark a card draggable and the browser does the rest: the drag image, a picture of the card that follows the pointer, the cursor,'],
-    ['the cancel', 'and the cancel, the animation that carries the card back when no target accepts the drop.'],
+    ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter.'],
+    ['the drag image', 'Mark a card draggable and the browser does the rest. It draws the drag image, a picture of the card that follows the pointer; it sets the cursor;'],
+    ['the cancel', 'and it plays the cancel, the animation that carries the card back when no target accepts the drop.'],
     ['a view transition and its capture', 'a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture,']
   ])('should say what %s is where the reader meets it', async (_term, sentence) => {
     expect(await nativeRecipe()).toHaveTextContent(sentence);
@@ -448,12 +447,13 @@ describe('the native drag sort tutorial’s words', () => {
     expect(explanation.everyCodeBeside(recipe, /The item’s dragover handler also sets/).join()).toMatch(/onDragOver=\{event => \{[^]*event\.dataTransfer\.dropEffect = 'move';/);
   });
 
-  test('should say what dragleave is where the lazy pace meets it', async () => {
+  test('should say what the list’s dragleave handler does where the lazy pace meets it, with the handler beside it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and dragleave, the event for the pointer leaving an item, forgets it.');
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, forgets it.');
+    expect(explanation.everyCodeBeside(screen.getByRole('region', {name: 'build the native drag sort yourself'}), /^Each dragover only remembers/).join()).toMatch(/onDragLeave=\{\(\) => setLanding\(nothing\(\)\)\}/);
   });
 
   test('should say what a tick is where the lazy glide meets it', async () => {
@@ -502,5 +502,68 @@ describe('the drag sort tab’s introduction', () => {
     const tab = await screen.findByRole('region', {name: 'Drag sort'});
 
     expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), within(tab).getByRole('button', {name: 'grip for A'})])).toEqual([]);
+  });
+});
+
+describe('the drag sort tab’s audited words', () => {
+  const tabAt = async (choices: string): Promise<void> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+  };
+
+  test('should caption the sketch with why the grip’s arrows are left and right', async () => {
+    await tabAt('');
+
+    expect(await screen.findByText(/^The design answers shape/)).toHaveTextContent('The exhibit lays the list across the page, so the grip’s arrows are left and right.');
+  });
+
+  test('should read the clue for a direct pick-up as working by pointer or by key, on the drag the platform ships', async () => {
+    await tabAt('');
+
+    expect(await screen.findByText(/^Direct manipulation/)).toHaveTextContent('Direct manipulation, by pointer or by key. The platform ships the drag.');
+  });
+
+  test.each([
+    ['motion=animated', 'When one item passes another, the crossed item slides to its new place; a lazy list’s reorder on release glides once the drag has ended.'],
+    ['motion=static', 'Reorders apply in a single frame; items cut to their new places.']
+  ])('should read the motion dial, with %s, in plain words', async (choice, reading) => {
+    await tabAt(choice);
+
+    expect(await screen.findByText(reading)).toBeInTheDocument();
+  });
+
+  test.each([
+    ['pace=eager&motion=animated', 'The order changes as you drag, so the item’s old place stays reachable until you let go.', 'And the crossed card slides into place, so the eye keeps the story of the swap.'],
+    ['pace=lazy&motion=animated', 'The order does not change until you drop, so only the destination matters.', 'And the whole reorder on release glides once, so the landing explains itself.'],
+    ['pace=lazy&motion=static', 'The order does not change until you drop, so only the destination matters.', 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.']
+  ])('should promise, with %s, what the order does', async (choices, pace, motion) => {
+    await tabAt(choices);
+    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+
+    expect(recipe).toHaveTextContent(pace);
+    expect(recipe).toHaveTextContent(motion);
+  });
+
+  test('should say, beside crossingOver, that nothing moves inside the quarter and a sliding item cannot be overtaken', async () => {
+    const recipe = await nativeRecipe();
+
+    expect(explanation.runTelling(recipe, /^Commit the reorder inside the dragover/)).toHaveTextContent('Inside the neighbour’s outer quarter nothing moves, and an item that is still sliding cannot be overtaken.');
+    expect(explanation.runTelling(recipe, /^Nothing has to be measured ahead of time/)).not.toHaveTextContent('an item that is still sliding');
+  });
+
+  test('should end the by-hand story pointing at the Tables demo, which builds the drag from pointer events', async () => {
+    const recipe = await nativeRecipe();
+
+    expect(within(recipe).getByRole('link', {name: 'Tables demo'})).toHaveAttribute('href', expect.stringContaining('tab=tables'));
+  });
+
+  test('should not close its steps on a sentence that only restates them', async () => {
+    const recipe = await nativeRecipe();
+
+    expect(recipe).not.toHaveTextContent('The swap is already done when the slide starts');
+    expect(recipe).not.toHaveTextContent('Nothing in this step touches drag and drop');
+    expect(recipe).not.toHaveTextContent('the glide only shows the reader what happened');
+    expect(screen.getByRole('region', {name: 'Drag sort'})).not.toHaveTextContent('Everything after this point is layered onto that one choice.');
   });
 });

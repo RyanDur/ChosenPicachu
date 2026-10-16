@@ -15,8 +15,8 @@ const copy: Copy = {
     hide: 'The item you lifted fades almost away where it was; the drag image under the pointer reads as the real thing.'
   },
   motion: {
-    animated: 'Eager crossings slide the crossed item to its new seat; a lazy settle glides once the drag has ended.',
-    static: 'Reorders apply in a single frame; items cut to their new seats.'
+    animated: 'When one item passes another, the crossed item slides to its new place; a lazy list’s reorder on release glides once the drag has ended.',
+    static: 'Reorders apply in a single frame; items cut to their new places.'
   }
 };
 

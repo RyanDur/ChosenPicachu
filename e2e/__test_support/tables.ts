@@ -5,6 +5,6 @@ export const tablesDemo = (page: Page) => ({
   howWeBuiltItInTheFirstStory: async (): Promise<Locator> => {
     const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).first();
     await story.getByText(/^so that /).click();
-    return story.getByRole('group', {name: 'how we built it'});
+    return story.getByRole('group', {name: 'how I built it'});
   }
 });
