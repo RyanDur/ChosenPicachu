@@ -108,6 +108,24 @@ describe('the part on what else forms a stacking context', () => {
     expect(within(part).getByText(/^What card one wears decides/)).toHaveTextContent('What card one wears decides whether its list’s 9999 counts in the tab’s panel, against card two, or only inside the card.');
   });
 
+  test('should say the bare card’s list is placed by anchor positioning, linked to MDN', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+    const run = explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/);
+
+    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, and the list’s insets read that name, so nothing between the list and the card is positioned.');
+    expect(within(run).getByRole('link', {name: 'anchor positioning'})).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
+  });
+
+  test('should hold Sort by in card one with no element that says nothing', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const part = await screen.findByRole('region', {name: heading});
+
+    const [cardOne] = within(part).getAllByRole('listitem').filter(item => within(item).queryByText('Its list has z-index: 9999.') !== null);
+
+    expect(within(cardOne).queryAllByRole('generic')).toEqual([]);
+  });
+
   test('should say the bare card’s list is compared with card two in the tab panel’s context', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
@@ -119,7 +137,7 @@ describe('the part on what else forms a stacking context', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
 
-    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.menu-anchor \{[^]*position: relative;/);
+    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;/);
   });
 
   test('should say what sticky is where the part first names it', async () => {

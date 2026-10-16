@@ -65,7 +65,7 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
     <ol className="old-way-cards">
       <li className={classNames('old-way-card card rounded-corners floating', wornAs[worn])}>
         <p className="paragraph">Its list has z-index: 9999.</p>
-        <div className="menu-anchor"><SortMenu onOpened={() => updateOpened(some(worn))}/></div>
+        <SortMenu onOpened={() => updateOpened(some(worn))}/>
       </li>
       <li className="old-way-card card rounded-corners floating positioned forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>

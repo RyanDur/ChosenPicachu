@@ -136,13 +136,14 @@
         }
     }
 
-    .menu-anchor {
-        position: relative;
+    .old-way-card .button {
+        anchor-name: --sort-by;
     }
 
     .sort-choices {
-        inset-block-start: 100%;
-        inset-inline-start: 0;
+        position-anchor: --sort-by;
+        inset-block-start: anchor(end);
+        inset-inline-start: anchor(start);
     }
 
     .faded {
