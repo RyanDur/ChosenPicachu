@@ -68,7 +68,7 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...unit(buildSrc, 'const drop = '), gap,
             ...unit(frameSettle, 'const untilSettled = '),
-            aside('// the marks set the cells’ classes; the stylesheet moves them; the cells clear them when the keyframe ends')
+            aside('// the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const displacedBetween'), gap,
