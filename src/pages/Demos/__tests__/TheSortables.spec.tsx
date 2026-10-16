@@ -546,17 +546,30 @@ describe('the drag sort tab’s audited words', () => {
     expect(recipe).toHaveTextContent(motion);
   });
 
-  test('should say a keyboard user needs the same reorders, which drag and drop cannot give', async () => {
+  test('should say, once, that drag and drop has no keyboard events, and that a keyboard user needs the same reorders', async () => {
     const recipe = await nativeRecipe();
 
+    expect(recipe).toHaveTextContent('Drag and drop has no keyboard events, and it does not matter: dragging was never the goal, the order changing is.');
     expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them.');
   });
 
-  test('should say what a keyframe’s from and a custom property are, and link the charts demo whose keyframe the slide turns horizontal', async () => {
+  test('should say, in two runs after the want, what a keyframe’s from is, then what --toward is, linking the charts demo whose keyframe the slide turns horizontal', async () => {
     const recipe = await nativeRecipe();
 
-    expect(explanation.runTelling(recipe, /^The swap happens at once/)).toHaveTextContent('whose from, the keyframe’s starting state, is one place over. It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
-    expect(within(explanation.runTelling(recipe, /^The swap happens at once/)).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
+    const sliding = explanation.runTelling(recipe, /^The swap happens at once/);
+    const [, swap, sign] = within(sliding).getAllByRole('paragraph');
+
+    expect(within(sliding).getAllByRole('paragraph')).toHaveLength(3);
+    expect(swap).toHaveTextContent(/whose from, the keyframe’s starting state, is one place over\.$/);
+    expect(sign).toHaveTextContent('It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
+    expect(within(sign).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
+  });
+
+  test('should say, beside the fade step’s CSS, why the card fades and is not hidden', async () => {
+    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
+    const fade = recipeFolds.steps(story)[5];
+
+    expect(within(fade).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\/\* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source \*\//);
   });
 
   test('should say, beside crossingOver, that a sliding item cannot be overtaken', async () => {
