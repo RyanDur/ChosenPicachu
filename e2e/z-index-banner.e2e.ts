@@ -76,3 +76,14 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
 
   await expect(page.getByText('Make the panel a popover')).toBeHidden();
 });
+
+test('a reader who follows step 3\'s link to the banners\' entrance lands on the second story, opened', async ({page}) => {
+  await page.goto('demos/?tab=z-index&news=top');
+  const link = page.getByRole('link', {name: 'The user can have multiple banners'});
+
+  await link.click();
+
+  await expect(page).toHaveURL(/#news-many-story$/);
+  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user can have multiple banners'})}).last()).toBeFocused();
+  await expect(page.getByRole('heading', {name: 'Slide in from off screen'})).toBeVisible();
+});
