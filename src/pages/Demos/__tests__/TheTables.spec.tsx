@@ -1291,22 +1291,27 @@ describe('the tables tab’s audited words', () => {
   });
 
   test('should say, beside the vanilla settle code, that the first cell’s animationend clears the column', async () => {
-    expect(await tabWithEveryStoryOpen('vanilla')).toHaveTextContent(/const untilSettled = [^]*\/\/ the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column/);
+    const tab = await tabWithEveryStoryOpen('vanilla');
+    const settle = within(tab).getAllByRole('listitem').filter(item => within(item).queryByRole('heading', {name: 'Let the column settle'}) !== null).slice(-1)[0];
+
+    expect(settle).toHaveTextContent(/const untilSettled = [^]*\/\/ the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column/);
   });
 
   test('should say a column snaps back to where it started, is carried back over it, and a drop there changes nothing', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
 
     expect(tab).toHaveTextContent('carrying the column back over where it started must clear it');
-    expect(tab).toHaveTextContent('one dispatch runs on pointer up. A drop where it started therefore changes nothing.');
+    expect(tab).toHaveTextContent('one dispatch runs on pointer up. With no landing left to dispatch, a drop where it started changes nothing.');
     expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
   });
 
-  test('should say the static keyboard walk still lands its marks, cleared at once by the zero-length animation', async () => {
-    const tab = await tabWithEveryStoryOpen('react', '&track=keyboard&motion=static');
+  test.each(['react', 'vanilla'] as const)('should say, in the %s world, the static keyboard walk still lands its marks, cleared at once by the zero-length animation', async world => {
+    const tab = await tabWithEveryStoryOpen(world, '&track=keyboard&motion=static');
 
     expect(tab).toHaveTextContent('Motion off should cost nothing extra: no waiting. The static walk should be the arrow handler with the slides simply absent.');
     expect(tab).toHaveTextContent('Apply the order; the marks still land, and the zero-length animation clears them at once, so the swap paints on the next frame.');
+    expect(tab).toHaveTextContent('// the whole walk; the marks land and clear at once, nothing to wait for');
+    expect(tab).not.toHaveTextContent('nothing marked, nothing to wait for');
   });
 
   test('should say rows have no anchors, and the first and last columns hold the table in place', async () => {

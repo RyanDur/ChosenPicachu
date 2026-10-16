@@ -55,13 +55,13 @@ export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> 
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
             ...unit(headerSource, 'const walkedTo = '),
-            aside('// the whole walk; nothing marked, nothing to wait for')
+            aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
-            aside('// the whole walk; nothing marked, nothing to wait for')
+            aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>}
       </Codes>
     </Reveal>

@@ -71,10 +71,10 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The table holds still, and one dispatch runs on pointer up. A drop where it
-          started therefore changes nothing.</Says>
-        : <Says>The table holds still, and one dispatch runs at the landing. A drop where it
-          started therefore changes nothing.</Says>}
+        ? <Says>The table holds still, and one dispatch runs on pointer up. With no landing left to
+          dispatch, a drop where it started changes nothing.</Says>
+        : <Says>The table holds still, and one dispatch runs at the landing. With no landing left to
+          dispatch, a drop where it started changes nothing.</Says>}
       {world === 'react'
         ? <Says>The lazy table is its own file, not a flag on the eager one: its travel only ever
           dispatches the landing into the drag, and its release, which also handles cancel,
