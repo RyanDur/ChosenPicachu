@@ -122,7 +122,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         </Reveal>
       </Step>
       <Step title="Anchored, not measured">
-        <Words want="The menu must land by its own button, not centered in the page, and nothing should measure to put it there.">
+        <Words want="The menu must land by its own button, not centred in the page, and nothing should measure to put it there.">
           <Says>A popover opened by its invoker is anchored to that invoker
             automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
               positioning</Mdn> can place it:
@@ -143,19 +143,18 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             beat user-agent styles no matter the specificity. The list markers are the reset’s
             job too; this site’s reset drops them for menu alongside ol and ul. One line remains
             that no reset should write for you: <Mdn path="Web/CSS/inset">inset</Mdn>: auto. The UA
-            centers every popover with inset: 0, and centered versus anchored is this menu’s own
+            centres every popover with inset: 0, and centred versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts inset: 0 back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
-            your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centered popover. Worse
-            placement, same menu: the feature degrades, the function does not.</Says>
+            your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centred popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
               ...span(menuCss, 'inset: auto;', 'inset: auto;'),
-              aside('/* centered is the UA’s placement; this menu chooses the anchor */'), gap,
+              aside('/* centred is the UA’s placement; this menu chooses the anchor */'), gap,
               ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
               aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
               ...unit(menuCss, '@supports not (position-area: block-end)'),
-              aside('/* no anchor positioning? centered: worse placement, same menu */')
+              aside('/* no anchor positioning? centred: worse placement, same menu */')
             ]}/>
           </Codes>
         </Reveal>
@@ -218,8 +217,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             trade, and this data never stops trading.</Says>
           <Says>So the sort is a question, never an answer that is stored: every read re-ranks
             the rows through the sorting column, so as values change underneath, the rows keep
-            trading places to stay sorted. Sort once and the sort is a moment; keep asking and
-            it is a property.</Says>
+            trading places to stay sorted.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
@@ -241,8 +239,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the <Term word="standing">standing</Term> it showed, and the page keeps the rows
             exactly where the sort left them, moves the one you moved, and clears the sort, so
             your drag proceeds from what you saw. Choosing "reset" clears the sort the other way:
-            back to the <Term word="seats">seats</Term> in the order they arrived, nothing
-            sorting them at all.</Says>
+            back to the <Term word="seats">seats</Term> as they stood before the sort,
+            nothing sorting them at all.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[

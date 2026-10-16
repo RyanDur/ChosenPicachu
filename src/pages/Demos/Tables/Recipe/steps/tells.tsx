@@ -30,13 +30,11 @@ export const NamesInTheCode: FC = () =>
     measurement taken at the grab: the table’s box, every column’s width, and later the row heights.</Tell>;
 
 export const TwoRoads: FC = () =>
-  <Tell>There are two roads to dragging something across a page, and this site builds
-    both. The <Link className="signpost"
+  <Tell>There are two ways to drag something across a page, and this site builds both. The <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> takes
-    the native API, where the platform brings most of the behavior for very little code;
+    the native API, where the platform brings most of the behaviour for very little code;
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
-    platform, the macOS cancel) are that road’s own story. This table takes the other
-    road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
+    platform, the macOS cancel) are that demo’s own story. This table takes the other way: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
     yours to own and no drag-and-drop library is anywhere in the build.</Tell>;
 
 export const AgainstTheStream: FC = () =>
@@ -46,7 +44,7 @@ export const AgainstTheStream: FC = () =>
     and the markup renders through them. Moving a column is just changing the
     order. We could ask the DOM where everything is as the pointer moves,
     but layout queries during a drag cause the jank you are trying to avoid; so
-    everything the drag needs gets measured once, when you grab.</Tell>;
+    everything the drag needs is measured at the grab, as the lift step shows.</Tell>;
 
 export const OwnedPixels: FC<{world: World}> = ({world}) =>
   <Tell>And owning the pixels does not mean building in JavaScript. The markup stays a
@@ -56,7 +54,7 @@ export const OwnedPixels: FC<{world: World}> = ({world}) =>
     ? 'React affords nothing the DOM does not give you'
     : 'no framework stands anywhere in the frame'}: the node moves
     are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
-    events, the state is a value. Each code block below is labeled with which of the
+    events, the state is a value. Each code block below is labelled with which of the
     three languages is doing the work.</Tell>;
 
 export const TurnedVertical: FC = () =>

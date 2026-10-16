@@ -25,8 +25,8 @@ const OneState: FC<{world: World}> = ({world}) =>
       <Says>The page’s state is the trades it holds, the candles the charts have asked for, and the arrangement
         it shows the trades in: the columns and the rows, each in the order they stand, and the sort while one
         holds.</Says>
-      <Says>A table’s state is only what the trader does to it: what the pointer is carrying, the marks a move leaves,
-        the widths once measured. Never the data, and never the order.</Says>
+      <Says>A table’s state is only what the trader does to it: what the pointer is carrying, the widths once
+        measured, and in React the marks a move leaves. Never the data, and never the order.</Says>
       <Says>A <Term word="store">store</Term> holds each value, and its dispatch is the only way in.</Says>
       <Says>The charts and the tables read the page’s store. Every part inside a table reads the table’s
         own.</Says>
@@ -48,8 +48,8 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The table element creates its own store once, empty, and every part inside it reads and writes
             through that one.</Says>
         </>
-        : <Says>The mount creates the same stores: the trades, with the same exchange as
-          middleware; the arrangement, seeded from the markup it was given; and the hand, empty.
+        : <Says>The mount, the one function that wires the document, creates the same stores: the trades, with the same exchange as
+          middleware; the arrangement, taken from the markup it was given; and the hand, empty.
           Every listener it wires dispatches to one of them.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
@@ -73,7 +73,8 @@ const ActionsAreData: FC = () =>
   <Step title="Actions are data, and one reducer reads them">
     <Words want="A change must say what happened, not how to poke the state, and it must leave the old value untouched.">
       <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries the
-        column and where it landed. rowMoved carries the row, where it landed and the standing it left.
+        column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’ order as shown, ranked while a sort
+        holds.
         columnMovedBeside carries the neighbour and the widths.</Says>
       <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> reads the type and returns the
         next state.</Says>
@@ -88,7 +89,7 @@ const ActionsAreData: FC = () =>
         beginning, so nobody names an initial state.</Says>
       <Says>Slices combine by key when a state has more than one concern, each seeing only its own. The page’s
         store is three: the trades, the candles and the arrangement.</Says>
-      <Says>The arrangement’s reducer handles what a drag and the menu decided: a column moved to a seat, a row
+      <Says>The arrangement’s reducer handles what a drag and the menu decided: a column moved to a position, a row
         moved in the standing it was shown, a sort chosen or cleared, keys that arrived. A moved row ends the sort
         first, so the ranked order becomes the real one and the move lands in it.</Says>
       <Says>The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and
@@ -264,8 +265,9 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
     <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
       records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
-    <Tell>In the vanilla build, the hand is the code’s name for the store that holds what the pointer is carrying
-      and the marks a move leaves. The React build names it store. Each table has one. It holds only what the trader
+    <Tell>In the vanilla build, the hand is the code’s name for the store that holds the drag and the widths once
+      measured; the React build names it store and keeps the marks a move leaves in it too, while the vanilla build
+      writes those marks onto the cells as classes. Each table has one. It holds only what the trader
       does to it, and it raises what the trader did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>

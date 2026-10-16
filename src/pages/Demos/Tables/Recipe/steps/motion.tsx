@@ -8,7 +8,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> = ({world, headerSource, cssSource, buildSrc}) =>
   <Step title="Let the column settle" dial=<MotionDial name="step-motion"/> id="step-motion">
-    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps home on release, over a neighbour that has already jumped, leaves the reader to work out both.">
+    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to its seat on release, over a neighbour that has already jumped, leaves the reader to work out both.">
       <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
         carries nothing the moment you let go. What should move is the real thing, from where it is: the
         column you dropped starts where you dropped it and settles into its slot, and every
@@ -18,8 +18,7 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
       <Says>Nothing is measured after the lift. A strike knows which columns it displaces and
         which way, so the same dispatch that reorders them marks each one shoved toward the
         start or the end, by the carried column’s width from the survey. The drop marks the
-        dropped column settling from the offset it was carried to, the same offset the drift
-        slice already holds, so the drag and the settle agree to the pixel.
+        dropped column settling from the offset it was carried to, the same offset the drag already holds, so the drag and the settle agree to the pixel.
         Every cell reads its mark from the state and wears it as a class and a custom property,
         and CSS owns the motion from there: a keyframe puts the cell where it came from on the
         first frame and lets it slide home.</Says>
@@ -32,11 +31,11 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
       {world === 'react'
         ? <Says>The strike, the walk and the drop are dispatches, the slides are keyframes in
           the stylesheet, and settling is a dispatch the element makes when its keyframe ends.
-          The static table dispatches the reorder and the release outright: no marks, no
-          classes, nothing to animate.</Says>
+          The static table wears the same marks and classes; the stylesheet gives them an animation
+          of zero length, so the marks clear on the same animationend and nothing visibly moves.</Says>
         : <Says>The strike, the walk and the drop set the cells’ classes, the slides are keyframes in
-          the stylesheet, and the cells clear their own classes when the keyframe ends. The static
-          build releases and stops: no marks, no classes, nothing to animate.</Says>}
+          the stylesheet, and the cells clear their own classes when the keyframe ends. The static build sets the same classes; the stylesheet gives them an
+          animation of zero length, so they clear on the same animationend and nothing visibly moves.</Says>}
       <Says>Rows are the same motion turned vertical: a shoved row slides up or down by the
         carried row’s height, and the dropped row settles from the drop height.</Says>
       <Codes>
@@ -66,7 +65,8 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
           ...unit(cssSource, '.sortable.animated .shoved-start {'), gap,
           ...unit(cssSource, '@keyframes settle {'), gap,
           ...unit(cssSource, '@keyframes settle-from-pointer {'), gap,
-          ...unit(cssSource, '@keyframes shoved-start {'),
+          ...unit(cssSource, '@keyframes shoved-start {'), gap,
+          ...unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
           aside('/* the only motion code there is; the table wears the word animated, and hide chooses where the settle starts */')
         ]}/>
       </Codes>

@@ -15,8 +15,8 @@ const copy: Copy = {
     hide: 'The lifted row or column moves with the pointer, cells and all, leaving its gap where it came from.'
   },
   motion: {
-    animated: 'The swap itself is instant; displaced cells slide to their new seats.',
-    static: 'The same marks land, and the stylesheet gives them no time: cells cut to their new seats.'
+    animated: 'The swap itself is instant; displaced cells slide to their new places.',
+    static: 'The same marks land, and the stylesheet gives them no time: cells cut to their new places.'
   }
 };
 

@@ -63,8 +63,8 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Samp
     <Reveal>
       <Says>The handler claims the left and right arrows; tabbing and the sort menu keep working
         because nothing else is touched. The walk clamps inside the anchored edges: the first
-        and last columns hold the table, so the nudge stops beside them. Rows do the same turned
-        vertical, the grip listening for up and down.</Says>
+        and last columns hold the table, so the nudge stops beside them. Rows stop at the table’s ends, but any row may move; only columns have anchors. The
+        grip’s keys are up and down.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

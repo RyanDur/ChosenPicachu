@@ -71,11 +71,11 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
     <Words want="A row is the same walk turned vertical, and the grip is already a button.">
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
         up and down make the vertical walk the way left and right make the horizontal one,
-        with the same anchors holding.</Says>
+        except that rows have no anchors: any row may move, and a walk stops at the table’s ends.</Says>
     </Words>
     <Reveal>
       <Says>The grip handles the arrows itself, and the walk is the column walk with the
-        axis turned: the seats shuffle instead of the order, and the outer edges hold.</Says>
+        axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

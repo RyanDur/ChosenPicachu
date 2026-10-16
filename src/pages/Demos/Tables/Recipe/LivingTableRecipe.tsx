@@ -78,8 +78,7 @@ const foldSays: Record<World, ReactNode> = {
   react: <Says>Every render folds the same trades into per-window aggregates: counts, volume,
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows are always exactly the stream’s current truth.</Says>,
-  vanilla: <Says>Every arrival refolds the same trades into per-window aggregates, because
-    refolding is simple math and cannot drift out of sync. The fold is the same module the
+  vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
     change, so a writer subscribed to the trades refolds the state, writes only the cells whose
     text changed, and reseats the rows when the sort ranks them anew. The arrangement has a
@@ -137,7 +136,7 @@ const StillStory: FC<{world: World}> = ({world}) =>
             cell, headers belong to their columns, and everything later, the sorting announcements,
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
-            and accessibility stops being work you add and becomes behavior you inherit.</Says>
+            and accessibility stops being work you add and becomes behaviour you inherit.</Says>
           {dealCodes[world]}
         </Reveal>
       </Step>

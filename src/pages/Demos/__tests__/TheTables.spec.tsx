@@ -188,7 +188,7 @@ describe('the tables demo', () => {
     const controls = await tableControls.region();
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/moves with the pointer, cells and all/);
-    expect(controls).toHaveTextContent(/slide to their new seats/);
+    expect(controls).toHaveTextContent(/slide to their new places/);
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
@@ -1189,6 +1189,12 @@ describe('the tables tutorials’ vocabulary', () => {
   const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
     blocks.find(block => word.test(block.textContent));
 
+  test.each(builds)('should spell $region’s prose the British way, with $at', async ({at, region}) => {
+    const words = (await prose(at, region)).map(block => block.textContent).join(' ');
+
+    expect(words).not.toMatch(/\b(behaviors?|centered|centers|honors|labeled|colors?)\b/i);
+  });
+
   test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
@@ -1216,7 +1222,7 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each(['react', 'vanilla'])('should name the hand and the reconcile where the living table first uses them, in the %s world', async world => {
     const blocks = await prose(`world=${world}`, 'the living table');
 
-    expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('In the vanilla build, the hand is the code’s name for the store that holds what the pointer is carrying and the marks a move leaves. The React build names it store.');
+    expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('In the vanilla build, the hand is the code’s name for the store that holds the drag and the widths once measured; the React build names it store and keeps the marks a move leaves in it too, while the vanilla build writes those marks onto the cells as classes.');
     expect(firstSaying(blocks, /\breconcile\b/)).toHaveTextContent('A reconcile is the function that moves the page’s cells from the old order to the new one.');
   });
 
@@ -1232,8 +1238,8 @@ describe('the tables tab’s introduction', () => {
     'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
-    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the JavaScript library this site is built with, and the same state sits under both.',
-    'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a column’s header, or a row’s grip, and move it.'
+    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the JavaScript library this site is built with, and the same state sits under both.',
+    'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.'
   ];
 
   test('should tell what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
@@ -1242,5 +1248,73 @@ describe('the tables tab’s introduction', () => {
     const tab = await screen.findByRole('region', {name: 'Tables'});
 
     expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), (await within(tab).findAllByRole('table'))[0]])).toEqual([]);
+  });
+});
+
+describe('the tables tab’s audited words', () => {
+  const tabWithEveryStoryOpen = async (world: 'react' | 'vanilla', also = ''): Promise<HTMLElement> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}&sort=column,row&living=still,flow,store&menu=rank&resize=widen${also}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: also.includes('tut=menu') ? 'build the sort menu yourself' : 'build the drag sort yourself'});
+    return screen.getByRole('region', {name: 'Tables'});
+  };
+
+  test.each([
+    ['react', 'The static table wears the same marks and classes; the stylesheet gives them an animation of zero length, so the marks clear on the same animationend and nothing visibly moves.'],
+    ['vanilla', 'The static build sets the same classes; the stylesheet gives them an animation of zero length, so they clear on the same animationend and nothing visibly moves.']
+  ] as const)('should say, in the %s world, the static table keeps its marks and the stylesheet gives them no time', async (world, sentence) => {
+    const tab = await tabWithEveryStoryOpen(world);
+
+    expect(tab).toHaveTextContent(sentence);
+    expect(tab).toHaveTextContent(/@keyframes shoved-start[^]*\.sortable\.static :is\(\.settling[^]*the only motion code there is/);
+  });
+
+  test('should say rows have no anchors, and the first and last columns hold the table in place', async () => {
+    const tab = await tabWithEveryStoryOpen('react', '&track=keyboard');
+
+    expect(tab).toHaveTextContent('except that rows have no anchors: any row may move, and a walk stops at the table’s ends.');
+    expect(tab).toHaveTextContent('the seats shuffle instead of the order, and a walk stops at the first and last seat.');
+    expect(tab).toHaveTextContent('Rows stop at the table’s ends, but any row may move; only columns have anchors. The grip’s keys are up and down.');
+    expect(tab).toHaveTextContent('grab a header between the first and the last, or any row’s grip, and move it');
+  });
+
+  test('should say, at the lift, that the first and last columns cannot be lifted', async () => {
+    expect(await tabWithEveryStoryOpen('react')).toHaveTextContent('The first and last columns hold the table in place and cannot be lifted.');
+  });
+
+  test('should say a reset returns the seats as they stood before the sort, and the fallback is a centred popover', async () => {
+    const tab = await tabWithEveryStoryOpen('react', '&tut=menu');
+
+    expect(tab).toHaveTextContent('as they stood before the sort, nothing sorting them at all.');
+    expect(tab).toHaveTextContent('fallback: a centred popover.');
+  });
+
+  test('should say a table’s state, and where each build keeps the marks a move leaves', async () => {
+    const tab = await tabWithEveryStoryOpen('vanilla');
+
+    expect(tab).toHaveTextContent('A table’s state is only what the trader does to it: what the pointer is carrying, the widths once measured, and in React the marks a move leaves.');
+    expect(tab).toHaveTextContent('The mount, the one function that wires the document, creates the same stores');
+    expect(tab).toHaveTextContent('names every row element, which the code calls a lane, after its row header');
+    expect(tab).toHaveTextContent('the arrangement, taken from the markup it was given');
+  });
+
+  test('should name the drift as a field of the drag and the column’s position as what moves with the gap', async () => {
+    const tab = await tabWithEveryStoryOpen('react');
+
+    expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case');
+    expect(tab).toHaveTextContent('the gap moves, and the column’s position moves with it');
+    expect(tab).toHaveTextContent('the same offset the drag already holds');
+    expect(tab).toHaveTextContent('a column moved to a position,');
+    expect(tab).toHaveTextContent('the standing it left, the rows’ order as shown, ranked while a sort holds.');
+  });
+
+  test('should say the two ways to drag, where the drag is measured, and what the store story tells', async () => {
+    const tab = await tabWithEveryStoryOpen('react');
+
+    expect(tab).toHaveTextContent('There are two ways to drag something across a page, and this site builds both.');
+    expect(tab).toHaveTextContent('This table takes the other way:');
+    expect(tab).toHaveTextContent('the rest are cards in the last station, and each opens into its build. Station 5 ends with a story told from the code’s side, the store the two worlds share.');
+    expect(tab).toHaveTextContent('everything the drag needs is measured at the grab, as the lift step shows');
   });
 });

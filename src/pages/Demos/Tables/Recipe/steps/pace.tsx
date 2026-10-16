@@ -18,17 +18,17 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
       {world === 'react'
         ? <Says><Term word="settle">Settle</Term> as soon as a neighbour is struck: the order updates mid-drag, the markup
           renders through it, and the same key finds its new seat. Carrying the column back is
-          just more crossings: home is always reachable. The only style that moves between them is
+          just more crossings: its own seat is always reachable. The only style that moves between them is
           the shove the animated builds mark, and that is the motion step’s story.</Says>
         : <Says>Dispatch as soon as a neighbour is struck: the dispatch writes a new column order
           into the state, and the <Term word="reconcile">reconcile</Term> moves the real cells to match it. Carrying the
-          column back is just more crossings: home is always reachable. The only style that
+          column back is just more crossings: its own seat is always reachable. The only style that
           moves between them is the shove the animated builds mark, and that is the motion step’s
           story.</Says>}
       {world === 'react'
         ? <Says>This is the whole of the eager table’s travel, and there is no landing to keep
           anywhere in it: the header keeps the pointer capture, columnUnder reads the
-          survey, and a strike dispatches on the spot. Eager acts on the move.</Says>
+          survey, and a strike dispatches on the spot.</Says>
         : <Says>This is the whole travel of the eager build, and there is no landing state to keep
           anywhere in it: columnUnder reads the survey, and a strike dispatches on the
           spot; the buttons-at-zero recovery is in the shared pointer travel, once, for every

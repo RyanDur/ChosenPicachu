@@ -12,7 +12,8 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
       <Says>Asking the DOM where things are mid-drag causes the layout thrash you came here to
         avoid, so everything gets measured once, at the grab: the
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
-        header in it. Every later answer is arithmetic against that one <Term word="survey">survey</Term>.</Says>
+        header in it. Every later answer is arithmetic against that one <Term word="survey">survey</Term>. The first
+        and last columns hold the table in place and cannot be lifted.</Says>
     </Words>
     <Reveal>
       {world === 'react'
