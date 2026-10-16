@@ -7,7 +7,7 @@ import {Axes, rangeOf} from '../Axes';
 import {bucketPressure, heaviestSide, pressureShapes} from './shapes';
 import '../chart-card.css';
 import './Pressure.css';
-import {LATEST_TRADES_CAP} from '../../store';
+import {LATEST_TRADES_CAP} from '../live-trades';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;

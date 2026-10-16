@@ -2,7 +2,7 @@ import {Middleware, Store, sliced, store} from '@components/store';
 import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, standingOf} from '@components/DragSortableTable/arrangement';
 import {TableColumn} from '@components/DragSortableTable/table-state';
 import {Trade} from './Charts/coinbase';
-import {LiveTradesState, opening} from './Charts/live-trades';
+import {LATEST_TRADES_CAP, LiveTradesState, opening} from './Charts/live-trades';
 import {Candle} from './Charts/Candles/shapes';
 import {Period} from './Charts/period';
 import {PeriodHistory, loading, unavailable} from './Charts/period-history';
@@ -46,8 +46,6 @@ export const historyArrived = (trades: readonly Trade[]): DemosAction => ({type:
 export const candlesAsked = (period: Period): DemosAction => ({type: 'candlesAsked', period});
 export const candlesArrived = (period: Period, candles: readonly Candle[]): DemosAction => ({type: 'candlesArrived', period, candles});
 export const candlesRefused = (period: Period): DemosAction => ({type: 'candlesRefused', period});
-
-export const LATEST_TRADES_CAP = 1500;
 
 export const folded = ({history, trades}: TradesState): Measures[] =>
   windowedAggregates(hydrated(history, trades)).map(cells);

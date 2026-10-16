@@ -22,6 +22,7 @@ import slotsSource from './slots.ts?sample';
 import coinbaseSource from './coinbase/index.ts?sample';
 import historySource from './coinbase/history.ts?sample';
 import demosSource from '@pages/Demos/store.ts?sample';
+import liveTradesSource from './live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
 import workspaceSource from './Workspace.tsx?sample';
 import travelSource from './useChartTravel.ts?sample';
@@ -60,7 +61,7 @@ const PriceStory: FC = () =>
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...unit(coinbaseSource, 'export const decodeTrade'), gap,
-            ...unit(demosSource, 'export const LATEST_TRADES_CAP'), gap,
+            ...unit(liveTradesSource, 'export const LATEST_TRADES_CAP'), gap,
             ...unit(demosSource, 'const tradesReducer')
           ]}/>
         </Codes>
@@ -266,16 +267,14 @@ const PressureStory: FC = () =>
       came and took it, and Coinbase marks each trade with the side of the one that was waiting. A trade marked sell is
       one a buyer took. The chart sums each minute into the size buyers took and the size sellers took.</Tell>
     <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades that
-      arrive while it is open, and the page keeps the newest 1,500 of those. The larger side sets one scale for both directions, so a taller
-      bar always means more size.</Tell>
+      arrive while the page is open, and the page keeps the newest 1,500 of those.</Tell>
     <Steps>
       <Step title="Sum each minute by who took the trade">
         <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
           <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says what
             the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.</Says>
           <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for each
-            minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes, from the last 1,500
-            trades.</Says>
+            minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -337,18 +336,17 @@ const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>The pressure chart answers minute by minute. The pie answers for the last 1,500 trades as a
-      whole: one slice for the size buyers took and one for the size sellers took.</Tell>
-    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only what arrives while it is open, the newest 1,500
-      trades.</Tell>
+    <Tell>The pressure chart answers minute by minute. The pie answers for up to the last 1,500 trades
+      as a whole: one slice for the size buyers took and one for the size sellers took.</Tell>
+    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only what has
+      arrived since the page opened.</Tell>
     <Tell>The circle has to move as the split changes, and move smoothly. So each slice is made of two half-discs that are
       only ever rotated, and a share is how far they have turned into view.</Tell>
     <Steps>
       <Step title="Add up each side">
-        <Words want="One number for each side, across the last 1,500 trades. The pie asks nothing about time.">
+        <Words want="One number for each side. The pie asks nothing about time.">
           <Says>sideTotals goes through every trade and adds its size to one of two sums, bought or sold, using
-            takerBought. There are no minutes and no spans here: the pie is the last 1,500 trades as a pair of
-            totals.</Says>
+            takerBought. There are no minutes and no spans here: the pie is a pair of totals.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -404,7 +402,7 @@ const PieStory: FC = () =>
       <Step title="Print each share">
         <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
           <Says>The legend prints each share as a whole percentage, in its slice’s colour. The caption says what the pie is:
-            the size traded on each side across the last 1,500 trades.</Says>
+            the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -419,7 +417,8 @@ const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
-    <Tell>Adding a chart, sorting, removing one and choosing a period are each written into the page’s address.
+    <Tell>Adding a chart, sorting, removing one and choosing a period, the stretch of time a chart shows, are each
+      written into the page’s address.
       That is all a reload or a shared link needs to bring the layout back.</Tell>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the

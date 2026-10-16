@@ -1,5 +1,7 @@
 import {Trade} from './coinbase';
 
+export const LATEST_TRADES_CAP = 1500;
+
 export type LiveTradesState = {
   status: 'connecting' | 'streaming' | 'failed';
   trades: readonly Trade[];

@@ -88,4 +88,11 @@ describe('the pie', () => {
 
     expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took from waiting buyers.');
   });
+
+  test('should explain the pie as up to the last 1,500 trades, counted while the page is open', () => {
+    render(<Pie trades={[]}/>);
+
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('Up to the last 1,500 trades, as one circle,');
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('counts only the trades that arrive while the page is open.');
+  });
 });

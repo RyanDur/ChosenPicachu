@@ -6,7 +6,7 @@ import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
 import {sideOf} from '../sides';
-import {LATEST_TRADES_CAP} from '../../store';
+import {LATEST_TRADES_CAP} from '../live-trades';
 
 const SIZE = 120;
 const RADIUS = 56;
@@ -67,10 +67,10 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       </figcaption>
     </figure>
     <Explainer>
-      Up to the last 1,500 trades, as one circle, split by who came and took each trade. The green slice is the
-      size buyers took from waiting sellers. The orange slice is the size sellers took from waiting buyers. The fetched
-      past doesn’t say who took each trade, so the pie starts empty and counts only the trades that arrive while you
-      watch.
+      Up to the last {LATEST_TRADES_CAP.toLocaleString('en-US')} trades, as one circle, split by who came and took each
+      trade. The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took from
+      waiting buyers. The fetched past doesn’t say who took each trade, so the pie starts empty and counts only the
+      trades that arrive while the page is open.
     </Explainer>
   </section>;
 };

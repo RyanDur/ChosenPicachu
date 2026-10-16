@@ -463,12 +463,16 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
-    test('should say the chart and its caption count from the last 1,500 trades', async () => {
+    test('should say the chart counts what arrives while the page is open, the newest 1,500 kept, and its caption says so', async () => {
       const story = await pressureStory();
 
-      expect(story).toHaveTextContent('The chart shows up to 60 minutes, from the last 1,500 trades.');
-      expect(story).toHaveTextContent('So the chart counts only the trades that arrive while it is open, and the page keeps the newest 1,500 of those.');
+      expect(story).toHaveTextContent('So the chart counts only the trades that arrive while the page is open, and the page keeps the newest 1,500 of those.');
+      expect(story).toHaveTextContent('The chart shows up to 60 minutes.');
       expect(story).toHaveTextContent('The caption says how many minutes are on show, from the last 1,500 trades.');
+    });
+
+    test('should not say the pressure count began when you arrived', async () => {
+      expect(await pressureStory()).not.toHaveTextContent('the count began when you arrived');
     });
 
     test('should head each step with what happens', async () => {
@@ -501,14 +505,18 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
-    test('should say the pie answers for the last 1,500 trades, not the whole visit', async () => {
+    test('should say the pie answers for up to the last 1,500 trades, counted since the page opened', async () => {
       const story = await pieStory();
 
-      expect(story).toHaveTextContent('the size traded on each side across the last 1,500 trades.');
-      expect(story).toHaveTextContent('The pie answers for the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
-      expect(story).toHaveTextContent('like the pressure chart it counts only what arrives while it is open, the newest 1,500 trades.');
-      expect(story).toHaveTextContent('One number for each side, across the last 1,500 trades.');
-      expect(story).toHaveTextContent('the pie is the last 1,500 trades as a pair of totals.');
+      expect(story).toHaveTextContent('The pie answers for up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
+      expect(story).toHaveTextContent('like the pressure chart it counts only what has arrived since the page opened.');
+      expect(story).toHaveTextContent('One number for each side. The pie asks nothing about time.');
+      expect(story).toHaveTextContent('the pie is a pair of totals.');
+      expect(story).toHaveTextContent('The caption says what the pie is: the size traded on each side, up to the last 1,500 trades.');
+    });
+
+    test('should not say the pie counts the whole visit', async () => {
+      expect(await pieStory()).not.toHaveTextContent('whole visit');
     });
 
     test('should head each step with what happens', async () => {
@@ -648,6 +656,21 @@ describe('a list of charts', () => {
 
     await screen.findByRole('region', {name: 'pie'});
     expect(chartsDesk.addMenu()).not.toBeInTheDocument();
+  });
+
+  test('a pie added after trades arrive starts with their shares', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsLive(feed);
+    broadcast(feed, [tradeFrame(50000, 1700000000000, '0.01', 'bought'), tradeFrame(50001, 1700000000500, '0.03', 'sold')]);
+    await within(screen.getByRole('region', {name: 'live trades'})).findByText('$50,001.00');
+
+    await chartsDesk.addChart('Pie');
+
+    const legend = within(await screen.findByRole('region', {name: 'pie'})).getByRole('list');
+    expect(legend).toHaveTextContent('25% bought');
+    expect(legend).toHaveTextContent('75% sold');
   });
 
   test('an added chart says so', async () => {
@@ -960,7 +983,7 @@ describe('the workspace story', () => {
   });
 
   test.each([
-    ['the address', 'Adding a chart, sorting, removing one and choosing a period are each written into the page’s address. That is all a reload or a shared link needs to bring the layout back.'],
+    ['the address', 'Adding a chart, sorting, removing one and choosing a period, the stretch of time a chart shows, are each written into the page’s address. That is all a reload or a shared link needs to bring the layout back.'],
     ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
@@ -1027,9 +1050,4 @@ describe('the charts’ audited words', () => {
     expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
   });
 
-  test('should explain the pie as up to the last 1,500 trades', async () => {
-    await tabWith('pie');
-
-    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('Up to the last 1,500 trades, as one circle,');
-  });
 });
