@@ -32,11 +32,14 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
           display is grid. Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens on
-          top. The list is placed by <a className="signpost" href={`${mdn}CSS_anchor_positioning`}>anchor positioning</a>:
-          the Sort by button names itself <code>--sort-by</code>, and the list’s insets read that name, so nothing
-          between the list and the card is positioned.</p>
+          top.</p>
+        <Snippet label="CSS" lines={unit(zIndexCss, '.old-way-cards {')}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">The list is placed by <a className="signpost" href={`${mdn}CSS_anchor_positioning`}>anchor
+          positioning</a>: the Sort by button names itself <code>--sort-by</code>, and the list’s offsets read that name,
+          so nothing between the list and the card is positioned.</p>
         <Snippet label="CSS" lines={[
-          ...unit(zIndexCss, '.old-way-cards {'), gap,
           ...unit(zIndexCss, '.old-way-card .button {'), gap,
           ...unit(zIndexCss, '.sort-choices {\n        position-anchor')
         ]}/>

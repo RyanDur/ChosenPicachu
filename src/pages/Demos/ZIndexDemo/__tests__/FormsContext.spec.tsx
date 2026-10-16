@@ -4,6 +4,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {computeAccessibleName} from 'dom-accessibility-api';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const heading = 'What else forms a stacking context';
 
@@ -108,13 +109,15 @@ describe('the part on what else forms a stacking context', () => {
     expect(within(part).getByText(/^What card one wears decides/)).toHaveTextContent('What card one wears decides whether its list’s 9999 counts in the tab’s panel, against card two, or only inside the card.');
   });
 
-  test('should say the bare card’s list is placed by anchor positioning, linked to MDN', async () => {
+  test('should say, in a run of its own after the bare card’s, that the list is placed by anchor positioning, linked to MDN, with the two anchor rules beside it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
-    const run = explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/);
+    const run = explanation.runTelling(part, /^The list is placed by/);
 
-    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, and the list’s insets read that name, so nothing between the list and the card is positioned.');
+    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, and the list’s offsets read that name, so nothing between the list and the card is positioned.');
     expect(within(run).getByRole('link', {name: 'anchor positioning'})).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
+    expect(explanation.everyCodeBeside(part, /^The list is placed by/).join()).toMatch(/\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;/);
+    expect(outOfReadingOrder([explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/), run])).toEqual([]);
   });
 
   test('should say the bare card’s list is compared with card two in the tab panel’s context', async () => {
@@ -124,11 +127,12 @@ describe('the part on what else forms a stacking context', () => {
     expect(explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/)).toHaveTextContent('Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens on top.');
   });
 
-  test('should show the grid and the anchor beside the run on a card that wears nothing', async () => {
+  test('should show the grid beside the run on a card that wears nothing', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
 
-    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;[^]*\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;/);
+    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).toMatch(/\.old-way-cards \{[^]*display: grid;/);
+    expect(explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join()).not.toMatch(/anchor/);
   });
 
   test('should say what sticky is where the part first names it', async () => {

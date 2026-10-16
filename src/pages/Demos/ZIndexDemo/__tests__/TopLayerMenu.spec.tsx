@@ -39,7 +39,7 @@ describe('why the popover wins', () => {
     const run = within(part).getByText(/The menu’s own sheet places it/);
 
     expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
-    expect(run).toHaveTextContent(/like the old list above, has no anchor, so it is left out\./);
+    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so that menu is left out; the old list above names its own\./);
   });
 
   test('should show the buttons’ tabIndex beside the run that says what it asks, and why Safari needs it', async () => {

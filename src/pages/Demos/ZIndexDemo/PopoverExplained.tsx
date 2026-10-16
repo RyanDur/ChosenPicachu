@@ -69,8 +69,8 @@ export const PopoverExplained: FC = () =>
           with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened it, and where a
           browser has no position-area, it centres the menu on the screen.
           In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
-          The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is
-          not a popover, like the old list above, has no anchor, so it is left out.</p>
+          The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is not a popover gets no anchor from the button
+          that opens it, so that menu is left out; the old list above names its own.</p>
         <Snippet label="CSS" lines={[
           ...span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end) {')
