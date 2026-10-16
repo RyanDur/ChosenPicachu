@@ -1292,16 +1292,19 @@ describe('the tables tab’s audited words', () => {
 
   test('should say, beside the vanilla settle code, that the first cell’s animationend clears the column', async () => {
     const tab = await tabWithEveryStoryOpen('vanilla');
-    const settle = within(tab).getAllByRole('listitem').filter(item => within(item).queryByRole('heading', {name: 'Let the column settle'}) !== null).slice(-1)[0];
+    const settle = recipeFolds.stepHeaded(tab, 'Let the column settle');
 
     expect(settle).toHaveTextContent(/const untilSettled = [^]*\/\/ the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column/);
   });
 
-  test('should say a column snaps back to where it started, is carried back over it, and a drop there changes nothing', async () => {
-    const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
+  test.each([
+    ['react', 'one dispatch runs on pointer up. With no landing left to dispatch, a drop where it started changes nothing.'],
+    ['vanilla', 'one dispatch runs at the landing. With no landing left to dispatch, a drop where it started changes nothing.']
+  ] as const)('should say, in the %s world, a column snaps back to where it started, is carried back over it, and a drop there changes nothing', async (world, drop) => {
+    const tab = await tabWithEveryStoryOpen(world, '&pace=lazy');
 
     expect(tab).toHaveTextContent('carrying the column back over where it started must clear it');
-    expect(tab).toHaveTextContent('one dispatch runs on pointer up. With no landing left to dispatch, a drop where it started changes nothing.');
+    expect(tab).toHaveTextContent(drop);
     expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
   });
 

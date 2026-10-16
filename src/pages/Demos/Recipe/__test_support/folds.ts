@@ -7,6 +7,9 @@ export const recipeFolds = {
   itemOf: (story: HTMLElement): HTMLElement | undefined => within(document.body).getAllByRole('listitem').find(item =>
     item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story)))),
   steps: (story: HTMLElement): HTMLElement[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem'),
+  stepHeaded: (root: HTMLElement, title: string): HTMLElement => within(root).getAllByRole('listitem')
+    .filter(item => within(item).queryByRole('heading', {name: title}) !== null)
+    .filter((item, _, items) => not(items.some(inner => inner !== item && item.contains(inner))))[0],
   stepTitles: (story: HTMLElement): string[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem')
     .map(step => within(step).getAllByRole('heading')[0].textContent),
   press: async (root: HTMLElement, title: string): Promise<HTMLElement> => {
