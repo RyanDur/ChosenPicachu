@@ -209,6 +209,20 @@ describe('columns by hand', () => {
     expect(carried()).toEqual([]);
   });
 
+  test('a settle mid-drag over a wider neighbour moves the seat by that neighbour’s width', () => {
+    widths = {...even(), buys: 160};
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
+    liftColumn('trades');
+
+    carryColumnOver('buys');
+
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    [header('trades'), ...lanes().map(lane => lane.cells[2])].forEach(cell => {
+      expect(cell).toHaveStyle({'--seat-x': '-160px'});
+    });
+    dropColumn();
+  });
+
   test('losing the pointer mid-drag keeps the column aloft', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
     liftColumn('trades');

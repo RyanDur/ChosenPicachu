@@ -1290,7 +1290,7 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent(clear);
   });
 
-  test('should say a column snaps back to where it started, drifts back over it, and changes nothing when dropped there', async () => {
+  test('should say a column snaps back to where it started, is carried back over it, and changes nothing when dropped there', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
 
     expect(tab).toHaveTextContent('carrying the column back over where it started must clear it');
@@ -1327,7 +1327,7 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent('the arrangement, taken from the markup it was given');
   });
 
-  test('should name the drift as the drag’s drifted case, and say the seat number changes by the gap’s width the other way', async () => {
+  test('should name the drift as the drag’s drifted case, and say the seat number changes by the crossed neighbour’s width the other way', async () => {
     const tab = await tabWithEveryStoryOpen('react');
 
     expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the pointer has moved since.');
