@@ -170,6 +170,15 @@ describe('columns by hand', () => {
     windows.forEach(window => expect(rowOf(window).cells[2].classList).toContain('carried'));
   });
 
+  test('the last column holds the table in place and cannot be lifted', () => {
+    seat(EagerTable, {origin: 'hide', motion: 'static'});
+
+    liftColumn('change');
+
+    expect(carried()).toEqual([]);
+    expect(header('change').classList).not.toContain('carried');
+  });
+
   test('a dropped column lands as itself', () => {
     seat(EagerTable, {origin: 'hide', motion: 'static'});
     liftColumn('buys');
@@ -685,7 +694,7 @@ describe('sort criteria menus', () => {
     expect(announced()).toEqual(['trades sorted descending']);
   });
 
-  test('reset restores the starting order', async () => {
+  test('reset returns the rows to the order before the sort', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
@@ -693,6 +702,19 @@ describe('sort criteria menus', () => {
 
     expect(windowNames()).toEqual(windows);
     expect(tradesHeader()).not.toHaveAttribute('aria-sort');
+  });
+
+  test('reset returns a row moved before the sort to the seat it held before the sort', async () => {
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
+    grip('this minute').focus();
+    await userEvent.keyboard('{ArrowDown}');
+    const beforeTheSort = windowNames();
+
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'reset', hidden: true}));
+
+    expect(beforeTheSort).not.toEqual(windows);
+    expect(windowNames()).toEqual(beforeTheSort);
   });
 
   test('a hand on a row ends the sort and keeps the standing order', async () => {

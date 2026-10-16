@@ -33,13 +33,13 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
     </Words>
     <Reveal>
       <Says>The <Term word="drift">drift</Term> is a field of the drag, written by the dragging reducer’s drifted
-        case: the survey
-        from the lift, the box the thing was grabbed in, and how far the pointer has moved
-        since. Every move dispatches the pointer, and two selectors turn the drag into two
+        case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the
+        pointer has moved since. Every move dispatches the pointer, and two selectors turn the drag into two
         numbers every carried cell wears as custom properties, {whatACustomPropertyIs}: the seat, where the grab box sits
         against where the column rests in the order as it stands now, and the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
-        changes, the gap moves, and the column’s position moves with it. The stylesheet adds the two and does
+        changes, the gap moves, and the seat number changes by the same width the other way, so the carried
+        cells stay under the pointer. The stylesheet adds the two and does
         the moving, and only the hide sheet adds them: the same cells wear the same numbers
         under keep and never leave their seat. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
         yet stays in its seat.</Says>

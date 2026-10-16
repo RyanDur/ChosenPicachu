@@ -17,12 +17,12 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
     <Reveal>
       {world === 'react'
         ? <Says><Term word="settle">Settle</Term> as soon as a neighbour is struck: the order updates mid-drag, the markup
-          renders through it, and the same key finds its new seat. Carrying the column back is
-          just more crossings: its own seat is always reachable. The only style that moves between them is
+          renders through it, and the same key finds its new place. Carrying the column back is
+          just more crossings: where it started is always reachable. The only style that moves between them is
           the shove the animated builds mark, and that is the motion step’s story.</Says>
         : <Says>Dispatch as soon as a neighbour is struck: the dispatch writes a new column order
           into the state, and the <Term word="reconcile">reconcile</Term> moves the real cells to match it. Carrying the
-          column back is just more crossings: its own seat is always reachable. The only style that
+          column back is just more crossings: where it started is always reachable. The only style that
           moves between them is the shove the animated builds mark, and that is the motion step’s
           story.</Says>}
       {world === 'react'
@@ -66,19 +66,19 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the
         release dispatches it. The landing is kept in the drag slice, never in the order:
-        drifting back over home must clear it, and release and cancel must resolve it the same
+        drifting back over where it started must clear it, and release and cancel must resolve it the same
         way.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <Says>The table holds still, and one dispatch runs on pointer up. Drifting back over
-          your own slot clears the landing, so a drop at home changes nothing.</Says>
+          your own slot clears the landing, so a drop where it started changes nothing.</Says>
         : <Says>The table holds still, and one dispatch runs at the landing. Drifting back over
-          your own slot clears the landing, so a drop at home changes nothing.</Says>}
+          your own slot clears the landing, so a drop where it started changes nothing.</Says>}
       {world === 'react'
         ? <Says>The lazy table is its own file, not a flag on the eager one: its travel only ever
           dispatches the landing into the drag, and its release, which also handles cancel,
-          dispatches the order. Lazy acts on the drop.</Says>
+          dispatches the order.</Says>
         : <Says>The lazy build is its own file, not a flag on the eager one: its travel records the
           landing in the drag, and its release, which also handles cancel, dispatches whatever
           the drag is holding.</Says>}

@@ -1189,12 +1189,6 @@ describe('the tables tutorials’ vocabulary', () => {
   const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
     blocks.find(block => word.test(block.textContent));
 
-  test.each(builds)('should spell $region’s prose the British way, with $at', async ({at, region}) => {
-    const words = (await prose(at, region)).map(block => block.textContent).join(' ');
-
-    expect(words).not.toMatch(/\b(behaviors?|centered|centers|honors|labeled|colors?)\b/i);
-  });
-
   test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
@@ -1270,6 +1264,38 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent(/@keyframes shoved-start[^]*\.sortable\.static :is\(\.settling[^]*the only motion code there is/);
   });
 
+  test.each([
+    ['react', 'sort'], ['vanilla', 'sort'], ['react', 'menu'], ['vanilla', 'menu'], ['react', 'resize'], ['vanilla', 'resize']
+  ] as const)('should spell the whole tab’s prose the British way, in the %s world with the %s tutorial', async (world, tut) => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}&tut=${tut}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const tab = await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders);
+    await within(tab).findAllByRole('heading', {name: /^The trader can/});
+
+    const words = [...within(tab).getAllByRole('paragraph'), ...within(tab).getAllByRole('heading')].map(block => block.textContent).join(' ');
+
+    expect(words).not.toMatch(/\b(behaviors?|centered|centers|honors|labeled|colors?)\b/i);
+  });
+
+  test.each([
+    ['react', 'a keyframe puts the cell where it came from on the first frame and lets it slide into its slot.', 'when the keyframe ends, the element gets its own animationend and dispatches that it has settled'],
+    ['vanilla', 'so the same call that reorders them sets a class on each one, shoved toward the start or the end, and a custom property with the carried column’s width from the survey.', 'when the keyframe ends, the first cell’s animationend removes the class from every cell in the column']
+  ] as const)('should tell the settle the way the %s build does it', async (world, mark, clear) => {
+    const tab = await tabWithEveryStoryOpen(world);
+
+    expect(tab).toHaveTextContent(mark);
+    expect(tab).toHaveTextContent(clear);
+  });
+
+  test('should say where a column started, not where it sits', async () => {
+    const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
+
+    expect(tab).toHaveTextContent('drifting back over where it started must clear it');
+    expect(tab).toHaveTextContent('so a drop where it started changes nothing.');
+    expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
+  });
+
   test('should say rows have no anchors, and the first and last columns hold the table in place', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&track=keyboard');
 
@@ -1299,11 +1325,11 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent('the arrangement, taken from the markup it was given');
   });
 
-  test('should name the drift as a field of the drag and the column’s position as what moves with the gap', async () => {
+  test('should name the drift as the drag’s drifted case, and say the seat number changes by the gap’s width the other way', async () => {
     const tab = await tabWithEveryStoryOpen('react');
 
-    expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case');
-    expect(tab).toHaveTextContent('the gap moves, and the column’s position moves with it');
+    expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the pointer has moved since.');
+    expect(tab).toHaveTextContent('the gap moves, and the seat number changes by the same width the other way, so the carried cells stay under the pointer.');
     expect(tab).toHaveTextContent('the same offset the drag already holds');
     expect(tab).toHaveTextContent('a column moved to a position,');
     expect(tab).toHaveTextContent('the standing it left, the rows’ order as shown, ranked while a sort holds.');
