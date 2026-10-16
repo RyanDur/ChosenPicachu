@@ -88,6 +88,7 @@ const SettleStep: FC = () => (
 );
 
 export const multipleStory = {param: 'news', id: 'many'} as const;
+export const slideInStep = 'step-slide-in';
 
 export const MultipleRecipe: FC = () => {
   const {enter = 'above', stack = 'down'} = useSearchParamsObject({enter: enterParam, stack: stackParam});
@@ -140,7 +141,7 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Slide in from off screen" dial=<EntranceDial name="journey-entrance"/>>
+      <Step title="Slide in from off screen" id={slideInStep} dial=<EntranceDial name="journey-entrance"/>>
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
           <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving

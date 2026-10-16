@@ -77,13 +77,28 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
   await expect(page.getByText('Make the panel a popover')).toBeHidden();
 });
 
-test('a reader who follows step 3\'s link to the banners\' entrance lands on the second story, opened', async ({page}) => {
-  await page.goto('demos/?tab=z-index&news=top');
-  const link = page.getByRole('link', {name: 'The user can have multiple banners'});
+for (const motion of ['no-preference', 'reduce'] as const) {
+  test.describe(`with ${motion} motion asked for`, () => {
+    test('a reader who follows step 3\'s link to the slide step lands on that step, its story opened and the step focused', async ({page}) => {
+      await page.emulateMedia({reducedMotion: motion});
+      await page.goto('demos/?tab=z-index&news=top');
 
-  await link.click();
+      await page.getByRole('link', {name: 'Slide in from off screen'}).click();
 
-  await expect(page).toHaveURL(/#news-many-story$/);
-  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user can have multiple banners'})}).last()).toBeFocused();
-  await expect(page.getByRole('heading', {name: 'Slide in from off screen'})).toBeVisible();
-});
+      await expect(page).toHaveURL(/#step-slide-in$/);
+      const step = page.getByRole('listitem').filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})}).last();
+      await expect(step).toBeFocused();
+      await expect(page.getByRole('heading', {name: 'Slide in from off screen'})).toBeInViewport();
+    });
+
+    test('a reader who follows the tutorial below lands on the story\'s heading', async ({page}) => {
+      await page.emulateMedia({reducedMotion: motion});
+      await page.goto('demos/?tab=z-index');
+
+      await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
+
+      await expect(page).toHaveURL(/#news-top-story$/);
+      await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
+    });
+  });
+}

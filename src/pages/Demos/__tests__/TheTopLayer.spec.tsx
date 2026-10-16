@@ -203,7 +203,7 @@ describe('the banner tutorial’s first story', () => {
     const placing = recipeFolds.steps(news)[2];
 
     expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it show\.$/);
-    expect(within(placing).getByText(/^The \.banners rule’s overflow: visible/)).toHaveTextContent('The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen that The user can have multiple banners explains in its step “Slide in from off screen”.');
+    expect(within(placing).getByText(/^The \.banners rule’s overflow: visible/)).toHaveTextContent('The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen that The user can have multiple banners explains in its step Slide in from off screen.');
     expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
     expect(within(placing).getByText(/^The sample is the component’s line/)).toBeInTheDocument();
@@ -251,14 +251,14 @@ describe('the banner tutorial’s first story', () => {
     expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*padding: 0;/);
   });
 
-  test('should open the second story from step 3’s link, keeping the side and align chosen', async () => {
+  test('should open the second story at its slide step from step 3’s link, keeping the side and align chosen', async () => {
     render(<TestApp at={demosAt('?tab=z-index&news=top&side=bottom&align=right')}/>);
     const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
     const placing = recipeFolds.steps(recipeFolds.story(tutorial, story))[2];
 
-    await userEvent.click(within(placing).getByRole('link', {name: 'The user can have multiple banners'}));
+    await userEvent.click(within(placing).getByRole('link', {name: 'Slide in from off screen'}));
 
-    expect(screen.getByText('Slide in from off screen')).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Slide in from off screen'})).toBeVisible();
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(/side=bottom&align=right/);
   });
 

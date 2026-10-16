@@ -11,7 +11,8 @@ type Props = PropsWithChildren<{
 
 export const Step: FC<Props> = ({title, dial, id, children}) => {
   const {step: Title} = useRanks();
-  return <li className={classNames('step', 'badge-before', has(dial) ? 'mint-badge-before' : 'shadow-badge-before')} id={id}>
+  return <li className={classNames('step', 'badge-before', has(dial) ? 'mint-badge-before' : 'shadow-badge-before')} id={id}
+    tabIndex={has(id) ? -1 : undefined}>
     <article className="step-body">
       <header className="step-heading">
         <Title className="sub-title">{title}</Title>

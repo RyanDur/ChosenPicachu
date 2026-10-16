@@ -1,3 +1,33 @@
+diff --git a/node_modules/jsdom/lib/generated/idl/Element.js b/node_modules/jsdom/lib/generated/idl/Element.js
+index 5d62754..6cd7013 100644
+--- a/node_modules/jsdom/lib/generated/idl/Element.js
++++ b/node_modules/jsdom/lib/generated/idl/Element.js
+@@ -899,6 +899,17 @@ exports.install = (globalObject, globalNames) => {
+       return utils.tryWrapperForImpl(esValue[implSymbol].getBoundingClientRect());
+     }
+ 
++    checkVisibility() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError(
++          "'checkVisibility' called on an object that is not a valid instance of Element."
++        );
++      }
++
++      return esValue[implSymbol].checkVisibility();
++    }
++
+     before() {
+       const esValue = this !== null && this !== undefined ? this : globalObject;
+       if (!exports.is(esValue)) {
+@@ -3614,6 +3625,7 @@ exports.install = (globalObject, globalNames) => {
+     insertAdjacentHTML: { enumerable: true },
+     getClientRects: { enumerable: true },
+     getBoundingClientRect: { enumerable: true },
++    checkVisibility: { enumerable: true },
+     before: { enumerable: true },
+     after: { enumerable: true },
+     replaceWith: { enumerable: true },
 diff --git a/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js b/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js
 index e54f043..991605e 100644
 --- a/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js
@@ -68,6 +98,22 @@ index eef3a9a..0840168 100644
      ],
      HTMLAnchorElement: ["a"],
      HTMLAreaElement: ["area"],
+diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js
+index 0ef1ce8..3d8e664 100644
+--- a/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js
++++ b/node_modules/jsdom/lib/jsdom/living/nodes/Element-impl.js
+@@ -325,6 +325,11 @@ class ElementImpl extends NodeImpl {
+     return attr;
+   }
+ 
++  // jsdom lays nothing out, so an element is visible when it is in the document
++  checkVisibility() {
++    return this.isConnected;
++  }
++
+   getBoundingClientRect() {
+     return {
+       x: 0,
 diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js
 index d020e3c..a1b38fa 100644
 --- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js

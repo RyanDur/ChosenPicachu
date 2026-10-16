@@ -6,8 +6,7 @@ import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from 
 import {span, unit} from '../../Recipe/carve';
 import {Sample} from '../../Recipe/sample';
 import {storyOpenedIn} from '../../Recipe/Story';
-import {storyAnchor} from '../../Recipe/story-anchor';
-import {multipleStory} from './MultipleRecipe';
+import {multipleStory, slideInStep} from './MultipleRecipe';
 import {AlignDial, SideDial} from '../../Controls';
 import {fixedBannerLosesHeading, popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
@@ -90,9 +89,10 @@ export const TopLayerRecipe: FC = () => {
             window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
             and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
           <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
-            that{' '}
-          <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: storyAnchor(multipleStory)}}><cite>The
-            user can have multiple banners</cite></Link> explains in its step “Slide in from off screen”.</Says>
+            that <cite>The user can have multiple banners</cite> explains in its
+            step{' '}
+          <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
+            from off screen</cite></Link>.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
             they are there so the choice shows in the class names.</Says>
