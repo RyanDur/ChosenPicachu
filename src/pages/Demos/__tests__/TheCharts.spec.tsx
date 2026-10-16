@@ -381,6 +381,10 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
+    test('should say the 1,500-trade cap bounds how far back the live part of the charts reaches', async () => {
+      expect(await priceStory()).toHaveTextContent('The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with it, so the live part of the price line and the candles reaches back as far as those trades do.');
+    });
+
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await priceStory())).toEqual([
         'Open a socket, and keep only what decodes',
@@ -446,6 +450,10 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
+    test('should say the chart shows up to 60 minutes, from the last 1,500 trades', async () => {
+      expect(await pressureStory()).toHaveTextContent('The chart shows up to 60 minutes, from the last 1,500 trades.');
+    });
+
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await pressureStory())).toEqual([
         'Sum each minute by who took the trade',
@@ -475,6 +483,10 @@ describe('a list of charts', () => {
       await screen.findByRole('heading', {name: 'pie tutorial', level: 2});
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
+
+    test('should say the caption counts each side across the last 1,500 trades', async () => {
+      expect(await pieStory()).toHaveTextContent('the size traded on each side across the last 1,500 trades.');
+    });
 
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await pieStory())).toEqual([
@@ -656,13 +668,13 @@ describe('a list of charts', () => {
 
 describe('the demos page', () => {
   describe('live trades', () => {
-    test('the user watches the latest trades stream in, newest last', async () => {
+    test('the user watches the latest trades stream in, newest last, measured from the first minute’s close', async () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
       await feedIsLive(feed);
-      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(price => tradeFrame(price)));
+      broadcast(feed, [tradeFrame(50001), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
       expect(await within(priceCard()).findByText('$50,005.00')).toBeVisible();
       expect(within(priceCard()).getByText('+$4.00')).toBeVisible();
     });
@@ -879,8 +891,8 @@ describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
-    'This page’s view is that a chart is arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws. The layout is kept in the page’s address, so a reload or a shared link brings back the same charts in the same order.',
-    'By the end you can draw a live line chart, candles, which show how the price opened, closed and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another, and press a chart to open the steps that build it. The last part of this page builds the workspace the charts sit in.'
+    'This page’s view is that a chart is arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws.',
+    'By the end you can draw a live line chart, candles, which show how the price opened, closed and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
   ];
 
   test('should tell the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
@@ -903,11 +915,23 @@ describe('the workspace story', () => {
     return recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
   };
 
+  test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
+    const story = await workspaceStory();
+
+    expect(story).toHaveTextContent('It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbour slides into the place it left.');
+    expect(story).toHaveTextContent('Delete or Backspace removes it.');
+    expect(story).toHaveTextContent('grip and no remove button, and the key does nothing, so the workspace always has a chart.');
+  });
+
+  test('should say an address entry may carry its period after a colon', async () => {
+    expect(await workspaceStory()).toHaveTextContent('An entry may carry its period after a colon, candles:day, and the hour, the default, is left off.');
+  });
+
   test('should head each step with what happens', async () => {
     expect(recipeFolds.stepTitles(await workspaceStory())).toEqual([
       'Read the charts from the address',
       'A chart swaps once the pointer has moved a third of its height',
-      'The arrow keys move a chart, and Delete removes it',
+      'The arrow keys move a chart, and Delete or Backspace removes it',
       'The last chart can’t be removed'
     ]);
   });
@@ -921,15 +945,15 @@ describe('the workspace story', () => {
     ['where the drag starts', 'A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.'],
     ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
     ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
-    ['the last chart', 'With one chart left there is no grip and no remove button, and Delete does nothing. The + is still there.']
+    ['the last chart', 'With one chart left there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.']
   ])('should say %s in plain words', async (_term, sentence) => {
     expect(await workspaceStory()).toHaveTextContent(sentence);
   });
 
-  test('should draw the mark moving to the pointer in step 2', async () => {
+  test('should draw, in step 2, the short chart dropping a tall chart’s height while the pointer stands still', async () => {
     const swap = recipeFolds.steps(await workspaceStory())[1];
 
-    expect(within(swap).getByRole('figure', {name: /^A third from the pointer\./})).toHaveTextContent(/the mark moves to where the pointer is/);
+    expect(within(swap).getByRole('figure', {name: /^A third from the pointer\./})).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
   });
 
   test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
@@ -946,9 +970,26 @@ describe('the workspace story', () => {
     expect(await workspaceStory()).not.toHaveTextContent(/\bhand\b/);
   });
 
-  test('should say each chart opens its own tutorial, and name MDN as Mozilla’s web reference', async () => {
+  test('should say the card below is the workspace, each chart above opens its own, and name MDN as Mozilla’s web reference', async () => {
     await workspaceStory();
 
-    expect(screen.getByText(/Each chart above opens its own tutorial: click it, or press Enter on it\. The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
+    expect(screen.getByText(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
+    expect(screen.getByText(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
+  });
+});
+
+describe('the charts’ audited words', () => {
+  test('should explain each chart in the words the audit settled', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const tab = await screen.findByRole('region', {name: 'Charts'});
+
+    expect(within(tab).getByRole('heading', {level: 2, name: 'Bitcoin, live: every BTC-USD trade on Coinbase'})).toBeInTheDocument();
+    expect(screen.getByRole('region', {name: 'live trades'})).toHaveTextContent('The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it.');
+    expect(screen.getByRole('region', {name: 'live trades'})).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
+    expect(screen.getByRole('region', {name: 'candles'})).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price');
+    expect(screen.getByRole('region', {name: 'candles'})).toHaveTextContent('the period menu sets how much time the chart covers.');
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('The last 1,500 trades, as one circle,');
   });
 });

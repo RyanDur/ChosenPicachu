@@ -44,8 +44,7 @@ describe('pressure', () => {
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pressure'});
-    expect(card).toHaveTextContent('since you arrived');
-    expect(card).toHaveTextContent('1 window ·');
+    expect(card).toHaveTextContent('1 minute · the last 1,500 trades');
     expect(card).toHaveTextContent('2 BTC');
     expect(card).toHaveTextContent('-2 BTC');
   });

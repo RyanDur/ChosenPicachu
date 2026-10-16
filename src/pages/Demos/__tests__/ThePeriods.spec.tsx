@@ -25,7 +25,7 @@ const rowsSpaced = (stepSeconds: number): number[][] =>
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
 const captionOf = (chart: string): string =>
-  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
+  within(screen.getByRole('region', {name: chart})).getByText(/candles? ·/).textContent ?? '';
 
 const drawnCandles = (): number => parseInt(captionOf('candles'), 10);
 
@@ -55,6 +55,19 @@ describe('the chart periods', () => {
     expect(chosen.get('granularity')).toBe('60');
     expect(chosen.get('start')).not.toBeNull();
     expect(chosen.get('end')).not.toBeNull();
+  });
+
+  test('the price line measures its move from the close of its first candle, where its dotted line starts', async () => {
+    await chartsWithHistory(60);
+
+    expect(await within(screen.getByRole('region', {name: 'live trades'})).findByText('+$15.00')).toBeVisible();
+  });
+
+  test('a period with one candle names it in the singular', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(60).slice(0, 1))));
+    render(<TestApp at={demosAt('?tab=charts&charts=candles')}/>);
+
+    expect(await within(await screen.findByRole('region', {name: 'candles'})).findByText('1 candle · 1m each')).toBeVisible();
   });
 
   test('choosing the hour draws its candles from history', async () => {

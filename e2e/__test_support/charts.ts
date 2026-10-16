@@ -1,19 +1,22 @@
 import type {Locator, Page} from '@playwright/test';
 
-const tradeFrame = (id: number, price: number): string => JSON.stringify({
+const tradeFrame = (id: number, price: number, at: number): string => JSON.stringify({
   type: 'match',
   trade_id: id,
   price: `${price}`,
   size: '0.01',
   side: 'buy',
-  time: new Date().toISOString()
+  time: new Date(at).toISOString()
 });
+
+const aMinuteApartEndingNow = (prices: number[]): string[] =>
+  prices.map((price, id) => tradeFrame(id, price, Date.now() - (prices.length - 1 - id) * 60_000));
 
 export const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
   await page.route(/\/products\/.*\/candles/, route =>
     route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
   await page.routeWebSocket(/ws-feed/, socket => {
-    socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
+    socket.onMessage(() => aMinuteApartEndingNow(prices).forEach(frame => socket.send(frame)));
   });
 };
 
@@ -23,7 +26,7 @@ export const feedStillConnecting = async (page: Page, prices: number[]): Promise
     route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
   await page.routeWebSocket(/ws-feed/, async socket => {
     await opened;
-    socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
+    socket.onMessage(() => aMinuteApartEndingNow(prices).forEach(frame => socket.send(frame)));
   });
   return {opens};
 };

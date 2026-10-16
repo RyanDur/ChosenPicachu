@@ -54,7 +54,7 @@ const PriceStory: FC = () =>
             match has, each of the right kind. And its price, its size and its time have to turn into real numbers. What
             passes is a Trade. What fails never reaches the page’s state.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
-            it.</Says>
+            it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -274,7 +274,8 @@ const PressureStory: FC = () =>
           <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says what
             the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.</Says>
           <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for each
-            minute: the size buyers took and the size sellers took. The chart shows the newest 60 minutes.</Says>
+            minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes, from the last 1,500
+            trades.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -402,7 +403,7 @@ const PieStory: FC = () =>
       <Step title="Print each share">
         <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
           <Says>The legend prints each share as a whole percentage, in its slice’s colour. The caption says what the pie is:
-            the size traded on each side since you arrived.</Says>
+            the size traded on each side across the last 1,500 trades.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -422,11 +423,10 @@ const WorkspaceStory: FC = () =>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
       chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
-      pointer. It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it
-      grabbed, up or down, and the neighbour slides into the place it left.</Tell>
+      pointer. It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbour slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
-      and down arrows move it one place and focus stays on it. Delete removes it. When one chart is left it has no
-      grip and no remove button, and Delete does nothing, so the workspace always has a chart.</Tell>
+      and down arrows move it one place and focus stays on it. Delete or Backspace removes it. When one chart is left it has no
+      grip and no remove button, and the key does nothing, so the workspace always has a chart.</Tell>
     <Steps>
       <Step title="Read the charts from the address">
         <Words want="The layout is the trader’s, so it has to come back after a reload and travel in a link.">
@@ -434,7 +434,7 @@ const WorkspaceStory: FC = () =>
             of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
             counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
-            page.</Says>
+            page. An entry may carry its period after a colon, candles:day, and the hour, the default, is left off.</Says>
           <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
             writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a
             button.</Says>
@@ -477,7 +477,7 @@ const WorkspaceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="The arrow keys move a chart, and Delete removes it">
+      <Step title="The arrow keys move a chart, and Delete or Backspace removes it">
         <Words want="The grip and the remove button show only under a pointer. A keyboard works on the chart itself.">
           <Says>Each chart is a link, so Tab reaches it. With a chart in focus, the up and down arrows move it one
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
@@ -492,7 +492,7 @@ const WorkspaceStory: FC = () =>
       <Step title="The last chart can’t be removed">
         <Words want="An empty workspace shows nothing and teaches nothing, so one chart always stays.">
           <Says>The grip and the remove button are drawn only while there is more than one chart. With one chart left
-            there is no grip and no remove button, and Delete does nothing. The + is still there.</Says>
+            there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -519,13 +519,12 @@ export const ChartsTutorial: FC = () => {
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
-      We are going to build this site’s live charts, feature by feature. Here is how to use
-      this page: every card below is a feature, told as a <a className="signpost"
+      We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is the workspace, told as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>. Open a card and you get the plan for that feature and
-      the steps that build it, with the real code from this site, so what you read is what
-      runs. Each chart above opens its own tutorial: click it, or press Enter on it. The links go to MDN, Mozilla’s
+        rel="noreferrer">user story</a>. Each chart above opens its own: click it, or press Enter on it. Open one
+      and you get the plan for that feature and the steps that build it, with the real code from this site, so what
+      you read is what runs. The links go to MDN, Mozilla’s
       web reference, if you want more.
     </p>
     <figure className="feedback">
@@ -538,8 +537,8 @@ export const ChartsTutorial: FC = () => {
     </figure>
     <p className="overview paragraph">
       If you want the exercise, stop here and build the story yourself first. The charts are
-      our interpretation of that; the cards below break the interpretation into features.
-      Open one to see how we built it, or to compare it with yours.
+      my interpretation of that; the stories break the interpretation into features. Open one to see how I built
+      it, or to compare it with yours.
     </p>
     <section aria-label="build the charts yourself" className="build-steps">
       <Stories><WorkspaceStory/></Stories>

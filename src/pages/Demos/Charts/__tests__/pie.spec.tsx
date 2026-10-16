@@ -57,10 +57,10 @@ describe('the pie', () => {
     expect(within(within(card).getByRole('list')).getAllByRole('listitem').map(({textContent}) => textContent)).toEqual(['75% bought', '25% sold']);
   });
 
-  test('the card says the session started when the trader arrived', () => {
+  test('the card says it counts the last 1,500 trades', () => {
     render(<Pie trades={[bought(3)]}/>);
 
-    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('since you arrived');
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('volume by side · the last 1,500 trades');
   });
 
   test('a one-sided session opens both gates fully', () => {

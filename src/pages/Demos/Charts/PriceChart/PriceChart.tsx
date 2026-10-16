@@ -30,11 +30,11 @@ type PriceView = {
 
 const viewOf = (candles: readonly Candle[], lastTrade?: Pick<Trade, 'price'>): Maybe<PriceView> => {
   const [opening] = candles;
-  return maybe(opening).map(({open}) => ({
+  return maybe(opening).map(({close}) => ({
     series: candles.map(candle => ({at: candle.openedAt, price: candle.close})),
     high: Math.max(...candles.map(candle => candle.high)),
     low: Math.min(...candles.map(candle => candle.low)),
-    first: open,
+    first: close,
     last: maybe(lastTrade).map(({price}) => price).orElse(candles[candles.length - 1].close)
   }));
 };
@@ -105,13 +105,11 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <Explainer>
-      This measures the price of one bitcoin in US dollars, live. The line is
-      the closing price of each bucket in the window, seeded from Coinbase&apos;s
-      history, with new trades folding into the newest bucket as they happen.
-      The dotted line marks the first price in the window and the color shows
-      the trend against it. High and low mark the window&apos;s range; the
-      headline is the latest price paid and how far it has moved. The period
-      menu resizes the window — every size stays live.
+      This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the
+      period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line
+      marks the first price in the period, the close of its first candle, and the colour shows the trend against it.
+      High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The
+      period menu sets how much time the chart covers. Every period stays live.
     </Explainer>
   </section>;
 };

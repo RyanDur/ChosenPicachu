@@ -52,7 +52,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       </Axes>
       <figcaption className="chart-caption caption">
         {notEmpty(pressures)
-          ? `${pressures.length} ${pressures.length === 1 ? 'window' : 'windows'} · 1m each · since you arrived`
+          ? `${pressures.length} ${pressures.length === 1 ? 'minute' : 'minutes'} · the last 1,500 trades`
           : 'waiting for the first trade'}
       </figcaption>
     </figure>

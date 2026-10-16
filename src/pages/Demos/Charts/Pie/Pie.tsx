@@ -61,12 +61,12 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       </ul>
       <figcaption className="chart-caption caption">
         {cut.length > 0
-          ? 'the session’s volume by side · since you arrived'
+          ? 'volume by side · the last 1,500 trades'
           : 'waiting for the first trade'}
       </figcaption>
     </figure>
     <Explainer>
-      Everything traded since you arrived, as one circle, split by who came and took each trade. The green slice is the
+      The last 1,500 trades, as one circle, split by who came and took each trade. The green slice is the
       size buyers took from waiting sellers. The orange slice is the size sellers took from waiting buyers. The fetched
       past doesn’t say who took each trade, so the pie starts empty and counts only the trades that arrive while you
       watch.

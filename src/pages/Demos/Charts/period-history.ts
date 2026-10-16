@@ -13,7 +13,7 @@ export const candlesOf = (history: PeriodHistory): readonly Candle[] =>
   history.state === 'arrived' ? history.candles : [];
 
 export const captionFor = (history: PeriodHistory, candles: number, period: Period): string => {
-  if (candles > 0) return `${candles} candles · ${bucketLabel[period]}`;
+  if (candles > 0) return `${candles} ${candles === 1 ? 'candle' : 'candles'} · ${bucketLabel[period]}`;
   switch (history.state) {
     case 'loading':
       return 'loading history';

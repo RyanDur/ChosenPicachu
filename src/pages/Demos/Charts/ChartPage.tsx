@@ -97,7 +97,7 @@ export const ChartPage: FC = () => {
       </figure>
       <p className="overview paragraph">
         If you want the exercise, stop here and build the story yourself first. The chart
-        above is our interpretation of that; the card below tells how we built it. Open it
+        above is my interpretation of that; the card below tells how I built it. Open it
         to see the steps, or to compare them with yours.
       </p>
       <section aria-label={`build the ${name} yourself`} className="build-steps">
