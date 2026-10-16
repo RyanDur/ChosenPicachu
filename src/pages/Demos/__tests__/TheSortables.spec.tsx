@@ -549,6 +549,7 @@ describe('the drag sort tab’s audited words', () => {
   test('should say, once, that drag and drop has no keyboard events, and that a keyboard user needs the same reorders', async () => {
     const recipe = await nativeRecipe();
 
+    expect(within(recipe).getAllByText(/Drag and drop has no keyboard events/)).toHaveLength(1);
     expect(recipe).toHaveTextContent('Drag and drop has no keyboard events, and it does not matter: dragging was never the goal, the order changing is.');
     expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them.');
   });
@@ -566,10 +567,9 @@ describe('the drag sort tab’s audited words', () => {
   });
 
   test('should say, beside the fade step’s CSS, why the card fades and is not hidden', async () => {
-    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
-    const fade = recipeFolds.steps(story)[5];
+    const recipe = await nativeRecipe();
 
-    expect(within(fade).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\/\* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source \*\//);
+    expect(explanation.everyCodeBeside(recipe, /^So the card does not disappear/).join()).toMatch(/\/\* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source \*\//);
   });
 
   test('should say, beside crossingOver, that a sliding item cannot be overtaken', async () => {
