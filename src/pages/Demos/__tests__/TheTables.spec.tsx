@@ -1294,11 +1294,11 @@ describe('the tables tab’s audited words', () => {
     expect(await tabWithEveryStoryOpen('vanilla')).toHaveTextContent(/const untilSettled = [^]*\/\/ the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column/);
   });
 
-  test('should say a column snaps back to where it started, is carried back over it, and changes nothing when dropped there', async () => {
+  test('should say a column snaps back to where it started, is carried back over it, and a drop there changes nothing', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
 
     expect(tab).toHaveTextContent('carrying the column back over where it started must clear it');
-    expect(tab).toHaveTextContent('Carrying the column back over where it started clears the landing, so a drop there changes nothing.');
+    expect(tab).toHaveTextContent('one dispatch runs on pointer up. A drop where it started therefore changes nothing.');
     expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
   });
 
