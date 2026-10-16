@@ -41,11 +41,12 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
 export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Cut on the keypress" dial=<MotionDial name="step-motion"/>>
     <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
-      <Says>Motion off should cost nothing extra: no marks, no waiting. The static walk should
-        be the arrow handler with the slides simply absent.</Says>
+      <Says>Motion off should cost nothing extra: no waiting. The static walk should be the arrow
+        handler with the slides simply absent.</Says>
     </Words>
     <Reveal>
-      <Says>Apply the order and mark nothing; the swap paints on the next frame. With no
+      <Says>Apply the order; the marks still land, and the zero-length animation clears them at once,
+        so the swap paints on the next frame. With no
         animation running there is nothing to pace, so a held arrow walks the column exactly as
         fast as the key repeats.</Says>
       <Codes>

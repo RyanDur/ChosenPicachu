@@ -1302,6 +1302,13 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
   });
 
+  test('should say the static keyboard walk still lands its marks, cleared at once by the zero-length animation', async () => {
+    const tab = await tabWithEveryStoryOpen('react', '&track=keyboard&motion=static');
+
+    expect(tab).toHaveTextContent('Motion off should cost nothing extra: no waiting. The static walk should be the arrow handler with the slides simply absent.');
+    expect(tab).toHaveTextContent('Apply the order; the marks still land, and the zero-length animation clears them at once, so the swap paints on the next frame.');
+  });
+
   test('should say rows have no anchors, and the first and last columns hold the table in place', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&track=keyboard');
 
