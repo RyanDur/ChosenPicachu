@@ -1,4 +1,7 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {Paths} from '@pages/Paths';
+import {DemoTopics} from '../../../types';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
@@ -9,7 +12,9 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
   <Step title="Slide the crossed item into place" dial=<MotionDial name="native-motion"/>>
     <Words want="An eager swap that jumps is hard to follow, but nothing can be animated during the drag with a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture, would swallow the drag’s own events.">
       <Says>The swap happens at once, and the crossed item is drawn where it used to be and slides to its new place on a{' '}
-        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one place over. It is the charts demo’s keyframe turned horizontal, with the
+        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one place over. It is the{' '}
+        <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>charts demo</Link>’s keyframe turned
+        horizontal, with the
         direction as data: --toward flips the sign of one keyframe instead of naming two.</Says>
     </Words>
     <Codes>

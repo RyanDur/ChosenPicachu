@@ -11,8 +11,7 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the result until it is too late to change your mind.">
       <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>: the state
         updates during the drag, the markup renders from it, and the same key finds its new place while the browser still
-        shows the drag image under the pointer. Carrying the item back is only more crossings, so the item can always return to its old place. Inside the neighbour’s outer quarter nothing moves, and an item that is still
-        sliding cannot be overtaken.</Says>
+        shows the drag image under the pointer. Carrying the item back is only more crossings, so the item can always return to its old place. An item that is still sliding cannot be overtaken.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

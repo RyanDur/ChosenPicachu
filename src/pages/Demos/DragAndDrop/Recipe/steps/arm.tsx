@@ -10,7 +10,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
         browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a
         finger pressing down, the handle sets a flag, and the card renders draggable for that gesture only.</Says>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag
-        beginning, and its handler says what move is about to be made. The browser does the rest: the drag image, the cursor and the cancel, with no more code.</Says>
+        beginning, and its handler says what move is about to be made.</Says>
       <Says>The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared
         sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the
         card’s look, not its drag.</Says>

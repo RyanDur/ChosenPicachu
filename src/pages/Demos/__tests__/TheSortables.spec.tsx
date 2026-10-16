@@ -319,7 +319,8 @@ describe('the sortable list demo', () => {
     await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
 
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
-    expect(within(recipe).getByRole('link', {name: /Tables demo/}))
+    const steps = recipeFolds.steps(recipeFolds.story(recipe, 'The user can arrange the list by hand'));
+    expect(within(steps[steps.length - 1]).getByRole('link', {name: /Tables demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=tables'));
   });
 
@@ -383,7 +384,7 @@ describe('the native drag sort tutorial’s words', () => {
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
       'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable for that gesture only.',
-      'Then the browser fires dragstart, the event for a drag beginning, and its handler says what move is about to be made. The browser does the rest: the drag image, the cursor and the cancel, with no more code.'
+      'Then the browser fires dragstart, the event for a drag beginning, and its handler says what move is about to be made.'
     ]));
   });
 
@@ -545,25 +546,24 @@ describe('the drag sort tab’s audited words', () => {
     expect(recipe).toHaveTextContent(motion);
   });
 
-  test('should say, beside crossingOver, that nothing moves inside the quarter and a sliding item cannot be overtaken', async () => {
+  test('should say a keyboard cannot reorder by drag because a drag starts only from a pointer', async () => {
     const recipe = await nativeRecipe();
 
-    expect(explanation.runTelling(recipe, /^Commit the reorder inside the dragover/)).toHaveTextContent('Inside the neighbour’s outer quarter nothing moves, and an item that is still sliding cannot be overtaken.');
-    expect(explanation.runTelling(recipe, /^Nothing has to be measured ahead of time/)).not.toHaveTextContent('an item that is still sliding');
+    expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them: a drag starts only from a pointer.');
   });
 
-  test('should end the by-hand story pointing at the Tables demo, which builds the drag from pointer events', async () => {
+  test('should link the charts demo whose keyframe the slide turns horizontal', async () => {
     const recipe = await nativeRecipe();
 
-    expect(within(recipe).getByRole('link', {name: 'Tables demo'})).toHaveAttribute('href', expect.stringContaining('tab=tables'));
+    expect(explanation.runTelling(recipe, /^The swap happens at once/)).toHaveTextContent('It is the charts demo’s keyframe turned horizontal');
+    expect(within(explanation.runTelling(recipe, /^The swap happens at once/)).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
   });
 
-  test('should not close its steps on a sentence that only restates them', async () => {
+  test('should say, beside crossingOver, that a sliding item cannot be overtaken', async () => {
     const recipe = await nativeRecipe();
 
-    expect(recipe).not.toHaveTextContent('The swap is already done when the slide starts');
-    expect(recipe).not.toHaveTextContent('Nothing in this step touches drag and drop');
-    expect(recipe).not.toHaveTextContent('the glide only shows the reader what happened');
-    expect(screen.getByRole('region', {name: 'Drag sort'})).not.toHaveTextContent('Everything after this point is layered onto that one choice.');
+    expect(explanation.runTelling(recipe, /^Commit the reorder inside the dragover/)).toHaveTextContent('An item that is still sliding cannot be overtaken.');
+    expect(explanation.everyCodeBeside(recipe, /^Commit the reorder inside the dragover/).join()).toMatch(/export const crossingOver/);
   });
+
 });
