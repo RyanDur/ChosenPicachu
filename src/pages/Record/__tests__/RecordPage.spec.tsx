@@ -110,6 +110,11 @@ describe('the record', () => {
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
+  test('should open the concert on the principles, then say the web worked by them before they were written', () => {
+    expect(screen.getByText(/^In 2007 the W3C wrote down how HTML should grow/))
+      .toHaveTextContent(/for the same purpose\.” The principles were written late\. The web had worked by them since 1994, and the moments above show how: when one language could not yet do a job, another did it, and the standard later adopted what had spread\.$/);
+  });
+
   test('should keep every source the concert links to on the research shelf', () => {
     const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
       .map(work => work.getAttribute('href'));

@@ -9,9 +9,8 @@ export const Concert: FC = () =>
       the rule this whole record obeys: <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“When a practice is already widespread among authors, consider adopting it rather than forbidding it or inventing something new.”</a> Another
       says the same about technology: <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“If there is already a widely used and implemented technology covering particular use cases”</a>,
       then <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider specifying that technology in preference to inventing something new for the same purpose.”</a> The
-      principles were written late. The moments above show the web working that way from 1994, before anyone had put
-      it in a document: when one language could not yet do a job, another did it, and the standard caught up
-      afterwards.</p>
+      principles were written late. The web had worked by them since 1994, and the moments above show how: when one
+      language could not yet do a job, another did it, and the standard later adopted what had spread.</p>
     <p className="paragraph muted-ink hyphenated">The first language to cover for the others was HTML. Browsers invented tags faster than any specification could
       define them, and the first HTML standard, <a className="signpost" href="https://www.rfc-editor.org/rfc/rfc1866">RFC 1866</a> in
       November 1995, wrote down <a className="signpost" href="https://www.rfc-editor.org/rfc/rfc1866">“a set of features that roughly corresponds to the capabilities of HTML in common use prior to June 1994”</a>.
