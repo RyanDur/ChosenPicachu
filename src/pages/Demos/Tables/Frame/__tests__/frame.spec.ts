@@ -38,7 +38,7 @@ describe('the frame table', () => {
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
   });
 
-  it('reset returns the rows to the order before the sort and withdraws the announcement', async () => {
+  it('reset ends the sort and withdraws the announcement', async () => {
     vanillaFrame.stand();
 
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));

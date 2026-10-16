@@ -170,15 +170,6 @@ describe('columns by hand', () => {
     windows.forEach(window => expect(rowOf(window).cells[2].classList).toContain('carried'));
   });
 
-  test('the last column holds the table in place and cannot be lifted', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-
-    liftColumn('change');
-
-    expect(carried()).toEqual([]);
-    expect(header('change').classList).not.toContain('carried');
-  });
-
   test('a dropped column lands as itself', () => {
     seat(EagerTable, {origin: 'hide', motion: 'static'});
     liftColumn('buys');
@@ -312,6 +303,9 @@ describe('columns by hand', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     liftColumn('window');
+    expect(carried()).toEqual([]);
+
+    liftColumn('change');
     expect(carried()).toEqual([]);
 
     liftColumn('buys');

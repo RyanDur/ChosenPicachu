@@ -1265,10 +1265,12 @@ describe('the tables tab’s audited words', () => {
   });
 
   test.each([
-    ['react', 'sort'], ['vanilla', 'sort'], ['react', 'menu'], ['vanilla', 'menu'], ['react', 'resize'], ['vanilla', 'resize']
-  ] as const)('should spell the whole tab’s prose the British way, in the %s world with the %s tutorial', async (world, tut) => {
+    ['react', 'tut=sort'], ['vanilla', 'tut=sort'],
+    ['react', 'tut=sort&track=keyboard&pace=lazy&origin=keep&motion=static'], ['vanilla', 'tut=sort&track=keyboard&pace=lazy&origin=keep&motion=static'],
+    ['react', 'tut=menu'], ['vanilla', 'tut=menu'], ['react', 'tut=resize'], ['vanilla', 'tut=resize']
+  ] as const)('should spell the whole tab’s prose the British way, in the %s world with %s', async (world, choices) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}&tut=${tut}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
+    render(<TestApp at={demosAt(`?tab=tables&world=${world}&${choices}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const tab = await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders);
     await within(tab).findAllByRole('heading', {name: /^The trader can/});
@@ -1288,7 +1290,7 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent(clear);
   });
 
-  test('should say where a column started, not where it sits', async () => {
+  test('should say a column snaps back to where it started, drifts back over it, and changes nothing when dropped there', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
 
     expect(tab).toHaveTextContent('drifting back over where it started must clear it');
