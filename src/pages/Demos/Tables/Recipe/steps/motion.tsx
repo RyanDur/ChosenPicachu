@@ -49,8 +49,8 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
           the stylesheet, and settling is a dispatch the element makes when its keyframe ends.
           The static table wears the same marks and classes; the stylesheet gives them an animation
           of zero length, so the marks clear on the same animationend and nothing visibly moves.</Says>
-        : <Says>The strike, the walk and the drop set the cells’ classes, the slides are keyframes in
-          the stylesheet, and the cells clear their own classes when the keyframe ends. The static build sets the same classes; the stylesheet gives them an
+        : <Says>The strike, the walk and the drop set the cells’ classes, and the slides are keyframes in
+          the stylesheet. The static build sets the same classes; the stylesheet gives them an
           animation of zero length, so they clear on the same animationend and nothing visibly moves.</Says>}
       <Says>Rows are the same motion turned vertical: a shoved row slides up or down by the
         carried row’s height, and the dropped row settles from the drop height.</Says>

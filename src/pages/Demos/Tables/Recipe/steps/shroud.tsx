@@ -38,11 +38,12 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         numbers every carried cell wears as custom properties, {whatACustomPropertyIs}: the seat, where the grab box sits
         against where the column rests in the order as it stands now, and the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
-        changes, the gap moves, and the seat number changes by the same width the other way, so the carried
+        changes, the gap moves by the crossed neighbour’s width, and the seat number changes by that width the
+        other way, so the carried
         cells stay under the pointer. The stylesheet adds the two and does
         the moving, and only the hide sheet adds them: the same cells wear the same numbers
-        under keep and never leave their seat. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
-        yet stays in its seat.</Says>
+        under keep and never leave their place. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
+        yet stays in its place.</Says>
       {world === 'react'
         ? <>
           <Says>There is no flag anywhere in the table: each cell asks the selectors whether its

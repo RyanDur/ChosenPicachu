@@ -413,7 +413,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Carry the real thing[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('two numbers every carried cell wears as custom properties, values set by name on the cell and read back in the stylesheet with var(): the seat,');
-    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its seat.');
+    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its place.');
   });
 
   test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
@@ -1282,7 +1282,7 @@ describe('the tables tab’s audited words', () => {
 
   test.each([
     ['react', 'a keyframe puts the cell where it came from on the first frame and lets it slide into its slot.', 'when the keyframe ends, the element gets its own animationend and dispatches that it has settled'],
-    ['vanilla', 'so the same call that reorders them sets a class on each one, shoved toward the start or the end, and a custom property with the carried column’s width from the survey.', 'when the keyframe ends, the first cell’s animationend removes the class from every cell in the column']
+    ['vanilla', 'The strike, the walk and the drop set the cells’ classes, and the slides are keyframes in the stylesheet. The static build', 'when the keyframe ends, the first cell’s animationend removes the class from every cell in the column']
   ] as const)('should tell the settle the way the %s build does it', async (world, mark, clear) => {
     const tab = await tabWithEveryStoryOpen(world);
 
@@ -1293,7 +1293,7 @@ describe('the tables tab’s audited words', () => {
   test('should say a column snaps back to where it started, drifts back over it, and changes nothing when dropped there', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&pace=lazy');
 
-    expect(tab).toHaveTextContent('drifting back over where it started must clear it');
+    expect(tab).toHaveTextContent('carrying the column back over where it started must clear it');
     expect(tab).toHaveTextContent('so a drop where it started changes nothing.');
     expect(tab).toHaveTextContent('A column that snaps back to where it started on release');
   });
@@ -1331,7 +1331,8 @@ describe('the tables tab’s audited words', () => {
     const tab = await tabWithEveryStoryOpen('react');
 
     expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the pointer has moved since.');
-    expect(tab).toHaveTextContent('the gap moves, and the seat number changes by the same width the other way, so the carried cells stay under the pointer.');
+    expect(tab).toHaveTextContent('the gap moves by the crossed neighbour’s width, and the seat number changes by that width the other way, so the carried cells stay under the pointer.');
+    expect(tab).toHaveTextContent('under keep and never leave their place.');
     expect(tab).toHaveTextContent('the same offset the drag already holds');
     expect(tab).toHaveTextContent('a column moved to a position,');
     expect(tab).toHaveTextContent('the standing it left, the rows’ order as shown, ranked while a sort holds.');

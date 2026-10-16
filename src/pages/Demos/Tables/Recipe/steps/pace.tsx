@@ -47,11 +47,11 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
         {world === 'react'
           ? <Snippet label="HTML" lines={[
             plain('<DraggableColumn column="trades">trades ...</DraggableColumn>'),
-            aside('{/* same key, new seat: React moves the node, not a copy */}')
+            aside('{/* same key, new place: React moves the node, not a copy */}')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'const reconcileColumns = '),
-            aside('// the same cells, new seats: the reconcile moves the node, not a copy')
+            aside('// the same cells, new places: the reconcile moves the node, not a copy')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const eagerTravel'),
@@ -66,7 +66,7 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the
         release dispatches it. The landing is kept in the drag slice, never in the order:
-        drifting back over where it started must clear it, and release and cancel must resolve it the same
+        carrying the column back over where it started must clear it, and release and cancel must resolve it the same
         way.</Says>
     </Words>
     <Reveal>
