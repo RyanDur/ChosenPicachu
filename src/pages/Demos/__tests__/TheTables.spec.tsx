@@ -466,7 +466,7 @@ describe('the tables demo', () => {
       await feedIsSubscribed(feed);
 
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
-      expect(brought).toContain('station-5');
+      await waitFor(() => expect(brought).toContain('station-5'));
     } finally {
       Element.prototype.scrollIntoView = () => undefined;
     }
