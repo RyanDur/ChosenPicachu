@@ -37,6 +37,12 @@ describe('pressure', () => {
     expect(shapes[1].soldHeight).toBe(0);
   });
 
+  test('should explain the chart as counting the trades that arrive while the page is open', () => {
+    render(<Pressure trades={[]}/>);
+
+    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('counts only the trades that arrive while the page is open.');
+  });
+
   test('the card counts the minutes on show in the plural', () => {
     render(<Pressure trades={[
       bought(2),

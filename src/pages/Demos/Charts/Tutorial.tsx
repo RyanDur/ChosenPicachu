@@ -309,7 +309,7 @@ const PressureStory: FC = () =>
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
             stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
-          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The caption says how many minutes are on show, from the last 1,500
+          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The caption says how many minutes are on show, up to the last 1,500
             trades.</Says>
         </Words>
         <Codes>

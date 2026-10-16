@@ -468,7 +468,7 @@ describe('a list of charts', () => {
 
       expect(story).toHaveTextContent('So the chart counts only the trades that arrive while the page is open, and the page keeps the newest 1,500 of those.');
       expect(story).toHaveTextContent('The chart shows up to 60 minutes.');
-      expect(story).toHaveTextContent('The caption says how many minutes are on show, from the last 1,500 trades.');
+      expect(story).toHaveTextContent('The caption says how many minutes are on show, up to the last 1,500 trades.');
     });
 
     test('should not say the pressure count began when you arrived', async () => {
