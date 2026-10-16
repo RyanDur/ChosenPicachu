@@ -251,7 +251,7 @@ describe('the banner tutorial’s first story', () => {
     expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*padding: 0;/);
   });
 
-  test('should open the second story at its slide step from step 3’s link, keeping the side and align chosen', async () => {
+  test('should open the second story from step 3’s slide-step link, keeping the side and align chosen', async () => {
     render(<TestApp at={demosAt('?tab=z-index&news=top&side=bottom&align=right')}/>);
     const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
     const placing = recipeFolds.steps(recipeFolds.story(tutorial, story))[2];

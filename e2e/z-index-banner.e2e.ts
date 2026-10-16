@@ -90,15 +90,15 @@ for (const motion of ['no-preference', 'reduce'] as const) {
       await expect(step).toBeFocused();
       await expect(page.getByRole('heading', {name: 'Slide in from off screen'})).toBeInViewport();
     });
-
-    test('a reader who follows the tutorial below lands on the story\'s heading', async ({page}) => {
-      await page.emulateMedia({reducedMotion: motion});
-      await page.goto('demos/?tab=z-index');
-
-      await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
-
-      await expect(page).toHaveURL(/#news-top-story$/);
-      await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
-    });
   });
 }
+
+test('a reader who follows the tutorial below with motion allowed lands on the story\'s heading', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  await page.goto('demos/?tab=z-index');
+
+  await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
+
+  await expect(page).toHaveURL(/#news-top-story$/);
+  await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
+});

@@ -8,18 +8,33 @@ const framesBeforeLandingAnyway = 120;
 
 // a fold's ::details-content opens a few frames after its open attribute and grows the page under a target that
 // is already laid out, and Chromium lists no animation for it, so the landing waits for the page to stop growing
-type Watch = {readonly last: string; readonly held: number; readonly waited: number};
+type Measured = {readonly top: number; readonly pageHeight: number; readonly visible: boolean};
+type Watch = {readonly last?: Measured; readonly held: number; readonly waited: number};
 
-const watching: Watch = {last: '', held: 0, waited: 0};
+const watching: Watch = {held: 0, waited: 0};
 
-const whenItHoldsStill = (target: Element, land: () => void, {last, held, waited}: Watch = watching): void => {
+const unmoved = (now: Measured, last?: Measured): boolean => last?.top === now.top && last.pageHeight === now.pageHeight;
+
+const watched = (watch: Watch, now: Measured): Watch | 'land' => {
+  const held = now.visible && unmoved(now, watch.last) ? watch.held + 1 : 0;
+  return held >= framesHeldStill || watch.waited >= framesBeforeLandingAnyway
+    ? 'land'
+    : {last: now, held, waited: watch.waited + 1};
+};
+
+const measured = (target: Element): Measured => ({
+  top: target.getBoundingClientRect().top + window.scrollY,
+  pageHeight: document.documentElement.scrollHeight,
+  visible: target.checkVisibility()
+});
+
+const whenItHoldsStill = (target: Element, land: () => void, watch: Watch = watching): void => {
   requestAnimationFrame(() => {
-    const now = `${target.getBoundingClientRect().top} ${document.documentElement.scrollHeight}`;
-    const stillFor = target.checkVisibility() && now === last ? held + 1 : 0;
-    if (stillFor >= framesHeldStill || waited >= framesBeforeLandingAnyway) {
+    const next = watched(watch, measured(target));
+    if (next === 'land') {
       land();
     } else {
-      whenItHoldsStill(target, land, {last: now, held: stillFor, waited: waited + 1});
+      whenItHoldsStill(target, land, next);
     }
   });
 };
