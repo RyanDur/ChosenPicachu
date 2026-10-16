@@ -39,7 +39,7 @@ describe('why the popover wins', () => {
     const run = within(part).getByText(/The menu’s own sheet places it/);
 
     expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
-    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so that menu is left out; the chooser’s list in What else forms a stacking context names its own\./);
+    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so that menu is left out; card one’s list in What else forms a stacking context names its own\./);
     expect(within(run).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
   });
 

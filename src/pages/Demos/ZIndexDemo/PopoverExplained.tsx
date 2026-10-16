@@ -70,7 +70,7 @@ export const PopoverExplained: FC = () =>
           browser has no position-area, it centres the menu on the screen.
           In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
           The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is not a popover gets no anchor from the button
-          that opens it, so that menu is left out; the chooser’s list
+          that opens it, so that menu is left out; card one’s list
           in <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> names
           its own.</p>
         <Snippet label="CSS" lines={[

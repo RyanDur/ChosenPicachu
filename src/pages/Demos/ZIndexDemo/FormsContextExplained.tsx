@@ -38,8 +38,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph">The list is placed by <a className="signpost" href={`${mdn}CSS_anchor_positioning`}>anchor
           positioning</a>: the Sort by button names itself <code>--sort-by</code>, <code>position-anchor</code> on the list picks that
-          button, <code>anchor(end)</code> puts the list’s top at the button’s bottom, and <code>anchor(start)</code> lines the
-          list’s start edge up with the button’s. Nothing between the list and the card is positioned.</p>
+          button, <code>anchor(end)</code> puts the list’s top at the button’s bottom, and <code>anchor(start)</code> lines the list’s start edge, the side a line of text begins
+          on, up with the button’s. Nothing between the list and the card is positioned.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.old-way-card .button {'), gap,
           ...unit(zIndexCss, '.sort-choices {\n        position-anchor')

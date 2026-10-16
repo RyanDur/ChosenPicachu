@@ -114,7 +114,7 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
     const run = explanation.runTelling(part, /^The list is placed by/);
 
-    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, position-anchor on the list picks that button, anchor(end) puts the list’s top at the button’s bottom, and anchor(start) lines the list’s start edge up with the button’s. Nothing between the list and the card is positioned.');
+    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, position-anchor on the list picks that button, anchor(end) puts the list’s top at the button’s bottom, and anchor(start) lines the list’s start edge, the side a line of text begins on, up with the button’s. Nothing between the list and the card is positioned.');
     expect(within(run).getByRole('link', {name: 'anchor positioning'})).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
     expect(explanation.everyCodeBeside(part, /^The list is placed by/).join()).toMatch(/\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;\s*inset-block-start: anchor\(end\);\s*inset-inline-start: anchor\(start\);/);
     expect(outOfReadingOrder([explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/), run])).toEqual([]);
