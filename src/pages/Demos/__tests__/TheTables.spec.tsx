@@ -1291,7 +1291,7 @@ describe('the tables tab’s audited words', () => {
   });
 
   test('should say, beside the vanilla settle code, that the first cell’s animationend clears the column', async () => {
-    expect(await tabWithEveryStoryOpen('vanilla')).toHaveTextContent('// the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column');
+    expect(await tabWithEveryStoryOpen('vanilla')).toHaveTextContent(/const untilSettled = [^]*\/\/ the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column/);
   });
 
   test('should say a column snaps back to where it started, is carried back over it, and changes nothing when dropped there', async () => {
