@@ -6,7 +6,7 @@ const after = (frames: readonly Measured[]): Watch | 'land' =>
   frames.reduce<Watch | 'land'>((watch, frame) => watch === 'land' ? watch : watched(watch, frame), watching);
 
 describe('the landing on a fragment', () => {
-  test('should land once the target has held its place on the page for two frames, wherever the window has scrolled', () => {
+  test('should land once the target has held its place on the page for two frames', () => {
     expect(after([at(4530, 9000), at(4530, 9000)])).not.toEqual('land');
     expect(after([at(4530, 9000), at(4530, 9000), at(4530, 9000)])).toEqual('land');
   });
@@ -15,6 +15,12 @@ describe('the landing on a fragment', () => {
     const growing = Array.from({length: 60}, (_, frame) => at(4530, 1000 + frame * 50));
 
     expect(after(growing)).not.toEqual('land');
+  });
+
+  test('should keep waiting while the target still moves on a page whose height holds', () => {
+    const moving = Array.from({length: 60}, (_, frame) => at(4530 + frame * 10, 9000));
+
+    expect(after(moving)).not.toEqual('land');
   });
 
   test('should keep waiting while the target is hidden, however still it is', () => {
