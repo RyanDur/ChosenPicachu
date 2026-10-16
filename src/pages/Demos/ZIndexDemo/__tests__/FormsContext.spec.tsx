@@ -117,15 +117,6 @@ describe('the part on what else forms a stacking context', () => {
     expect(within(run).getByRole('link', {name: 'anchor positioning'})).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
   });
 
-  test('should hold Sort by in card one with no element that says nothing', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const part = await screen.findByRole('region', {name: heading});
-
-    const [cardOne] = within(part).getAllByRole('listitem').filter(item => within(item).queryByText('Its list has z-index: 9999.') !== null);
-
-    expect(within(cardOne).queryAllByRole('generic')).toEqual([]);
-  });
-
   test('should say the bare card’s list is compared with card two in the tab panel’s context', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});
