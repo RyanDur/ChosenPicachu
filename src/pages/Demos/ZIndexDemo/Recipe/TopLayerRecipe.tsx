@@ -1,9 +1,13 @@
 import {FC} from 'react';
+import {Link, useSearchParams} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {Sample} from '../../Recipe/sample';
+import {storyOpenedIn} from '../../Recipe/Story';
+import {storyAnchor} from '../../Recipe/story-anchor';
+import {multipleStory} from './MultipleRecipe';
 import {AlignDial, SideDial} from '../../Controls';
 import {fixedBannerLosesHeading, popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
@@ -37,6 +41,7 @@ export const topLayerStory = {param: 'news', id: 'top'} as const;
 
 export const TopLayerRecipe: FC = () => {
   const {side = 'top', align = 'center'} = useSearchParamsObject({side: sideParam, align: alignParam});
+  const [searchParams] = useSearchParams();
 
   return <Story {...topLayerStory}
     can="The user sees the news above everything"
@@ -84,8 +89,9 @@ export const TopLayerRecipe: FC = () => {
             It takes only the room its content needs, and the auto margins share the rest, which centres it in the
             window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
             and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
-          <Says>That stylesheet also gives a popover overflow: auto, which would clip the banners as they slide, so the
-            panel sets overflow: visible.</Says>
+          <Says>The rule’s overflow: visible is for the slide, which{' '}
+            <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: storyAnchor(multipleStory)}}><cite>The
+              user can have multiple banners</cite></Link> explains in its step “Slide in from off screen”.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that edge. middle and center set auto again: they change nothing, and
             they are there so the choice shows in the class names.</Says>

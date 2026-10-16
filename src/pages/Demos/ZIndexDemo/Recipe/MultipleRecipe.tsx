@@ -87,10 +87,12 @@ const SettleStep: FC = () => (
   </Step>
 );
 
+export const multipleStory = {param: 'news', id: 'many'} as const;
+
 export const MultipleRecipe: FC = () => {
   const {enter = 'above', stack = 'down'} = useSearchParamsObject({enter: enterParam, stack: stackParam});
 
-  return <Story param="news" id="many"
+  return <Story {...multipleStory}
     can="The user can have multiple banners"
     soThat="no message waits for another to leave">
     <Tell>More than one message can be up at once, so the banners stack. A banner arrives in two moves: the stack
