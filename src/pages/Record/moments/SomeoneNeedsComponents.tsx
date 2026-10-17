@@ -10,15 +10,12 @@ export const SomeoneNeedsComponents: FC = () =>
       them first.</>}>
     <p className="paragraph muted-ink hyphenated">JavaScript answered. Components arrived in script, and the single-page
       application moved the whole document there with them: the server sent an empty body
-      and a bundle, and until the script ran there was no page. The livelier web had quietly
-      inverted its own premise: the document no longer carried the application, the
+      and a bundle, and until the script ran there was no page. The single-page application inverted the premise: the document no longer carried the application, the
       application emitted the document.</p>
     <p className="paragraph muted-ink hyphenated">Style followed structure into script as CSS-in-JS, the term arriving with{' '}
       <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html">Christopher
-        Chedeau’s 2014 talk</a> cataloguing CSS-at-scale problems at Facebook. The web had run
-      this experiment before: Netscape 4 rendering style by translating it into script,
-      JavaScript Style Sheets’ second coming, this time with the industry’s weight behind
-      it.</p>
+        Chedeau’s 2014 talk</a> cataloguing CSS-at-scale problems at Facebook. The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4
+      rendered style by translating it into script; this time the industry’s weight was behind it.</p>
     <p className="paragraph muted-ink hyphenated">The answer had a price: blank first paints, fragile crawls, a document that
       cannot be read without executing a program. And the document’s own habits had to be
       rebuilt by hand: links became components, the back button became state, scroll
@@ -30,5 +27,5 @@ export const SomeoneNeedsComponents: FC = () =>
       styles a boundary to stay inside,{' '}
     <a className="signpost" href="https://html.spec.whatwg.org/multipage/custom-elements.html">custom elements</a> gave
       components a home in markup itself, and @scope is the newest arrival in the same
-      direction. The lesson was not that script was wrong; it was that the need was real.</p>
+      direction.</p>
   </Moment>;

@@ -8,8 +8,8 @@ export const PresentationLeavesHome: FC = () =>
       <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html">drafted Cascading HTML
         Style Sheets</a>, encouraged by Dave Raggett, who had realized HTML should{' '}
       <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">never become a
-        page-description language</a>. Presentation was separated from structure by decision, not
-      by accident.</>}>
+        page-description language</a>. Lie separated presentation from structure on
+      purpose.</>}>
     <p className="paragraph muted-ink hyphenated">Style existed before CSS did. Berners-Lee’s NeXT browser had style sheets whose
       syntax he kept private, considering presentation each browser’s own business; Pei
       Wei’s Viola carried its own style language by 1992; Robert Raisch of O’Reilly had
@@ -33,6 +33,6 @@ export const PresentationLeavesHome: FC = () =>
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“combined, or ‘cascaded,’ in some way”</a>.</p>
     <p className="paragraph muted-ink hyphenated">The same year, Berners-Lee founded the W3C at MIT: governments, businesses,
       universities, and individuals writing recommendations to keep the browsers’ behavior
-      converging. Presentation got its own language and its own institution in the same
-      breath.</p>
+      converging. Presentation got its own language the same year the
+      web got its own standards body, the W3C.</p>
   </Moment>;

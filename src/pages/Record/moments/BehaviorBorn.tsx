@@ -41,7 +41,6 @@ export const BehaviorBorn: FC = () =>
       relationship stands: Java is to JavaScript as ham is to hamster.</p>
     <p className="paragraph muted-ink hyphenated">He never romanticized it. Years later he counted himself among those who curse
       it, calling it <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“a quickie love-child of C and Self”</a> and reaching
-      for Dr. Johnson: <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“the part that is good is not original, and the part that is original is not good.”</a>
-      And yet: <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“JS beat Java on the client.”</a> The complementary language
-      outlived the thing it was built to complement.</p>
+      for Dr. Johnson: <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“the part that is good is not original, and the part that is original is not good.”</a>{' '}
+      And yet: <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“JS beat Java on the client.”</a></p>
   </Moment>;

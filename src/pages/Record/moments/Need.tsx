@@ -21,15 +21,15 @@ export const Need: FC = () =>
       He built it, he admits, before he knew the idea already had a name: hypertext.</p>
     <p className="paragraph muted-ink hyphenated">The proposal’s argument is against trees. CERNDOC, the Unix file system, VMS/HELP:
       every hierarchy forced knowledge into one shape and could not model how work really
-      connected. His alternative was a diagram anyone could draw: circles and arrows, where
+      connected. His alternative was a diagram anyone could draw: circles and arrows, where{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“circles and arrows can stand for anything”</a>: call the circles
       nodes and the arrows links. Tellingly, the first “web” in the document describes the
       people, not the software: the organisation’s real structure was already{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“a multiply connected ‘web’”</a>; the system just needed to match
       it.</p>
     <p className="paragraph muted-ink hyphenated">Nothing in it said World Wide Web; the only name in the air was “Mesh.”
-      Berners-Lee’s manager, Mike Sendall, pencilled onto the cover the most quoted margin
-      note in computing: <a className="signpost" href="https://worldwideweb.cern.ch/history/">“Vague, but exciting.”</a> The conclusion asked
+      Berners-Lee’s manager, Mike Sendall, pencilled onto the cover a note quoted
+      ever since: <a className="signpost" href="https://worldwideweb.cern.ch/history/">“Vague, but exciting.”</a> The conclusion asked
       for the opposite of excitement: a universal linked information system in which{' '}
     <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">“generality and portability are more important than fancy graphics techniques”</a>.</p>
   </Moment>;

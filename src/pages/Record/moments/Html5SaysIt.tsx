@@ -33,6 +33,6 @@ export const Html5SaysIt: FC = () =>
       collapsed to fifteen characters because its remaining job was triggering standards
       mode. Even Berners-Lee’s 1991 wish for{' '}
     <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">“a
-      nestable &lt;SECTION&gt;..&lt;/SECTION&gt; element”</a>
-      resurfaced as the section element. Paved cowpaths, twenty-three years long.</p>
+      nestable &lt;SECTION&gt;..&lt;/SECTION&gt; element”</a>{' '}
+      resurfaced as the section element, twenty-three years later.</p>
   </Moment>;

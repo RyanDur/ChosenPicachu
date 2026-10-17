@@ -6,8 +6,7 @@ export const BrowsersAgree: FC = () =>
   <Moment of={moments.browsersAgree}
     tells={<>The specifications ran ahead of the browsers, and{' '}
       <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm">the Acid
-        Test</a> drew the line pixel by pixel; in the beginning, most browsers failed it. The
-      catching-up was not a release. It was a decade of feedback: tests, hacks, and public
+        Test</a> drew the line pixel by pixel; in the beginning, most browsers failed it. The catching-up took a decade of feedback: tests, hacks, and public
       scoreboards.</>}>
     <p className="paragraph muted-ink hyphenated">The specifications were ahead of everyone. CSS2 came in May
       1998 with z-index, media types, positioning, bidirectional text, and aural style
@@ -15,9 +14,8 @@ export const BrowsersAgree: FC = () =>
     <p className="paragraph muted-ink hyphenated">The feedback ran through tests. Eric Meyer’s private compatibility
       suite became the official CSS1 Test Suite; Tim Boland of NIST mined the specification
       for <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html">more than five hundred testable statements</a>; the credits
-      list a young L. David Baron and a young Ian Hickson, and one line lands with special
-      irony: <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html">“Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”</a>:
-      the same Chris Wilson whose IE3 team had shipped without a box model. Opera 3.5
+      list a young L. David Baron and a young Ian Hickson, and one line thanks <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html">“Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”</a>:
+      the same Chris Wilson whose IE3 team had shipped with little of the box model. Opera 3.5
       earned the era’s driest compliment from Lie and Bos: its developers{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“found the time to test their implementation before shipping it”</a>.</p>
     <p className="paragraph muted-ink hyphenated">Inside that suite sits Todd Fahrner’s box model “acid test”: a deliberately

@@ -20,6 +20,5 @@ export const DocumentComesBack: FC = () =>
       announced in 2020 and stable by 2023, moved rendering back across the wire
       entirely.</p>
     <p className="paragraph muted-ink hyphenated">Every step is the same sentence: structure and content travel as HTML, behavior
-      arrives as script, presentation stays declarative. The pendulum swings on where the
-      work happens; the three responsibilities do not move.</p>
+      arrives as script, presentation stays declarative. What changed each time was where the rendering happens; the three responsibilities did not move.</p>
   </Moment>;

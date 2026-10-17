@@ -29,6 +29,41 @@ describe('the record', () => {
     expect(seam).toHaveTextContent('The tables are built twice: once in plain HTML, CSS and JavaScript with no framework, and once in React on the same three. I keep both so the line between the platform and the framework stays visible. The history above is why that line matters: what a framework had to do keeps moving into the platform.');
   });
 
+  test.each([
+    'Berners-Lee’s manager, Mike Sendall, pencilled onto the cover a note quoted ever since: “Vague, but exciting.”',
+    'It was later renamed Nexus, and its central expectation failed: people, it turned out, were quite happy to write HTML by hand.',
+    'Lie separated presentation from structure on purpose.',
+    'Presentation got its own language the same year the web got its own standards body, the W3C.',
+    'The catching-up took a decade of feedback: tests, hacks, and public scoreboards.',
+    'and one line thanks “Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”: the same Chris Wilson whose IE3 team had shipped with little of the box model.',
+    'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
+    'The garden showed the other side: hold the structure constant and the design can be replaced any number of times without a change to the markup.',
+    'The browsers converged once the people writing the specification were the people shipping it.',
+    'The posture from 1994, the specification following the field, had become the rule.',
+    'Ajax let a page fetch data and rewrite itself without reloading.',
+    'John Resig’s jQuery stripped the repetition out in 2006: events, animation, Ajax calls, and DOM crawling wrapped as one API that hid the differences between the browsers then installed.',
+    'The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
+    'The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by translating it into script; this time the industry’s weight was behind it.',
+    'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
+    'What changed each time was where the rendering happens; the three responsibilities did not move.',
+    'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.',
+    'The markup of the time said it plainly:',
+    'circles and arrows, where “circles and arrows can stand for anything”',
+    'the part that is original is not good.” And yet: “JS beat Java on the client.”'
+  ])('should say plainly, words and links together: %s', sentence => {
+    expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
+  });
+
+  test.each([
+    'The complementary language outlived the thing it was built to complement.',
+    'The lesson was not that script was wrong',
+    'That feedback loop built an ecosystem',
+    'Paved cowpaths',
+    'in the same breath'
+  ])('should leave out the closer "%s"', closer => {
+    expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(closer);
+  });
+
   test('the record says why the languages arrived', () => {
     const record = within(screen.getByRole('region', {name: 'How the web got its languages'}));
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
@@ -72,7 +107,7 @@ describe('the record', () => {
     expect(timeline.getAllByText('the fuller story')).toHaveLength(21);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /peace treaty/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));

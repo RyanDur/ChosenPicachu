@@ -10,7 +10,7 @@ export const NeedOutrunsStandards: FC = () =>
       the dialects</a>: vendor tags on every side, and CSS itself{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">run as
       JavaScript</a>. The same page looked broken in the other browser.</>}>
-    <p className="paragraph muted-ink hyphenated">Mosaic-era markup said it plainly:</p>
+    <p className="paragraph muted-ink hyphenated">The markup of the time said it plainly:</p>
     <pre className="period-markup card rounded-corners hairline-edged caption"><code>{'<MULTICOL COLS="3" GUTTER="25">\n  <P><FONT SIZE="4" COLOR="RED">This would be some font broken up into columns</FONT></P>\n</MULTICOL>'}</code></pre>
     <p className="paragraph muted-ink hyphenated">Layout and paint, written as structure. Netscape extended
       HTML with presentational, unstandardized tags (multicol, layer, the dreaded blink)

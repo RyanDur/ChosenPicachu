@@ -8,7 +8,8 @@ export const BrowsersTakePen: FC = () =>
       <a className="signpost" href="https://whatwg.org/position-paper">put a counter-proposal in writing</a>:
       evolve HTML, backwards compatible. The W3C voted it down and held course for XML
       replacements, so the browser makers founded the WHATWG and wrote the specification they
-      were implementing. Consistency arrived when the implementors held the pen together.</>}>
+      were implementing. The browsers converged once the people writing the
+      specification were the people shipping it.</>}>
     <p className="paragraph muted-ink hyphenated">At the June 2004 workshop, Mozilla and Opera proposed evolving HTML itself:
       web applications, built on what already worked, backwards compatible with the web as
       deployed. The membership voted it down, eight votes to fourteen; in the standard’s own
@@ -31,6 +32,5 @@ export const BrowsersTakePen: FC = () =>
       <a className="signpost" href="https://whatwg.org/faq">Living Standard</a> that is{' '}
       <a className="signpost" href="https://whatwg.org/faq">“continuously updated”</a>; and in 2019 they signed an agreement on{' '}
       <a className="signpost" href="https://html.spec.whatwg.org/multipage/introduction.html">“a single version of HTML going forward”</a>. The posture from
-      1994, the specification following the field, was no longer a habit. It was the
-      constitution.</p>
+      1994, the specification following the field, had become the rule.</p>
   </Moment>;

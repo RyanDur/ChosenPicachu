@@ -4,8 +4,7 @@ import {moments} from './moments';
 
 export const PageBecomesApplication: FC = () =>
   <Moment of={moments.pageBecomesApplication}
-    tells={<>Ajax let a page fetch data and rewrite itself without reloading: Eich’s livelier
-      web, realized. Garrett named the approach and pointed at Google’s newest products,
+    tells={<>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and pointed at Google’s newest products,
       most of them betas, as its highest-profile examples. jQuery followed, and then the
       frameworks came.</>}>
     <p className="paragraph muted-ink hyphenated">Jesse James Garrett published{' '}
@@ -26,9 +25,8 @@ export const PageBecomesApplication: FC = () =>
     <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“even in late 1995”</a> prefiguring the whole style. His summary of
       JavaScript’s role in the era:{' '}
     <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“JS was the tap root.”</a></p>
-    <p className="paragraph muted-ink hyphenated">John Resig’s jQuery stripped the repetition out in 2006, events, animation, Ajax
-      calls, and DOM crawling wrapped as one API, less a framework than a peace treaty with the installed base of
-      broken browsers. Then the frameworks came to organize what script was now building:
+    <p className="paragraph muted-ink hyphenated">John Resig’s jQuery stripped the repetition out in 2006: events, animation, Ajax calls, and DOM
+      crawling wrapped as one API that hid the differences between the browsers then installed. Then the frameworks came to organize what script was now building:
       AngularJS in 2010, React in 2013, Vue in 2014. The page stopped being a document you
       fetched and started being a program you ran.</p>
     <p className="paragraph muted-ink hyphenated">What the language’s standard did next is the 2009 moment.</p>

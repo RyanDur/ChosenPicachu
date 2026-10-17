@@ -69,8 +69,6 @@ export const Timeline: FC = () =>
     </ol>
     <p className="sub-title">
       Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone
-      needs something, the community answers, and the platform learns the answer. That
-      feedback loop built an ecosystem where elegant solutions keep coming from places no
-      specification thought to look. And the needs have not stopped arriving.
+      needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.
     </p>
   </section>;
