@@ -27,8 +27,8 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
       still alive, so the reorder has to wait for the session to end.</>}>
       <Says>Each dragover stores the <Term word="landing">landing</Term>, the item the pointer is over at that
         moment, and the list’s <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> handler, which
-        runs when the pointer leaves an item or the list, clears it. Nothing moves until the release. The commit runs from the release because the browser
-        is still playing the end of its own drag until then.</Says>
+        runs when the pointer leaves an item or the list, clears it. Nothing moves until the release. The commit runs from dragend, the event that ends the session, because
+        the browser is still playing the end of its own drag until then.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

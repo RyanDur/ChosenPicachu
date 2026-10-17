@@ -11,7 +11,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
   <Step title="Slide the crossed item into place" dial=<MotionDial name="native-motion"/>>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
-      <Says>The swap happens at once. The crossed item gets the class pushed, and its{' '}
+      <Says>The swap happens at once. The crossed item gets the class <code>pushed</code>, and its{' '}
         <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from, the keyframe’s starting state, is one place over: the
         browser draws the item where it used to be and slides it to its new place.</Says>
       <Says>It is the{' '}

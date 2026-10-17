@@ -535,7 +535,7 @@ describe('a list of charts', () => {
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
       ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
-      ['what a rotation is', 'A rotation is one angle a transition can move smoothly, and the shape is never rebuilt. So I build the cut from rotation alone.'],
+      ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.'],
       ['what a class is', 'nothing to give a class, which is a name a stylesheet’s rules pick an element out by, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);

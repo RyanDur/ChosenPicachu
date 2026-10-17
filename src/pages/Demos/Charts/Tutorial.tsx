@@ -364,7 +364,8 @@ const PieStory: FC = () =>
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
             frame.</Says>
-          <Says>A rotation is one angle a transition can move smoothly, and the shape is never rebuilt. So I build the
+          <Says>A rotation is one angle, and a CSS transition, which moves a property from its old value to its new
+            one over a set time, can move it smoothly; the shape is never rebuilt. So I build the
             cut from rotation alone.</Says>
           <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
             nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the

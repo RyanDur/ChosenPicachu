@@ -290,7 +290,7 @@ describe('the sortable list demo', () => {
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
     expect(screen.getByText(/What you see above is my interpretation of that/)).toBeVisible();
-    expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
+    expect(recipe).toHaveTextContent(/Arm the drag from its grip/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
     expect(recipe).toHaveTextContent(/Fade the lifted card almost away/);
@@ -367,7 +367,7 @@ describe('the native drag sort tutorial’s words', () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
 
     expect(recipeFolds.stepTitles(story)).toEqual([
-      'Arm the drag from its handle',
+      'Arm the drag from its grip',
       'Keep which item is held in state, not in the drag’s payload',
       'Accept the drop, or the platform takes it back',
       'A swap counts once the pointer is a quarter of the way into a neighbour',
@@ -404,7 +404,7 @@ describe('the native drag sort tutorial’s words', () => {
     const story = recipeFolds.story(recipe, 'The user can arrange the list by hand');
 
     expect(recipeFolds.stepTitles(story)).toEqual([
-      'Arm the drag from its handle',
+      'Arm the drag from its grip',
       'Keep which item is held in state, not in the drag’s payload',
       'Accept the drop, or the platform takes it back',
       'Stash the landing, settle after the drag',
@@ -508,6 +508,7 @@ describe('the drag sort tab’s own words', () => {
     ['pace=lazy', 'You want the list to hold still while the platform drags. The drop lands while the'],
     ['pace=lazy', 'is still alive, so the reorder has to wait for the session to end.'],
     ['pace=lazy', 'Each dragover stores the'],
+    ['pace=lazy', 'The commit runs from dragend, the event that ends the session, because the browser is still playing the end of its own drag until then.'],
     ['pace=lazy&origin=keep', 'Do nothing. This is the keep list, so its Item is the plain card. The browser already drew the drag image, so for the length of the drag there are two of the card, one in place and one dimmed under the pointer. KeepItem has no hiding code.'],
     ['pace=lazy&origin=keep&motion=static', 'This is the static list, and it has no motion code. The handler sets the order and React draws it on the next frame; a keyboard move sets the order the same way.']
   ])('should say, with %s, words and links together: %s', async (choices, sentence) => {
@@ -516,6 +517,22 @@ describe('the drag sort tab’s own words', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
+  });
+});
+
+describe('the names the code uses', () => {
+  test.each([
+    {name: 'pushed', choices: '', run: /^The swap happens at once/},
+    {name: 'effectAllowed', choices: '', run: /^Then the browser fires/},
+    {name: 'KeepItem', choices: 'pace=lazy&origin=keep', run: /^Do nothing\. This is the keep list/}
+  ])('should set $name as code where its run names it', async ({name, choices, run}) => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const told = within(await screen.findByRole('region', {name: 'Drag sort'})).getByText(run);
+
+    expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
   });
 });
 
