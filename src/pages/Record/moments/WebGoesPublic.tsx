@@ -15,7 +15,7 @@ export const WebGoesPublic: FC = () =>
     <p className="paragraph muted-ink hyphenated">In October the project opened its own board: W3C’s history lists the <a className="signpost" href="https://www.w3.org/History.html">www-talk</a> mailing
       list starting that month, and the record of HTML from then on is a record of that list arguing. The tags
       themselves were the <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">“Tags used in HTML”</a> document,
-      the list the 1990 moment counts, with no specification behind it beyond the program that read it.</p>
+      the list the 1990 moment reads, with no specification behind it beyond the program that read it.</p>
     <p className="paragraph muted-ink hyphenated">The public took it up before anyone standardised it. W3C counts <a className="signpost" href="https://www.w3.org/History.html">“Around 50 known HTTP servers”</a> in
       January 1993 and <a className="signpost" href="https://www.w3.org/History.html">“Over 200 known HTTP servers”</a> by
       October, the month after NCSA released <a className="signpost" href="https://www.w3.org/History.html">“working versions of Mosaic browser for all common platforms: X, PC/Windows and Macintosh”</a>.
