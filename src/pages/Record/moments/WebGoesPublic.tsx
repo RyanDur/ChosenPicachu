@@ -2,23 +2,53 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
+const reply = 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt';
+const summary = 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt';
+const history = 'https://www.w3.org/History.html';
+
 export const WebGoesPublic: FC = () =>
   <Moment of={moments.webGoesPublic}
-    tells={<>On 6 August 1991 Berners-Lee answered a question on the alt.hypertext newsgroup with the project’s address and
-      an invitation. The browser, the editor and the documentation were on info.cern.ch for anyone to fetch. HTML left
-      the lab before it had a specification, as a list of tags and a working program.</>}>
-    <p className="paragraph muted-ink hyphenated">The post is short. The project, it says, aims <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt">“to allow links to be made to any information anywhere”</a>,
-      there is a prototype editor for the NeXT and a line-mode browser for everything else, and the code is <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt">“available by anonymous FTP from info.cern.ch”</a>.
-      It closes with two words: <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt">“Collaborators welcome!”</a>.
-      A newsgroup is a public discussion board that predates the web; alt.hypertext was the one for people who cared
-      about linked documents, and this is the earliest public announcement W3C’s own history lists.</p>
-    <p className="paragraph muted-ink hyphenated">In October the project opened its own board: W3C’s history lists the <a className="signpost" href="https://www.w3.org/History.html">www-talk</a> mailing
-      list starting that month, and the record of HTML from then on is a record of that list arguing. The tags
-      themselves were the <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">“Tags used in HTML”</a> document,
+    tells={<>On 6 August 1991 Berners-Lee answered a question on the alt.hypertext newsgroup, and an hour later posted a
+      summary of the project. Both gave the address of info.cern.ch, where the browser, the editor, the server and the
+      documentation sat for anyone to fetch. HTML left the lab before it had a specification, as a list of tags and a
+      working program.</>}>
+    <p className="paragraph muted-ink hyphenated">Someone had asked the group whether anyone knew of work on hypertext
+      links that could retrieve from many different sources. Berners-Lee’s reply is the web’s answer. The project{' '}
+    <a className="signpost" href={reply}>“aims to allow links to be made to any information anywhere”</a>; its address
+      format carries an access method, a hostname and a path, so one link could reach a local file, an FTP archive or an
+      HTTP server. There was a prototype editor for the NeXT and a line-mode browser that{' '}
+    <a className="signpost" href={reply}>“runs on almost anything”</a>, a server on CERN’s mainframe that served the
+      computer centre’s documentation, and code{' '}
+    <a className="signpost" href={reply}>“available by anonymous FTP from info.cern.ch”</a>,{' '}
+    <a className="signpost" href={reply}>“copyright CERN but free distribution and use is not normally a
+      problem”</a>. The project, he wrote,{' '}
+    <a className="signpost" href={reply}>“was started to allow high energy physicists to share data, news, and
+      documentation”</a>, and then: <a className="signpost" href={reply}>“Collaborators welcome!”</a> A newsgroup is a
+      public discussion board that predates the web; alt.hypertext was the one for people who cared about linked
+      documents.</p>
+    <p className="paragraph muted-ink hyphenated">The summary he posted an hour later says what the project was for and
+      how to join it. It{' '}
+    <a className="signpost" href={summary}>“started with the philosophy that much academic information should be freely
+      available to anyone”</a>. For a reader there were two operations, following a link and giving keywords, and{' '}
+    <a className="signpost" href={summary}>“these are the only operations necessary to access the entire world of
+      data”</a>. For a provider,{' '}
+    <a className="signpost" href={summary}>“making a web is as simple as writing a few SGML files which point to your
+      existing data”</a>, and{' '}
+    <a className="signpost" href={summary}>“any file available by anonymous FTP can be immediately linked into a
+      web”</a>; <a className="signpost" href={summary}>“the very small start-up effort is designed to allow small
+        contributions.”</a> The markup was SGML because SGML was standard, and the reply had already said what he thought
+      of it: <a className="signpost" href={reply}>“SGML (ugh! but standard)”</a>. The tags themselves were the{' '}
+    <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">“Tags used in HTML”</a> document,
       the list the 1990 moment reads, with no specification behind it beyond the program that read it.</p>
-    <p className="paragraph muted-ink hyphenated">The public took it up before anyone standardised it. W3C counts <a className="signpost" href="https://www.w3.org/History.html">“Around 50 known HTTP servers”</a> in
-      January 1993 and <a className="signpost" href="https://www.w3.org/History.html">“Over 200 known HTTP servers”</a> by
-      October, the month after NCSA released <a className="signpost" href="https://www.w3.org/History.html">“working versions of Mosaic browser for all common platforms: X, PC/Windows and Macintosh”</a>.
-      Every one of those servers was serving HTML that no standard yet defined; HTML 2.0, in 1995, is the answer to
-      that.</p>
+    <p className="paragraph muted-ink hyphenated">W3C’s history lists the browser going to a limited audience in March
+      and to CERN’s central machines in May; the August postings are the first it lists beyond CERN. In October the
+      project started its mailing lists, <a className="signpost" href={history}>www-talk</a> among them, and the record
+      of HTML from then on is a record of that list. In December Paul Kunz installed the first server outside Europe,
+      at SLAC. The history counts <a className="signpost" href={history}>“Around 50 known HTTP servers”</a> in January
+      1993 and <a className="signpost" href={history}>“Over 200 known HTTP servers”</a> by October, the month after NCSA
+      released{' '}
+    <a className="signpost" href={history}>“working versions of Mosaic browser for all common platforms: X, PC/Windows
+      and Macintosh”</a>; between the two counts, on 30 April 1993, CERN’s directors declared the technology{' '}
+    <a className="signpost" href={history}>“freely usable by anyone, with no fees being payable to CERN”</a>. Every one
+      of those servers was serving HTML that no standard yet defined; HTML 2.0, in 1995, is the answer to that.</p>
   </Moment>;

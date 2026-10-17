@@ -45,6 +45,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt"><cite>WorldWideWeb: Summary, posted to alt.hypertext</cite></a>
+            <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.w3.org/History.html"><cite>A Little History of the World Wide Web</cite></a>
             <span className="provenance caption">W3C</span>
           </li>
