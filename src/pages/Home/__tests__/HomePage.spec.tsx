@@ -53,12 +53,15 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'output'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/Semantic markup is the first objective listed in the/)).toBeInTheDocument();
-    expect(door.getByText(/come from the standard the browser makers began writing themselves in the/)).toBeInTheDocument();
+    expect(door.getByText(/^I start from what the content is and pick the element for it/))
+      .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
+    expect(door.getByText(/^The skeleton comes first/))
+      .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
     expect(door.getByText(/records what that rebuilding cost: links became components and the back button became state\./)).toBeInTheDocument();
     expect(door.getByText(/^A div is for when I want an element that says nothing/))
       .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
-    expect(door.getByText(/is the one the browser makers wrote themselves, from the/)).toBeInTheDocument();
+    expect(door.getByText(/^A div is for when I want an element that says nothing/))
+      .toHaveTextContent(/The standard that calls a div a last resort is the one the browser makers wrote themselves, from the 2004 moment on\./);
     expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
@@ -72,10 +75,12 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/Element selectors appear only in the reset\. There is no utility scale: lifted says why a style is there, and mt-4 says only what it does\. Markup full of utilities is the look written back into the structure\./)).toBeInTheDocument();
     expect(door.getByText(/Carried and settling use the same rules for a column and a row; only the lengths handed in differ\. Shoved has a rule per direction: two across for columns, two down for rows\./)).toBeInTheDocument();
-    expect(door.getByText(/’s lesson: theme variables started in script and now live in CSS\./)).toBeInTheDocument();
-    expect(door.getByText(/Only values the code works out at runtime are written inline, mostly as/)).toBeInTheDocument();
-    expect(door.getByText(/a position after a drag, the direction of a slide\./)).toBeInTheDocument();
-    expect(door.getByText(/links the talk\), is what this test guards against\./)).toBeInTheDocument();
+    expect(door.getByText(/^Constants live in the stylesheet/))
+      .toHaveTextContent(/Only values the code works out at runtime are written inline, mostly as custom properties the sheet already reads: a measured height, a position after a drag, the direction of a slide\./);
+    expect(door.getByText(/^Constants live in the stylesheet/))
+      .toHaveTextContent(/Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS\./);
+    expect(door.getByText(/^The test is to read a class list on its own/))
+      .toHaveTextContent(/Isolation, the last of the seven problems Chedeau’s talk lists \(the 2013 moment links the talk\), is what this test guards against\./);
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
     expect(door.getByText(/a pile of overrides/)).toBeInTheDocument();
     expect(door.getByText(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
@@ -93,11 +98,12 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
     expect(door.getByText(/so I name them in the past tense: lifted, dropped, chosen\./)).toBeInTheDocument();
     expect(door.getByText(/I keep the state in one place, and replacing it is the only way anything on screen changes\./)).toBeInTheDocument();
-    expect(door.getByText(/bound model and view both ways\. I keep one direction\./)).toBeInTheDocument();
-    expect(door.getByText(/is where that pattern got its name, Ajax, and became ordinary\./)).toBeInTheDocument();
+    expect(door.getByText(/^Behaviour splits into what is true and what happened/))
+      .toHaveTextContent(/AngularJS, in the 2010 moment, bound model and view both ways\. I keep one direction\./);
+    expect(door.getByText(/^Not every event starts at the pointer/))
+      .toHaveTextContent(/The 2005 moment is where that pattern got its name, Ajax, and became ordinary\./);
     expect(door.getByText(/so I test them on their own with no page involved\./)).toBeInTheDocument();
     expect(door.getByText(/The page announces each change too: a sighted reader watches the order change, and a screen reader user hears the same change read out\./)).toBeInTheDocument();
-    expect(door.getByText(/Not every event starts at the pointer/)).toBeInTheDocument();
     expect(door.getByText(/Change the framework, or remove it, and only the shell changes/)).toBeInTheDocument();
     expect(door.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
   });
