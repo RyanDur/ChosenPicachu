@@ -14,8 +14,7 @@ import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sampl
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
-import {TheImplementation} from './steps';
-import {whatACustomPropertyIs} from './steps/shroud';
+import {TheImplementation, whatACustomPropertyIs} from './steps';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');

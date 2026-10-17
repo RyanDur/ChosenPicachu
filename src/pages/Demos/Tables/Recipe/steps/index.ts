@@ -12,6 +12,7 @@ export {CarryVertical} from './vertical';
 export {FocusLands, ArrowsSpeak} from './keyboard';
 export {EagerPace, LazyPace} from './pace';
 export {HideOrigin, KeepOrigin} from './shroud';
+export {whatACustomPropertyIs} from './definitions';
 export {AnimatedMotion, StaticMotion} from './motion';
 export {WalkSlides, CutKey, GripArrows} from './keys';
 export {Promises} from './promises';
