@@ -119,6 +119,15 @@ describe('the tables tab’s own words', () => {
     expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
   });
 
+  test('should link the resize step’s :has() to MDN', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(within(await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders)).getByRole('link', {name: ':has()', hidden: true}))
+      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
+  });
+
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
@@ -1185,7 +1194,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
     expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
-    expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header. The table itself wears apportioned, a class it has from the start; under it a cell clips its text to its column, and a header that wears shared takes its width from its share. The header’s share is written as a custom property');
+    expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header. The table itself wears apportioned, a class it has from the start; under it a cell clips its text to its column, and a header that wears shared takes its width from its share.');
   });
 
   test('should label the ledger’s headerStates TS, in the react world', async () => {
