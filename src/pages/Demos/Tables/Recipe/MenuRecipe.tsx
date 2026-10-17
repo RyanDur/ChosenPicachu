@@ -78,7 +78,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
           <Says>The platform provides the whole popup: point the
             button’s <Mdn path="Web/HTML/Element/button#popovertarget">popoverTarget</Mdn> at the
-            menu, and <Mdn path="Web/HTML/Global_attributes/popover">popover="auto"</Mdn> brings
+            menu, and <Mdn path="Web/HTML/Global_attributes/popover"><code>popover="auto"</code></Mdn> brings
             the top layer, light-dismiss, and the accessibility relationship. The plan is to
             write no popup JavaScript at all.</Says>
         </Words>
@@ -91,11 +91,11 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             a <Mdn path="Web/CSS/CSS_positioned_layout/Stacking_context">stacking context</Mdn> is
             already beating z-index: 999.</Says>
           <Says>Naming the relationship does all of that for you. Give
-            the menu an id and point the button’s popoverTarget at it;
+            the menu an id and point the button’s <code>popoverTarget</code> at it;
             that is the whole wiring. Pressing the button toggles the popover (the
             default <Mdn path="Web/HTML/Element/button#popovertargetaction">popovertargetaction</Mdn>)
-            with no onClick anywhere, and the invoker-to-popup accessibility relationship comes
-            along free. popover="auto" chooses
+            with no <code>onClick</code> anywhere, and the invoker-to-popup accessibility relationship comes
+            along free. <code>popover="auto"</code> chooses
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
@@ -125,25 +125,25 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Says>A popover opened by its invoker is anchored to that invoker
             automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
               positioning</Mdn> can place it:
-            no <Mdn path="Web/CSS/anchor-name">anchor-name</Mdn>, no measurement, no
+            no <Mdn path="Web/CSS/anchor-name"><code>anchor-name</code></Mdn>, no measurement, no
             JavaScript.</Says>
         </Words>
         <Reveal>
           <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
-          <Mdn path="Web/CSS/position-area"> position-area</Mdn> picks cells.
-            block-end takes the row below the toggle; span-inline-start starts from the toggle’s
+          <Mdn path="Web/CSS/position-area"> <code>position-area</code></Mdn> picks cells.
+          <code>block-end</code> takes the row below the toggle; <code>span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
             this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:
-            flip-block is the escape hatch: when the row below has no room, the whole area flips
+          <code>flip-block</code> is the escape hatch: when the row below has no room, the whole area flips
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
             that is this rule’s business: your site reset already zeroes menu, and author styles
             beat user-agent styles no matter the specificity. The list markers are the reset’s
             job too; this site’s reset drops them for menu alongside ol and ul. One line remains
             that no reset should write for you: <Mdn path="Web/CSS/inset">inset</Mdn>: auto. The UA
-            centres every popover with inset: 0, and centred versus anchored is this menu’s own
-            decision, which is why the fallback below deliberately puts inset: 0 back.</Says>
+            centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
+            decision, which is why the fallback below deliberately puts <code>inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
             your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centred popover.</Says>
           <Codes>

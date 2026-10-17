@@ -79,16 +79,16 @@ const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable from the start and announced by name, and once the ledger
     exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
-    own: it is a grid container whose only item is the 8px line its ::after paints, so the
+    own: it is a grid container whose only item is the 8px line its <code>::after</code> paints, so the
     painted line is the hit area. The
-    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+  <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
   vanilla: <Says>The handle is focusable from the start, announced by the name the markup gives it, and
-    once the ledger exists dressColumn rewrites that label to state
+    once the ledger exists <code>dressColumn</code> rewrites that label to state
     the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
-    whose only item is the 8px line its ::after paints, so the painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>
 };
@@ -183,11 +183,12 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code>apportioned</code>, a class it has from
             the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
             width from its share. The header’s share is written as a custom property, <code>--share</code>, one of
-            the {whatACustomPropertyIs}. In <code>Aggregations.css</code>, beside the opening widths, the table
-            is <code>width: 100%</code>, so it fills its container; <code>min-width: 86rem</code>, so on a narrower page it keeps
-            that width and the container scrolls sideways (64rem on a screen of 600px or less with a fine pointer); and
-            fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, so each column holds its declared share of whatever
-            width the table has.</Says>
+            the {whatACustomPropertyIs}.</Says>
+          <Says>In <code>Aggregations.css</code>, beside the opening widths, three rules size the table.{' '}
+            <code>width: 100%</code> fills its container. <code>min-width: 86rem</code> keeps that width on a narrower page, so the
+            container scrolls sideways (64rem on a screen of 600px or less without a coarse pointer).
+            Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
+            has.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
