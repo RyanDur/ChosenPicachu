@@ -25,14 +25,14 @@ export const DragSurface: FC<{world: World; headerSource: Sample; buildSrc: Samp
           is held and gone when it is not, so nothing is ever stale. Every move retakes the
           capture. Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not
           always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser
-          drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the
+          drops the capture with it and fires <code>lostpointercapture</code> at the next move, with that move’s coordinates on the
           event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.</Says>
         : <Says>While something is <Term word="aloft">aloft</Term>, the header that lifted, or the grip
           for a row, handles the move and the release, and a guard on the store stops the
           listeners when nothing is held. Every move retakes the capture. Treat a cancel
           or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is
-          not the drop. When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires
-          lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the
+          not the drop. When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires{' '}
+        <code>lostpointercapture</code> at the next move, with that move’s coordinates on the event. So the handler treats the
           loss as the move it is, and retakes the pointer in the same handler.</Says>}
       <Codes>
         {world === 'react'

@@ -20,9 +20,9 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
         and never needed the discipline; the vanilla page attaches once and cannot live without
         it.</Says>
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an
-        action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer
-        turns into the next state. Whatever changes the order goes up to the page as an event,
-        onColumnMoved or onRowMoved, and comes back down as the next order. Ask, dispatch and subscribe together
+        action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer
+        turns into the next state. Whatever changes the order goes up to the page as an event,{' '}
+      <code>onColumnMoved</code> or <code>onRowMoved</code>, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, one plain object that both worlds mount unchanged. What differs is
         who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
         a reconcile, which moves nodes. Every listener from here on dispatches to the store and nothing

@@ -172,8 +172,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               only that one, so the th announces aria-sort from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
-              it changes, the build walks the columns and announce sets each th from that value: the sorting th gains
-              aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with
+              it changes, the build walks the columns and <code>announce</code>, one function, sets each <code>th</code> from that
+              value: the sorting <code>th</code> gains aria-sort, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
               it.</Says>}
           <Codes>
             {world === 'react'
@@ -234,7 +234,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the real order, and the sort must end.</Says>
         </Words>
         <Reveal>
-          <Says>Move a row and the sort ends. The table raises onRowMoved with
+          <Says>Move a row and the sort ends. The table raises <code>onRowMoved</code> with
             the <Term word="standing">standing</Term> it showed; the page keeps the rows
             where the sort left them, moves the one you moved, and clears the sort, so
             your drag proceeds from what you saw. Choosing "reset" clears the sort the other way:
@@ -265,12 +265,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           {world === 'react'
             ? <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: a menu
-              exists only where the page writes one inside the header, and a :has() rule on the cell pads
-              for the toggle when one is there.</Says>
+              exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has">:has()</Mdn> rule on the cell, which matches an
+              element by what it contains, pads for the toggle when one is there.</Says>
             : <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: menus
-              exist only where the markup writes them, a :has() rule on the cell pads for
-              the toggle when one is there, and the page itself declares the sortable set.</Says>}
+              exist only where the markup writes them, a <Mdn path="Web/CSS/:has">:has()</Mdn> rule on the cell, which matches an element by what it
+              contains, pads for the toggle when one is there, and the page itself declares the sortable set.</Says>}
           <Says>The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
             attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>

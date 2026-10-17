@@ -31,7 +31,7 @@ export const CssShare: FC<{world: World}> = ({world}) =>
         focusable.</Says>
     </Words>
     <Reveal>
-      <Says>The markup stays honest HTML, a real table with real headers. The row grip is a
+      <Says>The markup stays plain HTML, a real table with real headers. The row grip is a
         button that will reorder rows from the arrow keys without a line of drag code, and the
         resize handle is a button that announces itself by name, and its <Term word="share">share</Term> once the ledger
         exists. Each button writes a tabindex it would not need anywhere but Safari, whose

@@ -34,8 +34,8 @@ export const TwoRoads: FC = () =>
     to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> uses
     the native API, where the platform brings most of the behaviour for very little code;
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
-    platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where you draw
-    every pixel yourself and no drag-and-drop library is anywhere in the build.</Tell>;
+    platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, which leave every pixel of the drag
+    to the code, and no drag-and-drop library is anywhere in the build.</Tell>;
 
 export const AgainstTheStream: FC = () =>
   <Tell>The trader needs to move a column while the trades keep landing. I could reorder
@@ -47,7 +47,7 @@ export const AgainstTheStream: FC = () =>
     measures everything the drag needs at the grab, as the lift step shows.</Tell>;
 
 export const OwnedPixels: FC<{world: World}> = ({world}) =>
-  <Tell>Owning the pixels does not mean building in JavaScript. The markup stays a
+  <Tell>Leaving the pixels to the code does not mean building in JavaScript. The markup stays a
     normal table. Every visible change (the cursors, the hiding, every slide) is a CSS
     rule a class switches on. JavaScript only decides what the state is,
     and {world === 'react'
