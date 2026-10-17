@@ -36,6 +36,11 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">CERN, 2019</span>
           </li>
           <li>
+            <a className="signpost"
+              href="https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/"><cite>Weaving the Web</cite></a>
+            <span className="provenance caption">Tim Berners-Lee with Mark Fischetti, 1999, as quoted by the STFC</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt"><cite>The WorldWideWeb project, posted to alt.hypertext</cite></a>
             <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
           </li>

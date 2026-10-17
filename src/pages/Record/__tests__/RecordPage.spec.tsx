@@ -4,6 +4,31 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
+describe('the 1989 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Several thousand people at CERN, two-year stays, and what one project learned “sometimes lost forever, or only recovered after a detective investigation in an emergency”. Tim Berners-Lee proposed a web of notes with links between them, shaped like the organisation that would use it.',
+    'Berners-Lee wrote the proposal in March 1989 to answer a practical question: how several thousand people at CERN, spread across institutes and experiments and staying about two years each, could share what they knew. Knowledge moved by corridor talk and newsletters, which worked until people left; “often, the information has been recorded, it just cannot be found.” He took CERN as a small model of what every large organisation would soon face.',
+    'He had built the answer once already. In 1980 he wrote Enquire, a program that stored notes and linked them to each other in any way, so finding something meant following links “rather like in the old computer game ‘adventure’”. He built it before he knew the idea had a name, hypertext; the proposal credits Ted Nelson with the word.',
+    'The argument is against trees. CERNDOC, the Unix file system and VMS HELP each forced knowledge into one hierarchy, and work does not connect that way. His alternative was a diagram anyone could draw, circles and arrows, where “circles and arrows can stand for anything”: a person, a project, a document, a piece of hardware, joined by links that say depends on, is part of, uses, refers to. The first web in the document is the organisation itself, “a multiply connected ‘web’”, and the system had to match it. That is what set it apart from CERNDOC, a document system that lived on one central machine, and from every scheme that asked physicists to file their work one prescribed way; he had watched those fail, and wrote later that the rules had to be “as close as possible to no rules at all”. The proposal makes it a requirement: systems “start isolated and then merge”, so “a new system must allow existing systems to be linked together without requiring any central control or coordination.”',
+    'Most of the document is requirements, and they are the ones the web kept: access from remote machines, the same data on VM, Macintosh, VAX and Unix, existing databases shown as hypertext, private links a reader can add, plain text on a 24-by-80 screen before any graphics, and a defined interface between the software that stores and the software that shows, so servers and browsers could be built in parallel. The conclusion asked for a universal linked information system in which “generality and portability are more important than fancy graphics techniques”, and the plan was two people for six to twelve months. Nothing in it was called World Wide Web; Berners-Lee later wrote that the only name he had for it then was Mesh. His manager, Mike Sendall, pencilled on the cover a note quoted ever since: “Vague, but exciting.”'
+  ])('should tell the proposal as the practical case it is, words and links together: %s', told => {
+    expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(told);
+  });
+
+  test.each(['measuring the loss', 'walked out the door', 'is not about technology at all', 'the opposite of excitement'])('should leave out the lament "%s"', lament => {
+    expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(lament);
+  });
+
+  test('should link the book’s words to the page that quotes them, and shelve the book', () => {
+    expect(screen.getByRole('link', {name: '“as close as possible to no rules at all”', hidden: true})).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Weaving the Web', hidden: true})).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -30,7 +55,6 @@ describe('the record', () => {
   });
 
   test.each([
-    'Berners-Lee’s manager, Mike Sendall, pencilled onto the cover a note quoted ever since: “Vague, but exciting.”',
     'It was later renamed Nexus, and its central expectation failed: people, it turned out, were quite happy to write HTML by hand.',
     'Lie separated presentation from structure on purpose.',
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
