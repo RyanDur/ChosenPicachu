@@ -83,7 +83,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(within(part).getByText(/^Item gives its button/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.');
+    expect(within(part).getByText(/gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {

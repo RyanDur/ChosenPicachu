@@ -48,7 +48,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}position`}><code>position: relative</code></a> is
           not enough on its own, and neither is absolute: an element positioned either way forms a context only together
-          with a z-index other than auto. Fixed and sticky are different. Each forms a context by itself. Sticky
+          with a z-index other than auto. Fixed, which pins an element to the window, and sticky are
+          different. Each forms a context by itself. Sticky
           scrolls with the page until it reaches an edge and then stays there.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.positioned {')}/>
       </li>

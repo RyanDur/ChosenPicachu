@@ -142,7 +142,7 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
 
     expect(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))
-      .toHaveTextContent('Fixed and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.');
+      .toHaveTextContent('Fixed, which pins an element to the window, and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.');
   });
 
   test('should open its run on MDN’s whole list', async () => {

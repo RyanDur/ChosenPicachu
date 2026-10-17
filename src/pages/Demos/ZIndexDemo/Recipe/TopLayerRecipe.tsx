@@ -48,7 +48,7 @@ export const TopLayerRecipe: FC = () => {
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
       element around the banner forms a stacking context by the ways{' '}
-    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> shows. position: fixed, which pins the banner to the window, does not lift it out of that context,
+    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> shows. <code>position: fixed</code>, which pins the banner to the window, does not lift it out of that context,
       as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
       I made the panel a popover, drawn in the top layer like the new menu
       above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
@@ -94,7 +94,7 @@ export const TopLayerRecipe: FC = () => {
           <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
             from off screen</cite></Link>.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
-            spare room and the panel holds to that edge. middle and center set auto again. They change
+            spare room and the panel holds to that edge. <code>middle</code> and <code>center</code> set auto again. They change
             nothing. I keep them so the choice shows in the class names.</Says>
           <Says>On this page margin-block is the margins above and below the panel, and margin-inline is the ones to
             its left and right. Here, {sideFact[side]} And {alignFact[align]}</Says>

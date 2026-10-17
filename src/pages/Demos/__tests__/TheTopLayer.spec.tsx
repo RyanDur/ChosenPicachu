@@ -500,6 +500,25 @@ describe('the z-index tab’s own words', () => {
 });
 
 describe('the banner dials’ readings', () => {
+  test('should say, beside the entrance readings, that a reader who asks for less motion sees a new banner appear in place', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    expect(await screen.findByText('If your system asks for less motion, a new banner appears in place, whichever entrance you choose.')).toBeInTheDocument();
+  });
+
+  test.each([
+    {name: 'Item', run: /gives its button the site’s shared classes that set its look/},
+    {name: 'Menu', run: /gives its button the site’s shared classes that set its look/},
+    {name: 'position: fixed', run: /I could give the banner a huge z-index/},
+    {name: 'middle', run: /set auto again/},
+    {name: 'center', run: /set auto again/}
+  ])('should set $name as code where its run names it', async ({name, run}) => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const told = within(await screen.findByRole('region', {name: 'Z-index'})).getByText(run);
+
+    expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
+  });
+
   test.each([
     ['side=top', 'The panel holds to the window’s top edge.'],
     ['side=middle', 'The panel sits in the window’s middle.'],

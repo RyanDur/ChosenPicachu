@@ -109,7 +109,7 @@ describe('the accordions tab’s own words', () => {
     {choice: 'style=drawer', sentence: 'With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.'},
     {choice: 'style=reveal', sentence: 'With reveal, the size moves over 300 milliseconds with ease-in-out, and the text shows from its top down.'},
     {choice: 'style=reveal', sentence: 'Reveal moves the row on a transition, 300 milliseconds of ease-in-out. The text shows from its top down as the row grows.'},
-    {choice: 'type=exclusive', sentence: 'Most of us turned next to script. Opening one fold closes the others, and the short Close bar at the top closes whichever is open. A transition can move a height to a number'},
+    {choice: 'type=exclusive', sentence: 'Most of us turned next to script. A transition can move a height to a number'},
     {choice: 'type=inclusive', sentence: 'Most of us turned next to script. A transition can move a height to a number'},
     {choice: 'style=drawer', sentence: 'With the drawer, the height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, and the text slides down from under the bar.'},
     {choice: 'type=exclusive', sentence: 'This build is a disclosure: a bar you press to show the text under it. It has no script.'}
@@ -117,6 +117,16 @@ describe('the accordions tab’s own words', () => {
     render(<TestApp at={demosAt(`?tab=accordions&${choice}`)}/>);
 
     expect(await screen.findByRole('region', {name: 'Accordions'})).toHaveTextContent(sentence);
+  });
+});
+
+describe('the measured build’s Close bar', () => {
+  test('should explain the Close bar in a run of its own, before the run on script, with exclusive chosen', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const closeBar = within(oldWay).getByText('Opening one fold closes the others, and the short Close bar at the top closes whichever is open.');
+
+    expect(closeBar.compareDocumentPosition(within(oldWay).getByText(/^Most of us turned next to script/))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 });
 

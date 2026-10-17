@@ -159,10 +159,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
         : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
       <ol className={runs}>
+        {type === 'exclusive' && <li className="run">
+          <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
+        </li>}
         <li className="run">
-          <p className="paragraph">Most of us turned next to script.
-            {type === 'exclusive' && ' Opening one fold closes the others, and the short Close bar at the top closes whichever is open.'}
-            {' '}A transition can move a height to a number,
+          <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
             so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
             the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
             moves the same way, short or tall, because the target is the text’s own height. When the motion
