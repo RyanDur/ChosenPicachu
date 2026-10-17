@@ -9,7 +9,7 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 const htmlAlone = 'An accordion in HTML alone';
 
 const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
-const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('inclusive'), 'How every fold moves'];
+const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('exclusive'), 'How every fold moves'];
 
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one fold open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
 
@@ -56,21 +56,21 @@ describe('the accordions tab', () => {
     expect(within(choices).getByRole('group', {name: 'fold motion'})).toBeVisible();
   });
 
-  test('should open on the inclusive type, and write the type chosen into the address', async () => {
+  test('should open on the exclusive type, and write the type chosen into the address', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
     const types = await screen.findByRole('group', {name: 'fold type'});
-    expect(within(types).getByRole('radio', {name: 'Inclusive'})).toBeChecked();
-
-    await userEvent.click(within(types).getByRole('radio', {name: 'Exclusive'}));
-
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('type=exclusive');
     expect(within(types).getByRole('radio', {name: 'Exclusive'})).toBeChecked();
+
+    await userEvent.click(within(types).getByRole('radio', {name: 'Inclusive'}));
+
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('type=inclusive');
+    expect(within(types).getByRole('radio', {name: 'Inclusive'})).toBeChecked();
   });
 
   test.each([
     ['inclusive', parts[0], ['Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height']],
     ['inclusive', parts[1], ['Inclusive accordion using details elements']],
-    ['inclusive', parts[2], ['Inclusive accordion using checkboxes']],
+    ['inclusive', togetherHeading('inclusive'), ['Inclusive accordion using checkboxes']],
     ['exclusive', parts[0], ['Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']],
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
     ['exclusive', togetherHeading('exclusive'), ['Exclusive accordion using radio group']]
@@ -84,7 +84,7 @@ describe('the accordions tab', () => {
 });
 
 describe('the accordions explanation', () => {
-  test.each(parts.slice(0, 3))('should show, with inclusive chosen, none of the radio builds’ words or code under "%s"', async part => {
+  test.each([parts[0], parts[1], togetherHeading('inclusive')])('should show, with inclusive chosen, none of the radio builds’ words or code under "%s"', async part => {
     render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: part});
@@ -147,7 +147,7 @@ describe('the two together', () => {
   test('should show, with inclusive chosen, the checkbox build\'s label beside its run', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
-    const explained = await screen.findByRole('region', {name: parts[2]});
+    const explained = await screen.findByRole('region', {name: togetherHeading('inclusive')});
 
     expect(explanation.codeBeside(explained, /The inclusive build keeps the checkbox/)).toHaveTextContent('type="checkbox"');
   });
@@ -298,11 +298,11 @@ describe('the fold choices', () => {
 
     const row = await rowOf('fold type');
 
-    expect(within(row).getByRole('status')).toHaveTextContent('Any number of folds can be open at once.');
-
-    await userEvent.click(within(row).getByRole('radio', {name: 'Exclusive'}));
-
     expect(within(row).getByRole('status')).toHaveTextContent('Opening one fold closes the others.');
+
+    await userEvent.click(within(row).getByRole('radio', {name: 'Inclusive'}));
+
+    expect(within(row).getByRole('status')).toHaveTextContent('Any number of folds can be open at once.');
   });
 
   test.each([
@@ -551,7 +551,7 @@ describe('the fold motion', () => {
   test('should keep an open fold open when the reader chooses another motion', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
     const together = await screen.findByRole('region', {name: parts[2]});
-    const first = within(together).getAllByRole('checkbox')[0];
+    const first = within(together).getAllByRole('radio')[0];
     await userEvent.click(first);
 
     await userEvent.click(within(screen.getByRole('group', {name: 'fold motion'})).getByRole('radio', {name: 'Drawer'}));
@@ -697,7 +697,7 @@ describe('the depth of each part', () => {
     [parts[0], 'How the measured height works', /Most of us reached next for script/, /Closing runs the other way/],
     [parts[0], 'How the known height works', /Here every panel is the same height/, /You want the reader to see a bar/],
     [parts[1], 'How details works', /This replaces the three old ways/, /A pseudo-element is a part of an element/],
-    [parts[2], 'How the checkbox and the grid row work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
+    [parts[2], 'How the radio and the grid row work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
   ])('should keep, under "%s", a closed fold named "%s" with the depth inside it and the point outside it', async (part, fold, point, depth) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -777,7 +777,7 @@ describe('the runs in view, with the folds shut', () => {
   test('should say, with inclusive chosen, that the checkbox remembers as it did in the known-height build', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
-    const together = await screen.findByRole('region', {name: parts[2]});
+    const together = await screen.findByRole('region', {name: togetherHeading('inclusive')});
 
     expect(within(together).getByText(/The inclusive build keeps the checkbox/)).toHaveTextContent(/the checkbox remembers whether the fold is open, as it did in the known-height build\./);
   });
@@ -858,7 +858,7 @@ describe('the word attribute', () => {
 
 describe('the word display', () => {
   test('should be said first where display none is weighed against hiding the input off screen, with no text before it saying display', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -871,7 +871,7 @@ describe('the word display', () => {
 
 describe('the platform build’s bars', () => {
   test('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
@@ -891,7 +891,7 @@ describe('the platform build’s bars', () => {
   });
 
   test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -909,7 +909,7 @@ describe('the platform build’s bars', () => {
 
 describe('the known-height build’s stylesheet reading the checkbox', () => {
   test('should say what a selector, a pseudo-class and a combinator are', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -919,7 +919,7 @@ describe('the known-height build’s stylesheet reading the checkbox', () => {
 
 describe('the known-height build’s bars', () => {
   test('should say the label wears prior-approached, a shared class that reads an earlier sibling', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 

@@ -11,7 +11,7 @@ describe('The Demos page', () => {
 
     render(<TestApp at={demosAt()} feed={feed}/>);
 
-    const foldLabels = async () => (await screen.findAllByRole<HTMLInputElement>('checkbox'))
+    const foldLabels = async () => (await screen.findAllByRole<HTMLInputElement>('radio'))
       .map(toggle => toggle.labels?.[0]?.textContent);
     const before = await foldLabels();
     await demoTabs.open('Charts');
