@@ -118,15 +118,17 @@ for (const {build, control} of [
   });
 }
 
-test('a link to the exclusive type opens the tab on it, and it stays after a reload', async ({page}) => {
-  await page.goto('demos/?tab=accordions&type=exclusive');
-  const exclusive = page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Exclusive'});
-  await expect(exclusive).toBeChecked();
+test('a link to the inclusive type opens the tab on it, and it stays after a reload', async ({page}) => {
+  await page.goto('demos/?tab=accordions&type=inclusive');
+  const inclusive = page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Inclusive'});
+  const checkboxBuild = page.getByRole('heading', {name: 'Accordion using checkboxes and a known height'});
+  await expect(inclusive).toBeChecked();
+  await expect(checkboxBuild).toBeVisible();
 
   await page.reload();
 
-  await expect(exclusive).toBeChecked();
-  await expect(page.getByRole('heading', {name: 'Accordion using a radio group and a known height'})).toBeVisible();
+  await expect(inclusive).toBeChecked();
+  await expect(checkboxBuild).toBeVisible();
 });
 
 test('the space bar closes a part of the grid radio build the arrow keys opened', async ({page}) => {

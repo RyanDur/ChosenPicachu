@@ -57,7 +57,8 @@ describe('the home page', () => {
       .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
     expect(door.getByText(/^The skeleton comes first/))
       .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
-    expect(door.getByText(/records what that rebuilding cost: links became components and the back button became state\./)).toBeInTheDocument();
+    expect(door.getByText(/^The elements mean something beyond how they look/))
+      .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
     expect(door.getByText(/^A div is for when I want an element that says nothing/))
       .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
     expect(door.getByText(/^A div is for when I want an element that says nothing/))

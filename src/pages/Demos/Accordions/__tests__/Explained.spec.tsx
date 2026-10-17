@@ -694,12 +694,13 @@ describe('the accordion in HTML alone', () => {
 
 describe('the depth of each part', () => {
   test.each([
-    [parts[0], 'How the measured height works', /Most of us reached next for script/, /Closing runs the other way/],
-    [parts[0], 'How the known height works', /Here every panel is the same height/, /You want the reader to see a bar/],
-    [parts[1], 'How details works', /This replaces the three old ways/, /A pseudo-element is a part of an element/],
-    [parts[2], 'How the radio and the grid row work together', /A grid row can slide open to its content’s height/, /A row closes only as far as its item can/]
-  ])('should keep, under "%s", a closed fold named "%s" with the depth inside it and the point outside it', async (part, fold, point, depth) => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    {type: 'exclusive', part: parts[0], fold: 'How the measured height works', point: /Most of us reached next for script/, depth: /Closing runs the other way/},
+    {type: 'exclusive', part: parts[0], fold: 'How the known height works', point: /Here every panel is the same height/, depth: /You want the reader to see a bar/},
+    {type: 'exclusive', part: parts[1], fold: 'How details works', point: /This replaces the three old ways/, depth: /A pseudo-element is a part of an element/},
+    {type: 'exclusive', part: parts[2], fold: 'How the radio and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/},
+    {type: 'inclusive', part: togetherHeading('inclusive'), fold: 'How the checkbox and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/}
+  ])('should keep, with $type chosen, under "$part", a closed fold named "$fold" with the depth inside it and the point outside it', async ({type, part, fold, point, depth}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: part});
     const folded = within(explained).getByRole('group', {name: fold});
@@ -857,26 +858,26 @@ describe('the word attribute', () => {
 });
 
 describe('the word display', () => {
-  test('should be said first where display none is weighed against hiding the input off screen, with no text before it saying display', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should be said first where display none is weighed against hiding the input off screen, with no text before it saying display, with %s chosen', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     const told = oldWay.textContent;
 
     expect(told.search(/display/i)).toBeGreaterThan(told.indexOf('far off the page'));
-    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent('far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the checkbox too, but it would also take the checkbox out of the tab order, and a keyboard could no longer open the fold.');
+    expect(explanation.runTelling(oldWay, /far off the page/)).toHaveTextContent(`far off the page. Display is the property that sets how a box lays out what it holds, and display none would hide the ${input} too, but it would also take the ${input} out of the tab order, and a keyboard could no longer open the fold.`);
   });
 });
 
 describe('the platform build’s bars', () => {
-  test('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample, with %s chosen', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent('Summary also draws its own arrow, called a marker, where the checkbox build drew one from two borders. The browser gives a summary the display of a list item, and a marker is drawn only on a list item. This bar’s display is flex, a row, so the marker goes with it, and the bar draws the checkbox build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.');
+    expect(run).toHaveTextContent(`Summary also draws its own arrow, called a marker, where the ${input} build drew one from two borders. The browser gives a summary the display of a list item, and a marker is drawn only on a list item. This bar’s display is flex, a row, so the marker goes with it, and the bar draws the ${input} build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.`);
     expect(run).not.toHaveTextContent(/every build/);
     expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/)).toEqual([]);
   });
@@ -890,12 +891,12 @@ describe('the platform build’s bars', () => {
     expect(explanation.everyCodeBeside(platform, /The arrow points right while the fold is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
   });
 
-  test('should keep the bar’s own run to the row, the classes it wears and its focus', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should keep the bar’s own run to the row, the classes it wears and its focus, with %s chosen', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, wearing the same classes: inverse-filled for its colours, attentive for the approach colour, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\./);
+    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(new RegExp(`^The bar is the same flex row as the label in the ${input} build, now on summary, wearing the same classes: inverse-filled for its colours, attentive for the approach colour, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\\. Summary takes focus and hover itself, where the ${input} build carried focus from the hidden ${input} to the label\\.`));
   });
 
   test('should show the classes the details bar wears beside its own rule', async () => {
@@ -908,22 +909,22 @@ describe('the platform build’s bars', () => {
 });
 
 describe('the known-height build’s stylesheet reading the checkbox', () => {
-  test('should say what a selector, a pseudo-class and a combinator are', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say what a selector, a pseudo-class and a combinator are, with %s chosen', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Now a rule has to match on/)).toHaveTextContent('A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked checkbox. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.');
+    expect(explanation.runTelling(oldWay, /Now a rule has to match on/)).toHaveTextContent(`A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked ${input}. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.`);
   });
 });
 
 describe('the known-height build’s bars', () => {
-  test('should say the label wears prior-approached, a shared class that reads an earlier sibling', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say the label wears prior-approached, a shared class that reads an earlier sibling, with %s chosen', async (type, input) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent('so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the checkbox while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its checkbox, so the class’s :hover rule lights the bar too.');
+    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent(`so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the ${input} while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its ${input}, so the class’s :hover rule lights the bar too.`);
   });
 
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
