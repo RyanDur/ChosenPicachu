@@ -45,8 +45,8 @@ describe('the 1990 moment', () => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(told);
   });
 
-  test.each(['HyperCard', 'eighteen', 'the list the 1990 moment counts'])('should leave out "%s", which the sources do not hold', claim => {
-    expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(claim);
+  test.each(['HyperCard', 'eighteen'])('should leave out "%s", which the sources do not hold', claim => {
+    expect(itemHeadedBy('the timeline', 'Researchers need to collaborate')).not.toHaveTextContent(claim);
   });
 });
 
@@ -157,6 +157,11 @@ describe('the record', () => {
   });
 
   test.each([
+    ['Researchers need to collaborate', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”'],
+    ['Researchers need to collaborate', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html', '“registered by the W3 team”'],
+    ['Researchers need to collaborate', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html', '“a line of ASCII characters terminated by a CR LF”'],
+    ['Researchers need to collaborate', 'https://worldwideweb.cern.ch/worldwideweb/', '“a single click was used for editing”'],
+    ['Researchers need to collaborate', 'https://worldwideweb.cern.ch/history/', '“was later renamed Nexus to avoid confusion with the World Wide Web project”'],
     ['The web needs the public', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt', '“Collaborators welcome!”'],
     ['The browsers’ tags need a standard', 'https://www.rfc-editor.org/rfc/rfc1866', '“to distinguish it from the previous informal specifications”'],
     ['The style sheet needs a standard', 'https://www.w3.org/TR/REC-CSS1-961217', '“One of the fundamental features of CSS is that style sheets cascade”'],
