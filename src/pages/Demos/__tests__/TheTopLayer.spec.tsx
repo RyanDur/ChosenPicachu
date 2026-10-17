@@ -334,10 +334,10 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['down', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
-    ['up', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
-    ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
-    ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
+    ['down', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once for the downward and upward stacks, and the grid-template-columns rule once for the two sideways stacks.', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
+    ['up', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once for the downward and upward stacks, and the grid-template-columns rule once for the two sideways stacks.', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
+    ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
+    ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
     render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());
@@ -476,20 +476,14 @@ describe('the z-index tab’s introduction', () => {
 
 describe('the z-index tab’s own words', () => {
   test.each([
-    'I think a bigger number is the wrong fix, because a z-index is compared only inside a stacking context, a group of boxes the browser stacks as one. Most of this page is about that context: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
     'I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the term taught above in Why 9999 still loses. An element around the banner forms a stacking context by the ways What else forms a stacking context shows. position: fixed, which pins the banner to the window, does not lift it out of that context, as Why a fixed banner still loses shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So I made the panel a popover, drawn in the top layer like the new menu above. Why the popover wins says what both are.',
     'Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you can watch the mechanics.',
     'More properties than z-index form a stacking context. MDN, Mozilla’s web reference, keeps the whole list, and these are the ones a page meets most. I put the three that form none beside them because telling them apart is the lesson.',
-    'I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a tab is ever compared with one outside it.',
-    'Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.',
     'middle and center set auto again. They change nothing. I keep them so the choice shows in the class names.',
     'z-index: 1 forms a context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item, a box laid out by a parent whose display is flex. The menu part’s card had position: relative as well, and either is enough. Card two, at 1 and later in the code, is painted over card one.',
-    'Fixed and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.',
-    'The list is placed by anchor positioning. The Sort by button names itself --sort-by, and position-anchor on the list picks that button. anchor(end) puts the list’s top at the button’s bottom. anchor(start) lines the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing between the list and the card is positioned.',
     'A popover is shown in the top layer, a layer the browser keeps above the whole page for popovers, dialogs and elements shown full screen.',
     'To build this banner yourself, go to the tutorial below. It opens at the step where the panel becomes a popover and so is shown in the top layer.',
     'The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step.',
-    'A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out. Card one’s list in What else forms a stacking context names its own anchor.',
     'A banner is read at a glance, by someone busy with something else.',
     'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centres the menu on the screen.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
@@ -498,16 +492,7 @@ describe('the z-index tab’s own words', () => {
     expect(await screen.findByRole('region', {name: 'Z-index'})).toHaveTextContent(sentence);
   });
 
-  test.each([
-    {choice: 'stack=down', sentence: ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once for the downward and upward stacks, and the grid-template-columns rule once for the two sideways stacks.'},
-    {choice: 'stack=left', sentence: ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.'}
-  ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
-    render(<TestApp at={demosAt(`?tab=z-index&${choice}`)}/>);
-
-    expect(await screen.findByRole('region', {name: 'Z-index'})).toHaveTextContent(sentence);
-  });
-
-  test('should say what the page stacks no more after the top layer’s definition', async () => {
+  test('should define the top layer once, with no second sentence saying it again', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     expect(await screen.findByRole('region', {name: 'Z-index'})).not.toHaveTextContent('Whatever the page stacks, the top layer sits over it.');
