@@ -7,7 +7,7 @@ import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
-import {whatACustomPropertyIs} from './definitions';
+import {whatACustomPropertyIs} from '../definitions';
 
 const theSheetDeclaresSeatAndDrift = <>
   The sheet declares the seat and the drift with <code>@property</code>, a rule that gives a custom property a type

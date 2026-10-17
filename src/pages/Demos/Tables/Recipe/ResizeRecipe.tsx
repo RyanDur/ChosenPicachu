@@ -14,7 +14,8 @@ import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sampl
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
-import {TheImplementation, whatACustomPropertyIs} from './steps';
+import {TheImplementation} from './steps';
+import {whatACustomPropertyIs} from './definitions';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -82,14 +83,14 @@ const handleSays: Record<World, ReactNode> = {
     own: it is a grid container whose only item is the 8px line its <code>::after</code> paints, so the
     painted line is the hit area. The{' '}
   <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-    and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
+    and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
     on a touchscreen.</Says>,
   vanilla: <Says>The handle is focusable from the start, announced by the name the markup gives it, and
     once the ledger exists <code>dressColumn</code> rewrites that label to state
     the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
     whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-    and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
+    and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
     on a touchscreen.</Says>
 };
 
@@ -186,7 +187,8 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             the {whatACustomPropertyIs}.</Says>
           <Says>In <code>Aggregations.css</code>, beside the opening widths, three rules size the table.{' '}
             <code>width: 100%</code> fills its container. <code>min-width: 86rem</code> keeps that width on a narrower page, so the
-            container scrolls sideways (64rem on a screen of 600px or less without a coarse pointer).
+            container scrolls sideways. In a browser window 600px wide or less the floor drops to 64rem, unless the
+            pointer is coarse, the platform’s word for a finger on a touchscreen, which keeps the 86rem.
             Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
             has.</Says>
           {ledgerCodes[world]}

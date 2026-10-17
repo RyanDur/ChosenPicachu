@@ -89,7 +89,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             Escape needs another. Focus has to find its way back to the button. Assistive tech needs
             telling that the button owns a popup. And somewhere above your table,
             a <Mdn path="Web/CSS/CSS_positioned_layout/Stacking_context">stacking context</Mdn> is
-            already beating z-index: 999.</Says>
+            already beating <code>z-index: 999</code>.</Says>
           <Says>Naming the relationship does all of that for you. Give
             the menu an id and point the button’s <code>popoverTarget</code> at it;
             that is the whole wiring. Pressing the button toggles the popover (the
@@ -134,15 +134,15 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Mdn path="Web/CSS/position-area"> <code>position-area</code></Mdn> picks cells.{' '}
           <code>block-end</code> takes the row below the toggle; <code>span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
-            this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:{' '}
+            this writing mode. <Mdn path="Web/CSS/position-try-fallbacks"><code>position-try-fallbacks</code></Mdn>:{' '}
           <code>flip-block</code> is the escape hatch: when the row below has no room, the whole area flips
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
-            that is this rule’s business: your site reset already zeroes menu, and author styles
-            beat user-agent styles no matter the specificity. The list markers are the reset’s
-            job too; this site’s reset drops them for menu alongside ol and ul. One line remains
-            that no reset should write for you: <Mdn path="Web/CSS/inset">inset</Mdn>: auto. The UA
-            centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
+            that is this rule’s business: your site reset already zeroes <code>menu</code>, and author styles
+            beat the browser’s own default styles, its user-agent stylesheet, no matter the specificity. The list markers
+            are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.
+            One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
+            browser’s default stylesheet centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts <code>inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
             your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centred popover.</Says>
