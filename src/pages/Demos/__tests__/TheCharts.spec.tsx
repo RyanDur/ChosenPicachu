@@ -535,7 +535,7 @@ describe('a list of charts', () => {
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
       ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
-      ['what a rotation is', 'A rotation is less work: the shape stays the same and only its place changes. So I build the cut from rotation alone.'],
+      ['what a rotation is', 'A rotation is one angle a transition can move smoothly, and the shape is never rebuilt. So I build the cut from rotation alone.'],
       ['what a class is', 'nothing to give a class, which is a name a stylesheet’s rules pick an element out by, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);
@@ -943,7 +943,7 @@ describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
-    'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws.',
+    'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.',
     'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
   ];
 
@@ -989,7 +989,7 @@ describe('the workspace story', () => {
   });
 
   test.each([
-    ['the address', 'The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period, the stretch of time a chart shows. A reload or a shared link needs nothing else to bring the layout back.'],
+    ['the address', 'The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period. A reload or a shared link needs nothing else to bring the layout back.'],
     ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],

@@ -364,8 +364,8 @@ const PieStory: FC = () =>
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
             frame.</Says>
-          <Says>A rotation is less work: the shape stays the same and only its place changes. So I build the cut from
-            rotation alone.</Says>
+          <Says>A rotation is one angle a transition can move smoothly, and the shape is never rebuilt. So I build the
+            cut from rotation alone.</Says>
           <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
             nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the
             other.</Says>
@@ -417,8 +417,7 @@ const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
-    <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and
-      choosing a period, the stretch of time a chart shows. A reload or a shared link needs nothing else to bring the
+    <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period. A reload or a shared link needs nothing else to bring the
       layout back.</Tell>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the

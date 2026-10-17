@@ -9,7 +9,7 @@ export const ChartsIntroduction: FC = () =>
       not disagree.</p>
     <p className="paragraph">I take a chart to be arithmetic over data the page already holds, so there is no chart
       library here. The page holds one live feed, a connection that delivers each trade as it happens, and the
-      past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws.</p>
+      past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.</p>
     <p className="paragraph">By the end you can draw four charts from one feed. The first is a live line.
       The second is candles, which show where the price opened and closed and how far it reached in each span of time.
       The last two show who is buying and who is selling. You can
