@@ -284,6 +284,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Brendan Eich, 2008</span>
           </li>
           <li>
+            <a className="signpost" href="https://adactio.com/journal/1595"><cite>Misunderstanding markup</cite></a>
+            <span className="provenance caption">Jeremy Keith, 7 July 2009</span>
+          </li>
+          <li>
             <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/"><cite>A Brief History of JavaScript</cite></a>
             <span className="provenance caption">Sebastian Peyrott, Auth0, 2017</span>
           </li>

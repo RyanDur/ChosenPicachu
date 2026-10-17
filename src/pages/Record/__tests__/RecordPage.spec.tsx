@@ -132,6 +132,32 @@ describe('the 1996 moment', () => {
   });
 });
 
+describe('the first 1995 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Brendan Eich wrote the interpreter in about ten days in May 1995, for a scripting language that could “touch elements of the page, change their properties, and respond to events”: a glue language for web designers and part-time programmers, beside Java for the components.',
+    'Eich states the need in one sentence: “The lack of programmability of Web pages made them static, text-heavy, with at best images in tables or floating on the right or left.” With a language that could touch the page, “we envisioned a much livelier Web consisting of pages that acted more like applications”. The belief, his and Marc Andreessen’s with Bill Joy of Sun, was that HTML needed a scripting language, “a programming language that was easy to use by amateurs and novices, where the code could be written directly in source form as part of the Web page markup”. He calls it a “glue language” for “the Web designers and part time programmers who were building Web content from components such as images, plugins, and Java applets”, with Java as the “component language”.',
+    'Eich joined Netscape on 4 April 1995 to put “the Scheme programming language, or something like it” into the browser; “Scheme was the bait”, he wrote later. Netscape was negotiating with Sun to put Java in Navigator, so the debate inside the company became why two languages at all. The answer was two audiences: component authors writing C++ or Java, and the scripters, “amateur or pro, who would write code directly embedded in HTML”. Upper engineering management ruled that the language must “look like Java”, which ruled out Perl, Python and Tcl, and Scheme with them.',
+    'He spent “about ten days in May 1995 developing the interpreter, including the built-in objects except for the Date class”, which Ken Smith wrote by translating Java’s java.util.Date to C, “unintentionally inheriting java.util.Date’s Y2K bugs in the process”. The design was then “frozen by necessity”. Eich spent the rest of 1995 embedding the engine in the browser and writing what became DOM level 0, the objects a script uses to reach windows, documents, forms, links and images and to respond to events. He was “the lone JS developer at Netscape until mid-1996”. He names the ingredients himself, “Scheme-ish first-class functions and Self-ish (albeit singular) prototypes”, and calls the Java influences, the Date bugs and the split between primitives and objects among them, “unfortunate”.',
+    'The name took longer than the language. Mocha was Andreessen’s code name. Netscape marketing “saw potential trademark conflicts” and had “a ‘live’ meme going in their naming”, so the betas said LiveScript. In early December 1995 Netscape and Sun signed a licence agreement and it became JavaScript, “a complementary scripting language to go with Java”, pushed, in Eich’s words, “as a little brother to Java, as a complementary language like Visual Basic was to C++”. The audience was “Web designers, people who may or may not have much programming training”, writing “a little snippet you could write, you could copy somebody else’s, you could learn as you went”; you could, he said, “buy it by the yard”. Jeremy Keith’s line for the family relationship stands: “Java is to JavaScript as ham is to hamster.”',
+    'Some early adopters, “even in late 1995 (Netscape 2’s beta period), built advanced Web apps using JS and frames in framesets, prefiguring the ‘Ajax’ or ‘Web 2.0’ style of development”, the pattern the 2005 moment names. Then, though, “the means to communicate with servers generally involved reloading whole Web pages”. Eich counts himself among those who curse the language, “a quickie love-child of C and Self”, and borrows words he credits to Dr. Johnson: “the part that is good is not original, and the part that is original is not good.” And still: “JS beat Java on the client.”'
+  ])('should tell the need and the language from Eich’s own words, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'Pages need to respond')).toHaveTextContent(told);
+  });
+
+  test.each(['not an application platform', 'never shipped publicly', 'He never romanticized it'])('should leave out "%s", which the sources do not hold', claim => {
+    expect(itemHeadedBy('the timeline', 'Pages need to respond')).not.toHaveTextContent(claim);
+  });
+
+  test('should link Keith’s line to his journal, and shelve it', () => {
+    expect(within(itemHeadedBy('the timeline', 'Pages need to respond')).getByRole('link', {name: '“Java is to JavaScript as ham is to hamster.”', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Misunderstanding markup', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -172,8 +198,7 @@ describe('the record', () => {
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
     'What changed each time was where the rendering happens; the three responsibilities did not move.',
     'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.',
-    'The markup of the time said it plainly:',
-    'the part that is original is not good.” And yet: “JS beat Java on the client.”'
+    'The markup of the time said it plainly:'
   ])('should say plainly, words and links together: %s', sentence => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
   });
@@ -319,7 +344,7 @@ describe('the record', () => {
     expect(screen.getByRole('link', {name: /one HTML document/}))
       .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
     expect(screen.getByRole('link', {name: /wrote the interpreter in about ten days/}))
-      .toHaveAttribute('href', expect.stringContaining('auth0.com'));
+      .toHaveAttribute('href', expect.stringContaining('computerworld.com'));
     expect(screen.getByRole('link', {name: /reducing the overlap/}))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
   });
