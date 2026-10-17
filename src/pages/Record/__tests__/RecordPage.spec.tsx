@@ -100,8 +100,15 @@ describe('the 1994 moment', () => {
     expect(itemHeadedBy('the timeline', 'Authors need control of the look')).toHaveTextContent(told);
   });
 
-  test('should keep one 1994 moment on the timeline, with no second moment for the referee', () => {
-    expect(within(screen.getByRole('list', {name: 'the timeline'})).queryByRole('heading', {name: 'Author and reader need a referee'})).not.toBeInTheDocument();
+  test.each([
+    'h1.font.size = 24pt 100%',
+    'Font   o-----x--------------o 64%',
+    'http://NYT.com/style 30%',
+    'h1.font.size = font.size * 3',
+    'AGE > 3d ? background.color = pale_yellow : background.color = white',
+    'speech.*.weight = 35db'
+  ])('should show the draft’s own notation: %s', sample => {
+    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getAllByRole('code', {hidden: true}).map(code => code.textContent).join('\n')).toContain(sample);
   });
 
   test('should link the thesis’s words to the thesis, and shelve it', () => {

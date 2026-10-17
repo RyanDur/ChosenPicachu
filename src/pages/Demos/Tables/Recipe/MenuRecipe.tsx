@@ -131,10 +131,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         <Reveal>
           <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
-          <Mdn path="Web/CSS/position-area"> <code>position-area</code></Mdn> picks cells.
+          <Mdn path="Web/CSS/position-area"> <code>position-area</code></Mdn> picks cells.{' '}
           <code>block-end</code> takes the row below the toggle; <code>span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
-            this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:
+            this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:{' '}
           <code>flip-block</code> is the escape hatch: when the row below has no room, the whole area flips
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
