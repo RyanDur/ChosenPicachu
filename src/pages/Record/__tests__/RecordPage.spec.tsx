@@ -73,6 +73,58 @@ describe('the 1991 moment', () => {
   });
 });
 
+describe('the 1994 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Håkon Wium Lie drafted Cascading HTML Style Sheets in October 1994, encouraged by Dave Raggett, who had realized HTML should never become a page-description language. The draft gave the author and the reader the same notation and a share of influence each. At Chicago some argued style needed a full programming language; CSS went the other way, a simple declarative format on purpose.',
+    'Style sheets were older than CSS. Berners-Lee’s NeXT browser took its look from a simple style sheet, but he did not publish the syntax, “considering it a matter for each browser to decide how to best display pages to its users”. Pei Wei’s Viola had a style language in 1992, the Harmony browser had one in 1993, and Robert Raisch of O’Reilly had written a proposal in June 1993. NCSA Mosaic, the browser that made the web popular, went the other way; Lie and Bos call it “a backwards step as it only allowed its users to change certain colors and fonts”. Authors new to the web asked first how to change fonts and colours, and HTML did not let them.',
+    'One thread on the www-talk list in February 1994 shows the need as it was felt. Paul Wain of Brunel University had generated menus nested four deep; Lynx drew them as he expected, Mosaic put a blank line in, and he asked whether that was a bug in Mosaic and, if not, how he would go about it. Marc Andreessen, one of Mosaic’s programmers, answered that it was “a rendering choice made by the browser”, mocked “the ‘ha ha, you can’t control what your documents look like in HTML’ philosophy”, and told him: “What can you do about it? Probably nothing.” Then came the line Lie and Bos quote for the tension between authors and implementors, about the “hordes (literally) of people” who wanted to control what their documents looked like “in ways that would be trivial in TeX, Microsoft Word, and every other common text processing environment”: “Sorry, you’re screwed.”',
+    'Lie published the draft on 10 October 1994. Dave Raggett, the main architect of HTML 3.0, had encouraged him to get it out before the “Mosaic and the Web” conference in Chicago, because he “had realized that HTML would and should never turn into a page description language and that a more purpose-built mechanism was needed to satisfy requirements from authors”. The draft calls itself version 0.92 and “incomplete as a basis for implementation”; its stated purpose was “to establish guiding principles and propose a level of functionality for HTML style sheets”. Three days later Andreessen announced on www-talk the first beta of Mozilla, which became Netscape Navigator, and its answer to the same authors was new tags, center among them, “and more tags were to follow shortly”.',
+    'The draft names both parties and promises each something: readers “a richer visual (or auditory and tactile) environment while they retain control if necessary”, authors and publishers “stylistic influence without resorting to page description languages”. It says who wins a conflict: “if conflicts arise the user should have the last word, but one should also allow the author to attach style hints.”',
+    'The first cascade settled conflicts by arithmetic. Each statement asked for a percentage of influence. The user’s sheet came first and could claim all of it or, more likely, hand most of it on to the sheets the document linked; where two sheets set the same property, the browser took a weighted average:',
+    'Forty percent left sixty for sheets later in the cascade. Lie named the open problem himself: for a discrete value like a font family, “it may not be obvious how to mix 40% helvetica and 60% times”. His own example sheet carries the comment “# first, redefine influence to dictatorship”.',
+    'The draft draws the settlement as a control, a “fictitious screen shot”, in ASCII, of sliders between user and author:',
+    'Whole sheets could carry weights against each other, so a sheet that set nothing of its own could take 30 percent of one newspaper’s look and 70 of another’s:',
+    'A property could be computed from another, which CSS would not offer again until calc():',
+    'Statements could read the world outside the document: a page could yellow with age like paper, a tall display could pick a different newspaper’s sheet, and a headline could grow when an agent judged the story relevant to the reader, which Lie brought from his work on personalized newspapers at the MIT Media Laboratory:',
+    'The conditionals did not survive. A media query tests the display the same way today.',
+    'The screen was only “the primary presentation target”; HTML could serve “paper, speech and braille”, and the draft styles speech with volume in decibels:',
+    'CSS2’s aural style sheets followed in 1998.',
+    'Bert Bos answered the draft. He was building Argo, a browser for scholars in the humanities, with a style language general enough to apply to other markup languages than HTML, and the two joined forces; that generality became a goal of CSS, and “HTML” came out of the title. There were other proposals, Wei’s, Raisch’s and DSSSL, the ISO language for printing SGML, and Lie and Bos name the one thing that set theirs apart: on the web the look of a document could not be designed by the author or the reader alone, so their wishes, and the capabilities of the device and the browser, had to be “combined, or ‘cascaded,’ in some way”.',
+    'Lie presented the draft at the Chicago conference’s Developer’s Day. Lie and Bos write that a balance between author and user preferences “was novel”, and that some found CSS “too simple for the task it was designed for” and argued that “the power of a full programming language was needed”. The draft had already answered: a style sheet lacks compound statements, variables and and/or, and its statements are “declarations of constraints”. Lie counted the field later, in his thesis: between 1993 and 1996 “nine different style sheet languages were proposed for the web”, eight of them in web forums, mainly on www-talk, and one in an academic paper, PSL96, which had the functions and conditional statements CSS had refused; “with the exception of PSL96, all proposals were either quite simple from the outset, or simplified subsets of style sheet languages developed before the web”, and two of the nine, his and Bos’s, “formed the basis for CSS”.',
+    'The same year Berners-Lee founded the World Wide Web Consortium at MIT’s Laboratory for Computer Science, a body whose members, governments, businesses, universities and individuals, write the recommendations that keep the browsers converging; W3C’s history lists the MIT and CERN agreement in July 1994, the founding on 1 October, and the first consortium meeting at MIT on 14 December. Presentation got its own language the same year the web got its own standards body, the W3C.'
+  ])('should tell the draft once, as one moment, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'Authors need control of the look')).toHaveTextContent(told);
+  });
+
+  test('should keep one 1994 moment on the timeline, with no second moment for the referee', () => {
+    expect(within(screen.getByRole('list', {name: 'the timeline'})).queryByRole('heading', {name: 'Author and reader need a referee'})).not.toBeInTheDocument();
+  });
+
+  test('should link the thesis’s words to the thesis, and shelve it', () => {
+    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“formed the basis for CSS”', hidden: true})).toHaveAttribute('href', 'https://www.wiumlie.no/2006/phd/#ch-postweb');
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Cascading Style Sheets', hidden: true})).toHaveAttribute('href', 'https://www.wiumlie.no/2006/phd/#ch-postweb');
+  });
+});
+
+describe('the 1996 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'The road from the draft to the standard ran through two years of argument. At the third web conference, at Darmstadt in April 1995, Lie and Bos met in person for the first time and each showed an implementation, Bos’s Argo and Dave Raggett’s Arena, and the technical presentations “ended up in political discussions about the author-reader balance”. The author side argued for the last word, down to warning labels with legal requirements on their printing; Lie and Bos were on the other side, for the user, “whose eyes and ears ultimately have to decode the presentation”. The www-style list opened in May 1995 and held more than 4,000 messages three years later. The W3C became operational that year, and its staff working on style sheets, the two authors, sat at its European site in Sophia-Antipolis; the consortium’s style-sheet workshop went to Paris, “which is better served by international flights”, where Thomas Reardon of Microsoft pledged CSS support in Internet Explorer, and Lie and Bos call it “a milestone in ensuring style sheets their rightful place on the Web”. At the end of 1995 the W3C set up the HTML Editorial Review Board to ratify specifications, Lou Montulli of Netscape among its members, and took CSS as a work item; with Microsoft adding CSS, Netscape had to be brought on board or the browsers would diverge. The battles were “long and hard”, and CSS1 became a Recommendation in December 1996 with the draft’s percentages gone; specificity decides a conflict instead.',
+    'The Recommendation is a short document. Its abstract says what the language is for in two sentences: “This document specifies level 1 of the Cascading Style Sheet mechanism (CSS1)”, and “One of the fundamental features of CSS is that style sheets cascade”, so that “authors can attach a preferred style sheet, while the reader may have a personal style sheet”. The author-and-reader settlement of 1994 is the first thing the standard states. A Recommendation is W3C’s final status for a specification, the point at which it asks the browsers to implement it.',
+    'The browsers were partly there already. Lie and Bos record that “The first commercial browser to support CSS was Microsoft’s Internet Explorer 3 which was released in August 1996”, four months before the Recommendation, with most of the colour, background, font and text properties and little of the box model; the changes the Editorial Review Board made after it shipped were ones its developers “could not foresee”. “The next browser to announce support was Netscape’s Navigator, version 4.0”, and what that implementation was is the first 1996 moment’s story.',
+    'So the standard fixed the language and not the rendering. The same sheet produced different pages, and the next decade of CSS is the browsers catching up with a document that was finished in 1996. In February 1997 CSS got its own working group, chaired by Chris Lilley, recruited to the W3C from the University of Manchester. CSS level 2 followed as a Recommendation in May 1998, and the catching-up is the 1998 moment.'
+  ])('should tell the road from the draft to the standard, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The style sheet needs a standard')).toHaveTextContent(told);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -99,7 +151,6 @@ describe('the record', () => {
   });
 
   test.each([
-    'Lie separated presentation from structure on purpose.',
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
     'The catching-up took a decade of feedback: tests, hacks, and public scoreboards.',
     'and one line thanks “Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”: the same Chris Wilson whose IE3 team had shipped with little of the box model.',
@@ -132,10 +183,10 @@ describe('the record', () => {
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
     expect(record.getByText(/^Tim Berners-Lee and Robert Cailliau,/)).toBeVisible();
     expect(record.getByText(/Someone needed something/)).toBeVisible();
-    expect(screen.getByText(/one sentence said twenty-one ways/)).toBeVisible();
+    expect(screen.getByText(/one sentence said twenty ways/)).toBeVisible();
   });
 
-  test('the timeline walks twenty-one beats of the same need, in order', () => {
+  test('the timeline walks twenty beats of the same need, in order', () => {
     const beats = within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('listitem')
       .map(beat => `${within(beat).getByRole('time').textContent} ${within(beat).getByRole('heading').textContent}`);
 
@@ -144,7 +195,6 @@ describe('the record', () => {
       '1990 Researchers need to collaborate',
       '1991 The web needs the public',
       '1994 Authors need control of the look',
-      '1994 Author and reader need a referee',
       '1995 Pages need to respond',
       '1995 The browsers’ tags need a standard',
       '1996 The need outruns the standards',
@@ -167,7 +217,7 @@ describe('the record', () => {
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(21);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(20);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]

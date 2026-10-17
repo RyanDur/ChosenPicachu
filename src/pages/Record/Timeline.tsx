@@ -3,7 +3,6 @@ import {Quotation} from '@components/Quotation';
 import {Need} from './moments/Need';
 import {StructureArrives} from './moments/StructureArrives';
 import {PresentationLeavesHome} from './moments/PresentationLeavesHome';
-import {CascadeSettlement} from './moments/CascadeSettlement';
 import {BehaviorBorn} from './moments/BehaviorBorn';
 import {NeedOutrunsStandards} from './moments/NeedOutrunsStandards';
 import {BrowsersAgree} from './moments/BrowsersAgree';
@@ -29,7 +28,6 @@ const stories: Record<MomentKey, FC> = {
   structureArrives: StructureArrives,
   webGoesPublic: WebGoesPublic,
   presentationLeavesHome: PresentationLeavesHome,
-  cascadeSettlement: CascadeSettlement,
   behaviorBorn: BehaviorBorn,
   htmlTwo: HtmlTwo,
   needOutrunsStandards: NeedOutrunsStandards,

@@ -13,7 +13,7 @@ describe('the home page', () => {
   test('should open on the thesis, then say who the site is for, then what the doors, the record and the demos give', () => {
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose. When one could not yet do a job, another covered for it until the standard caught up, which is what HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
     expect(screen.getByText(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit is a div where a button was meant, a class that names a margin instead of the reason for it, a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
-    expect(screen.getByText(/^Each language has a door below/)).toHaveTextContent('Each language has a door below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty-one moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
+    expect(screen.getByText(/^Each language has a door below/)).toHaveTextContent('Each language has a door below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
     expect(outOfReadingOrder([
       screen.getByText(/^A webpage is three languages working in concert/),
       screen.getByText(/^This site is for the developer/),
@@ -130,7 +130,6 @@ describe('the home page', () => {
     ]],
     ['Presentation', [
       '1994 Authors need control of the look',
-      '1994 Author and reader need a referee',
       '1996 The need outruns the standards',
       '1996 The style sheet needs a standard',
       '1998 The browsers need to agree',
@@ -157,7 +156,7 @@ describe('the home page', () => {
   test('should send a moment\'s line straight to that moment on the record', () => {
     const presentation = within(screen.getByRole('list', {name: 'Presentation, from the record'}));
 
-    expect(presentation.getByRole('link', {name: '1994 Author and reader need a referee'})).toHaveAttribute('href', `${Paths.record}#author-and-reader-need-a-referee`);
+    expect(presentation.getByRole('link', {name: '1994 Authors need control of the look'})).toHaveAttribute('href', `${Paths.record}#authors-need-control-of-the-look`);
     expect(within(screen.getByRole('list', {name: 'Structure, from the record'})).getByRole('link', {name: '1995 The browsers’ tags need a standard'}))
       .toHaveAttribute('href', `${Paths.record}#the-browsers-tags-need-a-standard`);
   });

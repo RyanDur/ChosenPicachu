@@ -155,6 +155,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Håkon Wium Lie, 10 October 1994</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.wiumlie.no/2006/phd/#ch-postweb"><cite>Cascading Style Sheets</cite></a>
+            <span className="provenance caption">Håkon Wium Lie, PhD thesis, University of Oslo, 2005</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html"><cite>The CSS Saga</cite></a>
             <span className="provenance caption">Håkon Wium Lie and Bert Bos, from Cascading Style Sheets: Designing for the Web, 1999</span>
           </li>
