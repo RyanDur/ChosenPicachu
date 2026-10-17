@@ -86,7 +86,7 @@ describe('the tables tab’s own words', () => {
     expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent(sentence);
   });
 
-  test('should leave the gesture step’s fold to its code, with nothing the want already says', async () => {
+  test('should not tell the reader to focus the handle and tap, which the gesture step’s want already says', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -101,6 +101,8 @@ describe('the tables tab’s own words', () => {
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'lifted', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'dropped', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
+    {name: 'onColumnMoved', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
+    {name: 'onRowMoved', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'lostpointercapture', choice: 'world=react', run: /the browser drops the capture with it and fires/},
     {name: 'lostpointercapture', choice: 'world=vanilla', run: /the browser drops the capture with it and fires/},
     {name: 'apportioned', choice: 'tut=resize', run: /a class the table has from the start/}

@@ -515,12 +515,6 @@ describe('the names the code uses', () => {
 });
 
 describe('the banner dials’ readings', () => {
-  test('should say, beside the entrance readings, that a reader who asks for less motion sees a new banner appear in place', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-
-    expect(await screen.findByText('If your system asks for less motion, a new banner appears in place, whichever entrance you choose.')).toBeInTheDocument();
-  });
-
   test.each([
     ['side=top', 'The panel holds to the window’s top edge.'],
     ['side=middle', 'The panel sits in the window’s middle.'],

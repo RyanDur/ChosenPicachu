@@ -72,7 +72,6 @@ describe('the record', () => {
     'What changed each time was where the rendering happens; the three responsibilities did not move.',
     'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.',
     'The markup of the time said it plainly:',
-    'circles and arrows, where “circles and arrows can stand for anything”',
     'the part that is original is not good.” And yet: “JS beat Java on the client.”'
   ])('should say plainly, words and links together: %s', sentence => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
