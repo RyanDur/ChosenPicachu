@@ -187,7 +187,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             the {whatACustomPropertyIs}.</Says>
           <Says>In <code>Aggregations.css</code>, beside the opening widths, three rules size the table.{' '}
             <code>width: 100%</code> fills its container. <code>min-width: 86rem</code> keeps that width on a narrower page, so the
-            container scrolls sideways. In a browser window 600px wide or less the floor drops to 64rem, unless the
+            container scrolls sideways. In a browser window 600px wide or less the minimum drops to 64rem, unless the
             pointer is coarse, the platform’s word for a finger on a touchscreen, which keeps the 86rem.
             Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
             has.</Says>

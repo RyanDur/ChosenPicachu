@@ -63,7 +63,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'A sort applied once is stale by the next trade.'},
     {choice: 'tut=menu', sentence: 'Picture your toggle as the middle cell of a three-by-three grid drawn over the page: position-area picks cells. block-end takes the row below the toggle; span-inline-start starts from the toggle’s own column and spreads toward the line’s start: under the toggle, hanging left, in this writing mode.'},
     {choice: 'tut=menu', sentence: 'position-try-fallbacks: flip-block is the escape hatch: when the row below has no room, the whole area flips above.'},
-    {choice: 'tut=menu', sentence: 'your site reset already zeroes menu, and author styles beat the browser’s own default styles, its user-agent stylesheet, no matter the specificity. The list markers are the reset’s job too; this site’s reset drops them for menu alongside ol and ul. One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centres every popover with inset: 0,'},
+    {choice: 'tut=menu', sentence: 'your site reset already zeroes menu, and a page’s own styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however specific the browser’s selectors are, because the cascade ranks who wrote a rule before how specific it is. The list markers are the reset’s job too; this site’s reset drops them for menu alongside ol and ul. One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centres every popover with inset: 0,'},
     {choice: 'tut=resize', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=resize&world=vanilla', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=menu', sentence: 'So the sort is a question the page asks on every read, never a stored answer: each read re-ranks the rows by the sorting column, and as values change underneath, the rows move to stay sorted.'},
@@ -75,7 +75,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
     {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property, --share, one of the values set by name on the cell and read back in the stylesheet with var().'},
-    {choice: 'tut=resize', sentence: 'In Aggregations.css, beside the opening widths, three rules size the table. width: 100% fills its container. min-width: 86rem keeps that width on a narrower page, so the container scrolls sideways. In a browser window 600px wide or less the floor drops to 64rem, unless the pointer is coarse, the platform’s word for a finger on a touchscreen, which keeps the 86rem. Fixed table layout holds each column at its declared share of whatever width the table has.'},
+    {choice: 'tut=resize', sentence: 'In Aggregations.css, beside the opening widths, three rules size the table. width: 100% fills its container. min-width: 86rem keeps that width on a narrower page, so the container scrolls sideways. In a browser window 600px wide or less the minimum drops to 64rem, unless the pointer is coarse, the platform’s word for a finger on a touchscreen, which keeps the 86rem. Fixed table layout holds each column at its declared share of whatever width the table has.'},
     {choice: 'tut=resize', sentence: 'So the cell holds a title, a menu where the page writes one, a handle, and nothing else.'},
     {choice: 'tut=resize', sentence: 'It has a cost: the padding and the controls’ offsets are two numbers that must agree, so both live in the one header sheet and nowhere else.'},
     {choice: 'tut=resize', sentence: 'The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.'},
@@ -126,6 +126,9 @@ describe('the tables tab’s own words', () => {
     {name: 'width: 100%', choice: 'tut=resize', run: /three rules size the table/},
     {name: 'min-width: 86rem', choice: 'tut=resize', run: /three rules size the table/},
     {name: 'popoverTarget', choice: 'tut=menu', run: /accessibility relationship comes/},
+    {name: 'popoverTarget', choice: 'tut=menu', run: /The platform provides the whole popup/},
+    {name: 'popovertargetaction', choice: 'tut=menu', run: /accessibility relationship comes/},
+    {name: '@supports', choice: 'tut=menu', run: /fallback: a centred popover/},
     {name: 'menu', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ol', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ul', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
@@ -163,6 +166,14 @@ describe('the tables tab’s own words', () => {
 
     expect(within(await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders)).getByRole('link', {name: ':has()', hidden: true}))
       .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
+  });
+
+  test('should say in the menu’s code aside what the prose says: the browser’s default placement', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
   });
 
   test('should picture position-area once, as a grid, with no second figure before it', async () => {

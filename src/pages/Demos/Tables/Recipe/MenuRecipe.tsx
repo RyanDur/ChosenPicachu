@@ -77,7 +77,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
       <Step title="A menu that is a menu">
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
           <Says>The platform provides the whole popup: point the
-            button’s <Mdn path="Web/HTML/Element/button#popovertarget">popoverTarget</Mdn> at the
+            button’s <Mdn path="Web/HTML/Element/button#popovertarget"><code>popoverTarget</code></Mdn> at the
             menu, and <Mdn path="Web/HTML/Global_attributes/popover"><code>popover="auto"</code></Mdn> brings
             the top layer, light-dismiss, and the accessibility relationship. The plan is to
             write no popup JavaScript at all.</Says>
@@ -93,7 +93,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Says>Naming the relationship does all of that for you. Give
             the menu an id and point the button’s <code>popoverTarget</code> at it;
             that is the whole wiring. Pressing the button toggles the popover (the
-            default <Mdn path="Web/HTML/Element/button#popovertargetaction">popovertargetaction</Mdn>)
+            default <Mdn path="Web/HTML/Element/button#popovertargetaction"><code>popovertargetaction</code></Mdn>)
             with no <code>onClick</code> anywhere, and the invoker-to-popup accessibility relationship comes
             along free. <code>popover="auto"</code> chooses
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
@@ -138,18 +138,19 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <code>flip-block</code> is the escape hatch: when the row below has no room, the whole area flips
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
-            that is this rule’s business: your site reset already zeroes <code>menu</code>, and author styles
-            beat the browser’s own default styles, its user-agent stylesheet, no matter the specificity. The list markers
+            that is this rule’s business: your site reset already zeroes <code>menu</code>, and a page’s own
+            styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however specific the
+            browser’s selectors are, because the cascade ranks who wrote a rule before how specific it is. The list markers
             are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.
             One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
             browser’s default stylesheet centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts <code>inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
-            your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centred popover.</Says>
+            your <Mdn path="Web/CSS/@supports"><code>@supports</code></Mdn> fallback: a centred popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
               ...span(menuCss, 'inset: auto;', 'inset: auto;'),
-              aside('/* centred is the UA’s placement; this menu chooses the anchor */'), gap,
+              aside('/* centred is the browser’s default placement; this menu chooses the anchor */'), gap,
               ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
               aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
               ...unit(menuCss, '@supports not (position-area: block-end)'),
