@@ -59,11 +59,12 @@ export const DemosPage = () => {
 
   return <>
     <p className="demos-opening paragraph">
-      Each tab below is one feature a page needs, built here and explained. The tabs run from simple to expert: an
+      Each tab below is one feature a page needs. I built each one here and explain it. The tabs run from simple to expert: an
       accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns
-      and rows you drag while trades keep landing. A tab shows the thing first, with dials wherever the build has a
-      choice; then the explanation, with what the platform gives now beside the tricks we used before it; then the
-      steps that build it, each beside the code that runs on this page. Start with the accordions if HTML, CSS and
+      and rows you drag while trades keep landing. A tab shows the
+      feature first, with dials wherever the build has a choice. Then comes the explanation, with what the platform gives
+      now beside the tricks we used before it. Then come the steps that build it, each beside the code that runs on this
+      page. Start with the accordions if HTML, CSS and
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" defaultTab={DemoTopics.accordions} values={topics}/>

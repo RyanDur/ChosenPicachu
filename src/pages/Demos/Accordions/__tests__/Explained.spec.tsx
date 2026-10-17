@@ -83,6 +83,40 @@ describe('the accordions tab', () => {
   });
 });
 
+describe('the accordions tab’s own words', () => {
+  test.each([
+    {type: 'exclusive', style: 'reveal', sentence: 'Every fold on this tab moves by transition, never by animation, because a reader may press again before the fold lands. If they do, a transition turns around from wherever it is. An animation plays a set of keyframes on its own clock, whatever the state does.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'Most of us turned next to script. A transition can move a height to a number, so the script supplies the number. When a fold opens, the script measures the text’s real height and gives the panel that height, and the stylesheet’s transition moves the panel from 0 to it.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The script makes the moves in two layout effects, code React runs after it has updated the elements and before the browser paints them. The first answers a press by pinning where the motion starts. The second, once that start is on the page, sets where it ends. So the script measures the panel and pins its start with no frame showing in between.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The bar carries the fold’s name. The control is a radio under a label. The label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the word, the fold and the state: “Open”, then the fold’s name, then “radio, not checked”. Someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply has display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows.'},
+    {type: 'inclusive', style: 'reveal', sentence: 'The bar carries the fold’s name. The control is a checkbox under a label. The label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the word, the fold and the state: “Open”, then the fold’s name, then “checkbox, not checked”. Someone using voice control says what they see.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The rest of the site uses that look too, so I keep it out of the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply.'},
+    {type: 'exclusive', style: 'drawer', sentence: 'One transition moves it all, so no part can fall behind another. The drawer works around no browser limit. I built it to show what grid alignment does on its own.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'Radios that share a name keep one fold open on their own, which checkboxes cannot do without script. What a radio cannot do is close itself: pressed again, it stays checked. So I add that with a little script on the list. The radios stay plain.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The section has a tabindex of 0, so a keyboard can reach it and scroll it, and wears focus-ringed, so a keyboard user sees when they have reached it. Its bar names it through aria-labelledby, so a screen reader says which fold it is reading.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'Whether a tall fold’s last line is cut off depends on where its lines fall, so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s colour that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The change event is the one the browser sends to the radio a press has just checked, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where the motion starts, with a second class, unmoving, that switches the height’s transition off for that moment.'},
+    {type: 'inclusive', style: 'reveal', sentence: 'The change event is the one the browser sends to the checkbox a press has just checked or unchecked, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'When a reader asks for less motion, every fold opens with no slide.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The third sets view transitions, the browser’s moves from one page state to the next, to no animation at all.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can choose the one the job needs.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The sections below are about making it slide, starting with how we did it before the browser could.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The cost was the timing. The transition spent its whole time crossing the guess, so a short fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text. The bigger the guess, the worse the rush and the wait. A guess too small cut the text off.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'A ref is a handle on the element itself. The script uses the panel’s one ref only to measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a transition at all.'},
+    {type: 'exclusive', style: 'drawer', sentence: 'With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete lets a property with no values between on and off switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'The script keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute on the list element.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'You want the text to slide open, not appear at once.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'With reveal, the size moves over 300 milliseconds with ease-in-out, and the text shows from its top down.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'Reveal moves the row on a transition, 300 milliseconds of ease-in-out. The text shows from its top down as the row grows.'},
+    {type: 'exclusive', style: 'reveal', sentence: 'This build is a disclosure: a bar you press to show the text under it. Opening one fold closes the others, and the short Close bar at the top closes whichever is open. It has no script.'},
+    {type: 'inclusive', style: 'reveal', sentence: 'This build is a disclosure: a bar you press to show the text under it. It has no script.'}
+  ])('should say, with $type and $style, words and links together: $sentence', async ({type, style, sentence}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
+
+    expect(await screen.findByRole('region', {name: 'Accordions'})).toHaveTextContent(sentence);
+  });
+});
+
 describe('the accordions explanation', () => {
   test.each([parts[0], parts[1], togetherHeading('inclusive')])('should show, with inclusive chosen, none of the radio builds’ words or code under "%s"', async part => {
     render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
@@ -167,16 +201,16 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
     const state = explanation.runTelling(explained, /The script keeps what it knows in React state/);
-    const ref = explanation.runTelling(explained, /The panel’s one ref is used only to/);
-    const effects = explanation.runTelling(explained, /The moves are made in two layout effects/);
+    const ref = explanation.runTelling(explained, /The script uses the panel’s one ref only to/);
+    const effects = explanation.runTelling(explained, /The script makes the moves in two layout effects/);
 
     expect(state).toHaveTextContent('React is the library this site’s script is written in, and a component is a function that returns the elements it draws');
     expect(state).toHaveTextContent('React state, a value a component holds and renders from');
     expect(ref).toHaveTextContent('A ref is a handle on the element itself');
     expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
     expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toMatch(/useState/);
-    expect(explanation.everyCodeBeside(explained, /The panel’s one ref is used only to/).join()).toMatch(/useRef[^]*const standing/);
-    expect(explanation.everyCodeBeside(explained, /The moves are made in two layout effects/).join()).toMatch(/useLayoutEffect\(\(\) => \{[^]*\}, \[open, shown\]\);[^]*useLayoutEffect\(\(\) => \{[^]*\}, \[motion, open\]\);/);
+    expect(explanation.everyCodeBeside(explained, /The script uses the panel’s one ref only to/).join()).toMatch(/useRef[^]*const standing/);
+    expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join()).toMatch(/useLayoutEffect\(\(\) => \{[^]*\}, \[open, shown\]\);[^]*useLayoutEffect\(\(\) => \{[^]*\}, \[motion, open\]\);/);
     expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The script hands each height to the stylesheet/)])).toEqual([]);
   });
 
@@ -694,7 +728,7 @@ describe('the accordion in HTML alone', () => {
 
 describe('the depth of each part', () => {
   test.each([
-    {type: 'exclusive', part: parts[0], fold: 'How the measured height works', point: /Most of us reached next for script/, depth: /Closing runs the other way/},
+    {type: 'exclusive', part: parts[0], fold: 'How the measured height works', point: /Most of us turned next to script/, depth: /Closing runs the other way/},
     {type: 'exclusive', part: parts[0], fold: 'How the known height works', point: /Here every panel is the same height/, depth: /You want the reader to see a bar/},
     {type: 'exclusive', part: parts[1], fold: 'How details works', point: /This replaces the three old ways/, depth: /A pseudo-element is a part of an element/},
     {type: 'exclusive', part: parts[2], fold: 'How the radio and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/},
@@ -800,7 +834,7 @@ describe('the runs in view, with the folds shut', () => {
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
     expect(within(together).getByText(/^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
-    expect(within(together).getByText(/^The list keeps the open radio’s value/)).toHaveTextContent('The list keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute, a name the script sets on the list element to that string. In the script it is dataset.open: dataset is the browser’s name for an element’s data- attributes, with the prefix dropped. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
+    expect(within(together).getByText(/^The script keeps the open radio’s value/)).toHaveTextContent('The script keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute on the list element. In the script it is dataset.open: dataset is the browser’s name for an element’s data- attributes, with the prefix dropped. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
   });
 
   test('should say, with exclusive chosen, what keydown is where the list catches the space bar', async () => {
@@ -819,7 +853,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`Firefox and Safari have already applied a pressed box’s new style by the time the change event fires, the event the browser sends to the ${input} a press has just ${pressed}, and to no other. So the script first pins where the motion starts`);
+    expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`The change event is the one the browser sends to the ${input} a press has just ${pressed}, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where the motion starts`);
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a fold is open', async () => {
@@ -835,7 +869,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const motion = await screen.findByRole('region', {name: parts[3]});
 
-    expect(explanation.runTelling(motion, /every fold opens with no slide/)).toHaveTextContent(/^With less motion asked for, every fold opens with no slide\./);
+    expect(explanation.runTelling(motion, /every fold opens with no slide/)).toHaveTextContent(/^When a reader asks for less motion, every fold opens with no slide\./);
   });
 
   test('should say that a transition turns around when the reader presses again midway', async () => {
@@ -843,7 +877,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const motion = await screen.findByRole('region', {name: parts[3]});
 
-    expect(within(motion).getByText(/Every fold on this tab moves by transition/)).toHaveTextContent(/If the reader presses again midway, a transition turns around from wherever it is\./);
+    expect(within(motion).getByText(/Every fold on this tab moves by transition/)).toHaveTextContent(/because a reader may press again before the fold lands\. If they do, a transition turns around from wherever it is\./);
   });
 });
 
@@ -877,7 +911,7 @@ describe('the platform build’s bars', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
 
-    expect(run).toHaveTextContent(`Summary also draws its own arrow, called a marker, where the ${input} build drew one from two borders. The browser gives a summary the display of a list item, and a marker is drawn only on a list item. This bar’s display is flex, a row, so the marker goes with it, and the bar draws the ${input} build’s arrow in its place, so this bar reads the same as the bars of the known-height and measured builds.`);
+    expect(run).toHaveTextContent(`Summary also draws its own arrow, called a marker, where the ${input} build drew one from two borders. The browser gives a summary the display of a list item, and draws a marker only on a list item. This bar’s display is flex, a row, so the browser draws no marker. The bar draws the ${input} build’s arrow in its place, so it reads the same as the bars of the known-height and measured builds.`);
     expect(run).not.toHaveTextContent(/every build/);
     expect(explanation.everyCodeBeside(platform, /Summary also draws its own arrow/)).toEqual([]);
   });
@@ -959,7 +993,7 @@ describe('the known-height build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const run = explanation.runTelling(oldWay, /The bar’s colours are the page’s the other way round/);
 
-    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. That look is shared with the rest of the site, so it does not live in the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.');
+    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.');
     expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^&:not\(\.close\) \.info-label \{[^]*\.inverse-filled \{/);
     expect(outOfReadingOrder([
       run,
@@ -998,8 +1032,8 @@ describe('the classes the bars wear', () => {
 
     const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
-    expect(explanation.runTelling(together, /^The bar is named by its fold/)).toHaveTextContent(`The bar is named by its fold. The control is a ${input} under a label that holds the Open or Close the eye sees and, for the ear, the fold’s name, so a listener hears the word, the fold and the state, such as “Open”, then the fold’s name, then “${input}, not checked”, and someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply is display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
-    expect(explanation.everyCodeBeside(together, /^The bar is named by its fold/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
+    expect(explanation.runTelling(together, /^The bar carries the fold’s name/)).toHaveTextContent(`The bar carries the fold’s name. The control is a ${input} under a label. The label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the word, the fold and the state: “Open”, then the fold’s name, then “${input}, not checked”. Someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply has display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
+    expect(explanation.everyCodeBeside(together, /^The bar carries the fold’s name/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
   });
 });
 
@@ -1009,7 +1043,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent('The section has a tabindex of 0, so a keyboard can reach it and scroll it, wears focus-ringed so a keyboard reader sees when they have reached it, and is named by its bar with aria-labelledby, so a screen reader says which fold it is reading.');
+    expect(explanation.runTelling(oldWay, /The section has a tabindex of 0/)).toHaveTextContent('The section has a tabindex of 0, so a keyboard can reach it and scroll it, and wears focus-ringed, so a keyboard user sees when they have reached it. Its bar names it through aria-labelledby, so a screen reader says which fold it is reading.');
     expect(explanation.everyCodeBeside(oldWay, /The section has a tabindex of 0/).join()).toMatch(/\.focus-ringed \{/);
   });
 
@@ -1018,7 +1052,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed, which paints a shadow at its foot and a cover in the panel’s colour that scrolls with the text and hides the shadow at the end, or when the text fits.');
+    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s colour that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.');
     expect(explanation.everyCodeBeside(oldWay, /Whether a tall fold’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
   });
 });
