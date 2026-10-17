@@ -534,7 +534,7 @@ describe('a list of charts', () => {
     test.each([
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
-      ['the arc paths', 'I tried arc paths next.'],
+      ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
       ['what a rotation is', 'A rotation is less work: the shape stays the same and only its place changes. So I build the cut from rotation alone.'],
       ['what a class is', 'nothing to give a class, which is a name a stylesheet’s rules pick an element out by, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
