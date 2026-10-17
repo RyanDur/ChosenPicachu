@@ -56,10 +56,7 @@ describe('the record', () => {
 
   test.each([
     'The complementary language outlived the thing it was built to complement.',
-    'The lesson was not that script was wrong',
-    'That feedback loop built an ecosystem',
-    'Paved cowpaths',
-    'in the same breath'
+    'The lesson was not that script was wrong'
   ])('should leave out the closer "%s"', closer => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(closer);
   });

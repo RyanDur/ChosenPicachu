@@ -908,7 +908,7 @@ describe('the platform build’s bars', () => {
   });
 });
 
-describe('the known-height build’s stylesheet reading the checkbox', () => {
+describe('the known-height build’s stylesheet reading the hidden input', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say what a selector, a pseudo-class and a combinator are, with %s chosen', async (type, input) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
