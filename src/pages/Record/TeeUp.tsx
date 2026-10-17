@@ -5,18 +5,19 @@ import {Paths} from '@pages/Paths';
 export const TeeUp: FC<PropsWithChildren> = ({children}) =>
   <footer className="tee-up">
     <p className="sub-title">
-      Someone needs something; the clues point at an element; a design takes shape; the stories
-      are cut thin; the feature is built on them. That is how every page here is built.
+      I start from what someone needs. The clues in that need point at an element the platform already has. I design
+      around the element, cut the design into thin stories, and build the feature one story at a time. Every page here
+      was built that way.
     </p>
     <p className="sub-title">
-      The tables are built twice: once with the three languages raw, no framework anywhere in the
-      frame, and once in React with the same three underneath. The history above is the argument
-      for keeping that seam visible.
+      The tables are built twice: once in plain HTML, CSS and JavaScript with no framework, and once in React on the
+      same three. I keep both so the line between the platform and the framework stays visible. The history above is
+      why that line matters: what a framework had to do keeps moving into the platform.
     </p>
     <p className="sub-title">
-      <Link className="signpost" to={Paths.demos}>Start where the demos start</Link>: the
-      accordions, the tricks we used to do beside what the platform gives us now, and how
-      much power there is in knowing what was built for what.
+      <Link className="signpost" to={Paths.demos}>Start where the demos start</Link>, with the accordions, which set
+      the trick we used before beside what the platform gives now. Most of the leverage is in knowing what each element
+      was built for.
     </p>
     {children}
   </footer>;

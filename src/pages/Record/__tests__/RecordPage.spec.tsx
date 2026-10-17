@@ -21,12 +21,12 @@ describe('the record', () => {
     expect(demos).toHaveAttribute('href', expect.stringContaining(Paths.demos));
   });
 
-  test('should say, after the record, that the tables are built twice and the history above is the argument for keeping the seam visible', () => {
+  test('should say, after the record, that the tables are built twice and why both are kept', () => {
     const record = screen.getByRole('region', {name: 'How the web got its languages'});
     const seam = screen.getByText(/^The tables are built twice/);
 
     expect(record.compareDocumentPosition(seam)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(seam).toHaveTextContent('The tables are built twice: once with the three languages raw, no framework anywhere in the frame, and once in React with the same three underneath. The history above is the argument for keeping that seam visible.');
+    expect(seam).toHaveTextContent('The tables are built twice: once in plain HTML, CSS and JavaScript with no framework, and once in React on the same three. I keep both so the line between the platform and the framework stays visible. The history above is why that line matters: what a framework had to do keeps moving into the platform.');
   });
 
   test('the record says why the languages arrived', () => {
@@ -97,14 +97,19 @@ describe('the record', () => {
   });
 
   test('should open the tee-up on how every page here is built, need first', () => {
-    expect(screen.getByText(/^Someone needs something; the clues point at an element/))
-      .toHaveTextContent('Someone needs something; the clues point at an element; a design takes shape; the stories are cut thin; the feature is built on them. That is how every page here is built.');
+    expect(screen.getByText(/^I start from what someone needs/))
+      .toHaveTextContent('I start from what someone needs. The clues in that need point at an element the platform already has. I design around the element, cut the design into thin stories, and build the feature one story at a time. Every page here was built that way.');
+  });
+
+  test('should send the reader into the demos at the accordions, and say what the demos teach', () => {
+    expect(screen.getByText(/with the accordions, which set the trick we used before/))
+      .toHaveTextContent('Start where the demos start, with the accordions, which set the trick we used before beside what the platform gives now. Most of the leverage is in knowing what each element was built for.');
   });
 
   test('should tell the concert after the timeline closes and before the tee-up', () => {
     const closing = screen.getByText(/^Read the titles again, top to bottom/);
     const concert = screen.getByRole('region', {name: 'The concert'});
-    const teeUp = screen.getByText(/^Someone needs something; the clues point at an element/);
+    const teeUp = screen.getByText(/^I start from what someone needs/);
 
     expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
