@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, desktop, iPhone, pressTab, tabsTo} from './__test_support';
+import {bannerTrap, desktop, dialRow, iPhone, pressTab, tabsTo} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
@@ -101,4 +101,19 @@ test('a reader who follows the tutorial below with motion allowed lands on the s
 
   await expect(page).toHaveURL(/#news-top-story$/);
   await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
+});
+
+const lessMotionEntrance = 'If your system asks for less motion, a new banner appears in place, whichever entrance you choose.';
+
+test('the entrance reads the chosen side, and reads that a new banner appears in place once the reader asks for less motion', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  await page.goto('demos/?tab=z-index&enter=right');
+  const {reading} = dialRow(page, 'entrance');
+  await reading.scrollIntoViewIfNeeded();
+
+  await expect(reading).toHaveText('A new banner slides in from past the window’s right edge.', {useInnerText: true});
+
+  await page.emulateMedia({reducedMotion: 'reduce'});
+
+  await expect(reading).toHaveText(lessMotionEntrance, {useInnerText: true});
 });
