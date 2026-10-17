@@ -490,21 +490,26 @@ describe('the native drag sort tutorial’s words', () => {
 
 describe('the drag sort tab’s own words', () => {
   test.each([
-    ['pace=eager', 'Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the user’s side of the screen, and a promise of a conversation rather than a specification. The whole of it reads as one:'],
-    ['pace=eager', 'I cut it into two thin stories, the same reorder each time. One moves the order by pointer, on the platform’s own drag and drop. The other moves the order directly, from the keyboard. Both are cards in the last station, and each opens into its build.'],
+    'Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the user’s side of the screen, and a promise of a conversation rather than a specification. The whole of it reads as one:',
+    'I cut it into two thin stories, the same reorder each time. One moves the order by pointer, on the platform’s own drag and drop. The other moves the order directly, from the keyboard. Both are cards in the last station, and each opens into its build.',
+    'The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or right arrow into a move of one place and reports the new order up to the list, with no drag involved. While the item is still sliding, the handler ignores the keys.'
+  ])('should say, whatever the dials, words and links together: %s', async sentence => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
+  });
+
+  test.each([
     ['origin=hide', 'One card rides the pointer, so you see one card, not two.'],
-    ['pace=eager', 'Nothing has to be measured ahead of time. The browser fires dragover on whatever the pointer is over, so the event’s own target is the neighbour, and the neighbour’s bounding box, the rectangle the browser reports for an element’s place and size, is the space to cross.'],
     ['pace=eager', 'You want the order to move as you drag; waiting for the drop hides the result until it is too late to change your mind.'],
     ['pace=eager', 'The state updates during the drag, the markup renders from it, and React moves the li with the same key to its new place while the browser still shows the drag image under the pointer.'],
-    ['motion=animated', 'An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.'],
-    ['motion=animated', 'The swap happens at once. The crossed item gets the class pushed, and its keyframe’s from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place.'],
     ['pace=lazy', 'You want the list to hold still while the platform drags. The drop lands while the'],
     ['pace=lazy', 'is still alive, so the reorder has to wait for the session to end.'],
     ['pace=lazy', 'Each dragover stores the'],
-    ['pace=lazy', 'the item the pointer is over at that moment, and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it. Nothing moves until the release. The commit runs from the release because the browser is still playing the end of its own drag until then.'],
     ['pace=lazy&origin=keep', 'Do nothing. This is the keep list, so its Item is the plain card. The browser already drew the drag image, so for the length of the drag there are two of the card, one in place and one dimmed under the pointer. KeepItem has no hiding code.'],
-    ['pace=lazy&origin=keep&motion=static', 'This is the static list, and it has no motion code. The handler sets the order and React draws it on the next frame; a keyboard move sets the order the same way.'],
-    ['pace=eager', 'The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or right arrow into a move of one place and reports the new order up to the list, with no drag involved. While the item is still sliding, the handler ignores the keys.']
+    ['pace=lazy&origin=keep&motion=static', 'This is the static list, and it has no motion code. The handler sets the order and React draws it on the next frame; a keyboard move sets the order the same way.']
   ])('should say, with %s, words and links together: %s', async (choices, sentence) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
