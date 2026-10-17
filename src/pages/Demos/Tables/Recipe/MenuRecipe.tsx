@@ -64,11 +64,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
     can="The trader can sort the windows by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
     <TheImplementation world={world} react="Builds" vanilla="Frame/table/menus.ts"/>
-    <Tell>We could build the popup from divs, but then we would have to build focus, dismissal and
-      stacking ourselves, and choosing starts to feel like working against the menu instead of using it;
-      so the chooser uses the platform, and the first steps below collect what that
-      decision gives us. Sorting state has its own trap: the glyph, the attribute, and the
-      ranked rows all want their own copy of which column is chosen, and copies
+    <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
+      stacking myself. So the chooser uses the platform’s popover, and the first steps below collect what that
+      decision gives. Sorting state has its own trap: the glyph, the attribute and the
+      ranked rows each want their own copy of which column is chosen, and copies
       drift.</Tell>
     <Tell>And two forces pull at whatever the trader chooses. The data keeps streaming under
       the sort, so a sort that happens once is stale by the next trade. And a drag changes
@@ -130,7 +129,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             JavaScript.</Says>
         </Words>
         <Reveal>
-          <Says>Read the new syntax as a compass around the anchor. Picture your toggle as the
+          <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
           <Mdn path="Web/CSS/position-area"> position-area</Mdn> picks cells.
             block-end takes the row below the toggle; span-inline-start starts from the toggle’s
@@ -173,9 +172,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               only that one, so the th announces aria-sort from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
-              it changes, announce goes through the headers asking it for each: the sorting th gains
-              aria-sort, and every other column returns to rest. One value holds the sort, and the
-              header cannot lie.</Says>}
+              it changes, the build walks the columns and announce sets each th from that value: the sorting th gains
+              aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with
+              it.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
@@ -214,10 +213,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Says>Your first instinct is to sort once: rank the rows when the direction is chosen,
             store the result, move on. It even looks right, until the next trade changes a value
             and the table quietly stops being sorted. A sort applied once is stale by the next
-            trade, and this data never stops trading.</Says>
-          <Says>So the sort is a question, never an answer that is stored: every read re-ranks
-            the rows through the sorting column, so as values change underneath, the rows keep
-            trading places to stay sorted.</Says>
+            trade.</Says>
+          <Says>So the sort is a question the page asks on every read, never a stored answer: each
+            read re-ranks the rows by the sorting column, and as values change underneath, the rows move to stay
+            sorted.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
@@ -235,12 +234,11 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the real order, and the sort must end.</Says>
         </Words>
         <Reveal>
-          <Says>Move a row and the sort ends: the table raises onRowMoved with
-            the <Term word="standing">standing</Term> it showed, and the page keeps the rows
-            exactly where the sort left them, moves the one you moved, and clears the sort, so
+          <Says>Move a row and the sort ends. The table raises onRowMoved with
+            the <Term word="standing">standing</Term> it showed; the page keeps the rows
+            where the sort left them, moves the one you moved, and clears the sort, so
             your drag proceeds from what you saw. Choosing "reset" clears the sort the other way:
-            back to the <Term word="seats">seats</Term> as they stood before the sort,
-            nothing sorting them at all.</Says>
+            back to the <Term word="seats">seats</Term> as they stood before the sort.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
@@ -267,12 +265,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           {world === 'react'
             ? <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: a menu
-              exists only where the page writes one inside the header, and the cell pads for it
-              by asking the cascade what it holds.</Says>
+              exists only where the page writes one inside the header, and a :has() rule on the cell pads
+              for the toggle when one is there.</Says>
             : <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: menus
-              exist only where the markup writes them, the cell pads for them by asking the
-              cascade what it holds, and the page itself declares the sortable set.</Says>}
+              exist only where the markup writes them, a :has() rule on the cell pads for
+              the toggle when one is there, and the page itself declares the sortable set.</Says>}
           <Says>The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
             attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>

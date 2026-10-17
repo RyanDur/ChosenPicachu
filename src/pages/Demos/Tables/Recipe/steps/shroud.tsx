@@ -34,9 +34,10 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
     <Reveal>
       <Says>The <Term word="drift">drift</Term> is a field of the drag, written by the dragging reducer’s drifted
         case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the
-        pointer has moved since. Every move dispatches the pointer, and two selectors turn the drag into two
-        numbers every carried cell wears as custom properties, {whatACustomPropertyIs}: the seat, where the grab box sits
-        against where the column rests in the order as it stands now, and the drift. That
+        pointer has moved since. Every move dispatches the pointer. Two selectors turn the drag
+        into two numbers, and every carried cell wears them as custom properties: {whatACustomPropertyIs}. The first is
+        the seat, where the grab box sits against where the column rests in the order as it stands now. The second is
+        the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
         changes, the gap moves by the crossed neighbour’s width, and the seat number changes by that width the
         other way, so the carried

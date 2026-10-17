@@ -23,6 +23,6 @@ export const DataPath: FC = () =>
           <p className="data-path-does caption muted-ink">{does}</p>
         </li>)}
     </ol>
-    <p className="reel-note caption muted-ink">Drawn, not recorded: nothing here happens in time, so a
-      clip of ticking numbers would show less than the diagram does.</p>
+    <p className="reel-note caption muted-ink">I drew this rather than recording it. The path a number takes has no timing to
+      show, so a clip of ticking numbers would show less than the diagram does.</p>
   </figure>;

@@ -80,8 +80,8 @@ const ActionsAreData: FC = () =>
         next state.</Says>
     </Words>
     <Reveal>
-      <Says>The first draft dispatched functions from state to state and called them reducers. They were not: a
-        reducer interprets an action it did not write.</Says>
+      <Says>My first draft dispatched functions from state to state and called them reducers. They were not
+        reducers: a reducer interprets an action it did not write.</Says>
       <Says>Making the action data costs a union of types and one switch. It gets what the shape guarantees: the
         store knows nothing about tables, a layer of middleware can read what kind of action is passing, and a
         dispatch can be logged or replayed as a record.</Says>
@@ -258,16 +258,16 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
   <Story param="living" id="store"
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
-    <Tell>We could let each chart and each table keep its own copy of the trades. They would drift from each other
+    <Tell>I could let each chart and each table keep its own copy of the trades. They would drift from each other
       and from the stream, and every listener would need to know which world it landed in.</Tell>
     <Tell>So the page is a <Term word="store">store</Term> in the Redux shape, without Redux. Redux is a JavaScript library
       that keeps an application’s state in one store, and this page borrows that shape and none of its code.</Tell>
     <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
       records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
-    <Tell>In the vanilla build, the hand is the code’s name for the store that holds the drag and the widths once
-      measured; the React build names it store and keeps the marks a move leaves in it too, while the vanilla build
-      writes those marks onto the cells as classes. Each table has one. It holds only what the trader
+    <Tell>In the vanilla build the code calls the table’s store the hand. It holds the drag and the widths once
+      measured. The React build calls it store and keeps the marks a move leaves in it too; the vanilla build writes
+      those marks onto the cells as classes. Each table has one. It holds only what the trader
       does to it, and it raises what the trader did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>

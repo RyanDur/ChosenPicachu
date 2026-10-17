@@ -26,11 +26,11 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
           each row places its cells the same way. A moved column or row is an event the page
           dispatches into its own order. A reorder never touches the data, and nothing reads the
           markup back: the same key finds its new seat and React moves the real nodes.</Says>
-        : <Says>Rows and columns arrive in the markup’s order, and the markup is the source of the
-          structural knowledge: JavaScript reads the columns off the header classes and names every row element, which the code calls a lane, after its row header. Both seed the arrangement, and every dispatch
-          reconciles the page against the new order, so a reorder never touches the data: the
+        : <Says>Rows and columns arrive in the markup’s order, and the structure comes from the
+          markup: JavaScript reads the columns off the header classes, and names every row element (a lane, in the code)
+          after its row header. Both seed the arrangement. Every dispatch reconciles the page against the new order, so a reorder never touches the data: the
           same lane finds its new seat, and insertBefore moves the real node only when its seat
-          actually changed.</Says>}
+          changed.</Says>}
       {world === 'react'
         ? <Codes>
           <Snippet label="TS" lines={[

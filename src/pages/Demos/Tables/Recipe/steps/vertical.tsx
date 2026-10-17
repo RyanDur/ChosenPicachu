@@ -37,11 +37,11 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
         {world === 'react'
           ? <Snippet label="HTML" lines={[
             ...span(gripSource, '<button', '</button>'),
-            aside('{/* focusable by birth; the keyboard track will thank you */}')
+            aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
             ...span(frameHtml, '<button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed" aria-label="move row 1">', '</button>'),
-            aside('<!-- focusable by birth; the keyboard track will thank you -->')
+            aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[

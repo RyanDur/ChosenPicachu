@@ -156,13 +156,13 @@ const WidenStory: FC<{world: World}> = ({world}) =>
     soThat="what they read most gets the room, and the table keeps its shape">
     <Tell>The ledger is the table’s record of each column’s share of the width.</Tell>
     <TheImplementation world={world} react="Builds" vanilla="Frame/table/resize.ts"/>
-    <Tell>We could resize with absolute pixel widths, but one drag would break the
-      table’s guarantee to fill its container; so widths are shares of a hundred, created by
-      measuring the rendered headers at the first touch, and every resize is a trade
+    <Tell>I could resize with absolute pixel widths, but one drag would break the
+      table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers
+      at the first touch, and every resize is a trade
       between neighbours: whatever one column gains, the next gives, and the sum cannot
       change.</Tell>
     <Tell>The header cell lets each control find its own edge, and pads for whatever it holds,
-      so the handle sits at the boundary without a box to arrange it. It captures its pointer and measures the
+      so the handle sits at the boundary without a box to arrange it. The handle captures its pointer and measures the
       table once, pixels per share. A press on the handle would bubble, which means the browser passes it on to the
       header around it, and the header would start a column drag. So the handle stops the press there, and a
       boundary drag never becomes a column drag. Arrow keys on a focused handle make the same trade, one fixed step
@@ -172,8 +172,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the guarantee that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
           <Says>Widths should be <Term word="share">shares</Term> of a hundred, created by
-            measuring the rendered headers at the first touch; until a pointer arrives, the
-            stylesheet owns the widths and no ledger exists.</Says>
+            measuring the rendered headers when a handle is first pressed or focused; until then, the stylesheet owns the widths and no ledger exists.</Says>
         </Words>
         <Reveal>
           <Says>Pixel widths are the first record you reach for, and every entry in it is wrong as soon as the window
@@ -181,10 +180,11 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
             in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
             is a class of the table’s own sheet.</Says>
-          <Says>It switches the table to the layout the ledger apportions. Its share is written as a custom property, and
+          <Says>It makes the rule that reads the header’s share match that header; the table itself has used the
+            apportioned layout from the start. Its share is written as a custom property, and
             fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
             opening widths in that same stylesheet, keeps the table exactly its container: every
-            column a fraction of it, one record keeping one guarantee.</Says>
+            column a fraction of it.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
@@ -199,10 +199,10 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             piece of furniture a track. It works, and it costs a generic element whose only job is
             to arrange three children, plus an id to hang the column’s name on, because the title
             text is no longer the cell’s own.</Says>
-          <Says>So the cell stays honest: a title, a menu where the page writes one, a handle, and
+          <Says>So the cell holds a title, a menu where the page writes one, a handle, and
             nothing else. Each control pins itself to the end edge, and the cell pads for what it
             holds by asking the cascade: more room when a menu is present, less when only the
-            handle is. The cost is real and it is stated: the padding and the controls’ offsets are
+            handle is. It has a cost: the padding and the controls’ offsets are
             two numbers that must agree, so both live in the one header sheet and nowhere else.
             The column names itself with <code>aria-label</code>, since the title is bare text with no element
             to point at.</Says>
@@ -210,7 +210,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
         </Reveal>
       </Step>
       <Step title="A handle that is a button">
-        <Words want="The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.">
+        <Words want="The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.">
           <Says>The handle should be a
             native <Mdn path="Web/HTML/Element/button">button</Mdn>: focus, announcement, and
             activation for free, <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule.
@@ -271,7 +271,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             as well, because the header handles arrow keys by moving the column.</Says>
         </Words>
         <Reveal>
-          <Says>The sort never gets the press, and the arrow keys move a fixed step with no
+          <Says>The column drag never gets the press, and the arrow keys move a fixed step with no
             pointer required: focus the handle and tap.</Says>
           {gestureCodes[world]}
         </Reveal>

@@ -8,10 +8,10 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const FocusLands: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
-      <Says>HTML already focuses more than it gets credit for: a button is focusable by birth,
+      <Says>HTML already does most of this: a button is focusable by birth,
         and a header can ask with
-        a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>. CSS handles the
-        arrival: a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring for the keyboard
+        a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>. CSS draws the
+        rest: a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring for the keyboard
         that pointer users never see.</Says>
     </Words>
     <Reveal>
@@ -53,9 +53,8 @@ export const FocusLands: FC<{world: World; headerSource: Sample; buildSrc: Sampl
 export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="The arrows give the direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
-      <Says>The verb gets claimed with
-        a <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener that takes the two
-        arrows and nothing else: every other key falls through,
+      <Says>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener claims the verb.
+        It takes the two arrows and nothing else: every other key falls through,
         and <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn> fires only on what it
         claims, so the page does not scroll. The walk itself is the same seat arithmetic the
         pointer track built.</Says>
@@ -76,7 +75,7 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Samp
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const nudgedColumn'), gap,
           ...unit(surveySource, 'export const nudgedRow'),
-          aside('// the anchors hold and the walk stops beside them; both worlds walk with the same feet')
+          aside('// the anchors hold and the walk stops beside them; both worlds call the same walk')
         ]}/>
       </Codes>
     </Reveal>

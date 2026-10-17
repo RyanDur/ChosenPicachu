@@ -26,22 +26,20 @@ const dealPlans: Record<World, ReactNode> = {
     <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared
       once, each with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content, but a live table
       would never hold still: every new number re-negotiates the layout. And you could carry widths in
-      the data, but they are layout, not data. So the page’s stylesheet deals the opening
-      widths, and with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header
-      widths govern their whole columns: the table always fills its container, and the
-      columns hold still while the values change.</Says>
-    <Says>And no JavaScript knows these widths at all, because nothing needs to know the
-      size until you touch something. The resize <Term word="ledger">ledger</Term> is created at the first touch by
-      measuring the headers as they stand, and the drag measures them at the lift; a value
-      that changes at runtime is state, and until then nothing has changed.</Says>
+      the data, but they are layout, not data. So I deal the opening widths from the page’s stylesheet.
+      With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills
+      its container and the columns hold still while the values change.</Says>
+    <Says>No JavaScript knows these widths, because nothing needs the size until you touch something. The first
+      press or focus of a resize handle measures the headers as they stand and creates the{' '}
+    <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
+      runtime is state, and until then nothing has changed.</Says>
   </>,
   vanilla: <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are
     declared once, each a header cell with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content,
     but a live table would never hold still: every new number re-negotiates the layout. And you
-    could carry widths in the markup, but they are layout, not content. So the page’s
-    stylesheet deals the opening widths, and
-    with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header widths
-    govern their whole columns: the table always fills its container, and the columns
+    could carry widths in the markup, but they are layout, not content. So I deal the opening widths from the page’s
+    stylesheet. With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills its
+    container and the columns
     hold still while the values change.</Says>
 };
 
@@ -77,7 +75,7 @@ const socketPlans: Record<World, string> = {
 const foldSays: Record<World, ReactNode> = {
   react: <Says>Every render folds the same trades into per-window aggregates: counts, volume,
     vwap, the change since the window opened. The fold runs over the same capped trades
-    each time, so the windows are always exactly the stream’s current truth.</Says>,
+    each time, so the windows always match the trades the page holds.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
     change, so a writer subscribed to the trades refolds the state, writes only the cells whose
@@ -111,9 +109,9 @@ const StillStory: FC<{world: World}> = ({world}) =>
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     <TheImplementation world={world} react="Aggregations" vanilla="Frame/frame.main.ts"/>
-    <Tell>The shape comes from the design, in the element the story chose: a few measures
-      across a few time windows, numbers on two axes; that is what a table is for. It stands
-      first as a still, built from whatever trades the page holds: headers on both axes, and the
+    <Tell>The shape comes from the design, in the element the clues pointed at: a few measures
+      across a few time windows, numbers on two axes. That is what a table is for. I build it first as a still, from
+      whatever trades the page holds: headers on both axes, and the
       reading order correct before a single interaction exists.</Tell>
     <Steps>
       <Step title="Deal a real HTML table">
@@ -135,8 +133,8 @@ const StillStory: FC<{world: World}> = ({world}) =>
             element brings behaviour you would otherwise have to build: readers move through it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
-            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
-            and accessibility stops being work you add and becomes behaviour you inherit.</Says>
+            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the behaviour you
+            need.</Says>
           {dealCodes[world]}
         </Reveal>
       </Step>
@@ -179,11 +177,9 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             from growing forever, and what to do when the socket closes.</Says>
         </Words>
         <Reveal>
-          <Says>The handshake subscribes to the product,
-            every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade
-            appended under a cap so a long session never grows without bound, and
-            a <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed instead of
-            pretending.</Says>
+          <Says>The handshake subscribes to the product.
+            Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade, appended under a cap so a long session never grows without bound.
+            A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(exchangeSource, 'const stream = streaming('), gap,

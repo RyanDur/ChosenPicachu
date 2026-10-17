@@ -18,10 +18,10 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
     <Reveal>
       {world === 'react'
         ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
-          touch-action: none is why the pointer can drag on touch at all. On pointerdown, the
-          header takes the survey, takes the pointer, and lifts: one dispatch, and the store
-          holds the drag beside the columns and the seats, the one mark of what
-          is <Term word="aloft">carried</Term>, a key that a table with no carry never
+          touch-action: none is why the pointer can drag on touch at all. On pointerdown the
+          header takes the survey, takes the pointer, and lifts. That is one dispatch, and after it the store
+          holds the drag beside the columns and the seats: the one mark of what
+          is <Term word="aloft">carried</Term>, a key a table with no carry never
           has. One word in the code comes from a small library
           called <a className="signpost"
           href="https://ryandur.github.io/sand/"

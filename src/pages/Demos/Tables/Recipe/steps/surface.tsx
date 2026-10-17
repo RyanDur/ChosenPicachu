@@ -23,30 +23,27 @@ export const DragSurface: FC<{world: World; headerSource: Sample; buildSrc: Samp
         ? <Says>While something is <Term word="aloft">aloft</Term>, the header cell carries the move and
           release handlers, and only then: the props are there when the state says the column
           is held and gone when it is not, so nothing is ever stale. Every move retakes the
-          capture. Treat a cancel or a move with no buttons pressed as the drop: releases can
-          vanish into odd corners of the platform. Losing the capture is not the drop. When a
-          settle moves the header cell in the DOM, the browser drops the capture with it and
-          says so at the next move, with that move’s coordinates on the event; so the loss is
-          handled as the move it is, and the header takes the pointer back in the same
-          breath.</Says>
+          capture. Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not
+          always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser
+          drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the
+          event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.</Says>
         : <Says>While something is <Term word="aloft">aloft</Term>, the header that lifted, or the grip
           for a row, handles the move and the release, and a guard on the store stops the
           listeners when nothing is held. Every move retakes the capture. Treat a cancel
-          or a move with no buttons pressed as the drop: releases can vanish into odd corners of
-          the platform. Losing the capture is not the drop. When the reconcile moves the cell in
-          the DOM, the browser drops the capture with it and says so at the next move, with that
-          move’s coordinates on the event; so the loss is handled as the move it is, and the
-          holder takes the pointer back in the same breath.</Says>}
+          or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is
+          not the drop. When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires
+          lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the
+          loss as the move it is, and retakes the pointer in the same handler.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...span(headerSource, 'onPointerMove={has(drag) ? pointerTravel(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'), gap,
             ...unit(headerSource, 'const release = '),
-            aside('// cancel and buttons at zero are not delegates; they ARE the drop')
+            aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'const wireCarry = '),
-            aside('// cancel and buttons at zero are not delegates; they ARE the drop')
+            aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const pointerTravel'),

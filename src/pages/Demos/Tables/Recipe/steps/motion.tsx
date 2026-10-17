@@ -100,15 +100,13 @@ export const StaticMotion: FC<{world: World; cssSource: Sample}> = ({world, cssS
         ? <Says>The static table is the animated table wearing a different word. Every drop and
           every walk still marks what settles and what is shoved, because the marks are what
           happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
-          it starts and the mark clears in the same breath. There is real value beyond taste:
-          nothing competes with the pointer, and no motion for prefers-reduced-motion users to
-          endure.</Says>
+          it starts and the mark clears in the same breath. Its value is that nothing competes with the
+          pointer.</Says>
         : <Says>The static build is the animated build wearing a different word. Every drop and
           every walk still marks what settles and what is shoved, because the marks are what
           happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
-          it starts and the cells clear their classes at once. There is real value beyond taste:
-          nothing competes with the pointer, and no motion for prefers-reduced-motion users to
-          endure.</Says>}
+          it starts and the cells clear their classes at once. Its value is that nothing competes with the
+          pointer.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
           ...unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),

@@ -20,7 +20,7 @@ const shareMarkup: Record<World, ReactNode> = {
 
 export const CssShare: FC<{world: World}> = ({world}) =>
   <Step title="Let CSS carry its share">
-    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first, and most of them are declarations, not code.">
+    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.">
       <Says>Your first pass writes no behaviour: the stylesheet already covers most of
         this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
         fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
