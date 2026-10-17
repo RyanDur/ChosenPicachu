@@ -8,7 +8,7 @@ import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource,
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 
-const whatACustomPropertyIs = <>values set by name on the cell and read back in the stylesheet with <code>var()</code></>;
+export const whatACustomPropertyIs = <>values set by name on the cell and read back in the stylesheet with <code>var()</code></>;
 
 const theSheetDeclaresSeatAndDrift = <>
   The sheet declares the seat and the drift with <code>@property</code>, a rule that gives a custom property a type

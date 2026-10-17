@@ -162,14 +162,14 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         <Words want="A sorted column must say so, visibly and to assistive technology, without a second source of truth appearing anywhere.">
           <Says>Which column is sorted should be written once, as
             the <Term word="sort">sort</Term>, and every column should wear it from there;
-            let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
+            let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort"><code>aria-sort</code></Mdn> be
             the single signal read from it, and let the glyph be CSS reading that attribute.</Says>
         </Words>
         <Reveal>
           {world === 'react'
             ? <Says>The sort is one value in the page’s arrangement, a column name and a
               direction. When the page gives the table its columns it marks the sorting one, and
-              only that one, so the th announces <code>aria-sort</code> from what it was given and the toggle
+              only that one, so the <code>th</code> announces <code>aria-sort</code> from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
               it changes, the build walks the columns and <code>announce</code>, one function, sets each <code>th</code> from that
@@ -265,14 +265,14 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           {world === 'react'
             ? <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: a menu
-              exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has">:has()</Mdn> rule on the cell, which matches an
+              exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an
               element by what it contains, pads for the toggle when one is there.</Says>
             : <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: menus
-              exist only where the markup writes them, a <Mdn path="Web/CSS/:has">:has()</Mdn> rule on the cell, which matches an element by what it
+              exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
               contains, pads for the toggle when one is there, and the page itself declares the sortable set.</Says>}
-          <Says>The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and
-            attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
+          <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
+            browser’s button chrome, <code>muted-ink</code> greys its glyph, and <code>attentive</code> fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>
           <Codes>
             {world === 'react'

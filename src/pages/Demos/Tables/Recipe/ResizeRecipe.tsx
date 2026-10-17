@@ -15,6 +15,7 @@ import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
 import {TheImplementation} from './steps';
+import {whatACustomPropertyIs} from './steps/shroud';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -182,10 +183,12 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             is a class of the table’s own sheet.</Says>
           <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code>apportioned</code>, a class it has from
             the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
-            width from its share. The header’s share is written as a custom property.
-            Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the opening widths
-            in <code>Aggregations.css</code>, keeps the table exactly its container: every
-            column a fraction of it.</Says>
+            width from its share. The header’s share is written as a custom property, <code>--share</code>, one of
+            the {whatACustomPropertyIs}. In <code>Aggregations.css</code>, beside the opening widths, the table
+            is <code>width: 100%</code>, so it fills its container; <code>min-width: 86rem</code>, so on a narrower page it keeps
+            that width and the container scrolls sideways (64rem on a screen of 600px or less with a fine pointer); and
+            fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, so each column holds its declared share of whatever
+            width the table has.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
