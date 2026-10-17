@@ -180,9 +180,11 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
             in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
             is a class of the table’s own sheet.</Says>
-          <Says>It makes the rule that reads the header’s share match that header; the table itself wears{' '}
-            <code>apportioned</code>, a class the table has from the start. Its share is written as a custom property, and
-            fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the opening widths in Aggregations.css, keeps the table exactly its container: every
+          <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code>apportioned</code>, a class it has from
+            the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
+            width from its share. The header’s share is written as a custom property.
+            Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the opening widths
+            in <code>Aggregations.css</code>, keeps the table exactly its container: every
             column a fraction of it.</Says>
           {ledgerCodes[world]}
         </Reveal>
@@ -199,8 +201,8 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             to arrange three children, plus an id to hang the column’s name on, because the title
             text is no longer the cell’s own.</Says>
           <Says>So the cell holds a title, a menu where the page writes one, a handle, and
-            nothing else. Each control pins itself to the end edge, and a :has() rule on the cell pads for what it
-            holds: more room when a menu is present, less when only the
+            nothing else. Each control pins itself to the end edge, and a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the
+            cell pads for what it holds: more room when a menu is present, less when only the
             handle is. It has a cost: the padding and the controls’ offsets are
             two numbers that must agree, so both live in the one header sheet and nowhere else.
             The column names itself with <code>aria-label</code>, since the title is bare text with no element

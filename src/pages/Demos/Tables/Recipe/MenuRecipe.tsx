@@ -169,11 +169,11 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           {world === 'react'
             ? <Says>The sort is one value in the page’s arrangement, a column name and a
               direction. When the page gives the table its columns it marks the sorting one, and
-              only that one, so the th announces aria-sort from what it was given and the toggle
+              only that one, so the th announces <code>aria-sort</code> from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
               it changes, the build walks the columns and <code>announce</code>, one function, sets each <code>th</code> from that
-              value: the sorting <code>th</code> gains aria-sort, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
+              value: the sorting <code>th</code> gains <code>aria-sort</code>, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
               it.</Says>}
           <Codes>
             {world === 'react'

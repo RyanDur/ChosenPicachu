@@ -70,7 +70,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu&world=vanilla', sentence: 'When it changes, the build walks the columns and announce, one function, sets each th from that value: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
     {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
-    {choice: 'tut=resize', sentence: 'Its share is written as a custom property, and fixed table layout, set beside the opening widths in Aggregations.css, keeps the table exactly its container: every column a fraction of it.'},
+    {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property. Fixed table layout, set beside the opening widths in Aggregations.css, keeps the table exactly its container: every column a fraction of it.'},
     {choice: 'tut=resize', sentence: 'So the cell holds a title, a menu where the page writes one, a handle, and nothing else.'},
     {choice: 'tut=resize', sentence: 'It has a cost: the padding and the controls’ offsets are two numbers that must agree, so both live in the one header sheet and nowhere else.'},
     {choice: 'tut=resize', sentence: 'The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.'},
@@ -105,7 +105,11 @@ describe('the tables tab’s own words', () => {
     {name: 'onRowMoved', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'lostpointercapture', choice: 'world=react', run: /the browser drops the capture with it and fires/},
     {name: 'lostpointercapture', choice: 'world=vanilla', run: /the browser drops the capture with it and fires/},
-    {name: 'apportioned', choice: 'tut=resize', run: /a class the table has from the start/}
+    {name: 'apportioned', choice: 'tut=resize', run: /a class it has from the start/},
+    {name: 'Aggregations.css', choice: 'tut=resize', run: /set beside the opening widths in/},
+    {name: ':has()', choice: 'tut=resize', run: /rule on the cell pads for what it/},
+    {name: 'aria-sort', choice: 'tut=menu', run: /so the th announces/},
+    {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /the build walks the columns and/}
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
@@ -1181,7 +1185,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
 
     expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
-    expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header; the table itself wears apportioned, a class the table has from the start. Its share is written as a custom property');
+    expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header. The table itself wears apportioned, a class it has from the start; under it a cell clips its text to its column, and a header that wears shared takes its width from its share. The header’s share is written as a custom property');
   });
 
   test('should label the ledger’s headerStates TS, in the react world', async () => {
