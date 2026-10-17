@@ -160,7 +160,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
       <ol className={runs}>
         <li className="run">
-          <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
+          <p className="paragraph">Most of us turned next to script.
+            {type === 'exclusive' && ' Opening one fold closes the others, and the short Close bar at the top closes whichever is open.'}
+            {' '}A transition can move a height to a number,
             so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
             the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
             moves the same way, short or tall, because the target is the text’s own height. When the motion
@@ -275,8 +277,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
-            {type === 'exclusive' && ' Opening one fold closes the others, and the short Close bar at the top closes whichever is open.'}
-            {' '}It has no script. Everything below is HTML and CSS:
+            It has no script. Everything below is HTML and CSS:
             what the elements hold, and what a selector can match.</p>
         </li>
         <li className="run">
@@ -395,7 +396,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   panel’s height is 0 and overflow hidden hides the text.
                 {{
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing.',
-                  drawer: ' With the drawer, the height moves over 300 milliseconds with ease-in-out, and the text slides down from under the bar.',
+                  drawer: ' With the drawer, the height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, and the text slides down from under the bar.',
                   static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
@@ -550,7 +551,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   hold yet.
                 {{
                   reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
-                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete lets a property with no values between on and off switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
+                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
                   static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[

@@ -524,7 +524,15 @@ describe('the names the code uses', () => {
   test.each([
     {name: 'pushed', choices: '', run: /^The swap happens at once/},
     {name: 'effectAllowed', choices: '', run: /^Then the browser fires/},
-    {name: 'KeepItem', choices: 'pace=lazy&origin=keep', run: /^Do nothing\. This is the keep list/}
+    {name: 'KeepItem', choices: 'pace=lazy&origin=keep', run: /^Do nothing\. This is the keep list/},
+    {name: 'Item', choices: 'pace=lazy&origin=keep', run: /^Do nothing\. This is the keep list/},
+    {name: 'draggable', choices: '', run: /is an attribute, a setting written on the element/},
+    {name: 'soft-cornered', choices: '', run: /^The li, the list item that is the card/},
+    {name: 'field', choices: '', run: /^The li, the list item that is the card/},
+    {name: 'hairline-outline', choices: '', run: /^The li, the list item that is the card/},
+    {name: 'handle-raised', choices: '', run: /^The li, the list item that is the card/},
+    {name: '--toward', choices: '', run: /keyframe turned/},
+    {name: 'var()', choices: '', run: /keyframe turned/}
   ])('should set $name as code where its run names it', async ({name, choices, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);

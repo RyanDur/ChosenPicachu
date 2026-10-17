@@ -16,7 +16,8 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
         browser draws the item where it used to be and slides it to its new place.</Says>
       <Says>It is the{' '}
         <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>charts demo</Link>’s keyframe turned
-        horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(),
+        horizontal, with the direction as data: <code>--toward</code>, a custom property, a value given a name once and read
+        back with <code>var()</code>,
         flips the sign of one keyframe instead of naming two.</Says>
     </Words>
     <Codes>
