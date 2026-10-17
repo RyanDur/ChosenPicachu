@@ -394,6 +394,10 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
+    test('should say I draw the line with SVG rather than reach for a chart library', async () => {
+      expect(await priceStory()).toHaveTextContent('I could have reached for a chart library, but this chart is one line and two axes. So I draw the line with SVG, the browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.');
+    });
+
     test('should say the 1,500-trade cap bounds how far back the live part of the charts reaches', async () => {
       expect(await priceStory()).toHaveTextContent('The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with it, so the live part of the price line and the candles reaches back as far as those trades do.');
     });
@@ -445,7 +449,7 @@ describe('a list of charts', () => {
       ['the classes up and down', 'A class is a name written on an element that a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
       ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
       ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colours. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
-      ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colours travel as custom properties, values a stylesheet names once and other rules read, and a side class sets them: volume-side sets leather for the bar and drab for its edge, and the bars read them through side-face and side-wall.']
+      ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colours are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
     });
@@ -505,10 +509,10 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
-    test('should say the pie answers for up to the last 1,500 trades, counted since the page opened', async () => {
+    test('should say the pie sums up to the last 1,500 trades, counted since the page opened', async () => {
       const story = await pieStory();
 
-      expect(story).toHaveTextContent('The pie answers for up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
+      expect(story).toHaveTextContent('The pressure chart sums each minute on its own. The pie sums up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
       expect(story).toHaveTextContent('like the pressure chart it counts only what has arrived since the page opened.');
       expect(story).toHaveTextContent('One number for each side. The pie asks nothing about time.');
       expect(story).toHaveTextContent('the pie is a pair of totals.');
@@ -529,7 +533,9 @@ describe('a list of charts', () => {
 
     test.each([
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
-      ['what a rotation is', 'A rotation asks for less: the shape stays the same, and only where it is drawn changes.'],
+      ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
+      ['the arc paths', 'I tried arc paths next.'],
+      ['what a rotation is', 'A rotation is less work: the shape stays the same and only its place changes. So I build the cut from rotation alone.'],
       ['what a class is', 'nothing to give a class, which is a name a stylesheet’s rules pick an element out by, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);
@@ -937,8 +943,8 @@ describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
-    'This page’s view is that a chart is arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws.',
-    'By the end you can draw a live line chart, candles, which show how the price opened, closed and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
+    'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period a chart shows. Each chart is worked out from those every time the page redraws.',
+    'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
   ];
 
   test('should tell the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
@@ -983,7 +989,7 @@ describe('the workspace story', () => {
   });
 
   test.each([
-    ['the address', 'Adding a chart, sorting, removing one and choosing a period, the stretch of time a chart shows, are each written into the page’s address. That is all a reload or a shared link needs to bring the layout back.'],
+    ['the address', 'The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period, the stretch of time a chart shows. A reload or a shared link needs nothing else to bring the layout back.'],
     ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
     ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
@@ -1046,7 +1052,7 @@ describe('the charts’ audited words', () => {
     await tabWith('candles');
     const candles = screen.getByRole('region', {name: 'candles'});
 
-    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price');
+    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
     expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
   });
 

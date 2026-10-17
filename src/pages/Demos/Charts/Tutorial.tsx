@@ -38,8 +38,8 @@ const PriceStory: FC = () =>
   <Story param="graph" id="price"
     can="The trader can watch the price move, live"
     soThat="the session reads at a glance">
-    <Tell>We could reach for a chart library, but this chart is one line and two axes. So the line is drawn with SVG, the
-      browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.</Tell>
+    <Tell>I could have reached for a chart library, but this chart is one line and two axes. So I draw the line with
+      SVG, the browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.</Tell>
     <Tell>Trades arrive faster than anyone can read, so they are grouped into equal spans of time. Each span becomes one
       candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
@@ -222,9 +222,9 @@ const CandlesStory: FC = () =>
           <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
             busiest span on the chart, and every other bar is in proportion to it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
-          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colours travel as custom
-            properties, values a stylesheet names once and other rules read, and a side class sets them: volume-side
-            sets leather for the bar and drab for its edge, and the bars read them through side-face and side-wall.</Says>
+          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colours are custom
+            properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side
+            sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -336,12 +336,12 @@ const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>The pressure chart answers minute by minute. The pie answers for up to the last 1,500 trades
-      as a whole: one slice for the size buyers took and one for the size sellers took.</Tell>
+    <Tell>The pressure chart sums each minute on its own. The pie sums up to the last 1,500 trades as
+      a whole: one slice for the size buyers took and one for the size sellers took.</Tell>
     <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only what has
       arrived since the page opened.</Tell>
-    <Tell>The circle has to move as the split changes, and move smoothly. So each slice is made of two half-discs that are
-      only ever rotated, and a share is how far they have turned into view.</Tell>
+    <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that only
+      ever rotate, and a share is how far they have turned into view.</Tell>
     <Steps>
       <Step title="Add up each side">
         <Words want="One number for each side. The pie asks nothing about time.">
@@ -360,12 +360,12 @@ const PieStory: FC = () =>
           <Says>You could paint the split with a conic gradient, a background that sweeps colour round a point. But a
             painted background has no parts: nothing to give a class, which is a name a stylesheet’s rules pick an
             element out by, nothing to label, and nothing for a test to find.</Says>
-          <Says>Arc paths were the next try. An SVG arc carries a flag that flips when the arc passes half the circle, and a
+          <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
             frame.</Says>
-          <Says>A rotation asks for less: the shape stays the same, and only where it is drawn changes. So the cut is built
-            from rotation alone.</Says>
+          <Says>A rotation is less work: the shape stays the same and only its place changes. So I build the cut from
+            rotation alone.</Says>
           <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
             nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the
             other.</Says>
@@ -417,9 +417,9 @@ const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
-    <Tell>Adding a chart, sorting, removing one and choosing a period, the stretch of time a chart shows, are each
-      written into the page’s address.
-      That is all a reload or a shared link needs to bring the layout back.</Tell>
+    <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and
+      choosing a period, the stretch of time a chart shows. A reload or a shared link needs nothing else to bring the
+      layout back.</Tell>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
       chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
