@@ -285,6 +285,7 @@ describe('the tables demo', () => {
     await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
+    expect(screen.getByRole('region', {name: 'Tables'})).toHaveTextContent('Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the trader’s side of the screen, and a promise of a conversation rather than a specification.');
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     [['The trader can read the market in a table', 'station 4'],
       ['The trader can watch the market live, in windows', 'station 5'],

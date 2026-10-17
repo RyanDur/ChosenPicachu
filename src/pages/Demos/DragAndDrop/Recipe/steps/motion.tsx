@@ -10,9 +10,10 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
   <Step title="Slide the crossed item into place" dial=<MotionDial name="native-motion"/>>
-    <Words want="An eager swap that jumps is hard to follow, but nothing can be animated during the drag with a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture, would swallow the drag’s own events.">
-      <Says>The swap happens at once, and the crossed item is drawn where it used to be and slides to its new place on a{' '}
-        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from, the keyframe’s starting state, is one place over.</Says>
+    <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
+      <Says>The swap happens at once. The crossed item gets the class pushed, and its{' '}
+        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from, the keyframe’s starting state, is one place over: the
+        browser draws the item where it used to be and slides it to its new place.</Says>
       <Says>It is the{' '}
         <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>charts demo</Link>’s keyframe turned
         horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(),
@@ -53,8 +54,8 @@ export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
 export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Apply the state update directly" dial=<MotionDial name="native-motion"/>>
     <Words want="Motion is not free: it competes with the drag, costs a frame, and some readers ask for none.">
-      <Says>This is the static list, and it has no motion code. The order is applied and React draws it on the next
-        frame; a keyboard move is applied the same way.</Says>
+      <Says>This is the static list, and it has no motion code. The handler sets the order and React draws it on the next
+        frame; a keyboard move sets the order the same way.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

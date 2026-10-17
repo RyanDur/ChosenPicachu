@@ -383,8 +383,8 @@ describe('the native drag sort tutorial’s words', () => {
     const arm = recipeFolds.steps(story)[0];
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
-      'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the handle sets a flag, and the card renders draggable for that gesture only.',
-      'Then the browser fires dragstart, the event for a drag beginning, and its handler says what move is about to be made.'
+      'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the grip sets a flag, and the card renders draggable for that gesture only.',
+      'Then the browser fires dragstart, the event for a drag beginning, and its handler sets effectAllowed to move: this drag moves the card, it does not copy or link it.'
     ]));
   });
 
@@ -417,19 +417,19 @@ describe('the native drag sort tutorial’s words', () => {
   });
 
   test.each([
-    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, so the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
-    ['dragstart', 'dragstart, the event for a drag beginning, and its handler says what move is about to be made'],
+    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
+    ['dragstart', 'dragstart, the event for a drag beginning, and its handler sets effectAllowed to move: this drag moves the card, it does not copy or link it'],
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
     ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel.'],
     ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
     ['preventDefault', 'One call accepts the drop: the dragover handler calls preventDefault, the method that tells the browser not to do what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel.'],
     ['dropEffect and effectAllowed', 'The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move.'],
     ['drop', 'The drop handler, for the event of a release over a target, calls preventDefault too. The browser’s default for a dropped link, file or address is to open it as a page; this list drags none of those, so the call changes nothing today and keeps the list safe the day a payload is added.'],
-    ['a bounding box', 'its bounding box, the rectangle the browser reports for an element’s place and size, is the slot.'],
+    ['a bounding box', 'the neighbour’s bounding box, the rectangle the browser reports for an element’s place and size, is the space to cross.'],
     ['where a crossing counts', 'counts only once the pointer is past the neighbour’s outer quarter.'],
     ['the drag image', 'Mark a card draggable and the browser does the rest. It draws the drag image, a picture of the card that follows the pointer; it sets the cursor;'],
     ['the cancel', 'and it plays the cancel, the animation that carries the card back when no target accepts the drop.'],
-    ['a view transition and its capture', 'a view transition, the browser’s way of animating a page from one state to the next by taking a picture of both. Its capture, that picture,']
+    ['a view transition and its capture', 'A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture,']
   ])('should say what %s is where the reader meets it', async (_term, sentence) => {
     expect(await nativeRecipe()).toHaveTextContent(sentence);
   });
@@ -453,8 +453,8 @@ describe('the native drag sort tutorial’s words', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, forgets it.');
-    expect(explanation.everyCodeBeside(screen.getByRole('region', {name: 'build the native drag sort yourself'}), /^Each dragover only remembers/).join()).toMatch(/onDragLeave=\{\(\) => setLanding\(nothing\(\)\)\}/);
+    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it.');
+    expect(explanation.everyCodeBeside(screen.getByRole('region', {name: 'build the native drag sort yourself'}), /^Each dragover stores/).join()).toMatch(/onDragLeave=\{\(\) => setLanding\(nothing\(\)\)\}/);
   });
 
   test('should say what a tick is where the lazy glide meets it', async () => {
@@ -488,11 +488,37 @@ describe('the native drag sort tutorial’s words', () => {
   });
 });
 
+describe('the drag sort tab’s own words', () => {
+  test.each([
+    ['pace=eager', 'Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the user’s side of the screen, and a promise of a conversation rather than a specification. The whole of it reads as one:'],
+    ['pace=eager', 'I cut it into two thin stories, the same reorder each time. One moves the order by pointer, on the platform’s own drag and drop. The other moves the order directly, from the keyboard. Both are cards in the last station, and each opens into its build.'],
+    ['origin=hide', 'One card rides the pointer, so you see one card, not two.'],
+    ['pace=eager', 'Nothing has to be measured ahead of time. The browser fires dragover on whatever the pointer is over, so the event’s own target is the neighbour, and the neighbour’s bounding box, the rectangle the browser reports for an element’s place and size, is the space to cross.'],
+    ['pace=eager', 'You want the order to move as you drag; waiting for the drop hides the result until it is too late to change your mind.'],
+    ['pace=eager', 'The state updates during the drag, the markup renders from it, and React moves the li with the same key to its new place while the browser still shows the drag image under the pointer.'],
+    ['motion=animated', 'An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.'],
+    ['motion=animated', 'The swap happens at once. The crossed item gets the class pushed, and its keyframe’s from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place.'],
+    ['pace=lazy', 'You want the list to hold still while the platform drags. The drop lands while the'],
+    ['pace=lazy', 'is still alive, so the reorder has to wait for the session to end.'],
+    ['pace=lazy', 'Each dragover stores the'],
+    ['pace=lazy', 'the item the pointer is over at that moment, and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it. Nothing moves until the release. The commit runs from the release because the browser is still playing the end of its own drag until then.'],
+    ['pace=lazy&origin=keep', 'Do nothing. This is the keep list, so its Item is the plain card. The browser already drew the drag image, so for the length of the drag there are two of the card, one in place and one dimmed under the pointer. KeepItem has no hiding code.'],
+    ['pace=lazy&origin=keep&motion=static', 'This is the static list, and it has no motion code. The handler sets the order and React draws it on the next frame; a keyboard move sets the order the same way.'],
+    ['pace=eager', 'The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or right arrow into a move of one place and reports the new order up to the list, with no drag involved. While the item is still sliding, the handler ignores the keys.']
+  ])('should say, with %s, words and links together: %s', async (choices, sentence) => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
+  });
+});
+
 describe('the drag sort tab’s introduction', () => {
   const paragraphs = [
     'A sortable list is a list the reader reorders by picking an item up and putting it down somewhere else.',
     'The browser has shipped its own drag and drop for twenty years, and most of us have reached for a library anyway, because the native drag looked wrong, dropped in the wrong place, or could not be done with a keyboard.',
-    'This page’s view is that the order belongs to the user and the list is the element built for it, so the drag should be the browser’s own, with script only for what the platform does not yet do: making room as you hover, or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbours, or not.',
+    'The order belongs to the user, and the list is the element built for it. So I use the browser’s own drag, and write script only for what the platform does not yet do: making room as you hover, or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbours, or not.',
     'Each of those is a dial in the last part of the tutorial below, and the exhibit above the dials changes to match.',
     'By the end you can build a sortable list on the browser’s own drag and drop, choose each of those three behaviours and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves as the pointer. The exhibit below is three items; drag one by its grip, or focus the grip and use the left and right arrows.'
   ];
@@ -535,9 +561,10 @@ describe('the drag sort tab’s audited words', () => {
   });
 
   test.each([
-    ['pace=eager&motion=animated', 'The order changes as you drag, so the item’s old place stays reachable until you let go.', 'And the crossed card slides into place, so the eye keeps the story of the swap.'],
-    ['pace=lazy&motion=animated', 'The order does not change until you drop, so only the destination matters.', 'And the whole reorder on release glides once, so the landing explains itself.'],
-    ['pace=lazy&motion=static', 'The order does not change until you drop, so only the destination matters.', 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.']
+    ['pace=eager&motion=animated', 'The order changes as you drag, so the item’s old place stays reachable until you let go.', 'And the crossed card slides into place, so you can follow the swap instead of seeing a jump.'],
+    ['pace=lazy&motion=animated', 'The order does not change until you drop, so only the destination matters.', 'And the whole reorder on release glides once, so you see each card travel to its new place.'],
+    ['pace=lazy&motion=static', 'The order does not change until you drop, so only the destination matters.', 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.'],
+    ['pace=eager&motion=static', 'The order changes as you drag, so the item’s old place stays reachable until you let go.', 'And the reorder lands instantly, so nothing competes with the browser’s drag.']
   ])('should promise, with %s, what the order does', async (choices, pace, motion) => {
     await tabAt(choices);
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
@@ -561,7 +588,7 @@ describe('the drag sort tab’s audited words', () => {
     const [, swap, sign] = within(sliding).getAllByRole('paragraph');
 
     expect(within(sliding).getAllByRole('paragraph')).toHaveLength(3);
-    expect(swap).toHaveTextContent(/whose from, the keyframe’s starting state, is one place over\.$/);
+    expect(swap).toHaveTextContent(/its keyframe’s from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place\.$/);
     expect(sign).toHaveTextContent('It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
     expect(within(sign).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
   });
@@ -572,10 +599,10 @@ describe('the drag sort tab’s audited words', () => {
     expect(explanation.everyCodeBeside(recipe, /^So the card does not disappear/).join()).toMatch(/\/\* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source \*\//);
   });
 
-  test('should say, beside crossingOver, that a sliding item cannot be overtaken', async () => {
+  test('should say, beside crossingOver, that the handler ignores crossings over a sliding item', async () => {
     const recipe = await nativeRecipe();
 
-    expect(explanation.runTelling(recipe, /^Commit the reorder inside the dragover/)).toHaveTextContent('An item that is still sliding cannot be overtaken.');
+    expect(explanation.runTelling(recipe, /^Commit the reorder inside the dragover/)).toHaveTextContent('While an item is still sliding, the handler ignores crossings over it.');
     expect(explanation.everyCodeBeside(recipe, /^Commit the reorder inside the dragover/).join()).toMatch(/export const crossingOver/);
   });
 

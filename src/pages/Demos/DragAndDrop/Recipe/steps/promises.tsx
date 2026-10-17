@@ -9,16 +9,16 @@ const paces: Record<Pace, string> = {
 
 const origins: Record<Origin, string> = {
   keep: 'The card at rest stays in sight, so nothing vanishes while you decide.',
-  hide: 'One card rides the pointer, so no duplicate muddies the carry.'
+  hide: 'One card rides the pointer, so you see one card, not two.'
 };
 
 const motions: Record<Motion, Record<Pace, string>> = {
   animated: {
-    eager: 'And the crossed card slides into place, so the eye keeps the story of the swap.',
-    lazy: 'And the whole reorder on release glides once, so the landing explains itself.'
+    eager: 'And the crossed card slides into place, so you can follow the swap instead of seeing a jump.',
+    lazy: 'And the whole reorder on release glides once, so you see each card travel to its new place.'
   },
   static: {
-    eager: 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.',
+    eager: 'And the reorder lands instantly, so nothing competes with the browser’s drag.',
     lazy: 'And the reorder on release lands instantly, so nothing competes with the browser’s drag.'
   }
 };

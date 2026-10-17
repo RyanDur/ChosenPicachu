@@ -82,8 +82,8 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
   <section className="phase card rounded-corners lifted" aria-labelledby="phase-stories">
     <h3 id="phase-stories" className="phase-title title">Slice the design into stories</h3>
     <p className="overview paragraph muted-ink">
-      With the need heard and the design answering shape, the work splits into stories: each
-      one told as a <a className="signpost"
+      Once the need is heard and the design has answered shape, I split the work into stories. Each is a{' '}
+      <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>, a discrete piece of value from the {who}’s side of
