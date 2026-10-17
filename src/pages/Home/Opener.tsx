@@ -7,9 +7,9 @@ export const Opener: FC = () =>
   <header className="opening">
     <p className="thesis paragraph">
       A webpage is three languages working in concert. HTML says what things are, CSS says how
-      they show, and JavaScript says how they respond. They were designed apart, on purpose, and
-      when one could not yet do a job another covered for it until the standard caught up, as
-      HTML’s own principles ask:{' '}
+      they show, and JavaScript says how they respond. They were designed apart, on purpose. When
+      one could not yet do a job, another covered for it until the standard caught up, which is
+      what HTML’s own principles ask:{' '}
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting
         it rather than forbidding it or inventing something new”</a>.
     </p>
@@ -27,7 +27,8 @@ export const Opener: FC = () =>
       record where the web learned it. The record tells how the web got the three languages, in{' '}
       {spelledOut(inOrder.length)} moments and a closing essay. The demos are where I work the
       practice: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own
-      code and explained beside it, each with the tricks we used before the platform could do the
-      job and what it gives now.
+      code and explained beside it. Two set the trick we used before the platform could do the job
+      beside what it gives now, and the other three show what the platform does with no library at
+      all.
     </p>
   </header>;

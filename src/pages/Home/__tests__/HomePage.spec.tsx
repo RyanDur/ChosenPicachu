@@ -11,9 +11,9 @@ describe('the home page', () => {
   });
 
   test('should open on the thesis, then say who the site is for, then what the doors, the record and the demos give', () => {
-    expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose, and when one could not yet do a job another covered for it until the standard caught up, as HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
+    expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose. When one could not yet do a job, another covered for it until the standard caught up, which is what HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
     expect(screen.getByText(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit is a div where a button was meant, a class that names a margin instead of the reason for it, a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
-    expect(screen.getByText(/^Each language has a door below/)).toHaveTextContent('Each language has a door below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty-one moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it, each with the tricks we used before the platform could do the job and what it gives now.');
+    expect(screen.getByText(/^Each language has a door below/)).toHaveTextContent('Each language has a door below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty-one moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
     expect(outOfReadingOrder([
       screen.getByText(/^A webpage is three languages working in concert/),
       screen.getByText(/^This site is for the developer/),
@@ -53,7 +53,12 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'output'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/a page built of divs gives them nothing to move by/)).toBeInTheDocument();
+    expect(door.getByText(/Semantic markup is the first objective listed in the/)).toBeInTheDocument();
+    expect(door.getByText(/come from the standard the browser makers began writing themselves in the/)).toBeInTheDocument();
+    expect(door.getByText(/records what that rebuilding cost: links became components and the back button became state\./)).toBeInTheDocument();
+    expect(door.getByText(/^A div is for when I want an element that says nothing/))
+      .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
+    expect(door.getByText(/is the one the browser makers wrote themselves, from the/)).toBeInTheDocument();
     expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
@@ -63,12 +68,17 @@ describe('the home page', () => {
     const door = within(screen.getByRole('region', {name: 'Presentation'}));
 
     expect(door.getByText('how I organize it')).toBeVisible();
-    expect(door.getByRole('link', {name: 'custom property'}))
+    expect(door.getByRole('link', {name: 'custom properties'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/Element selectors are used only in the reset/)).toBeInTheDocument();
+    expect(door.getByText(/Element selectors appear only in the reset\. There is no utility scale: lifted says why a style is there, and mt-4 says only what it does\. Markup full of utilities is the look written back into the structure\./)).toBeInTheDocument();
+    expect(door.getByText(/Carried and settling use the same rules for a column and a row; only the lengths handed in differ\. Shoved has a rule per direction: two across for columns, two down for rows\./)).toBeInTheDocument();
+    expect(door.getByText(/’s lesson: theme variables started in script and now live in CSS\./)).toBeInTheDocument();
+    expect(door.getByText(/Only values the code works out at runtime are written inline, mostly as/)).toBeInTheDocument();
+    expect(door.getByText(/a position after a drag, the direction of a slide\./)).toBeInTheDocument();
+    expect(door.getByText(/links the talk\), is what this test guards against\./)).toBeInTheDocument();
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
     expect(door.getByText(/a pile of overrides/)).toBeInTheDocument();
-    expect(door.getByText(/still read by a screen reader but unseen/)).toBeInTheDocument();
+    expect(door.getByText(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
     expect(door.getByRole('link', {name: 'prefers-reduced-motion'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'appearance: base-select'}))
@@ -81,7 +91,12 @@ describe('the home page', () => {
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: /operable through a keyboard interface/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
-    expect(door.getByText(/replacing it is the only way anything on screen changes/)).toBeInTheDocument();
+    expect(door.getByText(/so I name them in the past tense: lifted, dropped, chosen\./)).toBeInTheDocument();
+    expect(door.getByText(/I keep the state in one place, and replacing it is the only way anything on screen changes\./)).toBeInTheDocument();
+    expect(door.getByText(/bound model and view both ways\. I keep one direction\./)).toBeInTheDocument();
+    expect(door.getByText(/is where that pattern got its name, Ajax, and became ordinary\./)).toBeInTheDocument();
+    expect(door.getByText(/so I test them on their own with no page involved\./)).toBeInTheDocument();
+    expect(door.getByText(/The page announces each change too: a sighted reader watches the order change, and a screen reader user hears the same change read out\./)).toBeInTheDocument();
     expect(door.getByText(/Not every event starts at the pointer/)).toBeInTheDocument();
     expect(door.getByText(/Change the framework, or remove it, and only the shell changes/)).toBeInTheDocument();
     expect(door.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
