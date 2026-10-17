@@ -38,10 +38,10 @@ export const BannerExplained: FC = () => {
         <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
       </li>
       <li className="run">
-        <p className="paragraph">To build this banner yourself, <Link className="signpost"
+        <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
           to={{search: `?${storyOpenedIn(searchParams, topLayerStory)}`, hash: storyAnchor(topLayerStory)}}>the
-          tutorial below</Link> opens at
-          the step that does it: making the banner a popover, so it is shown in the top layer.</p>
+          tutorial below</Link>. It
+          opens at the step where the panel becomes a popover and so is shown in the top layer.</p>
       </li>
     </ol>
   </section>;

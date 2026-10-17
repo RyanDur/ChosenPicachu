@@ -79,7 +79,7 @@ describe('the part on what else forms a stacking context', () => {
   test.each([
     ['position', /^is not enough on its own, and neither is absolute/, '.positioned {'],
     ['outline', /^is paint\. An outline, a border/, '.outlined {'],
-    ['z-index', /^forms a context on a positioned element, and on a grid item too, which card one is here/, '.forms-context {'],
+    ['z-index', /^forms a context on a positioned element\. It forms one on a grid item too, which card one is here/, '.forms-context {'],
     ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
     ['transform', /^forms a context, as any transform does/, '.turned {'],
     ['isolation', /^forms a context and does nothing more\. Use it to keep/, '.isolated {']
@@ -98,7 +98,7 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
     const words = /^forms a context and does nothing more/;
 
-    expect(explanation.runTelling(part, words)).toHaveTextContent('This site uses it that way: the tab’s panel wears it, in Tabs.css, so nothing in a tab can reach a z-index outside it.');
+    expect(explanation.runTelling(part, words)).toHaveTextContent('I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a tab is ever compared with one outside it.');
     expect(explanation.everyCodeBeside(part, words).join()).toMatch(/\.isolated \{[^]*\.tabs ~ \* \{\s*isolation: isolate;/);
   });
 
@@ -114,7 +114,7 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
     const run = explanation.runTelling(part, /^The list is placed by/);
 
-    expect(run).toHaveTextContent('The list is placed by anchor positioning: the Sort by button names itself --sort-by, position-anchor on the list picks that button, anchor(end) puts the list’s top at the button’s bottom, and anchor(start) lines the list’s start edge, the side a line of text begins on, up with the button’s. Nothing between the list and the card is positioned.');
+    expect(run).toHaveTextContent('The list is placed by anchor positioning. The Sort by button names itself --sort-by, and position-anchor on the list picks that button. anchor(end) puts the list’s top at the button’s bottom. anchor(start) lines the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing between the list and the card is positioned.');
     expect(within(run).getByRole('link', {name: 'anchor positioning'})).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
     expect(explanation.everyCodeBeside(part, /^The list is placed by/).join()).toMatch(/\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;\s*inset-block-start: anchor\(end\);\s*inset-inline-start: anchor\(start\);/);
     expect(outOfReadingOrder([explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/), run])).toEqual([]);
@@ -142,7 +142,7 @@ describe('the part on what else forms a stacking context', () => {
     const part = await screen.findByRole('region', {name: heading});
 
     expect(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))
-      .toHaveTextContent('Fixed and sticky, which scrolls with the page until it reaches an edge and then stays there, are different and form one by themselves.');
+      .toHaveTextContent('Fixed and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.');
   });
 
   test('should open its run on MDN’s whole list', async () => {

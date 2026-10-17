@@ -23,13 +23,13 @@ type Axis = 'vertical' | 'sideways';
 
 const axisFact: Record<Axis, ReactNode> = {
   vertical: <><code>:where(.stack-down, .stack-up)</code> is the part of the rule’s selector that matches the panel with
-    either class, and the rule applies to each banner in it, so the sheet writes the <code>grid-template-rows</code> rule
-    once for the downward and upward stacks, and a <code>grid-template-columns</code> rule once for the two sideways
+    either class, and the rule applies to each banner in it. So I write the <code>grid-template-rows</code> rule
+    once for the downward and upward stacks, and the <code>grid-template-columns</code> rule once for the two sideways
     stacks.</>,
   sideways: <><code>:where(.stack-left, .stack-right)</code> is the part of the rule’s selector that matches the panel
-    with either class, and the rule applies to each banner in it, so the sheet writes
+    with either class, and the rule applies to each banner in it. So I write
     the <code>grid-template-columns</code> rule once for the leftward and rightward stacks, and
-    a <code>grid-template-rows</code> rule once for the two vertical stacks.</>
+    the <code>grid-template-rows</code> rule once for the two vertical stacks.</>
 };
 
 const gapFact: Record<Stack, string> = {

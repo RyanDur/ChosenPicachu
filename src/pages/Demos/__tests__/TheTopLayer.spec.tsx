@@ -96,7 +96,7 @@ describe('the top layer', () => {
     await userEvent.click(within(within(controls).getByRole('group', {name: 'entrance'})).getByRole('radio', {name: 'Below'}));
     await userEvent.click(within(within(controls).getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
 
-    expect(within(controls).getByText('The news rests along the bottom edge and waits to be noticed.')).toBeVisible();
+    expect(within(controls).getByText('The panel holds to the window’s bottom edge.')).toBeVisible();
     expect(within(controls).getByText('?side=bottom&align=right&enter=below&stack=left')).toBeVisible();
   });
 
@@ -135,7 +135,7 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(news).toHaveTextContent('An element around the banner forms a stacking context by the ways What else forms a stacking context shows; position: fixed, which pins the banner to the window, does not lift it out of that context, as Why a fixed banner still loses shows. Inside that context, the banner’s 9999 is compared with nothing outside it.');
+    expect(news).toHaveTextContent('An element around the banner forms a stacking context by the ways What else forms a stacking context shows. position: fixed, which pins the banner to the window, does not lift it out of that context, as Why a fixed banner still loses shows. Inside that context, the banner’s 9999 is compared with nothing outside it.');
     expect(news).not.toHaveTextContent('the two CSS layouts that arrange their children');
     expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
     expect(within(news).getByRole('link', {name: 'Why a fixed banner still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why a fixed banner still loses'}).id}`);
@@ -158,7 +158,7 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
-    expect(news).toHaveTextContent('So the panel is a popover, drawn in the top layer like the new menu above. Why the popover wins says what both are.');
+    expect(news).toHaveTextContent('So I made the panel a popover, drawn in the top layer like the new menu above. Why the popover wins says what both are.');
     expect(within(news).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why the popover wins'}).id}`);
     expect(news).not.toHaveTextContent(/hidden until the code shows it|No z-index on the page can put anything over the top layer/);
   });
@@ -334,10 +334,10 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['down', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
-    ['up', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
-    ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
-    ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it, so the sheet writes the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
+    ['down', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once', 'a margin below every banner but the bottom one, the last child when the stack grows downward', 'carries the upward stack’s selector, where the bottom banner is the first child'],
+    ['up', ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once', 'a margin below every banner but the bottom one, the first child when the stack grows upward', 'carries the downward stack’s selector, where the bottom banner is the last child'],
+    ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
+    ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
     render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());
@@ -461,7 +461,7 @@ describe('the z-index tab’s introduction', () => {
   const paragraphs = [
     'Where two boxes on a page overlap, the browser draws one over the other. z-index is the CSS property for changing which.',
     'It reads like one ranking for the whole page, where the biggest number wins. So when a menu opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999 loses too.',
-    'This page’s view is that a bigger number is the wrong fix. A z-index is compared only inside a stacking context, a group of boxes the browser stacks as one, and most of this page is about it: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
+    'I think a bigger number is the wrong fix, because a z-index is compared only inside a stacking context, a group of boxes the browser stacks as one. Most of this page is about that context: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
     'By the end you can say why one box is drawn over another, why a z-index of 9999 can still lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the page. The last part builds this site’s banner that way. The first exhibit below is a pile of three cards with no z-index at all. Raise First with the pills and watch it come to the top.'
   ];
 
@@ -474,13 +474,62 @@ describe('the z-index tab’s introduction', () => {
   });
 });
 
+describe('the z-index tab’s own words', () => {
+  test.each([
+    'I think a bigger number is the wrong fix, because a z-index is compared only inside a stacking context, a group of boxes the browser stacks as one. Most of this page is about that context: what makes one, what it traps, and the browser’s own way out of it, the top layer.',
+    'I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the term taught above in Why 9999 still loses. An element around the banner forms a stacking context by the ways What else forms a stacking context shows. position: fixed, which pins the banner to the window, does not lift it out of that context, as Why a fixed banner still loses shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So I made the panel a popover, drawn in the top layer like the new menu above. Why the popover wins says what both are.',
+    'Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you can watch the mechanics.',
+    'More properties than z-index form a stacking context. MDN, Mozilla’s web reference, keeps the whole list, and these are the ones a page meets most. I put the three that form none beside them because telling them apart is the lesson.',
+    'I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a tab is ever compared with one outside it.',
+    'Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.',
+    'middle and center set auto again. They change nothing. I keep them so the choice shows in the class names.',
+    'z-index: 1 forms a context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item, a box laid out by a parent whose display is flex. The menu part’s card had position: relative as well, and either is enough. Card two, at 1 and later in the code, is painted over card one.',
+    'Fixed and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.',
+    'The list is placed by anchor positioning. The Sort by button names itself --sort-by, and position-anchor on the list picks that button. anchor(end) puts the list’s top at the button’s bottom. anchor(start) lines the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing between the list and the card is positioned.',
+    'A popover is shown in the top layer, a layer the browser keeps above the whole page for popovers, dialogs and elements shown full screen.',
+    'To build this banner yourself, go to the tutorial below. It opens at the step where the panel becomes a popover and so is shown in the top layer.',
+    'The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step.',
+    'A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out. Card one’s list in What else forms a stacking context names its own anchor.',
+    'A banner is read at a glance, by someone busy with something else.',
+    'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centres the menu on the screen.'
+  ])('should say, whatever the dials, words and links together: %s', async sentence => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    expect(await screen.findByRole('region', {name: 'Z-index'})).toHaveTextContent(sentence);
+  });
+
+  test.each([
+    {choice: 'stack=down', sentence: ':where(.stack-down, .stack-up) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-rows rule once for the downward and upward stacks, and the grid-template-columns rule once for the two sideways stacks.'},
+    {choice: 'stack=left', sentence: ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.'}
+  ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
+    render(<TestApp at={demosAt(`?tab=z-index&${choice}`)}/>);
+
+    expect(await screen.findByRole('region', {name: 'Z-index'})).toHaveTextContent(sentence);
+  });
+
+  test('should say what the page stacks no more after the top layer’s definition', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    expect(await screen.findByRole('region', {name: 'Z-index'})).not.toHaveTextContent('Whatever the page stacks, the top layer sits over it.');
+  });
+});
+
 describe('the banner dials’ readings', () => {
   test.each([
-    ['stack=down', 'Each new banner joins beneath the ones already standing.'],
-    ['stack=up', 'Each new banner stands on top of the stack.'],
-    ['stack=left', 'The stack grows sideways, newest at the left.'],
-    ['stack=right', 'The stack grows sideways, newest at the right.'],
-    ['align=center', 'The stack centres itself on the screen.']
+    ['side=top', 'The panel holds to the window’s top edge.'],
+    ['side=middle', 'The panel sits in the window’s middle.'],
+    ['side=bottom', 'The panel holds to the window’s bottom edge.'],
+    ['align=left', 'The panel holds to the window’s left edge.'],
+    ['align=center', 'The browser centres the panel across the window.'],
+    ['align=right', 'The panel holds to the window’s right edge.'],
+    ['enter=above', 'A new banner slides in from above the window’s top edge.'],
+    ['enter=below', 'A new banner slides in from below the window’s bottom edge.'],
+    ['enter=left', 'A new banner slides in from past the window’s left edge.'],
+    ['enter=right', 'A new banner slides in from past the window’s right edge.'],
+    ['stack=down', 'Each new banner goes below the ones already up.'],
+    ['stack=up', 'Each new banner goes above the ones already up.'],
+    ['stack=left', 'The stack grows leftward, with the newest banner at the left.'],
+    ['stack=right', 'The stack grows rightward, with the newest banner at the right.']
   ])('should read, with %s chosen, “%s”', async (choice, reading) => {
     render(<TestApp at={demosAt(`?tab=z-index&${choice}`)}/>);
 

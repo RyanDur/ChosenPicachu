@@ -17,8 +17,7 @@ export const PopoverExplained: FC = () =>
       <li className="run">
         <p className="paragraph">The top-layer Sort by in{' '}
           <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a> opens over everything around it every time, with the box checked or not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
-          whole page for popovers, dialogs and elements shown full screen. Whatever the page stacks, the top layer sits
-          over it.</p>
+          whole page for popovers, dialogs and elements shown full screen.</p>
       </li>
       <li className="run">
         <p className="paragraph">The top layer is not inside any stacking context, not even the page’s own, the one every
@@ -38,8 +37,8 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph">Menu, Entry and Item are this site’s components for a menu. A component is a
           function that writes a piece of the page from what it is given. These three write one element each: a menu,
           an li, which is one item of a list, and a button.</p>
-        <p className="paragraph">Item gives its button the site’s shared classes that set its look; a menu’s look is
-          the page’s to choose, so the page passes Menu those classes, as the sample shows.</p>
+        <p className="paragraph">Item gives its button the site’s shared classes that set its look. I leave a menu’s
+          look to the page that uses it, so the page passes Menu those classes, as the sample shows.</p>
         <Snippet label="HTML" lines={[
           ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
           ...unit(menuSource, 'export const Item')
@@ -66,13 +65,13 @@ export const PopoverExplained: FC = () =>
       </li>
       <li className="run">
         <p className="paragraph">The menu’s own sheet places it
-          with <Mdn path="Web/CSS/position-area">position-area</Mdn>, beside the button that opened it, and where a
+          with <Mdn path="Web/CSS/position-area">position-area</Mdn>, below the button that opened it or above it when there is no room below, and where a
           browser has no position-area, it centres the menu on the screen.
           In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
           The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is not a popover gets no anchor from the button
-          that opens it, so that menu is left out; card one’s list
+          that opens it, so the rule leaves that menu out. Card one’s list
           in <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> names
-          its own.</p>
+          its own anchor.</p>
         <Snippet label="CSS" lines={[
           ...span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end) {')

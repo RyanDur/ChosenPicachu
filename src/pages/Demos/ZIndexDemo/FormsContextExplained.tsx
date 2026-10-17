@@ -24,10 +24,10 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
     <ContextChooser worn={worn} onWornChosen={onWornChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">A stacking context is formed by more properties than z-index. MDN, Mozilla’s web
-          reference, keeps <a className="signpost" href={`${mdn}CSS_positioned_layout/Stacking_context`}>the whole
-            list</a>; these are the ones a page meets most, and the three that form none are there because telling them
-          apart is the lesson.</p>
+        <p className="paragraph">More properties than z-index form a stacking context. MDN, Mozilla’s web reference,
+          keeps <a className="signpost" href={`${mdn}CSS_positioned_layout/Stacking_context`}>the whole
+            list</a>, and these are the ones a page meets most. I put the three that form none beside them because telling
+          them apart is the lesson.</p>
       </li>
       <li className="run">
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
@@ -37,9 +37,9 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">The list is placed by <a className="signpost" href={`${mdn}CSS_anchor_positioning`}>anchor
-          positioning</a>: the Sort by button names itself <code>--sort-by</code>, <code>position-anchor</code> on the list picks that
-          button, <code>anchor(end)</code> puts the list’s top at the button’s bottom, and <code>anchor(start)</code> lines the list’s start edge, the side a line of text begins
-          on, up with the button’s. Nothing between the list and the card is positioned.</p>
+          positioning</a>. The Sort by button names itself <code>--sort-by</code>, and <code>position-anchor</code> on the list
+          picks that button. <code>anchor(end)</code> puts the list’s top at the button’s bottom. <code>anchor(start)</code> lines
+          the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing between the list and the card is positioned.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.old-way-card .button {'), gap,
           ...unit(zIndexCss, '.sort-choices {\n        position-anchor')
@@ -48,8 +48,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}position`}><code>position: relative</code></a> is
           not enough on its own, and neither is absolute: an element positioned either way forms a context only together
-          with a z-index other than auto. Fixed and sticky, which scrolls with the page until it reaches an edge and then
-          stays there, are different and form one by themselves.</p>
+          with a z-index other than auto. Fixed and sticky are different. Each forms a context by itself. Sticky
+          scrolls with the page until it reaches an edge and then stays there.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.positioned {')}/>
       </li>
       <li className="run">
@@ -60,9 +60,9 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code>z-index: 1</code></a> forms a
-          context on a positioned element, and on a grid item too, which card one is here, and on a flex item, a box laid
+          context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item, a box laid
           out by a parent whose display is flex. The menu part’s card had position: relative as well, and either is
-          enough. Card two, at 1 and later in the code, paints over card one.</p>
+          enough. Card two, at 1 and later in the code, is painted over card one.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.forms-context {')}/>
       </li>
       <li className="run">
@@ -80,8 +80,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code>isolation: isolate</code></a> forms
           a context and does nothing more. Use it to keep a component’s z-indexes inside it on purpose, instead of as a
-          side effect of opacity or a transform. This site uses it that way: the tab’s panel wears it, in Tabs.css, so
-          nothing in a tab can reach a z-index outside it.</p>
+          side effect of opacity or a transform. I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a
+          tab is ever compared with one outside it.</p>
         <Snippet label="CSS" lines={[
           ...unit(zIndexCss, '.isolated {'), gap,
           ...unit(tabsCss, '.tabs ~ * {')

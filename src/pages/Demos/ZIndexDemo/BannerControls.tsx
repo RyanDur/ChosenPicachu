@@ -11,26 +11,26 @@ type Copy = {
 
 const copy: Copy = {
   side: {
-    top: 'The news stands along the top edge, read before anything else.',
-    middle: 'The news stands mid-screen, in front of whatever you were doing.',
-    bottom: 'The news rests along the bottom edge and waits to be noticed.'
+    top: 'The panel holds to the window’s top edge.',
+    middle: 'The panel sits in the window’s middle.',
+    bottom: 'The panel holds to the window’s bottom edge.'
   },
   align: {
-    left: 'The stack holds to the left edge of the screen.',
-    center: 'The stack centres itself on the screen.',
-    right: 'The stack holds to the right edge of the screen.'
+    left: 'The panel holds to the window’s left edge.',
+    center: 'The browser centres the panel across the window.',
+    right: 'The panel holds to the window’s right edge.'
   },
   enter: {
-    above: 'Arrivals drop in from beyond the top of the screen.',
-    below: 'Arrivals rise from beneath the bottom of the screen.',
-    left: 'Arrivals sweep in from past the left edge.',
-    right: 'Arrivals sweep in from past the right edge.'
+    above: 'A new banner slides in from above the window’s top edge.',
+    below: 'A new banner slides in from below the window’s bottom edge.',
+    left: 'A new banner slides in from past the window’s left edge.',
+    right: 'A new banner slides in from past the window’s right edge.'
   },
   stack: {
-    down: 'Each new banner joins beneath the ones already standing.',
-    up: 'Each new banner stands on top of the stack.',
-    left: 'The stack grows sideways, newest at the left.',
-    right: 'The stack grows sideways, newest at the right.'
+    down: 'Each new banner goes below the ones already up.',
+    up: 'Each new banner goes above the ones already up.',
+    left: 'The stack grows leftward, with the newest banner at the left.',
+    right: 'The stack grows rightward, with the newest banner at the right.'
   }
 };
 

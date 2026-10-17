@@ -39,7 +39,7 @@ describe('why the popover wins', () => {
     const run = within(part).getByText(/The menu’s own sheet places it/);
 
     expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
-    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so that menu is left out; card one’s list in What else forms a stacking context names its own\./);
+    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out\. Card one’s list in What else forms a stacking context names its own anchor\./);
     expect(within(run).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
   });
 
@@ -83,7 +83,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(within(part).getByText(/^Item gives its button/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look; a menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(within(part).getByText(/^Item gives its button/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {
