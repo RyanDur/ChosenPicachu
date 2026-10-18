@@ -286,6 +286,30 @@ describe('the 2003 moment', () => {
   });
 });
 
+describe('the 2004 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Mozilla and Opera put a counter-proposal in writing: evolve HTML, backwards compatible. A straw poll at the W3C’s workshop went against it and the W3C put no resources into it, so the browser makers founded the WHATWG and wrote the specification they were implementing. The browsers converged once the people writing the specification were the people shipping it.',
+    'The Standard’s own history says how HTML had stopped. In 1998 “the W3C membership decided to stop evolving HTML and instead begin work on an XML-based equivalent, called XHTML”, then on XHTML2, “a new language that was not compatible with the earlier HTML and XHTML languages”. In 2003 XForms “sparked a renewed interest in evolving HTML itself, rather than finding replacements for it”, because XML had been deployed only for new things like RSS, “rather than as a replacement for existing deployed technologies (like HTML)”. The first result was a proof of concept extending HTML4’s forms, a draft under Opera’s copyright.',
+    'At the W3C’s workshop on web applications in June 2004, Mozilla and Opera put the case in a position paper. It warned of “a rising threat of single-vendor solutions”, and asked that browsers ship first implementations “before the end of the year 2004”. Its seven principles begin with “Backwards compatibility, clear migration path”: web application technologies “should be based on technologies authors are familiar with, including HTML, CSS, DOM, and JavaScript”, and should work in Internet Explorer 6 “without the need for binary plug-ins”. The rest are of a piece. “Well-defined error handling” means browsers “do not have to invent their own error handling mechanisms or reverse engineer other User Agents’”, and “Practical use” means every feature is “justified by a practical use case”. The last three are “Scripting is here to stay”, no device-specific profiling, and an “Open process” in which drafts “should continuously be visible to the public”.',
+    'The workshop took a straw poll. On the question “Should the W3C develop declarative extension to HTML and CSS and to address medium level Web Application requirements”, the summary records “8 voted Yes. 14 voted No.” It calls the poll “not binding”, and says that W3C “does not intend to put any resources into” extensions to HTML and CSS for web applications. The Standard’s history puts it in one line: the proposal “conflicted with the previously chosen direction for the web’s evolution”, and the W3C “voted to continue developing XML-based replacements instead”. Shortly after, Apple, Mozilla and Opera “jointly announced their intent to continue working on the effort” under a new venue, the WHATWG, founded, its FAQ says, over the W3C’s “apparent disregard for the needs of real-world web developers”. The draft moved to the WHATWG’s site, and its copyright passed to the three vendors jointly.',
+    'The Standard states the WHATWG’s method as three principles: “technologies need to be backwards compatible”, “specifications and implementations need to match even if this means changing the specification rather than the implementations”, and “specifications need to be detailed enough that implementations can achieve complete interoperability without reverse-engineering each other”. That last one is why HTML5 took in what had been three documents, HTML4, XHTML1 and DOM2 HTML. The people writing the specification were the people shipping it, so the specification could not drift from the browsers, and the browsers converged on it together. The W3C “indicated an interest to participate in the development of HTML5 after all” in 2006 and chartered a group to work with the WHATWG in 2007. The two split in 2011 over a finished HTML5 versus a Living Standard, “continuously updated”. In 2019 they signed an agreement on “a single version of HTML going forward”. The posture from 1994, the specification following the field, had become the rule.'
+  ])('should tell the workshop as the W3C\'s summary records it and the WHATWG\'s method in the Standard\'s words, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The standard needs the real world')).toHaveTextContent(told);
+  });
+
+  test.each(['eight votes to fourteen', 'The W3C voted it down', 'Two days later', 'Web Applications 1.0'])('should leave out "%s", which no source holds', claim => {
+    expect(itemHeadedBy('the timeline', 'The standard needs the real world')).not.toHaveTextContent(claim);
+  });
+
+  test('should shelve the workshop\'s summary in the research', () => {
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Summary, W3C Workshop on Web Applications and Compound Documents', hidden: true})).toBeInTheDocument();
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -424,6 +448,9 @@ describe('the record', () => {
     ['Someone needs to go first', 'https://thehistoryoftheweb.com/look-back-history-css/', 'ESPN followed a few months later'],
     ['The separation needs proof', 'https://csszengarden.com/pages/about/', '“a collaborative gallery that could show what CSS could accomplish”'],
     ['The separation needs proof', 'https://csszengarden.com/', '“You may modify the style sheet in any way you wish, but not the HTML.”'],
+    ['The standard needs the real world', 'https://www.w3.org/2004/04/webapps-cdf-ws/summary', '“8 voted Yes. 14 voted No.”'],
+    ['The standard needs the real world', 'https://whatwg.org/position-paper', '“a rising threat of single-vendor solutions”'],
+    ['The standard needs the real world', 'https://html.spec.whatwg.org/multipage/introduction.html', '“technologies need to be backwards compatible”'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],

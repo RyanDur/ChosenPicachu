@@ -90,6 +90,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Mozilla and Opera, June 2004; the rejected proposal, preserved by the WHATWG</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/2004/04/webapps-cdf-ws/summary"><cite>Summary, W3C Workshop on Web Applications and Compound Documents</cite></a>
+            <span className="provenance caption">Dean Jackson for the W3C, 21 July 2004</span>
+          </li>
+          <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/introduction.html"><cite>The HTML Standard’s own history</cite></a>
             <span className="provenance caption">the WHATWG, in the specification’s introduction</span>
           </li>
