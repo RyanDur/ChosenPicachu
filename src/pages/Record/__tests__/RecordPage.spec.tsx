@@ -4,6 +4,9 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
+const shelvedAs = (work: string): HTMLElement | undefined => within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true})
+  .find(entry => within(entry).queryByRole('link', {name: work, hidden: true}) !== null);
+
 describe('the 1989 moment', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -281,8 +284,8 @@ describe('the 2003 moment', () => {
     expect(itemHeadedBy('the timeline', 'The separation needs proof')).not.toHaveTextContent(claim);
   });
 
-  test('should shelve Shea\'s About page in the research', () => {
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'About the CSS Zen Garden', hidden: true})).toBeInTheDocument();
+  test('should shelve Shea\'s About page in the research, undated', () => {
+    expect(shelvedAs('About the CSS Zen Garden')).toHaveTextContent('Dave Shea, undated');
   });
 });
 
@@ -305,8 +308,8 @@ describe('the 2004 moment', () => {
     expect(itemHeadedBy('the timeline', 'The standard needs the real world')).not.toHaveTextContent(claim);
   });
 
-  test('should shelve the workshop\'s summary in the research', () => {
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Summary, W3C Workshop on Web Applications and Compound Documents', hidden: true})).toBeInTheDocument();
+  test('should shelve the workshop\'s summary in the research, dated by its page', () => {
+    expect(shelvedAs('Summary, W3C Workshop on Web Applications and Compound Documents')).toHaveTextContent('Dean Jackson for the W3C, 21 July 2004');
   });
 });
 

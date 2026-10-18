@@ -38,7 +38,10 @@ export type Dated = Exclude<MomentDate, {kind: 'year'}>;
 
 export type MomentHeading = {date: MomentDate; title: string; id: string};
 
-type Written = {readonly year: string; readonly month?: Month; readonly day?: number};
+export type Written =
+  | {readonly year: string; readonly month?: never; readonly day?: never}
+  | {readonly year: string; readonly month: Month; readonly day?: never}
+  | {readonly year: string; readonly month: Month; readonly day: number};
 
 const dateOf = ({year, month, day}: Written): MomentDate => maybe(month).either(
   (inMonth): MomentDate => maybe(day).either(
