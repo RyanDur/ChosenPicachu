@@ -391,7 +391,6 @@ describe('the record', () => {
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The browsers converged once the people writing the specification were the people shipping it.',
     'The posture from 1994, the specification following the field, had become the rule.',
-    'Ajax let a page fetch data and rewrite itself without reloading.',
     'The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
     'The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by translating it into script; this time the industry’s weight was behind it.',
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
