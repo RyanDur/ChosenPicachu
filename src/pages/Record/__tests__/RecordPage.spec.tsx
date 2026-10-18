@@ -3,15 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-
-const shelvedAs = (work: string): HTMLElement => {
-  const entry = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true})
-    .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
-  if (entry) {
-    return entry;
-  }
-  throw new Error(`no work on the research shelf named ${work}`);
-};
+import {recordPage} from '@pages/Record/__test_support/record';
 
 describe('the 1989 moment', () => {
   beforeEach(() => {
@@ -291,7 +283,7 @@ describe('the 2003 moment', () => {
   });
 
   test('should shelve Shea\'s About page in the research, undated', () => {
-    expect(shelvedAs('About the CSS Zen Garden')).toHaveTextContent('Dave Shea, undated');
+    expect(recordPage.shelvedAs('About the CSS Zen Garden')).toHaveTextContent('Dave Shea, undated');
   });
 });
 
@@ -315,7 +307,7 @@ describe('the 2004 moment', () => {
   });
 
   test('should shelve the workshop\'s summary in the research, dated by its page', () => {
-    expect(shelvedAs('Summary, W3C Workshop on Web Applications and Compound Documents')).toHaveTextContent('Dean Jackson for the W3C, 21 July 2004');
+    expect(recordPage.shelvedAs('Summary, W3C Workshop on Web Applications and Compound Documents')).toHaveTextContent('Dean Jackson for the W3C, 21 July 2004');
   });
 });
 
@@ -363,7 +355,7 @@ describe('the 2009 moment', () => {
   });
 
   test.each([['ECMAScript Harmony', 'Brendan Eich on es-discuss, 13 August 2008, via the Internet Archive'], ['The TC39 Process', 'TC39, Ecma International'], ['ActionScript', 'Wikipedia'], ['Tamarin', 'Wikipedia'], ['Adobe Flash Player', 'Wikipedia']])('should shelve %s, %s', (work, provenance) => {
-    expect(shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
@@ -387,8 +379,8 @@ describe('the 2010 moment', () => {
   });
 
   test('should shelve AngularJS\'s page and its changelog in the research', () => {
-    expect(shelvedAs('Why AngularJS?')).toHaveTextContent('angularjs.org, undated');
-    expect(shelvedAs('AngularJS changelog')).toHaveTextContent('the angular.js repository on GitHub, undated');
+    expect(recordPage.shelvedAs('Why AngularJS?')).toHaveTextContent('angularjs.org, undated');
+    expect(recordPage.shelvedAs('AngularJS changelog')).toHaveTextContent('the angular.js repository on GitHub, undated');
   });
 });
 
@@ -411,7 +403,7 @@ describe('the 2011 moment', () => {
   });
 
   test.each([['CSS Color Module Level 3', 'W3C Recommendation, 7 June 2011'], ['Selectors Level 3', 'W3C Recommendation, 29 September 2011'], ['CSS Namespaces Module', 'W3C Recommendation, 29 September 2011'], ['Media Queries', 'W3C Recommendation, 19 June 2012']])('should shelve %s, %s', (work, provenance) => {
-    expect(shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
@@ -443,7 +435,7 @@ describe('the 2013 moment', () => {
   });
 
   test.each([['Why did we build React?', 'Pete Hunt, React blog, 5 June 2013'], ['@scope', 'MDN']])('should shelve %s, %s', (work, provenance) => {
-    expect(shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
@@ -480,7 +472,7 @@ describe('the 2014 moment', () => {
   });
 
   test.each([['HTML Design Principles', 'Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November 2007'], ['HTML5', 'Ian Hickson, Robin Berjon, Steve Faulkner, Travis Leithead, Erika Doyle Navara, Theresa O’Connor and Silvia Pfeiffer, W3C Recommendation, 28 October 2014'], ['HTML Standard, parsing HTML documents', 'WHATWG, undated'], ['HTML Standard, the HTML syntax', 'WHATWG, undated']])('should shelve %s, %s', (work, provenance) => {
-    expect(shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
@@ -507,7 +499,7 @@ describe('the 2016 moment', () => {
   });
 
   test.each([['Next.js', 'Naoyuki Kanezawa, Guillermo Rauch and Tony Kovanen, Vercel blog, 25 October 2016'], ['Introducing Zero-Bundle-Size React Server Components', 'React blog, 21 December 2020'], ['Next.js 13.4', 'Next.js blog, 4 May 2023']])('should shelve %s, %s', (work, provenance) => {
-    expect(shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
@@ -802,14 +794,11 @@ describe('the record', () => {
   });
 
   test('should shelve Eich’s Computerworld interview as the Internet Archive’s copy, the live page being gone', () => {
-    expect(shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
+    expect(recordPage.shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
   test('the research shelves are headed by the three concerns, the third named Dynamic', () => {
-    const bibliography = screen.getByRole('region', {name: 'The research'});
-
-    expect(within(bibliography).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent))
-      .toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Dynamic']));
+    expect(recordPage.shelfHeadings()).toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Dynamic']));
   });
 
   test('the research stands collected, closed until asked', () => {
