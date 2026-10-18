@@ -2,7 +2,7 @@ import {FC, useContext} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {inOrder, moments} from '@pages/Record/moments/moments';
-import {momentAddress} from './MomentLink';
+import {momentAddress} from '@pages/Record/MomentLink';
 import {concernId, fromTheRecord} from '@pages/Record/moments/concerns';
 import {CurrentConcern} from './ConcernSection';
 

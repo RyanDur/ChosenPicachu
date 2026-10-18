@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {MomentLink} from '@pages/Home/MomentLink';
+import {MomentLink} from '@pages/Record/MomentLink';
 
 export const PresentationPractice: FC = () =>
   <>

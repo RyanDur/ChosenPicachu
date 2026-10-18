@@ -19,7 +19,7 @@ type Props = {
 export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {pathname} = useLocation();
   const {tab, createSearchParams} = useSearchParamsObject({tab: schema.string});
-  const current = tab ?? defaultTab;
+  const current = values.some(({param}) => param === tab) ? tab : defaultTab;
 
   return <nav aria-label={label} id={id} className="tabs backdrop backdrop-above contained">
     <ul className="tab-list">{values.map(({param, display}) =>

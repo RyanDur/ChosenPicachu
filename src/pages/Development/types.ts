@@ -1,16 +1,12 @@
 import * as schema from 'schemawax';
-import {Concern} from '@pages/Record/moments/concerns';
+import {maybe} from '@ryandur/sand';
+import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
 
-export enum DevelopmentTabs {
-  structure = 'structure',
-  presentation = 'presentation',
-  dynamicInteraction = 'dynamic-interaction'
-}
+export const concernTabs = concernsInOrder.map(concern => ({display: concern, param: concernId(concern)}));
 
-export const tabConcerns: Record<DevelopmentTabs, Concern> = {
-  [DevelopmentTabs.structure]: 'Structure',
-  [DevelopmentTabs.presentation]: 'Presentation',
-  [DevelopmentTabs.dynamicInteraction]: 'Dynamic Interaction'
+const noConcernHas = (param: string): never => {
+  throw new schema.DecoderError(`no concern has the tab ${param}`);
 };
 
-export const developmentTabParam: schema.Decoder<DevelopmentTabs> = schema.literalUnion(...Object.values(DevelopmentTabs));
+export const concernParam: schema.Decoder<Concern> = schema.string.andThen(param =>
+  maybe(concernsInOrder.find(concern => concernId(concern) === param)).either(named => named, () => noConcernHas(param)));
