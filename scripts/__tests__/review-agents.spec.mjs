@@ -56,7 +56,7 @@ describe('the reviewers AGENTS.md names', () => {
 describe('the review\'s QAs', () => {
   test('every door gets its own QA that runs on opus and can only read', () => {
     const qas = agents();
-    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa', 'tutorials-qa']);
+    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa', 'tutorials-qa', 'record-qa']);
     Object.values(qas).forEach(qa => {
       expect(qa.model).toBe('opus');
       expect(qa.tools).toEqual(reading);
