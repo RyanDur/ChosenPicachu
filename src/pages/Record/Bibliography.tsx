@@ -151,7 +151,7 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C Recommendation, 29 September 2011</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/TR/2011/REC-css3-namespace-20110929/"><cite>CSS Namespaces Module Level 3</cite></a>
+            <a className="signpost" href="https://www.w3.org/TR/2011/REC-css3-namespace-20110929/"><cite>CSS Namespaces Module</cite></a>
             <span className="provenance caption">W3C Recommendation, 29 September 2011</span>
           </li>
           <li>
