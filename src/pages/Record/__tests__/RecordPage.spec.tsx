@@ -263,6 +263,8 @@ describe('the record', () => {
 
   test.each([
     ['The web needs the public', 'https://www.w3.org/History.html', '“freely usable by anyone, with no fees being payable to CERN”'],
+    ['Pages need to respond', 'https://brendaneich.com/2008/04/popularity/', '“Scheme was the bait”'],
+    ['Pages need to respond', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“buy it by the yard”'],
     ['Researchers need to collaborate', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”'],
     ['Researchers need to collaborate', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html', '“registered by the W3 team”'],
     ['Researchers need to collaborate', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html', '“a line of ASCII characters terminated by a CR LF”'],
