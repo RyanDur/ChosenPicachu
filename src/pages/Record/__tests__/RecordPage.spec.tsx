@@ -271,13 +271,13 @@ describe('the 2003 moment', () => {
   test.each([
     'Shea’s own account starts with the state of things. By 2003 the industry had “hunkered down and kept using the hacky table layouts and font tags that typified web development in the late 90’s”, and CSS was still used for little beyond fonts and colours. “Those who understood the capabilities of CSS were rarely designers, and designers largely hadn’t embraced it yet”, so “the widespread perception of CSS was as a language capable only of boxy and boring design”. Three things moved him. Chris Casciano spent a month restyling his own site. A Wired contest in early 2003 asked designers to re-skin one of its properties with CSS alone. And Jeffrey Zeldman told those who wanted the situation to change to stop talking about what CSS could do and start doing it.',
     'The garden’s rules were the argument, and its page states them: “You may modify the style sheet in any way you wish, but not the HTML.” Choose a design from the list and “The HTML remains the same, the only thing that has changed is the external CSS file. Yes, really.” It asked for “mostly CSS 1 & 2 usage”, and “The only real requirement we have is that your CSS validates.” Shea made the first five designs himself in May 2003 and asked the public for the rest; hundreds followed, and designers, Hoffmann writes, used the garden “to show their bosses and clients what CSS could do”. After the table layouts and spacer GIFs, this was when CSS “finally became trustworthy”.',
-    'Lie’s 1994 draft had already shown the idea, as a two-line stylesheet that set nothing itself: reference the NYT’s sheet at 30% and Le Monde’s at 70%, and the presentation is “a mix”. Swap the sheet, keep the document. The garden was that example, industrialized, on the doctype-switched browsers of the 1998 moment. The language itself had moved from one document to many: for CSS beyond level 2 the working group “chose to adopt a modular approach, where each module defines a part of CSS, rather than to define a single monolithic specification”.',
-    'Shea built it, he writes, as “a collaborative gallery that could show what CSS could accomplish”, with one requirement: “a designer was unable to modify the HTML in any way, the entire design had to be accomplished through CSS and images/fonts alone.” Separation had been argued as hygiene: maintainability, sharing, adaptation. The garden showed the other side, that with the structure held constant the design could be replaced any number of times. The collaboration and the demonstration worked together, Shea writes, to “help drive home the argument” that CSS-based design was “finally ready for prime time”.'
+    'Lie’s 1994 draft had already shown the idea, as a two-line stylesheet that set nothing itself: reference the NYT’s sheet at 30% and Le Monde’s at 70%, and the presentation is “a mix”. Swap the sheet, keep the document. The garden was that example, industrialized, on the doctype-switched browsers of the 1998 moment.',
+    'Shea built it, he writes, as “a collaborative gallery that could show what CSS could accomplish”, with one rule: “a designer was unable to modify the HTML in any way, the entire design had to be accomplished through CSS and images/fonts alone.” Separation had been argued as hygiene: maintainability, sharing, adaptation. The garden showed the other side, that with the structure held constant the design could be replaced any number of times. The collaboration and the demonstration worked together, Shea writes, to “help drive home the argument” that CSS-based design was “finally ready for prime time”.'
   ])('should tell the Zen Garden in the garden\'s own words and Shea\'s, words and links together: %s', told => {
     expect(itemHeadedBy('the timeline', 'The separation needs proof')).toHaveTextContent(told);
   });
 
-  test.each(['CSS3’s module system', 'begun in 1999'])('should leave out "%s", which the garden\'s own requirement contradicts or no source holds', claim => {
+  test.each(['CSS3’s module system', 'begun in 1999', 'a modular approach'])('should leave out "%s", which no source holds or the 2011 moment tells', claim => {
     expect(itemHeadedBy('the timeline', 'The separation needs proof')).not.toHaveTextContent(claim);
   });
 
@@ -537,11 +537,6 @@ describe('the record', () => {
       .toHaveAttribute('href', expect.stringContaining('computerworld.com'));
     expect(screen.getByRole('link', {name: /reducing the overlap/}))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
-  });
-
-  test('should quote the CSS working group where the record tells of the move to modules', () => {
-    expect(within(itemHeadedBy('the timeline', 'The separation needs proof')).getByRole('link', {name: '“chose to adopt a modular approach, where each module defines a part of CSS, rather than to define a single monolithic specification”', hidden: true}))
-      .toHaveAttribute('href', 'https://www.w3.org/TR/css-2023/');
   });
 
   test('the research stands collected, closed until asked', () => {

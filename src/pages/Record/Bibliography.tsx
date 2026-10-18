@@ -208,7 +208,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://csszengarden.com/pages/about/"><cite>About the CSS Zen Garden</cite></a>
-            <span className="provenance caption">Dave Shea</span>
+            <span className="provenance caption">Dave Shea, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://www.css-class.com/a-brief-history-of-css/"><cite>A Brief History of CSS</cite></a>
@@ -229,10 +229,6 @@ export const Bibliography: FC = () =>
           <li>
             <a className="signpost" href="https://www.w3.org/Style/CSS/Overview.en.html"><cite>Cascading Style Sheets home page</cite></a>
             <span className="provenance caption">the W3C</span>
-          </li>
-          <li>
-            <a className="signpost" href="https://www.w3.org/TR/css-2023/"><cite>CSS Snapshot 2023</cite></a>
-            <span className="provenance caption">the CSS working group, W3C, 2023</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes"><cite>Pseudo-classes</cite></a>
