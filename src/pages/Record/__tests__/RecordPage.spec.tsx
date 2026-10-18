@@ -6,8 +6,9 @@ import {Paths} from '@pages/Paths';
 import {recordPage} from '@pages/Record/__test_support/record';
 
 describe('the 1989 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -31,8 +32,9 @@ describe('the 1989 moment', () => {
 });
 
 describe('the 1990 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -51,8 +53,9 @@ describe('the 1990 moment', () => {
 });
 
 describe('the 1991 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -75,8 +78,9 @@ describe('the 1991 moment', () => {
 });
 
 describe('the 1994 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -119,8 +123,9 @@ describe('the 1994 moment', () => {
 });
 
 describe('the 1996 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -134,8 +139,9 @@ describe('the 1996 moment', () => {
 });
 
 describe('the first 1995 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -160,8 +166,9 @@ describe('the first 1995 moment', () => {
 });
 
 describe('the second 1995 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -175,8 +182,9 @@ describe('the second 1995 moment', () => {
 });
 
 describe('the first 1996 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -201,8 +209,9 @@ describe('the first 1996 moment', () => {
 });
 
 describe('the 1997 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -217,8 +226,9 @@ describe('the 1997 moment', () => {
 });
 
 describe('the 1998 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -241,8 +251,9 @@ describe('the 1998 moment', () => {
 });
 
 describe('the 2002 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -265,8 +276,9 @@ describe('the 2002 moment', () => {
 });
 
 describe('the 2003 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -288,8 +300,9 @@ describe('the 2003 moment', () => {
 });
 
 describe('the 2004 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -312,8 +325,9 @@ describe('the 2004 moment', () => {
 });
 
 describe('the 2005 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -336,8 +350,9 @@ describe('the 2005 moment', () => {
 });
 
 describe('the 2009 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -360,8 +375,9 @@ describe('the 2009 moment', () => {
 });
 
 describe('the 2010 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -385,8 +401,9 @@ describe('the 2010 moment', () => {
 });
 
 describe('the 2011 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -408,8 +425,9 @@ describe('the 2011 moment', () => {
 });
 
 describe('the 2013 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test('should send the reader to the 2010 moment for the single-page application\'s shape', async () => {
@@ -440,8 +458,9 @@ describe('the 2013 moment', () => {
 });
 
 describe('the 2014 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -477,8 +496,9 @@ describe('the 2014 moment', () => {
 });
 
 describe('the 2016 moment', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test.each([
@@ -504,8 +524,9 @@ describe('the 2016 moment', () => {
 });
 
 describe('the record\'s frame and its concert', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test('should open on the first need as the 1989 moment tells it, and promise the concert', () => {
@@ -542,8 +563,9 @@ describe('the record\'s frame and its concert', () => {
 });
 
 describe('the record', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
   });
 
   test('should open on its title, then tell the record, then walk into the demos, then collect the research', () => {

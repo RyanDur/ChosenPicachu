@@ -9,6 +9,7 @@ const essayOf = (name: string): HTMLElement[] => {
 };
 
 export const homePage = {
+  arrived: (): Promise<HTMLElement> => screen.findByText(/^A webpage is three languages working in concert/),
   paragraph: (opening: RegExp): HTMLElement => screen.getByText(opening),
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).getAllByRole('link'),
   concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),

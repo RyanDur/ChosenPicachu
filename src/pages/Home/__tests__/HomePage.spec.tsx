@@ -5,8 +5,9 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import {homePage} from '@pages/Home/__test_support/home';
 
 describe('the home page', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
   });
 
   test('should open on the thesis, then say who the site is for, then what the concerns, the record and the demos give', () => {
@@ -100,8 +101,9 @@ describe('the home page', () => {
 });
 
 describe('the home page’s Structure essay', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
   });
 
   test('should read as the words give it, 8 paragraphs, paragraph for paragraph', () => {
@@ -168,8 +170,9 @@ describe('the home page’s Structure essay', () => {
 });
 
 describe('the home page’s Presentation essay', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
   });
 
   test('should read as the words give it, 8 paragraphs, paragraph for paragraph', () => {
@@ -233,8 +236,9 @@ describe('the home page’s Presentation essay', () => {
 });
 
 describe('the home page’s Dynamic essay', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
   });
 
   test('should read as the words give it, 7 paragraphs, paragraph for paragraph', () => {

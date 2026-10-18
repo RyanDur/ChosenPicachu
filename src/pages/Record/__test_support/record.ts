@@ -3,6 +3,7 @@ import {screen, within} from '@testing-library/react';
 const research = (): HTMLElement => screen.getByRole('region', {name: 'The research'});
 
 export const recordPage = {
+  arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
   shelvedAs: (work: string): HTMLElement => {
     const entry = within(research()).getAllByRole('listitem', {hidden: true})
       .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
