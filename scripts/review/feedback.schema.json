@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "required": ["overview", "nextSteps", "habits", "plusses", "deltas"],
   "$defs": {
-    "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests", "tutorials"]},
+    "rubric": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests", "tutorials", "record"]},
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
     "evidence": {"type": "string", "enum": ["read", "inferred"]}
   },
@@ -31,9 +31,9 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "habit", "file", "line", "happened", "why", "evidence", "principle"],
+        "required": ["rubric", "habit", "file", "line", "happened", "why", "evidence", "principle"],
         "properties": {
-          "door": {"$ref": "#/$defs/door"},
+          "rubric": {"$ref": "#/$defs/rubric"},
           "habit": {"type": "string"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
@@ -50,9 +50,9 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "habit", "severity", "file", "line", "happened", "why", "evidence", "change", "principle"],
+        "required": ["rubric", "habit", "severity", "file", "line", "happened", "why", "evidence", "change", "principle"],
         "properties": {
-          "door": {"$ref": "#/$defs/door"},
+          "rubric": {"$ref": "#/$defs/rubric"},
           "habit": {"type": "string"},
           "severity": {"$ref": "#/$defs/severity"},
           "file": {"type": "string"},

@@ -36,7 +36,7 @@ const lineOf = ({file, line, evidence}) => asText(`${file}:${line}${evidence ===
 
 const folded = (label, body) => [`<details><summary>${label}</summary>`, '', ...body, '', '</details>'].join('\n');
 
-export const plusOf = (plus, commit) => folded(`keep · ${plus.door} · ${lineOf(plus)}`, [
+export const plusOf = (plus, commit) => folded(`keep · ${plus.rubric} · ${lineOf(plus)}`, [
   `**Where:** ${placeOf(plus, commit)}`,
   '',
   `**What happened:** ${told(plus.happened)}`,
@@ -47,7 +47,7 @@ export const plusOf = (plus, commit) => folded(`keep · ${plus.door} · ${lineOf
   `> ${told(plus.principle)}`
 ]);
 
-export const deltaOf = (delta, commit) => folded(`${delta.severity} · ${delta.door} · ${lineOf(delta)}`, [
+export const deltaOf = (delta, commit) => folded(`${delta.severity} · ${delta.rubric} · ${lineOf(delta)}`, [
   `**Where:** ${placeOf(delta, commit)}`,
   '',
   `**What happened:** ${told(delta.happened)}`,

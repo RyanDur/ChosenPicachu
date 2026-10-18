@@ -36,8 +36,8 @@ const scopes = {
 const listed = names => names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 
 export const dispatch = asks => asks.length === 1
-  ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its door's plusses and deltas; the other QAs have nothing to review here.`
-  : `The QAs hold one door each: ${listed(asks)}. Send every one of them the scope, word for word, at the same time, and ask each for its door's plusses and deltas.`;
+  ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its rubric's plusses and deltas; the other QAs have nothing to review here.`
+  : `The QAs hold one rubric each: ${listed(asks)}. Send every one of them the scope, word for word, at the same time, and ask each for its rubric's plusses and deltas.`;
 
 export const promptFor = ({scope, before, after}) => {
   const chosen = scopes[scope];
@@ -48,12 +48,12 @@ export const promptFor = ({scope, before, after}) => {
     values,
     plain,
     '## Your part',
-    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The design door says how the code is shaped so that change stays cheap. The tests door says what a test is for. The tutorials door says what a tutorial on the demos tab owes its reader.`,
+    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each concern of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The design rubric says how the code is shaped so that change stays cheap. The tests rubric says what a test is for. The tutorials rubric says what a tutorial on the demos tab owes its reader. The record rubric says what the record owes its reader.`,
     chosen.describe({before, after}),
     `The scope has two halves. ${halves.tests} ${halves.site} The site's QAs review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
-    'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its door, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
-    'Answer in the feedback stance, in the shape you were given. Open with the overview: what the push did, what you found, and whether it is fine to ship. Then the next steps, one thing to do in each, what stops the push first. Name the habits: each is one rule from a door that two or more findings answer to, with a title, the rule in the door\'s words, the problem, why it matters, and the fix stated once as the next step. Put the habits a visitor meets first. Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none. Say what you deferred in one line, only if something was. Each entry says what happened, why, and for a delta the change, in plain sentences.'
+    'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its rubric, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
+    'Answer in the feedback stance, in the shape you were given. Open with the overview: what the push did, what you found, and whether it is fine to ship. Then the next steps, one thing to do in each, what stops the push first. Name the habits: each is one rule from a rubric that two or more findings answer to, with a title, the rule in the rubric\'s words, the problem, why it matters, and the fix stated once as the next step. Put the habits a visitor meets first. Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none. Say what you deferred in one line, only if something was. Each entry says what happened, why, and for a delta the change, in plain sentences.'
   ].join('\n\n');
 };
 

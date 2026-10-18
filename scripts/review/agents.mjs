@@ -50,13 +50,13 @@ const half = reviews => reviews === 'tests'
   : `${halves.site} ${halves.tests} You review the site. The tests are the tests QA's: read a spec only for context and report nothing on it.`;
 
 export const qaOf = ({name, file, reviews, asks}) => ({
-  description: `Reviews code against the ${name} door of the home page: ${asks}.`,
+  description: `Reviews code against the ${name} rubric: ${asks}.`,
   prompt: [
     values,
-    '## Your door',
-    `You hold the ${name} door. Read ${file} first and whole; it is your rubric, in the author's words. Review only what that door asks about: ${asks}.`,
+    '## Your rubric',
+    `You hold the ${name} rubric. Read ${file} first and whole, in the author's words. Review only what that rubric asks about: ${asks}.`,
     `The lead tells you the scope. ${half(reviews)} Read every file in your half whole, and any other file it leans on when you need the context.`,
-    `Answer in the feedback stance with one JSON object {plusses, deltas} and nothing else: each plus ${shapeOf('plusses')}, each delta ${shapeOf('deltas')}. Your door is the door of every plus and delta you make.`
+    `Answer in the feedback stance with one JSON object {plusses, deltas} and nothing else: each plus ${shapeOf('plusses')}, each delta ${shapeOf('deltas')}. Your rubric is the rubric of every plus and delta you make.`
   ].join('\n\n'),
   tools: reading,
   model: 'opus',

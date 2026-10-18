@@ -16,9 +16,9 @@ const answer = review => JSON.stringify({type: 'result', structured_output: revi
 
 const feedbackSchema = () => JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../review/feedback.schema.json'), 'utf8'));
 
-const violation = aDelta({door: 'structure', severity: 'violation', file: 'src/a.tsx', line: 3, happened: 'a div wraps a list'});
+const violation = aDelta({rubric: 'structure', severity: 'violation', file: 'src/a.tsx', line: 3, happened: 'a div wraps a list'});
 const concern = aDelta({
-  door: 'presentation',
+  rubric: 'presentation',
   severity: 'concern',
   file: 'src/b.css',
   line: 9,
@@ -28,25 +28,25 @@ const concern = aDelta({
   principle: 'Tag selectors are for resets only'
 });
 const note = aDelta({
-  door: 'structure',
+  rubric: 'structure',
   happened: 'a section has no heading',
   change: 'name the section with a heading',
   principle: 'Sections name themselves through their headings'
 });
-const testNote = aDelta({door: 'tests', file: 'src/__tests__/c.spec.tsx', line: 4});
-const interaction = aDelta({door: 'dynamic interaction'});
+const testNote = aDelta({rubric: 'tests', file: 'src/__tests__/c.spec.tsx', line: 4});
+const interaction = aDelta({rubric: 'dynamic interaction'});
 const plus = aPlus({
-  door: 'structure',
+  rubric: 'structure',
   file: 'src/f.tsx',
   line: 5,
   happened: 'the friends list is a fieldset with a legend',
   why: 'the group names itself and the platform hands the name to a reader',
   principle: 'The right tag hands most of that over for free'
 });
-const testPlus = aPlus({door: 'tests'});
+const testPlus = aPlus({rubric: 'tests'});
 
 describe('the review prompt', () => {
-  test('a full review sends the reviewer to the doors on the home page and scopes them to the whole of src', () => {
+  test('a full review sends the reviewer to the concerns on the home page and scopes them to the whole of src', () => {
     const prompt = promptFor({scope: 'full'});
     expect(prompt).toContain('src/pages/Home/Structure.tsx');
     expect(prompt).toContain('src/pages/Home/Presentation.tsx');
@@ -80,17 +80,17 @@ describe('the review prompt', () => {
 
   test('a review of the changes sends all seven QAs', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa, tutorials-qa and record-qa.');
+    expect(prompt).toContain('The QAs hold one rubric each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa, tutorials-qa and record-qa.');
   });
 
   test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('You report by habit. A habit is one rule from a door that two or more findings answer to');
+    expect(prompt).toContain('You report by habit. A habit is one rule from a rubric that two or more findings answer to');
     expect(prompt).toContain('Habits a visitor meets come before habits only the next reader meets.');
     expect(prompt).toContain('Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none.');
     expect(prompt).toContain('Say what you deferred in one line, only if something was.');
     expect(prompt).toContain('You take a feedback stance: plusses and deltas, each with its why.');
-    expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
+    expect(prompt).toContain('A **plus** is a choice in the code that holds a rubric up.');
     expect(prompt).toContain('A **delta** is a finding: something to change.');
     expect(prompt).toContain('Answer in the feedback stance');
   });
@@ -104,10 +104,10 @@ describe('the review prompt', () => {
     expect(prompt).toContain('Open with the overview');
   });
 
-  test('the lead reads the tutorials door with the others', () => {
+  test('the lead reads the tutorials rubric with the others', () => {
     const prompt = promptFor({scope: 'full'});
     expect(prompt).toContain('scripts/review/tutorials.md');
-    expect(prompt).toContain('The tutorials door says what a tutorial on the demos tab owes its reader.');
+    expect(prompt).toContain('The tutorials rubric says what a tutorial on the demos tab owes its reader.');
   });
 
   test('the review is asked to write plainly, naming things and never narrating itself', () => {
@@ -150,7 +150,7 @@ describe('the review prompt', () => {
 
 describe('the review report', () => {
   const heading = aHabit();
-  const naming = aHabit({title: 'a landmark is named for what it holds', rule: 'The structure door: every landmark gets a name and no two names collide.', fix: 'Name it for what it holds.'});
+  const naming = aHabit({title: 'a landmark is named for what it holds', rule: 'The structure rubric: every landmark gets a name and no two names collide.', fix: 'Name it for what it holds.'});
   const named = traits => aDelta({habit: naming.title, ...traits});
 
   test('reads the overview, next steps, habits, plusses and deltas the reviewer structured', () => {
@@ -231,7 +231,7 @@ describe('the review report', () => {
     expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '#### 1. a landmark is named for what it holds'));
   });
 
-  test('a habit tells its problem, where by severity in words, why it matters and the next step, then the door\'s rule, the entries, and what to keep', () => {
+  test('a habit tells its problem, where by severity in words, why it matters and the next step, then the rubric\'s rule, the entries, and what to keep', () => {
     const summary = summaryOf(review([plus], [note, violation], [heading]));
     const at = needle => placeOf(summary, needle);
     expect(at('#### 1. a section is named by its heading')).toBeLessThan(at('**Problem.** A reader who walks the page by headings never finds the section.'));
@@ -240,8 +240,8 @@ describe('the review report', () => {
     expect(at('- **Violation.** `src/a.tsx:3`.')).toBeLessThan(at('- **Note.** `src/somewhere.tsx:1`. a section has no heading'));
     expect(at('- **Note.** `src/somewhere.tsx:1`.')).toBeLessThan(at('**Why it matters.** The section is skipped by anyone who does not read from the top.'));
     expect(at('**Why it matters.**')).toBeLessThan(at('**Next step.** Give each section a heading that names it.'));
-    expect(at('**Next step.**')).toBeLessThan(at('> The structure door: sections name themselves through their headings.'));
-    expect(at('> The structure door:')).toBeLessThan(at('<details><summary>violation · structure · src/a.tsx:3</summary>'));
+    expect(at('**Next step.**')).toBeLessThan(at('> The structure rubric: sections name themselves through their headings.'));
+    expect(at('> The structure rubric:')).toBeLessThan(at('<details><summary>violation · structure · src/a.tsx:3</summary>'));
     expect(at('<details><summary>violation')).toBeLessThan(at('<details><summary>note · structure · src/somewhere.tsx:1</summary>'));
     expect(at('<details><summary>note')).toBeLessThan(at('**Keep doing.**'));
     expect(at('**Keep doing.**')).toBeLessThan(at('- `src/f.tsx:5`. the friends list is a fieldset with a legend'));
@@ -266,8 +266,8 @@ describe('the review report', () => {
     expect(summary).toContain('**Keep doing.**');
   });
 
-  test('a finding that fits no habit is told on its own after the habits: its problem, where, why it matters and the next step, then the door\'s words, in the open', () => {
-    const stray = aDelta({habit: 'nothing of the sort', severity: 'concern', file: 'src/s.tsx', line: 7, happened: 'a stray thing', why: 'it costs a reader', change: 'put it right', principle: 'the door says so on strays', checked: 'read the file'});
+  test('a finding that fits no habit is told on its own after the habits: its problem, where, why it matters and the next step, then the rubric\'s words, in the open', () => {
+    const stray = aDelta({habit: 'nothing of the sort', severity: 'concern', file: 'src/s.tsx', line: 7, happened: 'a stray thing', why: 'it costs a reader', change: 'put it right', principle: 'the rubric says so on strays', checked: 'read the file'});
     const summary = summaryOf(review([], [note, stray], [heading]));
     const at = needle => placeOf(summary, needle);
     expect(at('#### 1. a section is named by its heading')).toBeLessThan(at('#### 2. Concern at `src/s.tsx:7`'));
@@ -275,8 +275,8 @@ describe('the review report', () => {
     expect(at('**Problem.** a stray thing')).toBeLessThan(at('**Where.** `src/s.tsx:7`'));
     expect(at('**Where.** `src/s.tsx:7`')).toBeLessThan(at('**Why it matters.** it costs a reader'));
     expect(at('**Why it matters.** it costs a reader')).toBeLessThan(at('**Next step.** put it right'));
-    expect(at('**Next step.** put it right')).toBeLessThan(at('> the door says so on strays'));
-    expect(at('> the door says so on strays')).toBeLessThan(at('<details><summary>what was checked</summary>\n\nread the file'));
+    expect(at('**Next step.** put it right')).toBeLessThan(at('> the rubric says so on strays'));
+    expect(at('> the rubric says so on strays')).toBeLessThan(at('<details><summary>what was checked</summary>\n\nread the file'));
     expect(summary).not.toContain('<details><summary>concern · structure · src/s.tsx:7');
   });
 
@@ -357,7 +357,7 @@ describe('the review report', () => {
     expect(summaryOf(review([], [note], [heading]))).toContain('0 plusses. 1 note. 1 habit.');
   });
 
-  test('a delta folds away under its severity, door and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
+  test('a delta folds away under its severity, rubric and place, and opens on where, what happened, why it matters, the change, and the rubric\'s words', () => {
     const entry = deltaOf(concern);
     expect(entry).toMatch(/^<details><summary>concern · presentation · src\/b\.css:9<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
@@ -367,7 +367,7 @@ describe('the review report', () => {
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('a plus folds away under keep, its door and place, and opens on where, what happened, why it works, and the door\'s words', () => {
+  test('a plus folds away under keep, its rubric and place, and opens on where, what happened, why it works, and the rubric\'s words', () => {
     const entry = plusOf(plus);
     expect(entry).toMatch(/^<details><summary>keep · structure · src\/f\.tsx:5<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
@@ -446,23 +446,23 @@ describe('the review report', () => {
     expect(leavesFeedback(review([], []))).toBe(false);
   });
 
-  test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
+  test('the schema the review answers in names every field the report tells, and the rubrics and severities once', () => {
     const schema = feedbackSchema();
     expect(schema.required).toEqual(['overview', 'nextSteps', 'habits', 'plusses', 'deltas']);
     expect(schema.properties.overview).toEqual({type: 'string'});
     expect(schema.properties.nextSteps).toEqual({type: 'array', items: {type: 'string'}});
     expect(schema.properties.habits.items.required).toEqual(['title', 'rule', 'problem', 'why', 'fix']);
     expect(Object.keys(schema.properties)).toContain('deferred');
-    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'habit', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
+    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['rubric', 'habit', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
-    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'habit', 'severity', 'file', 'line', 'happened', 'why', 'evidence', 'change', 'principle']));
+    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['rubric', 'habit', 'severity', 'file', 'line', 'happened', 'why', 'evidence', 'change', 'principle']));
     expect(Object.keys(schema.properties.deltas.items.properties)).toContain('checked');
-    expect(schema.properties.plusses.items.properties.door).toEqual({$ref: '#/$defs/door'});
-    expect(schema.properties.deltas.items.properties.door).toEqual({$ref: '#/$defs/door'});
+    expect(schema.properties.plusses.items.properties.rubric).toEqual({$ref: '#/$defs/rubric'});
+    expect(schema.properties.deltas.items.properties.rubric).toEqual({$ref: '#/$defs/rubric'});
     expect(schema.properties.deltas.items.properties.severity).toEqual({$ref: '#/$defs/severity'});
     expect(schema.properties.plusses.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
     expect(schema.properties.deltas.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
-    expect(schema.$defs.door['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests', 'tutorials']);
+    expect(schema.$defs.rubric['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests', 'tutorials', 'record']);
     expect(schema.$defs.severity['enum']).toEqual(['violation', 'concern', 'note']);
     expect(schema.$defs.evidence['enum']).toEqual(['read', 'inferred']);
   });

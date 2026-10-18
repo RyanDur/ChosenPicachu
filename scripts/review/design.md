@@ -1,6 +1,6 @@
-# The design door
+# The design rubric
 
-The home page states what the site is, how it shows, and how it responds. The tests door states what a test is for. This door states how the code is shaped so that change stays cheap: where a thing lives, what the types allow, and how failure travels. Under all three sits one stance: a functional core and an imperative shell. Transitions, rules and shapes are pure functions of their inputs; the shell holds the state, listens, commits and reconciles what stands on screen. You hold every file that ships to this door and to nothing outside it.
+The home page states what the site is, how it shows, and how it responds. The tests rubric states what a test is for. This rubric states how the code is shaped so that change stays cheap: where a thing lives, what the types allow, and how failure travels. Under all three sits one stance: a functional core and an imperative shell. Transitions, rules and shapes are pure functions of their inputs; the shell holds the state, listens, commits and reconciles what stands on screen. You hold every file that ships to this rubric and to nothing outside it.
 
 ## Where a thing lives
 

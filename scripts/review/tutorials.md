@@ -1,6 +1,6 @@
-# The tutorials door
+# The tutorials rubric
 
-The home page states what the site is, how it shows, and how it responds. The tests door states what a test is for, and the design door how the code is shaped. This door states what a tutorial on the demos tab owes its reader. You hold every exhibit, run, caption, heading and recipe step on the demos tab to this door: the words a reader reads and the examples a reader presses. You hold nothing outside it.
+The home page states what the site is, how it shows, and how it responds. The tests rubric states what a test is for, and the design rubric how the code is shaped. This rubric states what a tutorial on the demos tab owes its reader. You hold every exhibit, run, caption, heading and recipe step on the demos tab to this rubric: the words a reader reads and the examples a reader presses. You hold nothing outside it.
 
 ## The reader
 

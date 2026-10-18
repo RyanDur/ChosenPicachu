@@ -54,7 +54,7 @@ describe('the reviewers AGENTS.md names', () => {
 });
 
 describe('the review\'s QAs', () => {
-  test('every door gets its own QA that runs on opus and can only read', () => {
+  test('every rubric gets its own QA that runs on opus and can only read', () => {
     const qas = agents();
     expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa', 'tutorials-qa', 'record-qa']);
     Object.values(qas).forEach(qa => {
@@ -64,18 +64,18 @@ describe('the review\'s QAs', () => {
     });
   });
 
-  test('each QA carries the values and its own door', () => {
+  test('each QA carries the values and its own rubric', () => {
     const qas = agents();
     reviewers.forEach(({name, file}) => {
       const qa = qas[`${name}-qa`];
       expect(qa.prompt).toContain('# What every reviewer here holds');
-      expect(qa.prompt).toContain(`You hold the ${name} door. Read ${file} first`);
+      expect(qa.prompt).toContain(`You hold the ${name} rubric. Read ${file} first`);
       expect(qa.prompt).toContain('Corroborate before you report');
       expect(qa.prompt).toContain('Never invent a delta');
     });
   });
 
-  test('the door QAs review the site and leave the tests to the tests QA', () => {
+  test('the rubric QAs review the site and leave the tests to the tests QA', () => {
     const qas = agents();
     reviewers.filter(({reviews}) => reviews === 'site').forEach(({name}) => {
       expect(qas[`${name}-qa`].prompt).toContain('You review the site.');
@@ -85,7 +85,7 @@ describe('the review\'s QAs', () => {
     expect(qas['tests-qa'].prompt).toContain('the only finding you make on the site is that a test is missing');
   });
 
-  test('the tests QA is sent to the tests door and the test support', () => {
+  test('the tests QA is sent to the tests rubric and the test support', () => {
     const qas = agents();
     expect(qas['tests-qa'].prompt).toContain('scripts/review/tests.md');
     expect(qas['tests-qa'].prompt).toContain('every __test_support/ directory');
@@ -94,7 +94,7 @@ describe('the review\'s QAs', () => {
   test('each QA is asked its own reviewer\'s question', () => {
     const qas = agents();
     reviewers.forEach(({name, asks}) => {
-      expect(qas[`${name}-qa`].prompt).toContain(`Review only what that door asks about: ${asks}.`);
+      expect(qas[`${name}-qa`].prompt).toContain(`Review only what that rubric asks about: ${asks}.`);
     });
   });
 
@@ -114,8 +114,8 @@ describe('the review\'s QAs', () => {
 
   test('every QA answers in the shape the schema asks for', () => {
     Object.values(agents()).forEach(qa => {
-      expect(qa.prompt).toContain('each plus {door, file, line, happened, why, evidence, checked, principle}');
-      expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, why, evidence, change, checked, principle}');
+      expect(qa.prompt).toContain('each plus {rubric, file, line, happened, why, evidence, checked, principle}');
+      expect(qa.prompt).toContain('each delta {rubric, severity, file, line, happened, why, evidence, change, checked, principle}');
     });
   });
 });
