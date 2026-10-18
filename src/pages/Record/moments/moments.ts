@@ -90,17 +90,14 @@ export const moments: Record<MomentKey, MomentHeading> = {
 };
 
 export type YearOfTwo = {
-  readonly title: string;
   readonly tells: string;
 };
 
 export const yearsOfTwo: Partial<Record<string, YearOfTwo>> = {
   '1995': {
-    title: 'Pages need to respond, and the browsers’ tags need a standard',
     tells: 'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },
   '1996': {
-    title: 'The pages need to look the same, and the style sheet needs a standard',
     tells: 'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.'
   }
 };

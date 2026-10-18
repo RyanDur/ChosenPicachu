@@ -63,10 +63,14 @@ const Story: FC<{of: MomentKey}> = ({of}) => {
   return <Told/>;
 };
 
-const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {title, tells}}) =>
+const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}${title.slice(1)}`;
+
+const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
+
+const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {tells}}) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
-    <h3 className="beat-title sub-title void-dot-before">{title}</h3>
+    <h3 className="beat-title sub-title void-dot-before">{joinedTitle(inOrder.filter(key => moments[key].date.year === year).map(key => moments[key].title))}</h3>
     <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
     <details className="fuller-story" name="record">
       <summary className="prompt caption">the fuller story</summary>
