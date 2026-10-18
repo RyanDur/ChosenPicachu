@@ -198,6 +198,22 @@ describe('the first 1996 moment', () => {
   });
 });
 
+describe('the 1997 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 in August 1996, and the two dialects differed enough that pages worked in one browser and not the other. Netscape took the language to Ecma that November. The first edition of the standard, named ECMAScript, was adopted in June 1997.',
+    'JavaScript had shipped in Navigator 2.0, and Microsoft answered in kind: “JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”. It was, in Eich’s words, “Microsoft’s reverse-engineering of it”, under another name because “Microsoft couldn’t get a license from Sun”; the trademark was Sun’s, issued on 6 May 1997. “These differences made it difficult for developers to make their websites work well in both browsers”, and pages wore “best viewed in Netscape” and “best viewed in Internet Explorer” logos for years.',
+    'Netscape’s answer was a standards body that was not the W3C: “In November 1996, Netscape submitted JavaScript to Ecma International, as the starting point for a standard specification that all browser vendors could conform to.” Ecma, founded as the European Computer Manufacturers Association, numbers its standards, and ECMA-262 is the number it gave the language. The name came from the same trademark: Ecma “couldn’t get anybody to donate a trademark that was agreeable to all parties”, so, Eich says, “they ended up inventing ECMAScript, which sounds a little like a skin disease”. His reading of the whole episode is that the browser war “forced premature standardization after a furious period of innovation”.',
+    'The specification tells its own origin. It “is based on several originating technologies, the most well known being JavaScript (Netscape) and JScript (Microsoft)”; “The development of this Standard started in November 1996”, and the first edition was “adopted by the Ecma General Assembly of June 1997”. Ecma sent it to ISO under the fast-track procedure, where it became ISO/IEC 16262 in April 1998. The second edition, in 1998, kept the two aligned, with changes “editorial in nature”. The third, adopted in December 1999, “introduced powerful regular expressions, better string handling, new control statements, try/catch exception handling”. Ecma’s own list gives the three: June 1997, August 1998, December 1999.',
+    'What the standard fixed was the core language. “The Ecma standard codifies just the core language, not the DOM,” Eich says, “and many people think of the DOM as ‘JavaScript’.” The objects a script uses to reach the page stayed each browser’s own. Eich had “an early version of the DOM that was somewhat proprietary; not all of it got standardized in the W3C”, so the gulf between the browsers outlived the standard. The third edition is the JavaScript the web ran on for a decade: “since publication of the third edition, ECMAScript has achieved massive adoption in conjunction with the World Wide Web where it has become the programming language that is supported by essentially all web browsers”. It then stood still for ten years, which is the 2009 moment.'
+  ])('should tell why the standard got its name and what it left to the browsers, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The language needs a standard')).toHaveTextContent(told);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -312,7 +328,7 @@ describe('the record', () => {
     expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/, /skin disease/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
@@ -337,6 +353,9 @@ describe('the record', () => {
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
+    ['The language needs a standard', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”'],
+    ['The language needs a standard', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
+    ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”'],
     ['The need outruns the standards', 'https://thehistoryoftheweb.com/look-back-history-css/', '“it wasn’t long before web pages lost all semantic value”'],
