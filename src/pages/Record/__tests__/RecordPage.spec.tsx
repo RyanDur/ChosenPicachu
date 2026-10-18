@@ -361,6 +361,30 @@ describe('the 2009 moment', () => {
   });
 });
 
+describe('the 2010 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'AngularJS states the need on its own page: “HTML is great for declaring static documents, but it falters when we try to use it for declaring dynamic views in web-applications.” Other frameworks, it says, “deal with HTML’s shortcomings by either abstracting away HTML, CSS, and/or JavaScript or by providing an imperative way for manipulating the DOM”, and “Neither of these address the root problem that HTML was not designed for dynamic views.” Its answer was to “extend HTML vocabulary for your application”.',
+    '“AngularJS was originally developed in 2009 by Miško Hevery” at Brat Tech LLC, as the software behind an online JSON storage service at GetAngular.com, before its makers “decided to abandon the business idea and release Angular as an open-source library”. Its changelog dates the first tagged release, 0.9.0, to 20 October 2010, and 1.0 to 13 June 2012; it was “maintained mainly by Google”. It is a “JavaScript-based web framework for developing single-page applications”. A framework is a program that owns the page’s structure and calls your code, the reverse of a library, which your code calls. A single-page application is a page that never reloads; the script rewrites it. AngularJS’s one idea was “two-way data-binding that allowed for the automatic synchronization of models and views”. Its own page puts it plainly: “an automatic way of updating the view whenever the model changes, as well as updating the model whenever the view changes”. Change the data and the page changes; change the page and the data changes.',
+    'The answers multiplied. React ran inside Facebook first, “first deployed on Facebook’s News Feed in 2011”, and was open-sourced at “JSConf US, in May 2013”; it is the 2013 moment. Vue, “first publicly announced the following February, in 2014”, began as a reaction to AngularJS; Evan You: “what if I could just extract the part that I really liked about Angular and build something really lightweight”. Angular, “a complete rewrite from the same team that built AngularJS”, shipped its 2.0 release on 14 September 2016, and AngularJS’s own page now says “AngularJS support has officially ended as of January 2022”.',
+    'Each framework moved more of the page into script, with structure, style and behaviour composed in one place and rendered by the program. The 2013 moment names that need; the 2016 moment counts its cost.'
+  ])('should state the need in AngularJS\'s own words and date its release from its changelog, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The application needs a frame')).toHaveTextContent(told);
+  });
+
+  test.each(['Google no longer updates AngularJS', 'at a small company', 'it was released on 20 October 2010'])('should leave out "%s", which the framework\'s own page and changelog replace', claim => {
+    expect(itemHeadedBy('the timeline', 'The application needs a frame')).not.toHaveTextContent(claim);
+  });
+
+  test('should shelve AngularJS\'s page and its changelog in the research', () => {
+    expect(shelvedAs('Why AngularJS?')).toHaveTextContent('angularjs.org');
+    expect(shelvedAs('AngularJS changelog')).toHaveTextContent('the angular.js repository on GitHub');
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -509,6 +533,9 @@ describe('the record', () => {
     ['The standard needs to move again', 'https://tc39.es/process-document/', '“Two compatible implementations which pass the Test262 acceptance tests”'],
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ActionScript', '“Completely conforming implementation of the ECMAScript fourth edition draft specification”'],
     ['The standard needs to move again', 'https://ecma-international.org/publications-and-standards/standards/ecma-262/', '“Therefore “ECMA-262 Edition 4” as an Ecma International publication does not exist”'],
+    ['The application needs a frame', 'https://angularjs.org/', '“Neither of these address the root problem that HTML was not designed for dynamic views.”'],
+    ['The application needs a frame', 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md', '20 October 2010'],
+    ['The application needs a frame', 'https://en.wikipedia.org/wiki/React_(software)', '“first deployed on Facebook’s News Feed in 2011”'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],

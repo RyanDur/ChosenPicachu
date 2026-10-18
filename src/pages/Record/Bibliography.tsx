@@ -316,6 +316,14 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
+            <a className="signpost" href="https://angularjs.org/"><cite>Why AngularJS?</cite></a>
+            <span className="provenance caption">angularjs.org</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://github.com/angular/angular.js/blob/master/CHANGELOG.md"><cite>AngularJS changelog</cite></a>
+            <span className="provenance caption">the angular.js repository on GitHub</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>
