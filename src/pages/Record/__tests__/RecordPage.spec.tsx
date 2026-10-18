@@ -214,6 +214,30 @@ describe('the 1997 moment', () => {
   });
 });
 
+describe('the 1998 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'In 1998 the standards were ahead of every browser. Todd Fahrner wrote a page, the Acid Test, that a correct CSS1 browser renders to the pixel, and no browser that year did. The browsers took a decade to catch up, pushed by tests, hacks and failures named in public.',
+    'The specifications were ahead of every browser. CSS2 became a Recommendation on 12 May 1998, edited by Bos and Lie. Its abstract lists what it added: “media-specific style sheets so that authors may tailor the presentation of their documents to visual browsers, aural devices, printers, braille devices, handheld devices”, and “content positioning, downloadable fonts, table layout, features for internationalization, automatic counters and numbering”. With them came z-index, bidirectional text and aural style sheets: presentation for ears as well as eyes.',
+    'The browsers were measured by tests. The CSS1 Test Suite was a joint effort of the W3C, NIST and Case Western Reserve University, and its credits say how it came about. Eric Meyer “had created his own private test suite in order to create a set of compatibility charts for the Internet community’s reference”. Håkon Lie “checked each page for correctness and completeness”. Tim Boland of NIST went “to the effort of identifying more than five hundred testable statements in the CSS1 specification”. It opened for public comment in late April 1998, moved to the W3C’s server in May, and was declared complete with the revised CSS1 specification on 17 December 1998. The credits also name L. David Baron, Ian Hickson and the CSS Samurai of the Web Standards Project, and one line thanks “Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”: the same Chris Wilson whose IE3 team had shipped with little of the box model. Opera 3.5 earned the era’s driest compliment from Lie and Bos: its developers “found the time to test their implementation before shipping it”.',
+    'Inside that suite sits Todd Fahrner’s box model “acid test”, Test 5.5.26c: a deliberately nonsensical page, T.S. Eliot fragments and radio buttons labelled bang and whimper, because only the boxes were under test. Its stylesheet shows its work so no vendor could argue: “width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”. The page says what passing means: “All 100%-conformant CSS1 agents should be able to render the document elements above this paragraph indistinguishably (to the pixel) from this reference rendering”. Its last line is the whole era in one sentence: “All discrepancies should be traceable to CSS1 implementation shortcomings.”',
+    'None of 1998’s browsers managed that. Lie and Bos record that Internet Explorer 4 “does not fully support CSS1”, that in Navigator 4 “many CSS properties cannot be used”, and that Opera 3.5 “supports most of CSS1”. The Web Standards Project turned the tests into scoreboards: in November 1998 it published “IE’s Top 10 CSS Problems”, naming failures in public. Tantek Çelik’s doctype switch, worked out after a conversation with Fahrner, let a browser keep its old bugs for old pages and render new pages by the book. Eric Meyer, Hoffmann writes, “has gone on record and said doctype switching saved CSS”. Çelik’s own team shipped Internet Explorer 5 for the Macintosh on 27 March 2000, on a new engine, Tasman; Hoffmann calls it “the first browser with full CSS Level 1 support”. Lie and Bos had predicted CSS3 “towards the end of 1999”; the buggy parts of level 2 alone took until 2011 to become CSS 2.1, and a large publisher betting its pages on CSS is the 2002 moment.'
+  ])('should tell the test suite from its credits and each browser from the Saga, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The browsers need to agree')).toHaveTextContent(told);
+  });
+
+  test.each(['a young', '99%', 'Wired', 'most browsers failed'])('should leave out "%s", which the 2002 moment or no source holds', claim => {
+    expect(itemHeadedBy('the timeline', 'The browsers need to agree')).not.toHaveTextContent(claim);
+  });
+
+  test.each(['Cascading Style Sheets, level 2', 'Internet Explorer for Mac'])('should shelve %s in the research', work => {
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: work, hidden: true})).toBeInTheDocument();
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -241,7 +265,6 @@ describe('the record', () => {
 
   test.each([
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
-    'The catching-up took a decade of feedback: tests, hacks, and public scoreboards.',
     'and one line thanks “Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”: the same Chris Wilson whose IE3 team had shipped with little of the box model.',
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The garden showed the other side: hold the structure constant and the design can be replaced any number of times without a change to the markup.',
@@ -353,6 +376,12 @@ describe('the record', () => {
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
+    ['The browsers need to agree', 'https://www.w3.org/TR/1998/REC-CSS2-19980512/', '“content positioning, downloadable fonts, table layout, features for internationalization, automatic counters and numbering”'],
+    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html', '“checked each page for correctness and completeness”'],
+    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm', '“All discrepancies should be traceable to CSS1 implementation shortcomings.”'],
+    ['The browsers need to agree', 'https://www.w3.org/Style/LieBos2e/history/Overview.html', '“does not fully support CSS1”'],
+    ['The browsers need to agree', 'https://thehistoryoftheweb.com/look-back-history-css/', '“the first browser with full CSS Level 1 support”'],
+    ['The browsers need to agree', 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac', '27 March 2000'],
     ['The language needs a standard', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”'],
     ['The language needs a standard', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
     ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],

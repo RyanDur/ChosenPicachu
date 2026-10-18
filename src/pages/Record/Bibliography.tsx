@@ -135,6 +135,14 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C Recommendation, 17 December 1996</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/TR/1998/REC-CSS2-19980512/"><cite>Cascading Style Sheets, level 2</cite></a>
+            <span className="provenance caption">W3C Recommendation, 12 May 1998</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac"><cite>Internet Explorer for Mac</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
             <a className="signpost" href="https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/"><cite>Wired With Standards</cite></a>
             <span className="provenance caption">Eric Meyer, 11 October 2002</span>
           </li>
