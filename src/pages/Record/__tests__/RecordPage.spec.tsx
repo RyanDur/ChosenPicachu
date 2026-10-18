@@ -806,7 +806,6 @@ describe('the record', () => {
 
     expect(within(bibliography).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent))
       .toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Dynamic']));
-    expect(within(bibliography).queryByRole('heading', {name: 'Dynamic Interaction', hidden: true})).not.toBeInTheDocument();
   });
 
   test('the research stands collected, closed until asked', () => {

@@ -29,6 +29,13 @@ describe('the practice page', () => {
     expect(within(tabs()).getByRole('link', {name: 'Dynamic', current: 'page'})).toBeInTheDocument();
   });
 
+  test.each(['constructor', 'toString', '__proto__'])('should open on Structure when the address names %s, a word every object answers to', async word => {
+    render(<TestApp at={`${Paths.practice}?tab=${word}`}/>);
+
+    expect(await screen.findByRole('heading', {name: 'Practice Structure', level: 1})).toBeInTheDocument();
+    expect(within(tabs()).getByRole('link', {name: 'Structure', current: 'page'})).toBeInTheDocument();
+  });
+
   test('should open on Structure, marked as the current tab, when the address names a tab the page does not have', async () => {
     render(<TestApp at={`${Paths.practice}?tab=behaviour`}/>);
 

@@ -8,7 +8,7 @@ const noConcernHas = (param: string): never => {
   throw new schema.DecoderError(`no concern has the tab ${param}`);
 };
 
-const formerTabs: Readonly<Record<string, Concern>> = {'dynamic-interaction': 'Dynamic'};
+const formerTabs: ReadonlyMap<string, Concern> = new Map([['dynamic-interaction', 'Dynamic']]);
 
 export const concernParam: schema.Decoder<Concern> = schema.string.andThen(param =>
-  maybe(formerTabs[param] ?? concernsInOrder.find(concern => concernId(concern) === param)).either(named => named, () => noConcernHas(param)));
+  maybe(formerTabs.get(param) ?? concernsInOrder.find(concern => concernId(concern) === param)).either(named => named, () => noConcernHas(param)));
