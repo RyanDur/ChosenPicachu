@@ -203,6 +203,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Dave Shea, 2003</span>
           </li>
           <li>
+            <a className="signpost" href="https://csszengarden.com/pages/about/"><cite>About the CSS Zen Garden</cite></a>
+            <span className="provenance caption">Dave Shea</span>
+          </li>
+          <li>
             <a className="signpost" href="https://www.css-class.com/a-brief-history-of-css/"><cite>A Brief History of CSS</cite></a>
             <span className="provenance caption">css-class.com</span>
           </li>
