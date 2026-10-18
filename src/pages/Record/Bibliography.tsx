@@ -66,6 +66,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Tim Berners-Lee and Dan Connolly, IETF, November 1995</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/TR/REC-html32"><cite>HTML 3.2 Reference Specification</cite></a>
+            <span className="provenance caption">W3C Recommendation, 14 January 1997</span>
+          </li>
+          <li>
             <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>
             <span className="provenance caption">html.com</span>
           </li>

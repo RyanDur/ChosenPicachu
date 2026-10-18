@@ -173,6 +173,32 @@ describe('the second 1995 moment', () => {
   });
 });
 
+describe('the first 1996 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Markup carried presentation for years because nothing else could, columns and fonts written as tags, and in the chaotic years of mixed browser support designers leaned on tables and spacer gifs: vendor tags on every side, and CSS itself run as JavaScript. The same page looked one way in one browser and another in the other.',
+    'The markup of the time said it plainly:',
+    'Layout and paint, written as structure. Netscape, Hoffmann writes, “simply extended HTML to include presentational, unstandardized HTML tags that could be used to design web pages”, and “it wasn’t long before web pages lost all semantic value”. While CSS was still a draft it “pressed on with presentational HTML elements like multicol, layer, and the dreaded blink tag”. Center had shipped in the first Mozilla beta, three days after Lie’s draft, and FONT made it into HTML 3.2 itself, the W3C’s Recommendation of January 1997. Raggett records the end of two of them: “The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”',
+    'Netscape “had been sceptical towards style sheets”. Lie and Bos read its first implementation, in Navigator 4, as “a half-hearted attempt to stop Microsoft from claiming to be more standards-compliant than themselves”: a broad set of features its developers “did not have time to fully test”, run by “translating CSS rules into snippets of Javascript”. The company also let developers write JSSS, JavaScript Style Sheets, “thereby bypassing CSS entirely”; had it succeeded, “the Web would have had one more style sheet than necessary”.',
+    'The quieter effect was on trust. The same page looked one way in Internet Explorer and another in Navigator. In “the chaotic years of mixed browser support, CSS became pretty unpopular among web designers”, who “leaned on HTML data tables (or spacer gifs), which allowed them to lay things out to exact dimensions”. Hoffmann’s verdict on the era: “at one time, not using CSS was actually a best practice.”',
+    'JavaScript fought the same war under a different flag. Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 that August, under a different name because “Microsoft couldn’t get a license from Sun”, and the two dialects differed. Eich’s reading is that the browser war “forced premature standardization after a furious period of innovation”: Netscape took the language to Ecma in November 1996, and the standard got a name nobody owned, ECMAScript. The standard, and why that name, is the 1997 moment.'
+  ])('should tell how markup carried the look and the browsers split, words and links together: %s', told => {
+    expect(itemHeadedBy('1996', 'The need outruns the standards')).toHaveTextContent(told);
+  });
+
+  test.each(['eczema', 'Flash', 'outpaced the Java applets', 'one more style sheet language', 'the war multiplied the dialects'])('should leave out "%s", which the sources do not hold', claim => {
+    expect(itemHeadedBy('1996', 'The need outruns the standards')).not.toHaveTextContent(claim);
+  });
+
+  test('should link HTML 3.2 to its Recommendation, and shelve it', () => {
+    expect(within(itemHeadedBy('1996', 'The need outruns the standards')).getByRole('link', {name: 'HTML 3.2', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'HTML 3.2 Reference Specification', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -287,7 +313,7 @@ describe('the record', () => {
     expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
