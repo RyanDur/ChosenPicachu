@@ -56,7 +56,10 @@ const nearbyOf = file => {
   homesOf(directory).flatMap(framedBesides).forEach(sheet => bySheet.get(sheet)?.forEach(name => near.add(name)));
   return near;
 };
-/** @param {Set<string>} near @param {string} prefix */
+/**
+ * @param {Set<string>} near
+ * @param {string} prefix
+ */
 const opens = (near, prefix) => [...near].some(name => name.startsWith(prefix));
 
 const htmlClass = '__htmlClass';

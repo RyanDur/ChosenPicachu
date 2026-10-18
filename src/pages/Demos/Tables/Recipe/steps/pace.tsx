@@ -8,7 +8,7 @@ import {gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
-  <Step title="Commit inside the move" dial=<PaceDial name="step-pace"/>>
+  <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
       <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a drop
         would make, made early. One thing has to hold: the reorder moves real nodes, not copies,
@@ -62,7 +62,7 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
   </Step>;
 
 export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSrc: Sample}> = ({world, headerSource, paceSource, buildSrc}) =>
-  <Step title="Hold still, dispatch on release" dial=<PaceDial name="step-pace"/>>
+  <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the
         release dispatches it. The landing is kept in the drag slice, never in the order:

@@ -34,17 +34,18 @@ const github = (token, path) => fetch(`https://api.github.com/${path}`, {
  * @param {(trouble: string) => void} warn
  */
 export const lastAnswered = async (fetching, {repository, workflow, runId}, warn) => {
+  const notFound = reason => {
+    warn(`the last answered review could not be found: ${reason}`);
+    return undefined;
+  };
   try {
     /** @type {{workflow_runs: {id: number, head_sha: string}[]}} */
     const {workflow_runs: runs} = await fetching(`repos/${repository}/actions/workflows/${workflow}/runs?branch=main&per_page=30`);
-    if (!runs.some(({id}) => id === Number(runId))) {
-      throw new Error(`the runs GitHub listed do not include run ${runId}`);
-    }
+    if (!runs.some(({id}) => id === Number(runId))) return notFound(`the runs GitHub listed do not include run ${runId}`);
     const jobsOf = id => fetching(`repos/${repository}/actions/runs/${id}/jobs`).then(({jobs}) => jobs);
     return await reviewedBefore(runs, jobsOf, Number(runId));
   } catch (trouble) {
-    warn(`the last answered review could not be found: ${trouble instanceof Error ? trouble.message : String(trouble)}`);
-    return undefined;
+    return notFound(trouble instanceof Error ? trouble.message : String(trouble));
   }
 };
 

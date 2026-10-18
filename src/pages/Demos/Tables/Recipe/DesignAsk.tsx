@@ -31,6 +31,6 @@ const Sketch: FC = () =>
   </table>;
 
 export const DesignAsk: FC = () =>
-  <Design sketch=<Sketch/>
+  <Design sketch={<Sketch/>}
     answers="The design answers shape: which measures, which windows, how much precision, how dense."
     unanswered={unanswered}/>;

@@ -7,7 +7,7 @@ import {gap, sessionSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Commit inside the crossing" dial=<PaceDial name="native-pace"/>>
+  <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
     <Words want="You want the order to move as you drag; waiting for the drop hides the result until it is too late to change your mind.">
       <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>. The state
         updates during the drag, the markup renders from it, and React moves the li with the same key to its new place while the browser still
@@ -22,7 +22,7 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
   </Step>;
 
 export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Stash the landing, settle after the drag" dial=<PaceDial name="native-pace"/>>
+  <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
     <Words want={<>You want the list to hold still while the platform drags. The drop lands while the <Term word="session">session</Term> is
       still alive, so the reorder has to wait for the session to end.</>}>
       <Says>Each dragover stores the <Term word="landing">landing</Term>, the item the pointer is over at that

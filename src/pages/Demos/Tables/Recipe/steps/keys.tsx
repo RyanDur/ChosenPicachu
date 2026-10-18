@@ -7,7 +7,7 @@ import {arrowsSource, frameSettle, gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
-  <Step title="Both parties slide" dial=<MotionDial name="step-motion"/>>
+  <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
     <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbour slid, the walked column would simply jump.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
         where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
@@ -39,7 +39,7 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
   </Step>;
 
 export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
-  <Step title="Cut on the keypress" dial=<MotionDial name="step-motion"/>>
+  <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
       <Says>Motion off should cost nothing extra: no waiting. The static walk should be the arrow
         handler with the slides simply absent.</Says>

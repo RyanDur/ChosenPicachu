@@ -22,7 +22,7 @@ const carriedProperties = (cssSource: Sample): Line[] => [
 ];
 
 export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> = ({world, headerSource, cssSource, buildSrc}) =>
-  <Step title="Carry the real thing" dial=<OriginDial name="step-origin"/>>
+  <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
     <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
       <Says>Copying the column would go stale on the next trade, and a copy never has
         the real buttons in it. So nothing is copied: the carried cells themselves move with the
@@ -108,7 +108,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
   </Step>;
 
 export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
-  <Step title="Keep the origin in place and let only the order move" dial=<OriginDial name="step-origin"/>>
+  <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
         carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep

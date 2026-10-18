@@ -7,7 +7,7 @@ import {frameSettle, gap, reducerSource, stateSource, surveySource} from './sour
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> = ({world, headerSource, cssSource, buildSrc}) =>
-  <Step title="Let the column settle" dial=<MotionDial name="step-motion"/> id="step-motion">
+  <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbour that has already jumped, leaves the reader to work out both.">
       <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
         carries nothing the moment you let go. What should move is the real thing, from where it is: the
@@ -90,7 +90,7 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
   </Step>;
 
 export const StaticMotion: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
-  <Step title="Leave the motion out" dial=<MotionDial name="step-motion"/> id="step-motion">
+  <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       <Says>No motion should be the stylesheet’s decision, not a second table: the same marks
         are dispatched and worn, and the static sheet gives them no time to play.</Says>

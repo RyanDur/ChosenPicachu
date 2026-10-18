@@ -9,7 +9,7 @@ import {gap, glideSource, marksSource, sessionSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
-  <Step title="Slide the crossed item into place" dial=<MotionDial name="native-motion"/>>
+  <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
       <Says>The swap happens at once. The crossed item gets the class <code>pushed</code>, and its{' '}
         <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from, the keyframe’s starting state, is one place over: the
@@ -33,7 +33,7 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
   </Step>;
 
 export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Glide the settle one tick after the release" dial=<MotionDial name="native-motion"/>>
+  <Step title="Glide the settle one tick after the release" dial={<MotionDial name="native-motion"/>}>
     <Words want="A lazy settle happens all at once on release, which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running, and the drag is still running when drop fires.">
       <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle a tick
         after the release, a setTimeout with no delay, which runs once the drag has ended. By the time{' '}
@@ -53,7 +53,7 @@ export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
   </Step>;
 
 export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Apply the state update directly" dial=<MotionDial name="native-motion"/>>
+  <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
     <Words want="Motion is not free: it competes with the drag, costs a frame, and some readers ask for none.">
       <Says>This is the static list, and it has no motion code. The handler sets the order and React draws it on the next
         frame; a keyboard move sets the order the same way.</Says>
