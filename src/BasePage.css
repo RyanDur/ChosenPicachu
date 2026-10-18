@@ -37,6 +37,10 @@
       grid-area: search;
       justify-self: flex-end;
     }
+
+    &:not(:has(.header-settings)) .app-title {
+      grid-column: title-start / search-end;
+    }
   }
 
   .side-nav {
@@ -369,6 +373,21 @@
     grid-template-areas:
       'title'
       'search';
+  }
+}
+
+@media (width <= 640px) {
+  #root .side-nav {
+    .path {
+      padding-inline-start: var(--base-x-2);
+      padding-block: var(--base-x-0_5);
+    }
+
+    .path[aria-current="page"]::before {
+      inset-inline-start: 0;
+      top: 50%;
+      translate: 0 -50%;
+    }
   }
 }
 
