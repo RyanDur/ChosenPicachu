@@ -63,7 +63,7 @@ const Story: FC<{of: MomentKey}> = ({of}) => {
   return <Told/>;
 };
 
-const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {title, tells, dated}}) =>
+const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {title, tells}}) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
     <h3 className="beat-title sub-title void-dot-before">{title}</h3>
@@ -71,8 +71,8 @@ const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {title, tells, d
     <details className="fuller-story" name="record">
       <summary className="prompt caption">the fuller story</summary>
       <ol className="moments-of-a-year timeline" aria-label={year}>
-        {dated.map(([key, date]) =>
-          <DoorsInTheYear.Provider key={key} value={some({doors: doorsOf(key), date})}>
+        {inOrder.filter(key => moments[key].year === year).map(key =>
+          <DoorsInTheYear.Provider key={key} value={some(doorsOf(key))}>
             <Story of={key}/>
           </DoorsInTheYear.Provider>)}
       </ol>

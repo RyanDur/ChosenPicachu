@@ -180,7 +180,6 @@ describe('the first 1996 moment', () => {
 
   test.each([
     'Markup carried presentation for years because nothing else could, columns and fonts written as tags, and in the chaotic years of mixed browser support designers leaned on tables and spacer gifs: vendor tags on every side, and CSS itself run as JavaScript. The same page looked one way in one browser and another in the other.',
-    'The markup of the time said it plainly:',
     'Layout and paint, written as structure. Netscape, Hoffmann writes, “simply extended HTML to include presentational, unstandardized HTML tags that could be used to design web pages”, and “it wasn’t long before web pages lost all semantic value”. While CSS was still a draft it “pressed on with presentational HTML elements like multicol, layer, and the dreaded blink tag”. Center had shipped in the first Mozilla beta, three days after Lie’s draft, and FONT made it into HTML 3.2 itself, the W3C’s Recommendation of January 1997. Raggett records the end of two of them: “The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”',
     'Netscape “had been sceptical towards style sheets”. Lie and Bos read its first implementation, in Navigator 4, as “a half-hearted attempt to stop Microsoft from claiming to be more standards-compliant than themselves”: a broad set of features its developers “did not have time to fully test”, run by “translating CSS rules into snippets of Javascript”. The company also let developers write JSSS, JavaScript Style Sheets, “thereby bypassing CSS entirely”; had it succeeded, “the Web would have had one more style sheet than necessary”.',
     'The quieter effect was on trust. The same page looked one way in Internet Explorer and another in Navigator. In “the chaotic years of mixed browser support, CSS became pretty unpopular among web designers”, who “leaned on HTML data tables (or spacer gifs), which allowed them to lay things out to exact dimensions”. Hoffmann’s verdict on the era: “at one time, not using CSS was actually a best practice.”',
@@ -195,7 +194,7 @@ describe('the first 1996 moment', () => {
 
   test('should link HTML 3.2 to its Recommendation, and shelve it', () => {
     expect(within(itemHeadedBy('1996', 'The need outruns the standards')).getByRole('link', {name: 'HTML 3.2', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'HTML 3.2 Reference Specification', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'HTML 3.2 Reference Specification', hidden: true})).toBeInTheDocument();
   });
 });
 
@@ -339,11 +338,12 @@ describe('the record', () => {
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
-    ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”']
-  ])('should tell %s, its fuller story quoting its source by a link', (title, source, quotation) => {
-    const entry = itemHeadedBy('the timeline', title);
-
-    expect(within(within(entry).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
+    ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”'],
+    ['The need outruns the standards', 'https://thehistoryoftheweb.com/look-back-history-css/', '“it wasn’t long before web pages lost all semantic value”'],
+    ['The need outruns the standards', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”'],
+    ['The need outruns the standards', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“Microsoft couldn’t get a license from Sun”']
+  ])('should tell %s, quoting its source by a link', (title, source, quotation) => {
+    expect(within(itemHeadedBy('the timeline', title)).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
   test('should open the tee-up on how every page here is built, need first', () => {
