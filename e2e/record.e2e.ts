@@ -17,7 +17,7 @@ test('opening one fuller story closes the one that was open', async ({page}) => 
 
 test('a keyboard reader who follows a line in Presentation\'s list reaches that moment on the record, and one Tab carries on inside it', async ({page}) => {
   await page.goto('');
-  await tabsTo(page, homePage(page).momentLine('Presentation', '1998 The browsers need to agree'));
+  await tabsTo(page, homePage(page).momentLine('Presentation', '1998 The browsers need to agree'), {within: 200});
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/record\/#the-browsers-need-to-agree$/);
   const moment = recordPage(page).moment('The browsers need to agree');
