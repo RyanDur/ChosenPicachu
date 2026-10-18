@@ -466,6 +466,29 @@ describe('the 2014 moment', () => {
   });
 });
 
+describe('the 2016 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'The question this time was where. Server-side rendering returned, sending real HTML first and attaching behavior after; static generation, islands, and server components are the same instinct refined: the document first, the program only where the page needs one.',
+    'Next.js opened on 25 October 2016 as “a small framework for server-rendered universal JavaScript webapps”, built on React, with “Automatic server rendering and code splitting” among its six principles, and server rendering became the default posture of a React application. Static generation pre-rendered what never changes. Hydration, in web.dev’s definition, is “Running client-side scripts to add application state and interactivity to server-rendered HTML”, attaching listeners to markup that already stood. The first paint became HTML again, and the program arrived second.',
+    'Jason Miller documented the islands architecture in 2020 and credits the name to Etsy’s Katie Sylor-Miller, from a meeting in 2019. The idea, in his words, is to “render HTML pages on the server, and inject placeholders or slots around highly dynamic regions”, each later hydrated on the client into a small self-contained widget. A page is then “like a static HTML document that contains multiple separate embedded applications”. Pages shipped as HTML with script only where an island of behavior lives, the static parts left as the documents they always were. React’s team announced its “research into zero-bundle-size React Server Components” on 21 December 2020, and Next.js 13.4, on 4 May 2023, shipped them stable in its App Router: rendering moved back across the wire entirely.',
+    'The people who built each step say why. Osmani and Miller, writing for Chrome in 2019 from “talking to large sites over the past few years”, “encourage developers to consider server-side rendering or static rendering over a full rehydration approach”, and close on “It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.” Miller says what an island is a return to: “A closer analog to the ‘islands’ approach would be progressive enhancement, to which we’re essentially adding SSR hydration”. That is a page that works as a document first, with script added to it, the way the Wired redesign of 2002 had counted on. Every step, then, is the same sentence: structure and content travel as HTML, behavior arrives as script, presentation stays declarative. What changed each time was where the rendering happens; the three responsibilities did not move.'
+  ])('should date server rendering, islands and server components from their own announcements, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveTextContent(told);
+  });
+
+  test.each(['Katie Sylor-Miller coined the island and', 'announced in 2020 and stable by 2023'])('should leave out "%s", which the announcements themselves replace', claim => {
+    expect(itemHeadedBy('the timeline', 'The document needs to come first')).not.toHaveTextContent(claim);
+  });
+
+  test.each([['Next.js', 'Naoyuki Kanezawa, Guillermo Rauch and Tony Kovanen, Vercel blog, 25 October 2016'], ['Introducing Zero-Bundle-Size React Server Components', 'React blog, 21 December 2020'], ['Next.js 13.4', 'Next.js blog, 4 May 2023']])('should shelve %s, %s', (work, provenance) => {
+    expect(shelvedAs(work)).toHaveTextContent(provenance);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -623,6 +646,10 @@ describe('the record', () => {
     ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
     ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
     ['The philosophy needs writing down', 'https://www.w3.org/TR/2014/REC-html5-20141028/', '28 October 2014'],
+    ['The document needs to come first', 'https://vercel.com/blog/next', '“a small framework for server-rendered universal JavaScript webapps”'],
+    ['The document needs to come first', 'https://jasonformat.com/islands-architecture/', 'documented the islands architecture'],
+    ['The document needs to come first', 'https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html', '“research into zero-bundle-size React Server Components”'],
+    ['The document needs to come first', 'https://nextjs.org/blog/next-13-4', '4 May 2023'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],

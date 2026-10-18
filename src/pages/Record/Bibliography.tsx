@@ -445,6 +445,18 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Jason Miller, 2020</span>
           </li>
           <li>
+            <a className="signpost" href="https://vercel.com/blog/next"><cite>Next.js</cite></a>{' '}
+            <span className="provenance caption">Naoyuki Kanezawa, Guillermo Rauch and Tony Kovanen, Vercel blog, 25 October 2016</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html"><cite>Introducing Zero-Bundle-Size React Server Components</cite></a>{' '}
+            <span className="provenance caption">React blog, 21 December 2020</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://nextjs.org/blog/next-13-4"><cite>Next.js 13.4</cite></a>{' '}
+            <span className="provenance caption">Next.js blog, 4 May 2023</span>
+          </li>
+          <li>
             <a className="signpost" href="https://web.dev/rendering-on-the-web/"><cite>Rendering on the Web</cite></a>{' '}
             <span className="provenance caption">Jason Miller and Addy Osmani, web.dev, 2019</span>
           </li>
