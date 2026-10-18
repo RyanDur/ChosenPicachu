@@ -6,7 +6,7 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 
-const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'development'});
+const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});
 
 const practices = [
   ['Structure', 'structure', /^I start from what the content is and pick the element for it/, /^The test is to read the page with the styles turned off/],
@@ -14,23 +14,23 @@ const practices = [
   ['Dynamic Interaction', 'dynamic-interaction', /^Behaviour splits into what is true and what happened/, /^The test is to read the state on its own/]
 ] as const;
 
-describe('the development page', () => {
+describe('the practice page', () => {
   test('should open on Structure when no tab is named', async () => {
-    render(<TestApp at={Paths.development}/>);
+    render(<TestApp at={Paths.practice}/>);
 
-    expect(await screen.findByRole('heading', {name: 'Development Structure', level: 1})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Practice Structure', level: 1})).toBeInTheDocument();
     expect(within(tabs()).getByRole('link', {name: 'Structure', current: 'page'})).toBeInTheDocument();
   });
 
   test('should open on Structure, marked as the current tab, when the address names a tab the page does not have', async () => {
-    render(<TestApp at={`${Paths.development}?tab=behaviour`}/>);
+    render(<TestApp at={`${Paths.practice}?tab=behaviour`}/>);
 
-    expect(await screen.findByRole('heading', {name: 'Development Structure', level: 1})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Practice Structure', level: 1})).toBeInTheDocument();
     expect(within(tabs()).getByRole('link', {name: 'Structure', current: 'page'})).toBeInTheDocument();
   });
 
   test('should say above the tabs what each one holds', async () => {
-    render(<TestApp at={Paths.development}/>);
+    render(<TestApp at={Paths.practice}/>);
     const opener = await screen.findByText(/^Each tab below is one of the three concerns/);
 
     expect(opener).toHaveTextContent(
@@ -39,29 +39,29 @@ describe('the development page', () => {
   });
 
   test.each(practices)('should open the %s tab from its address, reading how I organize it from its first rule to its test', async (concern, param, firstRule, theTest) => {
-    render(<TestApp at={`${Paths.development}?tab=${param}`}/>);
+    render(<TestApp at={`${Paths.practice}?tab=${param}`}/>);
 
-    expect(await screen.findByRole('heading', {name: `Development ${concern}`, level: 1})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: `Practice ${concern}`, level: 1})).toBeInTheDocument();
     expect(within(tabs()).getByRole('link', {name: concern, current: 'page'})).toBeInTheDocument();
     expect(within(practice()).getByText(firstRule)).toBeInTheDocument();
     expect(within(practice()).getByText(theTest)).toBeInTheDocument();
   });
 
   test.each([
-    ['Presentation', 'Structure', Paths.development, /^I write CSS in two kinds of sheet/],
-    ['Dynamic Interaction', 'Presentation', `${Paths.development}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
-    ['Structure', 'Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, /^I start from what the content is and pick the element for it/]
+    ['Presentation', 'Structure', Paths.practice, /^I write CSS in two kinds of sheet/],
+    ['Dynamic Interaction', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
+    ['Structure', 'Dynamic Interaction', `${Paths.practice}?tab=dynamic-interaction`, /^I start from what the content is and pick the element for it/]
   ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at, firstRule) => {
     render(<TestApp at={at}/>);
 
     await userEvent.click(within(tabs()).getByRole('link', {name: concern}));
 
-    expect(await screen.findByRole('heading', {name: `Development ${concern}`, level: 1})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: `Practice ${concern}`, level: 1})).toBeInTheDocument();
     expect(within(practice()).getByText(firstRule)).toBeInTheDocument();
   });
 
   test('the structure tab tells how I organize structure', async () => {
-    render(<TestApp at={Paths.development}/>);
+    render(<TestApp at={Paths.practice}/>);
     const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
 
     expect(concern.getByText('how I organize it')).toBeVisible();
@@ -85,7 +85,7 @@ describe('the development page', () => {
   });
 
   test('the presentation tab tells how I organize presentation', async () => {
-    render(<TestApp at={`${Paths.development}?tab=presentation`}/>);
+    render(<TestApp at={`${Paths.practice}?tab=presentation`}/>);
     const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
 
     expect(concern.getByText('how I organize it')).toBeVisible();
@@ -111,7 +111,7 @@ describe('the development page', () => {
   });
 
   test('the dynamic interaction tab tells how I organize behaviour', async () => {
-    render(<TestApp at={`${Paths.development}?tab=dynamic-interaction`}/>);
+    render(<TestApp at={`${Paths.practice}?tab=dynamic-interaction`}/>);
     const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
 
     expect(concern.getByText('how I organize it')).toBeVisible();
@@ -130,12 +130,12 @@ describe('the development page', () => {
   });
 
   test.each([
-    ['Structure', Paths.development, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
-    ['Presentation', `${Paths.development}?tab=presentation`, [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
-    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
+    ['Structure', Paths.practice, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
+    ['Presentation', `${Paths.practice}?tab=presentation`, [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
+    ['Dynamic Interaction', `${Paths.practice}?tab=dynamic-interaction`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
   ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
     render(<TestApp at={at}/>);
-    await screen.findByRole('heading', {name: `Development ${concern}`, level: 1});
+    await screen.findByRole('heading', {name: `Practice ${concern}`, level: 1});
 
     const cited = within(practice()).getAllByRole('link')
       .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
@@ -145,7 +145,7 @@ describe('the development page', () => {
   });
 
   test('should land a moment link on its moment in the record, with focus there', async () => {
-    render(<TestApp at={Paths.development}/>);
+    render(<TestApp at={Paths.practice}/>);
 
     await userEvent.click(within(await screen.findByRole('region', {name: 'how I organize it'})).getAllByRole('link', {name: '2016 moment'})[0]);
 

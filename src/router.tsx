@@ -10,7 +10,7 @@ import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
 import {TheRecord} from '@pages/Record';
-import {Development} from '@pages/Development';
+import {Practice} from '@pages/Practice';
 import {PageError} from '@pages/PageError';
 import {NoRoom} from '@pages/NoRoom';
 import {Header} from '@pages/BasePage/Header';
@@ -59,7 +59,7 @@ export const router = {
     ...Gallery,
     ...Games,
     TheRecord,
-    Development,
+    ...Practice,
     {path: '*', element: noRoom}
   ]
 };

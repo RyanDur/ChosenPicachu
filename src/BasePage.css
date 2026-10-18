@@ -314,20 +314,6 @@
   }
 }
 
-@media (width > 600px) and (width <= 640px) {
-  #root:has(.feedback-item) {
-    grid-template-rows: var(--header-block) auto var(--filter-block) 1fr var(--base);
-  }
-
-  #root:has(.feedback-item):not(:has(.app-footer)) {
-    grid-template-rows: var(--header-block) auto var(--filter-block) 1fr;
-  }
-
-  #root .rail:has(.feedback-item) {
-    --paths-and-feedback: 5;
-  }
-}
-
 @media (width <= 600px), (width <= 1100px) and (height <= 600px), (pointer: coarse) {
   #root .side-nav {
     overflow: visible;
@@ -376,7 +362,7 @@
   }
 }
 
-@media (width <= 640px) {
+@media (width <= 600px) {
   #root .side-nav {
     .path {
       padding-inline-start: var(--base-x-2);

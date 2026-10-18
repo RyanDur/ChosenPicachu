@@ -3,7 +3,7 @@ import {describe, expect, test} from 'vitest';
 const sheets: Record<string, string> = import.meta.glob('/src/**/*.css', {query: '?raw', import: 'default', eager: true});
 
 const namedLines = (): number[] =>
-  [...sheets['/src/styles/spacing.css'].matchAll(/--(?:no-gutters|nav-in-a-row|search-under-the-title|rail-in-two-rows|room-to-stand-open):\s*(\d+)px/g)]
+  [...sheets['/src/styles/spacing.css'].matchAll(/--(?:no-gutters|nav-in-a-row|search-under-the-title|room-to-stand-open):\s*(\d+)px/g)]
     .map(([, px]) => Number(px));
 
 const ownLines: Record<string, number[]> = {
@@ -36,7 +36,7 @@ describe('the lines the sheets break at', () => {
         .filter(line => !named.includes(line) && !(ownLines[path] ?? []).includes(line))
         .map(line => `${path} breaks at ${line}px`));
 
-    expect(named).toHaveLength(5);
+    expect(named).toHaveLength(4);
     expect(strays).toEqual([]);
   });
 });

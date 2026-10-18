@@ -32,10 +32,10 @@ describe('each page is named where a search shows it', () => {
     ['the gallery', `${Paths.artGallery}?page=1&size=8&tab=aic`, names.gallery],
     ['the games page', Paths.games, names.games],
     ['the record', Paths.record, names.record],
-    ['the development page, on Structure when no tab is named', Paths.development, names.development.structure],
-    ['development’s structure tab', `${Paths.development}?tab=structure`, names.development.structure],
-    ['development’s presentation tab', `${Paths.development}?tab=presentation`, names.development.presentation],
-    ['development’s dynamic interaction tab', `${Paths.development}?tab=dynamic-interaction`, names.development['dynamic-interaction']],
+    ['the practice page, on Structure when no tab is named', Paths.practice, names.practice.structure],
+    ['practice’s structure tab', `${Paths.practice}?tab=structure`, names.practice.structure],
+    ['practice’s presentation tab', `${Paths.practice}?tab=presentation`, names.practice.presentation],
+    ['practice’s dynamic interaction tab', `${Paths.practice}?tab=dynamic-interaction`, names.practice['dynamic-interaction']],
     ['an address with no room', '/nowhere/', names.noRoom]
   ])('should give %s its own title and description', async (_page, path, {title, description}) => {
     render(<TestApp at={path}/>);

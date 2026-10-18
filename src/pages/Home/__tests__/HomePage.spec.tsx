@@ -11,7 +11,7 @@ describe('the home page', () => {
   test('should open on the thesis, then say who the site is for, then what the concerns, the record and the demos give', () => {
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose. When one could not yet do a job, another covered for it until the standard caught up, which is what HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
     expect(screen.getByText(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit is a div where a button was meant, a class that names a margin instead of the reason for it, a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
-    expect(screen.getByText(/^Each language is one concern below/)).toHaveTextContent('Each language is one concern below: what it is for, what the record taught it, and the moments where that happened. How I organize each one is on the Development page, one tab for each. The record tells how the web got the three languages, in twenty moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
+    expect(screen.getByText(/^Each language is one concern below/)).toHaveTextContent('Each language is one concern below: what it is for, what the record taught it, and the moments where that happened. How I organize each one is on the Practice page, one tab for each. The record tells how the web got the three languages, in twenty moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
     expect(outOfReadingOrder([
       screen.getByText(/^A webpage is three languages working in concert/),
       screen.getByText(/^This site is for the developer/),
@@ -46,7 +46,7 @@ describe('the home page', () => {
     expect(essay.getByText(rule.slice(0, 30), {exact: false})).toHaveTextContent(rule);
   });
 
-  test('should leave how I organize each language to the Development page', () => {
+  test('should leave how I organize each language to the Practice page', () => {
     expect(screen.queryByRole('heading', {name: 'how I organize it'})).not.toBeInTheDocument();
     expect(screen.queryByRole('region', {name: /how I organize it/})).not.toBeInTheDocument();
   });

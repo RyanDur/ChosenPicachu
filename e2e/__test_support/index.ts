@@ -1,6 +1,6 @@
 export {chartsPage, feedStillConnecting, markets, scriptedMarket} from './charts';
 export {homePage} from './home';
-export {developmentPage} from './development';
+export {practicePage} from './practice';
 export {recordPage} from './record';
 export {galleryPage} from './gallery';
 export {piecePage} from './piece';

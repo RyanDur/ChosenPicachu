@@ -13,7 +13,7 @@ const listed = {
   'gallery/': names.gallery,
   'games/': names.games,
   'record/': names.record,
-  'development/': names.development.structure
+  'practice/': names.practice.structure
 };
 
 test('a search engine that runs no script reads each page’s own title and description', async ({request}) => {

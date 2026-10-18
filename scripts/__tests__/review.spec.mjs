@@ -49,11 +49,11 @@ const plus = aPlus({
 const testPlus = aPlus({rubric: 'tests'});
 
 describe('the review prompt', () => {
-  test('a full review sends the reviewer to the practices on the Development page and scopes them to the whole of src', () => {
+  test('a full review sends the reviewer to the practices on the Practice page and scopes them to the whole of src', () => {
     const prompt = promptFor({scope: 'full'});
-    expect(prompt).toContain('src/pages/Development/StructurePractice.tsx');
-    expect(prompt).toContain('src/pages/Development/PresentationPractice.tsx');
-    expect(prompt).toContain('src/pages/Development/DynamicInteractionPractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/StructurePractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/PresentationPractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/DynamicInteractionPractice.tsx');
     expect(prompt).toContain('The scope is the whole of src/');
   });
 

@@ -24,7 +24,7 @@ export const Opener: FC = () =>
     </p>
     <p className="thesis paragraph">
       Each language is one concern below: what it is for, what the record taught it, and the moments
-      where that happened. How I organize each one is on the Development page, one tab for each. The record tells how the web got the three languages, in{' '}
+      where that happened. How I organize each one is on the Practice page, one tab for each. The record tells how the web got the three languages, in{' '}
       {spelledOut(inOrder.length)} moments and a closing essay. The demos are where I work the
       practice: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own
       code and explained beside it. Two set the trick we used before the platform could do the job

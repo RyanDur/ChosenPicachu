@@ -43,17 +43,17 @@
     "title": "The record · Chosen Picachu",
     "description": "How the web got its three languages, in twenty moments from 1989 on, each with its fuller story and its sources."
   },
-  "development": {
+  "practice": {
     "structure": {
-      "title": "Structure · Development · Chosen Picachu",
+      "title": "Structure · Practice · Chosen Picachu",
       "description": "How I organize structure: the element for the content, named landmarks, and the page read with its styles off."
     },
     "presentation": {
-      "title": "Presentation · Development · Chosen Picachu",
+      "title": "Presentation · Practice · Chosen Picachu",
       "description": "How I organize presentation: two kinds of sheet, a class list that reads like a sentence, and constants kept in the stylesheet."
     },
     "dynamic-interaction": {
-      "title": "Dynamic Interaction · Development · Chosen Picachu",
+      "title": "Dynamic Interaction · Practice · Chosen Picachu",
       "description": "How I organize dynamic interaction: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action."
     }
   },
