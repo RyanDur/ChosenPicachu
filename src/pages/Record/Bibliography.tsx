@@ -147,6 +147,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Eric Meyer, 11 October 2002</span>
           </li>
           <li>
+            <a className="signpost" href="https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/"><cite>An Interview With Douglas Bowman of Wired News</cite></a>
+            <span className="provenance caption">Eric Meyer for Netscape DevEdge, 11 October 2002, via the Internet Archive</span>
+          </li>
+          <li>
             <a className="signpost" href="https://meyerweb.com/eric/projects/ndept/home.html"><cite>Wired News Redesigns With Standards</cite></a>
             <span className="provenance caption">Eric Meyer, Netscape DevEdge, 2002</span>
           </li>
