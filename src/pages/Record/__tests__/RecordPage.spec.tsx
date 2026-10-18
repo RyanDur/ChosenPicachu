@@ -532,8 +532,12 @@ describe('the record\'s frame and its concert', () => {
     expect(screen.getByRole('region', {name: 'The concert'})).toHaveTextContent(told);
   });
 
-  test.each(['losing each other’s documents', 'Everything on the web is layered', 'The needs have not stopped arriving', 'the largest', 'The principles were written late'])('should leave out "%s", which the reread replaced', claim => {
+  test.each(['losing each other’s documents', 'Everything on the web is layered', 'The needs have not stopped arriving'])('should leave out "%s" from the record\'s frame, which the reread replaced', claim => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(claim);
+  });
+
+  test.each(['the largest', 'The principles were written late'])('should leave out "%s" from the concert, which the reread replaced', claim => {
+    expect(screen.getByRole('region', {name: 'The concert'})).not.toHaveTextContent(claim);
   });
 });
 
