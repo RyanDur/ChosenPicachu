@@ -66,6 +66,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   };
   return {
     columnHeader,
+    rowGrip,
     centreOfColumn: async (name: string): Promise<Point> => centreOf(await boxOf(columnHeader(name))),
     centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
     centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),

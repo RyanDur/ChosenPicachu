@@ -5,16 +5,30 @@
   .fancy-table {
     table-layout: fixed;
     width: 100%;
-    min-width: 86rem;
+    min-width: 75.3rem;
+
+    @media (pointer: coarse) {
+      min-width: 86rem;
+    }
   }
 
-  .window { width: 17.5%; }
-  .trades { width: 13%; }
-  .buys { width: 11.5%; }
-  .sells { width: 11.5%; }
-  .volume { width: 14%; }
-  .vwap { width: 17.5%; }
-  .change { width: 15%; }
+  .window { width: 20.3%; }
+  .trades { width: 13.25%; }
+  .buys { width: 11.83%; }
+  .sells { width: 11.59%; }
+  .volume { width: 14.19%; }
+  .vwap { width: 14.66%; }
+  .change { width: 14.18%; }
+
+  @media (pointer: coarse) {
+    .window { width: 17.5%; }
+    .trades { width: 13%; }
+    .buys { width: 11.5%; }
+    .sells { width: 11.5%; }
+    .volume { width: 14%; }
+    .vwap { width: 17.5%; }
+    .change { width: 15%; }
+  }
 }
 
 @media (width <= 600px) {
