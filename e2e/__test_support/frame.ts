@@ -57,8 +57,6 @@ const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> =>
 
 export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
-  const rowGrip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`});
-  const rowHeader = (name: RegExp): Locator => table.getByRole('rowheader', {name});
   const resizeHandle = (name: string): Locator => table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
   const centreOfHandle = async (name: string): Promise<Point> => {
     await resizeHandle(name).scrollIntoViewIfNeeded();
@@ -66,10 +64,6 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   };
   return {
     columnHeader,
-    centreOfColumn: async (name: string): Promise<Point> => centreOf(await boxOf(columnHeader(name))),
-    centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
-    centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),
-    centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
     fingerDragColumn: async (name: string, {by, from}: {by: number; from: FingerPress}): Promise<void> => {
       const devtools = await page.context().newCDPSession(page);
       await columnHeader(name).scrollIntoViewIfNeeded();

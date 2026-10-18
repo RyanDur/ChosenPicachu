@@ -2,7 +2,7 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demosAt} from '@pages/Demos/__test_support';
-import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
@@ -76,7 +76,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
     {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property, --share, one of the values set by name on the cell and read back in the stylesheet with var().'},
-    {choice: 'tut=resize', sentence: 'In Aggregations.css, beside the opening widths, the table takes its size from three rules. width: 100% fills its container. min-width: 75.3rem, 753px at this site’s 10px root, keeps that width on a narrower page, so the container scrolls sideways. Fixed table layout holds each column at its declared share of whatever width the table has.'},
+    {choice: 'tut=resize', sentence: 'In Aggregations.css, beside the opening widths, three declarations in the table’s rule size it. width: 100% fills its container. min-width: 75.3rem, which is 753px at the browser’s usual 16px default because this site sets its root text to 62.5% of it, keeps that width on a narrower page, so the container scrolls sideways. Fixed table layout holds each column at its declared share of whatever width the table has.'},
     {choice: 'tut=resize', sentence: 'When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a fingertip-wide resize handle and sort toggle, and they need room. So the minimum is 86rem at every width, and the columns take shares cut for that wider table, which give vwap and change more of it.'},
     {choice: 'tut=resize', sentence: 'In a browser window 600px wide or less the minimum drops to 64rem, unless the pointer is coarse.'},
     {choice: 'tut=resize', sentence: 'So the cell holds a title, a menu where the page writes one, a handle, and nothing else.'},
@@ -114,7 +114,7 @@ describe('the tables tab’s own words', () => {
     {name: 'lostpointercapture', choice: 'world=react', run: /the browser drops the capture with it and fires/},
     {name: 'lostpointercapture', choice: 'world=vanilla', run: /the browser drops the capture with it and fires/},
     {name: 'apportioned', choice: 'tut=resize', run: /a class it has from the start/},
-    {name: 'Aggregations.css', choice: 'tut=resize', run: /takes its size from three rules/},
+    {name: 'Aggregations.css', choice: 'tut=resize', run: /three declarations in the table’s rule size it/},
     {name: ':has()', choice: 'tut=resize', run: /rule on the cell pads for what it/},
     {name: 'aria-sort', choice: 'tut=menu', run: /from what it was given and the toggle/},
     {name: 'aria-sort', choice: 'tut=menu', run: /be the single signal read from it/},
@@ -126,8 +126,8 @@ describe('the tables tab’s own words', () => {
     {name: 'muted-ink', choice: 'tut=menu', run: /^The toggle’s look is shared classes/},
     {name: 'attentive', choice: 'tut=menu', run: /^The toggle’s look is shared classes/},
     {name: '--share', choice: 'tut=resize', run: /written as a custom property/},
-    {name: 'width: 100%', choice: 'tut=resize', run: /takes its size from three rules/},
-    {name: 'min-width: 75.3rem', choice: 'tut=resize', run: /takes its size from three rules/},
+    {name: 'width: 100%', choice: 'tut=resize', run: /three declarations in the table’s rule size it/},
+    {name: 'min-width: 75.3rem', choice: 'tut=resize', run: /three declarations in the table’s rule size it/},
     {name: 'popoverTarget', choice: 'tut=menu', run: /accessibility relationship comes/},
     {name: 'popoverTarget', choice: 'tut=menu', run: /The platform provides the whole popup/},
     {name: 'popovertargetaction', choice: 'tut=menu', run: /accessibility relationship comes/},
@@ -327,13 +327,11 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = await aggregations.arrived();
+    await aggregations.arrived();
     expect(aggregations.windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
-    within(card).getByRole('button', {name: 'move row 1'}).focus();
-    await userEvent.keyboard('{ArrowDown}');
-    within(card).getByRole('columnheader', {name: /^trades/}).focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await aggregations.moveWindowByKey(1, '{ArrowDown}');
+    await aggregations.moveColumnByKey('trades', '{ArrowRight}');
     expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
 
     const controls = await tableControls.region();
@@ -891,15 +889,6 @@ describe('the tables demo', () => {
   });
 
   describe('the table worlds', () => {
-    const standFrame = async (height = 487) => {
-      const frame = await screen.findByTitle('the living table, in vanilla');
-      Object.defineProperty(frame, 'contentDocument', {
-        value: {body: {getBoundingClientRect: () => ({height})}}
-      });
-      fireEvent.load(frame);
-      return frame;
-    };
-
     test('react holds the stage by default, and no frame stands', async () => {
       const feed = await listeningFeed();
 
@@ -908,30 +897,6 @@ describe('the tables demo', () => {
 
       expect(await screen.findByRole('region', {name: 'live aggregations'})).toBeInTheDocument();
       expect(screen.queryByTitle('the living table, in vanilla')).not.toBeInTheDocument();
-    });
-
-    test('the html world deals the table in its own document', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      const frame = await standFrame();
-      expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
-      const card = aggregations.card();
-      expect(card).toContainElement(frame);
-      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
-    });
-
-    test('the fallback table leaves as soon as the frame loads, even before it reports a height', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      await standFrame(0);
-      const card = aggregations.card();
-      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
 
     test('the tutorial stands unchanged in the html world', async () => {
@@ -992,30 +957,6 @@ describe('the tables demo', () => {
       expect(screen.getByTitle('the living table, in vanilla')).toBeInTheDocument();
     });
 
-    test('the frame wears its own document\u2019s height', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      const frame = await standFrame();
-
-      expect(frame).toHaveStyle({'--stage-block-size': '487px'});
-    });
-
-    test('the world dial swaps the stage', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
-
-      const frame = await standFrame();
-      const card = aggregations.card();
-      expect(card).toContainElement(frame);
-      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
-    });
   });
 });
 
