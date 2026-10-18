@@ -34,10 +34,9 @@ A seeded draw is still a gamble; distinctness needs a deck. A test that passes o
 
 Kent C. Dodds, Common mistakes with React Testing Library: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
 
-- Query through `screen`, never through `container` or a render result named `wrapper`.
+- A spec acts and asks only through its owner's page object in `__test_support`, so its body reads given, when, then in the domain's verbs. The page object queries through `screen`, never through `container` or a render result named `wrapper`. A `screen`, `within` or `userEvent` in a spec body is a finding; rendering through TestApp stays in the spec. Why: Ryan, 2026-10-18, "why are you not using page objects for the rtl tests?" and, after a spec that queried `screen` directly, no `screen` in specs.
 - `getByRole` first, with a name; then label, then text. Never a test id, a class or a tag.
 - `userEvent`, never `fireEvent`. A press, a drag or a release is `user.pointer`, with `coords` where the place matters; keys are `user.keyboard`. An event user-event cannot send, such as `transitionend`, `animationend`, an image's `load` or `error`, `pointercancel`, `lostpointercapture` or HTML5 drag, is the browser's to send, so a journey owns that behaviour. Why: Ryan, 2026-10-18, "no fireEvent".
-- Gestures and queries live in the owner's page object, so a spec reads given, when, then through its verbs; a spec that inlines a pointer sequence or a chain of `within` queries is a finding.
 - `find*` for what arrives later. `waitFor` holds one assertion and no side effects, never an empty callback.
 - `query*` only to assert absence.
 - Assert with the matcher that says it: `toBeInTheDocument`, `toBeVisible`, `toHaveTextContent`, never `toBeDefined` on a query.
