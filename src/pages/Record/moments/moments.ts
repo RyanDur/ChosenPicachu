@@ -1,3 +1,5 @@
+import {maybe} from '@ryandur/sand';
+
 const ordered = <const Keys extends readonly string[]>(keys: Keys): Keys => keys;
 
 export const inOrder = ordered([
@@ -25,21 +27,25 @@ export const inOrder = ordered([
 
 export type MomentKey = typeof inOrder[number];
 
+export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
 export type MomentDate =
   | {readonly kind: 'year'; readonly year: string}
-  | {readonly kind: 'month'; readonly year: string; readonly month: number}
-  | {readonly kind: 'day'; readonly year: string; readonly month: number; readonly day: number};
+  | {readonly kind: 'month'; readonly year: string; readonly month: Month}
+  | {readonly kind: 'day'; readonly year: string; readonly month: Month; readonly day: number};
 
 export type Dated = Exclude<MomentDate, {kind: 'year'}>;
 
 export type MomentHeading = {date: MomentDate; title: string; id: string};
 
+const monthsInOrder: readonly Month[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
 const dateOf = (written: string): MomentDate => {
   const [year, ...rest] = written.split('-');
-  const [month, day] = rest.map(Number);
-  if (rest.length === 0) return {kind: 'year', year};
-  if (rest.length === 1) return {kind: 'month', year, month};
-  return {kind: 'day', year, month, day};
+  const [numbered, day] = rest.map(Number);
+  return maybe(monthsInOrder.find(month => month === numbered)).either(
+    (month): MomentDate => rest.length === 1 ? {kind: 'month', year, month} : {kind: 'day', year, month, day},
+    (): MomentDate => ({kind: 'year', year}));
 };
 
 const named = (written: string, title: string): MomentHeading =>
