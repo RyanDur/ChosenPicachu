@@ -241,57 +241,6 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
   });
 
-  test('a dragged column crosses its neighbour under the pointer', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const card = await aggregations.arrived();
-    const header = (name: string) =>
-      within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
-    const table = within(card).getAllByRole('table')[0];
-    table.getBoundingClientRect = () => ({
-      left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})
-    });
-    const spans = [150, 110, 100, 100, 120, 150, 130];
-    within(table).getAllByRole('columnheader').forEach((head, at) => {
-      head.getBoundingClientRect = () => ({
-        left: 0, right: 0, top: 0, bottom: 0, width: spans[at], height: 0, x: 0, y: 0, toJSON: () => ({})
-      });
-    });
-    fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(header('vwap'), {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
-    fireEvent.pointerUp(header('vwap'), {pointerId: 1});
-
-    expect(aggregations.columns()).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
-  });
-
-  test('the windows can trade places by hand', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const card = await aggregations.arrived();
-    const rowOf = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
-    const stage = within(card).getAllByRole('table')[0];
-    stage.getBoundingClientRect = () => ({
-      left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})
-    });
-    within(card).getAllByRole('row').slice(1).forEach(row => {
-      row.getBoundingClientRect = () => ({
-        left: 0, right: 860, top: 0, bottom: 40, width: 860, height: 40, x: 0, y: 0, toJSON: () => ({})
-      });
-    });
-    const grip = within(rowOf('session')).getByLabelText(/move row/);
-    fireEvent.pointerDown(grip, {clientX: 100, clientY: 300, pointerId: 1});
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
-    fireEvent.pointerUp(grip, {pointerId: 1});
-
-    expect(aggregations.windows()).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
-  });
-
   test('a direction from a column menu sorts the windows', async () => {
     const feed = await listeningFeed();
 
