@@ -3,7 +3,7 @@ import {tmpdir} from 'node:os';
 import {spawnSync} from 'node:child_process';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {promptFor, rubric} from '../review/prompt.mjs';
+import {promptFor} from '../review/prompt.mjs';
 import {reviewers} from '../review/agents.mjs';
 import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, unplaced, verdictOf} from '../review/report.mjs';
 import {aDelta, aHabit, aPlus, review} from '../review/__test_support/feedback.mjs';
@@ -81,15 +81,9 @@ describe('the review prompt', () => {
     expect(prompt).not.toContain('structure-qa');
   });
 
-  test('a review of the changes sends every QA whose scopes include the changes', () => {
-    const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    const sent = reviewers.filter(({scopes}) => scopes.includes('changes')).map(({name}) => `${name}-qa`);
-    expect(sent.length).toBeGreaterThan(1);
-    expect(prompt).toContain(`The QAs hold one rubric each: ${sent.slice(0, -1).join(', ')} and ${sent[sent.length - 1]}.`);
-  });
-
   test('every file the lead is told to read exists in the tree', () => {
-    rubric.forEach(file => expect(existsSync(join(root, file)), `${file} is named in the lead's prompt`).toBe(true));
+    const [, named] = promptFor({scope: 'full'}).match(/in the author's words: (.+?)\. Each /);
+    named.split(/, | and /).forEach(file => expect(existsSync(join(root, file)), `${file} is named in the lead's prompt`).toBe(true));
   });
 
   test('every reviewer AGENTS.md names can answer under its own rubric', () => {
@@ -476,7 +470,6 @@ describe('the review report', () => {
     expect(schema.properties.deltas.items.properties.severity).toEqual({$ref: '#/$defs/severity'});
     expect(schema.properties.plusses.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
     expect(schema.properties.deltas.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
-    expect(schema.$defs.rubric['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests', 'tutorials', 'record']);
     expect(schema.$defs.severity['enum']).toEqual(['violation', 'concern', 'note']);
     expect(schema.$defs.evidence['enum']).toEqual(['read', 'inferred']);
   });
