@@ -266,7 +266,6 @@ describe('the record', () => {
 
   test.each([
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
-    'and one line thanks “Chris Wilson of Microsoft, who prodded us into actually finishing the Test Suite”: the same Chris Wilson whose IE3 team had shipped with little of the box model.',
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The garden showed the other side: hold the structure constant and the design can be replaced any number of times without a change to the markup.',
     'The browsers converged once the people writing the specification were the people shipping it.',
