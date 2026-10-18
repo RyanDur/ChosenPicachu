@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 import {moments} from './moments';
 
 const essay = 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php';
-const computerworld = 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const computerworld = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
 const prototype = 'http://prototypejs.org/';
 const jquery = 'https://jquery.com/';

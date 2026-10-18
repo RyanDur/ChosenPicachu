@@ -372,8 +372,8 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>{' '}
-            <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008</span>
+            <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>{' '}
+            <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive</span>
           </li>
           <li>
             <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html"><cite>JavaScript creator ponders past, future</cite></a>{' '}

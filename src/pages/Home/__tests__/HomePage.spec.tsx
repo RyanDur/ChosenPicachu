@@ -51,7 +51,7 @@ describe('the home page', () => {
   });
 
   test.each([
-    ['Dynamic', '“touch elements of the page, change their properties, and respond to events”', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html']
+    ['Dynamic', '“touch elements of the page, change their properties, and respond to events”', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html']
   ])('should link the %s essay\'s quotation %s to its source', (concern, quoted, source) => {
     expect(within(screen.getByRole('region', {name: concern})).getByRole('link', {name: quoted})).toHaveAttribute('href', source);
   });

@@ -8,7 +8,7 @@ const saga = 'https://www.w3.org/Style/LieBos2e/history/Overview.html';
 const raggett = 'https://www.w3.org/People/Raggett/book4/ch02.html';
 const recommendation = 'https://www.w3.org/TR/REC-html32';
 const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
-const interview = 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const interview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 
 export const NeedOutrunsStandards: FC = () =>
   <Moment of={moments.needOutrunsStandards}

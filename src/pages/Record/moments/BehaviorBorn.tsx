@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
-const interview = 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const interview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 const popularity = 'https://brendaneich.com/2008/04/popularity/';
 const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
 const keith = 'https://adactio.com/journal/1595';

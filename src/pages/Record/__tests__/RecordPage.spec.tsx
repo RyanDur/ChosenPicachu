@@ -720,7 +720,7 @@ describe('the record', () => {
     ['The browsers need to agree', 'https://thehistoryoftheweb.com/look-back-history-css/', '“the first browser with full CSS Level 1 support”'],
     ['The browsers need to agree', 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac', '27 March 2000'],
     ['The language needs a standard', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”'],
-    ['The language needs a standard', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
+    ['The language needs a standard', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
     ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”'],
@@ -796,9 +796,13 @@ describe('the record', () => {
     expect(screen.getByRole('link', {name: /one HTML document/}))
       .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
     expect(screen.getByRole('link', {name: /wrote the interpreter in about ten days/}))
-      .toHaveAttribute('href', expect.stringContaining('computerworld.com'));
+      .toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
     expect(screen.getByRole('link', {name: /reducing the overlap/}))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
+  });
+
+  test('should shelve Eich’s Computerworld interview as the Internet Archive’s copy, the live page being gone', () => {
+    expect(shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
   test('the research shelves are headed by the three concerns, the third named Dynamic', () => {

@@ -7,7 +7,7 @@ const javascript = 'https://en.wikipedia.org/wiki/JavaScript';
 const specification = 'https://262.ecma-international.org/5.1/';
 const editions = 'https://ecma-international.org/publications-and-standards/standards/ecma-262/';
 const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
-const computerworld = 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const computerworld = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 
 export const EcmaScript: FC = () =>
   <Moment of={moments.ecmaScript}
