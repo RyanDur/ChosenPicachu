@@ -15,7 +15,7 @@ export const Presentation: FC = () =>
       CSS says how things look. Shared looks get shared class names, each component’s layout lives in its own sheet,
       and nothing is styled to say what the HTML already says.
     </p>
-    <FromTheRecord keys={['presentationLeavesHome', 'needOutrunsStandards', 'cssOne', 'browsersAgree', 'wiredRedesign', 'zenGarden', 'cssTwoOne', 'someoneNeedsComponents']}/>
+    <FromTheRecord/>
     <HowIOrganizeIt>
       <p className="paragraph">I write CSS in two kinds of sheet. A component’s sheet holds its structure,
         the grid and placement of that one component, named for it and kept beside it. Shared looks live in the site’s

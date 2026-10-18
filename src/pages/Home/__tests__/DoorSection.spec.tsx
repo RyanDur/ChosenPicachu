@@ -6,7 +6,7 @@ import {HowIOrganizeIt} from '@pages/Home/HowIOrganizeIt';
 describe('a door’s part outside a door section', () => {
   test('should draw nothing, so it passes as no door at all', async () => {
     render(<TestApp>
-      <FromTheRecord keys={['need']}/>
+      <FromTheRecord/>
       <HowIOrganizeIt><p>The skeleton comes first.</p></HowIOrganizeIt>
     </TestApp>);
 

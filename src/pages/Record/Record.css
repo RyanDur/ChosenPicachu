@@ -85,6 +85,45 @@
     padding-inline-start: 0;
   }
 
+  .beat-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--base-x-1_5);
+    margin: 0;
+  }
+
+  .doors {
+    margin: 0;
+  }
+
+  .moments-of-a-year .moment::after {
+    content: none;
+  }
+
+  @media (width <= 600px) {
+    .moments-of-a-year .moment {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    .moments-of-a-year .moment > * {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
+      padding-inline-start: 0;
+    }
+
+    .moments-of-a-year .beat-heading {
+      flex-direction: column-reverse;
+      align-items: start;
+    }
+
+    .moments-of-a-year .beat-title::before {
+      content: none;
+    }
+  }
+
   .beat-title {
     align-self: baseline;
     margin: 0;

@@ -4,6 +4,13 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
+const yearOfTwo: Record<string, string> = {
+  'Pages need to respond': '1995',
+  'The browsers’ tags need a standard': '1995',
+  'The need outruns the standards': '1996',
+  'The style sheet needs a standard': '1996'
+};
+
 describe('the 1989 moment', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -128,7 +135,7 @@ describe('the 1996 moment', () => {
     'The browsers were partly there already. Lie and Bos record that “The first commercial browser to support CSS was Microsoft’s Internet Explorer 3 which was released in August 1996”, four months before the Recommendation, with most of the colour, background, font and text properties and little of the box model; the changes the Editorial Review Board made after it shipped were ones its developers “could not foresee”. “The next browser to announce support was Netscape’s Navigator, version 4.0”, and what that implementation was is the first 1996 moment’s story.',
     'So the standard fixed the language and not the rendering. The same sheet produced different pages, and the next decade of CSS is the browsers catching up with a document that was finished in 1996. In February 1997 CSS got its own working group, chaired by Chris Lilley, recruited to the W3C from the University of Manchester. CSS level 2 followed as a Recommendation in May 1998, and the catching-up is the 1998 moment.'
   ])('should tell the road from the draft to the standard, words and links together: %s', told => {
-    expect(itemHeadedBy('the timeline', 'The style sheet needs a standard')).toHaveTextContent(told);
+    expect(itemHeadedBy('1996', 'The style sheet needs a standard')).toHaveTextContent(told);
   });
 });
 
@@ -145,15 +152,15 @@ describe('the first 1995 moment', () => {
     'The name took longer than the language. Mocha was Andreessen’s code name. Netscape marketing “saw potential trademark conflicts” and had “a ‘live’ meme going in their naming”, so the betas said LiveScript. In early December 1995 Netscape and Sun signed a licence agreement and it became JavaScript, “a complementary scripting language to go with Java”, pushed, in Eich’s words, “as a little brother to Java, as a complementary language like Visual Basic was to C++”. The audience was “Web designers, people who may or may not have much programming training”, writing “a little snippet you could write, you could copy somebody else’s, you could learn as you went”; you could, he said, “buy it by the yard”. Jeremy Keith’s line for the family relationship stands: “Java is to JavaScript as ham is to hamster.”',
     'Some early adopters, “even in late 1995 (Netscape 2’s beta period), built advanced Web apps using JS and frames in framesets, prefiguring the ‘Ajax’ or ‘Web 2.0’ style of development”, the pattern the 2005 moment names. Then, though, “the means to communicate with servers generally involved reloading whole Web pages”. Eich counts himself among those who curse the language, “a quickie love-child of C and Self”, and borrows words he credits to Dr. Johnson: “the part that is good is not original, and the part that is original is not good.” And still: “JS beat Java on the client.”'
   ])('should tell the need and the language from Eich’s own words, words and links together: %s', told => {
-    expect(itemHeadedBy('the timeline', 'Pages need to respond')).toHaveTextContent(told);
+    expect(itemHeadedBy('1995', 'Pages need to respond')).toHaveTextContent(told);
   });
 
   test.each(['not an application platform', 'never shipped publicly', 'He never romanticized it'])('should leave out "%s", which the sources do not hold', claim => {
-    expect(itemHeadedBy('the timeline', 'Pages need to respond')).not.toHaveTextContent(claim);
+    expect(itemHeadedBy('1995', 'Pages need to respond')).not.toHaveTextContent(claim);
   });
 
   test('should link Keith’s line to his journal, and shelve it', () => {
-    expect(within(itemHeadedBy('the timeline', 'Pages need to respond')).getByRole('link', {name: '“Java is to JavaScript as ham is to hamster.”', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
+    expect(within(itemHeadedBy('1995', 'Pages need to respond')).getByRole('link', {name: '“Java is to JavaScript as ham is to hamster.”', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
     expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Misunderstanding markup', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
   });
 });
@@ -169,7 +176,7 @@ describe('the second 1995 moment', () => {
     'The result is RFC 1866, dated November 1995, by Berners-Lee and Connolly. Its scope says what it is. “Previously, informal documentation on HTML has been available from a number of sources on the Internet”; this specification “brings together, clarifies, and formalizes a set of features that roughly corresponds to the capabilities of HTML in common use prior to June 1994”, seventeen months before its date. It names itself HTML 2.0 “to distinguish it from the previous informal specifications”, and says what it leaves out: “A number of new features to HTML are being proposed and experimented in the Internet community.” Forms, the one thing a page could do besides link, came in as a level: “Form processing is a level 2 feature”, and a browser without them was “minimally conforming”.',
     'Practice kept outrunning the document. Netscape, formed in November 1994, “began inventing its own HTML tags as it pleased without first openly discussing them with the Web community”; it “rarely made an appearance at the big International WWW conferences, but it seemed to be driving the HTML standard”. During 1995 came FONT FACE and the BGCOLOR attribute of BODY, “which control stylistic aspects of a document”, over the protest of the academic engineering community: “You’re not supposed to be able to do things like that in HTML”. In September came a proposal for frames, “implemented on Netscape’s Navigator browser before anyone really had time to comment on it”. Netscape’s defence was that vendors had to innovate ahead of the standard, and that if users liked a feature “the market would drive it to become a de facto standard”, the sequence Raggett says the W3C was trying to avoid. In December 1995 the IETF group was dismantled because it “was having difficulties coming to consensus swiftly enough”. The W3C took the pen: HTML 3.2, January 1997, “took the existing IETF HTML 2 standard and incorporated features from HTML+ and HTML 3”. Standardising what the browsers already did became HTML’s habit, and in 2007 its stated principle.'
   ])('should tell how the first standard wrote down what the browsers did, words and links together: %s', told => {
-    expect(itemHeadedBy('the timeline', 'The browsers’ tags need a standard')).toHaveTextContent(told);
+    expect(itemHeadedBy('1995', 'The browsers’ tags need a standard')).toHaveTextContent(told);
   });
 });
 
@@ -233,38 +240,62 @@ describe('the record', () => {
     expect(screen.getByText(/one sentence said twenty ways/)).toBeVisible();
   });
 
-  test('the timeline walks twenty beats of the same need, in order', () => {
-    const beats = within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('listitem')
-      .map(beat => `${within(beat).getByRole('time').textContent} ${within(beat).getByRole('heading').textContent}`);
+  test('the timeline walks the years in order, one entry each, a year of two moments holding both', () => {
+    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(beats).toEqual([
-      '1989 Someone needs something',
-      '1990 Researchers need to collaborate',
-      '1991 The web needs the public',
-      '1994 Authors need control of the look',
-      '1995 Pages need to respond',
-      '1995 The browsers’ tags need a standard',
-      '1996 The need outruns the standards',
-      '1996 The style sheet needs a standard',
-      '1997 The language needs a standard',
-      '1998 The browsers need to agree',
-      '2002 Someone needs to go first',
-      '2003 The separation needs proof',
-      '2004 The standard needs the real world',
-      '2005 The page needs to update in place',
-      '2009 The standard needs to move again',
-      '2010 The application needs a frame',
-      '2011 The specification needs its tests',
-      '2013 Someone needs components',
-      '2014 The philosophy needs writing down',
-      '2016 The document needs to come first'
+    expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
+      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2009', '2010', '2011', '2013', '2014', '2016']);
+    expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
+      'Someone needs something',
+      'Researchers need to collaborate',
+      'The web needs the public',
+      'Authors need control of the look',
+      'Pages need to respond, and the browsers’ tags need a standard',
+      'Pages need to respond',
+      'The browsers’ tags need a standard',
+      'The need outruns the standards, and the style sheet needs a standard',
+      'The need outruns the standards',
+      'The style sheet needs a standard',
+      'The language needs a standard',
+      'The browsers need to agree',
+      'Someone needs to go first',
+      'The separation needs proof',
+      'The standard needs the real world',
+      'The page needs to update in place',
+      'The standard needs to move again',
+      'The application needs a frame',
+      'The specification needs its tests',
+      'Someone needs components',
+      'The philosophy needs writing down',
+      'The document needs to come first'
     ]);
+  });
+
+  test.each([
+    ['1995', 'Pages need to respond, and the browsers’ tags need a standard',
+      'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
+      [['1995-05', 'May', 'Dynamic Interaction', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
+    ['1996', 'The need outruns the standards, and the style sheet needs a standard',
+      'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
+      [['1996-08', 'August', 'Structure, Presentation', 'The need outruns the standards'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
+  ])('should tell %s as one entry, and open its fuller story on each moment, dated by its month and captioned by its door', async (year, title, tells, doors) => {
+    const theYear = itemHeadedBy('the timeline', title);
+
+    expect(theYear).toHaveTextContent(tells);
+    await userEvent.click(within(theYear).getByText('the fuller story'));
+
+    expect(within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
+      within(moment).getByRole('time').getAttribute('datetime'),
+      within(moment).getByRole('time').textContent,
+      within(moment).getByText(/^(Structure|Presentation|Dynamic Interaction)/).textContent,
+      within(moment).getByRole('heading').textContent
+    ])).toEqual(doors);
   });
 
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(20);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
     const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
@@ -295,9 +326,9 @@ describe('the record', () => {
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”']
   ])('should tell %s, its fuller story quoting its source by a link', (title, source, quotation) => {
-    const moment = itemHeadedBy('the timeline', title);
+    const moment = itemHeadedBy(yearOfTwo[title] ?? 'the timeline', title);
 
-    expect(within(within(moment).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
+    expect(within(moment).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
   test('should open the tee-up on how every page here is built, need first', () => {
@@ -338,7 +369,7 @@ describe('the record', () => {
   test('should land the concert’s reader on the 1996 moment, with focus there', async () => {
     await userEvent.click(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}));
 
-    await waitFor(() => expect(itemHeadedBy('the timeline', 'The need outruns the standards')).toHaveFocus());
+    await waitFor(() => expect(itemHeadedBy('1996', 'The need outruns the standards')).toHaveFocus());
   });
 
   test('should keep every source a fuller story links to on the research shelf', () => {
@@ -402,6 +433,6 @@ describe('arriving at a moment on the record', () => {
 
     await screen.findByRole('heading', {name: 'The browsers’ tags need a standard'});
 
-    await waitFor(() => expect(itemHeadedBy('the timeline', 'The browsers’ tags need a standard')).toHaveFocus());
+    await waitFor(() => expect(itemHeadedBy('1995', 'The browsers’ tags need a standard')).toHaveFocus());
   });
 });

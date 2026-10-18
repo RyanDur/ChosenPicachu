@@ -16,7 +16,7 @@ export const DynamicInteraction: FC = () =>
       JavaScript says how things respond. The state is what is true right now, an event is what just happened, and the
       page is drawn from the two.
     </p>
-    <FromTheRecord keys={['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']}/>
+    <FromTheRecord/>
     <HowIOrganizeIt>
       <p className="paragraph">Behaviour splits into what is true and what happened. The state is what is
         true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
