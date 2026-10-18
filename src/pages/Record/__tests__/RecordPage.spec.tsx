@@ -385,6 +385,24 @@ describe('the 2010 moment', () => {
   });
 });
 
+describe('the 2011 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'W3C’s announcement of 7 June 2011 is headed “Cascading Style Sheets Standard Boasts Unprecedented Interoperability”. Interoperability means the same sheet produces the same page in different browsers, the thing CSS1 could not deliver in 1996, and the release says why the wait: “it took many years for implementations and the specification to converge”. It gives the number: “More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.” Daniel Glazman, co-chair of the working group, answers the question he says people had asked, “Why is CSS 2.1 taking so long?” His answer: “CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.” Thirteen years between CSS 2 and its finished revision.',
+    'The same day W3C published CSS Color Module Level 3 as a Recommendation, and within a year three more modules followed: Selectors Level 3 and Namespaces on 29 September 2011, and Media Queries on 19 June 2012. The release says W3C “expects future additions to CSS to be organized as independent modules, allowing smaller, more focused feature sets to progress and stabilize at their own pace”. Peter Linss, the other co-chair, says the group “can focus its efforts on rapidly advancing CSS with new modules”. The reasoning had been set out in 2001. “Rather than attempting to shove dozens of updates into a single monolithic specification”, “it will be much easier and more efficient to be able to update individual pieces of the specification”; and for small devices “it may be impractical to support all of CSS”. A module is one piece of the language with its own specification and its own tests.',
+    'This is the shape CSS still has: modules at levels, each finished the way 2.1 was finished, against its tests. CSS 1 was declared finished while no browser rendered all of it; since 2.1, a module is finished when the browsers render it alike.'
+  ])('should give the working group\'s own account of why CSS 2.1 took thirteen years and name the modules that followed, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The specification needs its tests')).toHaveTextContent(told);
+  });
+
+  test.each([['CSS Color Module Level 3', 'W3C Recommendation, 7 June 2011'], ['Selectors Level 3', 'W3C Recommendation, 29 September 2011'], ['CSS Namespaces Module Level 3', 'W3C Recommendation, 29 September 2011'], ['Media Queries', 'W3C Recommendation, 19 June 2012']])('should shelve %s, %s', (work, provenance) => {
+    expect(shelvedAs(work)).toHaveTextContent(provenance);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -537,7 +555,9 @@ describe('the record', () => {
     ['The application needs a frame', 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md', '20 October 2010'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/React_(software)', '“first deployed on Facebook’s News Feed in 2011”'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
+    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
+    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],
+    ['The specification needs its tests', 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/', 'Media Queries'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
     ['The browsers need to agree', 'https://www.w3.org/TR/1998/REC-CSS2-19980512/', '“content positioning, downloadable fonts, table layout, features for internationalization, automatic counters and numbering”'],
     ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html', '“checked each page for correctness and completeness”'],

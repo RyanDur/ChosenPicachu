@@ -143,6 +143,22 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C Recommendation, 12 May 1998</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/TR/2011/REC-css3-color-20110607/"><cite>CSS Color Module Level 3</cite></a>
+            <span className="provenance caption">W3C Recommendation, 7 June 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/TR/2011/REC-css3-selectors-20110929/"><cite>Selectors Level 3</cite></a>
+            <span className="provenance caption">W3C Recommendation, 29 September 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/TR/2011/REC-css3-namespace-20110929/"><cite>CSS Namespaces Module Level 3</cite></a>
+            <span className="provenance caption">W3C Recommendation, 29 September 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/"><cite>Media Queries</cite></a>
+            <span className="provenance caption">W3C Recommendation, 19 June 2012</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac"><cite>Internet Explorer for Mac</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>
