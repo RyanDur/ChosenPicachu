@@ -142,8 +142,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the
             browser’s rules are aimed, because the <Mdn path="Web/CSS/Cascade">cascade</Mdn>, the order CSS uses to choose
             between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers
-            are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.
-            One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
+            are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.</Says>
+          <Says>One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
             browser’s default stylesheet centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts <code>inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get

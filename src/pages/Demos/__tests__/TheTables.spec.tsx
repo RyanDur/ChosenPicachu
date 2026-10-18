@@ -63,7 +63,8 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'A sort applied once is stale by the next trade.'},
     {choice: 'tut=menu', sentence: 'Picture your toggle as the middle cell of a three-by-three grid drawn over the page: position-area picks cells. block-end takes the row below the toggle; span-inline-start starts from the toggle’s own column and spreads toward the line’s start: under the toggle, hanging left, in this writing mode.'},
     {choice: 'tut=menu', sentence: 'position-try-fallbacks: flip-block is the escape hatch: when the row below has no room, the whole area flips above.'},
-    {choice: 'tut=menu', sentence: 'your site reset already zeroes menu, and a page’s own styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the browser’s rules are aimed, because the cascade, the order CSS uses to choose between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers are the reset’s job too; this site’s reset drops them for menu alongside ol and ul. One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centres every popover with inset: 0,'},
+    {choice: 'tut=menu', sentence: 'your site reset already zeroes menu, and a page’s own styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the browser’s rules are aimed, because the cascade, the order CSS uses to choose between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers are the reset’s job too; this site’s reset drops them for menu alongside ol and ul.'},
+    {choice: 'tut=menu', sentence: 'One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centres every popover with inset: 0,'},
     {choice: 'tut=resize', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=resize&world=vanilla', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=menu', sentence: 'So the sort is a question the page asks on every read, never a stored answer: each read re-ranks the rows by the sorting column, and as values change underneath, the rows move to stay sorted.'},
@@ -132,7 +133,7 @@ describe('the tables tab’s own words', () => {
     {name: 'menu', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ol', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ul', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
-    {name: 'inset: auto', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
+    {name: 'inset: auto', choice: 'tut=menu', run: /^One line remains that no reset should write for you/},
     {name: 'z-index: 999', choice: 'tut=menu', run: /already beating/},
     {name: 'position-try-fallbacks', choice: 'tut=menu', run: /is the escape hatch/},
     {name: 'touch-action: none', choice: 'tut=resize', run: /lets the pointer drag it/},
@@ -174,6 +175,14 @@ describe('the tables tab’s own words', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
+  });
+
+  test('should keep why the reset wins and the one line left in runs of their own', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(within(await screen.findByRole('region', {name: 'Tables'})).getByText(/^One line remains that no reset should write for you/)).toBeInTheDocument();
   });
 
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
