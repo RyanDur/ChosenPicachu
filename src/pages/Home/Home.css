@@ -26,24 +26,25 @@
 
     @media (width >= 900px) {
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      grid-auto-flow: dense;
       column-gap: var(--base-x-4);
 
       > * {
         grid-column: 1 / -1;
       }
 
-      .concern-evidence {
-        grid-column: 1;
+      .concern-essay {
+        grid-column: 2;
       }
 
-      .concern-practice {
-        grid-column: 2;
+      .concern-evidence {
+        grid-column: 1;
       }
     }
   }
 
-  .concern-evidence,
-  .concern-practice {
+  .concern-essay,
+  .concern-evidence {
     align-content: start;
     display: grid;
     gap: var(--base-x-1_5);

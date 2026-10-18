@@ -1,9 +1,12 @@
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {site} from '@pages/__test_support/site';
+import {itemHeadedBy} from '@__test_support/headed-item';
+import {moments} from '@pages/Record/moments/moments';
+import {fromTheRecord} from '@pages/Record/moments/concerns';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 
@@ -60,6 +63,99 @@ describe('the development page', () => {
 
     expect(await screen.findByRole('heading', {name: `Development ${concern}`, level: 1})).toBeInTheDocument();
     expect(within(practice()).getByText(firstRule)).toBeInTheDocument();
+  });
+
+  test('the structure tab tells how I organize structure', async () => {
+    render(<TestApp at={Paths.development}/>);
+    const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
+
+    expect(concern.getByText('how I organize it')).toBeVisible();
+    expect(concern.getByRole('link', {name: 'search'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(concern.getByRole('link', {name: 'output'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(concern.getByText(/^I start from what the content is and pick the element for it/))
+      .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
+    expect(concern.getByText(/^The skeleton comes first/))
+      .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
+    expect(concern.getByText(/^The elements mean something beyond how they look/))
+      .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
+    expect(concern.getByText(/^A div is for when I want an element that says nothing/))
+      .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
+    expect(concern.getByText(/^A div is for when I want an element that says nothing/))
+      .toHaveTextContent(/The standard that calls a div a last resort is the one the browser makers wrote themselves, from the 2004 moment on\./);
+    expect(concern.getByRole('link', {name: /No ARIA is better than bad ARIA/}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(concern.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
+  });
+
+  test('the presentation tab tells how I organize presentation', async () => {
+    render(<TestApp at={`${Paths.development}?tab=presentation`}/>);
+    const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
+
+    expect(concern.getByText('how I organize it')).toBeVisible();
+    expect(concern.getByRole('link', {name: 'custom properties'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(concern.getByText(/Element selectors appear only in the reset\. There is no utility scale: lifted says why a style is there, and mt-4 says only what it does\. Markup full of utilities is the look written back into the structure\./)).toBeInTheDocument();
+    expect(concern.getByText(/Carried and settling use the same rules for a column and a row; only the lengths handed in differ\. Shoved has a rule per direction: two across for columns, two down for rows\./)).toBeInTheDocument();
+    expect(concern.getByText(/^Constants live in the stylesheet/))
+      .toHaveTextContent(/Only values the code works out at runtime are written inline, mostly as custom properties the sheet already reads: a measured height, a position after a drag, the direction of a slide\./);
+    expect(concern.getByText(/^Constants live in the stylesheet/))
+      .toHaveTextContent(/Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS\./);
+    expect(concern.getByText(/^The test is to read a class list on its own/))
+      .toHaveTextContent(/This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list\.$/);
+    expect(concern.getByText(/Element selectors appear only in the reset/))
+      .toHaveTextContent(/The separation is the 1994 draft’s, and the Zen Garden in the 2003 moment shows what it is for\./);
+    expect(concern.getByText(/reads like a sentence/)).toBeInTheDocument();
+    expect(concern.getByText(/a pile of overrides/)).toBeInTheDocument();
+    expect(concern.getByText(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
+    expect(concern.getByRole('link', {name: 'prefers-reduced-motion'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(concern.getByRole('link', {name: 'appearance: base-select'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+  });
+
+  test('the dynamic interaction tab tells how I organize behaviour', async () => {
+    render(<TestApp at={`${Paths.development}?tab=dynamic-interaction`}/>);
+    const concern = within(await screen.findByRole('region', {name: 'how I organize it'}));
+
+    expect(concern.getByText('how I organize it')).toBeVisible();
+    expect(concern.getByRole('link', {name: /operable through a keyboard interface/}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org'));
+    expect(concern.getByText(/so I name them in the past tense: lifted, dropped, chosen\./)).toBeInTheDocument();
+    expect(concern.getByText(/I keep the state in one place, and replacing it is the only way anything on screen changes\./)).toBeInTheDocument();
+    expect(concern.getByText(/^Behaviour splits into what is true and what happened/))
+      .toHaveTextContent(/AngularJS, in the 2010 moment, bound model and view both ways\. I keep one direction\./);
+    expect(concern.getByText(/^Not every event starts at the pointer/))
+      .toHaveTextContent(/The 2005 moment is where that pattern got its name, Ajax, and became ordinary\./);
+    expect(concern.getByText(/so I test them on their own with no page involved\./)).toBeInTheDocument();
+    expect(concern.getByText(/The page announces each change too: a sighted reader watches the order change, and a screen reader user hears the same change read out\./)).toBeInTheDocument();
+    expect(concern.getByText(/Change the framework, or remove it, and only the shell changes/)).toBeInTheDocument();
+    expect(concern.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
+  });
+
+  test.each([
+    ['Structure', Paths.development, ['html5SaysIt', 'browsersTakePen', 'someoneNeedsComponents', 'browsersTakePen', 'documentComesBack']],
+    ['Presentation', `${Paths.development}?tab=presentation`, ['presentationLeavesHome', 'zenGarden', 'needOutrunsStandards', 'someoneNeedsComponents']],
+    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, ['frameworks', 'pageBecomesApplication', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']]
+  ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
+    render(<TestApp at={at}/>);
+    await screen.findByRole('heading', {name: `Development ${concern}`, level: 1});
+
+    const cited = within(practice()).getAllByRole('link')
+      .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
+      .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]);
+
+    expect(cited).toEqual(meant.map(key => [moments[key].date.year, momentAddress(key)]));
+    meant.forEach(key => expect(fromTheRecord[concern]).toContain(key));
+  });
+
+  test('should land a moment link on its moment in the record, with focus there', async () => {
+    render(<TestApp at={Paths.development}/>);
+
+    await userEvent.click(within(await screen.findByRole('region', {name: 'how I organize it'})).getAllByRole('link', {name: '2016 moment'})[0]);
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
 
   test('should land a moment link on its moment in the record', async () => {

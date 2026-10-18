@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {chartsPage, homePage, markets, recordPage, scriptedMarket, violationsOf} from './__test_support';
+import {chartsPage, markets, recordPage, scriptedMarket, violationsOf} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -26,14 +26,6 @@ for (const {name, path, ready, loaded} of pages) {
     expect(violationsOf(results)).toEqual([]);
   });
 }
-
-test('the home page has no accessibility violations with every section’s practice showing', async ({page}) => {
-  const home = homePage(page);
-  await page.goto('');
-  await expect(home.practices).toHaveCount(3);
-
-  expect(violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze())).toEqual([]);
-});
 
 test('the record has no accessibility violations with its folds open', async ({page}) => {
   const record = recordPage(page);

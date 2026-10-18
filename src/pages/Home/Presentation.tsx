@@ -1,8 +1,6 @@
 import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
-import {HowIOrganizeIt} from './HowIOrganizeIt';
-import {PresentationPractice} from '@pages/Development/PresentationPractice';
 import {ConcernSection} from './ConcernSection';
 
 export const Presentation: FC = () =>
@@ -11,10 +9,9 @@ export const Presentation: FC = () =>
       The separation of HTML from CSS makes it easier to maintain sites, share style
       sheets across pages, and tailor pages to different environments.
     </Quotation>
-    <p className="paragraph">
-      CSS says how things look. Shared looks get shared class names, each component’s layout lives in its own sheet,
-      and nothing is styled to say what the HTML already says.
-    </p>
+    <div className="concern-essay">
+      <p className="paragraph">CSS says how things look. The need was an author’s: to set the look of a page without writing it into the structure. In October 1994 Håkon Wium Lie drafted Cascading HTML Style Sheets for that, encouraged by Dave Raggett, who had realized HTML should never become a page-description language. The browsers answered the same need with a font tag and tables for layout, and then took a decade to render the standard to the pixel, pushed by tests and failures named in public. In 2003 Dave Shea’s CSS Zen Garden showed what the separation buys: one document in many designs, by sheets alone. In 2013 components arrived in script, and Christopher Chedeau’s talk listed seven problems with CSS at that scale, isolation last.</p>
+      <p className="paragraph">I take a rule from that too. A look belongs in the sheet, named for what the element needs, and nothing in the HTML says how it looks.</p>
+    </div>
     <FromTheRecord/>
-    <HowIOrganizeIt><PresentationPractice/></HowIOrganizeIt>
   </ConcernSection>;

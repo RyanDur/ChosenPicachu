@@ -1,7 +1,5 @@
-import {itemHeadedBy} from '@__test_support/headed-item';
-import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
@@ -13,7 +11,7 @@ describe('the home page', () => {
   test('should open on the thesis, then say who the site is for, then what the concerns, the record and the demos give', () => {
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they show, and JavaScript says how they respond. They were designed apart, on purpose. When one could not yet do a job, another covered for it until the standard caught up, which is what HTML’s own principles ask: “consider adopting it rather than forbidding it or inventing something new”.');
     expect(screen.getByText(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit is a div where a button was meant, a class that names a margin instead of the reason for it, a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
-    expect(screen.getByText(/^Each language is one concern below/)).toHaveTextContent('Each language is one concern below: what it is for, how I organize it, and the moments in the record where the web learned it. The record tells how the web got the three languages, in twenty moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
+    expect(screen.getByText(/^Each language is one concern below/)).toHaveTextContent('Each language is one concern below: what it is for, what the record taught it, and the moments where that happened. How I organize each one is on the Development page, one tab for each. The record tells how the web got the three languages, in twenty moments and a closing essay. The demos are where I work the practice: five features built from this site’s own code and explained beside it. Two set the trick we used before the platform could do the job beside what it gives now, and the other three show what the platform does with no library at all.');
     expect(outOfReadingOrder([
       screen.getByText(/^A webpage is three languages working in concert/),
       screen.getByText(/^This site is for the developer/),
@@ -38,77 +36,27 @@ describe('the home page', () => {
   });
 
   test.each([
-    ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the element that means what the content is, and add the look and the behaviour on top of it.'],
-    ['Presentation', 'CSS says how things look. Shared looks get shared class names, each component’s layout lives in its own sheet, and nothing is styled to say what the HTML already says.'],
-    ['Dynamic Interaction', 'JavaScript says how things respond. The state is what is true right now, an event is what just happened, and the page is drawn from the two.']
-  ])('should open the %s concern with a plain line on what its language does', (concern, line) => {
-    expect(within(screen.getByRole('region', {name: concern})).getByText(line.slice(0, 20), {exact: false})).toHaveTextContent(line);
+    ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Berners-Lee’s tags already did that job. They came from CERN’s SGML guide so the documents world would recognise them, and the one tag of his own, the anchor, said only that this text points somewhere. Twice since, the structure left the document, and twice the standard brought it back. In 1994 the browsers added tags of their own until, in Dave Raggett’s words, “the language was becoming ill-defined”; HTML 2.0 wrote down the tags in use the next year, and from 2004 the browser makers wrote the standard themselves, the one that calls a div an element “of last resort”. In 2013 script built the components, and links and the back button became state; HTML5’s principles in 2014 put semantic markup first, and in 2016 the document came first again and the program second.', 'I take one rule from that. Choose the element that means what the content is, and add the look and the behaviour on top of it.'],
+    ['Presentation', 'CSS says how things look. The need was an author’s: to set the look of a page without writing it into the structure. In October 1994 Håkon Wium Lie drafted Cascading HTML Style Sheets for that, encouraged by Dave Raggett, who had realized HTML should never become a page-description language. The browsers answered the same need with a font tag and tables for layout, and then took a decade to render the standard to the pixel, pushed by tests and failures named in public. In 2003 Dave Shea’s CSS Zen Garden showed what the separation buys: one document in many designs, by sheets alone. In 2013 components arrived in script, and Christopher Chedeau’s talk listed seven problems with CSS at that scale, isolation last.', 'I take a rule from that too. A look belongs in the sheet, named for what the element needs, and nothing in the HTML says how it looks.'],
+    ['Dynamic Interaction', 'JavaScript says how things respond. It was not in the 1989 proposal. Brendan Eich wrote the interpreter at Netscape in May 1995 so a page could, in his words above, “touch elements of the page, change their properties, and respond to events”. In 2005 Ajax let a page fetch data and rewrite itself without reloading, and the page became an application. From 2010 each framework moved more of the page into script, and in 2013 React said a component is a description of what the DOM should look like, redrawn from data that changes over time. In 2016 the server rendered first again and the script arrived second.', 'I take one rule from that thread. The state is what is true right now, an event is what just happened, and the page is drawn from the two, so a framework can change under it and the core stays.']
+  ])('should tell %s as one essay, from what its language does to the rule I take', (concern, thread, rule) => {
+    const essay = within(screen.getByRole('region', {name: concern}));
+
+    expect(essay.getByText(thread.slice(0, 30), {exact: false})).toHaveTextContent(thread);
+    expect(essay.getByText(rule.slice(0, 30), {exact: false})).toHaveTextContent(rule);
   });
 
-  test('the structure concern tells how I organize structure', () => {
-    const concern = within(screen.getByRole('region', {name: 'Structure'}));
-
-    expect(concern.getByText('how I organize it')).toBeVisible();
-    expect(concern.getByRole('link', {name: 'search'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(concern.getByRole('link', {name: 'output'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(concern.getByText(/^I start from what the content is and pick the element for it/))
-      .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
-    expect(concern.getByText(/^The skeleton comes first/))
-      .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
-    expect(concern.getByText(/^The elements mean something beyond how they look/))
-      .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
-    expect(concern.getByText(/^A div is for when I want an element that says nothing/))
-      .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
-    expect(concern.getByText(/^A div is for when I want an element that says nothing/))
-      .toHaveTextContent(/The standard that calls a div a last resort is the one the browser makers wrote themselves, from the 2004 moment on\./);
-    expect(concern.getByRole('link', {name: /No ARIA is better than bad ARIA/}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(concern.getByText(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
+  test('should leave how I organize each language to the Development page', () => {
+    expect(screen.queryByRole('heading', {name: 'how I organize it'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', {name: /how I organize it/})).not.toBeInTheDocument();
   });
 
-  test('the presentation concern tells how I organize presentation', () => {
-    const concern = within(screen.getByRole('region', {name: 'Presentation'}));
-
-    expect(concern.getByText('how I organize it')).toBeVisible();
-    expect(concern.getByRole('link', {name: 'custom properties'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(concern.getByText(/Element selectors appear only in the reset\. There is no utility scale: lifted says why a style is there, and mt-4 says only what it does\. Markup full of utilities is the look written back into the structure\./)).toBeInTheDocument();
-    expect(concern.getByText(/Carried and settling use the same rules for a column and a row; only the lengths handed in differ\. Shoved has a rule per direction: two across for columns, two down for rows\./)).toBeInTheDocument();
-    expect(concern.getByText(/^Constants live in the stylesheet/))
-      .toHaveTextContent(/Only values the code works out at runtime are written inline, mostly as custom properties the sheet already reads: a measured height, a position after a drag, the direction of a slide\./);
-    expect(concern.getByText(/^Constants live in the stylesheet/))
-      .toHaveTextContent(/Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS\./);
-    expect(concern.getByText(/^The test is to read a class list on its own/))
-      .toHaveTextContent(/This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list\.$/);
-    expect(concern.getByText(/Element selectors appear only in the reset/))
-      .toHaveTextContent(/The separation is the 1994 draft’s, and the Zen Garden in the 2003 moment shows what it is for\./);
-    expect(concern.getByText(/reads like a sentence/)).toBeInTheDocument();
-    expect(concern.getByText(/a pile of overrides/)).toBeInTheDocument();
-    expect(concern.getByText(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
-    expect(concern.getByRole('link', {name: 'prefers-reduced-motion'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(concern.getByRole('link', {name: 'appearance: base-select'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-  });
-
-  test('the dynamic interaction concern tells how I organize behaviour', () => {
-    const concern = within(screen.getByRole('region', {name: 'Dynamic Interaction'}));
-
-    expect(concern.getByText('how I organize it')).toBeVisible();
-    expect(concern.getByRole('link', {name: /operable through a keyboard interface/}))
-      .toHaveAttribute('href', expect.stringContaining('w3.org'));
-    expect(concern.getByText(/so I name them in the past tense: lifted, dropped, chosen\./)).toBeInTheDocument();
-    expect(concern.getByText(/I keep the state in one place, and replacing it is the only way anything on screen changes\./)).toBeInTheDocument();
-    expect(concern.getByText(/^Behaviour splits into what is true and what happened/))
-      .toHaveTextContent(/AngularJS, in the 2010 moment, bound model and view both ways\. I keep one direction\./);
-    expect(concern.getByText(/^Not every event starts at the pointer/))
-      .toHaveTextContent(/The 2005 moment is where that pattern got its name, Ajax, and became ordinary\./);
-    expect(concern.getByText(/so I test them on their own with no page involved\./)).toBeInTheDocument();
-    expect(concern.getByText(/The page announces each change too: a sighted reader watches the order change, and a screen reader user hears the same change read out\./)).toBeInTheDocument();
-    expect(concern.getByText(/Change the framework, or remove it, and only the shell changes/)).toBeInTheDocument();
-    expect(concern.getByText(/The test is to read the state on its own/)).toBeInTheDocument();
+  test.each([
+    ['Structure', '“the language was becoming ill-defined”', 'https://www.w3.org/People/Raggett/book4/ch02.html'],
+    ['Structure', '“of last resort”', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element'],
+    ['Dynamic Interaction', '“touch elements of the page, change their properties, and respond to events”', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html']
+  ])('should link the %s essay\'s quotation %s to its source', (concern, quoted, source) => {
+    expect(within(screen.getByRole('region', {name: concern})).getByRole('link', {name: quoted})).toHaveAttribute('href', source);
   });
 
   test('should hold the opening and the three languages, one after another, and nothing else', () => {
@@ -163,7 +111,7 @@ describe('the home page', () => {
       .toHaveAttribute('href', `${Paths.record}#the-browsers-tags-need-a-standard`);
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should set %s\'s moments between its paragraph and how I organize it, and end them with the whole record', section => {
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should set %s\'s moments after its essay, and end them with the whole record', section => {
     const concern = screen.getByRole('region', {name: section});
     const list = within(concern).getByRole('list', {name: `${section}, from the record`});
     const wholeRecord = within(concern).getByRole('link', {name: 'the whole record'});
@@ -173,39 +121,13 @@ describe('the home page', () => {
     expect(outOfReadingOrder([
       within(concern).getByText(/^(HTML|CSS|JavaScript) says/),
       list,
-      wholeRecord,
-      within(concern).getByRole('heading', {level: 3, name: 'how I organize it'})
+      wholeRecord
     ])).toEqual([]);
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments and its practice as regions of their own, the practice open', section => {
+  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments as a region of their own', section => {
     const evidence = screen.getByRole('region', {name: `${section} from the record`});
-    const practice = screen.getByRole('region', {name: `${section} how I organize it`});
 
     expect(within(evidence).getByRole('list', {name: `${section}, from the record`})).toBeVisible();
-    within(practice).getAllByRole('paragraph').forEach(paragraph => expect(paragraph).toBeVisible());
-  });
-
-  test.each([
-    ['Structure', ['2014 The rules need writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
-    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components']],
-    ['Dynamic Interaction', ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
-  ])('should rest %s\'s practice on its own moments, each citation naming the year of the moment it opens', (section, meant) => {
-    const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));
-    const cited = within(screen.getByRole('region', {name: `${section} how I organize it`})).getAllByRole('link')
-      .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
-      .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]);
-
-    expect(cited).toEqual(meant.map(moment => [moment.slice(0, 4), listed.getByRole('link', {name: moment}).getAttribute('href')]));
-  });
-});
-
-describe('a moment named in how I organize it', () => {
-  test('should land the reader on that moment on the record, with focus there', async () => {
-    render(<TestApp at={Paths.home}/>);
-
-    await userEvent.click(within(screen.getByRole('region', {name: 'Structure how I organize it'})).getAllByRole('link', {name: '2016 moment'})[0]);
-
-    await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
 });
