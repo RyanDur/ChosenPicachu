@@ -32,6 +32,19 @@ describe('The Demos page', () => {
     expect(opening.compareDocumentPosition(screen.getByRole('navigation', {name: 'demos'})) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
+  test.each([
+    ['Accordions', demosAt()],
+    ['Accordions', demosAt('?tab=behaviour')],
+    ['Tables', demosAt('?tab=tables')]
+  ])('should mark the demo it shows as the current tab, %s at %s', async (shown, at) => {
+    render(<TestApp at={at}/>);
+
+    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
+
+    expect(tabs.getByRole('link', {name: shown, current: 'page'})).toBeInTheDocument();
+    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+  });
+
   test('should run its tabs in the order the opening names them, simple to expert', async () => {
     render(<TestApp at={demosAt()}/>);
 

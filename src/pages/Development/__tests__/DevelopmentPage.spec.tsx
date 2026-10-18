@@ -1,4 +1,4 @@
-import {cleanup, render, screen, waitFor, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
@@ -130,22 +130,18 @@ describe('the development page', () => {
   });
 
   test.each([
-    ['Structure', Paths.development, ['2014 The rules need writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
-    ['Presentation', `${Paths.development}?tab=presentation`, ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components']],
-    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
-  ])('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
-    render(<TestApp at={Paths.home}/>);
-    const listed = within(screen.getByRole('list', {name: `${concern}, from the record`}));
-    const addresses = meant.map(moment => [moment.slice(0, 4), listed.getByRole('link', {name: moment}).getAttribute('href')]);
-    cleanup();
-
+    ['Structure', Paths.development, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
+    ['Presentation', `${Paths.development}?tab=presentation`, [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
+    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
+  ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
     render(<TestApp at={at}/>);
     await screen.findByRole('heading', {name: `Development ${concern}`, level: 1});
+
     const cited = within(practice()).getAllByRole('link')
       .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
       .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]);
 
-    expect(cited).toEqual(addresses);
+    expect(cited).toEqual(meant);
   });
 
   test('should land a moment link on its moment in the record, with focus there', async () => {

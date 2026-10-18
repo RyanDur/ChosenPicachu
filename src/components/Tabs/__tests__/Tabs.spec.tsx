@@ -33,13 +33,13 @@ describe('Tabs', () => {
   it('should update the url', async () => {
     render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
-    await userEvent.click(screen.getByText(tab1.display));
+    await userEvent.click(screen.getByRole('link', {name: tab1.display}));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
 
-    await userEvent.click(screen.getByText(tab2.display));
+    await userEvent.click(screen.getByRole('link', {name: tab2.display}));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab2.param}`);
 
-    await userEvent.click(screen.getByText(tab3.display));
+    await userEvent.click(screen.getByRole('link', {name: tab3.display}));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab3.param}`);
   });
 

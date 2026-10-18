@@ -6,7 +6,7 @@ import {Listing} from '@pages/BasePage/useListing';
 import {Concern} from '@pages/Record/moments/concerns';
 import names from '@pages/names.json';
 import {DevelopmentPage} from './DevelopmentPage';
-import {useConcernShown} from './types';
+import {useConcernShown} from './useConcernShown';
 
 const listings: Record<Concern, Listing> = {
   'Structure': names.development.structure,

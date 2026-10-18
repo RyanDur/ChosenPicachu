@@ -1,7 +1,8 @@
 import {FC} from 'react';
 import {Tabs} from '@components/Tabs';
 import {Concern, concernId} from '@pages/Record/moments/concerns';
-import {concernTabs, useConcernShown} from './types';
+import {concernTabs} from './types';
+import {useConcernShown} from './useConcernShown';
 import {StructurePractice} from './StructurePractice';
 import {PresentationPractice} from './PresentationPractice';
 import {DynamicInteractionPractice} from './DynamicInteractionPractice';
