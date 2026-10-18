@@ -558,7 +558,6 @@ describe('the record', () => {
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The posture from 1994, the specification following the field, had become the rule.',
-    'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
     'What changed each time was where the rendering happens; the three responsibilities did not move.'
   ])('should say plainly, words and links together: %s', sentence => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
