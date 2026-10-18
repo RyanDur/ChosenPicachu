@@ -2,9 +2,20 @@ import type {FrameLocator, Locator, Page} from '@playwright/test';
 
 export type Stage = {name: string; at: string; table: (page: Page) => Locator | FrameLocator};
 
+export const tablesCard = (page: Page) => {
+  const card = page.getByRole('region', {name: 'live aggregations'});
+  const vanillaFrame = card.getByTitle('the living table, in vanilla').contentFrame();
+  return {
+    card,
+    vanillaFrame,
+    ownTables: card.getByRole('table'),
+    vanillaTable: vanillaFrame.getByRole('table')
+  };
+};
+
 export const stages: readonly Stage[] = [
-  {name: 'react', at: '/ChosenPicachu/demos/?tab=tables&world=react', table: page => page.getByRole('region', {name: 'live aggregations'})},
-  {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => page.getByTitle('the living table, in vanilla').contentFrame()}
+  {name: 'react', at: '/ChosenPicachu/demos/?tab=tables&world=react', table: page => tablesCard(page).card},
+  {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => tablesCard(page).vanillaFrame}
 ];
 
 type Box = {x: number; y: number; width: number; height: number};
