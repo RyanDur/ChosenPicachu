@@ -52,7 +52,7 @@ const stories: Record<MomentKey, FC> = {
 type Entry = {readonly kind: 'moment'; readonly key: MomentKey} | {readonly kind: 'year'; readonly year: string; readonly told: YearOfTwo};
 
 const entries = inOrder.reduce<readonly Entry[]>((told, key) => {
-  const {year} = moments[key];
+  const {year} = moments[key].date;
   return maybe(yearsOfTwo[year]).either(
     (ofTwo): readonly Entry[] => told.some(entry => entry.kind === 'year' && entry.year === year) ? told : [...told, {kind: 'year', year, told: ofTwo}],
     (): readonly Entry[] => [...told, {kind: 'moment', key}]);
@@ -71,7 +71,7 @@ const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {title, tells}})
     <details className="fuller-story" name="record">
       <summary className="prompt caption">the fuller story</summary>
       <ol className="moments-of-a-year timeline" aria-label={year}>
-        {inOrder.filter(key => moments[key].year === year).map(key =>
+        {inOrder.filter(key => moments[key].date.year === year).map(key =>
           <DoorsInTheYear.Provider key={key} value={some(doorsOf(key))}>
             <Story of={key}/>
           </DoorsInTheYear.Provider>)}

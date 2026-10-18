@@ -25,14 +25,39 @@ export const inOrder = ordered([
 
 export type MomentKey = typeof inOrder[number];
 
-export type MomentHeading = {date: string; year: string; title: string; id: string};
+export type MomentDate =
+  | {readonly kind: 'year'; readonly year: string}
+  | {readonly kind: 'month'; readonly year: string; readonly month: number}
+  | {readonly kind: 'day'; readonly year: string; readonly month: number; readonly day: number};
 
-const named = (date: string, title: string): MomentHeading =>
-  ({date, year: date.split('-')[0], title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
+export type Dated = Exclude<MomentDate, {kind: 'year'}>;
+
+export type MomentHeading = {date: MomentDate; title: string; id: string};
+
+const dateOf = (written: string): MomentDate => {
+  const [year, ...rest] = written.split('-');
+  const [month, day] = rest.map(Number);
+  if (rest.length === 0) return {kind: 'year', year};
+  if (rest.length === 1) return {kind: 'month', year, month};
+  return {kind: 'day', year, month, day};
+};
+
+const named = (written: string, title: string): MomentHeading =>
+  ({date: dateOf(written), title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
+
+const twoDigits = (part: number): string => String(part).padStart(2, '0');
+
+export const writtenAs = (date: MomentDate): string => {
+  switch (date.kind) {
+    case 'year': return date.year;
+    case 'month': return `${date.year}-${twoDigits(date.month)}`;
+    case 'day': return `${date.year}-${twoDigits(date.month)}-${twoDigits(date.day)}`;
+  }
+};
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export const monthOf = (date: string): string => months[Number(date.split('-')[1]) - 1];
+export const monthOf = (date: Dated): string => months[date.month - 1];
 
 export const moments: Record<MomentKey, MomentHeading> = {
   need: named('1989', 'Someone needs something'),

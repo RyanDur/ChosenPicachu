@@ -13,7 +13,7 @@ export const FromTheRecord: FC = () =>
       {inOrder.filter(key => fromTheRecord[door].includes(key)).map(key =>
         <li key={key}>
           <Link className="moment-line paragraph signpost" to={momentAddress(key)}>
-            <time className="moment-year caption bold" dateTime={moments[key].year}>{moments[key].year}</time> {moments[key].title}
+            <time className="moment-year caption bold" dateTime={moments[key].date.year}>{moments[key].date.year}</time> {moments[key].title}
           </Link>
         </li>)}
     </ol>
