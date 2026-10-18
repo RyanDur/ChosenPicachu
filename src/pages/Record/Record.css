@@ -19,6 +19,34 @@
     text-wrap: balance;
   }
 
+  .story {
+    display: grid;
+    gap: var(--base-x-1_5);
+    padding-block-start: var(--base-x-3);
+
+    .paragraph {
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+
+  .story-moments {
+    display: grid;
+    row-gap: var(--base-x-1_5);
+    margin: 0;
+  }
+
+  .story-moment {
+    display: grid;
+    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
+    column-gap: var(--base-x-2);
+    align-items: baseline;
+  }
+
+  .story-moment-year {
+    justify-self: end;
+  }
+
   .concert {
     display: grid;
     gap: var(--base-x-1_5);

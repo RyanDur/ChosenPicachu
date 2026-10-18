@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {maybe, some} from '@ryandur/sand';
-import {Quotation} from '@components/Quotation';
 import {Need} from './moments/Need';
 import {StructureArrives} from './moments/StructureArrives';
 import {PresentationLeavesHome} from './moments/PresentationLeavesHome';
@@ -86,15 +85,6 @@ const Year: FC<{year: string; of: readonly MomentKey[]; told: YearOfTwo}> = ({ye
 export const Timeline: FC = () =>
   <section className="record trim-rule-above" aria-labelledby="the-record">
     <h2 className="record-title title" id="the-record">How the web got its languages</h2>
-    <Quotation voice="sub-title" source={<>Tim Berners-Lee and Robert Cailliau,{' '}
-      <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-        the WorldWideWeb, 1990</a></>}>
-      HyperText is a way to link and access information of various kinds as a web of nodes
-      in which the user can browse at will.
-    </Quotation>
-    <p className="lede sub-title">
-      Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. Every moment below opens on a need of the same kind, and the concert at the end reads them as one method.
-    </p>
     <ol className="timeline" aria-label="the timeline">
       {entries.map(entry => entry.kind === 'moment'
         ? <Story key={entry.key} of={entry.key}/>

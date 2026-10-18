@@ -63,3 +63,13 @@ test('the concert\'s link to a moment inside a year of two lands on it again aft
   await expect(heading).toBeVisible();
   await expect(moment).toBeFocused();
 });
+
+test('a line in a story\'s list lands on that moment in the timeline below, with focus there', async ({page}) => {
+  const record = recordPage(page);
+  await page.goto('record/');
+
+  await record.storyLineTo('Presentation', '1998 The browsers need to agree').click();
+
+  await expect(page).toHaveURL(/\/record\/#the-browsers-need-to-agree$/);
+  await expect(record.moment('The browsers need to agree')).toBeFocused();
+});
