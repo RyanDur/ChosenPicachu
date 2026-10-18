@@ -23,15 +23,25 @@ const whenItHoldsStill = (target: Element, land: () => void, watch: Watch = watc
 
 const landingAround = (target: Element): Element => target.closest('[tabindex="-1"]') ?? target;
 
+const openFoldsAround = (target: Element): void => {
+  const fold = target.closest('details:not([open])');
+  if (fold instanceof HTMLDetailsElement) {
+    fold.open = true;
+    openFoldsAround(fold);
+  }
+};
+
 const landOnceItsFoldsHaveOpened = (hash: string): void => {
-  maybe(hash.slice(1), notEmpty).mBind(id => maybe(document.getElementById(id))).map(target =>
+  maybe(hash.slice(1), notEmpty).mBind(id => maybe(document.getElementById(id))).map(target => {
+    openFoldsAround(target);
     whenItHoldsStill(target, () => {
       if (window.location.hash === hash) {
         target.scrollIntoView();
         const landing = landingAround(target);
         if (landing instanceof HTMLElement) landing.focus({preventScroll: true});
       }
-    }));
+    });
+  });
 };
 
 // the browser resolves a fragment before this page has rendered it, and restores back and forward by itself

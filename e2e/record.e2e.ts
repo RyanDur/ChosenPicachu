@@ -46,3 +46,20 @@ test('a keyboard reader who follows a line in Structure\'s list to a moment insi
   await expect(moment.getByRole('heading', {name: 'The browsers’ tags need a standard'})).toBeVisible();
   await expect(moment).toBeFocused();
 });
+
+test('the concert\'s link to a moment inside a year of two lands on it again after the reader closes the year\'s fold', async ({page}) => {
+  await page.goto('record/');
+  const record = recordPage(page);
+  const link = page.getByRole('region', {name: 'The concert'}).getByRole('link', {name: 'the 1996 moment'});
+  const moment = record.moment('The need outruns the standards');
+  const heading = moment.getByRole('heading', {name: 'The need outruns the standards'});
+
+  await link.click();
+  await expect(heading).toBeVisible();
+  await record.fullerStoryOf(page.getByRole('list', {name: 'the timeline'}).getByRole('listitem').filter({has: page.getByRole('list', {name: '1996'})})).first().click();
+  await expect(heading).toBeHidden();
+  await link.click();
+
+  await expect(heading).toBeVisible();
+  await expect(moment).toBeFocused();
+});
