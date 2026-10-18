@@ -4,8 +4,14 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
-const shelvedAs = (work: string): HTMLElement | undefined => within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true})
-  .find(entry => within(entry).queryByRole('link', {name: work, hidden: true}) !== null);
+const shelvedAs = (work: string): HTMLElement => {
+  const entry = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true})
+    .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
+  if (entry) {
+    return entry;
+  }
+  throw new Error(`no work on the research shelf named ${work}`);
+};
 
 describe('the 1989 moment', () => {
   beforeEach(() => {
@@ -280,7 +286,7 @@ describe('the 2003 moment', () => {
     expect(itemHeadedBy('the timeline', 'The separation needs proof')).toHaveTextContent(told);
   });
 
-  test.each(['CSS3’s module system', 'begun in 1999', 'a modular approach'])('should leave out "%s", which no source holds or the 2011 moment tells', claim => {
+  test.each(['CSS3’s module system', 'begun in 1999', 'a modular approach', 'with one rule'])('should leave out "%s", which no source holds or the 2011 moment tells', claim => {
     expect(itemHeadedBy('the timeline', 'The separation needs proof')).not.toHaveTextContent(claim);
   });
 
@@ -304,7 +310,7 @@ describe('the 2004 moment', () => {
     expect(itemHeadedBy('the timeline', 'The standard needs the real world')).toHaveTextContent(told);
   });
 
-  test.each(['eight votes to fourteen', 'The W3C voted it down', 'Two days later', 'Web Applications 1.0'])('should leave out "%s", which no source holds', claim => {
+  test.each(['eight votes to fourteen', 'The W3C voted it down', 'Two days later', 'Web Applications 1.0', 'The browsers converged once'])('should leave out "%s", which no source holds', claim => {
     expect(itemHeadedBy('the timeline', 'The standard needs the real world')).not.toHaveTextContent(claim);
   });
 
@@ -328,7 +334,7 @@ describe('the 2005 moment', () => {
     expect(itemHeadedBy('the timeline', 'The page needs to update in place')).toHaveTextContent(told);
   });
 
-  test.each(['most of them betas', 'stripped the repetition out', 'XMLHTTP had shipped in IE5'])('should leave out "%s", which no source holds or the moment now says otherwise', claim => {
+  test.each(['most of them betas', 'stripped the repetition out', 'XMLHTTP had shipped in IE5', 'The bigger problem the libraries solved'])('should leave out "%s", which no source holds or the moment now says otherwise', claim => {
     expect(itemHeadedBy('the timeline', 'The page needs to update in place')).not.toHaveTextContent(claim);
   });
 
@@ -356,8 +362,8 @@ describe('the 2009 moment', () => {
     expect(itemHeadedBy('the timeline', 'The standard needs to move again')).not.toHaveTextContent(claim);
   });
 
-  test.each(['ECMAScript Harmony', 'The TC39 Process', 'ActionScript', 'Tamarin', 'Adobe Flash Player'])('should shelve %s in the research', work => {
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: work, hidden: true})).toBeInTheDocument();
+  test.each([['ECMAScript Harmony', 'Brendan Eich on es-discuss, 13 August 2008, via the Internet Archive'], ['The TC39 Process', 'TC39, Ecma International'], ['ActionScript', 'Wikipedia'], ['Tamarin', 'Wikipedia'], ['Adobe Flash Player', 'Wikipedia']])('should shelve %s, %s', (work, provenance) => {
+    expect(shelvedAs(work)).toHaveTextContent(provenance);
   });
 });
 
