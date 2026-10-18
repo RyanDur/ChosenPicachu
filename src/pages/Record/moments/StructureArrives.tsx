@@ -29,7 +29,7 @@ export const StructureArrives: FC = () =>
       accessed as hypertext”</a>; then editing, at which point{' '}
     <a className="signpost" href={proposal}>“authorship becomes universal”</a>. It gives the software away{' '}
     <a className="signpost" href={proposal}>“free of charge to anyone”</a>, and lists what it will not do, among it{' '}
-    <a className="signpost" href={proposal}>“research into fancy multimedia facilities such as sound and video”</a>.</p>
+    <a className="signpost" href={proposal}>“research into fancy multimedia facilities such as sound and video”</a>. Neither this proposal nor the 1989 one mentions a language running in the page.</p>
     <p className="paragraph muted-ink hyphenated">Links inside a document were already for sale; the proposal budgets
       licences for Guide and KMS, two commercial hypertext systems. The new thing fits in one line:{' '}
     <a className="signpost" href={proposal}>“Nodes do not need to be on the same machine: links may point across
