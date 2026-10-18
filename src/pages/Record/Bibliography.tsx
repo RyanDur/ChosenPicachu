@@ -296,6 +296,22 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
+            <a className="signpost" href="https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html"><cite>ECMAScript Harmony</cite></a>
+            <span className="provenance caption">Brendan Eich on es-discuss, 13 August 2008, via the Internet Archive</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/ActionScript"><cite>ActionScript</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Tamarin_(software)"><cite>Tamarin</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Adobe_Flash_Player"><cite>Adobe Flash Player</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS"><cite>AngularJS</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>

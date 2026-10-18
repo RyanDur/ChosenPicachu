@@ -334,6 +334,30 @@ describe('the 2005 moment', () => {
   });
 });
 
+describe('the 2009 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Ten years after the third edition, the language’s standard moved. The fourth edition, ambitious with classes and types, was never published as a standard; its design had already shipped as ActionScript 3, and the committee set it aside in 2008. The fifth, published on 3 December 2009, was the smaller step: strict mode, JSON, accessor properties. From 2015 an edition has come every year.',
+    'Ecma never published a fourth edition. Its own page records that the number “was reserved but not used in the Ecma publication process”, and that “Therefore “ECMA-262 Edition 4” as an Ecma International publication does not exist”. Eich told the es-discuss list in August 2008 what had happened. The committee “has been split for over a year, with some members favoring ES4, a major fourth edition to ECMA-262, and others advocating ES3.1 based on the existing ECMA-262 Edition 3 (ES3) specification”. At a meeting in Oslo at the end of July the split ended, in a result he labelled Harmony. The committee would “Focus work on ES3.1 with full collaboration of all parties, and target two interoperable implementations by early next year”. The step after it would “be more modest than ES4 in both semantic and syntactic innovation”. And “Some ES4 proposals have been deemed unsound for the Web, and are off the table for good: packages, namespaces and early binding.” His reason is one sentence: “A split committee is good for no one and nothing, least of all any language specs that might come out of it.”',
+    'The fourth edition did not vanish; it shipped under another name. Adobe’s ActionScript 3, released in June 2006 with Flash Player 9, was a “Completely conforming implementation of the ECMAScript fourth edition draft specification”, and on 7 November 2006 Adobe gave its ActionScript engine to Mozilla as Tamarin, meant to carry the fourth edition into the browsers. Eich says it in the same announcement: the ideas “going back to the first ES4 proposals in 1999, implemented variously in JScript.NET and ActionScript, won’t make it into any ES standard”. For a decade that language ran in most browsers through the Flash plugin; Eich’s own tally in 2008 was that “JS beat Java on the client, rivaled only by Flash, which supports an offspring of JS, ActionScript.” The run ended with the phone. In April 2010 Steve Jobs published an open letter explaining why Apple would not support Flash on the iPhone, iPod Touch and iPad, and Adobe discontinued Flash Player on 31 December 2020. Some of the fourth edition’s ideas came back anyway; of its features, Wikipedia records, “some were incorporated into the sixth edition”.',
+    'The fifth edition’s own introduction records that the fourth-edition work “was not completed and not published as the fourth edition of ECMAScript”, though “it informs continuing evolution of the language”. ES3.1 was “later renamed to ECMAScript, 5th Edition”, and “On 3 December 2009, ECMA-262 5th edition was published”. It “codifies de facto interpretations of the language specification that have become common among browser implementations”, and adds “accessor properties, reflective creation and inspection of objects”, “support for the JSON object encoding format” and “a strict mode that provides enhanced error checking and program security”. An accessor property is a property that runs a function when read or written. JSON is a format for sending objects as text. Strict mode is a stricter dialect a script opts into with one line.',
+    'The sixth edition, in June 2015, carried in what Harmony had kept: classes and modules, defined “in the same terms as ECMAScript 5 strict mode”, with iterators and generators, arrow functions, let and const, promises and template literals. Since then an edition has shipped every year, the seventeenth in 2026, and the way in is the rule from Oslo made permanent. TC39’s process admits a feature to the standard at its last stage only with “Two compatible implementations which pass the Test262 acceptance tests”, and gathers the year’s finished features into “a yearly standard publication”. A standard that had stalled for ten years over one large change now ships what two engines have already proved, every year.'
+  ])('should tell the split over the fourth edition from Eich\'s own announcement, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The standard needs to move again')).toHaveTextContent(told);
+  });
+
+  test.each(['political differences concerning language complexity', 'The fourth edition does not exist.', 'was abandoned in 2008'])('should leave out "%s", which Eich\'s own account replaces', claim => {
+    expect(itemHeadedBy('the timeline', 'The standard needs to move again')).not.toHaveTextContent(claim);
+  });
+
+  test.each(['ECMAScript Harmony', 'The TC39 Process', 'ActionScript', 'Tamarin', 'Adobe Flash Player'])('should shelve %s in the research', work => {
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: work, hidden: true})).toBeInTheDocument();
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -480,6 +504,10 @@ describe('the record', () => {
     ['The page needs to update in place', 'https://jquery.com/', '“an easy-to-use API that works across a multitude of browsers”'],
     ['The page needs to update in place', 'https://en.wikipedia.org/wiki/XMLHttpRequest', 'Microsoft.XMLHTTP'],
     ['The page needs to update in place', 'https://en.wikipedia.org/wiki/Google_Maps', 'ten days before the essay'],
+    ['The standard needs to move again', 'https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html', '“A split committee is good for no one and nothing, least of all any language specs that might come out of it.”'],
+    ['The standard needs to move again', 'https://tc39.es/process-document/', '“Two compatible implementations which pass the Test262 acceptance tests”'],
+    ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ActionScript', '“Completely conforming implementation of the ECMAScript fourth edition draft specification”'],
+    ['The standard needs to move again', 'https://ecma-international.org/publications-and-standards/standards/ecma-262/', '“Therefore “ECMA-262 Edition 4” as an Ecma International publication does not exist”'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
