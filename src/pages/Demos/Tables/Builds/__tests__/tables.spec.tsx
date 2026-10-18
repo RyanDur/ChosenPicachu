@@ -150,17 +150,6 @@ describe('columns by hand', () => {
     expect(cellsOf('last 5 minutes')).toEqual(['last 5 minutes', '0', '9', '0', '0.00', '—', '—']);
   });
 
-  test('a lazy column waits for the drop', () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-
-    dropColumn();
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-
   test('a hiding column is carried, every cell of it', () => {
     seat(EagerTable, {origin: 'hide', motion: 'static'});
 
@@ -277,17 +266,6 @@ describe('columns by hand', () => {
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('a lazy column carried home lands nowhere', () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOver('trades');
-    dropColumn();
-
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-  });
-
   test('the switch waits until the column is a quarter into an even neighbor', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -385,17 +363,6 @@ describe('columns by hand', () => {
     expect(announced()).toEqual([]);
   });
 
-  test('the lazy table says a dropped column once, where it landed', () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOver('sells');
-    dropColumn();
-
-    expect(announced()).toEqual(['trades moved to column 4 of 7']);
-  });
-
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -468,17 +435,6 @@ describe('rows by hand', () => {
 
     expect(carried()).toEqual([]);
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-  });
-
-  test('a lazy row waits for the drop', () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    liftRow('this minute');
-    carryRowOver('last 15 minutes');
-    expect(windowNames()).toEqual(windows);
-
-    dropRow();
-    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
 
   test('a hiding row is carried, every cell of it', () => {
@@ -1183,22 +1139,6 @@ describe('animated moves', () => {
     liftColumn('sells');
     expect(header('trades')).not.toHaveClass('settling');
     expect(header('buys')).not.toHaveClass('shoved-start');
-  });
-
-  test('a lazy column settles on the slot it takes at the drop, shoving everything it passed', () => {
-    seat(LazyTable, {origin: 'keep', motion: 'animated'});
-
-    liftColumn('trades');
-    carryColumnOver('sells');
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    expect(header('buys').className).not.toMatch(/shoved/);
-
-    dropColumn();
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('buys')).toHaveClass('shoved-start');
-    expect(header('sells')).toHaveClass('shoved-start');
-    expect(header('volume').className).not.toMatch(/shoved/);
   });
 
   test('a static release leaves the same marks as an animated one', () => {

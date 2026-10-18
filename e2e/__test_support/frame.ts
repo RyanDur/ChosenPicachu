@@ -18,6 +18,9 @@ export const stages: readonly Stage[] = [
   {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => tablesCard(page).vanillaFrame}
 ];
 
+export const stagesWith = (dials: string): readonly Stage[] =>
+  stages.map(stage => ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`}));
+
 type Box = {x: number; y: number; width: number; height: number};
 
 const boxOf = async (locator: Locator): Promise<Box> => {
@@ -39,6 +42,34 @@ const carry = async (page: Page, from: Box, to: Point): Promise<void> => {
   for (let step = 1; step <= 16; step++) {
     await page.mouse.move(start.x + (to.x - start.x) * (step / 16), start.y + (to.y - start.y) * (step / 16));
   }
+};
+
+export type Hold = {
+  readonly carryTo: (to: Locator) => Promise<void>;
+  readonly carryHome: () => Promise<void>;
+  readonly drop: () => Promise<void>;
+};
+
+const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> => {
+  await grip.scrollIntoViewIfNeeded();
+  const home = centreOf(await boxOf(grip));
+  let at = home;
+  const moveTo = async (to: Point): Promise<void> => {
+    for (let step = 1; step <= 16; step++) {
+      await page.mouse.move(at.x + (to.x - at.x) * (step / 16), at.y + (to.y - at.y) * (step / 16));
+    }
+    at = to;
+  };
+  await page.mouse.move(home.x, home.y);
+  await page.mouse.down();
+  return {
+    carryTo: async to => {
+      const box = await boxOf(to);
+      await moveTo(along === 'x' ? {x: box.x + box.width * 0.8, y: home.y} : {x: home.x, y: box.y + box.height * 0.8});
+    },
+    carryHome: () => moveTo(home),
+    drop: () => page.mouse.up()
+  };
 };
 
 const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void> => {
@@ -123,6 +154,9 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     rowOrder: (): Promise<string[]> =>
       table.getByRole('rowheader').evaluateAll(cells =>
         cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
+    holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x'),
+    holdRow: (row: number): Promise<Hold> => held(page, table.getByRole('button', {name: `move row ${row}`}), 'y'),
+    row: (name: RegExp): Locator => table.getByRole('row', {name}),
     dragColumnPast: async (column: string, past: string): Promise<void> => {
       await columnHeader(column).scrollIntoViewIfNeeded();
       const from = await boxOf(columnHeader(column));
