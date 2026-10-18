@@ -139,8 +139,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
             that is this rule’s business: your site reset already zeroes <code>menu</code>, and a page’s own
-            styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however specific the
-            browser’s selectors are, because the cascade ranks who wrote a rule before how specific it is. The list markers
+            styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the
+            browser’s rules are aimed, because the <Mdn path="Web/CSS/Cascade">cascade</Mdn>, the order CSS uses to choose
+            between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers
             are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.
             One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
             browser’s default stylesheet centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
