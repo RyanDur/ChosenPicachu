@@ -53,7 +53,7 @@ export const ArtGalleryPage: FC = () => {
   }, [movingTo, updateSearchParams]);
 
   return <>
-    {notEmpty(open) && <Tabs label="museums" values={open}/>}
+    {notEmpty(open) && <Tabs label="museums" current={tab} values={open}/>}
     {{
       wall: <ArtGallery/>,
       noMuseumOpen: <StandIn src={missingWall} alt="no museum is open"/>,

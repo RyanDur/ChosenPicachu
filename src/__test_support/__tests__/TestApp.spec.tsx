@@ -1,14 +1,21 @@
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Route} from 'react-router';
+import * as schema from 'schemawax';
 import {Tabs} from '@components/Tabs';
+import {useSearchParamsObject} from '@components/search-params';
 import {TestApp} from '../TestApp';
 
 const doors = [{display: 'First', param: 'first'}, {display: 'Second', param: 'second'}];
 
+const Doors = () => {
+  const {tab} = useSearchParamsObject({tab: schema.string});
+  return <Tabs label="doors" current={tab} values={doors}/>;
+};
+
 describe('the test app', () => {
   test('the address probe never runs ahead of the screen', async () => {
-    render(<TestApp at="/somewhere"><Tabs label="doors" values={doors}/></TestApp>);
+    render(<TestApp at="/somewhere"><Doors/></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'Second'}));
 
@@ -17,7 +24,7 @@ describe('the test app', () => {
   });
 
   test('the page reads the address the app is at, and the address follows each navigation', async () => {
-    render(<TestApp at="/somewhere#here"><Tabs label="doors" values={doors}/></TestApp>);
+    render(<TestApp at="/somewhere#here"><Doors/></TestApp>);
 
     expect(window.location).toBeAt('/somewhere#here');
 

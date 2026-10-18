@@ -10,29 +10,28 @@ describe('Tabs', () => {
   const tab2 = {display: 'Tab 2', param: 'tab2'};
   const tab3 = {display: 'Tab 3', param: 'tab3'};
 
-  it('the default tab is current without being written into the address', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+  it('the tab it is given is current, and the address is left alone', () => {
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('tab=');
   });
 
   it('the tab strip is a list, one item per tab', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     const items = within(screen.getByRole('navigation', {name: 'tabs under test'})).getAllByRole('listitem');
     expect(items.map(item => within(item).getByRole('link').textContent)).toEqual([tab1.display, tab2.display, tab3.display]);
   });
 
-  it('a tab in the address wins over the default', () => {
-    render(<TestApp at={`${path}?tab=${tab2.param}`}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+  it('marks no tab when it is given none', () => {
+    render(<TestApp at={path}><Tabs label="tabs under test" values={[tab1, tab2, tab3]}/></TestApp>);
 
-    expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
-    expect(screen.getByRole('link', {name: tab1.display})).not.toHaveAttribute('aria-current');
+    expect(screen.queryByRole('link', {current: 'page'})).not.toBeInTheDocument();
   });
 
   it('should update the url', async () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     await userEvent.click(screen.getByText(tab1.display));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
@@ -44,14 +43,10 @@ describe('Tabs', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab3.param}`);
   });
 
-  it('the tab in the url is the one marked current', async () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
-
-    expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
-
-    await userEvent.click(screen.getByText(tab2.display));
+  it('marks only the tab it is given, whatever the address says', () => {
+    render(<TestApp at={`${path}?tab=${tab3.param}`}><Tabs label="tabs under test" current={tab2.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
-    expect(screen.getByRole('link', {name: tab1.display})).not.toHaveAttribute('aria-current');
+    expect(screen.getAllByRole('link', {current: 'page'})).toHaveLength(1);
   });
 });

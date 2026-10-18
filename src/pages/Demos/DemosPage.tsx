@@ -67,7 +67,7 @@ export const DemosPage = () => {
       page. Start with the accordions if HTML, CSS and
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
-    <Tabs label="demos" defaultTab={DemoTopics.accordions} values={topics}/>
+    <Tabs label="demos" current={tab} values={topics}/>
     <section id="about" aria-label={topicNames[tab]} className="about">
       {({
         [DemoTopics.accordions]:

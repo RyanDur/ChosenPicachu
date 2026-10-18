@@ -1,8 +1,7 @@
 import {FC} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
 import {Tabs} from '@components/Tabs';
 import {Concern, concernId} from '@pages/Record/moments/concerns';
-import {concernParam, concernTabs} from './types';
+import {concernTabs, useConcernShown} from './types';
 import {StructurePractice} from './StructurePractice';
 import {PresentationPractice} from './PresentationPractice';
 import {DynamicInteractionPractice} from './DynamicInteractionPractice';
@@ -15,15 +14,15 @@ const practices: Record<Concern, FC> = {
 };
 
 export const DevelopmentPage: FC = () => {
-  const {tab} = useSearchParamsObject({tab: concernParam}, {tab: 'Structure'});
-  const Practice = practices[tab];
+  const concern = useConcernShown();
+  const Practice = practices[concern];
 
   return <>
     <p className="development-opening paragraph">
       Each tab below is one of the three concerns and says how I organize it: the rules I keep, the moments in the
       record that taught them, and the test that tells me a rule holds. The demos show the rules at work.
     </p>
-    <Tabs label="development" defaultTab={concernId('Structure')} values={concernTabs}/>
+    <Tabs label="development" current={concernId(concern)} values={concernTabs}/>
     <section className="practice" aria-labelledby="practice-title">
       <h2 className="practice-title sub-title" id="practice-title">how I organize it</h2>
       <Practice/>

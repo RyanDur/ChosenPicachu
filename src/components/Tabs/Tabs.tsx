@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {Link, useLocation} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
-import * as schema from 'schemawax';
 import './Tabs.css';
 
 type Tab = {
@@ -10,16 +9,15 @@ type Tab = {
 };
 
 type Props = {
-  defaultTab?: string;
+  current?: string;
   values: Tab[];
   label: string;
   id?: string;
 };
 
-export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
+export const Tabs: FC<Props> = ({values, id, label, current}) => {
   const {pathname} = useLocation();
-  const {tab, createSearchParams} = useSearchParamsObject({tab: schema.string});
-  const current = values.some(({param}) => param === tab) ? tab : defaultTab;
+  const {createSearchParams} = useSearchParamsObject({});
 
   return <nav aria-label={label} id={id} className="tabs backdrop backdrop-above contained">
     <ul className="tab-list">{values.map(({param, display}) =>

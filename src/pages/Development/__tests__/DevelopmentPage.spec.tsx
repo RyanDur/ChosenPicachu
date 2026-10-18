@@ -52,11 +52,10 @@ describe('the development page', () => {
   });
 
   test.each([
-    ['Presentation', 'Structure', Paths.development],
-    ['Dynamic Interaction', 'Presentation', `${Paths.development}?tab=presentation`],
-    ['Structure', 'Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`]
-  ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at) => {
-    const [, , firstRule] = practices.find(([named]) => named === concern) ?? practices[0];
+    ['Presentation', 'Structure', Paths.development, /^I write CSS in two kinds of sheet/],
+    ['Dynamic Interaction', 'Presentation', `${Paths.development}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
+    ['Structure', 'Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, /^I start from what the content is and pick the element for it/]
+  ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at, firstRule) => {
     render(<TestApp at={at}/>);
 
     await userEvent.click(within(tabs()).getByRole('link', {name: concern}));
