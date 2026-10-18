@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
 import {HowIOrganizeIt} from './HowIOrganizeIt';
-import {DoorSection} from './DoorSection';
+import {ConcernSection} from './ConcernSection';
 import {MomentLink} from './MomentLink';
 
 export const Structure: FC = () =>
-  <DoorSection door="Structure">
+  <ConcernSection concern="Structure">
     <Quotation voice="paragraph" source={<a className="signpost" href="https://html.com/html5/">html.com, on HTML</a>}>
       It is not a programming language, but rather a language that identifies the meaning,
       purpose, and structure of text within a document.
@@ -56,4 +56,4 @@ export const Structure: FC = () =>
         read. If the meaning only appears once the CSS loads, it is in the wrong language.
         That is the <MomentLink to="documentComesBack">2016 moment</MomentLink>’s test: the document first, the program only where the page needs one.</p>
     </HowIOrganizeIt>
-  </DoorSection>;
+  </ConcernSection>;

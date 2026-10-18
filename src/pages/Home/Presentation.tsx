@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
 import {HowIOrganizeIt} from './HowIOrganizeIt';
-import {DoorSection} from './DoorSection';
+import {ConcernSection} from './ConcernSection';
 import {MomentLink} from './MomentLink';
 
 export const Presentation: FC = () =>
-  <DoorSection door="Presentation">
+  <ConcernSection concern="Presentation">
     <Quotation voice="paragraph" source={<a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">the W3C, on HTML and CSS</a>}>
       The separation of HTML from CSS makes it easier to maintain sites, share style
       sheets across pages, and tailor pages to different environments.
@@ -57,4 +57,4 @@ export const Presentation: FC = () =>
         element is and what it needs, in the names the design uses, the sheet has become a pile of overrides.
         This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list.</p>
     </HowIOrganizeIt>
-  </DoorSection>;
+  </ConcernSection>;

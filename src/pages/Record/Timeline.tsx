@@ -22,8 +22,8 @@ import {EcmaScript} from './moments/EcmaScript';
 import {EsFive} from './moments/EsFive';
 import {Frameworks} from './moments/Frameworks';
 import {inOrder, MomentKey, moments, YearOfTwo, yearsOfTwo} from './moments/moments';
-import {doorsOf} from './moments/doors';
-import {DoorsInTheYear} from './moments/Moment';
+import {concernsOf} from './moments/concerns';
+import {ConcernsInTheYear} from './moments/Moment';
 import {spelledOut} from './moments/spelled-out';
 
 const stories: Record<MomentKey, FC> = {
@@ -76,9 +76,9 @@ const Year: FC<{year: string; of: readonly MomentKey[]; told: YearOfTwo}> = ({ye
       <summary className="prompt caption">the fuller story</summary>
       <ol className="moments-of-a-year timeline" aria-label={year}>
         {of.map(key =>
-          <DoorsInTheYear.Provider key={key} value={some(doorsOf(key))}>
+          <ConcernsInTheYear.Provider key={key} value={some(concernsOf(key))}>
             <Story of={key}/>
-          </DoorsInTheYear.Provider>)}
+          </ConcernsInTheYear.Provider>)}
       </ol>
     </details>
   </li>;

@@ -3,8 +3,8 @@ import {TestApp} from '@__test_support/TestApp';
 import {FromTheRecord} from '@pages/Home/FromTheRecord';
 import {HowIOrganizeIt} from '@pages/Home/HowIOrganizeIt';
 
-describe('a door’s part outside a door section', () => {
-  test('should draw nothing, so it passes as no door at all', async () => {
+describe('a concern’s part outside a concern section', () => {
+  test('should draw nothing, so it passes as no concern at all', async () => {
     render(<TestApp>
       <FromTheRecord/>
       <HowIOrganizeIt><p>The skeleton comes first.</p></HowIOrganizeIt>

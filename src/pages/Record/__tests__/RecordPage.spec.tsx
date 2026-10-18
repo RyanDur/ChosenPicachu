@@ -626,12 +626,12 @@ describe('the record', () => {
 
   test.each([
     ['1995', 'Pages need to respond, and the browsers’ tags need a standard',
-      'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
+      'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
       [['1995-05', 'May', 'Dynamic Interaction', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
     ['1996', 'The pages need to look the same, and the style sheet needs a standard',
-      'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
+      'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
       [['1996-08', 'August', 'Structure, Presentation', 'The pages need to look the same'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
-  ])('should tell %s as one entry, and open its fuller story on each moment, dated by its month and captioned by its door', async (year, title, tells, doors) => {
+  ])('should tell %s as one entry, and open its fuller story on each moment, dated by its month and captioned by its concern', async (year, title, tells, concerns) => {
     const theYear = itemHeadedBy('the timeline', title);
 
     expect(theYear).toHaveTextContent(tells);
@@ -642,7 +642,7 @@ describe('the record', () => {
       within(moment).getByRole('time').textContent,
       within(moment).getByText(/^(Structure|Presentation|Dynamic Interaction)/).textContent,
       within(moment).getByRole('heading', {level: 4}).textContent
-    ])).toEqual(doors);
+    ])).toEqual(concerns);
   });
 
   test('every beat opens into its fuller story, closed until asked', () => {

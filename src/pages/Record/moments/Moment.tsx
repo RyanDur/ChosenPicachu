@@ -2,12 +2,12 @@ import {createContext, FC, PropsWithChildren, ReactNode, useContext} from 'react
 import {Maybe, nothing} from '@ryandur/sand';
 import {MomentHeading, monthOf, writtenAs} from './moments';
 
-const noDoors: Maybe<string> = nothing();
+const noConcerns: Maybe<string> = nothing();
 
-export const DoorsInTheYear = createContext<Maybe<string>>(noDoors);
+export const ConcernsInTheYear = createContext<Maybe<string>>(noConcerns);
 
 export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>> = ({of: {date, title, id}, tells, children}) => {
-  const doors = useContext(DoorsInTheYear);
+  const concerns = useContext(ConcernsInTheYear);
   return date.kind === 'year'
     ? <li className="moment trim-rail-along" id={id} tabIndex={-1}>
       <time dateTime={date.year} className="year caption bold">{date.year}</time>
@@ -22,7 +22,7 @@ export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>
       <time dateTime={writtenAs(date)} className="month caption bold">{monthOf(date)}</time>
       <hgroup className="beat-heading">
         <h4 className="beat-title sub-title void-dot-before">{title}</h4>
-        {doors.either(told => <p className="doors caption">{told}</p>, () => null)}
+        {concerns.either(told => <p className="concerns caption">{told}</p>, () => null)}
       </hgroup>
       <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
       {children}

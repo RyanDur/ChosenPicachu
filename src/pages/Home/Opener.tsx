@@ -23,7 +23,7 @@ export const Opener: FC = () =>
       which language the job belonged to, and letting that language do it.
     </p>
     <p className="thesis paragraph">
-      Each language has a door below: what it is for, how I organize it, and the moments in the
+      Each language is one concern below: what it is for, how I organize it, and the moments in the
       record where the web learned it. The record tells how the web got the three languages, in{' '}
       {spelledOut(inOrder.length)} moments and a closing essay. The demos are where I work the
       practice: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own

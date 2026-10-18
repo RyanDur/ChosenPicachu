@@ -13,7 +13,7 @@
     text-wrap: pretty;
   }
 
-  .door {
+  .concern {
     align-content: start;
     display: grid;
     gap: var(--base-x-1_5);
@@ -32,18 +32,18 @@
         grid-column: 1 / -1;
       }
 
-      .door-evidence {
+      .concern-evidence {
         grid-column: 1;
       }
 
-      .door-practice {
+      .concern-practice {
         grid-column: 2;
       }
     }
   }
 
-  .door-evidence,
-  .door-practice {
+  .concern-evidence,
+  .concern-practice {
     align-content: start;
     display: grid;
     gap: var(--base-x-1_5);
@@ -65,7 +65,7 @@
     justify-self: end;
   }
 
-  .door-title {
+  .concern-title {
     margin: 0;
     text-wrap: balance;
   }
