@@ -185,11 +185,11 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
             width from its share. The header’s share is written as a custom property, <code>--share</code>, one of
             the {whatACustomPropertyIs}.</Says>
-          <Says>In <code>Aggregations.css</code>, beside the opening widths, three declarations in the table’s rule size it.{' '}
-            <code>width: 100%</code> fills its container.
+          <Says>In <code>Aggregations.css</code>, beside the opening widths, three declarations in the table’s rule size it: a
+            width, a minimum width and a table layout. <code>width: 100%</code> fills its container.
             Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
             has.</Says>
-          <Says>A rem is the text size of the root element, html, which this site sets to 62.5% of the browser’s default,
+          <Says>The minimum width is in rem. A rem is the text size of the root element, html, which this site sets to 62.5% of the browser’s default,
             10px when that default is the usual 16px. So <code>min-width: 75.3rem</code> is 753px, and that minimum keeps the
             width on a narrower page, so the container scrolls sideways.</Says>
           <Says>When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a
