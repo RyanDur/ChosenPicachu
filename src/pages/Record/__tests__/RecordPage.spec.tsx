@@ -401,12 +401,12 @@ describe('the 2011 moment', () => {
     'CSS 2.1, the correction of 1998’s CSS 2, became a Recommendation on 7 June 2011, with more than nine thousand tests behind it, after what the W3C called “many years for implementations and the specification to converge”. From then on CSS has grown by modules, each advancing at its own pace.',
     'W3C’s announcement of 7 June 2011 is headed “Cascading Style Sheets Standard Boasts Unprecedented Interoperability”. Interoperability means the same sheet produces the same page in different browsers, the thing CSS1 could not deliver in 1996, and the release says why the wait: “it took many years for implementations and the specification to converge”. It gives the number: “More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.” Daniel Glazman, co-chair of the working group, answers the question he says people had asked, “Why is CSS 2.1 taking so long?” His answer: “CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.” Thirteen years between CSS 2 and its finished revision.',
     'The same day W3C published CSS Color Module Level 3 as a Recommendation, and by June 2012 three more modules had followed: Selectors Level 3 and Namespaces on 29 September 2011, and Media Queries on 19 June 2012. The release says W3C “expects future additions to CSS to be organized as independent modules, allowing smaller, more focused feature sets to progress and stabilize at their own pace”. Peter Linss, the other co-chair, says the group “can focus its efforts on rapidly advancing CSS with new modules”. The reasoning had been set out in the working group’s 2001 roadmap: “Rather than attempting to shove dozens of updates into a single monolithic specification, it will be much easier and more efficient to be able to update individual pieces of the specification”. For small devices, it adds, “it may be impractical to support all of CSS”. A module is one piece of the language with its own specification and its own tests.',
-    'This is the shape CSS still has: modules at levels, each finished the way 2.1 was finished, against its tests. CSS 1 was declared finished while no browser rendered all of it; since 2.1, a module is finished when its tests pass across browsers.'
+    'This is the shape CSS has had since: modules at levels, each progressing, in the release’s words, “at their own pace”. CSS 1 was declared finished while no browser rendered all of it. CSS 2.1 was declared finished with more than nine thousand tests behind it.'
   ])('should give the working group\'s own account of why CSS 2.1 took thirteen years and name the modules that followed, words and links together: %s', told => {
     expect(itemHeadedBy('the timeline', 'The specification needs its tests')).toHaveTextContent(told);
   });
 
-  test.each(['within a year', 'in two independent browsers', 'when the browsers render it alike'])('should leave out "%s", which the dates and the release do not bear out', claim => {
+  test.each(['within a year', 'in two independent browsers', 'when the browsers render it alike', 'when its tests pass across browsers'])('should leave out "%s", which the dates and the release do not bear out', claim => {
     expect(itemHeadedBy('the timeline', 'The specification needs its tests')).not.toHaveTextContent(claim);
   });
 
@@ -420,9 +420,15 @@ describe('the 2013 moment', () => {
     render(<TestApp at={Paths.record}/>);
   });
 
+  test('should send the reader to the 2010 moment for the single-page application\'s shape', async () => {
+    await userEvent.click(within(itemHeadedBy('the timeline', 'Someone needs components')).getByRole('link', {name: 'the 2010 moment', hidden: true}));
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The application needs a frame')).toHaveFocus());
+  });
+
   test.each([
     'Interfaces had grown into applications, and their builders needed components: self-contained pieces that carry structure, style, and behavior together, and styles that stay where they are put. The platform did not have them yet, so JavaScript built them first.',
-    'Script built the components first, and React said what a component was. Pete Hunt’s post of June 2013, “Why did we build React?”, opens with what it is not, “React isn’t an MVC framework”, and then what it is: “React is a library for building composable user interfaces. It encourages the creation of reusable UI components which present data that changes over time.” A component’s render returns “neither a string nor a DOM node — it’s a lightweight description of what the DOM should look like”, and React redraws the page from it. Components arrived in script, and the single-page application moved the whole document there with them: the server sent an empty body and a bundle, and until the script ran there was no page. The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
+    'Script built the components first, and React said what a component was. Pete Hunt’s post of June 2013, “Why did we build React?”, opens with what it is not, “React isn’t an MVC framework”, and then what it is: “React is a library for building composable user interfaces. It encourages the creation of reusable UI components which present data that changes over time.” A component’s render returns “neither a string nor a DOM node — it’s a lightweight description of what the DOM should look like”, and React redraws the page from it. Components arrived in script, and the single-page application, the shape of the 2010 moment, moved the whole document there with them: the server sent an empty body and a bundle, and until the script ran there was no page. The application now emitted the document.',
     'Style followed structure into script as CSS-in-JS. The term’s start is Christopher Chedeau’s talk at NationJS in November 2014, cataloguing CSS-at-scale problems at Facebook; his own summary is that it “attempts to show that CSS has fundamental flaws and writing styling in JS solves most of the problem without even trying”. The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by “translating CSS rules into snippets of Javascript”; this time the industry’s weight was behind it.',
     'Building the page in script had a price: blank first paints, fragile crawls, a document that cannot be read without executing a program. And the document’s own habits had to be rebuilt by hand. Links became components, the back button became state, scroll restoration and URL fragments became libraries, and the frameworks grew routers and scroll managers to re-create behaviors the browser had shipped for twenty years.',
     'The platform has been answering the need ever since, absorbing what script proved. Custom properties took over the theme variables. Shadow DOM gave styles a boundary, since “the styles defined in the shadow DOM tree are scoped to that tree, so just as page styles don’t affect elements in the shadow DOM, shadow DOM styles don’t affect elements in the rest of the page”. Custom elements gave components a home in markup itself. And @scope, which “works across the latest devices and browser versions” since March 2026, is the newest arrival in the same direction.'
@@ -430,7 +436,7 @@ describe('the 2013 moment', () => {
     expect(itemHeadedBy('the timeline', 'Someone needs components')).toHaveTextContent(told);
   });
 
-  test.each(['rendered style by translating it into script', 'Christopher Chedeau’s 2014 talk', 'JavaScript answered.'])('should leave out "%s", which the sources\' own words replace', claim => {
+  test.each(['rendered style by translating it into script', 'Christopher Chedeau’s 2014 talk', 'JavaScript answered.', 'inverted the premise'])('should leave out "%s", which the sources\' own words replace', claim => {
     expect(itemHeadedBy('the timeline', 'Someone needs components')).not.toHaveTextContent(claim);
   });
 
@@ -720,11 +726,12 @@ describe('the record', () => {
     });
   });
 
-  test('should keep every source a fuller story links to on the research shelf', () => {
+  test('should keep every source a fuller story links to on the research shelf, links between moments aside', () => {
     const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
       .map(work => work.getAttribute('href'));
     const linked = within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
-      .flatMap(story => within(story).queryAllByRole('link', {hidden: true}).map(link => link.getAttribute('href')));
+      .flatMap(story => within(story).queryAllByRole('link', {hidden: true}).map(link => link.getAttribute('href') ?? ''))
+      .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
 
     expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
   });
