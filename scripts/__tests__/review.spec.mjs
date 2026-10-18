@@ -78,9 +78,9 @@ describe('the review prompt', () => {
     expect(prompt).not.toContain('structure-qa');
   });
 
-  test('a review of the changes sends all six QAs', () => {
+  test('a review of the changes sends all seven QAs', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa and tutorials-qa.');
+    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa, tutorials-qa and record-qa.');
   });
 
   test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {
