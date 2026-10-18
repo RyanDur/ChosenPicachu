@@ -1,11 +1,14 @@
-import {mkdtempSync, readFileSync} from 'node:fs';
+import {existsSync, mkdtempSync, readFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {spawnSync} from 'node:child_process';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {promptFor} from '../review/prompt.mjs';
+import {promptFor, rubric} from '../review/prompt.mjs';
+import {reviewers} from '../review/agents.mjs';
 import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, unplaced, verdictOf} from '../review/report.mjs';
 import {aDelta, aHabit, aPlus, review} from '../review/__test_support/feedback.mjs';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -78,9 +81,20 @@ describe('the review prompt', () => {
     expect(prompt).not.toContain('structure-qa');
   });
 
-  test('a review of the changes sends all seven QAs', () => {
+  test('a review of the changes sends every QA whose scopes include the changes', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('The QAs hold one rubric each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa, tutorials-qa and record-qa.');
+    const sent = reviewers.filter(({scopes}) => scopes.includes('changes')).map(({name}) => `${name}-qa`);
+    expect(sent.length).toBeGreaterThan(1);
+    expect(prompt).toContain(`The QAs hold one rubric each: ${sent.slice(0, -1).join(', ')} and ${sent[sent.length - 1]}.`);
+  });
+
+  test('every file the lead is told to read exists in the tree', () => {
+    rubric.forEach(file => expect(existsSync(join(root, file)), `${file} is named in the lead's prompt`).toBe(true));
+  });
+
+  test('every reviewer AGENTS.md names can answer under its own rubric', () => {
+    const named = feedbackSchema().$defs.rubric['enum'];
+    reviewers.forEach(({name}) => expect(named, `${name} has no rubric value in the schema`).toContain(name.replace('-', ' ')));
   });
 
   test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {

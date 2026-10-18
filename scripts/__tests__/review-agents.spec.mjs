@@ -98,7 +98,7 @@ describe('the review\'s QAs', () => {
     });
   });
 
-  test('the lead carries the values and splits the scope between the six QAs', () => {
+  test('the lead carries the values and splits the scope between every QA', () => {
     const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(lead).toContain('# What every reviewer here holds');
     expect(lead).toContain('scripts/review/tests.md');

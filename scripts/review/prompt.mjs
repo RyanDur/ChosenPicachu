@@ -9,7 +9,7 @@ const beside = file => readFileSync(join(dirname(fileURLToPath(import.meta.url))
 const values = beside('values.md');
 const plain = beside('plain.md');
 
-const rubric = [...reviewers.map(({file}) => file), 'src/pages/Home/TeeUp.tsx'];
+export const rubric = [...reviewers.map(({file}) => file), 'src/pages/Record/TeeUp.tsx'];
 
 const qasIn = scope => reviewers.filter(({scopes}) => scopes.includes(scope)).map(({name}) => `${name}-qa`);
 
