@@ -16,8 +16,8 @@ export const TeeUp: FC<PropsWithChildren> = ({children}) =>
     </p>
     <p className="sub-title">
       <Link className="signpost" to={Paths.demos}>Start where the demos start</Link>, with the accordions, which set
-      the trick we used before beside what the platform gives now. Most of the leverage is in knowing what each element
-      was built for.
+      the trick we used before beside what the platform gives now. Knowing what each element was built for is most of
+      the work.
     </p>
     {children}
   </footer>;
