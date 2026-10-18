@@ -44,6 +44,12 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(description);
   });
 
+  test('should describe the dynamic tab by what it organizes, behaviour', async () => {
+    render(<TestApp at={`${Paths.practice}?tab=dynamic`}/>);
+
+    await waitFor(() => expect(described()).toBe('How I organize behaviour: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action.'));
+  });
+
   test('should name the closed room for what it is when a page breaks', async () => {
     const Broken = () => {
       throw new Error('broken');
