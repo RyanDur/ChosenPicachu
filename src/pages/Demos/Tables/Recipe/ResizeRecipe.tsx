@@ -185,13 +185,15 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
             width from its share. The header’s share is written as a custom property, <code>--share</code>, one of
             the {whatACustomPropertyIs}.</Says>
-          <Says>In <code>Aggregations.css</code>, beside the opening widths, four rules size the table.{' '}
-            <code>width: 100%</code> fills its container. <code>min-width: 75.3rem</code> keeps that width on a narrower page, so the
-            container scrolls sideways. When the pointer is coarse, the platform’s word for a finger on a touchscreen, the
-            minimum is 86rem at every width and the columns keep their wider shares, because each header then carries a fingertip-wide resize handle and sort
-            toggle that need the room. In a browser window 600px wide or less, with a fine pointer, the minimum drops to 64rem.
+          <Says>In <code>Aggregations.css</code>, beside the opening widths, the table takes its size from three rules.{' '}
+            <code>width: 100%</code> fills its container. <code>min-width: 75.3rem</code>, 753px at this site’s 10px root,
+            keeps that width on a narrower page, so the container scrolls sideways.
             Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
             has.</Says>
+          <Says>When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a
+            fingertip-wide resize handle and sort toggle, and they need room. So the minimum is 86rem at every width, and
+            the columns take shares cut for that wider table, which give vwap and change more of it.</Says>
+          <Says>In a browser window 600px wide or less the minimum drops to 64rem, unless the pointer is coarse.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
