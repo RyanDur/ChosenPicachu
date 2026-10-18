@@ -112,7 +112,7 @@
     }
 
     .moments-of-a-year .beat-heading {
-      flex-direction: column-reverse;
+      flex-direction: column;
       align-items: start;
     }
 
