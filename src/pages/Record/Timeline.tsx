@@ -49,12 +49,12 @@ const stories: Record<MomentKey, FC> = {
   documentComesBack: DocumentComesBack
 };
 
-type Entry = {readonly kind: 'moment'; readonly key: MomentKey} | {readonly kind: 'year'; readonly year: string; readonly told: YearOfTwo};
+type Entry = {readonly kind: 'moment'; readonly key: MomentKey} | {readonly kind: 'year'; readonly year: string; readonly of: readonly MomentKey[]; readonly told: YearOfTwo};
 
 const entries = inOrder.reduce<readonly Entry[]>((told, key) => {
   const {year} = moments[key].date;
   return maybe(yearsOfTwo[year]).either(
-    (ofTwo): readonly Entry[] => told.some(entry => entry.kind === 'year' && entry.year === year) ? told : [...told, {kind: 'year', year, told: ofTwo}],
+    (ofTwo): readonly Entry[] => told.some(entry => entry.kind === 'year' && entry.year === year) ? told : [...told, {kind: 'year', year, of: inOrder.filter(other => moments[other].date.year === year), told: ofTwo}],
     (): readonly Entry[] => [...told, {kind: 'moment', key}]);
 }, []);
 
@@ -67,15 +67,15 @@ const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}$
 
 const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
 
-const Year: FC<{year: string; told: YearOfTwo}> = ({year, told: {tells}}) =>
+const Year: FC<{year: string; of: readonly MomentKey[]; told: YearOfTwo}> = ({year, of, told: {tells}}) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
-    <h3 className="beat-title sub-title void-dot-before">{joinedTitle(inOrder.filter(key => moments[key].date.year === year).map(key => moments[key].title))}</h3>
+    <h3 className="beat-title sub-title void-dot-before">{joinedTitle(of.map(key => moments[key].title))}</h3>
     <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
     <details className="fuller-story" name="record">
       <summary className="prompt caption">the fuller story</summary>
       <ol className="moments-of-a-year timeline" aria-label={year}>
-        {inOrder.filter(key => moments[key].date.year === year).map(key =>
+        {of.map(key =>
           <DoorsInTheYear.Provider key={key} value={some(doorsOf(key))}>
             <Story of={key}/>
           </DoorsInTheYear.Provider>)}
@@ -98,7 +98,7 @@ export const Timeline: FC = () =>
     <ol className="timeline" aria-label="the timeline">
       {entries.map(entry => entry.kind === 'moment'
         ? <Story key={entry.key} of={entry.key}/>
-        : <Year key={entry.year} year={entry.year} told={entry.told}/>)}
+        : <Year key={entry.year} year={entry.year} of={entry.of} told={entry.told}/>)}
     </ol>
     <p className="sub-title">
       Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone needs something, the community answers, and the platform learns the answer. The concert below reads the moments together.
