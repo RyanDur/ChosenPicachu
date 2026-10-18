@@ -1,12 +1,8 @@
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {cleanup, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
-import {momentAddress} from '@pages/Record/MomentLink';
-import {site} from '@pages/__test_support/site';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {moments} from '@pages/Record/moments/moments';
-import {fromTheRecord} from '@pages/Record/moments/concerns';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 
@@ -134,19 +130,22 @@ describe('the development page', () => {
   });
 
   test.each([
-    ['Structure', Paths.development, ['html5SaysIt', 'browsersTakePen', 'someoneNeedsComponents', 'browsersTakePen', 'documentComesBack']],
-    ['Presentation', `${Paths.development}?tab=presentation`, ['presentationLeavesHome', 'zenGarden', 'needOutrunsStandards', 'someoneNeedsComponents']],
-    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, ['frameworks', 'pageBecomesApplication', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']]
-  ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
+    ['Structure', Paths.development, ['2014 The rules need writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
+    ['Presentation', `${Paths.development}?tab=presentation`, ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components']],
+    ['Dynamic Interaction', `${Paths.development}?tab=dynamic-interaction`, ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
+  ])('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
+    render(<TestApp at={Paths.home}/>);
+    const listed = within(screen.getByRole('list', {name: `${concern}, from the record`}));
+    const addresses = meant.map(moment => [moment.slice(0, 4), listed.getByRole('link', {name: moment}).getAttribute('href')]);
+    cleanup();
+
     render(<TestApp at={at}/>);
     await screen.findByRole('heading', {name: `Development ${concern}`, level: 1});
-
     const cited = within(practice()).getAllByRole('link')
       .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
       .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]);
 
-    expect(cited).toEqual(meant.map(key => [moments[key].date.year, momentAddress(key)]));
-    meant.forEach(key => expect(fromTheRecord[concern]).toContain(key));
+    expect(cited).toEqual(addresses);
   });
 
   test('should land a moment link on its moment in the record, with focus there', async () => {
@@ -155,16 +154,5 @@ describe('the development page', () => {
     await userEvent.click(within(await screen.findByRole('region', {name: 'how I organize it'})).getAllByRole('link', {name: '2016 moment'})[0]);
 
     await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
-  });
-
-  test('should land a moment link on its moment in the record', async () => {
-    render(<TestApp at={Paths.development}/>);
-    const moment = within(practice()).getByRole('link', {name: '2014 moment'});
-
-    expect(moment).toHaveAttribute('href', momentAddress('html5SaysIt'));
-
-    await userEvent.click(moment);
-
-    expect(await site.pageTitled()).toHaveTextContent('The record');
   });
 });

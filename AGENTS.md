@@ -88,19 +88,19 @@ The pipeline runs the same through `npx --yes @anthropic-ai/claude-code@2.1.281`
 Each reviewer reads its rubric first and whole, reviews one half of the scope, the site or the tests, and runs in the scopes listed. A reviewer of the site reads the tests only for context; the reviewer of the tests reports on the site only that a test is missing.
 
 ### structure
-- rubric: `src/pages/Home/Structure.tsx`
+- rubric: `src/pages/Development/StructurePractice.tsx`
 - reviews: the site
 - scopes: full, changes
 - asks: what things are: the element chosen for the content, the landmarks and their names, the headings, the reading order with the styles off
 
 ### presentation
-- rubric: `src/pages/Home/Presentation.tsx`
+- rubric: `src/pages/Development/PresentationPractice.tsx`
 - reviews: the site
 - scopes: full, changes
 - asks: how things show: structure in the component sheet, needs as shared words, the platform's own states before invented ones, constants in the sheet and only runtime values inline
 
 ### dynamic-interaction
-- rubric: `src/pages/Home/DynamicInteraction.tsx`
+- rubric: `src/pages/Development/DynamicInteractionPractice.tsx`
 - reviews: the site
 - scopes: full, changes
 - asks: how things respond: state that holds only what cannot be derived, events named for what happened, pure transitions, the platform's behaviour before script, a keyboard twin for every gesture, changes that announce themselves
