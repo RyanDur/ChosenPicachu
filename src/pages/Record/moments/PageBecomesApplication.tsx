@@ -2,32 +2,20 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
+const essay = 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php';
+const computerworld = 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
+const prototype = 'http://prototypejs.org/';
+const jquery = 'https://jquery.com/';
+const xmlHttpRequest = 'https://en.wikipedia.org/wiki/XMLHttpRequest';
+const googleMaps = 'https://en.wikipedia.org/wiki/Google_Maps';
+const prototypeArticle = 'https://en.wikipedia.org/wiki/Prototype_JavaScript_Framework';
+
 export const PageBecomesApplication: FC = () =>
   <Moment of={moments.pageBecomesApplication}
-    tells={<>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and pointed at Google’s newest products,
-      most of them betas, as its highest-profile examples. jQuery followed, and then the
-      frameworks came.</>}>
-    <p className="paragraph muted-ink hyphenated">Jesse James Garrett published{' '}
-      <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">the
-        essay</a> on February 18, 2005, insisting that{' '}
-      <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">“Ajax isn’t a technology”</a> but several: standards-based markup
-      and CSS, the DOM for dynamic display, XMLHttpRequest for asynchronous retrieval,{' '}
-      <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">“and JavaScript binding everything together”</a>. Why coin a name at
-      all? He needed, he said,{' '}
-      <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">something shorter to use with clients</a> than the whole acronym
-      soup.</p>
-    <p className="paragraph muted-ink hyphenated">His exhibits were Google Suggest and Google Maps (Maps had launched ten days
-      before the essay), plus Gmail, Orkut, and the Google Groups beta, with Flickr and
-      Amazon’s A9 close behind. He claimed practicality, not invention:{' '}
-    <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">“Neither Adaptive Path nor Google invented Ajax”</a>; the products
-      simply proved the approach worked outside a laboratory. The pattern was older than
-      the name: XMLHTTP had shipped in IE5, and Eich points to hidden-frame applications{' '}
-    <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“even in late 1995”</a> prefiguring the whole style. His summary of
-      JavaScript’s role in the era:{' '}
-    <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“JS was the tap root.”</a></p>
-    <p className="paragraph muted-ink hyphenated">John Resig’s jQuery stripped the repetition out in 2006: events, animation, Ajax calls, and DOM
-      crawling wrapped as one API that hid the differences between the browsers then installed. Then the frameworks came to organize what script was now building:
-      AngularJS in 2010, React in 2013, Vue in 2014. The page stopped being a document you
-      fetched and started being a program you ran.</p>
-    <p className="paragraph muted-ink hyphenated">What the language’s standard did next is the 2009 moment.</p>
+    tells={<>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and pointed at Google’s newest products as its highest-profile examples. Prototype and jQuery smoothed over the differences between the browsers, and then the frameworks came.</>}>
+    <p className="paragraph muted-ink hyphenated">Garrett opens with the gap. Desktop applications <a className="signpost" href={essay}>“have a richness and responsiveness that has seemed out of reach on the Web”</a>. In the classic model <a className="signpost" href={essay}>“Most user actions in the interface trigger an HTTP request back to a web server”</a>, which <a className="signpost" href={essay}>“returns an HTML page to the client”</a>, and at every step <a className="signpost" href={essay}>“the user waits some more”</a>. That model, he writes, was <a className="signpost" href={essay}>“adapted from the Web’s original use as a hypertext medium”</a>, and <a className="signpost" href={essay}>“what makes the Web good for hypertext doesn’t necessarily make it good for software applications”</a>.</p>
+    <p className="paragraph muted-ink hyphenated">He published <a className="signpost" href={essay}>the essay</a> on 18 February 2005, insisting that <a className="signpost" href={essay}>“Ajax isn’t a technology”</a> but several: presentation in XHTML and CSS, display through the DOM, data in XML, <a className="signpost" href={essay}>“asynchronous data retrieval using XMLHttpRequest”</a>, <a className="signpost" href={essay}>“and JavaScript binding everything together”</a>. The mechanism is an engine. Instead of a page, the browser loads <a className="signpost" href={essay}>“an Ajax engine — written in JavaScript and usually tucked away in a hidden frame”</a>. The engine draws the interface and talks to the server on the user’s behalf, so the user <a className="signpost" href={essay}>“is never staring at a blank browser window and an hourglass icon”</a>. Why a name at all? He needed, he said, <a className="signpost" href={essay}>something shorter to use with clients</a> than <a className="signpost" href={essay}>“Asynchronous JavaScript+CSS+DOM+XMLHttpRequest”</a>.</p>
+    <p className="paragraph muted-ink hyphenated">His exhibits were Google Suggest and Google Maps, which Google had announced <a className="signpost" href={googleMaps}>ten days before the essay</a>, with Orkut, Gmail and the Google Groups beta behind them, and Flickr and Amazon’s A9 following. They showed Ajax <a className="signpost" href={essay}>“is not only technically sound, but also practical for real-world applications”</a>. He claimed practicality, not invention: <a className="signpost" href={essay}>“Neither Adaptive Path nor Google invented Ajax”</a>. What was new was <a className="signpost" href={essay}>“the prominent use of these techniques in real-world applications to change the fundamental interaction model of the Web”</a>. The pattern was older than the name. The object behind it had shipped in Internet Explorer 5 in 1999 as an ActiveX object, <a className="signpost" href={xmlHttpRequest}>Microsoft.XMLHTTP</a>, and every browser answered to the name XMLHttpRequest <a className="signpost" href={xmlHttpRequest}>by 2006</a>. Eich points to hidden-frame applications <a className="signpost" href={computerworld}>“even in late 1995”</a> prefiguring the whole style, and sums up JavaScript’s part in the era: <a className="signpost" href={computerworld}>“JS was the tap root.”</a></p>
+    <p className="paragraph muted-ink hyphenated">The bigger problem the libraries solved was the browsers. A company wanted to write a page once and run it in every browser, and the browsers still differed in the objects a script used to reach the page. When people came to JavaScript to program the browser, Eich says, <a className="signpost" href={infoworld}>“they want the same APIs and they don’t get them”</a>. What <a className="signpost" href={infoworld}>“helps make this less painful”</a>, he goes on, <a className="signpost" href={infoworld}>“are these JavaScript libraries, which are pure JavaScript code that makes this higher layer of code that masquerades and makes all the differences go away”</a>. Sam Stephenson’s Prototype came in <a className="signpost" href={prototypeArticle}>February 2005</a>, as the Ajax layer of Ruby on Rails, and calls itself a framework that <a className="signpost" href={prototype}>“smooths over the rough edges of cross-browser development”</a>. John Resig’s jQuery followed in 2006: events, animation, Ajax calls, and DOM crawling wrapped as one API that hid the differences between the browsers then installed, in its own words <a className="signpost" href={jquery}>“an easy-to-use API that works across a multitude of browsers”</a>. Then the frameworks came to organize what script was now building: AngularJS in 2010, React in 2013, Vue in 2014, which is the 2010 moment. The page stopped being a document you fetched and started being a program you ran. What the language’s standard did next is the 2009 moment.</p>
   </Moment>;

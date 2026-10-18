@@ -268,6 +268,26 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/XMLHttpRequest"><cite>XMLHttpRequest</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Google_Maps"><cite>Google Maps</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="http://prototypejs.org/"><cite>Prototype JavaScript framework</cite></a>
+            <span className="provenance caption">prototypejs.org</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype_JavaScript_Framework"><cite>Prototype JavaScript Framework</cite></a>
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://jquery.com/"><cite>jQuery</cite></a>
+            <span className="provenance caption">jquery.com</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/JScript"><cite>JScript</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>

@@ -310,6 +310,30 @@ describe('the 2004 moment', () => {
   });
 });
 
+describe('the 2005 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and pointed at Google’s newest products as its highest-profile examples. Prototype and jQuery smoothed over the differences between the browsers, and then the frameworks came.',
+    'Garrett opens with the gap. Desktop applications “have a richness and responsiveness that has seemed out of reach on the Web”. In the classic model “Most user actions in the interface trigger an HTTP request back to a web server”, which “returns an HTML page to the client”, and at every step “the user waits some more”. That model, he writes, was “adapted from the Web’s original use as a hypertext medium”, and “what makes the Web good for hypertext doesn’t necessarily make it good for software applications”.',
+    'He published the essay on 18 February 2005, insisting that “Ajax isn’t a technology” but several: presentation in XHTML and CSS, display through the DOM, data in XML, “asynchronous data retrieval using XMLHttpRequest”, “and JavaScript binding everything together”. The mechanism is an engine. Instead of a page, the browser loads “an Ajax engine — written in JavaScript and usually tucked away in a hidden frame”. The engine draws the interface and talks to the server on the user’s behalf, so the user “is never staring at a blank browser window and an hourglass icon”. Why a name at all? He needed, he said, something shorter to use with clients than “Asynchronous JavaScript+CSS+DOM+XMLHttpRequest”.',
+    'His exhibits were Google Suggest and Google Maps, which Google had announced ten days before the essay, with Orkut, Gmail and the Google Groups beta behind them, and Flickr and Amazon’s A9 following. They showed Ajax “is not only technically sound, but also practical for real-world applications”. He claimed practicality, not invention: “Neither Adaptive Path nor Google invented Ajax”. What was new was “the prominent use of these techniques in real-world applications to change the fundamental interaction model of the Web”. The pattern was older than the name. The object behind it had shipped in Internet Explorer 5 in 1999 as an ActiveX object, Microsoft.XMLHTTP, and every browser answered to the name XMLHttpRequest by 2006. Eich points to hidden-frame applications “even in late 1995” prefiguring the whole style, and sums up JavaScript’s part in the era: “JS was the tap root.”',
+    'The bigger problem the libraries solved was the browsers. A company wanted to write a page once and run it in every browser, and the browsers still differed in the objects a script used to reach the page. When people came to JavaScript to program the browser, Eich says, “they want the same APIs and they don’t get them”. What “helps make this less painful”, he goes on, “are these JavaScript libraries, which are pure JavaScript code that makes this higher layer of code that masquerades and makes all the differences go away”. Sam Stephenson’s Prototype came in February 2005, as the Ajax layer of Ruby on Rails, and calls itself a framework that “smooths over the rough edges of cross-browser development”. John Resig’s jQuery followed in 2006: events, animation, Ajax calls, and DOM crawling wrapped as one API that hid the differences between the browsers then installed, in its own words “an easy-to-use API that works across a multitude of browsers”. Then the frameworks came to organize what script was now building: AngularJS in 2010, React in 2013, Vue in 2014, which is the 2010 moment. The page stopped being a document you fetched and started being a program you ran. What the language’s standard did next is the 2009 moment.'
+  ])('should state the need and the mechanism in Garrett\'s words and source what came before, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The page needs to update in place')).toHaveTextContent(told);
+  });
+
+  test.each(['most of them betas', 'stripped the repetition out', 'XMLHTTP had shipped in IE5'])('should leave out "%s", which no source holds or the moment now says otherwise', claim => {
+    expect(itemHeadedBy('the timeline', 'The page needs to update in place')).not.toHaveTextContent(claim);
+  });
+
+  test.each(['XMLHttpRequest', 'Google Maps', 'Prototype JavaScript framework', 'Prototype JavaScript Framework', 'jQuery'])('should shelve %s in the research', work => {
+    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: work, hidden: true})).toBeInTheDocument();
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -341,7 +365,6 @@ describe('the record', () => {
     'The browsers converged once the people writing the specification were the people shipping it.',
     'The posture from 1994, the specification following the field, had become the rule.',
     'Ajax let a page fetch data and rewrite itself without reloading.',
-    'John Resig’s jQuery stripped the repetition out in 2006: events, animation, Ajax calls, and DOM crawling wrapped as one API that hid the differences between the browsers then installed.',
     'The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
     'The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by translating it into script; this time the industry’s weight was behind it.',
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
@@ -451,6 +474,12 @@ describe('the record', () => {
     ['The standard needs the real world', 'https://www.w3.org/2004/04/webapps-cdf-ws/summary', '“8 voted Yes. 14 voted No.”'],
     ['The standard needs the real world', 'https://whatwg.org/position-paper', '“a rising threat of single-vendor solutions”'],
     ['The standard needs the real world', 'https://html.spec.whatwg.org/multipage/introduction.html', '“technologies need to be backwards compatible”'],
+    ['The page needs to update in place', 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php', '“the user waits some more”'],
+    ['The page needs to update in place', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they want the same APIs and they don’t get them”'],
+    ['The page needs to update in place', 'http://prototypejs.org/', '“smooths over the rough edges of cross-browser development”'],
+    ['The page needs to update in place', 'https://jquery.com/', '“an easy-to-use API that works across a multitude of browsers”'],
+    ['The page needs to update in place', 'https://en.wikipedia.org/wiki/XMLHttpRequest', 'Microsoft.XMLHTTP'],
+    ['The page needs to update in place', 'https://en.wikipedia.org/wiki/Google_Maps', 'ten days before the essay'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Time ensured quality and interoperability”'],
     ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
