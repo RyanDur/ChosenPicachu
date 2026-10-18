@@ -67,13 +67,13 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 export const monthOf = (date: Dated): string => months[date.month - 1];
 
 export const moments: Record<MomentKey, MomentHeading> = {
-  need: named({year: '1989'}, 'Someone needs something'),
-  structureArrives: named({year: '1990'}, 'Researchers need to collaborate'),
-  webGoesPublic: named({year: '1991'}, 'The web needs the public'),
+  need: named({year: '1989'}, 'CERN needs to share what it knows'),
+  structureArrives: named({year: '1990'}, 'The information needs one interface'),
+  webGoesPublic: named({year: '1991'}, 'The web needs collaborators'),
   presentationLeavesHome: named({year: '1994'}, 'Authors need control of the look'),
   behaviorBorn: named({year: '1995', month: 5}, 'Pages need to respond'),
   htmlTwo: named({year: '1995', month: 11}, 'The browsers’ tags need a standard'),
-  needOutrunsStandards: named({year: '1996', month: 8}, 'The need outruns the standards'),
+  needOutrunsStandards: named({year: '1996', month: 8}, 'The pages need to look the same'),
   cssOne: named({year: '1996', month: 12, day: 17}, 'The style sheet needs a standard'),
   ecmaScript: named({year: '1997'}, 'The language needs a standard'),
   browsersAgree: named({year: '1998'}, 'The browsers need to agree'),
@@ -85,7 +85,7 @@ export const moments: Record<MomentKey, MomentHeading> = {
   frameworks: named({year: '2010'}, 'The application needs a frame'),
   cssTwoOne: named({year: '2011'}, 'The specification needs its tests'),
   someoneNeedsComponents: named({year: '2013'}, 'Someone needs components'),
-  html5SaysIt: named({year: '2014'}, 'The philosophy needs writing down'),
+  html5SaysIt: named({year: '2014'}, 'The rules need writing down'),
   documentComesBack: named({year: '2016'}, 'The document needs to come first')
 };
 
@@ -100,7 +100,7 @@ export const yearsOfTwo: Partial<Record<string, YearOfTwo>> = {
     tells: 'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },
   '1996': {
-    title: 'The need outruns the standards, and the style sheet needs a standard',
+    title: 'The pages need to look the same, and the style sheet needs a standard',
     tells: 'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.'
   }
 };

@@ -54,7 +54,7 @@ describe('the 1990 moment', () => {
   });
 
   test.each(['HyperCard', 'eighteen'])('should leave out "%s", which the sources do not hold', claim => {
-    expect(itemHeadedBy('the timeline', 'Researchers need to collaborate')).not.toHaveTextContent(claim);
+    expect(itemHeadedBy('the timeline', 'The information needs one interface')).not.toHaveTextContent(claim);
   });
 });
 
@@ -69,15 +69,15 @@ describe('the 1991 moment', () => {
     'The summary he posted an hour later says what the project was for and how to join it. It “started with the philosophy that much academic information should be freely available to anyone”. For a reader there were two operations, following a link and giving keywords, and “these are the only operations necessary to access the entire world of data”. For a provider, “making a web is as simple as writing a few SGML files which point to your existing data”, and “any file available by anonymous FTP can be immediately linked into a web”; “the very small start-up effort is designed to allow small contributions.” The markup was SGML because SGML was standard, and the reply had already said what he thought of it: “SGML (ugh! but standard)”. The tags themselves were the “Tags used in HTML” document, the list the 1990 moment reads, with no specification behind it beyond the program that read it.',
     'W3C’s history lists the browser going to a limited audience in March and to CERN’s central machines in May; the August postings are the first it lists beyond CERN. In October the project started its mailing lists, www-talk among them, and the record of HTML from then on is a record of that list. In December Paul Kunz installed the first server outside Europe, at SLAC. The history counts “Around 50 known HTTP servers” in January 1993 and “Over 200 known HTTP servers” by October, the month after NCSA released “working versions of Mosaic browser for all common platforms: X, PC/Windows and Macintosh”; between the two counts, on 30 April 1993, CERN’s directors declared the technology “freely usable by anyone, with no fees being payable to CERN”. Every one of those servers was serving HTML that no standard yet defined; HTML 2.0, in 1995, is the answer to that.'
   ])('should tell a question, an answer, a summary and the count of servers, words and links together: %s', told => {
-    expect(itemHeadedBy('the timeline', 'The web needs the public')).toHaveTextContent(told);
+    expect(itemHeadedBy('the timeline', 'The web needs collaborators')).toHaveTextContent(told);
   });
 
   test.each(['It closes with two words', 'the earliest public announcement', 'the list the 1990 moment counts'])('should leave out "%s", which the sources do not hold', claim => {
-    expect(itemHeadedBy('the timeline', 'The web needs the public')).not.toHaveTextContent(claim);
+    expect(itemHeadedBy('the timeline', 'The web needs collaborators')).not.toHaveTextContent(claim);
   });
 
   test('should link the summary’s words to the summary, and shelve it beside the reply', () => {
-    expect(within(itemHeadedBy('the timeline', 'The web needs the public')).getByRole('link', {name: '“the very small start-up effort is designed to allow small contributions.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt');
+    expect(within(itemHeadedBy('the timeline', 'The web needs collaborators')).getByRole('link', {name: '“the very small start-up effort is designed to allow small contributions.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt');
     expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'WorldWideWeb: Summary, posted to alt.hypertext', hidden: true})).toBeInTheDocument();
   });
 });
@@ -195,15 +195,15 @@ describe('the first 1996 moment', () => {
     'The quieter effect was on trust. The same page looked one way in Internet Explorer and another in Navigator. In “the chaotic years of mixed browser support, CSS became pretty unpopular among web designers”, who “leaned on HTML data tables (or spacer gifs), which allowed them to lay things out to exact dimensions”. Hoffmann’s verdict on the era: “at one time, not using CSS was actually a best practice.”',
     'JavaScript fought the same war under a different flag. Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 that August, under a different name because “Microsoft couldn’t get a license from Sun”, and the two dialects differed. Eich’s reading is that the browser war “forced premature standardization after a furious period of innovation”: Netscape took the language to Ecma in November 1996, and the standard got a name nobody owned, ECMAScript. The standard, and why that name, is the 1997 moment.'
   ])('should tell how markup carried the look and the browsers split, words and links together: %s', told => {
-    expect(itemHeadedBy('1996', 'The need outruns the standards')).toHaveTextContent(told);
+    expect(itemHeadedBy('1996', 'The pages need to look the same')).toHaveTextContent(told);
   });
 
   test.each(['eczema', 'Flash', 'outpaced the Java applets', 'one more style sheet language', 'the war multiplied the dialects'])('should leave out "%s", which the sources do not hold', claim => {
-    expect(itemHeadedBy('1996', 'The need outruns the standards')).not.toHaveTextContent(claim);
+    expect(itemHeadedBy('1996', 'The pages need to look the same')).not.toHaveTextContent(claim);
   });
 
   test('should link HTML 3.2 to its Recommendation, and shelve it', () => {
-    expect(within(itemHeadedBy('1996', 'The need outruns the standards')).getByRole('link', {name: 'HTML 3.2', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
+    expect(within(itemHeadedBy('1996', 'The pages need to look the same')).getByRole('link', {name: 'HTML 3.2', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
     expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'HTML 3.2 Reference Specification', hidden: true})).toBeInTheDocument();
   });
 });
@@ -458,21 +458,21 @@ describe('the 2014 moment', () => {
     'The principles came first, in November 2007, as a W3C working draft, HTML Design Principles, from the working group chartered to work with the WHATWG. Its rule for conflicts is one sentence: “In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.” Its rule for the past, pave the cowpaths, is the line the concert below opens with. Jeremy Keith presented them as six: avoid needless complexity; support existing content; solve real problems; pave the cowpaths, adopting what is “widely accepted” instead of inventing anew; degrade gracefully; and priority of constituencies: “users > authors > implementors > specifiers > theoretical purity”.',
     'HTML5 itself became a W3C Recommendation on 28 October 2014, seven years after the principles. And there was a quiet break with the past, which the Standard states. “While the HTML syntax described in this specification bears a close resemblance to SGML and XML, it is a separate language with its own parsing rules”, and “few (if any) web browsers ever implemented true SGML parsing for HTML documents”. The standard now describes the parser the browsers had, rather than the SGML grammar the earlier standards had claimed and the browsers had not implemented. The specification “defines the parsing rules for HTML documents, whether they are syntactically correct or not”, so what a browser does with broken markup stopped being a vendor’s guess. The doctype collapsed to fifteen characters, <!DOCTYPE html>, kept “for legacy reasons”, because when it is omitted “browsers tend to use a different rendering mode that is incompatible with some specifications”. Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.'
   ])('should quote the design principles as the W3C wrote them and the Standard on its break with SGML, words and links together: %s', told => {
-    expect(itemHeadedBy('the timeline', 'The philosophy needs writing down')).toHaveTextContent(told);
+    expect(itemHeadedBy('the timeline', 'The rules need writing down')).toHaveTextContent(told);
   });
 
   test.each(['no longer an SGML application', 'its remaining job was triggering standards mode', 'the cascade’s settlement written into the constitution', 'the 1994 settlement restated'])('should leave out "%s", which the Standard\'s own words replace', claim => {
-    expect(itemHeadedBy('the timeline', 'The philosophy needs writing down')).not.toHaveTextContent(claim);
+    expect(itemHeadedBy('the timeline', 'The rules need writing down')).not.toHaveTextContent(claim);
   });
 
   test('should link the Recommendation\'s date to the Recommendation, in the tells and in the story', () => {
-    const dated = within(itemHeadedBy('the timeline', 'The philosophy needs writing down')).getAllByRole('link', {name: '28 October 2014', hidden: true});
+    const dated = within(itemHeadedBy('the timeline', 'The rules need writing down')).getAllByRole('link', {name: '28 October 2014', hidden: true});
 
     expect(dated.map(link => link.getAttribute('href'))).toEqual(['https://www.w3.org/TR/2014/REC-html5-20141028/', 'https://www.w3.org/TR/2014/REC-html5-20141028/']);
   });
 
   test('should set the doctype as code', () => {
-    expect(within(itemHeadedBy('the timeline', 'The philosophy needs writing down')).getByRole('code', {hidden: true})).toHaveTextContent('<!DOCTYPE html>');
+    expect(within(itemHeadedBy('the timeline', 'The rules need writing down')).getByRole('code', {hidden: true})).toHaveTextContent('<!DOCTYPE html>');
   });
 
   test.each([['HTML Design Principles', 'Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November 2007'], ['HTML5', 'Ian Hickson, Robin Berjon, Steve Faulkner, Travis Leithead, Erika Doyle Navara, Theresa O’Connor and Silvia Pfeiffer, W3C Recommendation, 28 October 2014'], ['HTML Standard, parsing HTML documents', 'WHATWG, undated'], ['HTML Standard, the HTML syntax', 'WHATWG, undated']])('should shelve %s, %s', (work, provenance) => {
@@ -591,12 +591,12 @@ describe('the record', () => {
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
       ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2009', '2010', '2011', '2013', '2014', '2016']);
     expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
-      'Someone needs something',
-      'Researchers need to collaborate',
-      'The web needs the public',
+      'CERN needs to share what it knows',
+      'The information needs one interface',
+      'The web needs collaborators',
       'Authors need control of the look',
       'Pages need to respond, and the browsers’ tags need a standard',
-      'The need outruns the standards, and the style sheet needs a standard',
+      'The pages need to look the same, and the style sheet needs a standard',
       'The language needs a standard',
       'The browsers need to agree',
       'Someone needs to go first',
@@ -607,7 +607,7 @@ describe('the record', () => {
       'The application needs a frame',
       'The specification needs its tests',
       'Someone needs components',
-      'The philosophy needs writing down',
+      'The rules need writing down',
       'The document needs to come first'
     ]);
   });
@@ -616,9 +616,9 @@ describe('the record', () => {
     ['1995', 'Pages need to respond, and the browsers’ tags need a standard',
       'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
       [['1995-05', 'May', 'Dynamic Interaction', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
-    ['1996', 'The need outruns the standards, and the style sheet needs a standard',
+    ['1996', 'The pages need to look the same, and the style sheet needs a standard',
       'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
-      [['1996-08', 'August', 'Structure, Presentation', 'The need outruns the standards'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
+      [['1996-08', 'August', 'Structure, Presentation', 'The pages need to look the same'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
   ])('should tell %s as one entry, and open its fuller story on each moment, dated by its month and captioned by its door', async (year, title, tells, doors) => {
     const theYear = itemHeadedBy('the timeline', title);
 
@@ -649,16 +649,16 @@ describe('the record', () => {
   });
 
   test.each([
-    ['The web needs the public', 'https://www.w3.org/History.html', '“freely usable by anyone, with no fees being payable to CERN”'],
+    ['The web needs collaborators', 'https://www.w3.org/History.html', '“freely usable by anyone, with no fees being payable to CERN”'],
     ['Pages need to respond', 'https://brendaneich.com/2008/04/popularity/', '“Scheme was the bait”'],
     ['The browsers’ tags need a standard', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“was then circulated through the Internet community for comment”'],
     ['Pages need to respond', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“buy it by the yard”'],
-    ['Researchers need to collaborate', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”'],
-    ['Researchers need to collaborate', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html', '“registered by the W3 team”'],
-    ['Researchers need to collaborate', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html', '“a line of ASCII characters terminated by a CR LF”'],
-    ['Researchers need to collaborate', 'https://worldwideweb.cern.ch/worldwideweb/', '“a single click was used for editing”'],
-    ['Researchers need to collaborate', 'https://worldwideweb.cern.ch/history/', '“was later renamed Nexus to avoid confusion with the World Wide Web project”'],
-    ['The web needs the public', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt', '“Collaborators welcome!”'],
+    ['The information needs one interface', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”'],
+    ['The information needs one interface', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html', '“registered by the W3 team”'],
+    ['The information needs one interface', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html', '“a line of ASCII characters terminated by a CR LF”'],
+    ['The information needs one interface', 'https://worldwideweb.cern.ch/worldwideweb/', '“a single click was used for editing”'],
+    ['The information needs one interface', 'https://worldwideweb.cern.ch/history/', '“was later renamed Nexus to avoid confusion with the World Wide Web project”'],
+    ['The web needs collaborators', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt', '“Collaborators welcome!”'],
     ['The browsers’ tags need a standard', 'https://www.rfc-editor.org/rfc/rfc1866', '“to distinguish it from the previous informal specifications”'],
     ['The style sheet needs a standard', 'https://www.w3.org/TR/REC-CSS1-961217', '“One of the fundamental features of CSS is that style sheets cascade”'],
     ['Someone needs to go first', 'https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/', '“as much as 14% of our users”'],
@@ -686,10 +686,10 @@ describe('the record', () => {
     ['Someone needs components', 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html', '“React isn’t an MVC framework”'],
     ['Someone needs components', 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html', 'Christopher Chedeau’s talk'],
     ['Someone needs components', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope', '“works across the latest devices and browser versions”'],
-    ['The philosophy needs writing down', 'https://www.w3.org/TR/html-design-principles/', '“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”'],
-    ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
-    ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
-    ['The philosophy needs writing down', 'https://www.w3.org/TR/html-design-principles/', '“users over authors over implementors over specifiers over theoretical purity”'],
+    ['The rules need writing down', 'https://www.w3.org/TR/html-design-principles/', '“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”'],
+    ['The rules need writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
+    ['The rules need writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
+    ['The rules need writing down', 'https://www.w3.org/TR/html-design-principles/', '“users over authors over implementors over specifiers over theoretical purity”'],
     ['The document needs to come first', 'https://web.dev/rendering-on-the-web/', '“Running client-side scripts to add application state and interactivity to server-rendered HTML”'],
     ['The document needs to come first', 'https://vercel.com/blog/next', '“a small framework for server-rendered universal JavaScript webapps”'],
     ['The document needs to come first', 'https://jasonformat.com/islands-architecture/', 'documented the islands architecture'],
@@ -711,9 +711,9 @@ describe('the record', () => {
     ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”'],
-    ['The need outruns the standards', 'https://thehistoryoftheweb.com/look-back-history-css/', '“it wasn’t long before web pages lost all semantic value”'],
-    ['The need outruns the standards', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”'],
-    ['The need outruns the standards', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“Microsoft couldn’t get a license from Sun”']
+    ['The pages need to look the same', 'https://thehistoryoftheweb.com/look-back-history-css/', '“it wasn’t long before web pages lost all semantic value”'],
+    ['The pages need to look the same', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”'],
+    ['The pages need to look the same', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“Microsoft couldn’t get a license from Sun”']
   ])('should tell %s, quoting its source by a link', (title, source, quotation) => {
     expect(within(itemHeadedBy('the timeline', title)).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
@@ -751,7 +751,7 @@ describe('the record', () => {
   test('should land the concert’s reader on the 1996 moment, with focus there', async () => {
     await userEvent.click(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}));
 
-    await waitFor(() => expect(itemHeadedBy('1996', 'The need outruns the standards')).toHaveFocus());
+    await waitFor(() => expect(itemHeadedBy('1996', 'The pages need to look the same')).toHaveFocus());
   });
 
   test('should read every shelved work as its title, a space, then where it comes from', () => {

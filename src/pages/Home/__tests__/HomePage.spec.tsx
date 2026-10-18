@@ -118,19 +118,19 @@ describe('the home page', () => {
 
   test.each([
     ['Structure', [
-      '1989 Someone needs something',
-      '1990 Researchers need to collaborate',
-      '1991 The web needs the public',
+      '1989 CERN needs to share what it knows',
+      '1990 The information needs one interface',
+      '1991 The web needs collaborators',
       '1995 The browsers’ tags need a standard',
-      '1996 The need outruns the standards',
+      '1996 The pages need to look the same',
       '2004 The standard needs the real world',
       '2013 Someone needs components',
-      '2014 The philosophy needs writing down',
+      '2014 The rules need writing down',
       '2016 The document needs to come first'
     ]],
     ['Presentation', [
       '1994 Authors need control of the look',
-      '1996 The need outruns the standards',
+      '1996 The pages need to look the same',
       '1996 The style sheet needs a standard',
       '1998 The browsers need to agree',
       '2002 Someone needs to go first',
@@ -185,8 +185,8 @@ describe('the home page', () => {
   });
 
   test.each([
-    ['Structure', ['2014 The philosophy needs writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
-    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The need outruns the standards', '2013 Someone needs components', '2013 Someone needs components']],
+    ['Structure', ['2014 The rules need writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
+    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components', '2013 Someone needs components']],
     ['Dynamic Interaction', ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
   ])('should rest %s\'s practice on its own moments, each citation naming the year of the moment it opens', (section, meant) => {
     const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));

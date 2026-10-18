@@ -51,8 +51,8 @@ test('the concert\'s link to a moment inside a year of two lands on it again aft
   await page.goto('record/');
   const record = recordPage(page);
   const link = record.concertLinkTo('the 1996 moment');
-  const moment = record.moment('The need outruns the standards');
-  const heading = moment.getByRole('heading', {name: 'The need outruns the standards'});
+  const moment = record.moment('The pages need to look the same');
+  const heading = moment.getByRole('heading', {name: 'The pages need to look the same'});
 
   await link.click();
   await expect(heading).toBeVisible();
