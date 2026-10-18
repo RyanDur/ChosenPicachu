@@ -89,8 +89,7 @@ export const Timeline: FC = () =>
       in which the user can browse at will.
     </Quotation>
     <p className="lede sub-title">
-      Someone needed something: researchers, scattered across institutes, losing each other’s
-      documents. Everything on the web is layered onto that one need.
+      Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. Every moment below opens on a need of the same kind, and the concert at the end reads them as one method.
     </p>
     <ol className="timeline" aria-label="the timeline">
       {entries.map(entry => entry.kind === 'moment'
@@ -98,7 +97,6 @@ export const Timeline: FC = () =>
         : <Year key={entry.year} year={entry.year} told={entry.told}/>)}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone
-      needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.
+      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone needs something, the community answers, and the platform learns the answer. The concert below reads the moments together.
     </p>
   </section>;

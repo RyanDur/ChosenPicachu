@@ -495,6 +495,40 @@ describe('the 2016 moment', () => {
   });
 });
 
+describe('the record\'s frame and its concert', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test('should open on the first need as the 1989 moment tells it, and promise the concert', () => {
+    expect(screen.getByText(/^Someone needed something/)).toHaveTextContent('Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. Every moment below opens on a need of the same kind, and the concert at the end reads them as one method.');
+  });
+
+  test('should close the timeline by pointing at the concert', () => {
+    expect(screen.getByText(/^Read the titles again/)).toHaveTextContent('Read the titles again, top to bottom: it is one sentence said twenty ways. Someone needs something, the community answers, and the platform learns the answer. The concert below reads the moments together.');
+  });
+
+  test.each([
+    'Berners-Lee’s 1989 proposal made it a requirement that “a new system must allow existing systems to be linked together without requiring any central control or coordination”, because at CERN systems “start isolated and then merge”. Nobody would be told how to file their work; what spread would be linked. The web’s three languages grew the same way, and it took the standards bodies eighteen years to write the rule down.',
+    'He solved one problem and wrote down which he would not. The 1989 proposal asked for a system in which “generality and portability are more important than fancy graphics techniques”; the 1990 one listed what the project “will not aim” to do, among it “research into fancy multimedia facilities such as sound and video”. CERN gave it away. On 30 April 1993 its directors declared the technology “freely usable by anyone, with no fees being payable to CERN”. In December 1994, with the Large Hadron Collider to build, “CERN thus decides not to continue WWW development”, and the work passed to INRIA and the new consortium.',
+    'The other two languages came the same way, from needs HTML had left open. The look was a need Berners-Lee had set aside; nine people proposed a language for it between 1993 and 1996, and two of the nine “formed the basis for CSS”. Neither of his proposals mentions a language in the page. Netscape needed a page that could respond, and the glue language written in ten days became the web’s third language.',
+    'In 2007 the W3C wrote down how HTML should grow. One line of the HTML Design Principles is the rule this whole record obeys: “When a practice is already widespread among authors, consider adopting it rather than forbidding it or inventing something new.” Another says the same about technology: “If there is already a widely used and implemented technology covering particular use cases”, then “consider specifying that technology in preference to inventing something new for the same purpose.” The web had worked by them since 1994, and the moments above show how: when one language could not yet do a job, another did it, and the standard later adopted what had spread.',
+    'The first language to cover for the others was HTML. Browsers invented tags faster than any specification could define them, and the first HTML standard, RFC 1866 in November 1995, wrote down “a set of features that roughly corresponds to the capabilities of HTML in common use prior to June 1994”. Among those features was presentation. Markup carried fonts, colours and columns because nothing else could; FONT FACE and BGCOLOR are the tags Raggett names as ones “which control stylistic aspects of a document”. It kept carrying them until CSS 1 was finished in December 1996, and the browsers caught up with it over the years that followed. The principles name what that separation was for: “HTML should allow separation of content and presentation.” HTML allowed it once there was a language to separate presentation into.',
+    'Script covered for style twice. The first time was Netscape 4, which ran CSS as script, as the 1996 moment tells, and, in Lie and Bos’s words, “also decided to let developers write JSSS, thereby bypassing CSS entirely”. JavaScript Style Sheets did not survive the browser. The second time was 2014, when Christopher Chedeau listed Facebook’s “Problems with CSS at scale 1. Global Namespace 2. Dependencies 3. Dead Code Elimination 4. Minification” and “5. Sharing Constants 6. Non-deterministic Resolution 7. Isolation”, and proposed writing styles in script, where “All your styles are local JS variables and you can export them if you want to”. He was careful about what he was claiming: “My goal with this talk is not to convince you that you should drop CSS and use JS instead.” The seven problems were real, and the platform answered the last of them, isolation, in its own language. Shadow DOM, in MDN’s words, “enables you to attach a DOM tree to an element, and have the internals of this tree hidden from JavaScript and CSS running in the page”. The boundary runs both ways: “just as page styles don’t affect elements in the shadow DOM, shadow DOM styles don’t affect elements in the rest of the page.” The browsers had been doing this for themselves all along: “Before shadow DOM was made available to web developers, browsers were already using it to encapsulate the inner structure of an element.” A video element’s controls live there.',
+    'Script covered for structure too. When interfaces became applications, builders needed components, self-contained pieces carrying structure, style and behaviour together, and in 2013 script built them because markup had no such thing. The HTML Standard’s answer is custom elements, which “provide a way for authors to build their own fully-featured DOM elements”. The one rule on their names is that a custom element’s name contains a hyphen, which “is used for namespacing and to ensure forward compatibility”: a built-in element can never be called my-menu, so a page’s own elements and the platform’s cannot collide. The standard describes the feature as part of an effort to “rationalise the platform”, explaining the built-in elements in terms of the same low-level parts an author can now use.',
+    'Script covered for the document last. The single-page application moved the document itself into script: the server sent an empty body and a program, and the page existed only once the program had run. The cost showed as the applications grew. Osmani and Miller’s survey of rendering puts it in one line: “the amount of JavaScript required tends to grow as an application grows.” The way back was server rendering, the oldest technique on the record, “Rendering an app on the server to send HTML, rather than JavaScript, to the client”, refined into islands. The pattern “was coined by Etsy’s frontend architect Katie Sylor-Miller”. It is to “render HTML pages on the server, and inject placeholders or slots around highly dynamic regions”, so that “individual regions of the page become interactive without anything else on the page needing to be loaded first.” The survey’s advice agrees: “It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.”',
+    'Under those four stories runs one about who set the language. At first each side tried to set it alone. The browsers that shipped first thought they were defining it. In 1996 Netscape argued that if users liked one of its inventions “the market would drive it to become a de facto standard”. Raggett wrote that this was “precisely this sequence of events that Dave Raggett and the World Wide Web Consortium were trying to avoid”. The standards bodies made the opposite choice and spent a decade on an XML replacement for HTML. In June 2004 the W3C’s own workshop recorded “8 voted Yes. 14 voted No.” on extending HTML and CSS instead, and the W3C “does not intend to put any resources into” it.',
+    'Each choice got its result, and the people who made them changed course. The browser makers wrote the specification they were shipping, and the HTML Standard they produced states what they had learned: “specifications and implementations need to match even if this means changing the specification rather than the implementations”. The language’s committee learned it in 2008, when Eich’s Harmony set the terms as “two interoperable implementations by early next year”. CSS learned it in 2011, when 2.1 was finished against nine thousand tests and Glazman wrote that “Time ensured quality and interoperability.” Once the browsers followed the standards and the standards followed the browsers, the iterations got shorter: CSS by modules instead of one document, the language by an edition a year instead of one in ten, HTML as a living standard. A standard came to mean what two browsers already did, written down.',
+    'Read together, the moments are one method. A need arrives that the right language cannot yet meet. The language that can, usually script, meets it first, and the result is useful and costly: a page that cannot be read without a program, styles that cannot be found in a stylesheet. The platform then learns the answer in the language it belonged to, and the language that covered for it can stop. The principles say in what order the people involved count when that choice is hard: “consider users over authors over implementors over specifiers over theoretical purity.” The record covers thirty-seven years, and the method is young; its newest answers, @scope and server components, are less than six years old.'
+  ])('should read the moments as one method, in its own words and its sources\': %s', told => {
+    expect(screen.getByRole('region', {name: 'The concert'})).toHaveTextContent(told);
+  });
+
+  test.each(['losing each other’s documents', 'Everything on the web is layered', 'The needs have not stopped arriving', 'the largest', 'The principles were written late'])('should leave out "%s", which the reread replaced', claim => {
+    expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(claim);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -525,8 +559,7 @@ describe('the record', () => {
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The posture from 1994, the specification following the field, had become the rule.',
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
-    'What changed each time was where the rendering happens; the three responsibilities did not move.',
-    'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.'
+    'What changed each time was where the rendering happens; the three responsibilities did not move.'
   ])('should say plainly, words and links together: %s', sentence => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
   });
@@ -695,11 +728,6 @@ describe('the record', () => {
 
     expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  });
-
-  test('should open the concert on the principles, then say the web worked by them before they were written', () => {
-    expect(screen.getByText(/^In 2007 the W3C wrote down how HTML should grow/))
-      .toHaveTextContent(/for the same purpose\.” The principles were written late\. The web had worked by them since 1994, and the moments above show how: when one language could not yet do a job, another did it, and the standard later adopted what had spread\.$/);
   });
 
   test('should keep every source the concert links to on the research shelf', () => {
