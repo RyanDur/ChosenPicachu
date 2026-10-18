@@ -410,6 +410,30 @@ describe('the 2011 moment', () => {
   });
 });
 
+describe('the 2013 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'Interfaces had grown into applications, and their builders needed components: self-contained pieces that carry structure, style, and behavior together, and styles that stay where they are put. The platform did not have them yet, so JavaScript built them first.',
+    'Script built the components first, and React said what a component was. Pete Hunt’s post of June 2013, “Why did we build React?”, opens with what it is not, “React isn’t an MVC framework”, and then what it is: “React is a library for building composable user interfaces. It encourages the creation of reusable UI components which present data that changes over time.” A component’s render returns “neither a string nor a DOM node — it’s a lightweight description of what the DOM should look like”, and React redraws the page from it. Components arrived in script, and the single-page application moved the whole document there with them: the server sent an empty body and a bundle, and until the script ran there was no page. The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
+    'Style followed structure into script as CSS-in-JS. The term’s start is Christopher Chedeau’s talk at NationJS in November 2014, cataloguing CSS-at-scale problems at Facebook; his own summary is that it “attempts to show that CSS has fundamental flaws and writing styling in JS solves most of the problem without even trying”. The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by “translating CSS rules into snippets of Javascript”; this time the industry’s weight was behind it.',
+    'Building the page in script had a price: blank first paints, fragile crawls, a document that cannot be read without executing a program. And the document’s own habits had to be rebuilt by hand. Links became components, the back button became state, scroll restoration and URL fragments became libraries, and the frameworks grew routers and scroll managers to re-create behaviors the browser had shipped for twenty years.',
+    'The platform has been answering the need ever since, absorbing what script proved. Custom properties took over the theme variables. Shadow DOM gave styles a boundary, since “the styles defined in the shadow DOM tree are scoped to that tree, so just as page styles don’t affect elements in the shadow DOM, shadow DOM styles don’t affect elements in the rest of the page”. Custom elements gave components a home in markup itself. And @scope, which “works across the latest devices and browser versions” since March 2026, is the newest arrival in the same direction.'
+  ])('should quote React\'s own account of a component and Chedeau\'s of his talk, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'Someone needs components')).toHaveTextContent(told);
+  });
+
+  test.each(['rendered style by translating it into script', 'Christopher Chedeau’s 2014 talk', 'JavaScript answered.'])('should leave out "%s", which the sources\' own words replace', claim => {
+    expect(itemHeadedBy('the timeline', 'Someone needs components')).not.toHaveTextContent(claim);
+  });
+
+  test.each([['Why did we build React?', 'Pete Hunt, React blog, 5 June 2013'], ['@scope', 'MDN']])('should shelve %s, %s', (work, provenance) => {
+    expect(shelvedAs(work)).toHaveTextContent(provenance);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -440,7 +464,6 @@ describe('the record', () => {
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The posture from 1994, the specification following the field, had become the rule.',
     'The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
-    'The web had run this experiment before, as JavaScript Style Sheets, when Netscape 4 rendered style by translating it into script; this time the industry’s weight was behind it.',
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
     'What changed each time was where the rendering happens; the three responsibilities did not move.',
     'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.'
@@ -561,6 +584,9 @@ describe('the record', () => {
     ['The application needs a frame', 'https://angularjs.org/', '“Neither of these address the root problem that HTML was not designed for dynamic views.”'],
     ['The application needs a frame', 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md', '20 October 2010'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/React_(software)', '“first deployed on Facebook’s News Feed in 2011”'],
+    ['Someone needs components', 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html', '“React isn’t an MVC framework”'],
+    ['Someone needs components', 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html', 'Christopher Chedeau’s talk'],
+    ['Someone needs components', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope', '“works across the latest devices and browser versions”'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],

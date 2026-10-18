@@ -340,6 +340,14 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">the angular.js repository on GitHub, undated</span>
           </li>
           <li>
+            <a className="signpost" href="https://legacy.reactjs.org/blog/2013/06/05/why-react.html"><cite>Why did we build React?</cite></a>
+            <span className="provenance caption">Pete Hunt, React blog, 5 June 2013</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope"><cite>@scope</cite></a>
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>
