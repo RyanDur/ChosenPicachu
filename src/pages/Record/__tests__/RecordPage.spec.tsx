@@ -627,7 +627,7 @@ describe('the record', () => {
   test.each([
     ['1995', 'Pages need to respond, and the browsers’ tags need a standard',
       'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
-      [['1995-05', 'May', 'Dynamic Interaction', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
+      [['1995-05', 'May', 'Dynamic', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
     ['1996', 'The pages need to look the same, and the style sheet needs a standard',
       'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
       [['1996-08', 'August', 'Structure, Presentation', 'The pages need to look the same'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
@@ -640,7 +640,7 @@ describe('the record', () => {
     expect(within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
       within(moment).getByRole('time').getAttribute('datetime'),
       within(moment).getByRole('time').textContent,
-      within(moment).getByText(/^(Structure|Presentation|Dynamic Interaction)/).textContent,
+      within(moment).getByText(/^(Structure|Presentation|Dynamic)/).textContent,
       within(moment).getByRole('heading', {level: 4}).textContent
     ])).toEqual(concerns);
   });
@@ -799,6 +799,14 @@ describe('the record', () => {
       .toHaveAttribute('href', expect.stringContaining('computerworld.com'));
     expect(screen.getByRole('link', {name: /reducing the overlap/}))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
+  });
+
+  test('the research shelves are headed by the three concerns, the third named Dynamic', () => {
+    const bibliography = screen.getByRole('region', {name: 'The research'});
+
+    expect(within(bibliography).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent))
+      .toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Dynamic']));
+    expect(within(bibliography).queryByRole('heading', {name: 'Dynamic Interaction', hidden: true})).not.toBeInTheDocument();
   });
 
   test('the research stands collected, closed until asked', () => {

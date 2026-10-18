@@ -28,7 +28,7 @@ describe('the home page', () => {
   });
 
   test('the page offers three concerns, each named by its responsibility', () => {
-    ['Structure', 'Presentation', 'Dynamic Interaction'].forEach(concern =>
+    ['Structure', 'Presentation', 'Dynamic'].forEach(concern =>
       expect(screen.getByRole('heading', {name: concern, level: 2})).toBeVisible());
     expect(screen.getByText(/identifies the meaning, purpose, and structure/)).toBeVisible();
     expect(screen.getByText(/separation of HTML from CSS/)).toBeVisible();
@@ -38,7 +38,7 @@ describe('the home page', () => {
   test.each([
     ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Berners-Lee’s tags already did that job. They came from CERN’s SGML guide so the documents world would recognise them, and the one tag of his own, the anchor, carried the address of a document on another machine. Twice since, the structure left the document, and twice the standard brought it back. Through 1993 and early 1994 the browsers added tags of their own until, in Dave Raggett’s words, “the language was becoming ill-defined”; HTML 2.0 wrote down the tags in use in 1995, and from 2004 the browser makers wrote the standard themselves, the one that calls a div an element “of last resort”. In 2013 script built the components, and links and the back button became state. HTML5 became a Recommendation in 2014, and html.com’s summary of its objectives puts semantic markup first; in 2016 the document came first again and the program second.', 'I take one rule from that. Choose the element that means what the content is, and add the look and the behaviour on top of it.'],
     ['Presentation', 'CSS says how things look. The need was an author’s: to set the look of a page without writing it into the structure. In October 1994 Håkon Wium Lie drafted Cascading HTML Style Sheets for that, encouraged by Dave Raggett, who had realized HTML should never become a page-description language. The browsers answered the same need with a font tag, and designers with tables for layout. The browsers then took a decade to render the standard to the pixel, pushed by tests and failures named in public. In 2003 Dave Shea’s CSS Zen Garden showed what the separation buys: one document in many designs, by sheets alone. In 2013 components arrived in script, and in 2014 Christopher Chedeau’s talk listed seven problems with CSS at that scale, isolation last.', 'I take a rule from that too. A look belongs in the sheet, named for what the element needs, and nothing in the HTML says how it looks.'],
-    ['Dynamic Interaction', 'JavaScript says how things respond. It was not in the 1989 proposal. Brendan Eich wrote the interpreter at Netscape in May 1995 so a page could, in his words above, “touch elements of the page, change their properties, and respond to events”. In 2005 Ajax let a page fetch data and rewrite itself without reloading, and the page became an application. From 2010 each framework moved more of the page into script, and in 2013 React said a component is a description of what the DOM should look like, redrawn from data that changes over time. In 2016 the server rendered first again and the script arrived second.', 'I take one rule from that thread. The state is what is true right now, an event is what just happened, and the page is drawn from the two, so a framework can change under it and the core stays.']
+    ['Dynamic', 'JavaScript says how things respond. It was not in the 1989 proposal. Brendan Eich wrote the interpreter at Netscape in May 1995 so a page could, in his words above, “touch elements of the page, change their properties, and respond to events”. In 2005 Ajax let a page fetch data and rewrite itself without reloading, and the page became an application. From 2010 each framework moved more of the page into script, and in 2013 React said a component is a description of what the DOM should look like, redrawn from data that changes over time. In 2016 the server rendered first again and the script arrived second.', 'I take one rule from that thread. The state is what is true right now, an event is what just happened, and the page is drawn from the two, so a framework can change under it and the core stays.']
   ])('should tell %s as one essay, from what its language does to the rule I take', (concern, thread, rule) => {
     const essay = within(screen.getByRole('region', {name: concern}));
 
@@ -54,7 +54,7 @@ describe('the home page', () => {
   test.each([
     ['Structure', '“the language was becoming ill-defined”', 'https://www.w3.org/People/Raggett/book4/ch02.html'],
     ['Structure', '“of last resort”', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element'],
-    ['Dynamic Interaction', '“touch elements of the page, change their properties, and respond to events”', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html']
+    ['Dynamic', '“touch elements of the page, change their properties, and respond to events”', 'https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html']
   ])('should link the %s essay\'s quotation %s to its source', (concern, quoted, source) => {
     expect(within(screen.getByRole('region', {name: concern})).getByRole('link', {name: quoted})).toHaveAttribute('href', source);
   });
@@ -63,7 +63,7 @@ describe('the home page', () => {
     const sections = within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent);
 
     expect(screen.getByText(/^A webpage is three languages working in concert/)).toBeVisible();
-    expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic Interaction']);
+    expect(sections).toEqual(['Structure', 'Presentation', 'Dynamic']);
   });
 
   test.each([
@@ -88,7 +88,7 @@ describe('the home page', () => {
       '2011 The specification needs its tests',
       '2013 Someone needs components'
     ]],
-    ['Dynamic Interaction', [
+    ['Dynamic', [
       '1995 Pages need to respond',
       '1997 The language needs a standard',
       '2005 The page needs to update in place',
@@ -111,7 +111,7 @@ describe('the home page', () => {
       .toHaveAttribute('href', `${Paths.record}#the-browsers-tags-need-a-standard`);
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should set %s\'s moments after its essay, and end them with the whole record', section => {
+  test.each(['Structure', 'Presentation', 'Dynamic'])('should set %s\'s moments after its essay, and end them with the whole record', section => {
     const concern = screen.getByRole('region', {name: section});
     const list = within(concern).getByRole('list', {name: `${section}, from the record`});
     const wholeRecord = within(concern).getByRole('link', {name: 'the whole record'});
@@ -125,7 +125,7 @@ describe('the home page', () => {
     ])).toEqual([]);
   });
 
-  test.each(['Structure', 'Presentation', 'Dynamic Interaction'])('should name %s\'s moments as a region of their own', section => {
+  test.each(['Structure', 'Presentation', 'Dynamic'])('should name %s\'s moments as a region of their own', section => {
     const evidence = screen.getByRole('region', {name: `${section} from the record`});
 
     expect(within(evidence).getByRole('list', {name: `${section}, from the record`})).toBeVisible();

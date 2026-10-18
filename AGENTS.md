@@ -100,7 +100,7 @@ Each reviewer reads its rubric first and whole, reviews one half of the scope, t
 - asks: how things show: structure in the component sheet, needs as shared words, the platform's own states before invented ones, constants in the sheet and only runtime values inline
 
 ### dynamic-interaction
-- rubric: `src/pages/Practice/DynamicInteractionPractice.tsx`
+- rubric: `src/pages/Practice/DynamicPractice.tsx`
 - reviews: the site
 - scopes: full, changes
 - asks: how things respond: state that holds only what cannot be derived, events named for what happened, pure transitions, the platform's behaviour before script, a keyboard twin for every gesture, changes that announce themselves

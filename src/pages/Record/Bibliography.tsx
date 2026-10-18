@@ -280,8 +280,8 @@ export const Bibliography: FC = () =>
           </li>
         </ul>
       </section>
-      <section className="shelf" aria-label="dynamic interaction research">
-        <h3 className="shelf-title sub-title">Dynamic Interaction</h3>
+      <section className="shelf" aria-label="dynamic research">
+        <h3 className="shelf-title sub-title">Dynamic</h3>
         <ul className="works">
           <li>
             <a className="signpost" href="https://ecma-international.org/publications-and-standards/standards/ecma-262/"><cite>ECMA-262, the editions</cite></a>{' '}

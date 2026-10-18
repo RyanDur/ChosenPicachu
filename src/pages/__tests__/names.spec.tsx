@@ -35,7 +35,7 @@ describe('each page is named where a search shows it', () => {
     ['the practice page, on Structure when no tab is named', Paths.practice, names.practice.structure],
     ['practice’s structure tab', `${Paths.practice}?tab=structure`, names.practice.structure],
     ['practice’s presentation tab', `${Paths.practice}?tab=presentation`, names.practice.presentation],
-    ['practice’s dynamic interaction tab', `${Paths.practice}?tab=dynamic-interaction`, names.practice['dynamic-interaction']],
+    ['practice’s dynamic tab', `${Paths.practice}?tab=dynamic`, names.practice.dynamic],
     ['an address with no room', '/nowhere/', names.noRoom]
   ])('should give %s its own title and description', async (_page, path, {title, description}) => {
     render(<TestApp at={path}/>);

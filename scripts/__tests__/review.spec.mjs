@@ -53,7 +53,7 @@ describe('the review prompt', () => {
     const prompt = promptFor({scope: 'full'});
     expect(prompt).toContain('src/pages/Practice/StructurePractice.tsx');
     expect(prompt).toContain('src/pages/Practice/PresentationPractice.tsx');
-    expect(prompt).toContain('src/pages/Practice/DynamicInteractionPractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/DynamicPractice.tsx');
     expect(prompt).toContain('The scope is the whole of src/');
   });
 

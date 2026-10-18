@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {MomentLink} from '@pages/Record/MomentLink';
 
-export const DynamicInteractionPractice: FC = () =>
+export const DynamicPractice: FC = () =>
   <>
     <p className="paragraph">Behaviour splits into what is true and what happened. The state is what is
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what

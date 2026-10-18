@@ -52,9 +52,9 @@
       "title": "Presentation · Practice · Chosen Picachu",
       "description": "How I organize presentation: two kinds of sheet, a class list that reads like a sentence, and constants kept in the stylesheet."
     },
-    "dynamic-interaction": {
-      "title": "Dynamic Interaction · Practice · Chosen Picachu",
-      "description": "How I organize dynamic interaction: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action."
+    "dynamic": {
+      "title": "Dynamic · Practice · Chosen Picachu",
+      "description": "How I organize dynamic: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action."
     }
   },
   "games": {

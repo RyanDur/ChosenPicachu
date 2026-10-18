@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Opener} from './Opener';
 import {Structure} from './Structure';
 import {Presentation} from './Presentation';
-import {DynamicInteraction} from './DynamicInteraction';
+import {Dynamic} from './Dynamic';
 import './Home.css';
 
 export const HomePage: FC = () =>
@@ -10,5 +10,5 @@ export const HomePage: FC = () =>
     <Opener/>
     <Structure/>
     <Presentation/>
-    <DynamicInteraction/>
+    <Dynamic/>
   </article>;

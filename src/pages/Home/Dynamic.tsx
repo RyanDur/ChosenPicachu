@@ -3,8 +3,8 @@ import {Quotation} from '@components/Quotation';
 import {FromTheRecord} from './FromTheRecord';
 import {ConcernSection} from './ConcernSection';
 
-export const DynamicInteraction: FC = () =>
-  <ConcernSection concern="Dynamic Interaction">
+export const Dynamic: FC = () =>
+  <ConcernSection concern="Dynamic">
     <Quotation voice="paragraph" source={<a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan Eich, in Computerworld’s A-Z of Programming Languages</a>}>
       With a scripting language like JS that could touch elements of the page, change
       their properties, and respond to events, we envisioned a much livelier Web
