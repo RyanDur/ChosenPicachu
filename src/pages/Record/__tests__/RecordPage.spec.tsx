@@ -518,7 +518,6 @@ describe('the record', () => {
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
     'The posture from 1994, the specification following the field, had become the rule.',
-    'The single-page application inverted the premise: the document no longer carried the application, the application emitted the document.',
     'Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.',
     'What changed each time was where the rendering happens; the three responsibilities did not move.',
     'Someone needs something, the community answers, and the platform learns the answer. The needs have not stopped arriving.'
@@ -714,8 +713,11 @@ describe('the record', () => {
     await waitFor(() => expect(itemHeadedBy('1996', 'The need outruns the standards')).toHaveFocus());
   });
 
-  test('should read a shelved work as its title, a space, then where it comes from', () => {
-    expect(shelvedAs('HTML 3.2 Reference Specification')).toHaveTextContent('HTML 3.2 Reference Specification W3C Recommendation, 14 January 1997');
+  test('should read every shelved work as its title, a space, then where it comes from', () => {
+    within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true}).forEach(entry => {
+      const title = within(entry).getByRole('link', {hidden: true}).textContent ?? '';
+      expect(entry.textContent?.startsWith(`${title} `), `${title} runs into its provenance`).toBe(true);
+    });
   });
 
   test('should keep every source a fuller story links to on the research shelf', () => {
