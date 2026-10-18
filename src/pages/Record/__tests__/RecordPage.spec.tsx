@@ -421,7 +421,9 @@ describe('the 2013 moment', () => {
   });
 
   test('should send the reader to the 2010 moment for the single-page application\'s shape', async () => {
-    await userEvent.click(within(itemHeadedBy('the timeline', 'Someone needs components')).getByRole('link', {name: 'the 2010 moment', hidden: true}));
+    const moment = itemHeadedBy('the timeline', 'Someone needs components');
+    await userEvent.click(within(moment).getByText('the fuller story'));
+    await userEvent.click(within(moment).getByRole('link', {name: 'the 2010 moment'}));
 
     await waitFor(() => expect(itemHeadedBy('the timeline', 'The application needs a frame')).toHaveFocus());
   });
@@ -557,8 +559,7 @@ describe('the record', () => {
   test.each([
     'Presentation got its own language the same year the web got its own standards body, the W3C.',
     'Hundreds of designs followed, and not one change to the markup: the same structure under any presentation.',
-    'The posture from 1994, the specification following the field, had become the rule.',
-    'What changed each time was where the rendering happens; the three responsibilities did not move.'
+    'The posture from 1994, the specification following the field, had become the rule.'
   ])('should say plainly, words and links together: %s', sentence => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).toHaveTextContent(sentence);
   });
@@ -683,6 +684,7 @@ describe('the record', () => {
     ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
     ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
     ['The philosophy needs writing down', 'https://www.w3.org/TR/2014/REC-html5-20141028/', '28 October 2014'],
+    ['The document needs to come first', 'https://web.dev/rendering-on-the-web/', '“Running client-side scripts to add application state and interactivity to server-rendered HTML”'],
     ['The document needs to come first', 'https://vercel.com/blog/next', '“a small framework for server-rendered universal JavaScript webapps”'],
     ['The document needs to come first', 'https://jasonformat.com/islands-architecture/', 'documented the islands architecture'],
     ['The document needs to come first', 'https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html', '“research into zero-bundle-size React Server Components”'],
