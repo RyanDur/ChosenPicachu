@@ -23,7 +23,7 @@ export const Presentation: FC = () =>
         needs, not what it is. Element selectors appear only in the reset.
         There is no utility scale: lifted says why a style is there, and mt-4 says only what it does. Markup full of
         utilities is the look written back into the structure.
-        The separation is the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s, and the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> is what it buys.</p>
+        The separation is the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s, and the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> shows what it is for.</p>
       <p className="paragraph">A class list reads like a sentence: the element’s own name first, then what
         it needs, then what is true right now. The platform already names most states, such as invalid, checked and
         hover, so the sheet uses those{' '}
@@ -55,7 +55,6 @@ export const Presentation: FC = () =>
         script and now live in CSS.</p>
       <p className="paragraph">The test is to read a class list on its own. If it does not say what the
         element is and what it needs, in the names the design uses, the sheet has become a pile of overrides.
-        Isolation, the last of the seven problems Chedeau’s talk lists (the{' '}
-      <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> links the talk), is what this test guards against.</p>
+        This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list.</p>
     </HowIOrganizeIt>
   </DoorSection>;

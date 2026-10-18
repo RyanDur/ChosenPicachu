@@ -81,7 +81,9 @@ describe('the home page', () => {
     expect(door.getByText(/^Constants live in the stylesheet/))
       .toHaveTextContent(/Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS\./);
     expect(door.getByText(/^The test is to read a class list on its own/))
-      .toHaveTextContent(/Isolation, the last of the seven problems Chedeau’s talk lists \(the 2013 moment links the talk\), is what this test guards against\./);
+      .toHaveTextContent(/This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list\.$/);
+    expect(door.getByText(/Element selectors appear only in the reset/))
+      .toHaveTextContent(/The separation is the 1994 draft’s, and the Zen Garden in the 2003 moment shows what it is for\./);
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
     expect(door.getByText(/a pile of overrides/)).toBeInTheDocument();
     expect(door.getByText(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
@@ -186,7 +188,7 @@ describe('the home page', () => {
 
   test.each([
     ['Structure', ['2014 The rules need writing down', '2004 The standard needs the real world', '2013 Someone needs components', '2004 The standard needs the real world', '2016 The document needs to come first']],
-    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components', '2013 Someone needs components']],
+    ['Presentation', ['1994 Authors need control of the look', '2003 The separation needs proof', '1996 The pages need to look the same', '2013 Someone needs components']],
     ['Dynamic Interaction', ['2010 The application needs a frame', '2005 The page needs to update in place', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']]
   ])('should rest %s\'s practice on its own moments, each citation naming the year of the moment it opens', (section, meant) => {
     const listed = within(screen.getByRole('list', {name: `${section}, from the record`}));
