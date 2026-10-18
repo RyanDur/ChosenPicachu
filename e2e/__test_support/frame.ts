@@ -157,6 +157,14 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x'),
     holdRow: (row: number): Promise<Hold> => held(page, table.getByRole('button', {name: `move row ${row}`}), 'y'),
     row: (name: RegExp): Locator => table.getByRole('row', {name}),
+    moveColumnByKey: async (column: string, key: string): Promise<void> => {
+      await columnHeader(column).focus();
+      await page.keyboard.press(key);
+    },
+    moveRowByKey: async (row: number, key: string): Promise<void> => {
+      await table.getByRole('button', {name: `move row ${row}`}).focus();
+      await page.keyboard.press(key);
+    },
     dragColumnPast: async (column: string, past: string): Promise<void> => {
       await columnHeader(column).scrollIntoViewIfNeeded();
       const from = await boxOf(columnHeader(column));
