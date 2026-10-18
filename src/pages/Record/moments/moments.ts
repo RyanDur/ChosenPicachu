@@ -25,23 +25,10 @@ export const inOrder = ordered([
 
 export type MomentKey = typeof inOrder[number];
 
-export const doorsInOrder = ['Structure', 'Presentation', 'Dynamic Interaction'] as const;
+export type MomentHeading = {year: string; title: string; id: string};
 
-export type Door = typeof doorsInOrder[number];
-
-export const fromTheRecord: Record<Door, readonly MomentKey[]> = {
-  'Structure': ['need', 'structureArrives', 'webGoesPublic', 'htmlTwo', 'needOutrunsStandards', 'browsersTakePen', 'someoneNeedsComponents', 'html5SaysIt', 'documentComesBack'],
-  'Presentation': ['presentationLeavesHome', 'needOutrunsStandards', 'cssOne', 'browsersAgree', 'wiredRedesign', 'zenGarden', 'cssTwoOne', 'someoneNeedsComponents'],
-  'Dynamic Interaction': ['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'documentComesBack']
-};
-
-export const doorsOf = (key: MomentKey): string =>
-  doorsInOrder.filter(door => fromTheRecord[door].includes(key)).join(', ');
-
-export type MomentHeading = {year: string; title: string; id: string; date?: string};
-
-const named = (year: string, title: string, date?: string): MomentHeading =>
-  ({year, title, date, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
+const named = (year: string, title: string): MomentHeading =>
+  ({year, title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -52,10 +39,10 @@ export const moments: Record<MomentKey, MomentHeading> = {
   structureArrives: named('1990', 'Researchers need to collaborate'),
   webGoesPublic: named('1991', 'The web needs the public'),
   presentationLeavesHome: named('1994', 'Authors need control of the look'),
-  behaviorBorn: named('1995', 'Pages need to respond', '1995-05'),
-  htmlTwo: named('1995', 'The browsers’ tags need a standard', '1995-11'),
-  needOutrunsStandards: named('1996', 'The need outruns the standards', '1996-08'),
-  cssOne: named('1996', 'The style sheet needs a standard', '1996-12-17'),
+  behaviorBorn: named('1995', 'Pages need to respond'),
+  htmlTwo: named('1995', 'The browsers’ tags need a standard'),
+  needOutrunsStandards: named('1996', 'The need outruns the standards'),
+  cssOne: named('1996', 'The style sheet needs a standard'),
   ecmaScript: named('1997', 'The language needs a standard'),
   browsersAgree: named('1998', 'The browsers need to agree'),
   wiredRedesign: named('2002', 'Someone needs to go first'),
@@ -68,4 +55,23 @@ export const moments: Record<MomentKey, MomentHeading> = {
   someoneNeedsComponents: named('2013', 'Someone needs components'),
   html5SaysIt: named('2014', 'The philosophy needs writing down'),
   documentComesBack: named('2016', 'The document needs to come first')
+};
+
+export type YearOfTwo = {
+  readonly title: string;
+  readonly tells: string;
+  readonly dated: readonly (readonly [MomentKey, string])[];
+};
+
+export const yearsOfTwo: Partial<Record<string, YearOfTwo>> = {
+  '1995': {
+    title: 'Pages need to respond, and the browsers’ tags need a standard',
+    tells: 'Two doors moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
+    dated: [['behaviorBorn', '1995-05'], ['htmlTwo', '1995-11']]
+  },
+  '1996': {
+    title: 'The need outruns the standards, and the style sheet needs a standard',
+    tells: 'Two doors moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
+    dated: [['needOutrunsStandards', '1996-08'], ['cssOne', '1996-12-17']]
+  }
 };

@@ -1,9 +1,9 @@
 import {FC, useContext} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {fromTheRecord, inOrder, moments} from '@pages/Record/moments/moments';
+import {inOrder, moments} from '@pages/Record/moments/moments';
 import {momentAddress} from './MomentLink';
-import {doorId} from './door';
+import {doorId, fromTheRecord} from '@pages/Record/moments/doors';
 import {CurrentDoor} from './DoorSection';
 
 export const FromTheRecord: FC = () =>

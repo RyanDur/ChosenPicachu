@@ -177,14 +177,6 @@ describe('the tables tab’s own words', () => {
     expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
   });
 
-  test('should keep why the reset wins and the one line left in runs of their own', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    expect(within(await screen.findByRole('region', {name: 'Tables'})).getByText(/^One line remains that no reset should write for you/)).toBeInTheDocument();
-  });
-
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);

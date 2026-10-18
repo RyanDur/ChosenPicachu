@@ -77,7 +77,8 @@
     height: var(--base-x-2);
   }
 
-  .year {
+  .year,
+  .month {
     grid-column: 1;
     grid-row: 1;
     justify-self: end;

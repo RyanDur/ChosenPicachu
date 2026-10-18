@@ -4,13 +4,6 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
-const yearOfTwo: Record<string, string> = {
-  'Pages need to respond': '1995',
-  'The browsers’ tags need a standard': '1995',
-  'The need outruns the standards': '1996',
-  'The style sheet needs a standard': '1996'
-};
-
 describe('the 1989 moment', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -322,9 +315,9 @@ describe('the record', () => {
     ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
     ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”']
   ])('should tell %s, its fuller story quoting its source by a link', (title, source, quotation) => {
-    const moment = itemHeadedBy(yearOfTwo[title] ?? 'the timeline', title);
+    const entry = itemHeadedBy('the timeline', title);
 
-    expect(within(moment).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
+    expect(within(within(entry).getByRole('group')).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
   test('should open the tee-up on how every page here is built, need first', () => {

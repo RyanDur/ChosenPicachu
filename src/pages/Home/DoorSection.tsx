@@ -1,7 +1,6 @@
 import {createContext, FC, PropsWithChildren} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
-import {Door} from '@pages/Record/moments/moments';
-import {doorId} from './door';
+import {Door, doorId} from '@pages/Record/moments/doors';
 
 const noDoorSectionMounted: Maybe<Door> = nothing();
 

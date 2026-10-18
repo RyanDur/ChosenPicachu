@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useContext} from 'react';
-import {doorId} from './door';
+import {doorId} from '@pages/Record/moments/doors';
 import {CurrentDoor} from './DoorSection';
 
 export const HowIOrganizeIt: FC<PropsWithChildren> = ({children}) =>
