@@ -38,17 +38,15 @@ export type Dated = Exclude<MomentDate, {kind: 'year'}>;
 
 export type MomentHeading = {date: MomentDate; title: string; id: string};
 
-const monthsInOrder: readonly Month[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+type Written = {readonly year: string; readonly month?: Month; readonly day?: number};
 
-const dateOf = (written: string): MomentDate => {
-  const [year, ...rest] = written.split('-');
-  const [numbered, day] = rest.map(Number);
-  return maybe(monthsInOrder.find(month => month === numbered)).either(
-    (month): MomentDate => rest.length === 1 ? {kind: 'month', year, month} : {kind: 'day', year, month, day},
-    (): MomentDate => ({kind: 'year', year}));
-};
+const dateOf = ({year, month, day}: Written): MomentDate => maybe(month).either(
+  (inMonth): MomentDate => maybe(day).either(
+    (onDay): MomentDate => ({kind: 'day', year, month: inMonth, day: onDay}),
+    (): MomentDate => ({kind: 'month', year, month: inMonth})),
+  (): MomentDate => ({kind: 'year', year}));
 
-const named = (written: string, title: string): MomentHeading =>
+const named = (written: Written, title: string): MomentHeading =>
   ({date: dateOf(written), title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
 
 const twoDigits = (part: number): string => String(part).padStart(2, '0');
@@ -66,26 +64,26 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 export const monthOf = (date: Dated): string => months[date.month - 1];
 
 export const moments: Record<MomentKey, MomentHeading> = {
-  need: named('1989', 'Someone needs something'),
-  structureArrives: named('1990', 'Researchers need to collaborate'),
-  webGoesPublic: named('1991', 'The web needs the public'),
-  presentationLeavesHome: named('1994', 'Authors need control of the look'),
-  behaviorBorn: named('1995-05', 'Pages need to respond'),
-  htmlTwo: named('1995-11', 'The browsers’ tags need a standard'),
-  needOutrunsStandards: named('1996-08', 'The need outruns the standards'),
-  cssOne: named('1996-12-17', 'The style sheet needs a standard'),
-  ecmaScript: named('1997', 'The language needs a standard'),
-  browsersAgree: named('1998', 'The browsers need to agree'),
-  wiredRedesign: named('2002', 'Someone needs to go first'),
-  zenGarden: named('2003', 'The separation needs proof'),
-  browsersTakePen: named('2004', 'The standard needs the real world'),
-  pageBecomesApplication: named('2005', 'The page needs to update in place'),
-  esFive: named('2009', 'The standard needs to move again'),
-  frameworks: named('2010', 'The application needs a frame'),
-  cssTwoOne: named('2011', 'The specification needs its tests'),
-  someoneNeedsComponents: named('2013', 'Someone needs components'),
-  html5SaysIt: named('2014', 'The philosophy needs writing down'),
-  documentComesBack: named('2016', 'The document needs to come first')
+  need: named({year: '1989'}, 'Someone needs something'),
+  structureArrives: named({year: '1990'}, 'Researchers need to collaborate'),
+  webGoesPublic: named({year: '1991'}, 'The web needs the public'),
+  presentationLeavesHome: named({year: '1994'}, 'Authors need control of the look'),
+  behaviorBorn: named({year: '1995', month: 5}, 'Pages need to respond'),
+  htmlTwo: named({year: '1995', month: 11}, 'The browsers’ tags need a standard'),
+  needOutrunsStandards: named({year: '1996', month: 8}, 'The need outruns the standards'),
+  cssOne: named({year: '1996', month: 12, day: 17}, 'The style sheet needs a standard'),
+  ecmaScript: named({year: '1997'}, 'The language needs a standard'),
+  browsersAgree: named({year: '1998'}, 'The browsers need to agree'),
+  wiredRedesign: named({year: '2002'}, 'Someone needs to go first'),
+  zenGarden: named({year: '2003'}, 'The separation needs proof'),
+  browsersTakePen: named({year: '2004'}, 'The standard needs the real world'),
+  pageBecomesApplication: named({year: '2005'}, 'The page needs to update in place'),
+  esFive: named({year: '2009'}, 'The standard needs to move again'),
+  frameworks: named({year: '2010'}, 'The application needs a frame'),
+  cssTwoOne: named({year: '2011'}, 'The specification needs its tests'),
+  someoneNeedsComponents: named({year: '2013'}, 'Someone needs components'),
+  html5SaysIt: named({year: '2014'}, 'The philosophy needs writing down'),
+  documentComesBack: named({year: '2016'}, 'The document needs to come first')
 };
 
 export type YearOfTwo = {
