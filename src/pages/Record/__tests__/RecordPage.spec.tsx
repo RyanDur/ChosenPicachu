@@ -439,6 +439,33 @@ describe('the 2013 moment', () => {
   });
 });
 
+describe('the 2014 moment', () => {
+  beforeEach(() => {
+    render(<TestApp at={Paths.record}/>);
+  });
+
+  test.each([
+    'The specification era restated the philosophy: design principles for how a standard should behave, and stated objectives for the language: semantic markup, separation of design from content, and, in one summary’s words, reducing the overlap between HTML, CSS, and JavaScript.',
+    'The objectives, as html.com summarizes them: encouraging semantic markup; separating design from content; promoting accessibility and responsiveness; reducing the overlap between the three languages; and supporting rich media without plugins. The reasoning is the 1994 settlement restated for new devices: content is read “in a lot of different contexts — desktops, laptops, tablets, mobile phones, RSS readers”, so provide the meaning and let presentation adapt.',
+    'The principles came first, in November 2007, as a W3C working draft, HTML Design Principles, from the working group chartered to take up the WHATWG’s work. Its rule for conflicts is one sentence: “In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.” Its rule for the past, pave the cowpaths, is the line the concert below opens with. Jeremy Keith presented them as six: avoid needless complexity; support existing content; solve real problems; pave the cowpaths, adopting what is “widely accepted” instead of inventing anew; degrade gracefully; and priority of constituencies, the cascade’s settlement written into the constitution: “users > authors > implementors > specifiers > theoretical purity”.',
+    'HTML5 itself became a W3C Recommendation on 28 October 2014, seven years after the principles. And there was a quiet break with the past, which the Standard states. “While the HTML syntax described in this specification bears a close resemblance to SGML and XML, it is a separate language with its own parsing rules”, and “few (if any) web browsers ever implemented true SGML parsing for HTML documents”. The specification “defines the parsing rules for HTML documents, whether they are syntactically correct or not”, so what a browser does with broken markup stopped being a vendor’s guess. The doctype collapsed to fifteen characters, <!DOCTYPE html>, kept “for legacy reasons”, because when it is omitted “browsers tend to use a different rendering mode that is incompatible with some specifications”. Even Berners-Lee’s 1991 wish for “a nestable <SECTION>..</SECTION> element” resurfaced as the section element, twenty-three years later.'
+  ])('should quote the design principles as the W3C wrote them and the Standard on its break with SGML, words and links together: %s', told => {
+    expect(itemHeadedBy('the timeline', 'The philosophy needs writing down')).toHaveTextContent(told);
+  });
+
+  test.each(['no longer an SGML application', 'its remaining job was triggering standards mode'])('should leave out "%s", which the Standard\'s own words replace', claim => {
+    expect(itemHeadedBy('the timeline', 'The philosophy needs writing down')).not.toHaveTextContent(claim);
+  });
+
+  test('should set the doctype as code', () => {
+    expect(within(itemHeadedBy('the timeline', 'The philosophy needs writing down')).getByRole('code', {hidden: true})).toHaveTextContent('<!DOCTYPE html>');
+  });
+
+  test.each([['HTML Design Principles', 'Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November 2007'], ['HTML5', 'W3C Recommendation, 28 October 2014'], ['HTML Standard, parsing HTML documents', 'WHATWG'], ['HTML Standard, the HTML syntax', 'WHATWG']])('should shelve %s, %s', (work, provenance) => {
+    expect(shelvedAs(work)).toHaveTextContent(provenance);
+  });
+});
+
 describe('the record', () => {
   beforeEach(() => {
     render(<TestApp at={Paths.record}/>);
@@ -592,6 +619,10 @@ describe('the record', () => {
     ['Someone needs components', 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html', '“React isn’t an MVC framework”'],
     ['Someone needs components', 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html', 'Christopher Chedeau’s talk'],
     ['Someone needs components', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope', '“works across the latest devices and browser versions”'],
+    ['The philosophy needs writing down', 'https://www.w3.org/TR/html-design-principles/', '“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”'],
+    ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
+    ['The philosophy needs writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
+    ['The philosophy needs writing down', 'https://www.w3.org/TR/2014/REC-html5-20141028/', '28 October 2014'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],

@@ -103,7 +103,19 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/TR/html-design-principles/"><cite>HTML Design Principles</cite></a>{' '}
-            <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C, 2007</span>
+            <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November 2007</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/TR/2014/REC-html5-20141028/"><cite>HTML5</cite></a>{' '}
+            <span className="provenance caption">W3C Recommendation, 28 October 2014</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/parsing.html"><cite>HTML Standard, parsing HTML documents</cite></a>{' '}
+            <span className="provenance caption">WHATWG</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/syntax.html"><cite>HTML Standard, the HTML syntax</cite></a>{' '}
+            <span className="provenance caption">WHATWG</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA"><cite>ARIA</cite></a>{' '}

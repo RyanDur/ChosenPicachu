@@ -2,37 +2,22 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
+const htmlCom = 'https://html.com/html5/';
+const infoQ = 'https://www.infoq.com/news/2011/05/html5-design/';
+const principles = 'https://www.w3.org/TR/html-design-principles/';
+const recommendation = 'https://www.w3.org/TR/2014/REC-html5-20141028/';
+const parsing = 'https://html.spec.whatwg.org/multipage/parsing.html';
+const syntax = 'https://html.spec.whatwg.org/multipage/syntax.html';
+
 export const Html5SaysIt: FC = () =>
   <Moment of={moments.html5SaysIt}
     tells={<>The specification era restated the philosophy:{' '}
-      <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">design principles</a>{' '}
+      <a className="signpost" href={infoQ}>design principles</a>{' '}
       for how a standard should behave, and stated objectives for the language: semantic
       markup, separation of design from content, and, in one summary’s words,{' '}
-      <a className="signpost" href="https://html.com/html5/">reducing the overlap between HTML, CSS, and
+      <a className="signpost" href={htmlCom}>reducing the overlap between HTML, CSS, and
         JavaScript</a>.</>}>
-    <p className="paragraph muted-ink hyphenated">The objectives, as html.com summarizes them: encouraging semantic markup;
-      separating design from content; promoting accessibility and responsiveness; reducing
-      the overlap between the three languages; and supporting rich media without plugins.
-      The reasoning is the 1994 settlement restated for new devices: content is read{' '}
-    <a className="signpost" href="https://html.com/html5/">“in a lot of different contexts — desktops, laptops,
-      tablets, mobile phones, RSS readers”</a>,
-      so provide the meaning and let presentation adapt.</p>
-    <p className="paragraph muted-ink hyphenated">The W3C’s design principles, as Jeremy Keith presented them, are six: avoid
-      needless complexity; support existing content; solve real problems; pave the cowpaths,
-      adopting what is{' '}
-    <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">“widely accepted”</a> instead of
-      inventing anew; degrade
-      gracefully; and priority of constituencies, the cascade’s settlement written into the
-      constitution:{' '}
-    <a className="signpost"
-      href="https://www.infoq.com/news/2011/05/html5-design/">“users &gt; authors &gt; implementors &gt; specifiers &gt; theoretical
-      purity”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">And there was a quiet break with the past: HTML5 is no longer an SGML
-      application. The specification defines its own parsing, including what a browser must
-      do with broken markup, so parsing stopped being a vendor’s guess; the doctype
-      collapsed to fifteen characters because its remaining job was triggering standards
-      mode. Even Berners-Lee’s 1991 wish for{' '}
-    <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">“a
-      nestable &lt;SECTION&gt;..&lt;/SECTION&gt; element”</a>{' '}
-      resurfaced as the section element, twenty-three years later.</p>
+    <p className="paragraph muted-ink hyphenated">The objectives, as html.com summarizes them: encouraging semantic markup; separating design from content; promoting accessibility and responsiveness; reducing the overlap between the three languages; and supporting rich media without plugins. The reasoning is the 1994 settlement restated for new devices: content is read <a className="signpost" href={htmlCom}>“in a lot of different contexts — desktops, laptops, tablets, mobile phones, RSS readers”</a>, so provide the meaning and let presentation adapt.</p>
+    <p className="paragraph muted-ink hyphenated">The principles came first, in November 2007, as a W3C working draft, HTML Design Principles, from the working group chartered to take up the WHATWG’s work. Its rule for conflicts is one sentence: <a className="signpost" href={principles}>“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”</a> Its rule for the past, pave the cowpaths, is the line the concert below opens with. Jeremy Keith presented them as six: avoid needless complexity; support existing content; solve real problems; pave the cowpaths, adopting what is <a className="signpost" href={infoQ}>“widely accepted”</a> instead of inventing anew; degrade gracefully; and priority of constituencies, the cascade’s settlement written into the constitution: <a className="signpost" href={infoQ}>“users &gt; authors &gt; implementors &gt; specifiers &gt; theoretical purity”</a>.</p>
+    <p className="paragraph muted-ink hyphenated">HTML5 itself became a W3C Recommendation on <a className="signpost" href={recommendation}>28 October 2014</a>, seven years after the principles. And there was a quiet break with the past, which the Standard states. <a className="signpost" href={parsing}>“While the HTML syntax described in this specification bears a close resemblance to SGML and XML, it is a separate language with its own parsing rules”</a>, and <a className="signpost" href={parsing}>“few (if any) web browsers ever implemented true SGML parsing for HTML documents”</a>. The specification <a className="signpost" href={parsing}>“defines the parsing rules for HTML documents, whether they are syntactically correct or not”</a>, so what a browser does with broken markup stopped being a vendor’s guess. The doctype collapsed to fifteen characters, <code>{'<!DOCTYPE html>'}</code>, kept <a className="signpost" href={syntax}>“for legacy reasons”</a>, because when it is omitted <a className="signpost" href={syntax}>“browsers tend to use a different rendering mode that is incompatible with some specifications”</a>. Even Berners-Lee’s 1991 wish for <a className="signpost" href={infoQ}>“a nestable &lt;SECTION&gt;..&lt;/SECTION&gt; element”</a> resurfaced as the section element, twenty-three years later.</p>
   </Moment>;
