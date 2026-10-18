@@ -97,10 +97,6 @@
     margin: 0;
   }
 
-  .moments-of-a-year .moment::after {
-    content: none;
-  }
-
   @media (width <= 600px) {
     .moments-of-a-year .moment {
       grid-template-columns: minmax(0, 1fr);
@@ -119,7 +115,8 @@
       align-items: start;
     }
 
-    .moments-of-a-year .beat-title::before {
+    .moments-of-a-year .beat-title::before,
+    .moments-of-a-year .moment::after {
       content: none;
     }
   }

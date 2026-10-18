@@ -11,7 +11,7 @@ export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>
     doors => <li className="moment trim-rail-along" id={id} tabIndex={-1}>
       <time dateTime={date} className="year caption bold">{monthOf(date)}</time>
       <hgroup className="beat-heading">
-        <h3 className="beat-title sub-title void-dot-before">{title}</h3>
+        <h4 className="beat-title sub-title void-dot-before">{title}</h4>
         <p className="doors caption">{doors}</p>
       </hgroup>
       <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>

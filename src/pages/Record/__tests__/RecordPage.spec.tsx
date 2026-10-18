@@ -240,7 +240,7 @@ describe('the record', () => {
     expect(screen.getByText(/one sentence said twenty ways/)).toBeVisible();
   });
 
-  test('the timeline walks the years in order, one entry each, a year of two moments holding both', () => {
+  test('the timeline walks the years in order, one entry each, a year of two moments holding both under its title', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
@@ -251,11 +251,7 @@ describe('the record', () => {
       'The web needs the public',
       'Authors need control of the look',
       'Pages need to respond, and the browsers’ tags need a standard',
-      'Pages need to respond',
-      'The browsers’ tags need a standard',
       'The need outruns the standards, and the style sheet needs a standard',
-      'The need outruns the standards',
-      'The style sheet needs a standard',
       'The language needs a standard',
       'The browsers need to agree',
       'Someone needs to go first',
@@ -288,7 +284,7 @@ describe('the record', () => {
       within(moment).getByRole('time').getAttribute('datetime'),
       within(moment).getByRole('time').textContent,
       within(moment).getByText(/^(Structure|Presentation|Dynamic Interaction)/).textContent,
-      within(moment).getByRole('heading').textContent
+      within(moment).getByRole('heading', {level: 4}).textContent
     ])).toEqual(doors);
   });
 
