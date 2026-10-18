@@ -3,7 +3,7 @@ import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf} from './entry-p
 
 const names = JSON.parse(readFileSync('src/pages/names.json', 'utf-8'));
 const listings = {
-  '/': names.home, '/demos/': names.demos.accordions, '/users/': names.users, '/gallery/': names.gallery, '/games/': names.games, '/record/': names.record
+  '/': names.home, '/demos/': names.demos.accordions, '/users/': names.users, '/gallery/': names.gallery, '/games/': names.games, '/record/': names.record, '/development/': names.development.structure
 };
 const unlisted = route => {
   throw new Error(`src/pages/names.json names no page at ${route}`);

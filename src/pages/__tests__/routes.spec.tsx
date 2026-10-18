@@ -103,12 +103,12 @@ describe('the skeleton', () => {
 });
 
 describe('the rail lists the site’s pages', () => {
-  test('should list Home, Record, Demos, Users, Gallery, Games and Repo, in that order', async () => {
+  test('should list Home, Record, Development, Demos, Users, Gallery, Games and Repo, in that order', async () => {
     render(<TestApp at={Paths.users}/>);
 
     const nav = await site.nav();
 
-    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Record', 'Demos', 'Users', 'Gallery', 'Games', 'Repo']);
+    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Record', 'Development', 'Demos', 'Users', 'Gallery', 'Games', 'Repo']);
   });
 
   test('should take the reader to the record from the rail', async () => {
@@ -122,6 +122,17 @@ describe('the rail lists the site’s pages', () => {
   });
 });
 
+describe('the rail takes the reader to Development', () => {
+  test('should land on the Structure tab', async () => {
+    render(<TestApp at={Paths.users}/>);
+
+    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Development'}));
+
+    expect(await within(await site.nav()).findByRole('link', {name: 'Development', current: 'page'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Development Structure', level: 1})).toBeInTheDocument();
+  });
+});
+
 describe('the rail says which page the reader is on', () => {
   test.each([
     ['Home', Paths.home],
@@ -130,6 +141,8 @@ describe('the rail says which page the reader is on', () => {
     ['Gallery', `${Paths.artGallery}?page=3&size=8&tab=aic`],
     ['Games', Paths.games],
     ['Record', Paths.record],
+    ['Development', Paths.development],
+    ['Development', `${Paths.development}?tab=presentation`],
     ['Demos', chartPageAt('price')]
   ])('should announce %s as the current page, and no other', async (name, path) => {
     render(<TestApp at={path}/>);

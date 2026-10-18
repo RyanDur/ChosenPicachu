@@ -282,7 +282,7 @@
 
 @media (601px <= width <= 1100px) {
   #root .rail:has(.feedback-item) {
-    --paths-and-feedback: 8;
+    --paths-and-feedback: 9;
 
     grid-area: nav / nav / feedback / feedback;
     display: grid;
@@ -307,6 +307,20 @@
       grid-row: 1;
       grid-column: -2 / -1;
     }
+  }
+}
+
+@media (width > 600px) and (width <= 640px) {
+  #root:has(.feedback-item) {
+    grid-template-rows: var(--header-block) auto var(--filter-block) 1fr var(--base);
+  }
+
+  #root:has(.feedback-item):not(:has(.app-footer)) {
+    grid-template-rows: var(--header-block) auto var(--filter-block) 1fr;
+  }
+
+  #root .rail:has(.feedback-item) {
+    --paths-and-feedback: 5;
   }
 }
 

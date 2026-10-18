@@ -1,0 +1,27 @@
+.development-opening {
+  padding: var(--base-x-5);
+
+  @media (width <= 600px) {
+    padding-inline: var(--base-x-2_5);
+  }
+}
+
+.practice {
+  display: grid;
+  align-content: start;
+  gap: var(--base-x-1_5);
+  padding: var(--base-x-5);
+
+  @media (width <= 600px) {
+    padding-inline: var(--base-x-2_5);
+  }
+
+  .paragraph {
+    margin: 0;
+    text-wrap: pretty;
+  }
+}
+
+.practice-title {
+  margin: 0;
+}

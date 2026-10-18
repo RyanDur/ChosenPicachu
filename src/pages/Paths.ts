@@ -6,5 +6,6 @@ export enum Paths {
   chartTutorial = '/demos/charts/:kind/',
   games = '/games/',
   record = '/record/',
+  development = '/development/',
   repo = 'https://github.com/RyanDur/ChosenPicachu'
 }

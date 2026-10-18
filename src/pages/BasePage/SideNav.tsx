@@ -11,6 +11,7 @@ export const SideNav: FC = () =>
   <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
     <NavLink id="navigate-home" className={railPath} to={Paths.home} end>Home</NavLink>
     <NavLink id="navigate-record" className={railPath} to={Paths.record}>Record</NavLink>
+    <NavLink id="navigate-development" className={railPath} to={Paths.development}>Development</NavLink>
     <NavLink id="navigate-demos" className={railPath} to={Paths.demos}>Demos</NavLink>
     <NavLink id="navigate-users" className={railPath} to={Paths.users}>Users</NavLink>
     <NavLink id="navigate-form" className={railPath}

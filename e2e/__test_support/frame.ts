@@ -126,6 +126,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     },
     dragRowPast: async (row: number, past: RegExp): Promise<void> => {
       await table.getByRole('row', {name: past}).scrollIntoViewIfNeeded();
+      await table.getByRole('button', {name: `move row ${row}`}).scrollIntoViewIfNeeded();
       const grip = await boxOf(table.getByRole('button', {name: `move row ${row}`}));
       const target = await boxOf(table.getByRole('row', {name: past}));
       await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
