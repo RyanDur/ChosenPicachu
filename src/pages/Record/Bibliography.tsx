@@ -107,15 +107,15 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/TR/2014/REC-html5-20141028/"><cite>HTML5</cite></a>{' '}
-            <span className="provenance caption">W3C Recommendation, 28 October 2014</span>
+            <span className="provenance caption">Ian Hickson, Robin Berjon, Steve Faulkner, Travis Leithead, Erika Doyle Navara, Theresa O’Connor and Silvia Pfeiffer, W3C Recommendation, 28 October 2014</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/parsing.html"><cite>HTML Standard, parsing HTML documents</cite></a>{' '}
-            <span className="provenance caption">WHATWG</span>
+            <span className="provenance caption">WHATWG, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/syntax.html"><cite>HTML Standard, the HTML syntax</cite></a>{' '}
-            <span className="provenance caption">WHATWG</span>
+            <span className="provenance caption">WHATWG, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA"><cite>ARIA</cite></a>{' '}
