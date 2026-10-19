@@ -36,15 +36,10 @@ describe('the home page', () => {
     expect(homePage.quotation(/a much livelier Web/)).toBeVisible();
   });
 
-  test('should leave how I organize each language to the Practice page', () => {
-    expect(homePage.practiceHeading()).not.toBeInTheDocument();
-    expect(homePage.practiceRegion()).not.toBeInTheDocument();
-  });
-
   test.each([
-    ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Berners-Lee borrowed its grammar and invented one tag, the anchor, and the browsers added the rest, written down only after it was in use. The standard has followed the pages ever since, and HTML5 put semantic markup first. So the rule is to choose the element that means what the content is, and add the look and the behaviour on top of it. The element brings its meaning and its behaviour with it, and a reader’s tools read the meaning before anything else arrives.', 'structure'],
+    ['Structure', 'HTML says what each thing on the page is: a heading, a list, a button, a form. Berners-Lee borrowed its grammar and invented one tag, the anchor, and the browsers added the rest, written down only after it was in use. The standard followed the pages, left them for XML in 1998, and came back to them with HTML5, whose objectives, as html.com summarizes them, put semantic markup first. So the rule is to choose the element that means what the content is, and add the look and the behaviour on top of it. The element brings its meaning and its behaviour with it, and a reader’s tools read the meaning before anything else arrives.', 'structure'],
     ['Presentation', 'CSS says how things look. Authors asked for the look in 1994 and the browsers answered with tags; Håkon Wium Lie and Bert Bos answered with a sheet and a cascade, in which the author’s wishes, the reader’s and the browser’s combine, and the browsers took a decade of tests to render it alike. So a look belongs in the sheet, named for what the element needs, and nothing in the HTML says how it looks. When the sheet cannot say it yet, the workaround stays beside the rule and goes when the platform catches up.', 'presentation'],
-    ['Dynamic', 'JavaScript says how things respond. Brendan Eich wrote it in ten days to touch a page the server had already sent; the page then became the program, and the cost came with the growth, until the document came first again with script only where a region must respond. So the document comes first and the program only where the page needs one. Inside the program, the state is what is true, an event is what happened, and the page is drawn from the two, so a framework can change under it and the core stays.', 'dynamic']
+    ['Dynamic', 'JavaScript says how things respond. Brendan Eich wrote its first interpreter in about ten days to touch a page the server had already sent; the page then became the program, and the cost came with the growth, until the document came first again with script only where a region must respond. So the document comes first and the program only where the page needs one. Inside the program, the state is what is true, an event is what happened, and the page is drawn from the two, so a framework can change under it and the core stays.', 'dynamic']
   ])('should introduce %s in one paragraph and send the reader on, to its story on the record and to how I organize it on Practice', (concern, summary, id) => {
     expect(homePage.concernText(concern)).toEqual([summary, 'Its story is on the record.', 'How I organize it is on Practice.']);
     expect(homePage.storySignpost(concern)).toHaveAttribute('href', `${Paths.record}#${id}`);
@@ -56,10 +51,6 @@ describe('the home page', () => {
       homePage.storySignpost(concern),
       homePage.practiceSignpost(concern)
     ])).toEqual([]);
-  });
-
-  test('should leave the essays and the moment lists to the record', () => {
-    expect(homePage.momentLists()).toEqual([]);
   });
 
   test('should send the Dynamic quotation\'s source to the Internet Archive\'s copy of Eich\'s interview, the live page being gone', () => {

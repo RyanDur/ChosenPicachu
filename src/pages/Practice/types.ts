@@ -1,6 +1,9 @@
 import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
 import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
+import {Paths} from '@pages/Paths';
+
+export const practiceAddress = (concern: Concern): string => `${Paths.practice}?tab=${concernId(concern)}`;
 
 export const concernTabs = concernsInOrder.map(concern => ({display: concern, param: concernId(concern)}));
 

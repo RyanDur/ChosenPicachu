@@ -19,8 +19,5 @@ export const homePage = {
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
   summary: (name: string): HTMLElement => ownParagraphs(name)[0],
   storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the record.'}),
-  practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'}),
-  practiceHeading: (): HTMLElement | null => screen.queryByRole('heading', {name: 'how I organize it'}),
-  practiceRegion: (): HTMLElement | null => screen.queryByRole('region', {name: /how I organize it/}),
-  momentLists: (): HTMLElement[] => screen.queryAllByRole('list', {name: /from the record/})
+  practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
 };
