@@ -12,7 +12,7 @@ import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 import {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
-import {ColumnInHand, RowInHand, liftedColumn, liftedRow, noColumnInHand, noRowInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
+import {RowInHand, liftedRow, noRowInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 
 type Dials = {origin: Origin; motion: Motion};
 
@@ -99,76 +99,14 @@ const columnsSurveyed = (): void => {
     edge += width;
   });
 };
-const edgeOf = (name: string): number => {
-  let edge = 0;
-  for (const each of columnOrder()) {
-    if (each === name) break;
-    edge += widths[each] ?? 0;
-  }
-  return edge;
-};
-let heldColumn = '';
-let columnInHand: ColumnInHand = noColumnInHand;
-const liftColumn = (name: string): void => {
-  heldColumn = name;
-  columnsSurveyed();
-  columnInHand = liftedColumn(header(name), edgeOf(name) + (widths[name] ?? 0) / 2);
-};
-const carryColumnInto = (target: string, fraction: number): void => columnInHand.carriedTo(edgeOf(target) + (widths[target] ?? 0) * fraction);
-const carryColumnOver = (target: string): void => {
-  const order = columnOrder();
-  carryColumnInto(target, order.indexOf(target) < order.indexOf(heldColumn) ? 0.25 : 0.75);
-};
-const dropColumn = (): void => columnInHand.dropped();
 afterEach(() => {
   heldRow = '';
   rowInHand = noRowInHand;
-  heldColumn = '';
-  columnInHand = noColumnInHand;
 });
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
 describe('columns by hand', () => {
-  test('the switch waits until the column is a quarter into an even neighbor', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnInto('buys', 0.2);
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-
-    carryColumnInto('buys', 0.3);
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    dropColumn();
-  });
-
-  test('a slim column reaches deeper into a wide neighbor before switching', () => {
-    widths = {...even(), trades: 40, buys: 360};
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnInto('buys', 1 / 3);
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-
-    carryColumnInto('buys', 1 / 2);
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    dropColumn();
-  });
-
-  test('the first and last columns hold their posts', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('window');
-    expect(carried()).toEqual([]);
-
-    liftColumn('change');
-    expect(carried()).toEqual([]);
-
-    liftColumn('buys');
-    carryColumnOver('window');
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    dropColumn();
-  });
 
   test('a keyboard walk says the move', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});

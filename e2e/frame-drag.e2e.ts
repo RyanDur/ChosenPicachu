@@ -47,6 +47,21 @@ for (const {name, at, table} of stages) {
   });
 }
 
+for (const {name, at, table} of stages) {
+  test(`the first and last columns hold their posts, in ${name}`, async ({page}) => {
+    await page.goto(at);
+    const trades = dragSortTable(page, table(page));
+    await expect(trades.columnHeader('trades')).toBeVisible();
+
+    await trades.dragColumnPast('window', 'buys');
+    await trades.dragColumnPast('change', 'volume');
+    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+
+    await trades.dragColumnPast('buys', 'window');
+    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  });
+}
+
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   const vanilla = stages[1];
   await page.goto(vanilla.at);

@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {gripLabel, nudgedColumn, nudgedRow, struckAway} from '../survey';
+import {columnUnder, gripLabel, nudgedColumn, nudgedRow, struckAway} from '../survey';
 
 describe('the keyboard vocabulary', () => {
   it('walks a column, clamped inside the anchored edges', () => {
@@ -27,5 +27,27 @@ describe('the keyboard vocabulary', () => {
   it('speaks the grip label from the displayed position', () => {
     expect(gripLabel(0)).toBe('move row 1');
     expect(gripLabel(4)).toBe('move row 5');
+  });
+});
+
+describe('the pointer vocabulary', () => {
+  const order = ['window', 'trades', 'buys', 'change'];
+  const across = (columnWidths: Record<string, number>) => {
+    const width = Object.values(columnWidths).reduce((sum, each) => sum + each, 0);
+    return columnUnder(order, {left: 0, top: 0, width, height: 100, columnWidths});
+  };
+
+  it('switches with an even neighbour only once the pointer is a quarter into it', () => {
+    const under = across({window: 100, trades: 100, buys: 100, change: 100});
+
+    expect(under(224, 50, 'trades')).toBeUndefined();
+    expect(under(226, 50, 'trades')).toBe('buys');
+  });
+
+  it('a slim column reaches deeper into a wide neighbour before switching', () => {
+    const under = across({window: 100, trades: 40, buys: 360, change: 100});
+
+    expect(under(140 + 360 / 3, 50, 'trades')).toBeUndefined();
+    expect(under(140 + 360 / 2, 50, 'trades')).toBe('buys');
   });
 });

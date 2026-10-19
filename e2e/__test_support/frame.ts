@@ -170,7 +170,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await columnHeader(column).scrollIntoViewIfNeeded();
       const from = await boxOf(columnHeader(column));
       const to = await boxOf(columnHeader(past));
-      await dragTo(page, from, to.x + to.width * 0.8, from.y + from.height / 2);
+      await dragTo(page, from, to.x + to.width * (to.x < from.x ? 0.2 : 0.8), from.y + from.height / 2);
     },
     dragRowPast: async (row: number, past: RegExp): Promise<void> => {
       await table.getByRole('row', {name: past}).scrollIntoViewIfNeeded();
