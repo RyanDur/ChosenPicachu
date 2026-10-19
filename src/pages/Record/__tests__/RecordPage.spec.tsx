@@ -605,6 +605,21 @@ describe('the record', () => {
     expect(recordPage.openingQuotationSource()).toBeVisible();
   });
 
+  test('should open on the argument, the languages designed apart and the three things the record argues from the sources', () => {
+    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, and they were designed apart on purpose. HTML says what things are, CSS says how they show, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
+  });
+
+  test('should say how the four parts support the argument, and where to start', () => {
+    expect(recordPage.parts()).toHaveTextContent('The page supports that in four parts. Three stories, one for each language, told in order from their sources, each ending with the moments it rests on. Then every moment in order, from 1989 on, each opening on a need and each with its fuller story and its sources. Then the concert, which reads the moments together as one method. Then the research, the shelf every quotation on the page comes from. Start with a story, or go to a year.');
+  });
+
+  test('should keep every source a quotation on the page links to on the research shelf, links between moments aside', () => {
+    const shelved = recordPage.shelvedSources();
+
+    expect(recordPage.sourcesLinked()).not.toEqual([]);
+    expect(recordPage.sourcesLinked().filter(source => !shelved.includes(source))).toEqual([]);
+  });
+
   test('the timeline walks the years in order, one entry each, a year of two moments holding both under its title', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
@@ -758,17 +773,6 @@ describe('the record', () => {
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  test('should keep every source the concert links to on the research shelf', () => {
-    const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
-      .map(work => work.getAttribute('href'));
-    const linked = within(screen.getByRole('region', {name: 'The concert'})).getAllByRole('link')
-      .map(link => link.getAttribute('href') ?? '')
-      .filter(source => source.startsWith('http'));
-
-    expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
-  });
-
   test('should land the concert’s reader on the 1996 moment, with focus there', async () => {
     await userEvent.click(within(screen.getByRole('region', {name: 'The concert'})).getByRole('link', {name: 'the 1996 moment'}));
 
@@ -780,16 +784,6 @@ describe('the record', () => {
       const title = within(entry).getByRole('link', {hidden: true}).textContent ?? '';
       expect(entry.textContent?.startsWith(`${title} `), `${title} runs into its provenance`).toBe(true);
     });
-  });
-
-  test('should keep every source a fuller story links to on the research shelf, links between moments aside', () => {
-    const shelved = within(screen.getByRole('region', {name: 'The research'})).getAllByRole('link', {hidden: true})
-      .map(work => work.getAttribute('href'));
-    const linked = within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
-      .flatMap(story => within(story).queryAllByRole('link', {hidden: true}).map(link => link.getAttribute('href') ?? ''))
-      .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
-
-    expect(linked.filter(source => !shelved.includes(source))).toEqual([]);
   });
 
   test('the history cites its sources', () => {
@@ -854,14 +848,6 @@ describe('the record\'s three stories', () => {
   beforeEach(async () => {
     render(<TestApp at={Paths.record}/>);
     await recordPage.arrived();
-  });
-
-  test('should open on the argument, the languages designed apart and the three things the record argues from the sources', () => {
-    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, and they were designed apart on purpose. HTML says what things are, CSS says how they show, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
-  });
-
-  test('should say how the four parts support the argument, and where to start', () => {
-    expect(recordPage.parts()).toHaveTextContent('The page supports that in four parts. Three stories, one for each language, told in order from the people who were there, each ending with the moments it rests on. Then every moment in order, from 1989 on, each opening on a need and each with its fuller story and its sources. Then the concert, which reads the moments together as one method. Then the research, the shelf every quotation on the page comes from. Start with a story, or go to a year.');
   });
 
   test('should open on the quotation, then the argument, then the four parts, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {

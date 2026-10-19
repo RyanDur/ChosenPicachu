@@ -25,5 +25,9 @@ export const recordPage = {
     }
     throw new Error(`no work on the research shelf named ${work}`);
   },
+  shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
+  sourcesLinked: (): string[] => within(screen.getByRole('article')).getAllByRole('link', {hidden: true})
+    .map(link => link.getAttribute('href') ?? '')
+    .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   shelfHeadings: (): (string | null)[] => within(research()).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent)
 };
