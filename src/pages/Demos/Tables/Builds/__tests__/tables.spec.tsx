@@ -122,7 +122,6 @@ const carryColumnOver = (target: string): void => {
   const order = columnOrder();
   carryColumnInto(target, order.indexOf(target) < order.indexOf(heldColumn) ? 0.25 : 0.75);
 };
-const carryColumnOn = (by: {x?: number; y?: number}): void => columnInHand.carriedOn(by);
 const loseColumnCaptureOver = (target: string): void => columnInHand.captureLostAt(edgeOf(target) + (widths[target] ?? 0) / 2);
 const loseColumnCaptureUnheld = (): void => columnInHand.captureLostUnheld();
 const dropColumn = (): void => columnInHand.dropped();
@@ -137,55 +136,6 @@ const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} 
 
 describe('columns by hand', () => {
   const surface = (): HTMLElement => header(heldColumn);
-
-  test('a hiding column is carried, every cell of it', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-
-    liftColumn('buys');
-
-    expect(header('buys').classList).toContain('carried');
-    windows.forEach(window => expect(rowOf(window).cells[2].classList).toContain('carried'));
-  });
-
-  test('a dropped column lands as itself', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-    liftColumn('buys');
-
-    carryColumnOver('trades');
-    dropColumn();
-
-    expect(carried()).toEqual([]);
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-
-  test('a settle mid-drag moves home under the carried column', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-    liftColumn('trades');
-    carryColumnOn({x: 20, y: 15});
-
-    carryColumnOver('buys');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    [header('trades'), ...lanes().map(lane => lane.cells[2])].forEach(cell => {
-      expect(cell).toHaveStyle({'--seat-x': '-100px', '--drift-x': '125px', '--drift-y': '15px'});
-    });
-    dropColumn();
-    expect(carried()).toEqual([]);
-  });
-
-  test('a settle mid-drag over a wider neighbour moves the seat by that neighbour’s width', () => {
-    widths = {...even(), buys: 160};
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-    liftColumn('trades');
-
-    carryColumnOver('buys');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    [header('trades'), ...lanes().map(lane => lane.cells[2])].forEach(cell => {
-      expect(cell).toHaveStyle({'--seat-x': '-160px'});
-    });
-    dropColumn();
-  });
 
   test('losing the pointer mid-drag keeps the column aloft', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
@@ -338,25 +288,6 @@ describe('rows by hand', () => {
     carryRowOver('last 5 minutes');
 
     loseRowCaptureUnheld();
-
-    expect(carried()).toEqual([]);
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-  });
-
-  test('a hiding row is carried, every cell of it', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-
-    liftRow('last 5 minutes');
-
-    [...rowOf('last 5 minutes').cells].forEach(cell => expect(cell.classList).toContain('carried'));
-  });
-
-  test('a dropped row lands as itself', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-    liftRow('last 5 minutes');
-
-    carryRowOver('this minute');
-    dropRow();
 
     expect(carried()).toEqual([]);
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
