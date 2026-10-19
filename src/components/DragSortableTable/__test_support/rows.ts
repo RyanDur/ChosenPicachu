@@ -1,4 +1,4 @@
-import {fireEvent, within} from '@testing-library/react';
+import {within} from '@testing-library/react';
 
 export const sortableTable = {
   texts: (row: HTMLElement): (string | null)[] =>
@@ -17,35 +17,4 @@ export const rowsLaidOut = (table: HTMLTableElement): void => {
   [...(table.tBodies[0]?.rows ?? [])].forEach((lane, at) => {
     lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: HEAD + at * ROW, y: HEAD + at * ROW, bottom: HEAD + (at + 1) * ROW, height: ROW});
   });
-};
-
-export const rowsSurveyed = (table: HTMLTableElement): void => {
-  const height = HEAD + (table.tBodies[0]?.rows.length ?? 0) * ROW;
-  table.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
-  rowsLaidOut(table);
-};
-
-export type RowInHand = {
-  readonly carriedOver: (from: number, to: number) => void;
-  readonly dropped: () => void;
-};
-
-const emptyHanded = (): never => {
-  throw new Error('no row is in hand');
-};
-
-export const noRowInHand: RowInHand = {carriedOver: emptyHanded, dropped: emptyHanded};
-
-export const liftedRow = (grip: Element, at: number): RowInHand => {
-  let y = HEAD + at * ROW + 10;
-  const laneOf = (from: number, to: number): number => HEAD + to * ROW + (to < from ? 10 : 30);
-  const moveTo = (next: number): void => {
-    y = next;
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1});
-  };
-  fireEvent.pointerDown(grip, {clientX: 100, clientY: y, pointerId: 1});
-  return {
-    carriedOver: (from, to) => moveTo(laneOf(from, to)),
-    dropped: () => fireEvent.pointerUp(grip, {pointerId: 1})
-  };
 };

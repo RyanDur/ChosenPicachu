@@ -100,6 +100,7 @@ const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> =>
 
 export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
+  const grip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`, exact: true});
   const resizeHandle = (name: string): Locator => table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
   const centreOfHandle = async (name: string): Promise<Point> => {
     await resizeHandle(name).scrollIntoViewIfNeeded();
@@ -156,14 +157,14 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       table.getByRole('rowheader').evaluateAll(cells =>
         cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
     holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x'),
-    holdRow: (row: number): Promise<Hold> => held(page, table.getByRole('button', {name: `move row ${row}`}), 'y'),
+    holdRow: (row: number): Promise<Hold> => held(page, grip(row), 'y'),
     row: (name: RegExp): Locator => table.getByRole('row', {name}),
     moveColumnByKey: async (column: string, key: string): Promise<void> => {
       await columnHeader(column).focus();
       await page.keyboard.press(key);
     },
     moveRowByKey: async (row: number, key: string): Promise<void> => {
-      await table.getByRole('button', {name: `move row ${row}`}).focus();
+      await grip(row).focus();
       await page.keyboard.press(key);
     },
     dragColumnPast: async (column: string, past: string): Promise<void> => {
@@ -174,10 +175,10 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     },
     dragRowPast: async (row: number, past: RegExp): Promise<void> => {
       await table.getByRole('row', {name: past}).scrollIntoViewIfNeeded();
-      await table.getByRole('button', {name: `move row ${row}`}).scrollIntoViewIfNeeded();
-      const grip = await boxOf(table.getByRole('button', {name: `move row ${row}`}));
+      await grip(row).scrollIntoViewIfNeeded();
+      const from = await boxOf(grip(row));
       const target = await boxOf(table.getByRole('row', {name: past}));
-      await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
+      await dragTo(page, from, from.x + from.width / 2, target.y + target.height * 0.8);
     },
     listenToTheMoveReport: (): Promise<void> => table.getByRole('status', {name: 'move report'}).evaluate(report => {
       const said: string[] = [];

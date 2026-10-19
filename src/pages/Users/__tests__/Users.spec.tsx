@@ -88,19 +88,6 @@ describe('the users page', () => {
       expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
     });
 
-    it('a person dragged past the next row is said by name', async () => {
-      const kai = aUser();
-      const rae = aUser();
-      setupUsersResponse([kai, rae, aUser()]);
-      render(<TestApp at={Paths.users}/>);
-      await usersTable.roster();
-
-      await usersTable.dragPast(fullNameOf(kai), fullNameOf(rae));
-
-      await waitFor(() => expect(usersTable.names()).toEqual([fullNameOf(rae), fullNameOf(kai), expect.any(String)]));
-      expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
-    });
-
     it('a column is resized from one handle', async () => {
       setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);

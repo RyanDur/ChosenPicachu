@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {iPadSplitView, iPhone, Person, usersPage} from './__test_support';
+import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
@@ -45,6 +45,20 @@ test('a refresh brings new people to the users page', async ({page}) => {
 
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
   await expect(users.names).not.toHaveText(before);
+});
+
+test('a person in the roster drags to a new seat once the roster has arrived, and the move is said by name', async ({page}) => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  const roster = dragSortTable(page, page.getByRole('region', {name: 'User Candidates'}));
+  const [first, second, third, ...rest] = await roster.rowOrder();
+  await roster.listenToTheMoveReport();
+
+  await roster.dragRowPast(1, new RegExp(RegExp.escape(third)));
+
+  await expect.poll(() => roster.rowOrder()).toEqual([second, third, first, ...rest]);
+  await expect.poll(() => roster.whatTheMoveReportSaid()).toEqual([`${first} moved to 3 of ${rest.length + 3}`]);
 });
 
 const handhelds = [

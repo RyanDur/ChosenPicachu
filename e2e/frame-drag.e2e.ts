@@ -62,17 +62,18 @@ for (const {name, at, table} of stages) {
   });
 }
 
-test('a menu choice sorts, and never lifts the column', async ({page}) => {
-  const vanilla = stages[1];
-  await page.goto(vanilla.at);
-  const trades = dragSortTable(page, vanilla.table(page));
-  await expect(trades.columnHeader('trades')).toBeVisible();
+for (const {name, at, table} of stages) {
+  test(`a menu choice sorts, and never lifts the column, in ${name}`, async ({page}) => {
+    await page.goto(at);
+    const trades = dragSortTable(page, table(page));
+    await expect(trades.columnHeader('trades')).toBeVisible();
 
-  await trades.sortBy('trades', 'descending');
+    await trades.sortBy('trades', 'descending');
 
-  await expect(trades.columnHeader('trades')).toHaveAttribute('aria-sort', 'descending');
-  await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-});
+    await expect(trades.columnHeader('trades')).toHaveAttribute('aria-sort', 'descending');
+    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+  });
+}
 
 for (const {reader, device, presses} of [
   {reader: 'an iPad held upright', device: iPadUpright, presses: ['name'] as const},

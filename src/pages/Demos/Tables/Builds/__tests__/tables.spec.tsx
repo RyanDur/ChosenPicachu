@@ -12,7 +12,7 @@ import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 import {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
-import {RowInHand, liftedRow, noRowInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
+import {rect, rowsLaidOut} from '@components/DragSortableTable/__test_support';
 
 type Dials = {origin: Origin; motion: Motion};
 
@@ -56,11 +56,6 @@ const sourceTable = (): HTMLTableElement => {
   return found;
 };
 const nameOf = (header: Element): string => header.getAttribute('aria-label') ?? '';
-const seats = (): HTMLElement[] => {
-  const table = within(sourceTable());
-  return [...table.getAllByRole('columnheader'), ...table.getAllByRole('rowheader'), ...table.getAllByRole('cell')];
-};
-const carried = (): Element[] => seats().filter(seat => seat.classList.contains('carried'));
 const columnOrder = (): string[] => within(sourceTable()).getAllByRole('columnheader').map(nameOf);
 const header = (name: string): HTMLElement => within(sourceTable()).getByRole('columnheader', {name});
 const ownText = (cell: Element): string =>
@@ -74,15 +69,6 @@ const rowOf = (window: string): HTMLTableRowElement => {
   return row;
 };
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
-let heldRow = '';
-let rowInHand: RowInHand = noRowInHand;
-const liftRow = (window: string): void => {
-  heldRow = window;
-  rowsSurveyed(sourceTable());
-  rowInHand = liftedRow(grip(window), windowNames().indexOf(window));
-};
-const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
-const dropRow = (): void => rowInHand.dropped();
 let widths: Record<string, number> = {};
 const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
 beforeEach(() => {
@@ -99,10 +85,6 @@ const columnsSurveyed = (): void => {
     edge += width;
   });
 };
-afterEach(() => {
-  heldRow = '';
-  rowInHand = noRowInHand;
-});
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -196,17 +178,6 @@ describe('rows by hand', () => {
     expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
-  test('rows that arrive after the deal still drag', () => {
-    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
-    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
-
-    liftRow('this minute');
-    carryRowOver('last 15 minutes');
-    dropRow();
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
-  });
-
   test('a keyboard nudge says the move', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -215,7 +186,6 @@ describe('rows by hand', () => {
 
     expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
-
 });
 
 describe('sort criteria menus', () => {
@@ -335,22 +305,6 @@ describe('sort criteria menus', () => {
     rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
-  });
-
-  test('the menu toggle never lifts the column', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    fireEvent.pointerDown(screen.getByRole('button', {name: 'sort trades'}), {clientX: 100, clientY: 20, pointerId: 1});
-
-    expect(carried()).toEqual([]);
-  });
-
-  test('choosing a direction never lifts the column', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
-
-    expect(carried()).toEqual([]);
   });
 });
 
@@ -628,5 +582,4 @@ describe('animated moves', () => {
     expect(windowNames()).toEqual(windows);
     expect(document.activeElement).toBe(grip('this minute'));
   });
-
 });
