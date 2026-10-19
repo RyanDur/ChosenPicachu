@@ -9,7 +9,6 @@ export const recordPage = {
   opener: (): HTMLElement => screen.getByText(/^Someone needed something/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
   openingQuotationSource: (): HTMLElement => screen.getByRole('link', {name: /^proposing the WorldWideWeb, 1990$/}),
-  closingLine: (): HTMLElement => screen.getByText(/one sentence said twenty ways/),
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
   storyEssay: (name: string): string[] => within(story(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
   storyQuotations: (name: string, quoted: string): HTMLElement[] => within(story(name)).getAllByRole('link', {name: quoted}),

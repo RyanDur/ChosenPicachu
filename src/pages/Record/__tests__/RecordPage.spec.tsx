@@ -600,11 +600,9 @@ describe('the record', () => {
     expect(screen.getByRole('region', {name: 'How the web got its languages'})).not.toHaveTextContent(closer);
   });
 
-  test('the record says why the languages arrived', () => {
+  test('should open on the HyperText proposal\'s words, signposted to the 1990 proposal', () => {
     expect(recordPage.openingQuotation()).toBeVisible();
     expect(recordPage.openingQuotationSource()).toBeVisible();
-    expect(recordPage.opener()).toBeVisible();
-    expect(recordPage.closingLine()).toBeVisible();
   });
 
   test('the timeline walks the years in order, one entry each, a year of two moments holding both under its title', () => {
@@ -862,8 +860,8 @@ describe('the record\'s three stories', () => {
     expect(recordPage.opener()).toHaveTextContent('Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. The record tells how the web answered, in four parts. Three stories first, one for each language, each ending with the moments it rests on. Then every moment in order, each opening on a need of the same kind. Then the concert, which reads the three stories as one method. Then the research they stand on.');
   });
 
-  test('should tell the three stories after the opener and before the timeline, Structure, Presentation, Dynamic', () => {
-    expect(outOfReadingOrder([recordPage.opener(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Dynamic'), recordPage.timelineHeading()])).toEqual([]);
+  test('should open on the quotation, then the opener, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {
+    expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.opener(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Dynamic'), recordPage.timelineHeading()])).toEqual([]);
   });
 
   test('should tell Structure\'s story as the words give it, 8 paragraphs, paragraph for paragraph', () => {
