@@ -38,9 +38,9 @@ describe('the lines the sheets break at', () => {
     expect(strays).toEqual([]);
   });
 
-  test('a line a sheet owns is one it still breaks at', () => {
+  test('include a sheet\'s own line only while that sheet still breaks at it', () => {
     const unused = Object.entries(ownLines).flatMap(([path, lines]) =>
-      lines.filter(line => !queriedLines(sheets[path]).includes(line)).map(line => `${path} no longer breaks at ${line}px`));
+      lines.filter(line => !queriedLines(sheets[path] ?? '').includes(line)).map(line => `${path} no longer breaks at ${line}px`));
 
     expect(unused).toEqual([]);
   });
