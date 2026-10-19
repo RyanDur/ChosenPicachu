@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {fireEvent, render, screen, within} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Measured, Measures, measures} from '../../Aggregations/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
@@ -12,7 +12,6 @@ import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 import {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
-import {rect, rowsLaidOut} from '@components/DragSortableTable/__test_support';
 
 type Dials = {origin: Origin; motion: Motion};
 
@@ -69,22 +68,6 @@ const rowOf = (window: string): HTMLTableRowElement => {
   return row;
 };
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
-let widths: Record<string, number> = {};
-const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
-beforeEach(() => {
-  widths = even();
-});
-const columnsSurveyed = (): void => {
-  const total = Object.values(widths).reduce((sum, width) => sum + width, 0);
-  sourceTable().getBoundingClientRect = () => rect({left: 0, right: total, width: total, top: 0, bottom: 240, height: 240});
-  let edge = 0;
-  within(sourceTable()).getAllByRole('columnheader').forEach(head => {
-    const left = edge;
-    const width = widths[nameOf(head)] ?? 0;
-    head.getBoundingClientRect = () => rect({x: left, left, width, right: left + width});
-    edge += width;
-  });
-};
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -308,235 +291,10 @@ describe('sort criteria menus', () => {
   });
 });
 
-describe('resizable columns', () => {
-  const surveyed = (): void => {
-    const spans: Record<string, number> = {window: 500, trades: 400, buys: 20, sells: 20, volume: 20, vwap: 20, change: 20};
-    sourceTable().getBoundingClientRect = () => rect({width: 1000, right: 1000});
-    within(sourceTable()).getAllByRole('columnheader').forEach(head => {
-      head.getBoundingClientRect = () => rect({width: spans[nameOf(head)] ?? 0});
-    });
-  };
-
-  test('a column takes no width of its own until a hand resizes it', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    expect(header('window').style.width).toBe('');
-    expect(header('trades').style.width).toBe('');
-    expect(screen.getByRole('button', {name: 'resize window'})).toBeVisible();
-  });
-
-  test('the first touch of a handle gives every column its share', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    fireEvent.focus(screen.getByRole('button', {name: 'resize window'}));
-
-    expect(screen.getByRole('button', {name: 'resize window, 50%'})).toBeVisible();
-    expect(header('window').style.getPropertyValue('--share')).toBe('50%');
-    expect(header('trades').style.getPropertyValue('--share')).toBe('40%');
-  });
-
-  test('a resize whose pointer is cancelled stops following the pointer', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 110, clientY: 20, pointerId: 1});
-    const shareAfterMoving = header('window').style.getPropertyValue('--share');
-
-    fireEvent.pointerCancel(handle, {pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 0, clientX: 200, clientY: 20, pointerId: 1});
-
-    expect(header('window').style.getPropertyValue('--share')).toBe(shareAfterMoving);
-    expect(shareAfterMoving).not.toBe('50%');
-  });
-
-  test('pressing a handle without moving it reports nothing', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-    expect(announced()).toEqual([]);
-
-    fireEvent.pointerUp(handle, {pointerId: 1});
-    expect(announced()).toEqual([]);
-  });
-
-  test('an arrow right moves the boundary and the total holds', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    await userEvent.click(handle);
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(header('window').style.getPropertyValue('--share')).toBe('52%');
-    expect(header('trades').style.getPropertyValue('--share')).toBe('38%');
-    expect(screen.getByRole('button', {name: 'resize window, 52%'})).toBeVisible();
-  });
-
-  test('an arrow left moves the boundary back', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    await userEvent.click(handle);
-    await userEvent.keyboard('{ArrowRight}');
-
-    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
-
-    expect(header('window').style.getPropertyValue('--share')).toBe('48%');
-    expect(header('trades').style.getPropertyValue('--share')).toBe('42%');
-  });
-
-  test('dragging the handle trades share between neighbors', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(header('window').style.getPropertyValue('--share')).toBe('54%');
-    expect(header('trades').style.getPropertyValue('--share')).toBe('36%');
-  });
-
-  test('a handle dragged through several shares says nothing on the way and only the share it landed on', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-
-    fireEvent.pointerMove(handle, {clientX: 320, pointerId: 1});
-    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    expect(announced()).toEqual([]);
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(announced()).toEqual(['window resized to 54%']);
-  });
-
-  test('a handle dragged away and back to where it began says nothing', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-
-    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    fireEvent.pointerMove(handle, {clientX: 300, pointerId: 1});
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(announced()).toEqual([]);
-  });
-
-  test('a dragged handle keeps the name it had until it is let go', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    const handle = screen.getByRole('button', {name: /^resize window/});
-    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-
-    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    expect(handle).toHaveAccessibleName('resize window, 50%');
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(handle).toHaveAccessibleName('resize window, 54%');
-  });
-
-  test('an arrow key held through its repeats says the share once, when it is let go', async () => {
-    const keys = userEvent.setup();
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    await keys.click(screen.getByRole('button', {name: /^resize window/}));
-
-    await keys.keyboard('{ArrowRight>3}');
-    expect(announced()).toEqual([]);
-    await keys.keyboard('{/ArrowRight}');
-
-    expect(announced()).toEqual(['window resized to 56%']);
-  });
-
-  test('a keyboard move ends when the handle loses focus', async () => {
-    const keys = userEvent.setup();
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    await keys.click(screen.getByRole('button', {name: /^resize window/}));
-
-    await keys.keyboard('{ArrowRight>}');
-    expect(announced()).toEqual([]);
-    await keys.tab();
-
-    expect(announced()).toEqual(['window resized to 52%']);
-  });
-
-  test('a handle pressed while another holds focus says its own share once, when it is let go', async () => {
-    const hands = userEvent.setup();
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    await hands.click(screen.getByRole('button', {name: /^resize window/}));
-    const trades = screen.getByRole('button', {name: /^resize trades/});
-
-    await hands.pointer([
-      {keys: '[MouseLeft>]', target: trades, coords: {clientX: 500}},
-      {target: trades, coords: {clientX: 520}},
-      {target: trades, coords: {clientX: 540}}
-    ]);
-    expect(announced()).toEqual([]);
-    await hands.pointer({keys: '[/MouseLeft]', target: trades, coords: {clientX: 540}});
-
-    expect(announced()).toEqual(['trades resized to 37%']);
-  });
-
-  test('a second trade replaces what the page said about the first', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-    await userEvent.click(screen.getByRole('button', {name: 'resize window'}));
-    await userEvent.keyboard('{ArrowRight}');
-
-    await userEvent.click(screen.getByRole('button', {name: /^resize trades/}));
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(announced()).toEqual(['trades resized to 35%']);
-  });
-
-  test('a resize says the new share', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    await userEvent.click(handle);
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(announced()).toEqual(['window resized to 52%']);
-  });
-
-  test('arrow keys on the resize handle never move the column', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    const handle = screen.getByRole('button', {name: /resize trades/});
-    fireEvent.focus(handle);
-    fireEvent.keyDown(handle, {key: 'ArrowRight'});
-
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-  });
-
-  test('a widened column clips its overflow without marking its cells', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    expect(sourceTable().classList).toContain('apportioned');
-    expect(header('window').classList).not.toContain('clipped');
-    within(within(sourceTable()).getAllByRole('rowgroup')[1]).getAllByRole('cell')
-      .forEach(cell => expect(cell.classList).not.toContain('ellipsis'));
-  });
-});
-
 describe('animated moves', () => {
-  const settledRows = (): void => rowsLaidOut(sourceTable());
-
   test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    columnsSurveyed();
 
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -561,7 +319,6 @@ describe('animated moves', () => {
   test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    settledRows();
 
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');

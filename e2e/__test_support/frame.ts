@@ -137,6 +137,29 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.up();
     },
     resizeHandle,
+    holdHandle: async (name: string): Promise<{carryBy: (by: number) => Promise<void>; letGo: () => Promise<void>}> => {
+      const middle = await centreOfHandle(name);
+      await page.mouse.move(middle.x, middle.y);
+      await page.mouse.down();
+      return {
+        carryBy: by => page.mouse.move(middle.x + by, middle.y, {steps: 8}),
+        letGo: () => page.mouse.up()
+      };
+    },
+    fingerCancelledOnHandle: async (name: string, by: number): Promise<void> => {
+      const devtools = await page.context().newCDPSession(page);
+      const middle = await centreOfHandle(name);
+      await devtools.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: [{x: middle.x, y: middle.y}]});
+      for (let step = 1; step <= 8; step++) {
+        await devtools.send('Input.dispatchTouchEvent', {type: 'touchMove', touchPoints: [{x: middle.x + by * step / 8, y: middle.y}]});
+      }
+      await devtools.send('Input.dispatchTouchEvent', {type: 'touchCancel', touchPoints: []});
+    },
+    hoverAcrossHandle: async (name: string, by: number): Promise<void> => {
+      const middle = await centreOfHandle(name);
+      await page.mouse.move(middle.x, middle.y);
+      await page.mouse.move(middle.x + by, middle.y, {steps: 8});
+    },
     narrowByKeys: async (name: string, presses: number): Promise<void> => {
       await resizeHandle(name).focus();
       for (let press = 0; press < presses; press++) {
@@ -180,6 +203,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       const target = await boxOf(table.getByRole('row', {name: past}));
       await dragTo(page, from, from.x + from.width / 2, target.y + target.height * 0.8);
     },
+    moveReport: (): Locator => table.getByRole('status', {name: 'move report'}),
     listenToTheMoveReport: (): Promise<void> => table.getByRole('status', {name: 'move report'}).evaluate(report => {
       const said: string[] = [];
       new MutationObserver(() => said.push(report.textContent ?? '')).observe(report, {childList: true, characterData: true, subtree: true});
