@@ -31,9 +31,9 @@ describe('the home page', () => {
 
   test('should offer three concerns, each named by its responsibility and opened by its quotation', () => {
     expect(homePage.concernHeadings()).toEqual(['Structure', 'Presentation', 'Dynamic']);
-    expect(homePage.quotation(/identifies the meaning, purpose, and structure/)).toBeVisible();
-    expect(homePage.quotation(/separation of HTML from CSS/)).toBeVisible();
-    expect(homePage.quotation(/a much livelier Web/)).toBeVisible();
+    expect(homePage.quotationIn('Structure')).toHaveTextContent(/identifies the meaning, purpose, and structure/);
+    expect(homePage.quotationIn('Presentation')).toHaveTextContent(/separation of HTML from CSS/);
+    expect(homePage.quotationIn('Dynamic')).toHaveTextContent(/a much livelier Web/);
   });
 
   test.each([

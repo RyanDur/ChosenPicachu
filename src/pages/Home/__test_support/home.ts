@@ -13,7 +13,6 @@ export const homePage = {
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).getAllByRole('link'),
   concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),
-  quotation: (words: RegExp): HTMLElement => screen.getByText(words),
   quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
