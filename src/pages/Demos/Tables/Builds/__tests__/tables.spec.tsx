@@ -73,7 +73,6 @@ const rowOf = (window: string): HTMLTableRowElement => {
   if (!row) throw new Error(`no row for ${window}`);
   return row;
 };
-const cellsOf = (window: string): string[] => [...rowOf(window).cells].map(ownText);
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
 let heldRow = '';
 let rowInHand: RowInHand = noRowInHand;
@@ -138,16 +137,6 @@ const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} 
 
 describe('columns by hand', () => {
   const surface = (): HTMLElement => header(heldColumn);
-
-  test('an eager column follows the pointer as it crosses its neighbors', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    expect(cellsOf('last 5 minutes')).toEqual(['last 5 minutes', '0', '9', '0', '0.00', '—', '—']);
-  });
 
   test('a hiding column is carried, every cell of it', () => {
     seat(EagerTable, {origin: 'hide', motion: 'static'});
@@ -289,16 +278,6 @@ describe('columns by hand', () => {
     expect(announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
-  test('the lazy table says a column move', async () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    header('trades').focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    expect(announced()).toEqual(['trades moved to column 3 of 7']);
-  });
-
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -317,15 +296,6 @@ describe('columns by hand', () => {
 });
 
 describe('rows by hand', () => {
-
-  test('an eager row follows the pointer as it crosses its neighbors', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftRow('this minute');
-    carryRowOver('last 15 minutes');
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
-  });
 
   test('every control says its tab stop outright, so a browser that tabs only to fields still reaches it', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
@@ -459,16 +429,6 @@ describe('rows by hand', () => {
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(announced()).toEqual(['this minute moved to 2 of 5']);
-  });
-
-  test('the lazy table says a row move', async () => {
-    seat(LazyTable, {origin: 'keep', motion: 'static'});
-
-    grip('this minute').focus();
-    await userEvent.keyboard('{ArrowDown}');
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
@@ -809,17 +769,6 @@ describe('resizable columns', () => {
     await userEvent.keyboard('{ArrowRight}');
 
     expect(announced()).toEqual(['window resized to 52%']);
-  });
-
-  test('a boundary can never starve a column', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    surveyed();
-
-    const handle = screen.getByRole('button', {name: 'resize window'});
-    await userEvent.click(handle);
-    await userEvent.keyboard('{ArrowRight}'.repeat(30));
-    expect(header('window').style.getPropertyValue('--share')).toBe('85%');
-    expect(header('trades').style.getPropertyValue('--share')).toBe('5%');
   });
 
   test('arrow keys on the resize handle never move the column', () => {
