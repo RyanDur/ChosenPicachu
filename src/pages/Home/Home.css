@@ -1,9 +1,11 @@
 .home {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--base-x-3);
   padding: var(--base-x-3);
 
   .opening {
+    grid-column: 1 / -1;
     display: grid;
     gap: var(--base-x-2);
   }
@@ -28,5 +30,11 @@
   .concern-title {
     margin: 0;
     text-wrap: balance;
+  }
+}
+
+@media (width <= 600px), (height <= 500px) {
+  .home {
+    grid-template-columns: 1fr;
   }
 }
