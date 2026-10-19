@@ -33,6 +33,20 @@ for (const {name, at, table} of stages) {
   });
 }
 
+for (const {name, at, table} of stages) {
+  test(`a row dragged past two neighbours is reported once, where it lands, in ${name}`, async ({page}) => {
+    await page.goto(at);
+    const trades = dragSortTable(page, table(page));
+    await expect(trades.columnHeader('trades')).toBeVisible();
+    await trades.listenToTheMoveReport();
+
+    await trades.dragRowPast(1, /last 15 minutes/);
+    await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
+
+    await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['this minute moved to 3 of 5']);
+  });
+}
+
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   const vanilla = stages[1];
   await page.goto(vanilla.at);

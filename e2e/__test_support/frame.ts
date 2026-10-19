@@ -51,7 +51,8 @@ export type Hold = {
 };
 
 const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> => {
-  await grip.scrollIntoViewIfNeeded();
+  // a carry that runs past the edge of the view scrolls the page under the pointer, which no hand can do
+  await grip.evaluate(element => element.scrollIntoView({block: 'center', inline: 'center'}));
   const home = centreOf(await boxOf(grip));
   let at = home;
   const moveTo = async (to: Point): Promise<void> => {

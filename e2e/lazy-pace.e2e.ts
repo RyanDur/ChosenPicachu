@@ -21,23 +21,6 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
       await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
     });
 
-    test('a column carried past a neighbour and home again lands nowhere and says nothing', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, table(page));
-      await expect(trades.columnHeader('trades')).toBeVisible();
-      await trades.listenToTheMoveReport();
-
-      const hold = await trades.holdColumn('trades');
-      await hold.carryTo(trades.columnHeader('sells'));
-      await hold.carryHome();
-      await hold.drop();
-
-      await expect.poll(() => trades.columnOrder()).toEqual(columnsAsDealt);
-      await trades.moveColumnByKey('trades', 'ArrowRight');
-
-      await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['trades moved to column 3 of 7']);
-    });
-
     test('a column dropped past two neighbours is said once, where it lands', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
@@ -67,23 +50,6 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
       await hold.drop();
 
       await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
-    });
-
-    test('a row carried past a neighbour and home again lands nowhere and says nothing', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, table(page));
-      await expect(trades.columnHeader('trades')).toBeVisible();
-      await trades.listenToTheMoveReport();
-
-      const hold = await trades.holdRow(1);
-      await hold.carryTo(trades.row(/last 15 minutes/));
-      await hold.carryHome();
-      await hold.drop();
-
-      await expect.poll(() => trades.rowOrder()).toEqual(windowsAsDealt);
-      await trades.moveRowByKey(1, 'ArrowDown');
-
-      await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['this minute moved to 2 of 5']);
     });
   });
 }

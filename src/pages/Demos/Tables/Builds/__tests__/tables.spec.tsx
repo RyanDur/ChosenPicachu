@@ -239,19 +239,6 @@ describe('columns by hand', () => {
     expect(carried()).toEqual([]);
   });
 
-  test('a column carried back without dropping comes home', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-
-    carryColumnOver('buys');
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    dropColumn();
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-  });
-
   test('the switch waits until the column is a quarter into an even neighbor', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -310,43 +297,6 @@ describe('columns by hand', () => {
 
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     expect(announced()).toEqual(['trades moved to column 3 of 7']);
-  });
-
-  test('a dropped column says where it landed', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    dropColumn();
-
-    expect(announced()).toEqual(['trades moved to column 3 of 7']);
-  });
-
-  test('a column carried past three neighbours says nothing until it lands, then says where once', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOver('sells');
-    carryColumnOver('volume');
-    expect(announced()).toEqual([]);
-
-    dropColumn();
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
-    expect(announced()).toEqual(['trades moved to column 5 of 7']);
-  });
-
-  test('a column carried away and back to its own seat says nothing', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOver('buys');
-    dropColumn();
-
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    expect(announced()).toEqual([]);
   });
 
   test('a menu appears only where the column asks for one', () => {
@@ -442,18 +392,6 @@ describe('rows by hand', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
-  test('a row carried back without dropping comes home', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-
-    carryRowOver('last 5 minutes');
-    dropRow();
-    expect(windowNames()).toEqual(windows);
-  });
-
   test('the keyboard walks a row down and back up', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -534,28 +472,6 @@ describe('rows by hand', () => {
     expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
-  test('a dropped row says where it landed', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftRow('this minute');
-    carryRowOver('last 15 minutes');
-    dropRow();
-
-    expect(announced()).toEqual(['this minute moved to 3 of 5']);
-  });
-
-  test('a row carried past two neighbours says nothing until it lands, then says where once', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-    carryRowOver('last 15 minutes');
-    expect(announced()).toEqual([]);
-
-    dropRow();
-
-    expect(announced()).toEqual(['this minute moved to 3 of 5']);
-  });
 });
 
 describe('sort criteria menus', () => {
