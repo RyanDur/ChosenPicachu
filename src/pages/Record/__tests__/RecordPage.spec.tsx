@@ -856,12 +856,16 @@ describe('the record\'s three stories', () => {
     await recordPage.arrived();
   });
 
-  test('should open on the need, then say the record has four parts and what each holds', () => {
-    expect(recordPage.opener()).toHaveTextContent('Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. The record tells how the web answered, in four parts. Three stories first, one for each language, each ending with the moments it rests on. Then every moment in order, each opening on a need of the same kind. Then the concert, which reads the moments together as one method. Then the research they stand on.');
+  test('should open on the argument, the languages designed apart and the three things the record argues from the sources', () => {
+    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, and they were designed apart on purpose. HTML says what things are, CSS says how they show, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
   });
 
-  test('should open on the quotation, then the opener, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {
-    expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.opener(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Dynamic'), recordPage.timelineHeading()])).toEqual([]);
+  test('should say how the four parts support the argument, and where to start', () => {
+    expect(recordPage.parts()).toHaveTextContent('The page supports that in four parts. Three stories, one for each language, told in order from the people who were there, each ending with the moments it rests on. Then every moment in order, from 1989 on, each opening on a need and each with its fuller story and its sources. Then the concert, which reads the moments together as one method. Then the research, the shelf every quotation on the page comes from. Start with a story, or go to a year.');
+  });
+
+  test('should open on the quotation, then the argument, then the four parts, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {
+    expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.argument(), recordPage.parts(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Dynamic'), recordPage.timelineHeading()])).toEqual([]);
   });
 
   test('should tell Structure\'s story as the words give it, 8 paragraphs, paragraph for paragraph', () => {

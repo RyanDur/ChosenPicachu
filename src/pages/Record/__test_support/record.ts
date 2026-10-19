@@ -6,7 +6,8 @@ const storyMoments = (name: string): HTMLElement => within(story(name)).getByRol
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
-  opener: (): HTMLElement => screen.getByText(/^Someone needed something/),
+  argument: (): HTMLElement => screen.getByText(/^A webpage is three languages, and they were designed apart/),
+  parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
   openingQuotationSource: (): HTMLElement => screen.getByRole('link', {name: /^proposing the WorldWideWeb, 1990$/}),
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
