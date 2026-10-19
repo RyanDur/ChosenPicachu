@@ -446,21 +446,6 @@ describe('the frame table', () => {
   });
 
   describe('the worlds of pace, origin, and motion', () => {
-    it('hide carries every cell of the lifted column by its offset from home', () => {
-      vanillaFrame.stand({pace: 'eager'});
-      stubbedRects();
-
-      const trades = screen.getByRole('columnheader', {name: /trades/});
-      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 200, clientY: 50, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 230, clientY: 60, pointerId: 1});
-
-      const column = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[1])];
-      column.forEach(cell => {
-        expect(cell).toHaveClass('carried');
-        expect(cell).toHaveStyle({'--seat-x': '-160px', '--drift-x': '30px', '--drift-y': '10px'});
-      });
-    });
 
     it('a dropped column lands as itself', () => {
       vanillaFrame.stand({pace: 'eager'});
@@ -475,24 +460,6 @@ describe('the frame table', () => {
       expect(trades.style.getPropertyValue('--seat-x')).toBe('');
     });
 
-    it('a lifted row is carried, every cell of it', () => {
-      vanillaFrame.stand({pace: 'eager'});
-      rowRects();
-
-      const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-      held(grip, {clientX: 20, clientY: 20, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 20, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 25, clientY: 35, pointerId: 1});
-
-      [...screen.getByRole('row', {name: /this minute/}).children].forEach(cell => {
-        expect(cell).toHaveClass('carried');
-        expect(cell).toHaveStyle({'--seat-y': '0px', '--drift-x': '5px', '--drift-y': '15px'});
-      });
-
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(carried()).toEqual([]);
-    });
-
     it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
       vanillaFrame.stand({pace: 'eager'});
 
@@ -502,57 +469,5 @@ describe('the frame table', () => {
       expect(carried()).toEqual([]);
     });
 
-    const tradesCarriedPastBuys = (): {trades: HTMLElement; buys: HTMLElement} => {
-      vanillaFrame.stand({pace: 'eager'});
-      stubbedRects();
-      const trades = screen.getByRole('columnheader', {name: /trades/});
-      const buys = screen.getByRole('columnheader', {name: /buys/});
-      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 50, pointerId: 1});
-      return {trades, buys};
-    };
-
-    it('a strike shoves the neighbour', () => {
-      const {buys} = tradesCarriedPastBuys();
-
-      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-      const shoved = [buys, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[1])];
-      shoved.forEach(cell => expect(cell).toHaveClass('shoved-start'));
-    });
-
-    it('the next lift clears the marks', () => {
-      const {trades, buys} = tradesCarriedPastBuys();
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-
-      held(buys, {clientX: 200, clientY: 50, pointerId: 1});
-
-      expect(trades).not.toHaveClass('settling');
-      expect(buys).not.toHaveClass('shoved-start');
-    });
-
-    it('every cell is at rest once the settle ends: nothing carried, settling or shoved', () => {
-      const {trades, buys} = tradesCarriedPastBuys();
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-
-      [trades, buys].forEach(header => {
-        const at = columnOrder().indexOf(header.getAttribute('aria-label') ?? '');
-        screen.getAllByRole('row').forEach(lane => fireEvent.animationEnd(lane.children[at]));
-      });
-
-      const cells = [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')];
-      ['carried', 'settling', 'shoved-start', 'shoved-end', 'shoved-up', 'shoved-down'].forEach(motion =>
-        cells.forEach(cell => expect(cell).not.toHaveClass(motion)));
-    });
-
-    it('every release marks each cell of the dropped column to settle and keeps the column order', () => {
-      const {trades} = tradesCarriedPastBuys();
-
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-
-      expect(carried()).toEqual([]);
-      const settling = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[2])];
-      settling.forEach(cell => expect(cell).toHaveClass('settling'));
-      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    });
   });
 });

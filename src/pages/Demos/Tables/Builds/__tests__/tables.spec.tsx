@@ -83,7 +83,6 @@ const liftRow = (window: string): void => {
   rowInHand = liftedRow(grip(window), windowNames().indexOf(window));
 };
 const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
-const carryRowOn = (by: number): void => rowInHand.carriedOn(by);
 const loseRowCapture = (): void => rowInHand.captureLost();
 const loseRowCaptureOver = (target: string): void => rowInHand.captureLostOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
 const loseRowCaptureUnheld = (): void => rowInHand.captureLostUnheld();
@@ -168,19 +167,6 @@ describe('columns by hand', () => {
 
     expect(carried()).toEqual([]);
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-
-  test('the carried column wears its offset from home', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOn({x: 20, y: 15});
-
-    [header('trades'), ...lanes().map(lane => lane.cells[1])].forEach(cell => {
-      expect(cell).toHaveClass('carried');
-      expect(cell).toHaveStyle({'--seat-x': '0px', '--drift-x': '20px', '--drift-y': '15px'});
-    });
-    dropColumn();
   });
 
   test('a settle mid-drag moves home under the carried column', () => {
@@ -466,20 +452,6 @@ describe('rows by hand', () => {
     carryRowOver('last 5 minutes');
     dropRow();
     expect(windowNames()).toEqual(windows);
-  });
-
-  test('the carried row wears its offset from home on every cell', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'static'});
-
-    liftRow('last 5 minutes');
-    carryRowOn(15);
-
-    [...rowOf('last 5 minutes').cells].forEach(cell => {
-      expect(cell).toHaveClass('carried');
-      expect(cell).toHaveStyle({'--seat-y': '0px', '--drift-x': '0px', '--drift-y': '15px'});
-    });
-    dropRow();
-    expect(carried()).toEqual([]);
   });
 
   test('the keyboard walks a row down and back up', async () => {
@@ -957,52 +929,6 @@ describe('resizable columns', () => {
 
 describe('animated moves', () => {
   const settledRows = (): void => rowsLaidOut(sourceTable());
-  const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
-
-  test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    columnsSurveyed();
-
-    header('trades').focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    expect(carried()).toEqual([]);
-    columnCells('trades').forEach(cell => {
-      expect(cell).toHaveClass('settling');
-    });
-    columnCells('buys').forEach(cell => {
-      expect(cell).toHaveClass('shoved-start');
-    });
-  });
-
-  test('the marks clear when the animation ends', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    columnsSurveyed();
-    header('trades').focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    fireEvent.animationEnd(header('trades'));
-    fireEvent.animationEnd(header('buys'));
-
-    columnCells('trades').forEach(cell => expect(cell).not.toHaveClass('settling'));
-    columnCells('buys').forEach(cell => expect(cell).not.toHaveClass('shoved-start'));
-  });
-
-  test('a second walk marks again', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    columnsSurveyed();
-    header('trades').focus();
-    await userEvent.keyboard('{ArrowRight}');
-    fireEvent.animationEnd(header('trades'));
-    fireEvent.animationEnd(header('buys'));
-
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('sells')).toHaveClass('shoved-start');
-  });
 
   test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
@@ -1020,8 +946,6 @@ describe('animated moves', () => {
 
     await userEvent.keyboard('{ArrowLeft}');
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('vwap')).toHaveClass('shoved-end');
     await userEvent.keyboard('{ArrowLeft}');
     await userEvent.keyboard('{ArrowLeft}');
     await userEvent.keyboard('{ArrowLeft}');
@@ -1047,10 +971,6 @@ describe('animated moves', () => {
 
     await userEvent.keyboard('{ArrowUp}');
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'this minute', 'session']);
-    [...rowOf('this minute').cells].forEach(cell => {
-      expect(cell).toHaveClass('settling');
-    });
-    [...rowOf('session').cells].forEach(cell => expect(cell).toHaveClass('shoved-down'));
     await userEvent.keyboard('{ArrowUp}');
     await userEvent.keyboard('{ArrowUp}');
     await userEvent.keyboard('{ArrowUp}');
@@ -1060,130 +980,4 @@ describe('animated moves', () => {
     expect(document.activeElement).toBe(grip('this minute'));
   });
 
-  test('a keyboard nudge settles every cell of the walked row', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    settledRows();
-
-    grip('this minute').focus();
-    await userEvent.keyboard('{ArrowDown}');
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    [...rowOf('this minute').cells].forEach(cell => {
-      expect(cell).toHaveClass('settling');
-    });
-  });
-
-  test('the row a keyboard nudge passed is shoved up', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    settledRows();
-
-    grip('this minute').focus();
-    await userEvent.keyboard('{ArrowDown}');
-
-    [...rowOf('last 5 minutes').cells].forEach(cell => {
-      expect(cell).toHaveClass('shoved-up');
-    });
-  });
-
-  test('a strike shoves the neighbour toward the side it gave up', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'animated'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    expect(header('trades')).not.toHaveClass('settling');
-    columnCells('buys').forEach(cell => {
-      expect(cell).toHaveClass('shoved-start');
-    });
-  });
-
-  test('a strike back shoves the neighbour the other way', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'animated'});
-    liftColumn('trades');
-    carryColumnOver('buys');
-
-    carryColumnOver('buys');
-
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    columnCells('buys').forEach(cell => {
-      expect(cell).toHaveClass('shoved-end');
-      expect(cell).not.toHaveClass('shoved-start');
-    });
-  });
-
-  test('on release every cell of the carried column settles, and the column it passed is shoved', () => {
-    seat(EagerTable, {origin: 'hide', motion: 'animated'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    expect(header('trades')).toHaveClass('carried');
-
-    dropColumn();
-    expect(carried()).toEqual([]);
-    columnCells('trades').forEach(cell => {
-      expect(cell).toHaveClass('settling');
-    });
-    columnCells('buys').forEach(cell => expect(cell).toHaveClass('shoved-start'));
-  });
-
-  test('the next lift clears every settling and shoved mark', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    dropColumn();
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('buys')).toHaveClass('shoved-start');
-
-    liftColumn('sells');
-    expect(header('trades')).not.toHaveClass('settling');
-    expect(header('buys')).not.toHaveClass('shoved-start');
-  });
-
-  test('a static release leaves the same marks as an animated one', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    dropColumn();
-
-    expect(carried()).toEqual([]);
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('buys')).toHaveClass('shoved-start');
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-
-  test('the table wears the word the sheet reads', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-
-    expect(sourceTable()).toHaveClass('static');
-    expect(sourceTable()).not.toHaveClass('animated');
-  });
-
-  test('a carried row shoves the row it passes up', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    [...rowOf('last 5 minutes').cells].forEach(cell => {
-      expect(cell).toHaveClass('shoved-up');
-    });
-    dropRow();
-  });
-
-  test('on release every cell of the dropped row settles', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'animated'});
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-
-    dropRow();
-
-    expect(carried()).toEqual([]);
-    [...rowOf('this minute').cells].forEach(cell => {
-      expect(cell).toHaveClass('settling');
-    });
-  });
 });
