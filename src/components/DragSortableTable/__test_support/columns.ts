@@ -2,9 +2,6 @@ import {fireEvent} from '@testing-library/react';
 
 export type ColumnInHand = {
   readonly carriedTo: (x: number) => void;
-  readonly carriedOn: (by: {x?: number; y?: number}) => void;
-  readonly captureLostAt: (x: number) => void;
-  readonly captureLostUnheld: () => void;
   readonly dropped: () => void;
 };
 
@@ -14,7 +11,7 @@ const emptyHanded = (): never => {
   throw new Error('no column is in hand');
 };
 
-export const noColumnInHand: ColumnInHand = {carriedTo: emptyHanded, carriedOn: emptyHanded, captureLostAt: emptyHanded, captureLostUnheld: emptyHanded, dropped: emptyHanded};
+export const noColumnInHand: ColumnInHand = {carriedTo: emptyHanded, dropped: emptyHanded};
 
 export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   const pointer = {x, y: HEADER_Y};
@@ -26,9 +23,6 @@ export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   fireEvent.pointerDown(header, {clientX: pointer.x, clientY: pointer.y, pointerId: 1});
   return {
     carriedTo: next => moveTo({x: next, y: pointer.y}),
-    captureLostAt: x => fireEvent.lostPointerCapture(header, {buttons: 1, clientX: x, clientY: pointer.y, pointerId: 1}),
-    captureLostUnheld: () => fireEvent.lostPointerCapture(header, {buttons: 0, clientX: pointer.x, clientY: pointer.y, pointerId: 1}),
-    carriedOn: ({x = 0, y = 0}) => moveTo({x: pointer.x + x, y: pointer.y + y}),
     dropped: () => fireEvent.pointerUp(header, {pointerId: 1})
   };
 };

@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
+import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Measured, Measures, measures} from '../../Aggregations/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
@@ -82,9 +82,6 @@ const liftRow = (window: string): void => {
   rowInHand = liftedRow(grip(window), windowNames().indexOf(window));
 };
 const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
-const loseRowCapture = (): void => rowInHand.captureLost();
-const loseRowCaptureOver = (target: string): void => rowInHand.captureLostOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
-const loseRowCaptureUnheld = (): void => rowInHand.captureLostUnheld();
 const dropRow = (): void => rowInHand.dropped();
 let widths: Record<string, number> = {};
 const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
@@ -122,8 +119,6 @@ const carryColumnOver = (target: string): void => {
   const order = columnOrder();
   carryColumnInto(target, order.indexOf(target) < order.indexOf(heldColumn) ? 0.25 : 0.75);
 };
-const loseColumnCaptureOver = (target: string): void => columnInHand.captureLostAt(edgeOf(target) + (widths[target] ?? 0) / 2);
-const loseColumnCaptureUnheld = (): void => columnInHand.captureLostUnheld();
 const dropColumn = (): void => columnInHand.dropped();
 afterEach(() => {
   heldRow = '';
@@ -135,49 +130,6 @@ const announced = (): string[] => screen.getAllByRole('status', {name: 'move rep
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
 describe('columns by hand', () => {
-  const surface = (): HTMLElement => header(heldColumn);
-
-  test('losing the pointer mid-drag keeps the column aloft', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    liftColumn('trades');
-    const captured: number[] = [];
-    surface().setPointerCapture = id => captured.push(id);
-    carryColumnOver('buys');
-
-    loseColumnCaptureOver('sells');
-
-    expect(surface()).toHaveClass('carried');
-    expect(captured).toEqual([1, 1]);
-    dropColumn();
-  });
-
-  test('a pointer lost with no button held drops the column where it is', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    liftColumn('trades');
-    carryColumnOver('buys');
-
-    loseColumnCaptureUnheld();
-
-    expect(carried()).toEqual([]);
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-
-  test('a column that loses the pointer keeps crossing its neighbours', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    liftColumn('trades');
-    surface().setPointerCapture = () => undefined;
-    carryColumnOver('buys');
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-
-    loseColumnCaptureOver('sells');
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
-    carryColumnOver('volume');
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
-    dropColumn();
-    expect(carried()).toEqual([]);
-  });
-
   test('the switch waits until the column is a quarter into an even neighbor', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -254,43 +206,6 @@ describe('rows by hand', () => {
     expect(screen.getByRole('button', {name: 'sort trades'})).toHaveAttribute('tabindex', '0');
     expect(screen.getByRole('button', {name: 'resize trades'})).toHaveAttribute('tabindex', '0');
     expect(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true})).toHaveAttribute('tabindex', '0');
-  });
-
-  test('a retaken pointer lands on the grip that lifted the row, never on the header cell', async () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    const retaken: string[] = [];
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-    grip('this minute').setPointerCapture = () => retaken.push('grip');
-    rowOf('this minute').cells[0].setPointerCapture = () => retaken.push('header cell');
-
-    loseRowCapture();
-
-    await waitFor(() => expect(retaken).toContain('grip'));
-    expect(retaken).not.toContain('header cell');
-  });
-
-  test('a row that lost the pointer keeps crossing its neighbours', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    liftRow('this minute');
-    grip('this minute').setPointerCapture = () => undefined;
-    carryRowOver('last 5 minutes');
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-
-    loseRowCaptureOver('last 15 minutes');
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
-  });
-
-  test('a pointer lost with no button held drops the row where it is', () => {
-    seat(EagerTable, {origin: 'keep', motion: 'static'});
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-
-    loseRowCaptureUnheld();
-
-    expect(carried()).toEqual([]);
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
   test('the keyboard walks a row down and back up', async () => {

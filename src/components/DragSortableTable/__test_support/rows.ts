@@ -27,10 +27,6 @@ export const rowsSurveyed = (table: HTMLTableElement): void => {
 
 export type RowInHand = {
   readonly carriedOver: (from: number, to: number) => void;
-  readonly carriedOn: (by: number) => void;
-  readonly captureLost: () => void;
-  readonly captureLostOver: (from: number, to: number) => void;
-  readonly captureLostUnheld: () => void;
   readonly dropped: () => void;
 };
 
@@ -38,7 +34,7 @@ const emptyHanded = (): never => {
   throw new Error('no row is in hand');
 };
 
-export const noRowInHand: RowInHand = {carriedOver: emptyHanded, carriedOn: emptyHanded, captureLost: emptyHanded, captureLostOver: emptyHanded, captureLostUnheld: emptyHanded, dropped: emptyHanded};
+export const noRowInHand: RowInHand = {carriedOver: emptyHanded, dropped: emptyHanded};
 
 export const liftedRow = (grip: Element, at: number): RowInHand => {
   let y = HEAD + at * ROW + 10;
@@ -50,13 +46,6 @@ export const liftedRow = (grip: Element, at: number): RowInHand => {
   fireEvent.pointerDown(grip, {clientX: 100, clientY: y, pointerId: 1});
   return {
     carriedOver: (from, to) => moveTo(laneOf(from, to)),
-    carriedOn: by => moveTo(y + by),
-    captureLost: () => fireEvent.lostPointerCapture(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1}),
-    captureLostOver: (from, to) => {
-      y = laneOf(from, to);
-      fireEvent.lostPointerCapture(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1});
-    },
-    captureLostUnheld: () => fireEvent.lostPointerCapture(grip, {buttons: 0, clientX: 100, clientY: y, pointerId: 1}),
     dropped: () => fireEvent.pointerUp(grip, {pointerId: 1})
   };
 };

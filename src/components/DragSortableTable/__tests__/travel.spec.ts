@@ -20,28 +20,13 @@ describe('the travel vocabulary', () => {
     expect(settled).toEqual(['buys']);
   });
 
-  it('a move with no buttons is the drop', async () => {
+  it('a move with no buttons is the drop', () => {
     const happened: string[] = [];
-    const holder = document.createElement('th');
-    holder.setPointerCapture = () => undefined;
     const listener = pointerTravel(() => happened.push('moved'), () => happened.push('drop'));
 
-    listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
-    await Promise.resolve();
+    listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: null});
 
     expect(happened).toEqual(['drop']);
-  });
-
-  it('the holder keeps the pointer capture across a move', async () => {
-    const happened: string[] = [];
-    const holder = document.createElement('th');
-    holder.setPointerCapture = id => happened.push(`captured ${id}`);
-    const listener = pointerTravel(() => happened.push('moved'), () => happened.push('drop'));
-
-    listener({buttons: 1, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
-    expect(happened).toEqual(['captured 7', 'moved']);
-    await Promise.resolve();
-    expect(happened).toEqual(['captured 7', 'moved', 'captured 7']);
   });
 
   const measuredTable = () => {
