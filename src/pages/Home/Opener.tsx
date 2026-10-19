@@ -6,7 +6,7 @@ export const Opener: FC = () =>
   <header className="opening">
     <p className="thesis paragraph">
       A webpage is three languages working in concert. HTML says what things are, CSS says how
-      they show, and JavaScript says how they respond. They were designed apart, on purpose. When
+      they show, and JavaScript says how they respond. Each was designed to handle a specific concern. When
       one could not yet do a job, another covered for it until the standard caught up, which is
       what HTML’s own principles ask:{' '}
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting

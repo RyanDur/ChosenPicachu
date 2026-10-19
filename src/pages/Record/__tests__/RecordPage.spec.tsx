@@ -605,8 +605,8 @@ describe('the record', () => {
     expect(recordPage.openingQuotationSource()).toBeVisible();
   });
 
-  test('should open on the argument, the languages designed apart and the three things the record argues from the sources', () => {
-    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, and they were designed apart on purpose. HTML says what things are, CSS says how they show, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
+  test('should open on the argument, each language designed for a concern and the three things the record argues from the sources', () => {
+    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, each designed to handle a specific concern. HTML says what things are, CSS says how they show, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
   });
 
   test('should say how the four parts support the argument, and where to start', () => {
