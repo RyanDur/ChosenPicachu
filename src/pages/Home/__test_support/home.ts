@@ -1,11 +1,10 @@
 import {screen, within} from '@testing-library/react';
 
 const concern = (name: string): HTMLElement => screen.getByRole('region', {name});
-const momentsOf = (name: string): HTMLElement => within(concern(name)).getByRole('region', {name: `${name} from the record`});
 
-const essayOf = (name: string): HTMLElement[] => {
-  const asides = [within(concern(name)).getByRole('blockquote'), momentsOf(name)];
-  return within(concern(name)).getAllByRole('paragraph').filter(paragraph => !asides.some(aside => aside.contains(paragraph)));
+const ownParagraphs = (name: string): HTMLElement[] => {
+  const quotation = within(concern(name)).getByRole('blockquote');
+  return within(concern(name)).getAllByRole('paragraph').filter(paragraph => !quotation.contains(paragraph));
 };
 
 export const homePage = {
@@ -13,19 +12,15 @@ export const homePage = {
   paragraph: (opening: RegExp): HTMLElement => screen.getByText(opening),
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).getAllByRole('link'),
   concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
+  concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),
   quotation: (words: RegExp): HTMLElement => screen.getByText(words),
+  quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
+  concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
+  summary: (name: string): HTMLElement => ownParagraphs(name)[0],
+  storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the record.'}),
+  practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'}),
   practiceHeading: (): HTMLElement | null => screen.queryByRole('heading', {name: 'how I organize it'}),
   practiceRegion: (): HTMLElement | null => screen.queryByRole('region', {name: /how I organize it/}),
-  essay: (name: string): string[] => essayOf(name).map(paragraph => paragraph.textContent ?? ''),
-  essayOpening: (name: string): HTMLElement => essayOf(name)[0],
-  quotations: (name: string, quoted: string): HTMLElement[] => within(concern(name)).getAllByRole('link', {name: quoted}),
-  moments: momentsOf,
-  momentList: (name: string): HTMLElement => within(momentsOf(name)).getByRole('list', {name: `${name}, from the record`}),
-  momentLines: (name: string): (string | null)[] =>
-    within(within(momentsOf(name)).getByRole('list', {name: `${name}, from the record`})).getAllByRole('link').map(line => line.textContent),
-  momentLine: (name: string, line: string): HTMLElement =>
-    within(within(momentsOf(name)).getByRole('list', {name: `${name}, from the record`})).getByRole('link', {name: line}),
-  momentsHeading: (name: string): HTMLElement => within(momentsOf(name)).getByRole('heading', {level: 3, name: 'from the record'}),
-  wholeRecord: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'the whole record'})
+  momentLists: (): HTMLElement[] => screen.queryAllByRole('list', {name: /from the record/})
 };

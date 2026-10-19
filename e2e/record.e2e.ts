@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {homePage, pressTab, recordPage, tabsTo} from './__test_support';
+import {pressTab, recordPage, tabsTo} from './__test_support';
 
 test('opening one fuller story closes the one that was open', async ({page}) => {
   const record = recordPage(page);
@@ -15,9 +15,9 @@ test('opening one fuller story closes the one that was open', async ({page}) => 
   await expect(record.storyTold(first)).toBeHidden();
 });
 
-test('a keyboard reader who follows a line in Presentation\'s list reaches that moment on the record, and one Tab carries on inside it', async ({page}) => {
-  await page.goto('');
-  await tabsTo(page, homePage(page).momentLine('Presentation', '1998 The browsers need to agree'), {within: 200});
+test('a keyboard reader who follows a line in Presentation\'s story reaches that moment in the timeline, and one Tab carries on inside it', async ({page}) => {
+  await page.goto('record/');
+  await tabsTo(page, recordPage(page).storyLineTo('Presentation', '1998 The browsers need to agree'), {within: 200});
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/record\/#the-browsers-need-to-agree$/);
   const moment = recordPage(page).moment('The browsers need to agree');
@@ -36,9 +36,9 @@ test('an address that names a moment inside a year of two lands on that moment, 
   await expect(moment).toBeFocused();
 });
 
-test('a keyboard reader who follows a line in Structure\'s list to a moment inside a year of two reaches it with the year\'s fold open', async ({page}) => {
-  await page.goto('');
-  await tabsTo(page, homePage(page).momentLine('Structure', '1995 The browsers’ tags need a standard'));
+test('a keyboard reader who follows a line in Structure\'s story to a moment inside a year of two reaches it with the year\'s fold open', async ({page}) => {
+  await page.goto('record/');
+  await tabsTo(page, recordPage(page).storyLineTo('Structure', '1995 The browsers’ tags need a standard'), {within: 200});
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/record\/#the-browsers-tags-need-a-standard$/);
   const moment = recordPage(page).moment('The browsers’ tags need a standard');

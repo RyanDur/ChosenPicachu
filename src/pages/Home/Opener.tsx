@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos/types';
-import {inOrder} from '@pages/Record/moments/moments';
 import {spelledOut} from '@pages/Record/moments/spelled-out';
 
 export const Opener: FC = () =>
@@ -23,9 +22,9 @@ export const Opener: FC = () =>
       which language the job belonged to, and letting that language do it.
     </p>
     <p className="thesis paragraph">
-      Each language is one concern below: what it is for, what the record taught it, and the moments
-      where that happened. How I organize each one is on the Practice page, one tab for each. The record tells how the web got the three languages, in{' '}
-      {spelledOut(inOrder.length)} moments and a closing essay. The demos are where I work the
+      Each language is one concern below: what it says, the rule its history teaches, and where the rest is. The
+      record tells each language’s story, then every moment in order, then reads the three together. How I organize
+      each one is on the Practice page, one tab for each. The demos are where I work the
       practice: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own
       code and explained beside it. Two set the trick we used before the platform could do the job
       beside what it gives now, and the other three show what the platform does with no library at

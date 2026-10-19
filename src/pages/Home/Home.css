@@ -23,46 +23,6 @@
       margin: 0;
       text-wrap: pretty;
     }
-
-    @media (width >= 900px) {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      column-gap: var(--base-x-4);
-
-      > * {
-        grid-column: 1 / -1;
-      }
-
-      .concern-essay {
-        grid-column: 1;
-      }
-
-      .concern-evidence {
-        grid-column: 2;
-      }
-    }
-  }
-
-  .concern-essay,
-  .concern-evidence {
-    align-content: start;
-    display: grid;
-    gap: var(--base-x-1_5);
-  }
-
-  .moments {
-    display: grid;
-    row-gap: var(--base-x-1_5);
-  }
-
-  .moment-line {
-    display: grid;
-    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
-    column-gap: var(--base-x-2);
-    align-items: baseline;
-  }
-
-  .moment-year {
-    justify-self: end;
   }
 
   .concern-title {

@@ -15,7 +15,7 @@ const stories: Record<Concern, FC> = {
 
 const StoryOf: FC<{concern: Concern}> = ({concern}) => {
   const Essay = stories[concern];
-  return <section className="story trim-rule-above" aria-labelledby={concernId(concern)}>
+  return <section className="story trim-rule-above" aria-labelledby={concernId(concern)} tabIndex={-1}>
     <h2 className="record-title title" id={concernId(concern)}>{concern}</h2>
     <Essay/>
     <h3 className="sub-title">the moments it rests on</h3>
