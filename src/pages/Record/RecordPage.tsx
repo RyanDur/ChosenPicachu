@@ -21,7 +21,7 @@ export const RecordPage: FC = () => {
       Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to
       share what they knew. The record tells how the web answered, in four parts. Three stories first, one for each
       language, each ending with the moments it rests on. Then every moment in order, each opening on a need of the same
-      kind. Then the concert, which reads the three stories as one method. Then the research they stand on.
+      kind. Then the concert, which reads the moments together as one method. Then the research they stand on.
     </p>
     <Stories/>
     <Timeline/>

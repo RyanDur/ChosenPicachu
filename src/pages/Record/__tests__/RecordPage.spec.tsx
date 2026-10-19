@@ -857,7 +857,7 @@ describe('the record\'s three stories', () => {
   });
 
   test('should open on the need, then say the record has four parts and what each holds', () => {
-    expect(recordPage.opener()).toHaveTextContent('Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. The record tells how the web answered, in four parts. Three stories first, one for each language, each ending with the moments it rests on. Then every moment in order, each opening on a need of the same kind. Then the concert, which reads the three stories as one method. Then the research they stand on.');
+    expect(recordPage.opener()).toHaveTextContent('Someone needed something: several thousand people at CERN, spread across institutes and experiments, who had to share what they knew. The record tells how the web answered, in four parts. Three stories first, one for each language, each ending with the moments it rests on. Then every moment in order, each opening on a need of the same kind. Then the concert, which reads the moments together as one method. Then the research they stand on.');
   });
 
   test('should open on the quotation, then the opener, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {
