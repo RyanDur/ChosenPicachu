@@ -3,7 +3,7 @@ import {describe, expect, test} from 'vitest';
 const sheets: Record<string, string> = import.meta.glob('/src/**/*.css', {query: '?raw', import: 'default', eager: true});
 
 const namedLines = (): number[] =>
-  [...sheets['/src/styles/spacing.css'].matchAll(/--(?:no-gutters|nav-in-a-row|search-under-the-title|room-to-stand-open|phone-on-its-side):\s*(\d+)px/g)]
+  [...sheets['/src/styles/spacing.css'].matchAll(/--(?:no-gutters|nav-in-a-row|search-under-the-title|room-to-stand-open|phone-held-upright|phone-on-its-side):\s*(\d+)px/g)]
     .map(([, px]) => Number(px));
 
 const ownLines: Record<string, number[]> = {
@@ -34,7 +34,14 @@ describe('the lines the sheets break at', () => {
         .filter(line => !named.includes(line) && !(ownLines[path] ?? []).includes(line))
         .map(line => `${path} breaks at ${line}px`));
 
-    expect(named).toHaveLength(5);
+    expect(named).toHaveLength(6);
     expect(strays).toEqual([]);
+  });
+
+  test('a line a sheet owns is one it still breaks at', () => {
+    const unused = Object.entries(ownLines).flatMap(([path, lines]) =>
+      lines.filter(line => !queriedLines(sheets[path]).includes(line)).map(line => `${path} no longer breaks at ${line}px`));
+
+    expect(unused).toEqual([]);
   });
 });
