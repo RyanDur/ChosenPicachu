@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
 import {Concern, concernId} from '@pages/Record/moments/concerns';
-import {storyAddress} from '@pages/Record/MomentLink';
+import {storyAddress} from '@pages/Record/storyAddress';
 import {practiceAddress} from '@pages/Practice/types';
 
 export const ConcernSection: FC<PropsWithChildren<{concern: Concern}>> = ({concern, children}) =>

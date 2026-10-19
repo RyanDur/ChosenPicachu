@@ -29,7 +29,7 @@ describe('the home page', () => {
     expect(links[0]).toHaveAttribute('href', 'https://www.w3.org/TR/html-design-principles/');
   });
 
-  test('the page offers three concerns, each named by its responsibility', () => {
+  test('should offer three concerns, each named by its responsibility and opened by its quotation', () => {
     expect(homePage.concernHeadings()).toEqual(['Structure', 'Presentation', 'Dynamic']);
     expect(homePage.quotation(/identifies the meaning, purpose, and structure/)).toBeVisible();
     expect(homePage.quotation(/separation of HTML from CSS/)).toBeVisible();
