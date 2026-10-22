@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {arrangementSource, gap, headersSource, placingSource, rowSource} from './sources';
+import {arrangementSource, bootSource, gap, headersSource, placingSource, rowSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> = ({world, tableSource, buildSrc}) =>
@@ -50,13 +50,12 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         : <Codes>
           <Snippet label="TS" lines={[
             ...unit(arrangementSource, 'export type Arrangement'), gap,
-            ...span(buildSrc, "const order = [...table.querySelectorAll('thead th')]",
-              "const order = [...table.querySelectorAll('thead th')]"), gap,
-            ...span(buildSrc, 'const lanes = new Map(', 'const lanes = new Map('), gap,
-            ...span(buildSrc, 'const arrangement = store(', 'const hand = tableStore(')
+            ...unit(buildSrc, '#order('), gap,
+            ...unit(buildSrc, '#standing('), gap,
+            ...unit(bootSource, 'const show = ')
           ]}/>
           <Snippet label="TS" lines={[
-            ...span(buildSrc, 'const reseatRows = ',
+            ...span(buildSrc, '#reseatRows(',
               'body.insertBefore(desired, body.children[position] ?? null);'),
             aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
           ]}/>

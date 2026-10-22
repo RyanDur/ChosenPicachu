@@ -1,5 +1,5 @@
 import type {Pace} from '../../../Controls';
-import {wire as eager} from './Eager';
-import {wire as lazy} from './Lazy';
+import {DragSortableTable as Eager} from './Eager';
+import {DragSortableTable as Lazy} from './Lazy';
 
-export const wires: Record<Pace, (document: Document) => void> = {eager, lazy};
+export const builds: Record<Pace, typeof Eager | typeof Lazy> = {eager: Eager, lazy: Lazy};

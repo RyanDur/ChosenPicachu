@@ -21,7 +21,8 @@ import arrangementSource from '@components/DragSortableTable/arrangement.ts?samp
 import placingSource from '@components/DragSortableTable/placing.ts?sample';
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import {plain} from '../../../Recipe';
+import bootSource from '../../Frame/boot.ts?sample';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource};
 
 export const gap = plain(' ');

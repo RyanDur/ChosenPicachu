@@ -93,8 +93,8 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(buildSrc, 'const writeCells = '), gap,
-      ...span(buildSrc, 'trades.subscribe(', '});')
+      ...unit(buildSrc, 'set rows('), gap,
+      ...unit(buildSrc, '#writeCells(')
     ]}/>
   </Codes>
 };

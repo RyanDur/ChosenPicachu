@@ -39,9 +39,9 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
             ...unit(elementSource, 'export const DragSortableTable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'const trades = demosStore(', 'const hand = tableStore('), gap,
-            ...span(buildSrc, 'arrangement.subscribe(', 'hand.subscribe('), gap,
-            ...span(buildSrc, 'const mounted: MountedTable', 'const mounted: MountedTable')
+            ...span(buildSrc, 'readonly #hand = tableStore();', 'readonly #hand = tableStore();'), gap,
+            ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
+            ...unit(buildSrc, '#parts(): Maybe<MountedTable>')
           ]}/>}
       </Codes>
     </Reveal>

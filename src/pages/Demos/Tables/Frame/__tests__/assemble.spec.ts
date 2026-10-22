@@ -1,3 +1,4 @@
+import {within} from '@testing-library/react';
 import {frameDocument, sheets} from '../assemble';
 import indexCss from '../../../../../index.css?raw';
 import tableHtml from '../table.html?raw';
@@ -48,6 +49,16 @@ describe('the frame assembly', () => {
 
   it('the document carries the starting table dressed by the dials', () => {
     expect(document()).toContain(tableHtml.replace('class="fancy-table sortable apportioned"', 'class="fancy-table sortable apportioned hide animated"'));
+  });
+
+  it('should stand the starting table and its move report inside one drag-sortable-table', () => {
+    const parsed = new DOMParser().parseFromString(document(), 'text/html').querySelector('drag-sortable-table');
+    if (!(parsed instanceof HTMLElement)) throw new Error('the document stands no drag-sortable-table');
+    const host = window.document.importNode(parsed, true);
+    window.document.body.replaceChildren(host);
+
+    expect(within(host).getByRole('table')).toBeInTheDocument();
+    expect(within(host).getByRole('status', {name: 'move report'})).toBeInTheDocument();
   });
 
   it('the document carries its environment', () => {

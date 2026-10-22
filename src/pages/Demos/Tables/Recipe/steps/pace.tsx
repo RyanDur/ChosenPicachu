@@ -50,7 +50,7 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
             aside('{/* same key, new place: React moves the node, not a copy */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'const reconcileColumns = '),
+            ...unit(buildSrc, '#reconcileColumns('),
             aside('// the same cells, new places: the reconcile moves the node, not a copy')
           ]}/>}
         <Snippet label="TS" lines={[

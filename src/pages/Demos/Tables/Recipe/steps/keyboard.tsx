@@ -39,7 +39,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample; buildSrc: Sampl
             aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'const dressGrips = '),
+            ...unit(buildSrc, '#dressGrips('),
             aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[

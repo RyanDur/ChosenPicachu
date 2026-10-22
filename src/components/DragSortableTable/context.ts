@@ -21,8 +21,8 @@ export const useTableSelector = <Slice>(select: Selector<Slice>): Slice => selec
 
 export const useTableDispatch = (): Dispatch<TableAction> => useContext(Table).dispatch;
 
-type ColumnMoved = {readonly column: string; readonly to: number};
-type RowMoved = {readonly row: string; readonly to: number; readonly standing: readonly string[]};
+export type ColumnMoved = {readonly column: string; readonly to: number};
+export type RowMoved = {readonly row: string; readonly to: number; readonly standing: readonly string[]};
 export type Sorted = {readonly column: string; readonly direction?: Direction};
 
 export type HeaderEvents = {

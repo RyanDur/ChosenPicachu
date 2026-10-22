@@ -185,7 +185,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(arrangementSource, 'export type Arrangement'), gap,
-                ...span(buildSrc, 'if (previous.sort !== next.sort) {', 'announce(document, name'), gap,
+                ...span(buildSrc, 'if (sortOf(before) !== sortOf(this.#columns)) {', 'announce(table, name, sorted));'), gap,
                 ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
@@ -294,7 +294,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...unit(baseCss, '    &:has(> .menu-toggle) {')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(buildSrc, 'const sortable = order.filter', 'sort-${column}`)));')
+                ...unit(buildSrc, 'const sortableOf = ')
               ]}/>}
             <Snippet label="CSS" lines={[
               ...unit(headerCss, '.sortable .header-cell > .menu-toggle {'), gap,

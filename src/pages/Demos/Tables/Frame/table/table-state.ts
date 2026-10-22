@@ -13,7 +13,7 @@ export {columnOf, namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt,
 export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/actions';
 export {arrangementOf, arrangementReducer, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 export {tableStore} from '@components/DragSortableTable/store';
-export {demosStore, feedRequested, selectMeasures} from '@pages/Demos/store';
+export {demosStore, feedRequested, selectColumns, selectMeasures, selectRows} from '@pages/Demos/store';
 export {landingReport, moveReport} from '@components/DragSortableTable/report';
 
 export type ArrangementStore = Store<Arrangement, ArrangementAction>;
@@ -28,6 +28,8 @@ export type MountedTable = {
   body: HTMLTableSectionElement;
   lanes: ReadonlyMap<string, HTMLTableRowElement>;
 };
+
+export const columnNamed = (th: Element): string => th.classList.item(1) ?? '';
 
 export const changed = <T>(before: readonly T[], after: readonly T[]): boolean =>
   before.length !== after.length || after.some((at, position) => before[position] !== at);

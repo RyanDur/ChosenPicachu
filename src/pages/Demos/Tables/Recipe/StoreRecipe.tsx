@@ -16,6 +16,7 @@ import exchangeSource from '@pages/Demos/exchange.ts?sample';
 import openingSource from '@pages/Demos/useExchange.ts?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
+import bootSource from '../Frame/boot.ts?sample';
 
 const gap = plain(' ');
 
@@ -63,7 +64,9 @@ const OneState: FC<{world: World}> = ({world}) =>
             ...unit(demosSource, 'export const demosStore')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'const trades = demosStore(', 'const hand = tableStore(')
+            ...span(buildSrc, 'export class DragSortableTable', '#rows: readonly Measures[] = [];'), gap,
+            ...unit(buildSrc, 'set columns('), gap,
+            ...span(bootSource, 'const page = demosStore(', 'page.dispatch(feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -201,7 +204,7 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
             ...unit(openingSource, 'export const useExchange')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'trades.dispatch(feedRequested());', 'trades.dispatch(feedRequested());')
+            ...span(bootSource, 'page.dispatch(feedRequested());', 'page.dispatch(feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -247,8 +250,8 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
             ...unit(elementSource, 'export const DragSortableTable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'arrangement.subscribe(', 'hand.subscribe('), gap,
-            ...span(buildSrc, 'trades.subscribe(', '});')
+            ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
+            ...span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(show);')
           ]}/>}
       </Codes>
     </Reveal>

@@ -1,5 +1,4 @@
-import {has, is, maybe} from '@ryandur/sand';
-import {unconfigured} from '@env';
+import {has, is, maybe, Maybe} from '@ryandur/sand';
 import {Direction} from '@components/DragSortableTable/sorting';
 import {
   anchored,
@@ -13,20 +12,13 @@ import {
 import {eagerTravel, Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {columnLift, Grab, rowLift} from '@components/DragSortableTable/lift';
 import {columnArrows, rowArrows} from '@components/DragSortableTable/arrows';
-import {Seated} from '@components/DragSortableTable/table-state';
-import {store} from '@components/store';
-import {isMeasure, seated} from '@pages/Demos/Tables/Aggregations/cells';
+import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
+import {isMeasure, Measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {
-  Arrangement,
-  arrangementOf,
-  arrangementReducer,
   Carry,
   changed,
-  columnMoved,
-  columnOf,
-  demosStore,
+  columnNamed,
   drifted,
-  feedRequested,
   landingReport,
   Report,
   lifted,
@@ -34,122 +26,134 @@ import {
   moveReport,
   orderAtLift,
   released,
-  rowMoved,
-  selectMeasures,
   settlingAt,
   settlingFromSeat,
-  sorted,
-  standingOf,
   TableState,
   tableStore
 } from '../table/table-state';
-import {exchange} from '@pages/Demos/exchange';
 import {keepingFocus} from '../table/focus';
 import {announce, wireMenu} from '../table/menus';
 import {dressWidths, wireResize} from '../table/resize';
 import {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from '../table/settle';
 import {dressCarried} from '../table/carry';
-
-export const wire = (document: Document): void => {
-  maybe(document.querySelector('table')).map(table =>
-    maybe(table.querySelector('tbody')).map(body => mount(document, table, body)));
-};
+import {tell} from '../table/events';
 
 const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
+const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
+  [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
+const sortableOf = (table: HTMLTableElement): string[] =>
+  headersOf(table).map(columnNamed).filter(column => is(table.querySelector(`#sort-${column}`)));
+const sortOf = (columns: readonly TableColumn<Labelled>[]): string =>
+  columns.map(({name, sorted}) => has(sorted) ? `${name} ${sorted}` : '').join('');
 
-const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSectionElement): void => {
-  const lanes = new Map([...body.querySelectorAll('tr')].map(lane => [rowOf(lane), lane]));
-  const order = [...table.querySelectorAll('thead th')].map(th => th.classList.item(1) ?? '');
-  const sortable = order.filter(column => is(document.getElementById(`sort-${column}`)));
-  const env = {...unconfigured, ...window.__env};
+export class DragSortableTable extends HTMLElement {
+  readonly #hand = tableStore();
+  #columns: readonly TableColumn<Labelled>[] = [];
+  #rows: readonly Measures[] = [];
 
-  const trades = demosStore(exchange(env, () => undefined));
-  const arrangement = store({slice: {initial: arrangementOf(order, [...lanes.keys()]), reduce: arrangementReducer}});
-  const hand = tableStore();
-  const windows = (): readonly Seated[] => seated(selectMeasures(trades.state));
-  const valueOf = (row: string, column: string) => windows().find(({key}) => key === row)?.values[column];
-  const columns = (): readonly string[] => arrangement.state.columns;
-  const standing = (): readonly string[] => standingOf(arrangement.state, valueOf);
+  set columns(columns: readonly TableColumn<Labelled>[]) {
+    const before = this.#columns;
+    this.#columns = columns;
+    this.#parts().map(parts => this.#arrange(parts, before));
+  }
 
-  const report = (said: Report): void => {
-    const output = document.querySelector('output[aria-label="move report"]');
+  set rows(rows: readonly Measures[]) {
+    this.#rows = rows;
+    this.#parts().map(parts => {
+      this.#writeCells(parts);
+      this.#reseatRows(parts);
+    });
+  }
+
+  connectedCallback(): void {
+    this.#parts().map(parts => this.#wire(parts));
+  }
+
+  #order(): readonly string[] {
+    return this.#columns.map(({name}) => name);
+  }
+
+  #standing(): readonly string[] {
+    return this.#rows.map(row => row.window.display);
+  }
+
+  #report(said: Report): void {
+    const output = this.querySelector('output[aria-label="move report"]');
     const text = moveReport(said);
     if (output !== null && output.textContent !== text) {
       output.textContent = text;
     }
-  };
+  }
 
-  const mounted: MountedTable = {store: hand, order: columns, standing, report, document, table, body, lanes};
+  #parts(): Maybe<MountedTable> {
+    return maybe(this.querySelector('table')).mBind(table => maybe(table.tBodies.item(0)).map(body => ({
+      store: this.#hand,
+      order: () => this.#order(),
+      standing: () => this.#standing(),
+      report: (said: Report) => this.#report(said),
+      document: this.ownerDocument,
+      table,
+      body,
+      lanes: new Map([...body.rows].map(lane => [rowOf(lane), lane]))
+    })));
+  }
 
-  const columnShoving = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
-    const current = columns();
-    const from = current.indexOf(name);
-    arrangement.dispatch(columnMoved(name, to));
-    shoveColumns(mounted, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
-  };
-  const columnTo = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
-    const current = columns();
-    const from = current.indexOf(name);
-    const over = spanCrossed(current, widths, from, to);
-    columnShoving(name, to, widths);
-    report({about: 'column', name, position: to, of: current.length});
-    settleColumn(mounted, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
-  };
-  const columnBeside = (name: string, neighbour: string): void => {
-    const current = columns();
-    columnShoving(name, interior(current.indexOf(neighbour), current.length), hand.state.drag?.survey.columnWidths ?? {});
-  };
-  const rowShoving = (row: string, before: readonly string[], to: number, heights: Readonly<Record<string, number>>): void => {
-    const from = before.indexOf(row);
-    shoveRows(mounted, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
-  };
-  const rowNudged = (row: string, from: number, to: number, heights: Readonly<Record<string, number>>): void => {
-    const before = standing();
-    rowShoving(row, before, to, heights);
-    settleRow(mounted, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
-  };
-  const rowTo = (row: string, to: number): void => {
-    const before = standing();
-    arrangement.dispatch(rowMoved(row, to, before));
-    report({about: 'row', name: row, position: to, of: before.length});
-  };
-  const rowBeside = (row: string, neighbour: string): void => {
-    const before = standing();
-    const to = before.indexOf(neighbour);
-    arrangement.dispatch(rowMoved(row, to, before));
-    rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
-  };
+  #arrange(parts: MountedTable, before: readonly TableColumn<Labelled>[]): void {
+    const {table, document} = parts;
+    const shown = headersOf(table).map(columnNamed);
+    if (changed(shown, this.#order())) {
+      keepingFocus(document, () => this.#reconcileColumns(table, shown));
+      this.#dressGrips(table);
+      dressWidths(parts);
+    }
+    this.#reseatRows(parts);
+    dressCarried(parts, this.#hand.state);
+    if (sortOf(before) !== sortOf(this.#columns)) {
+      this.#columns.forEach(({name, sorted}) => announce(table, name, sorted));
+    }
+  }
 
-  const writeCells = (): void => {
-    const order = columns();
-    selectMeasures(trades.state).forEach(row =>
-      maybe(lanes.get(row.window.display)).map(lane =>
-        sortable.forEach(measure => {
-          const text = isMeasure(measure) ? row[measure].display : '';
-          const cell = lane.cells[order.indexOf(measure)];
-          if (cell.textContent !== text) {
-            cell.textContent = text;
-          }
-        })));
-  };
-
-  const reconcileColumns = (previous: readonly string[], next: readonly string[]): void => {
+  #reconcileColumns(table: HTMLTableElement, shown: readonly string[]): void {
     [...table.rows].forEach(lane => {
-      const placed = new Map(previous.map((name, at) => [name, lane.cells[at]]));
-      next.forEach((name, position) =>
+      const placed = new Map(shown.map((name, at) => [name, lane.cells[at]]));
+      this.#order().forEach((name, position) =>
         maybe(placed.get(name)).map(cell => {
           if (lane.cells[position] !== cell) {
             lane.insertBefore(cell, lane.cells[position] ?? null);
           }
         }));
     });
-  };
+  }
 
-  const shown = (): readonly string[] => [...body.querySelectorAll('tr')].map(rowOf);
+  #dressGrips(table: HTMLTableElement): void {
+    const headers = headersOf(table);
+    headers.forEach((th, at) => {
+      if (anchored(at, headers.length)) {
+        th.classList.remove('grabbable');
+        th.removeAttribute('tabindex');
+      } else {
+        th.classList.add('grabbable');
+        th.tabIndex = 0;
+      }
+    });
+  }
 
-  const reseatRows = (): void => {
-    const next = standing();
-    if (!changed(shown(), next)) {
+  #writeCells({table, lanes}: MountedTable): void {
+    const order = headersOf(table).map(columnNamed);
+    this.#rows.forEach(row =>
+      maybe(lanes.get(row.window.display)).map(lane =>
+        sortableOf(table).forEach(measure => {
+          const text = isMeasure(measure) ? row[measure].display : '';
+          const cell = lane.cells[order.indexOf(measure)];
+          if (cell.textContent !== text) {
+            cell.textContent = text;
+          }
+        })));
+  }
+
+  #reseatRows({document, body, lanes}: MountedTable): void {
+    const next = this.#standing();
+    if (!changed([...body.rows].map(rowOf), next)) {
       return;
     }
     keepingFocus(document, () =>
@@ -166,123 +170,131 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
           grip.setAttribute('aria-label', label);
         }
       }));
-  };
+  }
 
-  const dressGrips = (): void => {
-    [...table.querySelectorAll('thead th')].forEach((th, at) => {
-      if (!(th instanceof HTMLTableCellElement)) {
+  #wire(parts: MountedTable): void {
+    const {table, lanes} = parts;
+    const hand = this.#hand;
+    const columns = (): readonly string[] => this.#order();
+    const standing = (): readonly string[] => this.#standing();
+
+    const columnShoving = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
+      const current = columns();
+      const from = current.indexOf(name);
+      tell(this, 'column-moved', {column: name, to});
+      shoveColumns(parts, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
+    };
+    const columnTo = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
+      const current = columns();
+      const from = current.indexOf(name);
+      const over = spanCrossed(current, widths, from, to);
+      columnShoving(name, to, widths);
+      this.#report({about: 'column', name, position: to, of: current.length});
+      settleColumn(parts, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
+    };
+    const columnBeside = (name: string, neighbour: string): void => {
+      const current = columns();
+      columnShoving(name, interior(current.indexOf(neighbour), current.length), hand.state.drag?.survey.columnWidths ?? {});
+    };
+    const rowShoving = (row: string, before: readonly string[], to: number, heights: Readonly<Record<string, number>>): void => {
+      const from = before.indexOf(row);
+      shoveRows(parts, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
+    };
+    const rowNudged = (row: string, from: number, to: number, heights: Readonly<Record<string, number>>): void => {
+      const before = standing();
+      rowShoving(row, before, to, heights);
+      settleRow(parts, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
+    };
+    const rowTo = (row: string, to: number): void => {
+      const before = standing();
+      tell(this, 'row-moved', {row, to, standing: before});
+      this.#report({about: 'row', name: row, position: to, of: before.length});
+    };
+    const rowBeside = (row: string, neighbour: string): void => {
+      const before = standing();
+      const to = before.indexOf(neighbour);
+      tell(this, 'row-moved', {row, to, standing: before});
+      rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
+    };
+
+    const dress = (previous: TableState, next: TableState): void => {
+      if (previous.widths !== next.widths || previous.sizing !== next.sizing) {
+        dressWidths(parts);
+      }
+      if (previous.drag !== next.drag) {
+        dressCarried(parts, next);
+      }
+    };
+    hand.subscribe((previous, current) => dress(previous, current()));
+
+    const drop = (): void => {
+      const {drag} = hand.state;
+      if (!has(drag)) {
         return;
       }
-      if (anchored(at, columns().length)) {
-        th.classList.remove('grabbable');
-        th.removeAttribute('tabindex');
+      landingReport(drag.axis, orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? columns() : standing()}).map(said => this.#report(said));
+      const from = settlingAt(hand.state, columns(), standing());
+      hand.dispatch(released());
+      if (drag.axis === 'column') {
+        settleColumn(parts, drag.held, from);
       } else {
-        th.classList.add('grabbable');
-        th.tabIndex = 0;
+        settleRow(parts, drag.held, from);
       }
-    });
-  };
+    };
 
-  const reconcile = (previous: Arrangement, next: Arrangement): void => {
-    if (changed(previous.columns, next.columns)) {
-      keepingFocus(document, () => reconcileColumns(previous.columns, next.columns));
-      dressGrips();
-      dressWidths(mounted);
-    }
-    reseatRows();
-    dressCarried(mounted, hand.state);
-    if (previous.sort !== next.sort) {
-      next.columns.forEach(name => announce(document, name, next.sort?.column === name ? next.sort.direction : undefined));
-    }
-  };
-
-  const dress = (previous: TableState, next: TableState): void => {
-    if (previous.widths !== next.widths || previous.sizing !== next.sizing) {
-      dressWidths(mounted);
-    }
-    if (previous.drag !== next.drag) {
-      dressCarried(mounted, next);
-    }
-  };
-
-  arrangement.subscribe((previous, current) => reconcile(previous, current()));
-  hand.subscribe((previous, current) => dress(previous, current()));
-  trades.subscribe(() => {
-    writeCells();
-    reseatRows();
-  });
-
-  const drop = (): void => {
-    const {drag} = hand.state;
-    if (!has(drag)) {
-      return;
-    }
-    landingReport(drag.axis, orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? columns() : standing()}).map(report);
-    const from = settlingAt(hand.state, columns(), standing());
-    hand.dispatch(released());
-    if (drag.axis === 'column') {
-      settleColumn(mounted, drag.held, from);
-    } else {
-      settleRow(mounted, drag.held, from);
-    }
-  };
-
-  const moved = (moving: Moving): void => {
-    hand.dispatch(drifted(moving));
-    const {drag} = hand.state;
-    if (drag?.axis === 'column') {
-      eagerTravel(columnUnder(columns(), drag.survey), drag.held, neighbour => columnBeside(drag.held, neighbour))(moving);
-    } else if (drag?.axis === 'row') {
-      eagerTravel(rowUnder(standing(), drag.survey), drag.held, neighbour => rowBeside(drag.held, neighbour))(moving);
-    }
-  };
-
-  const lift = (carry: Carry, grab: Grab): void => {
-    unmarked(mounted);
-    hand.dispatch(lifted(carry, grab));
-  };
-
-  const wireCarry = (holder: HTMLElement): void => {
-    ['pointermove', 'lostpointercapture'].forEach(travelling => holder.addEventListener(travelling, event => {
-      if (event instanceof PointerEvent && has(hand.state.drag)) {
-        pointerTravel(moved, drop)(event);
+    const moved = (moving: Moving): void => {
+      hand.dispatch(drifted(moving));
+      const {drag} = hand.state;
+      if (drag?.axis === 'column') {
+        eagerTravel(columnUnder(columns(), drag.survey), drag.held, neighbour => columnBeside(drag.held, neighbour))(moving);
+      } else if (drag?.axis === 'row') {
+        eagerTravel(rowUnder(standing(), drag.survey), drag.held, neighbour => rowBeside(drag.held, neighbour))(moving);
       }
-    }));
-    ['pointerup', 'pointercancel'].forEach(ending => holder.addEventListener(ending, drop));
-  };
+    };
 
-  const choose = (column: string) => (direction?: Direction): void => {
-    arrangement.dispatch(sorted(column, direction));
-    report({about: 'sort', name: column, direction});
-  };
+    const lift = (carry: Carry, grab: Grab): void => {
+      unmarked(parts);
+      hand.dispatch(lifted(carry, grab));
+    };
 
-  sortable.forEach(column => wireMenu(document, column, choose(column)));
-  wireResize(mounted);
-  [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
-    chrome.addEventListener('pointerdown', event => event.stopPropagation()));
+    const wireCarry = (holder: HTMLElement): void => {
+      ['pointermove', 'lostpointercapture'].forEach(travelling => holder.addEventListener(travelling, event => {
+        if (event instanceof PointerEvent && has(hand.state.drag)) {
+          pointerTravel(moved, drop)(event);
+        }
+      }));
+      ['pointerup', 'pointercancel'].forEach(ending => holder.addEventListener(ending, drop));
+    };
 
-  const wireColumnGrip = (th: HTMLTableCellElement): void => {
-    const held = columnOf(columns(), th);
+    const choose = (column: string) => (direction?: Direction): void => {
+      tell(this, 'sorted', {column, direction});
+      this.#report({about: 'sort', name: column, direction});
+    };
 
-    th.addEventListener('pointerdown', columnLift(held, columns, standing, grab => lift({axis: 'column', held}, grab)));
-    wireCarry(th);
-    th.addEventListener('keydown', columnArrows(held, columns, ({to, widths}) => columnTo(held, to, widths)));
-  };
+    sortableOf(table).forEach(column => wireMenu(table, column, choose(column)));
+    wireResize(parts);
+    [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
+      chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
-  const wireRowGrip = (held: string, grip: HTMLButtonElement): void => {
-    grip.addEventListener('pointerdown', rowLift(columns, standing, grab => lift({axis: 'row', held}, grab)));
-    wireCarry(grip);
-    grip.addEventListener('keydown', rowArrows(held, standing, {nudged: ({from, to, heights}) => rowNudged(held, from, to, heights), moved: ({to}) => rowTo(held, to)}));
-  };
+    const wireColumnGrip = (th: HTMLTableCellElement): void => {
+      const held = columnNamed(th);
 
-  dressGrips();
-  [...table.querySelectorAll('thead th')]
-    .filter(th => th instanceof HTMLTableCellElement)
-    .forEach(wireColumnGrip);
-  lanes.forEach((lane, held) =>
-    [...lane.querySelectorAll('button.grip')]
-      .filter(grip => grip instanceof HTMLButtonElement)
-      .forEach(grip => wireRowGrip(held, grip)));
+      th.addEventListener('pointerdown', columnLift(held, columns, standing, grab => lift({axis: 'column', held}, grab)));
+      wireCarry(th);
+      th.addEventListener('keydown', columnArrows(held, columns, ({to, widths}) => columnTo(held, to, widths)));
+    };
 
-  trades.dispatch(feedRequested());
-};
+    const wireRowGrip = (held: string, grip: HTMLButtonElement): void => {
+      grip.addEventListener('pointerdown', rowLift(columns, standing, grab => lift({axis: 'row', held}, grab)));
+      wireCarry(grip);
+      grip.addEventListener('keydown', rowArrows(held, standing, {nudged: ({from, to, heights}) => rowNudged(held, from, to, heights), moved: ({to}) => rowTo(held, to)}));
+    };
+
+    this.#dressGrips(table);
+    headersOf(table).forEach(wireColumnGrip);
+    lanes.forEach((lane, held) =>
+      [...lane.querySelectorAll('button.grip')]
+        .filter(grip => grip instanceof HTMLButtonElement)
+        .forEach(grip => wireRowGrip(held, grip)));
+  }
+}
