@@ -61,6 +61,15 @@ describe('columns by hand', () => {
     expect(liveTable.announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
+  test('the lazy table says a column move', async () => {
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
+
+    liveTable.focusColumn('trades');
+    await liveTable.press('{ArrowRight}');
+
+    expect(liveTable.announced()).toEqual(['trades moved to column 3 of 7']);
+  });
+
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
@@ -134,6 +143,15 @@ describe('rows by hand', () => {
     await liveTable.press('{ArrowDown}');
 
     expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(liveTable.announced()).toEqual(['this minute moved to 2 of 5']);
+  });
+
+  test('the lazy table says a row move', async () => {
+    seat(LazyTable, {origin: 'keep', motion: 'static'});
+
+    liveTable.focusRow('this minute');
+    await liveTable.press('{ArrowDown}');
+
     expect(liveTable.announced()).toEqual(['this minute moved to 2 of 5']);
   });
 

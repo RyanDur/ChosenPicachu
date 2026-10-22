@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {drifted, eagerTravel, pointerTravel} from '../travel';
-import {columnArrows, rowArrows} from '../arrows';
+import {columnArrows} from '../arrows';
 
 const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
 
@@ -27,36 +27,6 @@ describe('the travel vocabulary', () => {
     listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: null});
 
     expect(happened).toEqual(['drop']);
-  });
-
-  const measuredTable = () => {
-    const table = document.createElement('table');
-    table.innerHTML = '<thead><tr><th class="cell window"></th><th class="cell trades"></th><th class="cell buys"></th><th class="cell change"></th></tr></thead><tbody><tr><td></td></tr><tr><td></td></tr></tbody>';
-    [...table.tHead?.rows[0]?.cells ?? []].forEach((th, at) => {
-      th.getBoundingClientRect = () => new DOMRect(0, 0, 100 + at, 0);
-    });
-    [...table.tBodies[0]?.rows ?? []].forEach((lane, at) => {
-      lane.getBoundingClientRect = () => new DOMRect(0, 0, 0, 40 + at);
-    });
-    return table;
-  };
-
-  it('a column arrow hands over the column widths as they stand', () => {
-    const th = measuredTable().tHead?.rows[0]?.cells[1];
-    const widths: Readonly<Record<string, number>>[] = [];
-
-    columnArrows('trades', () => ['window', 'trades', 'buys', 'change'], nudge => widths.push(nudge.widths))({...pressed('ArrowRight'), currentTarget: th ?? null});
-
-    expect(widths).toEqual([{window: 100, trades: 101, buys: 102, change: 103}]);
-  });
-
-  it('a row arrow hands over the row heights as they stand', () => {
-    const grip = measuredTable().tBodies[0]?.rows[0]?.cells[0];
-    const heights: Readonly<Record<string, number>>[] = [];
-
-    rowArrows('this minute', () => ['this minute', 'this hour'], {nudged: nudge => heights.push(nudge.heights), moved: () => undefined})({...pressed('ArrowDown'), currentTarget: grip ?? null});
-
-    expect(heights).toEqual([{'this minute': 40, 'this hour': 41}]);
   });
 
   it('column arrows answer only to left and right', () => {

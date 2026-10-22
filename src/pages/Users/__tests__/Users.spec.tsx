@@ -82,10 +82,9 @@ describe('the users page', () => {
       render(<TestApp at={Paths.users}/>);
       await usersTable.roster();
 
-      (await usersTable.grip(fullNameOf(kai))).focus();
-      await userEvent.keyboard('{ArrowDown}');
+      await usersTable.moveByKey(fullNameOf(kai), '{ArrowDown}');
 
-      expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
+      expect(usersTable.moveReport()).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
     });
 
     it('a column is resized from one handle', async () => {

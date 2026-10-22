@@ -77,7 +77,7 @@ for (const {name, at, table} of stages) {
 
       const hold = await trades.holdHandle('window');
       const before = await trades.announcedShare('window');
-      await hold.carryBy(40);
+      await hold.carryTo(40);
       expect(await trades.whatTheMoveReportSaid()).toEqual([]);
       expect(await trades.announcedShare('window')).toBe(before);
       await hold.letGo();
@@ -87,7 +87,7 @@ for (const {name, at, table} of stages) {
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`window resized to ${after}%`]);
     });
 
-    test('a handle pressed and let go, or dragged away and back, says nothing', async ({page}) => {
+    test('a handle pressed and let go, or dragged away and back, says nothing until a key moves it', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
       await trades.listenToTheMoveReport();
@@ -95,11 +95,14 @@ for (const {name, at, table} of stages) {
       const pressed = await trades.holdHandle('window');
       await pressed.letGo();
       const carried = await trades.holdHandle('window');
-      await carried.carryBy(40);
-      await carried.carryBy(0);
+      await carried.carryTo(40);
+      await carried.carryHome();
       await carried.letGo();
+      await trades.resizeHandle('window').focus();
+      await page.keyboard.press('ArrowRight');
 
-      expect(await trades.whatTheMoveReportSaid()).toEqual([]);
+      const share = await trades.announcedShare('window');
+      await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`window resized to ${share}%`]);
     });
 
     test('a handle dragged while another holds focus says only its own share', async ({page}) => {
@@ -109,7 +112,7 @@ for (const {name, at, table} of stages) {
       await trades.listenToTheMoveReport();
 
       const hold = await trades.holdHandle('trades');
-      await hold.carryBy(40);
+      await hold.carryTo(40);
       await hold.letGo();
 
       const share = await trades.announcedShare('trades');

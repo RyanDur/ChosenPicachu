@@ -137,12 +137,13 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.up();
     },
     resizeHandle,
-    holdHandle: async (name: string): Promise<{carryBy: (by: number) => Promise<void>; letGo: () => Promise<void>}> => {
+    holdHandle: async (name: string): Promise<{carryTo: (by: number) => Promise<void>; carryHome: () => Promise<void>; letGo: () => Promise<void>}> => {
       const middle = await centreOfHandle(name);
       await page.mouse.move(middle.x, middle.y);
       await page.mouse.down();
       return {
-        carryBy: by => page.mouse.move(middle.x + by, middle.y, {steps: 8}),
+        carryTo: by => page.mouse.move(middle.x + by, middle.y, {steps: 8}),
+        carryHome: () => page.mouse.move(middle.x, middle.y, {steps: 8}),
         letGo: () => page.mouse.up()
       };
     },
@@ -166,7 +167,12 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
         await page.keyboard.press('ArrowLeft');
       }
     },
-    announcedShare: async (name: string): Promise<number> => Number(/, (\d+)%$/.exec(await resizeHandle(name).getAttribute('aria-label') ?? '')?.[1]),
+    announcedShare: async (name: string): Promise<number> => {
+      const label = await resizeHandle(name).getAttribute('aria-label') ?? '';
+      const share = /, (\d+)%$/.exec(label)?.[1] ?? '';
+      if (share === '') throw new Error(`the handle "${label}" names no share`);
+      return Number(share);
+    },
     dragFromWhereHeadersMeet: async (column: string, by: number): Promise<void> => {
       const handle = resizeHandle(column);
       await handle.scrollIntoViewIfNeeded();

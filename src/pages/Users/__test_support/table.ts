@@ -31,6 +31,11 @@ export const usersTable = {
 
   grips: (): HTMLElement[] => within(table()).getAllByRole('button', {name: /move row/}),
   grip: async (name: string): Promise<HTMLElement> => within(await rowOf(name)).getByRole('button', {name: /move row/}),
+  moveByKey: async (name: string, key: string): Promise<void> => {
+    within(await rowOf(name)).getByRole('button', {name: /move row/}).focus();
+    await userEvent.keyboard(key);
+  },
+  moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
 
   resizeHandles: (column: string): HTMLElement[] =>
     within(table()).getAllByRole('button', {name: new RegExp(`resize ${column}`)}),
