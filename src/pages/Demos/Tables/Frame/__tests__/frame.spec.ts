@@ -1,5 +1,4 @@
-import {screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {waitFor} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
@@ -34,15 +33,6 @@ describe('the frame table', () => {
     expect(vanillaFrame.moveReport()).toHaveTextContent('buys sorted descending');
   });
 
-  const windowNames = (): string[] =>
-    screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
-
-  const sortMenu = (column: string) =>
-    within(screen.getByRole('columnheader', {name: new RegExp(column)}));
-
-  const measure = (window: string, at: number): HTMLElement =>
-    within(screen.getByRole('row', {name: new RegExp(window)})).getAllByRole('cell')[at];
-
   afterEach(() => {
     document.body.innerHTML = '';
   });
@@ -50,48 +40,48 @@ describe('the frame table', () => {
   it('without a feed the starting zeros stand', () => {
     vanillaFrame.stand();
 
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(measure('this minute', 0)).toHaveTextContent('0');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('0');
   });
 
   it('a sort with no values still announces its direction', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+    await vanillaFrame.choose('trades', 'descending');
 
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(measure('this minute', 0)).toHaveTextContent('0');
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('0');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
   it('reset ends the sort and withdraws the announcement', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
+    await vanillaFrame.choose('buys', 'ascending');
+    await vanillaFrame.choose('buys', 'reset');
 
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.header('buys')).not.toHaveAttribute('aria-sort');
   });
 
   it('choosing a sort says it', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('buys sorted ascending');
+    await vanillaFrame.choose('buys', 'ascending');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('buys sorted ascending');
 
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('buys sort reset');
+    await vanillaFrame.choose('buys', 'reset');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('buys sort reset');
   });
 
   it('a new sort releases the old column', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+    await vanillaFrame.choose('buys', 'ascending');
+    await vanillaFrame.choose('trades', 'descending');
 
-    expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+    expect(vanillaFrame.header('buys')).not.toHaveAttribute('aria-sort');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
   it('trades fold into the windows', async () => {
@@ -101,33 +91,29 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
-    await waitFor(() => expect(measure('session', 0)).toHaveTextContent('2'));
-    expect(measure('this minute', 0)).toHaveTextContent('1');
+    await waitFor(() => expect(vanillaFrame.cells('session')[0]).toHaveTextContent('2'));
+    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('1');
   });
-
-  const columnOrder = (): string[] =>
-    screen.getAllByRole('columnheader').map(header => header.getAttribute('aria-label') ?? '');
 
   it('the keyboard walks a column', async () => {
     vanillaFrame.stand();
 
-    screen.getByRole('columnheader', {name: /trades/}).focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await vanillaFrame.moveColumnByKey('trades', '{ArrowRight}');
 
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     vanillaFrame.stand({pace: 'eager'});
 
-    const trades = screen.getByRole('columnheader', {name: /trades/});
-    trades.focus();
-    await userEvent.keyboard('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    const trades = vanillaFrame.header('trades');
+    vanillaFrame.focusColumn('trades');
+    await vanillaFrame.press('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
+    expect(vanillaFrame.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
-    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    await vanillaFrame.press('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
+    expect(vanillaFrame.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(document.activeElement).toBe(trades);
   });
 
@@ -135,47 +121,44 @@ describe('the frame table', () => {
     blurFocusOnMoves();
     vanillaFrame.stand({pace: 'eager'});
 
-    const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: /move row/});
-    grip.focus();
-    await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
-    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
+    const grip = vanillaFrame.grip('this minute');
+    vanillaFrame.focusRow('this minute');
+    await vanillaFrame.press('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
 
-    await userEvent.keyboard('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    await vanillaFrame.press('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(document.activeElement).toBe(grip);
   });
 
   it('the first seat is anchored', async () => {
     vanillaFrame.stand();
 
-    screen.getByRole('columnheader', {name: /trades/}).focus();
-    await userEvent.keyboard('{ArrowLeft}');
+    await vanillaFrame.moveColumnByKey('trades', '{ArrowLeft}');
 
-    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
   it('the fold finds its columns after they move', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
     await feedIsSubscribed(feed);
-    screen.getByRole('columnheader', {name: /trades/}).focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await vanillaFrame.moveColumnByKey('trades', '{ArrowRight}');
 
     broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'sold')]);
 
     await waitFor(() => {
-      const row = within(screen.getByRole('row', {name: /session/})).getAllByRole('cell');
-      expect(row[0]).toHaveTextContent('0');
-      expect(row[1]).toHaveTextContent('1');
-      expect(row[2]).toHaveTextContent('1');
+      const session = vanillaFrame.cells('session');
+      expect(session[0]).toHaveTextContent('0');
+      expect(session[1]).toHaveTextContent('1');
+      expect(session[2]).toHaveTextContent('1');
     });
   });
 
   it('a reseat leaves settled rows untouched', async () => {
     vanillaFrame.stand();
 
-    const still = screen.getByRole('row', {name: /this hour/});
-    const [, hold] = screen.getAllByRole('rowgroup');
+    const still = vanillaFrame.row('this hour');
     let touched = false;
     const observer = new MutationObserver(records =>
       records.forEach(record => {
@@ -183,105 +166,96 @@ describe('the frame table', () => {
           touched = true;
         }
       }));
-    observer.observe(hold, {childList: true});
+    observer.observe(vanillaFrame.body(), {childList: true});
 
-    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
-    await userEvent.keyboard('{ArrowDown}');
+    await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
     observer.takeRecords();
     observer.disconnect();
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     expect(touched).toBe(false);
   });
 
   it('the keyboard walks a row, and its label follows', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
-    await userEvent.keyboard('{ArrowDown}');
+    await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    const row = screen.getByRole('row', {name: /this minute/});
-    expect(within(row).getByRole('button', {name: 'move row 2'})).toBeInTheDocument();
+    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.grip('this minute')).toHaveAccessibleName('move row 2');
   });
 
   it('a row nudge says the move', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
-    await userEvent.keyboard('{ArrowDown}');
+    await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('this minute moved to 2 of 5');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('this minute moved to 2 of 5');
   });
 
   it('a column walk says the move', async () => {
     vanillaFrame.stand();
 
-    screen.getByRole('columnheader', {name: /trades/}).focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await vanillaFrame.moveColumnByKey('trades', '{ArrowRight}');
 
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades moved to column 3 of 7');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('trades moved to column 3 of 7');
   });
 
   it('the last seat clamps the walk', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(screen.getByRole('button', {name: 'move row 5'}));
-    await userEvent.keyboard('{ArrowDown}');
+    await vanillaFrame.moveRowByKey(5, '{ArrowDown}');
 
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a hand that lifts a row and drops it where it was leaves the sort standing', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+    await vanillaFrame.choose('trades', 'ascending');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
 
     await vanillaFrame.liftAndLetGo(1);
 
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a keyboard nudge ends the sort and keeps the rows where it left them', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+    await vanillaFrame.choose('trades', 'ascending');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
 
-    screen.getByRole('button', {name: 'move row 1'}).focus();
-    await userEvent.keyboard('{ArrowDown}');
+    await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
-    expect(screen.getByRole('columnheader', {name: /trades/})).not.toHaveAttribute('aria-sort');
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.header('trades')).not.toHaveAttribute('aria-sort');
+    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a keyboard nudge at the rail keeps the sort and adds no report', async () => {
     vanillaFrame.stand();
 
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+    await vanillaFrame.choose('trades', 'ascending');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
 
-    screen.getByRole('button', {name: 'move row 1'}).focus();
-    await userEvent.keyboard('{ArrowUp}');
+    await vanillaFrame.moveRowByKey(1, '{ArrowUp}');
 
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
-    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.moveReport()).toHaveTextContent('trades sorted ascending');
   });
 
   it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
     await feedIsSubscribed(feed);
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+    await vanillaFrame.choose('trades', 'descending');
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
     await waitFor(() =>
-      expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']));
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+      expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']));
+    expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
-
 });
