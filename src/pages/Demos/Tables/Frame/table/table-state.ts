@@ -3,12 +3,8 @@ import {Report} from '@components/DragSortableTable/report';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
 import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
 
-export type {TableState, Carry, Drag} from '@components/DragSortableTable/table-state';
-export type {TableReducer} from '@components/DragSortableTable/reducer';
-export type {TableAction} from '@components/DragSortableTable/actions';
-export type {DemosStore, DemosMiddleware as Middleware} from '@pages/Demos/store';
+export type {TableState, Carry} from '@components/DragSortableTable/table-state';
 export type {Report} from '@components/DragSortableTable/report';
-export type {Arrangement, ArrangementAction} from '@components/DragSortableTable/arrangement';
 export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
 export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/actions';
 export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';

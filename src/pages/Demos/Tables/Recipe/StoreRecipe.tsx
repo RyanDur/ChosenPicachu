@@ -211,7 +211,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a show, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a <code>show</code>, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
         would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
@@ -231,8 +231,8 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
           <Says>The three listeners take the events the element tells it, column-moved, row-moved and sorted, each dispatched into the arrangement; the one subscription sets the element’s columns and rows whenever the store changes, and the element’s setters move the real cells, touching only the ones whose place changed.</Says>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
-          <Says>The element’s rows setter writes only the text that differs, and reseats the rows when the sort ranks them anew.</Says>
-          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s show reads the page’s state each time it runs and keeps nothing of its own, and of the page’s state the element keeps only the last columns and rows it was set.</Says>
+          <Says>The element’s rows setter writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
+          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s <code>show</code> reads the page’s state each time it runs and keeps nothing of its own, and of the page’s state the element keeps only the last columns and rows it was set.</Says>
         </>}
       <Codes>
         {world === 'react'

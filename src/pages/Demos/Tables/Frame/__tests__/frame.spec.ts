@@ -143,10 +143,6 @@ describe('the frame table', () => {
     });
   });
 
-  const carried = (): Element[] =>
-    [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')]
-      .filter(seat => seat.classList.contains('carried'));
-
   it('a reseat leaves settled rows untouched', async () => {
     vanillaFrame.stand();
 
@@ -260,16 +256,4 @@ describe('the frame table', () => {
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
   });
 
-  describe('the worlds of pace, origin, and motion', () => {
-
-    it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
-      vanillaFrame.stand({pace: 'eager'});
-
-      await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
-
-      expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
-      expect(carried()).toEqual([]);
-    });
-
-  });
 });

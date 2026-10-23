@@ -23,7 +23,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
       <code>onColumnMoved</code> or <code>onRowMoved</code> in React and <code>column-moved</code> or <code>row-moved</code> from the
         element, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, one plain object that both worlds mount unchanged. What differs is
-        who subscribes: React subscribes a component, which re-renders; the vanilla element takes the order the page gives it and reconciles, which moves nodes. Every listener from here on does one of two things and nothing else: it dispatches to the hand, or it tells the page an event, which is why each is in one shared file and every shared block below appears in both worlds unchanged.</Says>
+        who subscribes: React subscribes a component, which re-renders; the vanilla element takes the order the page gives it and reconciles, which moves nodes. Every shared listener from here on, the lift, the travel and the arrows, does one of two things and nothing else: it dispatches to the table’s store, or it raises what the trader did, which is why each is in one shared file and every shared block below appears in both worlds unchanged. The vanilla element’s own listeners, the ones that write the move report and move the cells, are its alone and are not shared.</Says>
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(storeSource, 'export type Store'), gap,
