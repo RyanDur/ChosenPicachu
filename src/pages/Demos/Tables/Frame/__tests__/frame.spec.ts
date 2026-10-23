@@ -9,7 +9,7 @@ describe('the frame table', () => {
   it('should make every movable header a tab stop and leave the anchored edges out', () => {
     vanillaFrame.stand();
 
-    expect(vanillaFrame.header('trades')).toHaveAttribute('tabindex', '0');
+    ['trades', 'buys', 'sells', 'volume', 'vwap'].forEach(movable => expect(vanillaFrame.header(movable)).toHaveAttribute('tabindex', '0'));
     expect(vanillaFrame.header('window')).not.toHaveAttribute('tabindex');
     expect(vanillaFrame.header('change')).not.toHaveAttribute('tabindex');
   });

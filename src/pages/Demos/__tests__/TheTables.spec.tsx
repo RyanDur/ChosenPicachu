@@ -34,7 +34,7 @@ describe('the tables tab’s own words', () => {
     'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: the node moves are insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
-    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the element, and comes back down as the next order. Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
+    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the element, and comes back down as the next order.',
     'That is one dispatch, and after it the store holds the drag beside the columns and the seats: the one mark of what is',
     'a key a table with no carry never has.',
     'Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.',
@@ -105,7 +105,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The element’s rows setter writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.'},
     {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s show reads the page’s state each time it runs and keeps nothing of its own, and of the page’s state the element keeps only the last columns and rows it was set.'},
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a show, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is'},
-    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it, and nothing else, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or raises the prop; in the vanilla element it dispatches to the hand, or raises the event, writes the move report, the output that tells a screen reader where the moved column or row now sits, and moves the cells.'},
+    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved prop; in the vanilla element it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle><button type="button" tabindex="0" class="resize-handle'},
@@ -116,6 +116,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
     {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'Choose, a function of the table’s context, raises sorted to the page; the page dispatches it into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath.'},
+    {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu><button type="button" tabindex="0" class="menu-toggle'},
     {choice: 'motion=static', sentence: 'Its value is that nothing competes with the pointer.'},
     {choice: 'motion=static&world=vanilla', sentence: 'Its value is that nothing competes with the pointer.'}
   ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
@@ -185,7 +186,8 @@ describe('the tables tab’s own words', () => {
     {name: 'col-resize', choice: 'tut=resize', run: /offers the gesture/},
     {name: 'dressColumn', choice: 'tut=resize&world=vanilla', run: /rewrites that label to state/},
     {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
-    {name: 'announceSort', choice: 'tut=menu&world=vanilla', run: /walks them and/}
+    {name: 'announceSort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
+    {name: 'insertBefore', choice: 'world=vanilla', run: /same lane finds its new seat/}
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
@@ -1148,7 +1150,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
 
     expect(recipe).toHaveTextContent('The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
-    expect(recipe).toHaveTextContent(/\.sortable \.header-cell > \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
+    expect(recipe).toHaveTextContent(/\.sortable \.header-cell \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
   });
 
   test.each(['react', 'vanilla'])('should name the resize handle’s classes in the %s world, with their blocks after its rule', async world => {

@@ -32,7 +32,7 @@ type Build = {
   buildSrc: Sample;
 };
 
-const SortedDirectly: FC<Build> = ({world, menuSrc, buildSrc}) =>
+const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
   <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
       <Says>The answer is the sort alone: dispatch it and let the rows cut to their ranked
@@ -52,7 +52,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc, buildSrc}) =>
             ...span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'const choose = ')
+            ...unit(frameMenus, 'export const choose = ')
           ]}/>}
       </Codes>
     </Reveal>
@@ -115,7 +115,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, 'class="menu-toggle', '</menu>')
+                ...span(tableSource, '<sort-menu>', '</sort-menu>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -189,9 +189,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .header-cell > .menu-toggle::before {'), gap,
-              ...unit(headerCss, ".sortable [aria-sort='ascending'] > .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable [aria-sort='descending'] > .menu-toggle::before {"),
+              ...unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), gap,
+              ...unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
+              ...unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
               aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'
@@ -284,7 +284,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 aside('// on the toggle and on the menu both')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(buildSrc, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
+                ...unit(frameMenus, 'const keepingTheColumnStill = '), gap,
+                ...span(frameMenus, "...[...host.querySelectorAll('.menu-toggle, .menu')]", '.map(keepingTheColumnStill)'),
                 aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'
@@ -297,7 +298,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...unit(frameColumns, 'export const sortableOf = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .header-cell > .menu-toggle {'), gap,
+              ...unit(headerCss, '.sortable .header-cell .menu-toggle {'), gap,
               ...unit(surfaceCss, '.borderless {'), gap,
               ...unit(surfaceCss, '.unfilled {'), gap,
               ...unit(surfaceCss, '.muted-ink {'), gap,

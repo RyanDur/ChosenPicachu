@@ -8,6 +8,7 @@ import {builds} from './builds';
 import {enhancing} from './table/enhance';
 import {rowGrip} from './table/grip';
 import {resizeHandle} from './table/handle';
+import {sortMenu} from './table/menus';
 
 declare global {
   // augmenting Window only works through interface merging — a type alias cannot merge
@@ -23,6 +24,7 @@ export const define = (told: Pace): void => {
   customElements.define('drag-sortable-table', builds[told]);
   customElements.define('row-grip', enhancing(rowGrip));
   customElements.define('resize-handle', enhancing(resizeHandle));
+  customElements.define('sort-menu', enhancing(sortMenu));
 };
 
 export const feed = (document: Document): void => {

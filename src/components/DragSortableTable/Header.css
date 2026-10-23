@@ -2,7 +2,7 @@
   text-align: left;
 }
 
-.sortable .header-cell > .menu-toggle {
+.sortable .header-cell .menu-toggle {
   position: absolute;
   inset-inline-end: var(--base-x-1_5);
   top: 50%;
@@ -14,20 +14,20 @@
   padding: 0;
 }
 
-.sortable .header-cell > .menu-toggle::before {
+.sortable .header-cell .menu-toggle::before {
   content: '\21C5';
 }
 
-.sortable [aria-sort='ascending'] > .menu-toggle::before {
+.sortable [aria-sort='ascending'] .menu-toggle::before {
   content: '\25B2';
 }
 
-.sortable [aria-sort='descending'] > .menu-toggle::before {
+.sortable [aria-sort='descending'] .menu-toggle::before {
   content: '\25BC';
 }
 
 @media (pointer: coarse) {
-  .sortable .header-cell > .menu-toggle {
+  .sortable .header-cell .menu-toggle {
     min-width: var(--finger-reach);
     min-height: var(--finger-reach);
     top: auto;
@@ -35,7 +35,7 @@
     translate: none;
   }
 
-  .sortable .header-cell:has(.resize-handle) > .menu-toggle {
+  .sortable .header-cell:has(.resize-handle) .menu-toggle {
     inset-inline-end: var(--finger-reach);
   }
 }

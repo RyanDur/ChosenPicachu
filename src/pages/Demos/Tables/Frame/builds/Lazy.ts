@@ -1,5 +1,4 @@
 import {has, maybe, Maybe, some} from '@ryandur/sand';
-import {Direction} from '@components/DragSortableTable/sorting';
 import {columnUnder, displacedBetween, interior, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
 import {lazyTravel, Moving} from '@components/DragSortableTable/travel';
 import {columnLift, Grab} from '@components/DragSortableTable/lift';
@@ -24,12 +23,12 @@ import {
   TableState,
   tableStore
 } from '../table/table-state';
-import {announceSort, wireMenu} from '../table/menus';
+import {announceSort} from '../table/menus';
 import {dressWidths} from '../table/resize';
 import {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from '../table/settle';
 import {carrying, dressCarried} from '../table/carry';
 import {tell} from '../table/events';
-import {arrangeColumns, headersOf, markGrips, sortableOf} from '../table/columns';
+import {arrangeColumns, headersOf, markGrips} from '../table/columns';
 import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {report} from '../table/report';
 import {provide, TableContext} from '../table/context';
@@ -121,11 +120,6 @@ const lift = (context: MountedTable, carry: Carry, grab: Grab): void => {
   context.store.dispatch(lifted(carry, grab));
 };
 
-const choose = (context: MountedTable, column: string) => (direction?: Direction): void => {
-  tell(context.host, 'sorted', {column, direction});
-  context.report({about: 'sort', name: column, direction});
-};
-
 const dress = (context: MountedTable, previous: TableState, next: TableState): void => {
   if (previous.widths !== next.widths || previous.sizing !== next.sizing) {
     dressWidths(context);
@@ -161,9 +155,6 @@ const seated = (context: MountedTable): void => {
 const wired = (context: TableContext): void => {
   const {table, store: hand, order, standing} = context;
   hand.subscribe((previous, current) => dress(context, previous, current()));
-  sortableOf(table).forEach(column => wireMenu(table, column, choose(context, column)));
-  [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
-    chrome.addEventListener('pointerdown', event => event.stopPropagation()));
   markGrips(table);
   headersOf(table).forEach(th => {
     const held = columnOfHeader(th);

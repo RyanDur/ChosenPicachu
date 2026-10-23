@@ -1,7 +1,10 @@
 import {has, maybe} from '@ryandur/sand';
 import {Direction, directionOf} from '@components/DragSortableTable/sorting';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
-import {MountedTable} from './table-state';
+import {columnOfHeader, MountedTable} from './table-state';
+import {tell} from './events';
+import {contextOf} from './context';
+import {listen, nothingToUndo, Undo, undoingAll} from './undo';
 
 export const announce = (table: ParentNode, column: string, sorted?: Direction): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -13,12 +16,6 @@ export const announce = (table: ParentNode, column: string, sorted?: Direction):
   });
 };
 
-export const wireMenu = (table: ParentNode, column: string, choose: (direction?: Direction) => void): void => {
-  maybe(table.querySelector(`#sort-${column}`)).map(menu =>
-    [...menu.querySelectorAll('button.item')].forEach(item =>
-      item.addEventListener('click', () => choose(directionOf((item.textContent ?? '').trim())))));
-};
-
 const sortOf = (columns: readonly TableColumn<Labelled>[]): string =>
   columns.map(({name, sorted}) => has(sorted) ? `${name} ${sorted}` : '').join('');
 
@@ -27,3 +24,20 @@ export const announceSort = ({table, columns}: Pick<MountedTable, 'table' | 'col
     columns().forEach(({name, sorted}) => announce(table, name, sorted));
   }
 };
+
+export const choose = ({host, report}: Pick<MountedTable, 'host' | 'report'>, column: string, direction?: Direction): void => {
+  tell(host, 'sorted', {column, direction});
+  report({about: 'sort', name: column, direction});
+};
+
+const choosing = (host: HTMLElement, column: string, item: HTMLElement): Undo =>
+  listen(item, 'click', () => contextOf(host).map(context => choose(context, column, directionOf((item.textContent ?? '').trim()))));
+
+const keepingTheColumnStill = (chrome: HTMLElement): Undo =>
+  listen(chrome, 'pointerdown', event => event.stopPropagation());
+
+export const sortMenu = (host: HTMLElement): Undo =>
+  maybe(host.closest('th')).map(th => undoingAll([
+    ...[...host.querySelectorAll('button.item')].filter(item => item instanceof HTMLElement).map(item => choosing(host, columnOfHeader(th), item)),
+    ...[...host.querySelectorAll('.menu-toggle, .menu')].filter(chrome => chrome instanceof HTMLElement).map(keepingTheColumnStill)
+  ])).orElse(nothingToUndo);
