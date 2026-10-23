@@ -20,7 +20,20 @@ export const tablesTab = {
   recipe,
   part,
   heading: (name: string): HTMLElement => screen.getByRole('heading', {name}),
-  words: (told: RegExp): HTMLElement => screen.getByText(told),
+  findHeading: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTablesTabRenders),
+  words: (told: string | RegExp): HTMLElement => screen.getByText(told),
+  findWords: (told: string): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTablesTabRenders),
+  missingWords: (told: string): HTMLElement | null => screen.queryByText(told),
+  wordsIn: (holder: HTMLElement, told: string): HTMLElement => within(holder).getByText(told),
+  recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
+  frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
+  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
+  findRadios: (name: string): Promise<HTMLElement[]> => screen.findAllByRole('radio', {name, hidden: true}),
+  pick: async (...radios: string[]): Promise<void> => {
+    for (const name of radios) {
+      await userEvent.click(await screen.findByRole('radio', {name}, untilTheTablesTabRenders));
+    }
+  },
   link: (name: string): HTMLElement => screen.getByRole('link', {name}),
   cell: (name: string): HTMLElement => screen.getByRole('cell', {name}),
   columnHeader: (name: string): HTMLElement => screen.getByRole('columnheader', {name}),
@@ -37,6 +50,7 @@ export const tablesTab = {
       .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id),
   linksIn: async (build: string, name: string | RegExp): Promise<HTMLElement[]> =>
     within(await recipe(build)).getAllByRole('link', {name}),
+  radioIn: async (build: string, name: string): Promise<HTMLElement | null> => within(await recipe(build)).queryByRole('radio', {name}),
   labelledIn: async (build: string, label: string): Promise<HTMLElement[]> => within(await recipe(build)).getAllByLabelText(label),
   chooseInRecipe: async (build: string, ...dials: string[]): Promise<void> => {
     for (const name of dials) {

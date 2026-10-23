@@ -7,6 +7,7 @@ const region = (): Promise<HTMLElement> => screen.findByRole('region', {name: 't
 
 export const tableControls = {
   region,
+  shown: (): HTMLElement | null => screen.queryByRole('region', {name: 'table controls'}),
   settings: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'settings'}, untilTheTablesTabRenders),
   readout: (table: string): HTMLElement => screen.getByText(table),
   axis: async (name: string): Promise<HTMLElement> => within(await region()).getByRole('group', {name}),
