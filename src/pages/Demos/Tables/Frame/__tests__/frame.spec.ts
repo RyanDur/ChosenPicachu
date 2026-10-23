@@ -24,6 +24,17 @@ describe('the frame table', () => {
     expect(vanillaFrame.moveReport()).toHaveTextContent('session moved to 3 of 5');
   });
 
+  it('should sort buys from its menu after trades walks past it', async () => {
+    vanillaFrame.stand();
+    vanillaFrame.header('trades').focus();
+
+    await vanillaFrame.press('{ArrowRight}');
+    await vanillaFrame.choose('buys', 'descending');
+
+    expect(vanillaFrame.header('buys')).toHaveAttribute('aria-sort', 'descending');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('buys sorted descending');
+  });
+
   const windowNames = (): string[] =>
     screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
 
