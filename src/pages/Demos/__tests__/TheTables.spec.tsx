@@ -2,12 +2,11 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demosAt} from '@pages/Demos/__test_support';
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {aggregations, tableControls, tablesTab, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
+import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
@@ -1017,8 +1016,8 @@ describe('the living table’s terms', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const livingTable = await screen.findByRole('region', {name: 'the living table'});
-    const [defined] = within(livingTable).getAllByLabelText(term);
+    const livingTable = await tablesTab.findPart('the living table');
+    const defined = tablesTab.definedIn(livingTable, term);
 
     expect(defined).toHaveTextContent(definition);
   });
@@ -1031,15 +1030,15 @@ describe('the living table’s terms', () => {
     render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'the still table'}, untilTheTablesTabRenders)).toHaveTextContent(sentence);
+    expect(await tablesTab.findPart('the still table')).toHaveTextContent(sentence);
   });
 
   test('should define the ledger in plain words where the still table first uses it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'the living table'});
-    const [defined] = within(screen.getByRole('region', {name: 'the still table'})).getAllByLabelText('ledger');
+    await tablesTab.findPart('the living table');
+    const defined = tablesTab.definedIn(tablesTab.part('the still table'), 'ledger');
 
     expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
   });
@@ -1048,7 +1047,7 @@ describe('the living table’s terms', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
   });
 
@@ -1056,11 +1055,11 @@ describe('the living table’s terms', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const livingTable = await tablesTab.findPart('the living table');
     const story = recipeFolds.story(livingTable, 'The page is a store, and so is the table');
-    const opening = within(story).getByText(/^One value holds the trades/);
+    const opening = tablesTab.wordsIn(story, /^One value holds the trades/);
 
-    ['action', 'reducer', 'selector', 'middleware'].forEach(term => expect(within(opening).getByLabelText(term)).toBeInTheDocument());
+    ['action', 'reducer', 'selector', 'middleware'].forEach(term => expect(tablesTab.termIn(opening, term)).toBeInTheDocument());
   });
 
   test.each([
@@ -1072,7 +1071,7 @@ describe('the living table’s terms', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent(sentence);
   });
 
@@ -1080,7 +1079,7 @@ describe('the living table’s terms', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const livingTable = await screen.findByRole('region', {name: 'the living table'});
+    const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
   });
 });
@@ -1090,8 +1089,8 @@ describe('the drag sort recipe’s words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    expect(within(recipe).getByRole('figure', {name: /^Where a switch counts\. /})).toBeInTheDocument();
+    const recipe = await tablesTab.recipe('drag sort');
+    expect(tablesTab.figureIn(recipe, /^Where a switch counts\. /)).toBeInTheDocument();
   });
 
   test.each([
@@ -1103,7 +1102,7 @@ describe('the drag sort recipe’s words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
     expect(recipe).toHaveTextContent(sentence);
   });
 
@@ -1111,7 +1110,7 @@ describe('the drag sort recipe’s words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
     expect(recipe).not.toHaveTextContent(/inner half/);
   });
 
@@ -1119,8 +1118,8 @@ describe('the drag sort recipe’s words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    const [defined] = within(recipe).getAllByLabelText('reconcile');
+    const recipe = await tablesTab.recipe('drag sort');
+    const defined = tablesTab.definedIn(recipe, 'reconcile');
 
     expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
@@ -1131,7 +1130,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('sort menu');
 
     expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; here a menu, an li, one item of a list, and a button.');
   });
@@ -1143,9 +1142,9 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('sort menu');
 
-    expect(within(recipe).getByText(opening)).toHaveTextContent(sentence);
+    expect(tablesTab.wordsIn(recipe, opening)).toHaveTextContent(sentence);
     expect(explanation.everyCodeBeside(recipe, opening).join()).toMatch(classedMenu);
   });
 
@@ -1153,7 +1152,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('sort menu');
 
     expect(recipe).toHaveTextContent('The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
@@ -1163,7 +1162,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag resize');
 
     expect(recipe).toHaveTextContent('The handle’s look is shared classes. borderless and unfilled take off the browser’s button chrome. held-bar-after paints the line: faded leather, a tan, while a pointer hovers it, and faded mint, a pale green, while it holds focus. focus-ringed draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
@@ -1173,7 +1172,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag resize');
 
     expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
     expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header. The table itself wears apportioned, a class it has from the start; under it a cell clips its text to its column, and a header that wears shared takes its width from its share.');
@@ -1183,10 +1182,10 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
-    const states = within(recipe).getByRole('figure', {name: /DragSortableTable\/looks\.ts on GitHub/});
+    const recipe = await tablesTab.recipe('drag resize');
+    const states = tablesTab.figureIn(recipe, /DragSortableTable\/looks\.ts on GitHub/);
 
-    expect(within(states).getByText('TS')).toBeInTheDocument();
+    expect(tablesTab.wordsIn(states, 'TS')).toBeInTheDocument();
     expect(states).toHaveTextContent('export const headerStates');
   });
 
@@ -1194,7 +1193,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toHaveTextContent(/export const motionLooks[^]*\(carried \|\| has\(settlingFrom\) \|\| has\(shove\)\) && 'paper-in-motion'/);
   });
@@ -1203,7 +1202,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag resize');
 
     expect(recipe).toHaveTextContent(/export const headerStates[^]*has\(width\) && 'shared'/);
   });
@@ -1212,7 +1211,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toHaveTextContent('Every motion class changes through changeMotion, which adds or removes the class and keeps paper-in-motion on while any motion class is present.');
     expect(recipe).toHaveTextContent(/export const dressCarried[^]*export const changeMotion/);
@@ -1222,7 +1221,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
     expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
@@ -1232,13 +1231,13 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the sheet gives the carried cell position: relative as well. Raised, the carried cells pass over whatever they cross, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
     expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbours slide beneath the carried cells, and the paper keeps either from showing through the other.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
@@ -1248,10 +1247,10 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
     expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
@@ -1261,7 +1260,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}&track=keyboard`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'}, untilTheTablesTabRenders);
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by name. focus-ringed is one: the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
@@ -1290,8 +1289,7 @@ describe('the tables tutorials’ vocabulary', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${at}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const build = await screen.findByRole('region', {name: region}, untilTheTablesTabRenders);
-    return [...within(build).getAllByRole('paragraph'), ...within(build).getAllByRole('heading')]
+    return tablesTab.blocksIn(await tablesTab.findPart(region))
       .sort((one, other) => one.compareDocumentPosition(other) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
   };
 
@@ -1348,9 +1346,9 @@ describe('the tables tab’s introduction', () => {
   test('should tell what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
     render(<TestApp at={demosAt('?tab=tables')}/>);
 
-    const tab = await screen.findByRole('region', {name: 'Tables'});
+    const tab = await tablesTab.region();
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), (await within(tab).findAllByRole('table'))[0]])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => tablesTab.wordsIn(tab, paragraph)), (await tablesTab.tablesIn(tab))[0]])).toEqual([]);
   });
 });
 
@@ -1359,8 +1357,8 @@ describe('the tables tab’s audited words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}&sort=column,row&living=still,flow,store&menu=rank&resize=widen${also}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: also.includes('tut=menu') ? 'build the sort menu yourself' : 'build the drag sort yourself'});
-    return screen.getByRole('region', {name: 'Tables'});
+    await tablesTab.recipe(also.includes('tut=menu') ? 'sort menu' : 'drag sort');
+    return tablesTab.region();
   };
 
   test.each([
@@ -1381,10 +1379,10 @@ describe('the tables tab’s audited words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}&${choices}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tab = await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders);
-    await within(tab).findAllByRole('heading', {name: /^The trader can/});
+    const tab = await tablesTab.region();
+    await tablesTab.findHeadingsIn(tab, /^The trader can/);
 
-    const words = [...within(tab).getAllByRole('paragraph'), ...within(tab).getAllByRole('heading')].map(block => block.textContent).join(' ');
+    const words = tablesTab.blocksIn(tab).map(block => block.textContent).join(' ');
 
     expect(words).not.toMatch(/\b(behaviors?|centered|centers|honors|labeled|colors?)\b/i);
   });
