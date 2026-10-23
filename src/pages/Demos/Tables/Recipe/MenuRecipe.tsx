@@ -12,6 +12,7 @@ import tableSource from '../Frame/table.html?sample';
 import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
 import demosSource from '@pages/Demos/store.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
+import frameColumns from '../Frame/table/columns.ts?sample';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
 import {menuSource, surfaceCss} from './steps/sources';
@@ -185,7 +186,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(arrangementSource, 'export type Arrangement'), gap,
-                ...span(buildSrc, 'if (sortOf(before) !== sortOf(this.#columns)) {', 'announce(table, name, sorted));'), gap,
+                ...unit(frameMenus, 'export const announceSort = '), gap,
                 ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
@@ -294,7 +295,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...unit(baseCss, '    &:has(> .menu-toggle) {')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...unit(buildSrc, 'const sortableOf = ')
+                ...unit(frameColumns, 'export const sortableOf = ')
               ]}/>}
             <Snippet label="CSS" lines={[
               ...unit(headerCss, '.sortable .header-cell > .menu-toggle {'), gap,

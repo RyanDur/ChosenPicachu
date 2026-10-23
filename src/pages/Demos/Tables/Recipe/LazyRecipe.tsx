@@ -87,7 +87,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
       <TheImplementation world={world} react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
       <QuietDials/>
       <Steps>
-        <FocusLands world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <FocusLands world={world} headerSource={headerSource}/>
         <ArrowsSpeak world={world} headerSource={headerSource} buildSrc={buildSrc}/>
         {motion === 'animated'
           ? <WalkSlides world={world} headerSource={headerSource} buildSrc={buildSrc}/>

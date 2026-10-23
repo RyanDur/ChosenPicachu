@@ -22,7 +22,9 @@ import placingSource from '@components/DragSortableTable/placing.ts?sample';
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import {plain} from '../../../Recipe';
 import bootSource from '../../Frame/boot.ts?sample';
+import frameColumns from '../../Frame/table/columns.ts?sample';
+import frameRows from '../../Frame/table/rows.ts?sample';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows};
 
 export const gap = plain(' ');

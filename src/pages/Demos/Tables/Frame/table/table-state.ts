@@ -1,5 +1,7 @@
 import {TableStore} from '@components/DragSortableTable/store';
 import {Report} from '@components/DragSortableTable/report';
+import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
+import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
 
 export type {TableState, Carry, Drag} from '@components/DragSortableTable/table-state';
 export type {TableReducer} from '@components/DragSortableTable/reducer';
@@ -15,7 +17,10 @@ export {demosStore, feedRequested, selectColumns, selectRows} from '@pages/Demos
 export {landingReport, moveReport} from '@components/DragSortableTable/report';
 
 export type MountedTable = {
+  host: HTMLElement;
   store: TableStore;
+  columns: () => readonly TableColumn<Labelled>[];
+  rows: () => readonly Measures[];
   order: () => readonly string[];
   standing: () => readonly string[];
   report: (said: Report) => void;

@@ -37,7 +37,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
           : <Snippet label="TS" lines={[
             ...span(buildSrc, 'readonly #hand = tableStore();', 'readonly #hand = tableStore();'), gap,
             ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
-            ...unit(buildSrc, '#parts(): Maybe<MountedTable>')
+            ...unit(buildSrc, '#context(): Maybe<MountedTable>')
           ]}/>}
       </Codes>
     </Reveal>

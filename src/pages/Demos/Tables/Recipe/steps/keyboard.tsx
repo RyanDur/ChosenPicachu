@@ -2,10 +2,10 @@ import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
+import {frameColumns, gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const FocusLands: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
+export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
       <Says>HTML already does most of this: a button is focusable by birth,
@@ -36,7 +36,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample; buildSrc: Sampl
             aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, '#dressGrips('),
+            ...unit(frameColumns, 'export const markGrips = '),
             aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[

@@ -12,6 +12,7 @@ import dealSource from '../Builds/EagerTable/EagerTable.tsx?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import cellSource from '@components/DragSortableTable/Cell.tsx?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
+import frameRows from '../Frame/table/rows.ts?sample';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?sample';
 import widthsSource from '@pages/Demos/Tables/Aggregations.css?sample';
 import tableSource from '../Frame/table.html?sample';
@@ -91,7 +92,7 @@ const foldCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
       ...unit(buildSrc, 'set rows('), gap,
-      ...unit(buildSrc, '#writeCells(')
+      ...unit(frameRows, 'export const writeCells = ')
     ]}/>
   </Codes>
 };

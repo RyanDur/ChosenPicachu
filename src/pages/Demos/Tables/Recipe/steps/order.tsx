@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {arrangementSource, bootSource, gap, headersSource, placingSource, rowSource} from './sources';
+import {arrangementSource, bootSource, frameRows, gap, headersSource, placingSource, rowSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> = ({world, tableSource, buildSrc}) =>
@@ -48,12 +48,11 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         : <Codes>
           <Snippet label="TS" lines={[
             ...unit(arrangementSource, 'export type Arrangement'), gap,
-            ...unit(buildSrc, '#order('), gap,
-            ...unit(buildSrc, '#standing('), gap,
+            ...span(buildSrc, 'order: () => this.#columns.map', 'standing: () => this.#rows.map'), gap,
             ...unit(bootSource, 'const show = ')
           ]}/>
           <Snippet label="TS" lines={[
-            ...span(buildSrc, '#reseatRows(',
+            ...span(frameRows, 'export const reseatRows = ',
               'body.insertBefore(desired, body.children[position] ?? null);'),
             aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
           ]}/>
