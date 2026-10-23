@@ -1,9 +1,8 @@
 import {has, maybe, Maybe, some} from '@ryandur/sand';
-import {columnUnder, displacedBetween, interior, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
+import {columnUnder, displacedBetween, interior, PixelSizes, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
 import {eagerTravel, Moving} from '@components/DragSortableTable/travel';
 import {columnLift, Grab} from '@components/DragSortableTable/lift';
 import {columnArrows, RowNudge} from '@components/DragSortableTable/arrows';
-import {ColumnWidths} from '@components/Table/shares';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
 import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {
@@ -31,14 +30,14 @@ import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {report} from '../table/report';
 import {provide, TableContext} from '../table/context';
 
-const columnShoving = (context: MountedTable, name: string, to: number, widths: ColumnWidths): void => {
+const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
   const from = current.indexOf(name);
   tell(context.host, 'column-moved', {column: name, to});
   shoveColumns(context, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
 };
 
-const columnTo = (context: MountedTable, name: string, to: number, widths: ColumnWidths): void => {
+const columnTo = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
   const from = current.indexOf(name);
   const over = spanCrossed(current, widths, from, to);

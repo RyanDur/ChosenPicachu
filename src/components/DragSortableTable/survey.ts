@@ -1,15 +1,17 @@
 import {has} from '@ryandur/sand';
 
+export type PixelSizes = Readonly<Record<string, number>>;
+
 type Bounds = {
   left: number;
   top: number;
   width: number;
   height: number;
-  columnWidths: Readonly<Record<string, number>>;
+  columnWidths: PixelSizes;
 };
 
 export type Survey = Bounds & {
-  rowHeights: Readonly<Record<string, number>>;
+  rowHeights: PixelSizes;
 };
 
 export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bounds => {
@@ -24,7 +26,7 @@ export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bo
   };
 };
 
-export const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): Readonly<Record<string, number>> => {
+export const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): PixelSizes => {
   const body = surface.tBodies[0];
   return seats.reduce((heights, row, position) => ({
     ...heights,

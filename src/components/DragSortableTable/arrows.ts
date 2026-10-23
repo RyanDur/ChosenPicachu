@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {anchored, bounded, columnSteps, nudgedColumn, nudgedRow, rowHeights, rowSteps} from './survey';
+import {anchored, bounded, columnSteps, nudgedColumn, nudgedRow, PixelSizes, rowHeights, rowSteps} from './survey';
 
 type ArrowKey = {
   key: string;
@@ -10,7 +10,7 @@ type ArrowKey = {
 export const columnArrows = (
   held: string,
   order: () => readonly string[],
-  arrange: (nudge: {from: number; to: number; widths: Readonly<Record<string, number>>}) => void
+  arrange: (nudge: {from: number; to: number; widths: PixelSizes}) => void
 ) => (event: ArrowKey): void => {
   maybe(columnSteps[event.key]).map(toward => {
     event.preventDefault();
@@ -26,7 +26,7 @@ export const columnArrows = (
   });
 };
 
-export type RowNudge = {from: number; to: number; heights: Readonly<Record<string, number>>};
+export type RowNudge = {from: number; to: number; heights: PixelSizes};
 
 export const rowArrows = (
   held: string,

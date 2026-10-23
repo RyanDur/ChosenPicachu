@@ -29,7 +29,7 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
           rel="noreferrer">sand</a>: has, its null check, false for nothing and for
           empty.</Says>
         : <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
-          touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey and the pointer and calls the table’s lift, a function of its context, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried. One word in the code
+          touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s <code>lifted</code>, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried. One word in the code
           comes from a small library called <a className="signpost"
           href="https://ryandur.github.io/sand/"
           target="_blank"
