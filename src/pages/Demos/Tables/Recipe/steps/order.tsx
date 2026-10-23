@@ -14,7 +14,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         The table shows what it is given, and what the trader does to it comes back as an event
         the page handles. The open
         question is how each world makes the page follow a value: React renders the markup
-        through it; a vanilla build has to <Term word="reconcile">reconcile</Term> the DOM against
+        through it; a vanilla element has to <Term word="reconcile">reconcile</Term> the DOM against
         it by hand.</Says>
     </Words>
     <Reveal>
@@ -26,9 +26,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
           each row places its cells the same way. A moved column or row is an event the page
           dispatches into its own order. A reorder never touches the data, and nothing reads the
           markup back: the same key finds its new seat and React moves the real nodes.</Says>
-        : <Says>Rows and columns arrive in the markup’s order, and the structure comes from the
-          markup: JavaScript reads the columns off the header classes, and names every row element (a lane, in the code)
-          after its row header. Both seed the arrangement. Every dispatch reconciles the page against the new order, so a reorder never touches the data: the
+        : <Says>Rows and columns arrive in the order the page gives them: its show sets the element’s columns and rows as they stand, and the element reads the order and the standing from those. The structure is still the markup’s: the element names every row element (a lane, in the code) after its row header. Every time the page gives it a new order the element reconciles the table against it, so a reorder never touches the data: the
           same lane finds its new seat, and insertBefore moves the real node only when its seat
           changed.</Says>}
       {world === 'react'

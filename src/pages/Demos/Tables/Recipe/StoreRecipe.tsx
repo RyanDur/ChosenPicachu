@@ -49,9 +49,7 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The table element creates its own store once, empty, and every part inside it reads and writes
             through that one.</Says>
         </>
-        : <Says>The mount, the one function that wires the document, creates the same stores: the trades, with the same exchange as
-          middleware; the arrangement, taken from the markup it was given; and the hand, empty.
-          Every listener it wires dispatches to one of them.</Says>}
+        : <Says>The page and the element split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives the element its columns and rows in order. The element keeps only the hand, empty, as a field of its own, beside the columns and rows it was given. Every listener the element wires dispatches to the hand, and whatever changes the order goes up to the page as an event.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
@@ -142,8 +140,7 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           <Says>Anything a component would derive from state is a selector instead, so the component holds no
             arithmetic over the store.</Says>
         </>
-        : <Says>The mount asks the arrangement for the order and the standing at the moment it
-          needs an answer, so a listener never keeps a stale copy of either.</Says>}
+        : <Says>The element reads the order and the standing from the columns and rows it was last given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(contextSource, 'export const useTableSelector'), gap,
@@ -182,15 +179,13 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
         candlesRefused.</Says>
       <Says>On feedReleased it hangs up.</Says>
-      <Says>It lets every other action through untouched. Nothing in the page or the mount knows a socket exists:
-        they dispatch that they want the feed, and they see the store change.</Says>
+      <Says>It lets every other action through untouched. Nothing in the page or the element knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
       {world === 'react'
         ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
           one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <>
-          <Says>The mount builds the store with the same layer and dispatches the request last, once every listener
-            is wired.</Says>
+          <Says>The page builds the store with the same layer and dispatches the request last, once it has set the element’s columns and rows and is listening for what the trader does.</Says>
           <Says>The frame’s socket lives as long as the frame does.</Says>
         </>}
       <Codes>
@@ -216,9 +211,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla build subscribes
-        a reconcile and uses the first two. A reconcile is the function that moves the
-        page’s cells from the old order to the new one. A listener that mirrored the state to a backend
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a show, which sets the element’s columns and rows, and the element reconciles the table against them; the element subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
         would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
@@ -234,15 +227,13 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
           <Says>You never touch the page’s elements yourself. You only dispatch what happened.</Says>
         </>
         : <>
-          <Says>The mount subscribes three times.</Says>
-          <Says>A reconcile on the arrangement moves the page’s elements from the previous order to the current one,
-            touching only the cells whose place changed.</Says>
+          <Says>The page listens three times and subscribes once.</Says>
+          <Says>The three listeners take the events the element tells it, column-moved, row-moved and sorted, each dispatched into the arrangement; the one subscription sets the element’s columns and rows whenever the store changes, and the element’s setters move the real cells, touching only the ones whose place changed.</Says>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
           <Says>A writer on the trades writes only the text that differs, and reseats the rows when the sort ranks
             them anew.</Says>
-          <Says>The store gives every listener the state before the change and a way to read the state now, so the
-            mount keeps nothing of its own.</Says>
+          <Says>The store gives every listener the state before the change and a way to read the state now, so the page’s show keeps nothing of its own, and the element keeps nothing of the page’s.</Says>
         </>}
       <Codes>
         {world === 'react'

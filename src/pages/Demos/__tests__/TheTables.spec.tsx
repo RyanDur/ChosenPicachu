@@ -34,7 +34,7 @@ describe('the tables tab’s own words', () => {
     'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: the node moves are insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
-    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved, and comes back down as the next order. Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
+    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the element, and comes back down as the next order. Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
     'That is one dispatch, and after it the store holds the drag beside the columns and the seats: the one mark of what is',
     'a key a table with no carry never has.',
     'Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.',
@@ -71,8 +71,8 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'Move a row and the sort ends. The table raises onRowMoved with the'},
     {choice: 'tut=menu', sentence: 'it showed; the page keeps the rows where the sort left them, moves the one you moved, and clears the sort, so your drag proceeds from what you saw.'},
     {choice: 'tut=menu', sentence: 'and a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there, and the page itself declares the sortable set.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'When it changes, the build walks the columns and announce, one function, sets each th from that value: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there, and the element reads the sortable set off its own markup.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'When the page sets the element’s columns with a new sort, the element walks them and announce, one function, sets each th from what it was given: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
     {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
     {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property, --share, one of the values set by name on the cell and read back in the stylesheet with var().'},
@@ -85,6 +85,26 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize', sentence: 'The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.'},
     {choice: 'tut=resize', sentence: 'and a :has() rule on the cell pads for what it holds: more room when a menu is present, less when only the handle is.'},
     {choice: 'tut=resize', sentence: 'of a hundred, created by measuring the rendered headers when a handle is first pressed or focused; until then, the stylesheet owns the widths and no ledger exists.'},
+    {choice: 'world=vanilla', sentence: 'The page and the element split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives the element its columns and rows in order. The element keeps only the hand, empty, as a field of its own, beside the columns and rows it was given. Every listener the element wires dispatches to the hand, and whatever changes the order goes up to the page as an event.'},
+    {choice: 'world=vanilla', sentence: 'The element reads the order and the standing from the columns and rows it was last given, at the moment it needs an answer, so a listener never keeps a stale copy of either.'},
+    {choice: 'world=vanilla', sentence: 'Nothing in the page or the element knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.'},
+    {choice: 'world=vanilla', sentence: 'The page builds the store with the same layer and dispatches the request last, once it has set the element’s columns and rows and is listening for what the trader does.'},
+    {choice: 'world=vanilla', sentence: 'The vanilla page subscribes a show, which sets the element’s columns and rows, and the element reconciles the table against them; the element subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one.'},
+    {choice: 'world=vanilla', sentence: 'The page listens three times and subscribes once.'},
+    {choice: 'world=vanilla', sentence: 'The three listeners take the events the element tells it, column-moved, row-moved and sorted, each dispatched into the arrangement; the one subscription sets the element’s columns and rows whenever the store changes, and the element’s setters move the real cells, touching only the ones whose place changed.'},
+    {choice: 'world=vanilla', sentence: 'so the page’s show keeps nothing of its own, and the element keeps nothing of the page’s.'},
+    {choice: 'world=vanilla', sentence: 'there is no render to catch the change, so the page refolds the trades and sets the element’s rows, and the element writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.'},
+    {choice: 'world=vanilla', sentence: 'the page sets the element’s rows, and the element writes what changed.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'The sort is one value in the page’s arrangement, a column name and a direction.'},
+    {choice: 'world=vanilla', sentence: 'a vanilla listener attaches once, when the element connects.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla element attaches once and cannot live without it.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla element takes the order the page gives it and reconciles, which moves nodes.'},
+    {choice: 'world=vanilla', sentence: 'a vanilla element has to'},
+    {choice: 'world=vanilla', sentence: 'Rows and columns arrive in the order the page gives them: its show sets the element’s columns and rows as they stand, and the element reads the order and the standing from those. The structure is still the markup’s: the element names every row element (a lane, in the code) after its row header. Every time the page gives it a new order the element reconciles the table against it, so a reorder never touches the data:'},
+    {choice: 'track=keyboard&world=vanilla', sentence: 'and the element asks each movable header for focus with a tabindex as it marks each movable header grabbable and gives it a tabindex, when it connects and whenever its column order changes (the anchored edges hold the table, so their headers ask for nothing), so Tab reaches'},
+    {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the element raises column-moved, the page writes the new order into its arrangement and gives it back, and the element’s'},
+    {choice: 'world=vanilla', sentence: 'This is the whole travel of the eager element,'},
+    {choice: 'pace=lazy&world=vanilla', sentence: 'The lazy element is its own file, not a flag on the eager one: its travel records the landing in the hand, and its release, which also handles cancel, raises whatever the hand is holding to the page and then lets the hand go.'},
     {choice: 'motion=static', sentence: 'Its value is that nothing competes with the pointer.'},
     {choice: 'motion=static&world=vanilla', sentence: 'Its value is that nothing competes with the pointer.'}
   ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
@@ -104,8 +124,8 @@ describe('the tables tab’s own words', () => {
   });
 
   test.each([
-    {name: 'announce', choice: 'tut=menu&world=vanilla', run: /the build walks the columns and/},
-    {name: 'th', choice: 'tut=menu&world=vanilla', run: /the build walks the columns and/},
+    {name: 'announce', choice: 'tut=menu&world=vanilla', run: /the element walks them and/},
+    {name: 'th', choice: 'tut=menu&world=vanilla', run: /the element walks them and/},
     {name: 'onRowMoved', choice: 'tut=menu', run: /^Move a row and the sort ends/},
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'lifted', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
@@ -121,7 +141,7 @@ describe('the tables tab’s own words', () => {
     {name: 'aria-sort', choice: 'tut=menu', run: /be the single signal read from it/},
     {name: 'th', choice: 'tut=menu', run: /from what it was given and the toggle/},
     {name: ':has()', choice: 'tut=menu', run: /pads for the toggle when one is there\./},
-    {name: ':has()', choice: 'tut=menu&world=vanilla', run: /pads for the toggle when one is there, and the page itself/},
+    {name: ':has()', choice: 'tut=menu&world=vanilla', run: /pads for the toggle when one is there, and the element reads/},
     {name: 'borderless', choice: 'tut=menu', run: /^The toggle’s look is shared classes/},
     {name: 'unfilled', choice: 'tut=menu', run: /^The toggle’s look is shared classes/},
     {name: 'muted-ink', choice: 'tut=menu', run: /^The toggle’s look is shared classes/},
@@ -153,7 +173,7 @@ describe('the tables tab’s own words', () => {
     {name: '::after', choice: 'tut=resize', run: /only item is the 8px line its/},
     {name: 'col-resize', choice: 'tut=resize', run: /offers the gesture/},
     {name: 'dressColumn', choice: 'tut=resize&world=vanilla', run: /rewrites that label to state/},
-    {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /the build walks the columns and/}
+    {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /the element walks them and/}
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
@@ -1286,7 +1306,7 @@ describe('the tables tutorials’ vocabulary', () => {
     const blocks = await prose(`world=${world}`, 'the living table');
 
     expect(firstSaying(blocks, /\bthe hand\b/)).toHaveTextContent('In the vanilla build the code calls the table’s store the hand. It holds the drag and the widths once measured. The React build calls it store and keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes.');
-    expect(firstSaying(blocks, /\breconcile\b/)).toHaveTextContent('A reconcile is the function that moves the page’s cells from the old order to the new one.');
+    expect(firstSaying(blocks, /\breconcile\b/)).toHaveTextContent('A reconcile is the function that moves the table’s cells from the old order to the new one.');
   });
 
   test('should name dress where the vanilla living table first uses it', async () => {
@@ -1410,9 +1430,9 @@ describe('the tables tab’s audited words', () => {
     const tab = await tabWithEveryStoryOpen('vanilla');
 
     expect(tab).toHaveTextContent('A table’s state is only what the trader does to it: what the pointer is carrying, the widths once measured, and in React the marks a move leaves.');
-    expect(tab).toHaveTextContent('The mount, the one function that wires the document, creates the same stores');
-    expect(tab).toHaveTextContent('Rows and columns arrive in the markup’s order, and the structure comes from the markup: JavaScript reads the columns off the header classes, and names every row element (a lane, in the code) after its row header. Both seed the arrangement. Every dispatch');
-    expect(tab).toHaveTextContent('the arrangement, taken from the markup it was given');
+    expect(tab).toHaveTextContent('The page and the element split the stores as React does.');
+    expect(tab).toHaveTextContent('Rows and columns arrive in the order the page gives them');
+    expect(tab).toHaveTextContent('The element keeps only the hand, empty, as a field of its own');
   });
 
   test('should name the drift as the drag’s drifted case, and say the seat number changes by the crossed neighbour’s width the other way', async () => {

@@ -173,9 +173,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               direction. When the page gives the table its columns it marks the sorting one, and
               only that one, so the <code>th</code> announces <code>aria-sort</code> from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
-            : <Says>The sort is one value in the arrangement, a column name and a direction. When
-              it changes, the build walks the columns and <code>announce</code>, one function, sets each <code>th</code> from that
-              value: the sorting <code>th</code> gains <code>aria-sort</code>, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
+            : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page sets the element’s
+              columns with a new sort, the element walks them and <code>announce</code>, one function, sets each <code>th</code> from what
+              it was given: the sorting <code>th</code> gains <code>aria-sort</code>, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
               it.</Says>}
           <Codes>
             {world === 'react'
@@ -272,7 +272,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             : <Says>The header never gets your press. The toggle sits itself at the header’s end
               edge. And not every column offers a menu: menus
               exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
-              contains, pads for the toggle when one is there, and the page itself declares the sortable set.</Says>}
+              contains, pads for the toggle when one is there, and the element reads the sortable set off its own markup.</Says>}
           <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
             browser’s button chrome, <code>muted-ink</code> greys its glyph, and <code>attentive</code> fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>

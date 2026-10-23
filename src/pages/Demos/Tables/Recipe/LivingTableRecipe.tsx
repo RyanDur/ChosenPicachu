@@ -77,10 +77,7 @@ const foldSays: Record<World, ReactNode> = {
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows always match the trades the page holds.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
-    React world runs. What React did for you ends here: there is no render to catch the
-    change, so a writer subscribed to the trades refolds the state, writes only the cells whose
-    text changed, and reseats the rows when the sort ranks them anew. The arrangement has a
-    listener of its own, and that is the store story.</Says>
+    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and sets the element’s rows, and the element writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -101,7 +98,7 @@ const foldCodes: Record<World, ReactNode> = {
 
 const refolds: Record<World, string> = {
   react: 'Then every render refolds every trade the page holds into the windows, because refolding is simple math and cannot drift out of sync.',
-  vanilla: 'Then every arrival refolds every trade the page holds into the windows, and the page writes what changed.'
+  vanilla: 'Then every arrival refolds every trade the page holds into the windows, the page sets the element’s rows, and the element writes what changed.'
 };
 
 const StillStory: FC<{world: World}> = ({world}) =>

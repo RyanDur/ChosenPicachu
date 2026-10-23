@@ -10,22 +10,20 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>, and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state
-        remembers the world as it stood when the listener was made, and a vanilla listener
-        attaches once, at mount. Sharing only works if a handler holds no state at all: it asks
+        remembers the world as it stood when the listener was made, and a vanilla listener attaches once, when the element connects. Sharing only works if a handler holds no state at all: it asks
         at event time and writes back through one dispatch.</Says>
     </Words>
     <Reveal>
       <Says>No listener here holds state. Where a handler needs the order, it takes the order
         as a function and calls it when the event fires. React remakes its handlers every render
-        and never needed the discipline; the vanilla page attaches once and cannot live without
-        it.</Says>
+        and never needed the discipline; the vanilla element attaches once and cannot live without it.</Says>
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an
         action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer
         turns into the next state. Whatever changes the order goes up to the page as an event,{' '}
-      <code>onColumnMoved</code> or <code>onRowMoved</code>, and comes back down as the next order. Ask, dispatch and subscribe together
+      <code>onColumnMoved</code> or <code>onRowMoved</code> in React and <code>column-moved</code> or <code>row-moved</code> from the
+        element, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, one plain object that both worlds mount unchanged. What differs is
-        who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
-        a reconcile, which moves nodes. Every listener from here on dispatches to the store and nothing
+        who subscribes: React subscribes a component, which re-renders; the vanilla element takes the order the page gives it and reconciles, which moves nodes. Every listener from here on dispatches to the store and nothing
         else, which is why each is in one shared file and every shared block below appears in
         both worlds unchanged.</Says>
       <Codes>
