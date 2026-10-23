@@ -17,8 +17,7 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
-          touch-action: none is why the pointer can drag on touch at all. On pointerdown the
+        ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and <code>touch-action: none</code> is why the pointer can drag on touch at all. On <code>pointerdown</code> the
           header takes the survey, takes the pointer, and lifts. That is one dispatch, and after it the store
           holds the drag beside the columns and the seats: the one mark of what
           is <Term word="aloft">carried</Term>, a key a table with no carry never
@@ -26,14 +25,13 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
           called <a className="signpost"
           href="https://ryandur.github.io/sand/"
           target="_blank"
-          rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          rel="noreferrer">sand</a>: <code>has</code>, its null check, false for nothing and for
           empty.</Says>
-        : <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and
-          touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s <code>lifted</code>, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried. One word in the code
+        : <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and <code>touch-action: none</code> is why the pointer can drag on touch at all. On <code>pointerdown</code>, the header’s listener takes the survey and the pointer and calls the context’s <code>lifted</code>, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried. One word in the code
           comes from a small library called <a className="signpost"
           href="https://ryandur.github.io/sand/"
           target="_blank"
-          rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          rel="noreferrer">sand</a>: <code>has</code>, its null check, false for nothing and for
           empty.</Says>}
       <Codes>
         {world === 'react'

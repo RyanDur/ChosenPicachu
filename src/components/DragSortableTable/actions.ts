@@ -2,6 +2,7 @@ import {Direction} from './sorting';
 import {ColumnWidths, Grip} from '@components/Table/shares';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
 import {Moving} from './travel';
+import {PixelSizes} from './survey';
 import {Grab} from './lift';
 
 import {Landing} from './report';
@@ -25,10 +26,10 @@ export type TableAction =
   | {readonly type: 'settled'; readonly target: Carry}
   | {readonly type: 'shovedColumns'; readonly names: readonly string[]; readonly shove: ColumnShove}
   | {readonly type: 'shovedRows'; readonly keys: readonly string[]; readonly shove: RowShove}
-  | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbour: string; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
-  | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
-  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbour: string; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
-  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly label: string; readonly to: number; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
+  | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbour: string; readonly widths: PixelSizes; readonly order: readonly string[]}
+  | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: PixelSizes; readonly order: readonly string[]}
+  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbour: string; readonly heights: PixelSizes; readonly standing: readonly string[]}
+  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly label: string; readonly to: number; readonly heights: PixelSizes; readonly standing: readonly string[]}
   | {readonly type: 'sortChosen'; readonly column: string; readonly direction?: Direction};
 
 type Action = TableAction;
@@ -81,14 +82,14 @@ export const unsettled = (target: Carry, from: Settling): Action => ({type: 'uns
 export const settled = (target: Carry): Action => ({type: 'settled', target});
 export const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
 export const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
-export const columnMovedBeside = (name: string, neighbour: string, widths: Readonly<Record<string, number>>, order: readonly string[]): Action =>
+export const columnMovedBeside = (name: string, neighbour: string, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnMovedBeside', name, neighbour, widths, order});
-export const columnWalkedTo = (name: string, to: number, widths: Readonly<Record<string, number>>, order: readonly string[]): Action =>
+export const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
 type LabelledRow = {readonly row: string; readonly label: string};
 
-export const rowMovedBeside = ({row, label}: LabelledRow, neighbour: string, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+export const rowMovedBeside = ({row, label}: LabelledRow, neighbour: string, heights: PixelSizes, standing: readonly string[]): Action =>
   ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
-export const rowWalkedTo = ({row, label}: LabelledRow, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+export const rowWalkedTo = ({row, label}: LabelledRow, to: number, heights: PixelSizes, standing: readonly string[]): Action =>
   ({type: 'rowWalkedTo', row, label, to, heights, standing});
 export const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});

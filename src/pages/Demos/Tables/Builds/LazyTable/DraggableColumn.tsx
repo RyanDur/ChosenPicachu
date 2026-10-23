@@ -4,7 +4,7 @@ import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
-import {interior, Survey} from '@components/DragSortableTable/survey';
+import {interior, PixelSizes, Survey} from '@components/DragSortableTable/survey';
 import {ColumnDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
 import {lifted, columnLandingFound, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
@@ -32,7 +32,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const count = useTableSelector(selectColumnCount);
   const travels = useTableSelector(columnTravels(column));
 
-  const walkedTo = (to: number, widths: Readonly<Record<string, number>>): void => {
+  const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
   };

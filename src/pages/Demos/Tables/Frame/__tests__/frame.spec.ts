@@ -26,9 +26,8 @@ describe('the frame table', () => {
 
   it('should sort buys from its menu after trades walks past it', async () => {
     vanillaFrame.stand();
-    vanillaFrame.header('trades').focus();
 
-    await vanillaFrame.press('{ArrowRight}');
+    await vanillaFrame.moveColumnByKey('trades', '{ArrowRight}');
     await vanillaFrame.choose('buys', 'descending');
 
     expect(vanillaFrame.header('buys')).toHaveAttribute('aria-sort', 'descending');

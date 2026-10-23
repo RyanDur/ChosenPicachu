@@ -4,7 +4,7 @@ import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from './selectors';
-import {columnUnder, interior, Survey} from './survey';
+import {columnUnder, interior, PixelSizes, Survey} from './survey';
 import {ColumnDrag, pixels, shoveDistance} from './table-state';
 import {lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
@@ -30,7 +30,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const count = useTableSelector(selectColumnCount);
   const travels = useTableSelector(columnTravels(column));
 
-  const walkedTo = (to: number, widths: Readonly<Record<string, number>>): void => {
+  const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
   };

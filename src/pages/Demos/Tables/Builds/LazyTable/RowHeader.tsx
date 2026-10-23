@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
 import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from '@components/DragSortableTable/selectors';
-import {Survey} from '@components/DragSortableTable/survey';
+import {PixelSizes, Survey} from '@components/DragSortableTable/survey';
 import {RowGrip} from '@components/DragSortableTable/RowGrip';
 import {RowDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
 import {lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
@@ -33,7 +33,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
+  const nudged = (to: number, heights: PixelSizes): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);

@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
 import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from './selectors';
-import {rowUnder, Survey} from './survey';
+import {PixelSizes, rowUnder, Survey} from './survey';
 import {RowGrip} from './RowGrip';
 import {RowDrag, pixels, shoveDistance} from './table-state';
 import {lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
@@ -31,7 +31,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
+  const nudged = (to: number, heights: PixelSizes): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);

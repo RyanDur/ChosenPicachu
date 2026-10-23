@@ -43,5 +43,9 @@ export const vanillaFrame = {
   moveRowByKey: async (row: number, key: string): Promise<void> => {
     screen.getByRole('button', {name: `move row ${row}`}).focus();
     await userEvent.keyboard(key);
+  },
+  moveColumnByKey: async (column: string, key: string): Promise<void> => {
+    vanillaFrame.header(column).focus();
+    await userEvent.keyboard(key);
   }
 };

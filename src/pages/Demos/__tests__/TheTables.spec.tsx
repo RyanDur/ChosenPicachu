@@ -34,14 +34,16 @@ describe('the tables tab’s own words', () => {
     'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: the node moves are insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
-    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the element, and comes back down as the next order.',
+    'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state.',
+    'Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the element, and comes back down as the next order.',
     'That is one dispatch, and after it the store holds the drag beside the columns and the seats: the one mark of what is',
     'a key a table with no carry never has.',
     'Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.',
     '// a cancel, or a move with no buttons down, is the drop itself',
     'I could build rows their own machinery, but the need is the same motion turned vertical, so rows reuse what the columns built. Three things differ: a grip button to grab, row heights in the survey, and a vertical hit test. The promises the dials set carry over unchanged.',
     'focusable by birth; the keyboard track builds on it',
-    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.'
+    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
+    'The context’s lifted, moved and dropped are the vanilla element’s own functions, not those actions: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -98,7 +100,9 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'a vanilla listener attaches once, when the element connects.'},
     {choice: 'world=vanilla', sentence: 'the vanilla element attaches once and cannot live without it.'},
     {choice: 'world=vanilla', sentence: 'the vanilla element takes the order the page gives it and reconciles, which moves nodes.'},
-    {choice: 'world=vanilla', sentence: 'a vanilla element has to'},
+    {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
+    {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
+    {choice: 'world=vanilla', sentence: 'React renders the markup through it; a vanilla custom element, a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page, has to'},
     {choice: 'world=vanilla', sentence: 'Rows and columns arrive in the order the page gives them: show, the function in boot.ts that reads the page’s state, sets the element’s columns and rows as they stand, and the element reads the order and the standing from those. The structure is still the markup’s: the element names every row element (a lane, in the code) after its row header. Every time the page gives it a new order the element reconciles the table against it, so a reorder never touches the data:'},
     {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the element raises column-moved, the page writes the new order into its arrangement and gives it back, and the element’s'},
     {choice: 'world=vanilla', sentence: 'This is the whole travel of the eager element,'},
@@ -106,20 +110,22 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The element’s rows setter writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.'},
     {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s show reads the page’s state each time it runs and keeps nothing of its own, and of the page’s state the element keeps only the last columns and rows it was set.'},
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a show, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is'},
-    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved event the page gave the table; in the vanilla element it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
+    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla element it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle><button type="button" tabindex="0" class="resize-handle'},
     {choice: 'world=vanilla', sentence: 'The element provides its parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
-    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
+    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element too. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
     {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
     {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
     {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu><button type="button" tabindex="0" class="menu-toggle'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are wrapped by sort-menu, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, the mounted table and the verbs its pace decides, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath. The rows cut to their ranked seats, in the animated build and the static one alike.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows, and the element reseats the rows in the same breath. The rows cut to their ranked seats, in the animated build and the static one alike.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'sort-menu stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge.'},
+    {choice: 'tut=menu&world=react', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
+    {choice: 'tut=menu&world=react', sentence: 'SortMenu is the whole chooser: three buttons naming the three choices, raising onSorted with which column asked for what.'},
     {choice: 'world=vanilla', sentence: 'Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.'},
     {choice: 'motion=static', sentence: 'Its value is that nothing competes with the pointer.'},
     {choice: 'motion=static&world=vanilla', sentence: 'Its value is that nothing competes with the pointer.'}
@@ -191,7 +197,21 @@ describe('the tables tab’s own words', () => {
     {name: 'dressColumn', choice: 'tut=resize&world=vanilla', run: /rewrites that label to state/},
     {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
     {name: 'announceSort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
-    {name: 'insertBefore', choice: 'world=vanilla', run: /same lane finds its new seat/}
+    {name: 'insertBefore', choice: 'world=vanilla', run: /same lane finds its new seat/},
+    {name: 'SortMenu', choice: 'tut=menu&world=react', run: /is the whole chooser/},
+    {name: 'onSorted', choice: 'tut=menu&world=react', run: /is the whole chooser/},
+    {name: 'choose', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
+    {name: 'sorted', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
+    {name: 'touch-action: none', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
+    {name: 'pointerdown', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
+    {name: 'has', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
+    {name: 'touch-action: none', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
+    {name: 'pointerdown', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
+    {name: 'has', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
+    {name: 'lifted', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
+    {name: 'row-grip', choice: 'world=vanilla', run: /grip’s button is wrapped by/},
+    {name: 'resize-handle', choice: 'tut=resize&world=vanilla', run: /the button is wrapped by/},
+    ...['lifted', 'moved', 'dropped', 'rowNudged', 'rowMoved'].map(name => ({name, choice: 'world=vanilla', run: /^The element provides its parts a context/}))
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);

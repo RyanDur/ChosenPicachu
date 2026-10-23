@@ -14,7 +14,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         The table shows what it is given, and what the trader does to it comes back as an event
         the page handles. The open
         question is how each world makes the page follow a value: React renders the markup
-        through it; a vanilla element has to <Term word="reconcile">reconcile</Term> the DOM against
+        through it; a vanilla custom element, a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page, has to <Term word="reconcile">reconcile</Term> the DOM against
         it by hand.</Says>
     </Words>
     <Reveal>
