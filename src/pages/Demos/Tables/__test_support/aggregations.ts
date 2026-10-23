@@ -7,6 +7,9 @@ const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregat
 export const aggregations = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders),
   card,
+  header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
+  rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
+  row: (window: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${window}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
   windows: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),

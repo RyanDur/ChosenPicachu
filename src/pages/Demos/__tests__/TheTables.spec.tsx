@@ -251,22 +251,21 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const card = await screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders);
+    await aggregations.arrived();
     for (const measure of ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
-      expect(within(card).getByRole('columnheader', {name: new RegExp(`^${measure}`)})).toBeVisible();
+      expect(aggregations.header(measure)).toBeVisible();
     }
-    expect(within(card).getAllByRole('row')).toHaveLength(6);
+    expect(aggregations.rows()).toHaveLength(6);
     broadcast(feed, fourTrades);
-    const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
-    await waitFor(() => expect(sortableTable.texts(rowFor('this minute'))).toEqual(
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
-    expect(sortableTable.texts(rowFor('last 5 minutes'))).toEqual(
+    expect(sortableTable.texts(aggregations.row('last 5 minutes'))).toEqual(
       ['last 5 minutes', '2', '2', '0', '0.06', '$50,003.17', '+$1.00']);
-    expect(sortableTable.texts(rowFor('last 15 minutes'))).toEqual(
+    expect(sortableTable.texts(aggregations.row('last 15 minutes'))).toEqual(
       ['last 15 minutes', '3', '2', '1', '0.31', '$50,002.23', '+$2.00']);
-    expect(sortableTable.texts(rowFor('this hour'))).toEqual(
+    expect(sortableTable.texts(aggregations.row('this hour'))).toEqual(
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
-    expect(sortableTable.texts(rowFor('session'))).toEqual(
+    expect(sortableTable.texts(aggregations.row('session'))).toEqual(
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
@@ -278,7 +277,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     await aggregations.arrived();
 
-    expect(screen.getByText(/trades land\. The grid never grows: no row or column is added or removed\. Only the numbers change, and while a column is sorted, the rows reseat as their numbers do\./)).toBeInTheDocument();
+    expect(await tablesTab.region()).toHaveTextContent(/trades land\. The grid never grows: no row or column is added or removed\. Only the numbers change, and while a column is sorted, the rows reseat as their numbers do\./);
   });
 
   test('the glider offers a pace, an origin and a motion, eager by default', async () => {
@@ -287,16 +286,15 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const controls = await tableControls.region();
     for (const axis of ['pace', 'origin', 'motion']) {
-      expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
+      expect(await tableControls.axis(axis)).toBeVisible();
     }
     for (const choice of ['Eager', 'Lazy', 'Keep', 'Hide']) {
-      expect(within(controls).getByRole('radio', {name: choice})).toBeVisible();
+      expect(await tableControls.radio(choice)).toBeVisible();
     }
-    expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
+    expect(await tableControls.radio('Eager')).toBeChecked();
+    expect(await tableControls.radio('Hide')).toBeChecked();
+    expect(await tableControls.radio('Animate')).toBeChecked();
   });
 
   test('a direction from a column menu sorts the windows', async () => {
@@ -311,8 +309,7 @@ describe('the tables demo', () => {
     await aggregations.sort('trades', 'descending');
 
     expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
-    expect(within(aggregations.card()).getByRole('columnheader', {name: /^trades/}))
-      .toHaveAttribute('aria-sort', 'descending');
+    expect(aggregations.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
   test('while a column is sorted, the windows reseat as trades change their numbers', async () => {
@@ -337,12 +334,12 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(await screen.findByRole('group', {name: 'settings'}, untilTheTablesTabRenders)).toHaveAttribute('open');
-    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
+    expect(await tableControls.settings()).toHaveAttribute('open');
+    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await tableControls.pressSettings();
-    expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
-    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
+    expect(await tableControls.region()).not.toBeVisible();
+    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
   test("the controls' prompt reads settings apart from its readout", async () => {
@@ -351,7 +348,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(await screen.findByRole('group', {name: 'settings'})).toHaveTextContent(/^settings \S/);
+    expect(await tableControls.settings()).toHaveTextContent(/^settings \S/);
   });
 
   test('the controls read out whatever is chosen', async () => {
@@ -364,16 +361,14 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/moves with the pointer, cells and all/);
     expect(controls).toHaveTextContent(/slide to their new places/);
-    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
+    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
 
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
+    await tableControls.choose('Lazy', 'Keep', 'Static');
 
     expect(controls).toHaveTextContent(/dispatches the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/gives them no time/);
-    expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
+    expect(tableControls.readout('<LazyTable className="keep static"/>')).toBeVisible();
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -390,11 +385,9 @@ describe('the tables demo', () => {
     await aggregations.moveColumnByKey('trades', '{ArrowRight}');
     expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
 
-    const controls = await tableControls.region();
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
+    await tableControls.choose('Lazy', 'Static');
 
-    expect(screen.getByText('<LazyTable className="hide static"/>')).toBeVisible();
+    expect(tableControls.readout('<LazyTable className="hide static"/>')).toBeVisible();
     expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
     expect(aggregations.columns().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
