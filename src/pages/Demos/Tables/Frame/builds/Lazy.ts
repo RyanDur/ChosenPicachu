@@ -4,6 +4,7 @@ import {columnUnder, displacedBetween, interior, rowUnder, spanCrossed} from '@c
 import {lazyTravel, Moving} from '@components/DragSortableTable/travel';
 import {columnLift, Grab} from '@components/DragSortableTable/lift';
 import {columnArrows, RowNudge} from '@components/DragSortableTable/arrows';
+import {ColumnWidths} from '@components/Table/shares';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
 import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {
@@ -33,16 +34,14 @@ import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {report} from '../table/report';
 import {provide, TableContext} from '../table/context';
 
-type Widths = Readonly<Record<string, number>>;
-
-const columnShoving = (context: MountedTable, name: string, to: number, widths: Widths): void => {
+const columnShoving = (context: MountedTable, name: string, to: number, widths: ColumnWidths): void => {
   const current = context.order();
   const from = current.indexOf(name);
   tell(context.host, 'column-moved', {column: name, to});
   shoveColumns(context, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
 };
 
-const columnTo = (context: MountedTable, name: string, to: number, widths: Widths): void => {
+const columnTo = (context: MountedTable, name: string, to: number, widths: ColumnWidths): void => {
   const current = context.order();
   const from = current.indexOf(name);
   const over = spanCrossed(current, widths, from, to);
@@ -56,7 +55,7 @@ const columnBeside = (context: MountedTable, name: string, neighbour: string): v
   columnShoving(context, name, interior(current.indexOf(neighbour), current.length), context.store.state.drag?.survey.columnWidths ?? {});
 };
 
-const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: {to: number; heights: Widths}): void => {
+const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: Pick<RowNudge, 'to' | 'heights'>): void => {
   const from = before.indexOf(row);
   shoveRows(context, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
 };
@@ -139,11 +138,11 @@ const dress = (context: MountedTable, previous: TableState, next: TableState): v
 const withVerbs = (parts: MountedTable): TableContext => {
   const context: TableContext = {
     ...parts,
-    lift: (carry, grab) => lift(context, carry, grab),
+    lifted: (carry, grab) => lift(context, carry, grab),
     moved: moving => moved(context, moving),
-    drop: () => drop(context),
+    dropped: () => drop(context),
     rowNudged: (row, nudge) => rowNudged(context, row, nudge),
-    rowTo: (row, to) => rowTo(context, row, to)
+    rowMoved: (row, to) => rowTo(context, row, to)
   };
   return context;
 };
@@ -168,7 +167,7 @@ const wired = (context: TableContext): void => {
   markGrips(table);
   headersOf(table).forEach(th => {
     const held = columnOfHeader(th);
-    th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lift({axis: 'column', held}, grab)));
+    th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carrying(th, () => some(context));
     th.addEventListener('keydown', columnArrows(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
   });

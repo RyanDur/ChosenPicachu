@@ -86,13 +86,16 @@ const handleSays: Record<World, ReactNode> = {
   <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
     on a touchscreen.</Says>,
-  vanilla: <Says>The handle is focusable from the start, announced by the name the markup gives it, and
-    once the ledger exists <code>dressColumn</code> rewrites that label to state
-    the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
-    to the cell’s height, and the button carries no width of its own: it is a grid container
-    whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-    and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
-    on a touchscreen. In the vanilla build the button is wrapped by resize-handle, an element that finds its button on connect and attaches the resize to it; the button, its tabindex and its first name are the markup’s, and the table writes the share into the name once the widths are measured; every listener the element attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
+  vanilla: <>
+    <Says>The handle is focusable from the start, announced by the name the markup gives it, and
+      once the ledger exists <code>dressColumn</code> rewrites that label to state
+      the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
+      to the cell’s height, and the button carries no width of its own: it is a grid container
+      whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+      and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
+      on a touchscreen.</Says>
+    <Says>In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
+  </>
 };
 
 const captureSays: Record<World, ReactNode> = {

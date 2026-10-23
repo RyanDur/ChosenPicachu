@@ -27,6 +27,19 @@ for (const {name, at, table} of stages) {
       await expect.poll(() => trades.announcedShare('trades')).toBe(neighbour + 2);
     });
 
+    test('a handle whose column was moved past still trades two points a press', async ({page}) => {
+      await page.goto(at);
+      const trades = dragSortTable(page, table(page));
+      await trades.moveColumnByKey('trades', 'ArrowRight');
+      await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+      await trades.resizeHandle('buys').focus();
+      const share = await trades.announcedShare('buys');
+
+      await page.keyboard.press('ArrowRight');
+
+      await expect.poll(() => trades.announcedShare('buys')).toBe(share + 2);
+    });
+
     test('an arrow held through its repeats says the share once, when it is let go', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));

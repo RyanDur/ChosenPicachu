@@ -28,7 +28,7 @@ export const reseatRows = ({body, lanes, standing}: Pick<MountedTable, 'body' | 
   if (!changed([...body.rows].map(rowOf), next)) {
     return;
   }
-  keepingFocus(body.ownerDocument.activeElement, () =>
+  keepingFocus(maybe(body.ownerDocument.activeElement), () =>
     next.forEach((row, position) =>
       maybe(lanes.get(row)).map(desired => {
         if (body.children[position] !== desired) {

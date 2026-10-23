@@ -28,10 +28,11 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           reads that loss as the drop. Chrome lets go lazily, on the next move, so it never
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
-        : <Says>The grip does the travelling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself by its own element, row-grip, a function of the grip’s host that enhancing makes into an element, never on the cell around it. Safari makes
+        : <Says>The grip does the travelling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari makes
           that a rule, not a taste: retake the pointer on any other element and WebKit lets the
           grip’s capture go at once, with no button down, and the drag reads that loss as the
           drop.</Says>}
+      {world === 'vanilla' && <Says>In the vanilla build the grip’s button is wrapped by row-grip, a custom element that, when the browser connects it, finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
@@ -39,7 +40,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
             aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...span(frameHtml, '<button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed" aria-label="move row 1">', '</button>'),
+            ...span(frameHtml, '<row-grip><button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed" aria-label="move row 1">', '</button></row-grip>'),
             aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'
@@ -52,6 +53,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           : <Snippet label="TS" lines={[
             ...unit(surveySource, 'export const rowUnder'), gap,
             ...unit(buildSrc, 'const rowBeside = '), gap,
+            ...unit(frameGrip, 'const gripping = '), gap,
             ...unit(frameGrip, 'export const rowGrip = '), gap,
             ...unit(frameEnhance, 'export const enhancing = '),
             aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')

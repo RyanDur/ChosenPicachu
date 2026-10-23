@@ -7,11 +7,11 @@ import {carrying} from './carry';
 import {rowOf} from './rows';
 
 const gripping = (host: HTMLElement, grip: HTMLElement, held: string): Undo => undoingAll([
-  listen(grip, 'pointerdown', event => contextOf(host).map(({order, standing, lift}) =>
-    rowLift(order, standing, grab => lift({axis: 'row', held}, grab))(event))),
+  listen(grip, 'pointerdown', event => contextOf(host).map(({order, standing, lifted}) =>
+    rowLift(order, standing, grab => lifted({axis: 'row', held}, grab))(event))),
   carrying(grip, () => contextOf(host)),
-  listen(grip, 'keydown', event => contextOf(host).map(({standing, rowNudged, rowTo}) =>
-    rowArrows(held, standing, {nudged: nudge => rowNudged(held, nudge), moved: ({to}) => rowTo(held, to)})(event)))
+  listen(grip, 'keydown', event => contextOf(host).map(({standing, rowNudged, rowMoved}) =>
+    rowArrows(held, standing, {nudged: nudge => rowNudged(held, nudge), moved: ({to}) => rowMoved(held, to)})(event)))
 ]);
 
 export const rowGrip = (host: HTMLElement): Undo =>

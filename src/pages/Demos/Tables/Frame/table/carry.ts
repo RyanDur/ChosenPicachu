@@ -31,10 +31,10 @@ export const dressCarried = (mounted: MountedTable, state: TableState): void => 
   });
 };
 
-type Carrier = Pick<TableContext, 'store' | 'moved' | 'drop'>;
+type Carrier = Pick<TableContext, 'store' | 'moved' | 'dropped'>;
 
 export const carrying = (holder: HTMLElement, carrier: () => Maybe<Carrier>): Undo => undoingAll([
   ...(['pointermove', 'lostpointercapture'] as const).map(travelling => listen(holder, travelling, event =>
-    carrier().map(({store, moved, drop}) => has(store.state.drag) ? pointerTravel(moved, drop)(event) : undefined))),
-  ...(['pointerup', 'pointercancel'] as const).map(ending => listen(holder, ending, () => carrier().map(({drop}) => drop())))
+    carrier().map(({store, moved, dropped}) => has(store.state.drag) ? pointerTravel(moved, dropped)(event) : undefined))),
+  ...(['pointerup', 'pointercancel'] as const).map(ending => listen(holder, ending, () => carrier().map(({dropped}) => dropped())))
 ]);

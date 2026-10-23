@@ -39,7 +39,7 @@ export const arrangeColumns = (context: Pick<MountedTable, 'table' | 'store' | '
   const {table, order} = context;
   const shown = headersOf(table).map(columnOfHeader);
   if (changed(shown, order())) {
-    keepingFocus(table.ownerDocument.activeElement, () => reconcileColumns(table, shown, order()));
+    keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, shown, order()));
     markGrips(table);
     dressWidths(context);
   }
