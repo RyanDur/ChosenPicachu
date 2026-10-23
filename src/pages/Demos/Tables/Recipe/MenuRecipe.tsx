@@ -293,7 +293,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
                 ...unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
-              : <Snippet label="HTML" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(frameColumns, 'export const sortableOf = ')
               ]}/>}
             <Snippet label="CSS" lines={[

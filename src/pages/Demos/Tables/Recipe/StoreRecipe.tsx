@@ -49,7 +49,7 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The table element creates its own store once, empty, and every part inside it reads and writes
             through that one.</Says>
         </>
-        : <Says>The page and the element split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives the element its columns and rows in order. The element keeps only the hand, empty, as a field of its own, beside the columns and rows it was given. Every listener the element wires dispatches to the hand, and whatever changes the order goes up to the page as an event.</Says>}
+        : <Says>The page and the element split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives the element its columns and rows in order. The element keeps only the hand, empty, as a field of its own, beside the columns and rows it was given. The element’s listeners dispatch the drag and the widths to the hand, and raise to the page whatever changes the order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,

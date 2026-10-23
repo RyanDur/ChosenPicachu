@@ -6,6 +6,14 @@ import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
 
 describe('the frame table', () => {
+  it('should make every movable header a tab stop and leave the anchored edges out', () => {
+    vanillaFrame.stand();
+
+    expect(vanillaFrame.header('trades')).toHaveAttribute('tabindex', '0');
+    expect(vanillaFrame.header('window')).not.toHaveAttribute('tabindex');
+    expect(vanillaFrame.header('change')).not.toHaveAttribute('tabindex');
+  });
+
   it('should move a row one seat per press after its own grip has been reseated', async () => {
     vanillaFrame.stand();
 
