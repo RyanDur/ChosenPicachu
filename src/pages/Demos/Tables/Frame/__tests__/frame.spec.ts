@@ -1,11 +1,9 @@
-import {fireEvent, screen, waitFor, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
-
-const mutationsDelivered = (): Promise<void> => new Promise(resolve => queueMicrotask(resolve));
 
 describe('the frame table', () => {
   const windowNames = (): string[] =>
@@ -82,19 +80,6 @@ describe('the frame table', () => {
   const columnOrder = (): string[] =>
     screen.getAllByRole('columnheader').map(header => header.getAttribute('aria-label') ?? '');
 
-  const stubbedRects = (): void => {
-    const widths: Record<string, number> = {window: 160, trades: 100, buys: 100, sells: 100, volume: 100, vwap: 120, change: 120};
-    screen.getByRole('table').getBoundingClientRect = () => ({
-      left: 0, right: 800, top: 0, bottom: 200, width: 800, height: 200, x: 0, y: 0, toJSON: () => ({})
-    });
-    screen.getAllByRole('columnheader').forEach(header => {
-      const name = header.getAttribute('aria-label') ?? '';
-      header.getBoundingClientRect = () => ({
-        left: 0, right: 0, top: 0, bottom: 0, width: widths[name] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
-      });
-    });
-  };
-
   it('the keyboard walks a column', async () => {
     vanillaFrame.stand();
 
@@ -141,18 +126,6 @@ describe('the frame table', () => {
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  it('a column drags past its neighbour and the swap is eager', () => {
-    vanillaFrame.stand();
-    stubbedRects();
-
-    const trades = screen.getByRole('columnheader', {name: /trades/});
-    held(trades, {clientX: 200, clientY: 50, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
-
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    fireEvent.pointerUp(surface(), {pointerId: 1});
-  });
-
   it('the fold finds its columns after they move', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
@@ -170,30 +143,9 @@ describe('the frame table', () => {
     });
   });
 
-  let holder: HTMLElement | undefined;
-  afterEach(() => {
-    holder = undefined;
-  });
-  const held = (element: HTMLElement, at: {clientX: number; clientY: number; pointerId: number}): void => {
-    holder = element;
-    fireEvent.pointerDown(element, at);
-  };
-  const surface = (): HTMLElement => {
-    if (holder) return holder;
-    throw new Error('nothing was lifted');
-  };
   const carried = (): Element[] =>
     [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')]
       .filter(seat => seat.classList.contains('carried'));
-
-  const rowRects = (): void => {
-    stubbedRects();
-    screen.getAllByRole('row').slice(1).forEach((lane, at) => {
-      lane.getBoundingClientRect = () => ({
-        left: 0, right: 800, top: at * 40, bottom: at * 40 + 40, width: 800, height: 40, x: 0, y: at * 40, toJSON: () => ({})
-      });
-    });
-  };
 
   it('a reseat leaves settled rows untouched', async () => {
     vanillaFrame.stand();
@@ -256,26 +208,13 @@ describe('the frame table', () => {
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
-  it('a row drags past its neighbour and the swap is eager', () => {
-    vanillaFrame.stand();
-    rowRects();
-
-    const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-    held(grip, {clientX: 20, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
-
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    fireEvent.pointerUp(surface(), {pointerId: 1});
-  });
-
   it('a hand that lifts a row and drops it where it was leaves the sort standing', async () => {
     vanillaFrame.stand();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
 
-    held(screen.getByRole('button', {name: 'move row 1'}), {clientX: 20, clientY: 20, pointerId: 1});
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    await vanillaFrame.liftAndLetGo(1);
 
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
@@ -308,116 +247,6 @@ describe('the frame table', () => {
     expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
   });
 
-  it('the keyboard trades shares between neighbours', async () => {
-    vanillaFrame.stand();
-    stubbedRects();
-
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    handle.focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe('14.5%');
-    expect(screen.getByRole('columnheader', {name: /buys/}).style.getPropertyValue('--share')).toBe('10.5%');
-    expect(screen.getByRole('button', {name: /resize trades, 15%/})).toBeInTheDocument();
-  });
-
-  it('a share trade says the new share', async () => {
-    vanillaFrame.stand();
-    stubbedRects();
-
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    handle.focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 15%');
-  });
-
-  it('a vanilla handle dragged through several shares says nothing on the way and only the share it landed on', () => {
-    vanillaFrame.stand();
-    stubbedRects();
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 120, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
-    expect(screen.getByRole('status', {name: 'move report'})).toBeEmptyDOMElement();
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 18%');
-  });
-
-  it('a hand drags the vanilla handle and the neighbours trade share', () => {
-    vanillaFrame.stand();
-    stubbedRects();
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe('17.5%');
-    expect(screen.getByRole('columnheader', {name: /buys/}).style.getPropertyValue('--share')).toBe('7.5%');
-  });
-
-  it('a vanilla keyboard move ends when the handle loses focus', async () => {
-    const keys = userEvent.setup();
-    vanillaFrame.stand();
-    stubbedRects();
-    screen.getByRole('button', {name: 'resize trades'}).focus();
-
-    await keys.keyboard('{ArrowRight>}');
-    expect(screen.getByRole('status', {name: 'move report'})).toBeEmptyDOMElement();
-    await keys.tab();
-
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 15%');
-  });
-
-  it('a dragged vanilla handle keeps the name it had until it is let go', () => {
-    vanillaFrame.stand();
-    stubbedRects();
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
-    expect(handle).toHaveAccessibleName('resize trades, 13%');
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(handle).toHaveAccessibleName('resize trades, 18%');
-  });
-
-  it('a vanilla handle that loses focus after a drag says nothing twice', async () => {
-    vanillaFrame.stand();
-    stubbedRects();
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    handle.focus();
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
-    fireEvent.pointerUp(handle, {pointerId: 1});
-    const said: string[] = [];
-    new MutationObserver(() => said.push(screen.getByRole('status', {name: 'move report'}).textContent ?? ''))
-      .observe(screen.getByRole('status', {name: 'move report'}), {childList: true, characterData: true, subtree: true});
-
-    handle.blur();
-    await mutationsDelivered();
-
-    expect(said).toEqual([]);
-  });
-
-  it('a resize whose pointer is cancelled stops following the pointer', () => {
-    vanillaFrame.stand();
-    stubbedRects();
-    const handle = screen.getByRole('button', {name: 'resize trades'});
-    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 1, clientX: 108, clientY: 20, pointerId: 1});
-    const shareAfterMoving = screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share');
-
-    fireEvent.pointerCancel(handle, {pointerId: 1});
-    fireEvent.pointerMove(handle, {buttons: 0, clientX: 200, clientY: 20, pointerId: 1});
-
-    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe(shareAfterMoving);
-    expect(shareAfterMoving).not.toBe('12.5%');
-  });
-
   it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
@@ -432,19 +261,6 @@ describe('the frame table', () => {
   });
 
   describe('the worlds of pace, origin, and motion', () => {
-
-    it('a dropped column lands as itself', () => {
-      vanillaFrame.stand({pace: 'eager'});
-      stubbedRects();
-      const trades = screen.getByRole('columnheader', {name: /trades/});
-      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
-      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 230, clientY: 60, pointerId: 1});
-
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-
-      expect(carried()).toEqual([]);
-      expect(trades.style.getPropertyValue('--seat-x')).toBe('');
-    });
 
     it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
       vanillaFrame.stand({pace: 'eager'});

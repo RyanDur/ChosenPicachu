@@ -17,7 +17,7 @@ import {isMeasure, Measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {
   Carry,
   changed,
-  columnNamed,
+  columnOfHeader,
   columnLandingFound,
   drifted,
   landingReport,
@@ -44,7 +44,7 @@ const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.t
 const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
   [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
 const sortableOf = (table: HTMLTableElement): string[] =>
-  headersOf(table).map(columnNamed).filter(column => is(table.querySelector(`#sort-${column}`)));
+  headersOf(table).map(columnOfHeader).filter(column => is(table.querySelector(`#sort-${column}`)));
 const sortOf = (columns: readonly TableColumn<Labelled>[]): string =>
   columns.map(({name, sorted}) => has(sorted) ? `${name} ${sorted}` : '').join('');
 
@@ -102,7 +102,7 @@ export class DragSortableTable extends HTMLElement {
 
   #arrange(parts: MountedTable, before: readonly TableColumn<Labelled>[]): void {
     const {table, document} = parts;
-    const shown = headersOf(table).map(columnNamed);
+    const shown = headersOf(table).map(columnOfHeader);
     if (changed(shown, this.#order())) {
       keepingFocus(document, () => this.#reconcileColumns(table, shown));
       this.#dressGrips(table);
@@ -140,7 +140,7 @@ export class DragSortableTable extends HTMLElement {
   }
 
   #writeCells({table, lanes}: MountedTable): void {
-    const order = headersOf(table).map(columnNamed);
+    const order = headersOf(table).map(columnOfHeader);
     this.#rows.forEach(row =>
       maybe(lanes.get(row.window.display)).map(lane =>
         sortableOf(table).forEach(measure => {
@@ -288,7 +288,7 @@ export class DragSortableTable extends HTMLElement {
       chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
     const wireColumnGrip = (th: HTMLTableCellElement): void => {
-      const held = columnNamed(th);
+      const held = columnOfHeader(th);
 
       th.addEventListener('pointerdown', columnLift(held, columns, standing, grab => lift({axis: 'column', held}, grab)));
       wireCarry(th);

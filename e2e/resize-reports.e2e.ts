@@ -87,6 +87,21 @@ for (const {name, at, table} of stages) {
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`window resized to ${after}%`]);
     });
 
+    test('a handle dragged and then left says its share once', async ({page}) => {
+      await page.goto(at);
+      const trades = dragSortTable(page, table(page));
+      await trades.resizeHandle('window').focus();
+      await trades.listenToTheMoveReport();
+
+      const hold = await trades.holdHandle('window');
+      await hold.carryTo(40);
+      await hold.letGo();
+      const share = await trades.announcedShare('window');
+      await page.keyboard.press('Tab');
+
+      await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`window resized to ${share}%`]);
+    });
+
     test('a handle pressed and let go, or dragged away and back, says nothing until a key moves it', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));

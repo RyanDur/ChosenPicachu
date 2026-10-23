@@ -2,7 +2,7 @@ import {maybe, not} from '@ryandur/sand';
 import {STEP_SHARE, grippedAt, measuredFloors, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
 import {TableAction} from '@components/DragSortableTable/actions';
-import {MountedTable, arrowLifted, columnNamed, gripped, handleDragged, handleLeft, handleReleased, measured, namedShare, pointerHolds, tradedBy, widthsOf} from './table-state';
+import {MountedTable, arrowLifted, columnOfHeader, gripped, handleDragged, handleLeft, handleReleased, measured, namedShare, pointerHolds, tradedBy, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -70,5 +70,5 @@ export const wireResize = (mounted: MountedTable): void => {
   [...mounted.table.querySelectorAll('.resize-handle')]
     .filter(handle => handle instanceof HTMLButtonElement)
     .forEach(handle => maybe(handle.closest('th')).map(th =>
-      wireHandle(mounted, columnNamed(th), handle)));
+      wireHandle(mounted, columnOfHeader(th), handle)));
 };

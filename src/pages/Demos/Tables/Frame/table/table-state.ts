@@ -1,6 +1,4 @@
-import {Store} from '@components/store';
 import {TableStore} from '@components/DragSortableTable/store';
-import {Arrangement, ArrangementAction} from '@components/DragSortableTable/arrangement';
 import {Report} from '@components/DragSortableTable/report';
 
 export type {TableState, Carry, Drag} from '@components/DragSortableTable/table-state';
@@ -9,14 +7,12 @@ export type {TableAction} from '@components/DragSortableTable/actions';
 export type {DemosStore, DemosMiddleware as Middleware} from '@pages/Demos/store';
 export type {Report} from '@components/DragSortableTable/report';
 export type {Arrangement, ArrangementAction} from '@components/DragSortableTable/arrangement';
-export {columnOf, namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
+export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
 export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/actions';
-export {arrangementOf, arrangementReducer, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
+export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 export {tableStore} from '@components/DragSortableTable/store';
-export {demosStore, feedRequested, selectColumns, selectMeasures, selectRows} from '@pages/Demos/store';
+export {demosStore, feedRequested, selectColumns, selectRows} from '@pages/Demos/store';
 export {landingReport, moveReport} from '@components/DragSortableTable/report';
-
-export type ArrangementStore = Store<Arrangement, ArrangementAction>;
 
 export type MountedTable = {
   store: TableStore;
@@ -29,7 +25,7 @@ export type MountedTable = {
   lanes: ReadonlyMap<string, HTMLTableRowElement>;
 };
 
-export const columnNamed = (th: Element): string => th.classList.item(1) ?? '';
+export const columnOfHeader = (th: Element): string => th.classList.item(1) ?? '';
 
 export const changed = <T>(before: readonly T[], after: readonly T[]): boolean =>
   before.length !== after.length || after.some((at, position) => before[position] !== at);
