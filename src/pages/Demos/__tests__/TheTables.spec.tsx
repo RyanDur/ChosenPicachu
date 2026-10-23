@@ -42,8 +42,7 @@ describe('the tables tab’s own words', () => {
     '// a cancel, or a move with no buttons down, is the drop itself',
     'I could build rows their own machinery, but the need is the same motion turned vertical, so rows reuse what the columns built. Three things differ: a grip button to grab, row heights in the survey, and a vertical hit test. The promises the dials set carry over unchanged.',
     'focusable by birth; the keyboard track builds on it',
-    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
-    'The context’s lifted, moved and dropped are the vanilla element’s own functions, not those actions: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'
+    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -102,7 +101,10 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'the vanilla element takes the order the page gives it and reconciles, which moves nodes.'},
     {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
-    {choice: 'world=vanilla', sentence: 'React renders the markup through it; a vanilla custom element, a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page, has to'},
+    {choice: 'world=vanilla', sentence: 'React renders the markup through it; a vanilla custom element has to'},
+    {choice: 'world=vanilla', sentence: 'A custom element is a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page.'},
+    {choice: 'world=vanilla', sentence: 'A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand. These verbs are the element’s own functions, not the actions of the same name: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'},
+    {choice: 'world=react', sentence: 'Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order'},
     {choice: 'world=vanilla', sentence: 'Rows and columns arrive in the order the page gives them: show, the function in boot.ts that reads the page’s state, sets the element’s columns and rows as they stand, and the element reads the order and the standing from those. The structure is still the markup’s: the element names every row element (a lane, in the code) after its row header. Every time the page gives it a new order the element reconciles the table against it, so a reorder never touches the data:'},
     {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the element raises column-moved, the page writes the new order into its arrangement and gives it back, and the element’s'},
     {choice: 'world=vanilla', sentence: 'This is the whole travel of the eager element,'},
@@ -122,7 +124,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
     {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu><button type="button" tabindex="0" class="menu-toggle'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are wrapped by sort-menu, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows, and the element reseats the rows in the same breath. The rows cut to their ranked seats, in the animated build and the static one alike.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows. Setting the rows reseats them in the same call. The rows cut to their ranked seats, in the animated build and the static one alike.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'sort-menu stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge.'},
     {choice: 'tut=menu&world=react', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
     {choice: 'tut=menu&world=react', sentence: 'SortMenu is the whole chooser: three buttons naming the three choices, raising onSorted with which column asked for what.'},
@@ -199,6 +201,7 @@ describe('the tables tab’s own words', () => {
     {name: 'announceSort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
     {name: 'insertBefore', choice: 'world=vanilla', run: /same lane finds its new seat/},
     {name: 'SortMenu', choice: 'tut=menu&world=react', run: /is the whole chooser/},
+    {name: 'pointerdown', choice: 'tut=menu&world=react', run: /each stop the/},
     {name: 'onSorted', choice: 'tut=menu&world=react', run: /is the whole chooser/},
     {name: 'choose', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
     {name: 'sorted', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
