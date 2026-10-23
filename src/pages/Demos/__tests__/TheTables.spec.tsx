@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {aggregations, tableControls, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
+import {aggregations, tableControls, tablesTab, untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
@@ -49,7 +49,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent(sentence);
+    expect(await tablesTab.region()).toHaveTextContent(sentence);
   });
 
   test.each([
@@ -134,7 +134,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent(sentence);
+    expect(await tablesTab.region()).toHaveTextContent(sentence);
   });
 
   test('should not tell the reader to focus the handle and tap, which the gesture step’s want already says', async () => {
@@ -142,7 +142,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).not.toHaveTextContent('focus the handle and tap');
+    expect(await tablesTab.region()).not.toHaveTextContent('focus the handle and tap');
   });
 
   test.each([
@@ -216,9 +216,7 @@ describe('the tables tab’s own words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const told = within(await screen.findByRole('region', {name: 'Tables'})).getAllByText(run)[0];
-
-    expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
+    expect(await tablesTab.codeIn(run)).toContain(name);
   });
 
   test('should link the resize step’s :has() to MDN', async () => {
@@ -226,8 +224,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(within(await screen.findByRole('region', {name: 'build the drag resize yourself'}, untilTheTablesTabRenders)).getByRole('link', {name: ':has()', hidden: true}))
-      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
+    expect(await tablesTab.linkIn('drag resize', ':has()')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
   });
 
   test('should say in the menu’s code aside what the prose says: the browser’s default placement', async () => {
@@ -235,7 +232,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
+    expect(await tablesTab.region()).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
   });
 
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
@@ -243,7 +240,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).not.toHaveTextContent('Read the new syntax as a compass');
+    expect(await tablesTab.region()).not.toHaveTextContent('Read the new syntax as a compass');
   });
 });
 
