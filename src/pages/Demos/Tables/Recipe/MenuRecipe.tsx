@@ -44,8 +44,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           onSorted with which column asked for what. The page dispatches it, and that is the
           whole answer. The rows cut to their ranked seats on the next frame, in the animated
           table and the static one alike.</Says>
-        : <Says>Choose, a function of the table’s context, raises sorted to the page; the page dispatches it into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath. The rows cut to their ranked seats, in the animated build and the
-          static one alike.</Says>}
+        : <Says>The toggle and its menu are wrapped by sort-menu, a custom element that, when the browser connects it, finds its direction buttons. When one is chosen it asks for the table’s context and calls choose, which raises sorted to the page and writes the move report; the page dispatches the sort into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -269,8 +268,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               edge. And not every column offers a menu: a menu
               exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an
               element by what it contains, pads for the toggle when one is there.</Says>
-            : <Says>The header never gets your press. The toggle sits itself at the header’s end
-              edge. And not every column offers a menu: menus
+            : <Says>The header never gets your press: sort-menu stops it at the toggle and at the menu, so a press there never lifts the column. The toggle sits itself at the header’s end edge. And not every column offers a menu: menus
               exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
               contains, pads for the toggle when one is there, and the element reads the sortable set off its own markup.</Says>}
           <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
