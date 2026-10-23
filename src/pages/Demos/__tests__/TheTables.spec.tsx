@@ -399,7 +399,7 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
 
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
@@ -412,39 +412,39 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
-    expect(screen.getByText(/I watch the market all day/)).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'The trader can watch the live market in windows they arrange'})).toBeVisible();
-    expect(screen.getByText(/so that what they compare sits side by side/)).toBeVisible();
-    expect(screen.getByRole('columnheader', {name: 'what it tells you'})).toBeVisible();
-    expect(screen.getByRole('rowheader', {name: /keep themselves current/})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
-    expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
-    expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
-    expect(screen.getByText(/What you see above is my interpretation of that/)).toBeVisible();
+    expect(tablesTab.heading('let’s build this feature')).toBeVisible();
+    expect(tablesTab.words(/I watch the market all day/)).toBeVisible();
+    expect(tablesTab.heading('Start with the need, and let it pick the element')).toBeVisible();
+    expect(tablesTab.heading('The trader can watch the live market in windows they arrange')).toBeVisible();
+    expect(tablesTab.words(/so that what they compare sits side by side/)).toBeVisible();
+    expect(tablesTab.columnHeader('what it tells you')).toBeVisible();
+    expect(tablesTab.rowHeader(/keep themselves current/)).toBeVisible();
+    expect(tablesTab.heading('Sketch a design from the need')).toBeVisible();
+    expect(tablesTab.aside('what a design cannot tell you')).toBeVisible();
+    expect(tablesTab.words(/keep building on your best interpretation/)).toBeVisible();
+    expect(tablesTab.words(/What you see above is my interpretation of that/)).toBeVisible();
   });
 
   test('the recipe’s tables name their rows and columns', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    const clues = within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByRole('table', {name: 'the clues'});
-    expect(within(clues).getAllByRole('columnheader')).toHaveLength(2);
-    expect(within(clues).getAllByRole('rowheader')).toHaveLength(5);
-    const layers = screen.getByRole('table', {name: 'the layers'});
-    expect(within(layers).getAllByRole('columnheader')).toHaveLength(4);
-    expect(within(layers).getAllByRole('rowheader')).toHaveLength(4);
-    const sketch = within(screen.getByRole('region', {name: 'Sketch a design from the need'}));
+    const clues = tablesTab.table('the clues');
+    expect(clues.columns).toHaveLength(2);
+    expect(clues.rows).toHaveLength(5);
+    const layers = tablesTab.table('the layers');
+    expect(layers.columns).toHaveLength(4);
+    expect(layers.rows).toHaveLength(4);
     for (const measure of ['trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
-      expect(sketch.getByRole('columnheader', {name: measure})).toBeVisible();
+      expect(tablesTab.columnIn('Sketch a design from the need', measure)).toBeVisible();
     }
-    expect(sketch.getAllByRole('columnheader')).toHaveLength(7);
-    expect(sketch.getAllByRole('rowheader')).toHaveLength(5);
+    const sketch = tablesTab.headersIn('Sketch a design from the need');
+    expect(sketch.columns).toHaveLength(7);
+    expect(sketch.rows).toHaveLength(5);
   });
 
   test('should open the slices by saying the work splits into user stories from the trader’s side', async () => {
@@ -452,58 +452,54 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Tables'})).toHaveTextContent('Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the trader’s side of the screen, and a promise of a conversation rather than a specification.');
+    expect(await tablesTab.region()).toHaveTextContent('Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the trader’s side of the screen, and a promise of a conversation rather than a specification.');
   });
 
   test('the slices point at their stations', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
-    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
+    expect(tablesTab.heading('Slice the design into stories')).toBeVisible();
     [['The trader can read the market in a table', 'station 4'],
       ['The trader can watch the market live, in windows', 'station 5'],
       ['The trader can sort by column, and by row', 'station 6'],
       ['The trader can sort the windows by any measure, or take the order back', 'station 6'],
       ['The trader can widen a column', 'station 6']
     ].forEach(([slice, station]) =>
-      expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent(station));
-    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
-      .toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
+      expect(tablesTab.slice(slice)).toHaveTextContent(station));
+    expect(tablesTab.sliceLinks()).toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
     [['station-4', 'The trader can read the market in a table'],
       ['station-5', 'The trader can watch the market live, in windows'],
       ['station-6', 'Layer on functionality, in the order it was asked for']
     ].forEach(([id, holds]) =>
-      expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
-        .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id)).toContain(id));
+      expect(tablesTab.stationsHolding(holds)).toContain(id));
   });
 
   test('the recipe links out to the user story', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    expect(screen.getByRole('link', {name: 'user story'}))
-      .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
+    expect(tablesTab.link('user story')).toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
   });
 
   test('the still table and the living table each tell their part', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    const still = screen.getByRole('region', {name: 'the still table'});
+    const still = tablesTab.part('the still table');
     expect(still).toBeVisible();
     expect(recipeFolds.story(still, 'The trader can read the market in a table')).toBeInTheDocument();
     expect(still).toHaveTextContent(/Deal a real HTML table/);
     expect(still).toHaveTextContent(/scope="col"/);
     expect(still).toHaveTextContent('The shape comes from the design, in the element the clues pointed at: a few measures across a few time windows, numbers on two axes. That is what a table is for. I build it first as a still, from whatever trades the page holds: headers on both axes, and the reading order correct before a single interaction exists.');
     expect(still).not.toHaveTextContent(/The page is a store/);
-    const living = screen.getByRole('region', {name: 'the living table'});
+    const living = tablesTab.part('the living table');
     expect(living).toBeVisible();
     expect(recipeFolds.story(living, 'The trader can watch the market live, in windows')).toBeInTheDocument();
     expect(recipeFolds.story(living, 'The page is a store, and so is the table')).toBeInTheDocument();
@@ -520,30 +516,30 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
-    expect(screen.getByText(/Both axes, every layer, or the layer is not done/)).toBeVisible();
-    expect(screen.getByRole('columnheader', {name: 'by keyboard'})).toBeVisible();
-    expect(screen.getByRole('rowheader', {name: 'Widen a column'})).toBeVisible();
+    expect(tablesTab.heading('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(tablesTab.words(/Both axes, every layer, or the layer is not done/)).toBeVisible();
+    expect(tablesTab.columnHeader('by keyboard')).toBeVisible();
+    expect(tablesTab.rowHeader('Widen a column')).toBeVisible();
   });
 
   test('each layer’s facts say their heading in their own words, so they pair without the table', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    await tablesTab.recipe('drag sort');
 
-    expect(screen.getByRole('cell', {name: 'by mouse drag the edge'})).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: 'by keyboard arrows on the handle'})).toBeInTheDocument();
-    expect(screen.getByRole('cell', {name: 'asked for by precision they can actually read'})).toBeInTheDocument();
+    expect(tablesTab.cell('by mouse drag the edge')).toBeInTheDocument();
+    expect(tablesTab.cell('by keyboard arrows on the handle')).toBeInTheDocument();
+    expect(tablesTab.cell('asked for by precision they can actually read')).toBeInTheDocument();
   });
 
   test('opening the sort by column story shows the drag build with its steps closed', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
 
@@ -556,35 +552,32 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
 
-    expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
+    expect((await tablesTab.linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
-    const [definition] = within(recipe).getAllByLabelText('survey');
+    const [definition] = await tablesTab.labelledIn('drag sort', 'survey');
     expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
     expect(recipe).toHaveTextContent(/export type Store<State, Action>/);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Carry the real thing/);
     expect(recipe).toHaveTextContent(/translate: calc\(var\(--seat-x\) \+ var\(--drift-x\)\)/);
-    expect(within(recipe).getAllByRole('link', {name: 'the implementation'})[0])
-      .toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
+    expect((await tablesTab.linksIn('drag sort', 'the implementation'))[0]).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
     expect(recipe).toHaveTextContent(/Let the column settle/);
     expect(recipe).toHaveTextContent(/the only motion code there is; the table wears the word animated/);
     expect(recipe).toHaveTextContent(/@keyframes settle \{/);
     expect(recipe).toHaveTextContent(/Turn the carry vertical/);
-    expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
+    expect((await tablesTab.linksIn('drag sort', 'insertBefore'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
   });
 
   test('the carry step declares the four numbers the carried cells read, and says what @property is', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
 
@@ -597,10 +590,10 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
     expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep sheet simply never adds them up.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
@@ -612,13 +605,11 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await tablesTab.recipe('drag sort');
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await recipeFolds.press(recipe, 'The trader can sort by row');
 
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
+    await tablesTab.chooseInRecipe('drag sort', 'Lazy', 'Keep', 'Static');
 
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/Hold still, dispatch on release/);
