@@ -35,11 +35,11 @@ const reconcileColumns = (table: HTMLTableElement, shown: readonly string[], ord
   });
 };
 
-export const arrangeColumns = (context: MountedTable): void => {
-  const {table, document, order} = context;
+export const arrangeColumns = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
+  const {table, order} = context;
   const shown = headersOf(table).map(columnOfHeader);
   if (changed(shown, order())) {
-    keepingFocus(document, () => reconcileColumns(table, shown, order()));
+    keepingFocus(table.ownerDocument.activeElement, () => reconcileColumns(table, shown, order()));
     markGrips(table);
     dressWidths(context);
   }

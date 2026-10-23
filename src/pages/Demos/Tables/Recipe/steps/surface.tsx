@@ -3,10 +3,10 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {gap, travelSource} from './sources';
+import {frameCarry, gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-export const DragSurface: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
+export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
       <Says>So nothing can wait for the pointer to come back. Whoever lifts
@@ -33,7 +33,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample; buildSrc: Samp
           or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture is
           not the drop. When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires{' '}
         <code>lostpointercapture</code> at the next move, with that move’s coordinates on the event. So the handler treats the
-          loss as the move it is, and retakes the pointer in the same handler.</Says>}
+          loss as the move it is, and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -42,7 +42,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample; buildSrc: Samp
             aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'const wireCarry = '),
+            ...unit(frameCarry, 'export const carrying = '),
             aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[

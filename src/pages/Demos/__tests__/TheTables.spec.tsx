@@ -72,7 +72,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'it showed; the page keeps the rows where the sort left them, moves the one you moved, and clears the sort, so your drag proceeds from what you saw.'},
     {choice: 'tut=menu', sentence: 'and a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there, and the element reads the sortable set off its own markup.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'When the page sets the element’s columns with a new sort, the element walks them and announce, one function, sets each th from what it was given: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'When the page sets the element’s columns with a new sort, announceSort walks them and announce, one function, sets each th from what it was given: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
     {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
     {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property, --share, one of the values set by name on the cell and read back in the stylesheet with var().'},
@@ -107,6 +107,15 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a show, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is'},
     {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, does one of two things and nothing else: it dispatches to the table’s store, or it raises what the trader did, which is why each is in one shared file and every shared block below appears in both worlds unchanged. The vanilla element’s own listeners, the ones that write the move report and move the cells, are its alone and are not shared.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
+    {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
+    {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle><button type="button" tabindex="0" class="resize-handle'},
+    {choice: 'world=vanilla', sentence: 'the vanilla element attaches once and cannot live without it. The element provides its parts a context, the mounted table and the verbs its pace decides, lift, move, drop and the row walk; a grip or a handle asks for it from inside the table, and nothing is passed by hand.'},
+    {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the table’s lift, a function of its context, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
+    {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
+    {choice: 'world=vanilla', sentence: 'the move, the drop and the capture loss are wired on the grip itself by its own element, row-grip, a function of the grip’s host that enhancing makes into an element, never on the cell around it.'},
+    {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
+    {choice: 'tut=resize&world=vanilla', sentence: 'and touch-action: none lets the pointer drag it on a touchscreen. In the vanilla build the button is wrapped by resize-handle, an element that finds its button on connect and attaches the resize to it; the button, its tabindex and its first name are the markup’s, and the table writes the share into the name once the widths are measured; every listener the element attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'Choose, a function of the table’s context, raises sorted to the page; the page dispatches it into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath.'},
     {choice: 'motion=static', sentence: 'Its value is that nothing competes with the pointer.'},
     {choice: 'motion=static&world=vanilla', sentence: 'Its value is that nothing competes with the pointer.'}
   ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
@@ -126,8 +135,8 @@ describe('the tables tab’s own words', () => {
   });
 
   test.each([
-    {name: 'announce', choice: 'tut=menu&world=vanilla', run: /the element walks them and/},
-    {name: 'th', choice: 'tut=menu&world=vanilla', run: /the element walks them and/},
+    {name: 'announce', choice: 'tut=menu&world=vanilla', run: /walks them and/},
+    {name: 'th', choice: 'tut=menu&world=vanilla', run: /walks them and/},
     {name: 'onRowMoved', choice: 'tut=menu', run: /^Move a row and the sort ends/},
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
     {name: 'lifted', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
@@ -175,7 +184,8 @@ describe('the tables tab’s own words', () => {
     {name: '::after', choice: 'tut=resize', run: /only item is the 8px line its/},
     {name: 'col-resize', choice: 'tut=resize', run: /offers the gesture/},
     {name: 'dressColumn', choice: 'tut=resize&world=vanilla', run: /rewrites that label to state/},
-    {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /the element walks them and/}
+    {name: 'aria-sort', choice: 'tut=menu&world=vanilla', run: /walks them and/},
+    {name: 'announceSort', choice: 'tut=menu&world=vanilla', run: /walks them and/}
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);

@@ -58,7 +58,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
         <OrderInState world={world} tableSource={tableSource} buildSrc={buildSrc}/>
         <ListenersOnce world={world} buildSrc={buildSrc}/>
         <LiftOnce world={world} headerSource={headerSource} buildSrc={buildSrc}/>
-        <DragSurface world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <DragSurface world={world} headerSource={headerSource}/>
         <DeadZone/>
         <LazyPace world={world} headerSource={headerSource} paceSource={paceSource} buildSrc={buildSrc}/>
         {origin === 'hide'

@@ -24,7 +24,10 @@ import {plain} from '../../../Recipe';
 import bootSource from '../../Frame/boot.ts?sample';
 import frameColumns from '../../Frame/table/columns.ts?sample';
 import frameRows from '../../Frame/table/rows.ts?sample';
+import frameGrip from '../../Frame/table/grip.ts?sample';
+import frameHandle from '../../Frame/table/handle.ts?sample';
+import frameEnhance from '../../Frame/table/enhance.ts?sample';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows, frameGrip, frameHandle, frameEnhance};
 
 export const gap = plain(' ');

@@ -35,7 +35,7 @@
     translate: none;
   }
 
-  .sortable .header-cell:has(> .resize-handle) > .menu-toggle {
+  .sortable .header-cell:has(.resize-handle) > .menu-toggle {
     inset-inline-end: var(--finger-reach);
   }
 }

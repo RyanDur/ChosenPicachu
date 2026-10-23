@@ -44,8 +44,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc, buildSrc}) =>
           onSorted with which column asked for what. The page dispatches it, and that is the
           whole answer. The rows cut to their ranked seats on the next frame, in the animated
           table and the static one alike.</Says>
-        : <Says>Choose dispatches the sort into the arrangement, and the reconcile moves the lanes
-          in the same breath. The rows cut to their ranked seats, in the animated build and the
+        : <Says>Choose, a function of the table’s context, raises sorted to the page; the page dispatches it into its arrangement and sets the element’s columns and rows, and the element reseats the lanes in the same breath. The rows cut to their ranked seats, in the animated build and the
           static one alike.</Says>}
       <Codes>
         {world === 'react'
@@ -53,7 +52,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc, buildSrc}) =>
             ...span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, '  const choose = ')
+            ...unit(buildSrc, 'const choose = ')
           ]}/>}
       </Codes>
     </Reveal>
@@ -175,7 +174,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               only that one, so the <code>th</code> announces <code>aria-sort</code> from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page sets the element’s
-              columns with a new sort, the element walks them and <code>announce</code>, one function, sets each <code>th</code> from what
+              columns with a new sort, <code>announceSort</code> walks them and <code>announce</code>, one function, sets each <code>th</code> from what
               it was given: the sorting <code>th</code> gains <code>aria-sort</code>, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
               it.</Says>}
           <Codes>
@@ -292,7 +291,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ? <Snippet label="HTML" lines={[
                 ...span(tableSrc, '<Column column="window"', '<Column column="window"'),
                 ...span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
-                ...unit(baseCss, '    &:has(> .menu-toggle) {')
+                ...unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...unit(frameColumns, 'export const sortableOf = ')

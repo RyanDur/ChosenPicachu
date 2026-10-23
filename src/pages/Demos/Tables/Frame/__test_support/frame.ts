@@ -37,6 +37,9 @@ export const vanillaFrame = {
     const grip = screen.getByRole('button', {name: `move row ${row}`});
     await userEvent.pointer([{keys: '[MouseLeft>]', target: grip}, {keys: '[/MouseLeft]', target: grip}]);
   },
+  press: async (key: string): Promise<void> => {
+    await userEvent.keyboard(key);
+  },
   moveRowByKey: async (row: number, key: string): Promise<void> => {
     screen.getByRole('button', {name: `move row ${row}`}).focus();
     await userEvent.keyboard(key);

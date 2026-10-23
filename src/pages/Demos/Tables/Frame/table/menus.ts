@@ -22,7 +22,7 @@ export const wireMenu = (table: ParentNode, column: string, choose: (direction?:
 const sortOf = (columns: readonly TableColumn<Labelled>[]): string =>
   columns.map(({name, sorted}) => has(sorted) ? `${name} ${sorted}` : '').join('');
 
-export const announceSort = ({table, columns}: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
+export const announceSort = ({table, columns}: Pick<MountedTable, 'table' | 'columns'>, before: readonly TableColumn<Labelled>[]): void => {
   if (sortOf(before) !== sortOf(columns())) {
     columns().forEach(({name, sorted}) => announce(table, name, sorted));
   }

@@ -10,7 +10,7 @@ export const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('
 export const lanesOf = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
   new Map([...body.rows].map(lane => [rowOf(lane), lane]));
 
-export const writeCells = ({table, lanes, rows}: MountedTable): void => {
+export const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = headersOf(table).map(columnOfHeader);
   rows().forEach(row =>
     maybe(lanes.get(row.window.display)).map(lane =>
@@ -23,12 +23,12 @@ export const writeCells = ({table, lanes, rows}: MountedTable): void => {
       })));
 };
 
-export const reseatRows = ({document, body, lanes, standing}: MountedTable): void => {
+export const reseatRows = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
   const next = standing();
   if (!changed([...body.rows].map(rowOf), next)) {
     return;
   }
-  keepingFocus(document, () =>
+  keepingFocus(body.ownerDocument.activeElement, () =>
     next.forEach((row, position) =>
       maybe(lanes.get(row)).map(desired => {
         if (body.children[position] !== desired) {

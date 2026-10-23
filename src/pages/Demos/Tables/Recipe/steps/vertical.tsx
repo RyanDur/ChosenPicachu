@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameHtml, gap, gripSource, surveySource} from './sources';
+import {frameEnhance, frameGrip, frameHtml, gap, gripSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
@@ -28,8 +28,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           reads that loss as the drop. Chrome lets go lazily, on the next move, so it never
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
-        : <Says>The grip does the travelling as well as the lifting: the move, the drop and the
-          capture loss are wired on the grip itself, never on the cell around it. Safari makes
+        : <Says>The grip does the travelling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself by its own element, row-grip, a function of the grip’s host that enhancing makes into an element, never on the cell around it. Safari makes
           that a rule, not a taste: retake the pointer on any other element and WebKit lets the
           grip’s capture go at once, with no button down, and the drag reads that loss as the
           drop.</Says>}
@@ -53,7 +52,8 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           : <Snippet label="TS" lines={[
             ...unit(surveySource, 'export const rowUnder'), gap,
             ...unit(buildSrc, 'const rowBeside = '), gap,
-            ...unit(buildSrc, 'const wireCarry = '),
+            ...unit(frameGrip, 'export const rowGrip = '), gap,
+            ...unit(frameEnhance, 'export const enhancing = '),
             aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')
           ]}/>}
       </Codes>

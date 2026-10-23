@@ -26,7 +26,7 @@ export const columnArrows = (
   });
 };
 
-type RowNudge = {from: number; to: number; heights: Readonly<Record<string, number>>};
+export type RowNudge = {from: number; to: number; heights: Readonly<Record<string, number>>};
 
 export const rowArrows = (
   held: string,

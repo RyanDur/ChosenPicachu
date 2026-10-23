@@ -13,6 +13,7 @@ import tableSource from '../Frame/table.html?sample';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
+import frameHandle from '../Frame/table/handle.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
 import {TheImplementation} from './steps';
 import {whatACustomPropertyIs} from './definitions';
@@ -38,7 +39,7 @@ const ledgerCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredWidths'), gap,
-      ...unit(frameResize, '  const awaken = ')
+      ...unit(frameHandle, 'const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
       ...unit(frameResize, 'const dressColumn = ')
@@ -70,7 +71,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<button type="button" tabindex="0" class="resize-handle', 'aria-label="resize window"></button>')
+    ...span(tableSource, '<resize-handle><button type="button" tabindex="0" class="resize-handle', 'aria-label="resize window"></button></resize-handle>')
   ]}/>
 };
 
@@ -91,7 +92,7 @@ const handleSays: Record<World, ReactNode> = {
     to the cell’s height, and the button carries no width of its own: it is a grid container
     whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
-    on a touchscreen.</Says>
+    on a touchscreen. In the vanilla build the button is wrapped by resize-handle, an element that finds its button on connect and attaches the resize to it; the button, its tabindex and its first name are the markup’s, and the table writes the share into the name once the widths are measured; every listener the element attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
 };
 
 const captureSays: Record<World, ReactNode> = {
@@ -124,8 +125,8 @@ const captureCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(frameResize, "handle.addEventListener('pointerdown'"), gap,
-      ...unit(frameResize, "handle.addEventListener('pointermove'")
+      ...unit(frameHandle, "listen(handle, 'pointerdown'"), gap,
+      ...unit(frameHandle, "listen(handle, 'pointermove'")
     ]}/>
     <GripWords/>
   </Codes>
@@ -143,9 +144,9 @@ const gestureCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
+      ...span(frameHandle, "listen(handle, 'pointerdown', event => {", 'event.stopPropagation();'),
       aside('// …the press measures; the bubbling stops here'), gap,
-      ...unit(frameResize, "handle.addEventListener('keydown'"),
+      ...unit(frameHandle, "listen(handle, 'keydown'"),
       aside('// the column drag above never gets the press')
     ]}/>
   </Codes>

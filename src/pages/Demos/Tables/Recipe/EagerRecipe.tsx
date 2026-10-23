@@ -58,7 +58,7 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
         <OrderInState world={world} tableSource={tableSource} buildSrc={buildSrc}/>
         <ListenersOnce world={world} buildSrc={buildSrc}/>
         <LiftOnce world={world} headerSource={headerSource} buildSrc={buildSrc}/>
-        <DragSurface world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <DragSurface world={world} headerSource={headerSource}/>
         <DeadZone/>
         <EagerPace world={world} headerSource={headerSource} buildSrc={buildSrc}/>
         {origin === 'hide'

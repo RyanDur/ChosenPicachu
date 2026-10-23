@@ -6,6 +6,16 @@ import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
 
 describe('the frame table', () => {
+  it('should move a row one seat per press after its own grip has been reseated', async () => {
+    vanillaFrame.stand();
+
+    await vanillaFrame.moveRowByKey(5, '{ArrowUp}');
+    await vanillaFrame.press('{ArrowUp}');
+
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'session', 'last 15 minutes', 'this hour']);
+    expect(vanillaFrame.moveReport()).toHaveTextContent('session moved to 3 of 5');
+  });
+
   const windowNames = (): string[] =>
     screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
 

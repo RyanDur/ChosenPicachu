@@ -16,7 +16,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
     <Reveal>
       <Says>No listener here holds state. Where a handler needs the order, it takes the order
         as a function and calls it when the event fires. React remakes its handlers every render
-        and never needed the discipline; the vanilla element attaches once and cannot live without it.</Says>
+        and never needed the discipline; the vanilla element attaches once and cannot live without it. The element provides its parts a context, the mounted table and the verbs its pace decides, lift, move, drop and the row walk; a grip or a handle asks for it from inside the table, and nothing is passed by hand.</Says>
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an
         action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer
         turns into the next state. Whatever changes the order goes up to the page as an event,{' '}
@@ -37,7 +37,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
           : <Snippet label="TS" lines={[
             ...span(buildSrc, 'readonly #hand = tableStore();', 'readonly #hand = tableStore();'), gap,
             ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
-            ...unit(buildSrc, '#context(): Maybe<MountedTable>')
+            ...unit(buildSrc, '#context(): Maybe<TableContext>')
           ]}/>}
       </Codes>
     </Reveal>

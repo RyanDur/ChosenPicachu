@@ -20,7 +20,6 @@ export type MountedTable = {
   order: () => readonly string[];
   standing: () => readonly string[];
   report: (said: Report) => void;
-  document: Document;
   table: HTMLTableElement;
   body: HTMLTableSectionElement;
   lanes: ReadonlyMap<string, HTMLTableRowElement>;

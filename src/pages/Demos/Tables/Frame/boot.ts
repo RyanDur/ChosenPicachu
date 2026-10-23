@@ -5,6 +5,9 @@ import {columnMoved, demosStore, feedRequested, rowMoved, selectColumns, selectR
 import {DragSortableTable as EagerTable} from './builds/Eager';
 import {DragSortableTable as LazyTable} from './builds/Lazy';
 import {builds} from './builds';
+import {enhancing} from './table/enhance';
+import {rowGrip} from './table/grip';
+import {resizeHandle} from './table/handle';
 
 declare global {
   // augmenting Window only works through interface merging — a type alias cannot merge
@@ -16,7 +19,11 @@ declare global {
 
 export const pace = (): Pace => window.__frame?.pace ?? 'eager';
 
-export const define = (told: Pace): void => customElements.define('drag-sortable-table', builds[told]);
+export const define = (told: Pace): void => {
+  customElements.define('drag-sortable-table', builds[told]);
+  customElements.define('row-grip', enhancing(rowGrip));
+  customElements.define('resize-handle', enhancing(resizeHandle));
+};
 
 export const feed = (document: Document): void => {
   const table = document.querySelector('drag-sortable-table');

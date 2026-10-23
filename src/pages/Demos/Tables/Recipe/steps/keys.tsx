@@ -3,7 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {arrowsSource, frameSettle, gap} from './sources';
+import {arrowsSource, frameGrip, frameSettle, gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
@@ -75,8 +75,9 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
         except that rows have no anchors: any row may move, and a walk stops at the table’s ends.</Says>
     </Words>
     <Reveal>
-      <Says>The grip handles the arrows itself, and the walk is the column walk with the
-        axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>
+      {world === 'react'
+        ? <Says>The grip handles the arrows itself, and the walk is the column walk with the axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>
+        : <Says>The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -84,7 +85,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
             aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, "grip.addEventListener('keydown'", "grip.addEventListener('keydown'"), gap,
+            ...unit(frameGrip, "listen(grip, 'keydown'"), gap,
             ...unit(buildSrc, 'const rowTo = '),
             aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}
