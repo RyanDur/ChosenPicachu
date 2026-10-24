@@ -47,9 +47,9 @@ const dealPlans: Record<World, ReactNode> = {
 const suppliedBy: Record<World, ReactNode> = {
   react: <>
     <Says>The page writes the head and the body as children of <code>DragSortableTable</code>.</Says>
-    <Says>It passes the component the caption and two choices the later steps explain as props, the values a React
-      component is given by the markup that uses it: <code>origin</code>, whether a carried row’s or column’s cells
-      stay visible in their place, and <code>motion</code>, whether moves animate.</Says>
+    <Says>As props, the values a React component is given by the markup that uses it, the page passes the caption and
+      two choices the later steps explain: <code>origin</code>, whether a carried row’s or column’s cells stay visible
+      in their place, and <code>motion</code>, whether moves animate.</Says>
     <Says>The component supplies the table, the caption and the move report, the output that tells a screen reader
       what moved.</Says>
     <Says>Each row header carries its window as its label, so a screen reader names the row by its window and not by
@@ -58,14 +58,14 @@ const suppliedBy: Record<World, ReactNode> = {
   vanilla: <>
     <Says>The page writes only the head and the body, inside a <code>template</code> in <code>drag-sortable-table</code>. A
       template is an element whose contents the browser reads but does not show or run until a script takes them.</Says>
-    <Says>The template is there because the element, not the page, supplies the table. Written straight inside the
-      element with no table around them, the head and the rows would lose their own tags, which the parser, the part
-      of the browser that reads markup into elements, drops outside a table, and everything they held would land loose
-      in the section: grips, handles, menus, names and numbers, with no table to read.</Says>
     <Says><code>drag-sortable-table</code> is a custom element: a tag of the page’s own, registered with the browser,
       that runs a function of its own when the browser connects it to the page. That function supplies the table, the
       caption and the move report, the output that tells a screen reader what moved, and moves the head and the body
       from the template into the table.</Says>
+    <Says>Without the template the head and the rows would stand inside the element with no table around them when the
+      browser reads them. They would lose their own tags, which the parser, the part of the browser that reads markup
+      into elements, drops outside a table, and everything they held would land loose in the section: grips, handles,
+      menus, names and numbers, with no table to read.</Says>
     <Says>On the element the page names the caption and two choices the later steps explain: <code>origin</code>,
       whether a carried row’s or column’s cells stay visible in their place, and <code>motion</code>, whether moves
       animate.</Says>
