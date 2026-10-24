@@ -6,6 +6,7 @@ import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
 import {withoutImports} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Sample} from '@pages/Demos/Recipe/sample';
+import {whatTheDomIs} from '../definitions';
 
 const sourceOf = (world: World, path: string): string =>
   `${Paths.repo}/${world === 'react' ? 'tree' : 'blob'}/main/src/pages/Demos/Tables/${path}`;
@@ -42,9 +43,9 @@ export const AgainstTheStream: FC = () =>
     the data itself, but every trade that lands would fight every drag. So the columns and
     the seats are the state, in their order; a trade rewrites a row’s values under its key,
     and the markup renders through them. Moving a column is just changing the
-    order. I could ask the DOM, the page’s tree of elements and text that the browser builds from the HTML, where
-    everything is as the pointer moves,
-    but layout queries during a drag cause the jank you are trying to avoid. So the lift
+    order. {whatTheDomIs} I could ask it where everything is as the pointer moves, but each answer makes the
+    browser do its layout, the work of deciding every box’s size and place, and a drag that waits on that work
+    stutters. So the lift
     measures everything the drag needs at the grab, as the lift step shows.</Tell>;
 
 export const OwnedPixels: FC<{world: World}> = ({world}) =>
