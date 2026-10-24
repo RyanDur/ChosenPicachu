@@ -1,11 +1,11 @@
-import {has, is} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {env} from '@env';
 import {Feed} from '@pages/Demos/__test_support/feed';
 import type {Motion, Origin, Pace} from '../../../Controls';
 import {startingTable} from '../starting';
-import {define, feed as feedTheTable} from '../boot';
+import {feed as feedTheTable} from '../boot';
 
 type Stage = {
   readonly feed?: Feed;
@@ -34,9 +34,6 @@ export const vanillaFrame = {
   stand: ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
     window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
     document.body.innerHTML = startingTable({origin, motion});
-    if (!is(customElements.get('row-grip'))) {
-      define();
-    }
     feedTheTable(document, pace);
   },
   table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),

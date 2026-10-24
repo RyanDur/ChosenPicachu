@@ -57,7 +57,7 @@ const edgeMarkup: Record<World, ReactNode> = {
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>'), gap,
-    ...span(tableSource, '</sort-menu>', '</th>')
+    ...span(tableSource, '</menu>', '</th>')
   ]}/>
 };
 
@@ -71,7 +71,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<resize-handle>', '</resize-handle>')
+    ...span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize window"></button>')
   ]}/>
 };
 
@@ -94,7 +94,7 @@ const handleSays: Record<World, ReactNode> = {
       whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
       and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
       on a touchscreen.</Says>
-    <Says>In the vanilla build the button is wrapped by <code>resize-handle</code>, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
+    <Says>In the vanilla build the handle is the button the page writes, marked <code>data-resize-handle</code>. When boot calls <code>dragSortable</code> it attaches the resize to that button, once; when its column moves, the header moves with its listeners.</Says>
   </>
 };
 
@@ -128,8 +128,8 @@ const captureCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(frameHandle, "listen(handle, 'pointerdown'"), gap,
-      ...unit(frameHandle, "listen(handle, 'pointermove'")
+      ...unit(frameHandle, "handle.addEventListener('pointerdown'"), gap,
+      ...unit(frameHandle, "handle.addEventListener('pointermove'")
     ]}/>
     <GripWords/>
   </Codes>
@@ -147,9 +147,9 @@ const gestureCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...span(frameHandle, "listen(handle, 'pointerdown', event => {", 'event.stopPropagation();'),
+      ...span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       aside('// …the press measures; the bubbling stops here'), gap,
-      ...unit(frameHandle, "listen(handle, 'keydown'"),
+      ...unit(frameHandle, "handle.addEventListener('keydown'"),
       aside('// the column drag above never gets the press')
     ]}/>
   </Codes>

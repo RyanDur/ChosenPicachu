@@ -26,8 +26,8 @@ import frameColumns from '../../Frame/table/columns.ts?sample';
 import frameRows from '../../Frame/table/rows.ts?sample';
 import frameGrip from '../../Frame/table/grip.ts?sample';
 import frameHandle from '../../Frame/table/handle.ts?sample';
-import frameEnhance from '../../Frame/table/enhance.ts?sample';
+import frameParts from '../../Frame/table/parts.ts?sample';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows, frameGrip, frameHandle, frameEnhance};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows, frameGrip, frameHandle, frameParts};
 
 export const gap = plain(' ');

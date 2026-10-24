@@ -95,9 +95,9 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'there is no render to catch the change, so the page refolds the trades and calls reconcile, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.'},
     {choice: 'world=vanilla', sentence: 'and the page calls reconcile, which writes what changed.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The sort is one value in the page’s arrangement, a column name and a direction.'},
-    {choice: 'world=vanilla', sentence: 'When a vanilla listener attaches is nothing a handler can count on. The table’s listeners attach once, when boot calls dragSortable. A grip’s or a handle’s attach each time its element connects, and a move re-inserts some cells and leaves others in place, so a part’s listeners may be attached again on one move and not on the next.'},
+    {choice: 'world=vanilla', sentence: 'Every vanilla listener attaches once, when boot calls dragSortable: the table’s, and each grip’s, handle’s and menu’s. A move re-inserts cells, and a node keeps its listeners when it is moved, so nothing is attached twice and nothing is lost.'},
     {choice: 'world=react', sentence: 'Sharing only works if a handler holds no state at all: it asks at event time and writes back through one dispatch.'},
-    {choice: 'world=vanilla', sentence: 'the vanilla listeners cannot count on being remade, so they live by it.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla listeners are made once and never remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'the vanilla page subscribes a listener that calls reconcile, and the table reads the order through the functions it was given and moves its nodes to match.'},
     {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
@@ -113,14 +113,14 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls'},
     {choice: 'world=vanilla', sentence: ', the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.'},
     {choice: 'world=react', sentence: ', the function the vanilla build returned, with the columns as they stood before the change'},
-    {choice: 'world=react', sentence: 'the vanilla listeners cannot count on being remade, so they live by it.'},
+    {choice: 'world=react', sentence: 'the vanilla listeners are made once and never remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'dragSortable subscribes once itself, to its own hand.'},
     {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the headers or the body; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When boot calls dragSortable on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
-    {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
-    {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
+    {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'},
+    {choice: 'tut=resize&world=vanilla', sentence: '<button type="button" tabindex="0" data-resize-handle class="resize-handle'},
     {choice: 'world=vanilla', sentence: '<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable> <caption class="off-screen">Live aggregations by window</caption> <thead>'},
-    {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are each wrapped in a custom element, row-grip and resize-handle: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. Each finds its button on connect and attaches the behaviour to it.'},
+    {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are marked for what they do, data-row-grip and data-resize-handle, and dragSortable attaches the behaviour to each when boot calls it.'},
     {choice: 'world=vanilla', sentence: 'The page writes the whole table as it would for any table: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. One attribute, data-drag-sortable, marks the table as one that drag-sorts. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
     {choice: 'world=vanilla', sentence: 'At boot a script finds every table so marked and calls dragSortable on it. There are two builds of dragSortable, eager and lazy, one file each, and the pace is which one boot calls.'},
     {choice: 'world=vanilla', sentence: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths. The call also wires the table’s listeners at once.'},
@@ -140,16 +140,16 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=react', sentence: 'The page’s provider and useDragSortable each subscribe through useSyncExternalStore,'},
     {choice: 'world=react', sentence: '<table id="live-aggregations" className={sortable.className}> <caption className="off-screen">{caption}</caption>'},
     {choice: 'world=react', sentence: '<output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{reportOf(sortable)}</output>'},
-    {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks the table it sits in for it each time an event fires, and nothing is passed by hand.'},
+    {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. dragSortable gives each grip, handle and menu its context as it wires it, once; what the context answers about the order it still reads at event time, through the functions the page gave.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
-    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element too. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
-    {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
-    {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
-    {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu> <button type="button" tabindex="0" class="menu-toggle'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are wrapped by sort-menu, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls reconcile, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.'},
-    {choice: 'tut=menu&world=vanilla', sentence: 'sort-menu stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge.'},
+    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip is the button the page writes, marked data-row-grip. When boot calls dragSortable it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.'},
+    {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip handles the arrows itself, and the walk is the column walk with the axis turned:'},
+    {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the handle is the button the page writes, marked data-resize-handle. When boot calls dragSortable it attaches the resize to that button, once; when its column moves, the header moves with its listeners.'},
+    {choice: 'tut=menu&world=vanilla', sentence: '<button type="button" tabindex="0" data-sort-toggle class="menu-toggle'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are the button and the menu the page writes, marked data-sort-toggle and data-sort-menu. When boot calls dragSortable it finds the menu’s direction buttons and wires each.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it calls choose with the context dragSortable gave it, what the table knows about itself and the functions it answers with; choose raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls reconcile, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.'},
+    {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
     {choice: 'tut=menu&world=react', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
     {choice: 'tut=menu&world=react', sentence: 'SortMenu is the whole chooser: three buttons naming the three choices, raising onSorted with which column asked for what.'},
     {choice: 'world=vanilla', sentence: 'Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.'},
@@ -193,13 +193,12 @@ describe('the tables tab’s own words', () => {
     expect(tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent)).toContain(label);
   });
 
-  test.each(['sort', 'menu', 'resize'])('should define a custom element once, at the step that first supplies one, with tut=%s', async tutorial => {
+  test.each(['sort', 'menu', 'resize'])('should define no custom element in the vanilla world, with tut=%s', async tutorial => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=vanilla&tut=${tutorial}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
 
-    expect(blocks.filter(block => block.includes('a tag of the page’s own, registered with the browser'))).toHaveLength(1);
+    expect(await tablesTab.region()).not.toHaveTextContent(/custom element/);
   });
 
   test('should not tell the React world when a vanilla listener attaches', async () => {
@@ -207,7 +206,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await tablesTab.region()).not.toHaveTextContent('When a vanilla listener attaches is nothing a handler can count on');
+    expect(await tablesTab.region()).not.toHaveTextContent('Every vanilla listener attaches once');
   });
 
   test('should not tell the context’s verbs in the React world', async () => {
@@ -288,8 +287,8 @@ describe('the tables tab’s own words', () => {
     {name: 'SortMenu', choice: 'tut=menu&world=react', run: /is the whole chooser/},
     {name: 'pointerdown', choice: 'tut=menu&world=react', run: /each stop the/},
     {name: 'onSorted', choice: 'tut=menu&world=react', run: /is the whole chooser/},
-    {name: 'choose', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
-    {name: 'sorted', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it asks the table/},
+    {name: 'choose', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it calls/},
+    {name: 'sorted', choice: 'tut=menu&world=vanilla', run: /^When one is chosen it calls/},
     {name: 'touch-action: none', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
     {name: 'pointerdown', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
     {name: 'has', choice: 'world=react', run: /is why the pointer can drag on touch at all/},
@@ -297,8 +296,9 @@ describe('the tables tab’s own words', () => {
     {name: 'pointerdown', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
     {name: 'has', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
     {name: 'lifted', choice: 'world=vanilla', run: /is why the pointer can drag on touch at all/},
-    {name: 'row-grip', choice: 'world=vanilla', run: /grip’s button is wrapped by/},
-    {name: 'resize-handle', choice: 'tut=resize&world=vanilla', run: /the button is wrapped by/},
+    {name: 'data-row-grip', choice: 'world=vanilla', run: /the grip is the button the page writes/},
+    {name: 'data-resize-handle', choice: 'tut=resize&world=vanilla', run: /the handle is the button the page writes/},
+    ...['data-sort-toggle', 'data-sort-menu'].map(name => ({name, choice: 'tut=menu&world=vanilla', run: /are the button and the menu the page writes/})),
     ...['lifted', 'moved', 'dropped', 'rowNudged', 'rowMoved'].map(name => ({name, choice: 'world=vanilla', run: /provides the parts a context/}))
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();

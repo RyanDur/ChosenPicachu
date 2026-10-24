@@ -77,7 +77,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
     <Reveal>
       {world === 'react'
         ? <Says>The grip handles the arrows itself, and the walk is the column walk with the axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>
-        : <Says>The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>}
+        : <Says>The grip handles the arrows itself, and the walk is the column walk with the axis turned: the seats shuffle instead of the order, and a walk stops at the first and last seat.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -85,7 +85,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
             aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameGrip, "listen(grip, 'keydown'"), gap,
+            ...unit(frameGrip, "grip.addEventListener('keydown'"), gap,
             ...unit(buildSrc, 'const rowTo = '),
             aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}

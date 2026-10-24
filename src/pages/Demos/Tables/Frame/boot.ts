@@ -3,10 +3,6 @@ import type {Dials, Pace} from '../../Controls';
 import {exchange} from '@pages/Demos/exchange';
 import {columnMoved, demosStore, feedRequested, rowMoved, selectColumns, selectRows, sorted} from './table/table-state';
 import {builds} from './builds';
-import {enhancing} from './table/enhance';
-import {rowGrip} from './table/grip';
-import {resizeHandle} from './table/handle';
-import {sortMenu} from './table/menus';
 
 declare global {
   // augmenting Window only works through interface merging — a type alias cannot merge
@@ -17,12 +13,6 @@ declare global {
 }
 
 export const pace = (): Pace => window.__frame?.pace ?? 'eager';
-
-export const define = (): void => {
-  customElements.define('row-grip', enhancing(rowGrip));
-  customElements.define('resize-handle', enhancing(resizeHandle));
-  customElements.define('sort-menu', enhancing(sortMenu));
-};
 
 const fed = (table: HTMLTableElement, told: Pace): void => {
   const page = demosStore(exchange({...unconfigured, ...window.__env}, () => undefined));
@@ -41,6 +31,5 @@ export const feed = (document: Document, told: Pace): void =>
     .forEach(table => fed(table, told));
 
 export const boot = (document: Document): void => {
-  define();
   feed(document, pace());
 };

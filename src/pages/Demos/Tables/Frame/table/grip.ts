@@ -1,19 +1,17 @@
 import {maybe} from '@ryandur/sand';
 import {rowLift} from '@components/DragSortableTable/lift';
 import {rowArrows} from '@components/DragSortableTable/arrows';
-import {contextOf} from './context';
-import {listen, nothingToUndo, Undo, undoingAll} from './undo';
+import {TableContext} from './context';
 import {carrying} from './carry';
 import {rowOf} from './rows';
 
-const gripping = (host: HTMLElement, grip: HTMLElement, held: string): Undo => undoingAll([
-  listen(grip, 'pointerdown', event => contextOf(host).map(({order, standing, lifted}) =>
-    rowLift(order, standing, grab => lifted({axis: 'row', held}, grab))(event))),
-  carrying(grip, () => contextOf(host)),
-  listen(grip, 'keydown', event => contextOf(host).map(({standing, rowNudged, rowMoved}) =>
-    rowArrows(held, standing, {nudged: nudge => rowNudged(held, nudge), moved: ({to}) => rowMoved(held, to)})(event)))
-]);
+const gripping = (context: TableContext, grip: HTMLElement, held: string): void => {
+  const {order, standing, lifted, rowNudged, rowMoved} = context;
+  grip.addEventListener('pointerdown', rowLift(order, standing, grab => lifted({axis: 'row', held}, grab)));
+  carrying(grip, context);
+  grip.addEventListener('keydown', rowArrows(held, standing, {nudged: nudge => rowNudged(held, nudge), moved: ({to}) => rowMoved(held, to)}));
+};
 
-export const rowGrip = (host: HTMLElement): Undo =>
-  maybe(host.querySelector('button')).mBind(grip =>
-    maybe(host.closest('tr')).map(lane => gripping(host, grip, rowOf(lane)))).orElse(nothingToUndo);
+export const rowGrip = (context: TableContext, grip: HTMLElement): void => {
+  maybe(grip.closest('tr')).map(lane => gripping(context, grip, rowOf(lane)));
+};

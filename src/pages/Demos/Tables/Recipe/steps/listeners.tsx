@@ -12,16 +12,15 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
       <Says>The trap to check before sharing anything: a listener that closes over state
         remembers the world as it stood when the listener was made. Sharing only works if a handler holds no state at all: it asks
         at event time and writes back through one dispatch.</Says>
-      {world === 'vanilla' && <Says>When a vanilla listener attaches is nothing a handler can count on. The table’s listeners attach
-        once, when boot calls <code>dragSortable</code>. A grip’s or a handle’s attach each time its element connects, and a move
-        re-inserts some cells and leaves others in place, so a part’s listeners may be attached again on one move and not on the
-        next.</Says>}
+      {world === 'vanilla' && <Says>Every vanilla listener attaches once, when boot calls <code>dragSortable</code>: the
+        table’s, and each grip’s, handle’s and menu’s. A move re-inserts cells, and a node keeps its listeners when it is
+        moved, so nothing is attached twice and nothing is lost.</Says>}
     </Words>
     <Reveal>
       <Says>No listener here holds state. Where a handler needs the order, it takes the order
         as a function and calls it when the event fires. React remakes its handlers every render
-        and never needed the discipline; the vanilla listeners cannot count on being remade, so they live by it.</Says>
-      {world === 'vanilla' && <Says><code>dragSortable</code> provides the parts a context: the mounted table and the verbs its pace decides, <code>lifted</code>, <code>moved</code> and <code>dropped</code> for a drag, and <code>rowNudged</code> and <code>rowMoved</code> for a row walked by the arrow keys. A grip or a handle asks the table it sits in for it each time an event fires, and nothing is passed by hand.</Says>}
+        and never needed the discipline; the vanilla listeners are made once and never remade, so they live by it.</Says>
+      {world === 'vanilla' && <Says><code>dragSortable</code> provides the parts a context: the mounted table and the verbs its pace decides, <code>lifted</code>, <code>moved</code> and <code>dropped</code> for a drag, and <code>rowNudged</code> and <code>rowMoved</code> for a row walked by the arrow keys. <code>dragSortable</code> gives each grip, handle and menu its context as it wires it, once; what the context answers about the order it still reads at event time, through the functions the page gave.</Says>}
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, <code>onColumnMoved</code> or <code>onRowMoved</code> in React and <code>column-moved</code> or <code>row-moved</code> from the table, and comes back down as the next order.</Says>
       {world === 'vanilla' && <Says>The context’s verbs are the build’s own functions, not the actions of the same name: <code>lifted</code> dispatches the <code>lifted</code> action, <code>moved</code> dispatches <code>drifted</code>, and <code>dropped</code> dispatches <code>released</code>.</Says>}
       <Says>Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged. What differs is who subscribes: React subscribes a component, which re-renders; the vanilla page subscribes a listener that calls <code>reconcile</code>, and the table reads the order through the functions it was given and moves its nodes to match.</Says>

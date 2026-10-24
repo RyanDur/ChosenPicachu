@@ -45,8 +45,8 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           whole answer. The rows cut to their ranked seats on the next frame, in the animated
           table and the static one alike.</Says>
         : <>
-          <Says>The toggle and its menu are wrapped by <code>sort-menu</code>, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.</Says>
-          <Says>When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls <code>choose</code>, which raises <code>sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls <code>reconcile</code>, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
+          <Says>The toggle and its menu are the button and the menu the page writes, marked <code>data-sort-toggle</code> and <code>data-sort-menu</code>. When boot calls <code>dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
+          <Says>When one is chosen it calls <code>choose</code> with the context <code>dragSortable</code> gave it, what the table knows about itself and the functions it answers with; <code>choose</code> raises <code>sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls <code>reconcile</code>, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -54,6 +54,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
             ...span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
+            ...unit(frameMenus, 'const choosing = '), gap,
             ...unit(frameMenus, 'export const choose = ')
           ]}/>}
       </Codes>
@@ -117,7 +118,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<sort-menu>', '</sort-menu>')
+                ...span(tableSource, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -270,7 +271,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               edge. And not every column offers a menu: a menu
               exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an
               element by what it contains, pads for the toggle when one is there.</Says>
-            : <Says><code>sort-menu</code> stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge. And not every column offers a menu: menus
+            : <Says>The toggle and the menu each stop the <code>pointerdown</code>, so the header never gets your press. The toggle sits itself at the header’s end edge. And not every column offers a menu: menus
               exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
               contains, pads for the toggle when one is there, and <code>reconcile</code> reads the sortable set off the table’s markup each time it writes the cells.</Says>}
           <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
@@ -285,7 +286,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(frameMenus, 'const keepingTheColumnStill = '), gap,
-                ...span(frameMenus, "...[...host.querySelectorAll('.menu-toggle, .menu')]", '.map(keepingTheColumnStill)'),
+                ...span(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
                 aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'

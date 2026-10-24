@@ -1,9 +1,8 @@
-import {has, Maybe} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {pointerTravel, still} from '@components/DragSortableTable/travel';
 import {MountedTable, TableState, seatOffset} from './table-state';
 import {columnCells, changeMotion} from './settle';
 import {TableContext} from './context';
-import {listen, Undo, undoingAll} from './undo';
 
 const carriedCells = (mounted: MountedTable, state: TableState): readonly HTMLTableCellElement[] => {
   const {drag} = state;
@@ -33,8 +32,8 @@ export const dressCarried = (mounted: MountedTable, state: TableState): void => 
 
 type Carrier = Pick<TableContext, 'store' | 'moved' | 'dropped'>;
 
-export const carrying = (holder: HTMLElement, carrier: () => Maybe<Carrier>): Undo => undoingAll([
-  ...(['pointermove', 'lostpointercapture'] as const).map(travelling => listen(holder, travelling, event =>
-    carrier().map(({store, moved, dropped}) => has(store.state.drag) ? pointerTravel(moved, dropped)(event) : undefined))),
-  ...(['pointerup', 'pointercancel'] as const).map(ending => listen(holder, ending, () => carrier().map(({dropped}) => dropped())))
-]);
+export const carrying = (holder: HTMLElement, {store, moved, dropped}: Carrier): void => {
+  (['pointermove', 'lostpointercapture'] as const).forEach(travelling => holder.addEventListener(travelling, event =>
+    has(store.state.drag) ? pointerTravel(moved, dropped)(event) : undefined));
+  (['pointerup', 'pointercancel'] as const).forEach(ending => holder.addEventListener(ending, () => dropped()));
+};

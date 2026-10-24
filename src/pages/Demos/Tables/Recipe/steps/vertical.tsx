@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameEnhance, frameGrip, frameHtml, gap, gripSource, surveySource} from './sources';
+import {frameGrip, frameHtml, frameParts, gap, gripSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
@@ -29,7 +29,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
         : <Says>The grip does the travelling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.</Says>}
-      {world === 'vanilla' && <Says>In the vanilla build the grip’s button is wrapped by <code>row-grip</code>, a custom element too. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.</Says>}
+      {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes, marked <code>data-row-grip</code>. When boot calls <code>dragSortable</code> it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
@@ -37,7 +37,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
             aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...span(frameHtml, '<row-grip>', '</row-grip>'),
+            ...span(frameHtml, '<button type="button" tabindex="0" data-row-grip', '</button>this minute'),
             aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'
@@ -52,7 +52,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
             ...unit(buildSrc, 'const rowBeside = '), gap,
             ...unit(frameGrip, 'const gripping = '), gap,
             ...unit(frameGrip, 'export const rowGrip = '), gap,
-            ...unit(frameEnhance, 'export const enhancing = '),
+            ...unit(frameParts, 'export const wireParts = '),
             aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')
           ]}/>}
       </Codes>

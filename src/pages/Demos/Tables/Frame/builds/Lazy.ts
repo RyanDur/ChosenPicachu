@@ -1,4 +1,4 @@
-import {has, maybe, Maybe, some} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 import {columnUnder, displacedBetween, interior, PixelSizes, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
 import {lazyTravel, Moving} from '@components/DragSortableTable/travel';
 import {columnLift, Grab} from '@components/DragSortableTable/lift';
@@ -31,7 +31,8 @@ import {tell} from '../table/events';
 import {arrangeColumns, headersOf, markGrips} from '../table/columns';
 import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {moveReportOf, report} from '../table/report';
-import {provide, TableContext} from '../table/context';
+import {TableContext} from '../table/context';
+import {wireParts} from '../table/parts';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
@@ -153,10 +154,11 @@ const wired = (context: TableContext): void => {
   const {table, store: hand, order, standing} = context;
   hand.subscribe((previous, current) => dress(context, previous, current()));
   markGrips(table);
+  wireParts(context);
   headersOf(table).forEach(th => {
     const held = columnOfHeader(th);
     th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
-    carrying(th, () => some(context));
+    carrying(th, context);
     th.addEventListener('keydown', columnArrows(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
   });
 };
@@ -175,7 +177,6 @@ export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): R
     body,
     lanes: lanesOf(body)
   }));
-  provide(table, context);
   context().map(wired);
   return before => context().map(mounted => reconciled(mounted, before));
 };
