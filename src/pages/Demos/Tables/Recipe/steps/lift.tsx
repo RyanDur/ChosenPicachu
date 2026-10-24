@@ -9,8 +9,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
-      <Says>Asking the DOM where things are mid-drag can force a layout on any move that changed the
-        page, the stutter you came here to avoid, so everything gets measured once, at the grab: the
+      <Says>Everything gets measured once, at the grab: the
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
         header in it. Every later answer is arithmetic against that one <Term word="survey">survey</Term>. The first
         and last columns hold the table in place and cannot be lifted.</Says>
