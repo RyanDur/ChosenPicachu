@@ -28,6 +28,7 @@ import {tell} from '../table/events';
 import {arrangeColumns, headersOf, markGrips} from '../table/columns';
 import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {report} from '../table/report';
+import {supplyTable} from '../table/supply';
 import {provide, TableContext} from '../table/context';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -174,6 +175,7 @@ export class DragSortableTable extends HTMLElement {
   }
 
   connectedCallback(): void {
+    supplyTable(this);
     this.#context().map(wired);
   }
 

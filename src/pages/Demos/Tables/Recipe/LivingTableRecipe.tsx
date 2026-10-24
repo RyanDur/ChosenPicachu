@@ -44,6 +44,20 @@ const dealPlans: Record<World, ReactNode> = {
     hold still while the values change.</Says>
 };
 
+const suppliedBy: Record<World, ReactNode> = {
+  react: <Says>The page writes the head and the body as children
+    of <code>DragSortableTable</code> and passes the caption, the origin and the motion as props. The component
+    supplies the table, the caption and the move report, the output that tells a screen reader what moved. Each row
+    header carries its window as its label, so a screen reader names the row by its window and not by the grip
+    inside it.</Says>,
+  vanilla: <Says>The page writes only the head and the body, inside a <code>template</code> in <code>drag-sortable-table</code>, and
+    names the caption, the origin and the motion on the element. When the browser connects the element it supplies the
+    table, the caption and the move report, the output that tells a screen reader what moved, and moves the head and the
+    body into the table. The template is there because the parser drops the tags of a head or a row written straight
+    inside a new tag and keeps only their text. Whatever a template holds stays as written. Each row header also carries
+    its window as its label, so a screen reader names the row by its window and not by the grip inside it.</Says>
+};
+
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
@@ -59,7 +73,7 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(tableSource, '<thead>', '</th>'), gap,
+      ...span(tableSource, '<drag-sortable-table', '</th>'), gap,
       ...span(tableSource, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[
@@ -127,6 +141,7 @@ const StillStory: FC<{world: World}> = ({world}) =>
             each row leads with a th of its own,
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
             travels with every cell beside it, then a td per measure.</Says>
+          {suppliedBy[world]}
           <Says>You could build this out of divs and grid, and it would look identical. But the table
             element brings behaviour you would otherwise have to build: readers move through it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,

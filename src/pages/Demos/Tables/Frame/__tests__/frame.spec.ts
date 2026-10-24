@@ -5,6 +5,13 @@ import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
 
 describe('the frame table', () => {
+  it('should supply the table the page captions, with its move report beside it', () => {
+    vanillaFrame.stand();
+
+    expect(vanillaFrame.table()).toBeInTheDocument();
+    expect(vanillaFrame.moveReport()).toBeInTheDocument();
+  });
+
   it('should make every movable header a tab stop and leave the anchored edges out', () => {
     vanillaFrame.stand();
 
@@ -41,7 +48,7 @@ describe('the frame table', () => {
     vanillaFrame.stand();
 
     expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('0');
+    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
   });
 
   it('a sort with no values still announces its direction', async () => {
@@ -50,7 +57,7 @@ describe('the frame table', () => {
     await vanillaFrame.choose('trades', 'descending');
 
     expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('0');
+    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -91,8 +98,8 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
-    await waitFor(() => expect(vanillaFrame.figures('session')[0]).toHaveTextContent('2'));
-    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('1');
+    await waitFor(() => expect(vanillaFrame.figure('session', 'trades')).toHaveTextContent('2'));
+    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1');
   });
 
   it('the keyboard walks a column', async () => {
@@ -147,7 +154,7 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'sold')]);
 
-    await waitFor(() => expect(vanillaFrame.figures('session').slice(0, 3).map(figure => figure.textContent)).toEqual(['0', '1', '1']));
+    await waitFor(() => expect(['buys', 'trades', 'sells'].map(column => vanillaFrame.figure('session', column).textContent)).toEqual(['0', '1', '1']));
   });
 
   it('the keyboard walks a row, and its label follows', async () => {

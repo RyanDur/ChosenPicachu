@@ -21,6 +21,7 @@ const header = (name: string): HTMLElement => screen.getByRole('columnheader', {
 const row = (window: string): HTMLElement => screen.getByRole('row', {name: new RegExp(window)});
 const numberedGrip = (rowNumber: number): HTMLElement => screen.getByRole('button', {name: `move row ${rowNumber}`});
 const grip = (window: string): HTMLElement => within(row(window)).getByRole('button', {name: /move row/});
+const columnOrder = (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? '');
 const press = async (...keys: string[]): Promise<void> => {
   for (const key of keys) {
     await userEvent.keyboard(key);
@@ -40,11 +41,13 @@ export const vanillaFrame = {
     }
     feedTheTable(document);
   },
+  table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),
   header,
   row,
   grip,
-  figures: (window: string): HTMLElement[] => within(row(window)).getAllByRole('cell'),
-  columnOrder: (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? ''),
+  figure: (window: string, column: string): HTMLElement =>
+    within(row(window)).getAllByRole('cell')[columnOrder().indexOf(column) - 1],
+  columnOrder,
   windowNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
   choose: async (column: string, choice: MenuChoice): Promise<void> =>

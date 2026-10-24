@@ -115,6 +115,9 @@ describe('the tables tab’s own words', () => {
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
+    {choice: 'world=vanilla', sentence: '<drag-sortable-table caption="Live aggregations by window" origin="hide" motion="animated"> <template> <thead>'},
+    {choice: 'world=vanilla', sentence: 'The page writes only the head and the body, inside a template in drag-sortable-table, and names the caption, the origin and the motion on the element. When the browser connects the element it supplies the table, the caption and the move report, the output that tells a screen reader what moved, and moves the head and the body into the table. The template is there because the parser drops the tags of a head or a row written straight inside a new tag and keeps only their text. Whatever a template holds stays as written. Each row header also carries its window as its label, so a screen reader names the row by its window and not by the grip inside it.'},
+    {choice: 'world=react', sentence: 'The page writes the head and the body as children of DragSortableTable and passes the caption, the origin and the motion as props. The component supplies the table, the caption and the move report, the output that tells a screen reader what moved. Each row header carries its window as its label, so a screen reader names the row by its window and not by the grip inside it.'},
     {choice: 'world=vanilla', sentence: 'The element provides its parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
@@ -152,10 +155,9 @@ describe('the tables tab’s own words', () => {
     await feedIsSubscribed(feed);
     const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
 
-    const action = blocks.findIndex(block => block.includes('a record of what happened'));
     const verbs = blocks.findIndex(block => block.includes('The context’s verbs are the element’s own functions'));
 
-    expect(verbs).toBeGreaterThan(action);
+    expect(blocks.slice(0, Math.max(verbs, 0)).join(' ')).toContain('Every handler ends in a dispatch of an action');
   });
 
   test('should not tell the context’s verbs in the React world', async () => {
@@ -168,6 +170,9 @@ describe('the tables tab’s own words', () => {
 
   test.each([
     {name: 'announce', choice: 'tut=menu&world=vanilla', run: /walks them and/},
+    {name: 'template', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
+    {name: 'drag-sortable-table', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
+    {name: 'DragSortableTable', choice: 'world=react', run: /^The page writes the head and the body as children/},
     {name: 'th', choice: 'tut=menu&world=vanilla', run: /walks them and/},
     {name: 'onRowMoved', choice: 'tut=menu', run: /^Move a row and the sort ends/},
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},

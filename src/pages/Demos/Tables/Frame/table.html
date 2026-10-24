@@ -1,7 +1,6 @@
 <section aria-label="live aggregations" class="aggregations">
-    <drag-sortable-table>
-        <table class="fancy-table sortable apportioned">
-            <caption class="off-screen">Live aggregations by window</caption>
+    <drag-sortable-table caption="Live aggregations by window" origin="hide" motion="animated">
+        <template>
             <thead>
             <tr class="row">
                 <th scope="col" class="cell window header-cell muted-rule-after muted-bar-below focus-ringed"
@@ -220,7 +219,8 @@
             </thead>
             <tbody class="body">
             <tr class="row hover-approached">
-                <th scope="row" class="cell row-header muted-rule-after muted-rule-below">
+                <th scope="row" class="cell row-header muted-rule-after muted-rule-below"
+                    aria-label="this minute">
                     <row-grip>
                         <button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed"
                                 aria-label="move row 1">
@@ -230,9 +230,7 @@
                                 <path d="M4 9.5h16"/>
                                 <path d="M4 14.5h16"/>
                             </svg>
-                        </button>
-                    </row-grip>
-                    this minute
+                        </button></row-grip>this minute
                 </th>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
@@ -242,7 +240,8 @@
                 <td class="cell muted-rule-after muted-rule-below">—</td>
             </tr>
             <tr class="row hover-approached">
-                <th scope="row" class="cell row-header muted-rule-after muted-rule-below">
+                <th scope="row" class="cell row-header muted-rule-after muted-rule-below"
+                    aria-label="last 5 minutes">
                     <row-grip>
                         <button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed"
                                 aria-label="move row 2">
@@ -252,9 +251,7 @@
                                 <path d="M4 9.5h16"/>
                                 <path d="M4 14.5h16"/>
                             </svg>
-                        </button>
-                    </row-grip>
-                    last 5 minutes
+                        </button></row-grip>last 5 minutes
                 </th>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
@@ -264,7 +261,8 @@
                 <td class="cell muted-rule-after muted-rule-below">—</td>
             </tr>
             <tr class="row hover-approached">
-                <th scope="row" class="cell row-header muted-rule-after muted-rule-below">
+                <th scope="row" class="cell row-header muted-rule-after muted-rule-below"
+                    aria-label="last 15 minutes">
                     <row-grip>
                         <button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed"
                                 aria-label="move row 3">
@@ -274,9 +272,7 @@
                                 <path d="M4 9.5h16"/>
                                 <path d="M4 14.5h16"/>
                             </svg>
-                        </button>
-                    </row-grip>
-                    last 15 minutes
+                        </button></row-grip>last 15 minutes
                 </th>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
@@ -286,7 +282,8 @@
                 <td class="cell muted-rule-after muted-rule-below">—</td>
             </tr>
             <tr class="row hover-approached">
-                <th scope="row" class="cell row-header muted-rule-after muted-rule-below">
+                <th scope="row" class="cell row-header muted-rule-after muted-rule-below"
+                    aria-label="this hour">
                     <row-grip>
                         <button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed"
                                 aria-label="move row 4">
@@ -296,9 +293,7 @@
                                 <path d="M4 9.5h16"/>
                                 <path d="M4 14.5h16"/>
                             </svg>
-                        </button>
-                    </row-grip>
-                    this hour
+                        </button></row-grip>this hour
                 </th>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
@@ -308,7 +303,8 @@
                 <td class="cell muted-rule-after muted-rule-below">—</td>
             </tr>
             <tr class="row hover-approached">
-                <th scope="row" class="cell row-header muted-rule-after muted-rule-below">
+                <th scope="row" class="cell row-header muted-rule-after muted-rule-below"
+                    aria-label="session">
                     <row-grip>
                         <button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed"
                                 aria-label="move row 5">
@@ -318,9 +314,7 @@
                                 <path d="M4 9.5h16"/>
                                 <path d="M4 14.5h16"/>
                             </svg>
-                        </button>
-                    </row-grip>
-                    session
+                        </button></row-grip>session
                 </th>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
                 <td class="cell muted-rule-after muted-rule-below">0</td>
@@ -330,7 +324,6 @@
                 <td class="cell muted-rule-after muted-rule-below">—</td>
             </tr>
             </tbody>
-        </table>
-        <output class="off-screen" aria-label="move report"></output>
+        </template>
     </drag-sortable-table>
 </section>
