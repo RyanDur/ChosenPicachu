@@ -46,12 +46,19 @@ const dealPlans: Record<World, ReactNode> = {
 
 const suppliedBy: Record<World, ReactNode> = {
   react: <>
-    <Says>The page writes the head and the body as children of <code>DragSortableTable</code>.</Says>
-    <Says>As props, the values a React component is given by the markup that uses it, the page passes the caption and
-      two choices the later steps explain: <code>origin</code>, whether a carried row’s or column’s cells stay visible
-      in their place, and <code>motion</code>, whether moves animate.</Says>
-    <Says>The component supplies the table, the caption and the move report, the output that tells a screen reader
-      what moved.</Says>
+    <Says>The page writes the whole table itself: the <code>table</code>, its caption, the head and the body, and after
+      it an <code>output</code>, the move report that tells a screen reader what moved, whose <code>for</code> names the
+      table it reports on. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
+      column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
+      table.</Says>
+    <Says>The behaviour arrives through <code>useDragSortable</code>, a hook: a function a component calls while it
+      renders, to keep something across renders or to read something kept outside React. The page calls it with its
+      columns, its rows and the two choices. The hook makes the hand, which holds what is held and the widths, and
+      returns what the parts need to know, the hand’s state, the columns and rows, and the dispatch, and the classes the
+      table wears, since the behaviour’s own sheets read them.</Says>
+    <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
+      inside it one value without adding an element to the page, and the headers, rows, grips, handles and menus read
+      the hook’s answer from it. Nothing writes the table for the page.</Says>
     <Says>Each row header carries its window as its label, so a screen reader names the row by its window and not by
       the grip inside it.</Says>
   </>,
@@ -81,7 +88,8 @@ const suppliedBy: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<Headers onColumnMoved', '</Headers>')
+      ...span(dealSource, '<table id="live-aggregations"', '</Headers>'), gap,
+      ...span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')

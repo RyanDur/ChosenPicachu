@@ -10,8 +10,8 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {liveTable} from '../__test_support/table';
-import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
+import {Column, DragSortable, useDragSortable} from '@components/DragSortableTable';
+import {Motion, Origin} from '@components/DragSortableTable/useDragSortable';
 
 type Dials = {origin: Origin; motion: Motion};
 
@@ -41,9 +41,13 @@ const seat = (Table: Table, dials: Dials = {origin: 'hide', motion: 'animated'},
 
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
-    render(<DragSortableTable caption="a table" origin="hide" motion="animated" columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
-      <thead><tr><Column column="ghost">a header</Column></tr></thead>
-    </DragSortableTable>);
+    const Page: FC = () =>
+      <DragSortable value={useDragSortable([{name: 'window', data: {label: 'window'}}], [], {origin: 'hide', motion: 'animated'})}>
+        <table>
+          <thead><tr><Column column="ghost">a header</Column></tr></thead>
+        </table>
+      </DragSortable>;
+    render(<Page/>);
 
     expect(liveTable.header('ghost')).toBeVisible();
   });

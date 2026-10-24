@@ -10,7 +10,7 @@ import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import storeSource from '@components/store.ts?sample';
 import contextSource from '@components/DragSortableTable/context.ts?sample';
 import selectorsSource from '@components/DragSortableTable/selectors.ts?sample';
-import elementSource from '@components/DragSortableTable/DragSortableTable.tsx?sample';
+import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import demosSource from '@pages/Demos/store.ts?sample';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
 import openingSource from '@pages/Demos/useExchange.ts?sample';
@@ -46,8 +46,8 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The page creates its store once, with the exchange as its middleware, and passes it to
             a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades and the
             same arrangement.</Says>
-          <Says>The table element creates its own store once, empty, and every part inside it reads and writes
-            through that one.</Says>
+          <Says>The hook creates the table’s own store once, empty, and every part inside the provider reads and
+            writes through that one.</Says>
         </>
         : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code>dragSortable</code> two functions that read its columns and rows. <code>dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
       <Codes>
@@ -217,7 +217,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
     <Reveal>
       {world === 'react'
         ? <>
-          <Says>The page’s provider and the table element each subscribe through useSyncExternalStore, React’s hook
+          <Says>The page’s provider and <code>useDragSortable</code> each subscribe through useSyncExternalStore, React’s hook
             for reading a store kept outside React.</Says>
           <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the carried cells’ marks. The markup
             renders through the new state, and React reconciles the page’s elements, moving only the ones whose
@@ -237,7 +237,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(elementSource, 'export const DragSortableTable')
+            ...unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,

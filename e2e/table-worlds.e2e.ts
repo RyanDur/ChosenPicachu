@@ -20,7 +20,7 @@ test('the world dial swaps the stage, from the react table to the vanilla frame 
   await expect(tables.ownTables).toHaveCount(0);
 });
 
-test('the vanilla table reads to a screen reader as the react table does: its caption and its headers on both axes', async ({page}) => {
+test('the vanilla table reads to a screen reader as the react table does: its caption, its headers on both axes and no stray image', async ({page}) => {
   const [react, vanilla] = stages;
   await page.goto(react.at);
   await expect(tablesCard(page).ownTables).toBeVisible();

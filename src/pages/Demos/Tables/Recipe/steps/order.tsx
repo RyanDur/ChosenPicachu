@@ -35,7 +35,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
             ...unit(arrangementSource, 'export type Arrangement')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(tableSource, '<DragSortableTable {...table}', 'rows={seated(rows)}>'), gap,
+            ...span(tableSource, 'const sortable = useDragSortable(', 'return <DragSortable value={sortable}>'), gap,
             ...span(tableSource, '<Headers onColumnMoved', '</Headers>'), gap,
             ...span(tableSource, '<Body onRowMoved', '</Body>')
           ]}/>

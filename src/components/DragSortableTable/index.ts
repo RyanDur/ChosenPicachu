@@ -6,4 +6,5 @@ export {Cell} from './Cell';
 export {Headers} from './Headers';
 export {Row} from './Row';
 export {Body} from './Body';
-export {DragSortableTable} from './DragSortableTable';
+export {DragSortable, reportOf, useDragSortable} from './useDragSortable';
+export type {Motion, Origin} from './useDragSortable';

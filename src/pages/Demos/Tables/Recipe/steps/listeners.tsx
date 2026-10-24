@@ -25,7 +25,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, <code>onColumnMoved</code> or <code>onRowMoved</code> in React and <code>column-moved</code> or <code>row-moved</code> from the table, and comes back down as the next order.</Says>
       {world === 'vanilla' && <Says>The context’s verbs are the build’s own functions, not the actions of the same name: <code>lifted</code> dispatches the <code>lifted</code> action, <code>moved</code> dispatches <code>drifted</code>, and <code>dropped</code> dispatches <code>released</code>.</Says>}
       <Says>Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged. What differs is who subscribes: React subscribes a component, which re-renders; the vanilla page subscribes a listener that calls <code>reconcile</code>, and the table reads the order through the functions it was given and moves its nodes to match.</Says>
-      <Says>Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the <code>onColumnMoved</code> or <code>onRowMoved</code> function the page gave the table; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.</Says>
+      <Says>Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the <code>onColumnMoved</code> or <code>onRowMoved</code> function the page gave the headers or the body; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.</Says>
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(storeSource, 'export type Store'), gap,
@@ -34,7 +34,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(elementSource, 'export const DragSortableTable')
+            ...unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'export const dragSortable = '), gap,

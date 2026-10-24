@@ -7,7 +7,7 @@ import {DialGroup, DialRow} from './DialRow';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
-import type {Motion, Origin} from '@components/DragSortableTable/DragSortableTable';
+import type {Motion, Origin} from '@components/DragSortableTable/useDragSortable';
 
 export type {Motion, Origin};
 

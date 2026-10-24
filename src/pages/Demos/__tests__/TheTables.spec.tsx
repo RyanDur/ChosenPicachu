@@ -112,8 +112,10 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.'},
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls'},
     {choice: 'world=vanilla', sentence: ', the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.'},
+    {choice: 'world=react', sentence: ', the function the vanilla build returned, with the columns as they stood before the change'},
+    {choice: 'world=react', sentence: 'the vanilla listeners cannot count on being remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'dragSortable subscribes once itself, to its own hand.'},
-    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
+    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the headers or the body; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When boot calls dragSortable on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
@@ -125,9 +127,14 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'},
     {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
-    {choice: 'world=react', sentence: 'The page writes the head and the body as children of DragSortableTable.'},
-    {choice: 'world=react', sentence: 'As props, the values a React component is given by the markup that uses it, the page passes the caption and two choices the later steps explain: origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate.'},
-    {choice: 'world=react', sentence: 'The component supplies the table, the caption and the move report, the output that tells a screen reader what moved.'},
+    {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
+    {choice: 'world=react', sentence: 'The behaviour arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices. The hook makes the hand, which holds what is held and the widths, and returns what the parts need to know, the hand’s state, the columns and rows, and the dispatch, and the classes the table wears, since the behaviour’s own sheets read them.'},
+    {choice: 'world=react', sentence: 'The page wraps the table in a'},
+    {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it. Nothing writes the table for the page.'},
+    {choice: 'world=react', sentence: 'The hook creates the table’s own store once, empty, and every part inside the provider reads and writes through that one.'},
+    {choice: 'world=react', sentence: 'The page’s provider and useDragSortable each subscribe through useSyncExternalStore,'},
+    {choice: 'world=react', sentence: '<table id="live-aggregations" className={sortable.className}> <caption className="off-screen">{caption}</caption>'},
+    {choice: 'world=react', sentence: '<output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{reportOf(sortable)}</output>'},
     {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks the table it sits in for it each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
@@ -216,9 +223,12 @@ describe('the tables tab’s own words', () => {
     {name: 'motion', choice: 'world=vanilla', run: /^The page writes the whole table as it would/},
     {name: 'dragSortable', choice: 'world=vanilla', run: /^At boot a script finds every table/},
     {name: 'reconcile', choice: 'world=vanilla', run: /^The call returns/},
-    {name: 'origin', choice: 'world=react', run: /^As props, the values a React component/},
-    {name: 'motion', choice: 'world=react', run: /^As props, the values a React component/},
-    {name: 'DragSortableTable', choice: 'world=react', run: /^The page writes the head and the body as children/},
+    {name: 'table', choice: 'world=react', run: /^The page writes the whole table itself/},
+    {name: 'output', choice: 'world=react', run: /^The page writes the whole table itself/},
+    {name: 'for', choice: 'world=react', run: /^The page writes the whole table itself/},
+    {name: 'origin', choice: 'world=react', run: /^The page writes the whole table itself/},
+    {name: 'motion', choice: 'world=react', run: /^The page writes the whole table itself/},
+    {name: 'useDragSortable', choice: 'world=react', run: /^The behaviour arrives through/},
     {name: 'th', choice: 'tut=menu&world=vanilla', run: /walks the columns and/},
     {name: 'onRowMoved', choice: 'tut=menu', run: /^Move a row and the sort ends/},
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
@@ -1347,8 +1357,13 @@ describe('the tables tutorials’ vocabulary', () => {
       .sort((one, other) => one.compareDocumentPosition(other) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
   };
 
-  const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement | undefined =>
-    blocks.find(block => word.test(block.textContent));
+  const firstSaying = (blocks: HTMLElement[], word: RegExp): HTMLElement => {
+    const found = blocks.find(block => word.test(block.textContent));
+    if (!found) {
+      throw new Error(`no paragraph uses ${word}`);
+    }
+    return found;
+  };
 
   test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
@@ -1387,8 +1402,7 @@ describe('the tables tutorials’ vocabulary', () => {
   test('should mark reconcile as a defined term where the React world first reads it', async () => {
     const first = firstSaying(await prose('world=react', 'the living table'), /\breconcile/);
 
-    expect(first).toBeDefined();
-    expect(first && tablesTab.definedIn(first, 'reconcile')).toBeInTheDocument();
+    expect(tablesTab.definedIn(first, 'reconcile')).toBeInTheDocument();
   });
 
   test('should define a reconcile in prose once in the vanilla world, at the Deal step', async () => {

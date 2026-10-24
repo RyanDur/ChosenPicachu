@@ -189,7 +189,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     holdRow: (row: number): Promise<Hold> => held(page, grip(row), 'y'),
     reading: async (): Promise<string[]> => (await table.getByRole('table').ariaSnapshot()).split('\n')
       .map(line => line.trim())
-      .filter(line => /^- (table|caption|columnheader|rowheader)\b/.test(line)),
+      .filter(line => /^- (table|caption|columnheader|rowheader|img)\b/.test(line)),
     row: (name: RegExp): Locator => table.getByRole('row', {name}),
     moveColumnByKey: async (column: string, key: string): Promise<void> => {
       await columnHeader(column).focus();
