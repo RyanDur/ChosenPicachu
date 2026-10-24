@@ -20,8 +20,8 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
           renders through it, and the same key finds its new place. Carrying the column back is
           just more crossings: where it started is always reachable. The only style that moves between them is
           the shove the animated builds mark, and that is the motion step’s story.</Says>
-        : <Says>Tell the page as soon as a neighbour is struck: the element raises <code>column-moved</code>, the page writes the new
-          order into its arrangement and gives it back, and the element’s <Term word="reconcile">reconcile</Term> moves the real
+        : <Says>Tell the page as soon as a neighbour is struck: the table raises <code>column-moved</code>, the page writes the new
+          order into its arrangement and calls <code>reconcile</code>, which moves the real
           cells to match it. Carrying the
           column back is just more crossings: where it started is always reachable. The only style that
           moves between them is the shove the animated builds mark, and that is the motion step’s
@@ -30,7 +30,7 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
         ? <Says>This is the whole of the eager table’s travel, and there is no landing to keep
           anywhere in it: the header keeps the pointer capture, columnUnder reads the
           survey, and a strike dispatches on the spot.</Says>
-        : <Says>This is the whole travel of the eager element, and there is no landing state to keep
+        : <Says>This is the whole travel of the eager build, and there is no landing state to keep
           anywhere in it: columnUnder reads the survey, and a strike dispatches on the
           spot; the buttons-at-zero recovery is in the shared pointer travel, once, for every
           build.</Says>}
@@ -80,7 +80,7 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
         ? <Says>The lazy table is its own file, not a flag on the eager one: its travel only ever
           dispatches the landing into the drag, and its release, which also handles cancel,
           dispatches the order.</Says>
-        : <Says>The lazy element is its own file, not a flag on the eager one: its travel records the landing in the hand, and its release, which also handles cancel, raises whatever the hand is holding to the page and then lets the hand go.</Says>}
+        : <Says>The lazy build is its own file, not a flag on the eager one: its travel records the landing in the hand, and its release, which also handles cancel, raises whatever the hand is holding on the table and then lets the hand go.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

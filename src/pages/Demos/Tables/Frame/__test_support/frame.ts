@@ -6,7 +6,6 @@ import {Feed} from '@pages/Demos/__test_support/feed';
 import type {Motion, Origin, Pace} from '../../../Controls';
 import {startingTable} from '../starting';
 import {define, feed as feedTheTable} from '../boot';
-import {builds} from '../builds';
 
 type Stage = {
   readonly feed?: Feed;
@@ -29,17 +28,16 @@ const press = async (...keys: string[]): Promise<void> => {
 };
 
 export const vanillaFrame = {
+  arrive: ({origin = 'hide', motion = 'animated'}: Stage = {}): void => {
+    document.body.innerHTML = startingTable({origin, motion});
+  },
   stand: ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
     window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
-    window.__frame = {pace, origin, motion};
     document.body.innerHTML = startingTable({origin, motion});
-    const defined = customElements.get('drag-sortable-table');
-    if (!is(defined)) {
-      define(pace);
-    } else if (defined !== builds[pace]) {
-      throw new Error(`this window defined drag-sortable-table for another pace than ${pace}; stand ${pace} in its own spec file`);
+    if (!is(customElements.get('row-grip'))) {
+      define();
     }
-    feedTheTable(document);
+    feedTheTable(document, pace);
   },
   table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),
   header,

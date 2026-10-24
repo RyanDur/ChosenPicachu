@@ -13,7 +13,6 @@ export {demosStore, feedRequested, selectColumns, selectRows} from '@pages/Demos
 export {landingReport, moveReport} from '@components/DragSortableTable/report';
 
 export type MountedTable = {
-  host: HTMLElement;
   store: TableStore;
   columns: () => readonly TableColumn<Labelled>[];
   rows: () => readonly Measures[];
@@ -24,6 +23,13 @@ export type MountedTable = {
   body: HTMLTableSectionElement;
   lanes: ReadonlyMap<string, HTMLTableRowElement>;
 };
+
+export type Given = {
+  readonly columns: () => readonly TableColumn<Labelled>[];
+  readonly rows: () => readonly Measures[];
+};
+
+export type Reconcile = (before: readonly TableColumn<Labelled>[]) => void;
 
 export const columnOfHeader = (th: Element): string => th.classList.item(1) ?? '';
 

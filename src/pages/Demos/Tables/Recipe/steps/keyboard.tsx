@@ -20,7 +20,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
           reaches every movable piece of the table in order. The focus-visible ring draws for the
           keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by
           name. <code>focus-ringed</code> is one: the site’s ring, which every movable column header and every grip wears.</Says>
-        : <Says>The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order. The focus-visible ring draws for the keyboard only. A shared class is a look
+        : <Says>The row grip is already a button in the markup. When boot calls <code>dragSortable</code> on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order. The focus-visible ring draws for the keyboard only. A shared class is a look
           that lives in the site’s shared sheet and that an element wears by name. <code>focus-ringed</code> is one: the site’s ring,
           which every movable column header and every grip wears.</Says>}
       <Says>The buttons say their tab stop outright: a tabindex of zero on an element that is

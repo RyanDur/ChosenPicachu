@@ -5,10 +5,11 @@ import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
 
 describe('the frame table', () => {
-  it('should supply the table the page captions, with its move report beside it', () => {
-    vanillaFrame.stand();
+  it('should show the captioned table with its rows and its move report before its script runs', () => {
+    vanillaFrame.arrive();
 
     expect(vanillaFrame.table()).toBeInTheDocument();
+    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.moveReport()).toBeInTheDocument();
   });
 

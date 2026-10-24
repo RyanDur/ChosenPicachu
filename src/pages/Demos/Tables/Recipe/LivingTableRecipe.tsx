@@ -56,19 +56,19 @@ const suppliedBy: Record<World, ReactNode> = {
       the grip inside it.</Says>
   </>,
   vanilla: <>
-    <Says>The page writes only the head and the body, inside a <code>template</code> in <code>drag-sortable-table</code>. A
-      template is an element whose contents the browser reads but does not show or run until a script takes them.</Says>
-    <Says><code>drag-sortable-table</code> is a custom element: a tag of the page’s own, registered with the browser,
-      that runs a function of its own when the browser connects it to the page. That function supplies the table, the
-      caption and the move report, the output that tells a screen reader what moved, and moves the head and the body
-      from the template into the table.</Says>
-    <Says>Without the template the head and the rows would stand inside the element with no table around them when the
-      browser reads them. They would lose their own tags, which the parser, the part of the browser that reads markup
-      into elements, drops outside a table, and everything they held would land loose in the section: grips, handles,
-      menus, names and numbers, with no table to read.</Says>
-    <Says>On the element the page names the caption and two choices the later steps explain: <code>origin</code>,
-      whether a carried row’s or column’s cells stay visible in their place, and <code>motion</code>, whether moves
-      animate.</Says>
+    <Says>The page writes the whole table as it would for any table: the <code>table</code>, its caption, the head and
+      the body, and after it an <code>output</code>, the move report that tells a screen reader what moved,
+      whose <code>for</code> names the table it reports on. One attribute, <code>data-drag-sortable</code>, marks the table as
+      one that drag-sorts. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
+      column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
+      table.</Says>
+    <Says>At boot a script finds every table so marked and calls <code>dragSortable</code> on it, the build the pace
+      names, eager or lazy. The call makes the hand, the table’s own store of what is held and the widths, wires the
+      listeners at once, and returns <code>reconcile</code>, the function the page calls whenever its store changes,
+      which moves the cells to the new order and writes the text that changed. The table keeps no copy of the order: the
+      page gives <code>dragSortable</code> two functions that read its columns and rows, and the table asks them when it
+      needs an answer. The table itself is the browser’s, so it shows with its rows before the script runs and without
+      it.</Says>
     <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
       by the grip inside it.</Says>
   </>
@@ -89,7 +89,7 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(tableSource, '<drag-sortable-table', '</th>'), gap,
+      ...span(tableSource, '<table class="fancy-table', '</th>'), gap,
       ...span(tableSource, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[
@@ -108,7 +108,7 @@ const foldSays: Record<World, ReactNode> = {
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows always match the trades the page holds.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
-    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and sets the element’s rows, and the element writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
+    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and calls <code>reconcile</code>, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -121,7 +121,7 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(buildSrc, 'set rows('), gap,
+      ...unit(buildSrc, 'const reconciled = '), gap,
       ...unit(frameRows, 'export const writeCells = ')
     ]}/>
   </Codes>
@@ -129,7 +129,7 @@ const foldCodes: Record<World, ReactNode> = {
 
 const refolds: Record<World, string> = {
   react: 'Then every render refolds every trade the page holds into the windows, because refolding is simple math and cannot drift out of sync.',
-  vanilla: 'Then every arrival refolds every trade the page holds into the windows, the page sets the element’s rows, and the element writes what changed.'
+  vanilla: 'Then every arrival refolds every trade the page holds into the windows, and the page calls reconcile, which writes what changed.'
 };
 
 const StillStory: FC<{world: World}> = ({world}) =>

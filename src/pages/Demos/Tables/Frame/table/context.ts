@@ -19,4 +19,4 @@ export const provide = (table: Element, context: () => Maybe<TableContext>): voi
 };
 
 export const contextOf = (part: Element): Maybe<TableContext> =>
-  maybe(part.closest('drag-sortable-table')).mBind(table => maybe(provided.get(table)).mBind(context => context()));
+  maybe(part.closest('table[data-drag-sortable]')).mBind(table => maybe(provided.get(table)).mBind(context => context()));

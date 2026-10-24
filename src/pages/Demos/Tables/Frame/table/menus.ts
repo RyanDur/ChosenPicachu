@@ -25,8 +25,8 @@ export const announceSort = ({table, columns}: Pick<MountedTable, 'table' | 'col
   }
 };
 
-export const choose = ({host, report}: Pick<MountedTable, 'host' | 'report'>, column: string, direction?: Direction): void => {
-  tell(host, 'sorted', {column, direction});
+export const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, column: string, direction?: Direction): void => {
+  tell(table, 'sorted', {column, direction});
   report({about: 'sort', name: column, direction});
 };
 

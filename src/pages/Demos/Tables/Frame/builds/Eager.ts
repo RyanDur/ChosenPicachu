@@ -4,14 +4,15 @@ import {eagerTravel, Moving} from '@components/DragSortableTable/travel';
 import {columnLift, Grab} from '@components/DragSortableTable/lift';
 import {columnArrows, RowNudge} from '@components/DragSortableTable/arrows';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
-import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {
   Carry,
   columnOfHeader,
   drifted,
   landingReport,
   lifted,
+  Given,
   MountedTable,
+  Reconcile,
   orderAtLift,
   released,
   Report,
@@ -28,13 +29,12 @@ import {tell} from '../table/events';
 import {arrangeColumns, headersOf, markGrips} from '../table/columns';
 import {lanesOf, reseatRows, writeCells} from '../table/rows';
 import {report} from '../table/report';
-import {supplyTable} from '../table/supply';
 import {provide, TableContext} from '../table/context';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
   const from = current.indexOf(name);
-  tell(context.host, 'column-moved', {column: name, to});
+  tell(context.table, 'column-moved', {column: name, to});
   shoveColumns(context, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
 };
 
@@ -65,14 +65,14 @@ const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowN
 
 const rowTo = (context: MountedTable, row: string, to: number): void => {
   const before = context.standing();
-  tell(context.host, 'row-moved', {row, to, standing: before});
+  tell(context.table, 'row-moved', {row, to, standing: before});
   context.report({about: 'row', name: row, position: to, of: before.length});
 };
 
 const rowBeside = (context: MountedTable, row: string, neighbour: string): void => {
   const before = context.standing();
   const to = before.indexOf(neighbour);
-  tell(context.host, 'row-moved', {row, to, standing: before});
+  tell(context.table, 'row-moved', {row, to, standing: before});
   rowShoving(context, row, before, {to, heights: context.store.state.drag?.survey.rowHeights ?? {}});
 };
 
@@ -129,16 +129,12 @@ const withVerbs = (parts: MountedTable): TableContext => {
   return context;
 };
 
-const arranged = (context: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
+const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
   arrangeColumns(context);
+  writeCells(context);
   reseatRows(context);
   dressCarried(context, context.store.state);
   announceSort(context, before);
-};
-
-const seated = (context: MountedTable): void => {
-  writeCells(context);
-  reseatRows(context);
 };
 
 const wired = (context: TableContext): void => {
@@ -153,44 +149,20 @@ const wired = (context: TableContext): void => {
   });
 };
 
-export class DragSortableTable extends HTMLElement {
-  readonly #hand = tableStore();
-  #columns: readonly TableColumn<Labelled>[] = [];
-  #rows: readonly Measures[] = [];
-
-  constructor() {
-    super();
-    provide(this, () => this.#context());
-  }
-
-  set columns(columns: readonly TableColumn<Labelled>[]) {
-    const before = this.#columns;
-    this.#columns = columns;
-    this.#context().map(context => arranged(context, before));
-  }
-
-  set rows(rows: readonly Measures[]) {
-    this.#rows = rows;
-    this.#context().map(seated);
-  }
-
-  connectedCallback(): void {
-    supplyTable(this);
-    this.#context().map(wired);
-  }
-
-  #context(): Maybe<TableContext> {
-    return maybe(this.querySelector('table')).mBind(table => maybe(table.tBodies.item(0)).map(body => withVerbs({
-      host: this,
-      store: this.#hand,
-      columns: () => this.#columns,
-      rows: () => this.#rows,
-      order: () => this.#columns.map(({name}) => name),
-      standing: () => this.#rows.map(row => row.window.display),
-      report: (said: Report) => report(this, said),
-      table,
-      body,
-      lanes: lanesOf(body)
-    })));
-  }
-}
+export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): Reconcile => {
+  const hand = tableStore();
+  const context = (): Maybe<TableContext> => maybe(table.tBodies.item(0)).map(body => withVerbs({
+    store: hand,
+    columns,
+    rows,
+    order: () => columns().map(({name}) => name),
+    standing: () => rows().map(row => row.window.display),
+    report: (said: Report) => report(table, said),
+    table,
+    body,
+    lanes: lanesOf(body)
+  }));
+  provide(table, context);
+  context().map(wired);
+  return before => context().map(mounted => reconciled(mounted, before));
+};

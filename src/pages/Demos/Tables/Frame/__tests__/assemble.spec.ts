@@ -50,7 +50,7 @@ describe('the frame assembly', () => {
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'keep', motion: 'static'});
 
-    expect(dressed).toContain('<drag-sortable-table caption="Live aggregations by window" origin="keep" motion="static">');
+    expect(dressed).toContain('<table class="fancy-table sortable apportioned keep static" id="live-aggregations" data-drag-sortable>');
   });
 
   it('the document carries its environment', () => {

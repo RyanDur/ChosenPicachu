@@ -49,7 +49,7 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The table element creates its own store once, empty, and every part inside it reads and writes
             through that one.</Says>
         </>
-        : <Says>The page and the element split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives the element its columns and rows in order. The element keeps only the hand, empty, as a field of its own, beside the columns and rows it was given. The element’s listeners dispatch the drag and the widths to the hand, and raise to the page whatever changes the order.</Says>}
+        : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code>dragSortable</code> two functions that read its columns and rows. <code>dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
@@ -62,8 +62,7 @@ const OneState: FC<{world: World}> = ({world}) =>
             ...unit(demosSource, 'export const demosStore')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'export class DragSortableTable', '#rows: readonly Measures[] = [];'), gap,
-            ...unit(buildSrc, 'set columns('), gap,
+            ...unit(buildSrc, 'export const dragSortable = '), gap,
             ...span(bootSource, 'const page = demosStore(', 'page.dispatch(feedRequested());')
           ]}/>}
       </Codes>
@@ -140,7 +139,7 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           <Says>Anything a component would derive from state is a selector instead, so the component holds no
             arithmetic over the store.</Says>
         </>
-        : <Says>The element reads the order and the standing from the columns and rows it was last given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
+        : <Says>The table reads the order and the standing from the page’s store, through the two functions it was given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(contextSource, 'export const useTableSelector'), gap,
@@ -179,13 +178,13 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
         candlesRefused.</Says>
       <Says>On feedReleased it hangs up.</Says>
-      <Says>It lets every other action through untouched. Nothing in the page or the element knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
+      <Says>It lets every other action through untouched. Nothing in the page or in <code>dragSortable</code> knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
       {world === 'react'
         ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
           one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <>
-          <Says>The page builds the store with the same layer and dispatches the request last, once it has set the element’s columns and rows and is listening for what the trader does.</Says>
+          <Says>The page builds the store with the same layer and dispatches the request last, once it has called <code>dragSortable</code> on the table and is listening for what the trader does.</Says>
           <Says>The frame’s socket lives as long as the frame does.</Says>
         </>}
       <Codes>
@@ -211,7 +210,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a <code>show</code>, which sets the element’s columns and rows. The element reconciles the table against them, and subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <code>reconcile</code>, the function <code>dragSortable</code> returned, with the columns as they stood before the change, and <code>reconcile</code> moves the table’s cells to the order the page now holds; <code>dragSortable</code> subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
         would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
@@ -228,11 +227,11 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
         </>
         : <>
           <Says>The page listens three times and subscribes once.</Says>
-          <Says>The three listeners take the events the element tells it, column-moved, row-moved and sorted, each dispatched into the arrangement; the one subscription sets the element’s columns and rows whenever the store changes, and the element’s setters move the real cells, touching only the ones whose place changed.</Says>
+          <Says>The three listeners take the events the table raises, <code>column-moved</code>, <code>row-moved</code> and <code>sorted</code>, each dispatched into the arrangement; the one subscription calls <code>reconcile</code> whenever the store changes, and <code>reconcile</code> moves the real cells, touching only the ones whose place changed.</Says>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
-          <Says>The element’s rows setter writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
-          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s <code>show</code> reads the page’s state each time it runs and keeps nothing of its own, and of the page’s state the element keeps only the last columns and rows it was set.</Says>
+          <Says><code>reconcile</code> writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
+          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own; the table keeps none of the page’s state either: it asks for the columns and rows each time.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -241,7 +240,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
-            ...span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(show);')
+            ...span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
           ]}/>}
       </Codes>
     </Reveal>

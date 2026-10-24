@@ -94,7 +94,7 @@ const handleSays: Record<World, ReactNode> = {
       whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
       and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
       on a touchscreen.</Says>
-    <Says>In the vanilla build the button is wrapped by <code>resize-handle</code>, a custom element too. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
+    <Says>In the vanilla build the button is wrapped by <code>resize-handle</code>, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.</Says>
   </>
 };
 

@@ -45,8 +45,8 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           whole answer. The rows cut to their ranked seats on the next frame, in the animated
           table and the static one alike.</Says>
         : <>
-          <Says>The toggle and its menu are wrapped by <code>sort-menu</code>, a custom element too. On connect it finds its direction buttons.</Says>
-          <Says>When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls <code>choose</code>, which raises <code>sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows. Setting the rows reseats them in the same call. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
+          <Says>The toggle and its menu are wrapped by <code>sort-menu</code>, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.</Says>
+          <Says>When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls <code>choose</code>, which raises <code>sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls <code>reconcile</code>, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -175,8 +175,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               direction. When the page gives the table its columns it marks the sorting one, and
               only that one, so the <code>th</code> announces <code>aria-sort</code> from what it was given and the toggle
               wears the direction’s glyph from that attribute.</Says>
-            : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page sets the element’s
-              columns with a new sort, <code>announceSort</code> walks them and <code>announce</code>, one function, sets each <code>th</code> from what
+            : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page calls <code>reconcile</code> after a new sort, <code>announceSort</code> walks the columns and <code>announce</code>, one function, sets each <code>th</code> from what
               it was given: the sorting <code>th</code> gains <code>aria-sort</code>, and every other <code>th</code> loses it. One value holds the sort, so the headers always agree with
               it.</Says>}
           <Codes>
@@ -273,7 +272,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               element by what it contains, pads for the toggle when one is there.</Says>
             : <Says><code>sort-menu</code> stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge. And not every column offers a menu: menus
               exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
-              contains, pads for the toggle when one is there, and the element reads the sortable set off its own markup.</Says>}
+              contains, pads for the toggle when one is there, and <code>reconcile</code> reads the sortable set off the table’s markup each time it writes the cells.</Says>}
           <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
             browser’s button chrome, <code>muted-ink</code> greys its glyph, and <code>attentive</code> fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>
