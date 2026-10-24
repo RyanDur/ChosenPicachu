@@ -56,7 +56,8 @@ const suppliedBy: Record<World, ReactNode> = {
       columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
       when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
-      subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths.</Says>
+      subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a
+      move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.</Says>
     <Says>The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the
       classes the table wears, since the behaviour’s own sheets read them.</Says>
     <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
@@ -90,8 +91,11 @@ const suppliedBy: Record<World, ReactNode> = {
 
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
+    <Snippet label="TS" lines={[
+      ...span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
+    ]}/>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, 'const sortable = useDragSortable(', '</Headers>'), gap,
+      ...span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>'), gap,
       ...span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[

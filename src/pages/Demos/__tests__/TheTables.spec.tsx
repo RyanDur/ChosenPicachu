@@ -129,7 +129,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
     {choice: 'world=react', sentence: 'The behaviour arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices.'},
-    {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths.'},
+    {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.'},
     {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behaviour’s own sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
     {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it.'},
@@ -1100,6 +1100,16 @@ describe('the living table’s terms', () => {
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.findPart('the still table')).toHaveTextContent(sentence);
+  });
+
+  test('should show the page’s useDragSortable call in the React Deal sample, in the still table', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const still = await tablesTab.findPart('the still table');
+
+    expect(tablesTab.samplesIn(still, 'TS').map(sample => sample.textContent))
+      .toContainEqual(expect.stringContaining('const sortable = useDragSortable(columns, seated(rows), {origin, motion});'));
   });
 
   test('should define the ledger in plain words where the still table first uses it', async () => {
