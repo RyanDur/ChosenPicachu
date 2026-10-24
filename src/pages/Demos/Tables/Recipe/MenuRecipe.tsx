@@ -45,7 +45,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           whole answer. The rows cut to their ranked seats on the next frame, in the animated
           table and the static one alike.</Says>
         : <>
-          <Says>The toggle and its menu are wrapped by <code>sort-menu</code>, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.</Says>
+          <Says>The toggle and its menu are wrapped by <code>sort-menu</code>, a custom element too. On connect it finds its direction buttons.</Says>
           <Says>When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls <code>choose</code>, which raises <code>sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows. Setting the rows reseats them in the same call. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
         </>}
       <Codes>

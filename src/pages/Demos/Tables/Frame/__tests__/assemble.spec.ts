@@ -1,6 +1,5 @@
 import {frameDocument, sheets} from '../assemble';
 import indexCss from '../../../../../index.css?raw';
-import tableHtml from '../table.html?raw';
 
 const styleSheets = import.meta.glob<string>('../../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
 
@@ -47,7 +46,11 @@ describe('the frame assembly', () => {
   });
 
   it('the document carries the starting table dressed by the dials', () => {
-    expect(document()).toContain(tableHtml.replace('class="fancy-table sortable apportioned"', 'class="fancy-table sortable apportioned hide animated"'));
+    const dressed = frameDocument(
+      {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
+      {pace: 'eager', origin: 'keep', motion: 'static'});
+
+    expect(dressed).toContain('<drag-sortable-table caption="Live aggregations by window" origin="keep" motion="static">');
   });
 
   it('the document carries its environment', () => {

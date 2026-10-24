@@ -45,17 +45,31 @@ const dealPlans: Record<World, ReactNode> = {
 };
 
 const suppliedBy: Record<World, ReactNode> = {
-  react: <Says>The page writes the head and the body as children
-    of <code>DragSortableTable</code> and passes the caption, the origin and the motion as props. The component
-    supplies the table, the caption and the move report, the output that tells a screen reader what moved. Each row
-    header carries its window as its label, so a screen reader names the row by its window and not by the grip
-    inside it.</Says>,
-  vanilla: <Says>The page writes only the head and the body, inside a <code>template</code> in <code>drag-sortable-table</code>, and
-    names the caption, the origin and the motion on the element. When the browser connects the element it supplies the
-    table, the caption and the move report, the output that tells a screen reader what moved, and moves the head and the
-    body into the table. The template is there because the parser drops the tags of a head or a row written straight
-    inside a new tag and keeps only their text. Whatever a template holds stays as written. Each row header also carries
-    its window as its label, so a screen reader names the row by its window and not by the grip inside it.</Says>
+  react: <>
+    <Says>The page writes the head and the body as children of <code>DragSortableTable</code>, and passes it the
+      caption and the same two choices, origin and motion, as props, the values a React component is given by the
+      markup that uses it.</Says>
+    <Says>The component supplies the table, the caption and the move report, the output that tells a screen reader
+      what moved.</Says>
+    <Says>Each row header carries its window as its label, so a screen reader names the row by its window and not by
+      the grip inside it.</Says>
+  </>,
+  vanilla: <>
+    <Says>The page writes only the head and the body, inside a <code>template</code> in <code>drag-sortable-table</code>. A
+      template is an element whose contents the browser reads but does not show or run until a script takes them. On
+      the element the page names the caption and two choices the later steps explain, <code>origin</code>, whether a
+      carried row’s or column’s cells stay visible in their place, and <code>motion</code>, whether moves animate.</Says>
+    <Says><code>drag-sortable-table</code> is a custom element: a tag of the page’s own, registered with the browser,
+      that runs a function of its own when the browser connects it to the page. That function supplies the table, the
+      caption and the move report, the output that tells a screen reader what moved, and moves the head and the body
+      from the template into the table.</Says>
+    <Says>The template is there because the element, not the page, supplies the table. Written straight inside the
+      element with no table around them, the head and the rows would lose their own tags, which the parser drops
+      outside a table, and everything they held would land loose in the section: grips, handles, menus, names and
+      numbers, with no table to read.</Says>
+    <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
+      by the grip inside it.</Says>
+  </>
 };
 
 const dealCodes: Record<World, ReactNode> = {

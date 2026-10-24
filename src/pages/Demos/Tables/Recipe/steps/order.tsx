@@ -15,8 +15,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         the page handles. The open
         question is how each world makes the page follow a value: React renders the markup
         through it; a vanilla custom element has to <Term word="reconcile">reconcile</Term> the DOM against
-        it by hand. A custom element is a tag of the page’s own, registered with the browser, that runs a function of its own
-        when the browser connects it to the page.</Says>
+        it by hand.</Says>
     </Words>
     <Reveal>
       {world === 'react'
