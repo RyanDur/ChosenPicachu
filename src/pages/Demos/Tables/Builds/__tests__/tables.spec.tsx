@@ -10,8 +10,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {liveTable} from '../__test_support/table';
-import {Column, DragSortable, useDragSortable} from '@components/DragSortableTable';
-import {Motion, Origin} from '@components/DragSortableTable/useDragSortable';
+import {Column, DragSortable, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
 
 type Dials = {origin: Origin; motion: Motion};
 

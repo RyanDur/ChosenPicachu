@@ -4,22 +4,12 @@ import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import {UserMenu} from './UserMenu';
-import {
-  Body,
-  Cell,
-  Column,
-  DraggableColumn,
-  DragSortable,
-  Headers,
-  Row,
-  RowHeader
-} from '@components/DragSortableTable';
+import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, reportOf, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import {fullNameOf} from '@components/Users/UserInfo/user';
-import {reportOf, useDragSortable} from '@components/DragSortableTable/useDragSortable';
 
 export const UsersTable: FC = () => {
   const dispatch = useUsersDispatch();

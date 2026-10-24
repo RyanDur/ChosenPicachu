@@ -20,8 +20,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
     <Reveal>
       {world === 'react'
         ? <Says>Rows and columns arrive in whatever order the fold produced. The page holds the
-          columns and the <Term word="seats">seats</Term>, each in the order it stands, and passes the
-          table both, the rows already in their standing. The page writes its header cells once,
+          columns and the <Term word="seats">seats</Term>, each in the order it stands, and passes both to <code>useDragSortable</code>, the rows already in their standing. The page writes its header cells once,
           in any order it likes, and the header row places them by the columns as they stand;
           each row places its cells the same way. A moved column or row is an event the page
           dispatches into its own order. A reorder never touches the data, and nothing reads the
@@ -34,8 +33,10 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
           <Snippet label="TS" lines={[
             ...unit(arrangementSource, 'export type Arrangement')
           ]}/>
+          <Snippet label="TS" lines={[
+            ...span(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
+          ]}/>
           <Snippet label="HTML" lines={[
-            ...span(tableSource, 'const sortable = useDragSortable(', 'return <DragSortable value={sortable}>'), gap,
             ...span(tableSource, '<Headers onColumnMoved', '</Headers>'), gap,
             ...span(tableSource, '<Body onRowMoved', '</Body>')
           ]}/>

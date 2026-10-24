@@ -4,8 +4,7 @@ import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {Measured, Measures, seated} from '../../Aggregations/cells';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';
-import {Motion, Origin, reportOf, useDragSortable} from '@components/DragSortableTable/useDragSortable';
-import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Row, RowHeader} from '@components/DragSortableTable';
+import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Motion, Origin, reportOf, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
 
 type Props = HeaderEvents & BodyEvents & {
   caption: string;

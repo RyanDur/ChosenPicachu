@@ -1,13 +1,12 @@
 import {FC, PropsWithChildren} from 'react';
 import * as schema from 'schemawax';
-import {DragStyle} from '@components/DragSortableTable';
+import {DragStyle, Motion, Origin} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
 import {roomToStandOpen} from '@components/room';
 import {DialGroup, DialRow} from './DialRow';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
-import type {Motion, Origin} from '@components/DragSortableTable/useDragSortable';
 
 export type {Motion, Origin};
 

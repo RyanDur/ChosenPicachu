@@ -128,10 +128,15 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
-    {choice: 'world=react', sentence: 'The behaviour arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices. The hook makes the hand, which holds what is held and the widths, and returns what the parts need to know, the hand’s state, the columns and rows, and the dispatch, and the classes the table wears, since the behaviour’s own sheets read them.'},
+    {choice: 'world=react', sentence: 'The behaviour arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices.'},
+    {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths.'},
+    {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behaviour’s own sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
-    {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it. Nothing writes the table for the page.'},
-    {choice: 'world=react', sentence: 'The hook creates the table’s own store once, empty, and every part inside the provider reads and writes through that one.'},
+    {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it.'},
+    {choice: 'world=react', sentence: 'useDragSortable creates the table’s own store once, empty, and every part inside DragSortable, the provider, reads and writes through that one.'},
+    {choice: 'world=react', sentence: 'and passes both to useDragSortable, the rows already in their standing.'},
+    {choice: 'world=react', sentence: 'Both builds call the table’s store the hand. It holds the drag and the widths once measured. The React build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes.'},
+    {choice: 'world=vanilla', sentence: 'and passes that projection to the table’s behaviour in the order it should stand.'},
     {choice: 'world=react', sentence: 'The page’s provider and useDragSortable each subscribe through useSyncExternalStore,'},
     {choice: 'world=react', sentence: '<table id="live-aggregations" className={sortable.className}> <caption className="off-screen">{caption}</caption>'},
     {choice: 'world=react', sentence: '<output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{reportOf(sortable)}</output>'},
@@ -1390,7 +1395,7 @@ describe('the tables tutorials’ vocabulary', () => {
   });
 
   test.each([
-    {world: 'react', term: /\bthe hand\b/, region: 'the living table', saying: 'In the vanilla build the code calls the table’s store the hand. It holds the drag and the widths once measured.'},
+    {world: 'react', term: /\bthe hand\b/, region: 'the still table', saying: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked.'},
     {world: 'vanilla', term: /\bthe hand\b/, region: 'the still table', saying: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked.'},
     {world: 'vanilla', term: /\breconcile\b/, region: 'the still table', saying: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'}
   ])('should define $term where the $world world first uses it, in $region', async ({world, term, region, saying}) => {

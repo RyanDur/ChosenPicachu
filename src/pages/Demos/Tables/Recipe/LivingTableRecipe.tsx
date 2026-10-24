@@ -53,12 +53,15 @@ const suppliedBy: Record<World, ReactNode> = {
       table.</Says>
     <Says>The behaviour arrives through <code>useDragSortable</code>, a hook: a function a component calls while it
       renders, to keep something across renders or to read something kept outside React. The page calls it with its
-      columns, its rows and the two choices. The hook makes the hand, which holds what is held and the widths, and
-      returns what the parts need to know, the hand’s state, the columns and rows, and the dispatch, and the classes the
-      table wears, since the behaviour’s own sheets read them.</Says>
+      columns, its rows and the two choices.</Says>
+    <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
+      when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
+      subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths.</Says>
+    <Says>The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the
+      classes the table wears, since the behaviour’s own sheets read them.</Says>
     <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
       inside it one value without adding an element to the page, and the headers, rows, grips, handles and menus read
-      the hook’s answer from it. Nothing writes the table for the page.</Says>
+      the hook’s answer from it.</Says>
     <Says>Each row header carries its window as its label, so a screen reader names the row by its window and not by
       the grip inside it.</Says>
   </>,
@@ -88,7 +91,7 @@ const suppliedBy: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<table id="live-aggregations"', '</Headers>'), gap,
+      ...span(dealSource, 'const sortable = useDragSortable(', '</Headers>'), gap,
       ...span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[

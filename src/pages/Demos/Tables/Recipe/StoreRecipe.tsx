@@ -46,8 +46,8 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The page creates its store once, with the exchange as its middleware, and passes it to
             a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades and the
             same arrangement.</Says>
-          <Says>The hook creates the table’s own store once, empty, and every part inside the provider reads and
-            writes through that one.</Says>
+          <Says><code>useDragSortable</code> creates the table’s own store once, empty, and every part inside <code>DragSortable</code>,
+            the provider, reads and writes through that one.</Says>
         </>
         : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code>dragSortable</code> two functions that read its columns and rows. <code>dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
       <Codes>
@@ -103,8 +103,7 @@ const ActionsAreData: FC = () =>
         reducer that writes it.</Says>
       <Says>The parts hold no state and compose no reducers: they ask the store, and they dispatch to it.</Says>
       <Says>The table is never given the trades. The page projects them into rows, a key and the value under each
-        column, ranked by the sort while one holds, and passes that projection to the table element beside its
-        markup in the order it should stand.</Says>
+        column, ranked by the sort while one holds, and passes that projection to the table’s behaviour in the order it should stand.</Says>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
@@ -258,9 +257,8 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
     <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
       records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
-    <Tell>In the vanilla build the code calls the table’s store the hand. It holds the drag and the widths once
-      measured. The React build calls it store and keeps the marks a move leaves in it too; the vanilla build writes
-      those marks onto the cells as classes. Each table has one. It holds only what the trader
+    <Tell>Both builds call the table’s store the hand. It holds the drag and the widths once measured. The React
+      build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes. Each table has one. It holds only what the trader
       does to it, and it raises what the trader did back to the page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>
