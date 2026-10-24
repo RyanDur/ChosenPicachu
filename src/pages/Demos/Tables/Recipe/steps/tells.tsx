@@ -42,7 +42,8 @@ export const AgainstTheStream: FC = () =>
     the data itself, but every trade that lands would fight every drag. So the columns and
     the seats are the state, in their order; a trade rewrites a row’s values under its key,
     and the markup renders through them. Moving a column is just changing the
-    order. I could ask the DOM where everything is as the pointer moves,
+    order. I could ask the DOM, the page’s tree of elements and text that the browser builds from the HTML, where
+    everything is as the pointer moves,
     but layout queries during a drag cause the jank you are trying to avoid. So the lift
     measures everything the drag needs at the grab, as the lift step shows.</Tell>;
 
@@ -52,7 +53,7 @@ export const OwnedPixels: FC<{world: World}> = ({world}) =>
     rule a class switches on. JavaScript only decides what the state is,
     and {world === 'react'
     ? 'React affords nothing the DOM does not give you'
-    : 'there is no framework in the document'}: a move of a node, one element or piece of text in the page’s tree,
+    : 'there is no framework in the document'}: a move of a node, one element or piece of text in the DOM,
     is <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
     events, the state is a value. Each code block below is labelled with which of the
     three languages is doing the work.</Tell>;

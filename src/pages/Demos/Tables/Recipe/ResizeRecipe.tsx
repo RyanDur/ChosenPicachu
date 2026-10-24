@@ -269,7 +269,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
         </Reveal>
       </Step>
       <Step title="Capture the pointer, measure once">
-        <Words want="Pointer positions arrive in pixels while the ledger holds shares, and asking the DOM for the table’s width on every move forces a layout each time.">
+        <Words want="Pointer positions arrive in pixels while the ledger holds shares, and asking the DOM, the page’s tree of elements and text that the browser builds from the HTML, for the table’s width on every move forces a layout each time.">
           <Says>Capture on the handle, which is safe here because unlike the sort’s cells the
             handle never moves in the DOM, and measure the table once: pixels per share, the
             resize’s own <Term word="survey">survey</Term>.</Says>

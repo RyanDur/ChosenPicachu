@@ -29,8 +29,8 @@ describe('the tables tab’s own words', () => {
     'I could let each chart and each table keep its own copy of the trades.',
     'My first draft dispatched functions from state to state and called them reducers. They were not reducers: a reducer interprets an action it did not write.',
     'I could reorder the data itself, but every trade that lands would fight every drag. So the columns and the seats are the state, in their order; a trade rewrites a row’s values under its key, and the markup renders through them.',
-    'I could ask the DOM where everything is as the pointer moves, but layout queries during a drag cause the jank you are trying to avoid.',
-    'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: a move of a node, one element or piece of text in the page’s tree, is insertBefore, the handlers are events, the state is a value.',
+    'I could ask the DOM, the page’s tree of elements and text that the browser builds from the HTML, where everything is as the pointer moves, but layout queries during a drag cause the jank you are trying to avoid.',
+    'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: a move of a node, one element or piece of text in the DOM, is insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
     'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state.',
@@ -52,7 +52,7 @@ describe('the tables tab’s own words', () => {
 
   test.each([
     {choice: 'world=vanilla', sentence: 'So I deal the opening widths from the page’s stylesheet. With table-layout: fixed the header widths govern their whole columns, so the table always fills its container and the columns hold still while the values change.'},
-    {choice: 'world=vanilla', sentence: 'JavaScript only decides what the state is, and there is no framework in the document: a move of a node, one element or piece of text in the page’s tree, is insertBefore, the handlers are events, the state is a value.'},
+    {choice: 'world=vanilla', sentence: 'JavaScript only decides what the state is, and there is no framework in the document: a move of a node, one element or piece of text in the DOM, is insertBefore, the handlers are events, the state is a value.'},
     {choice: 'world=vanilla', sentence: 'so a reorder never touches the data: the same lane finds its new seat, and insertBefore moves the real node only when its seat changed.'},
     {choice: 'world=vanilla', sentence: 'When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.'},
     {choice: 'track=keyboard', sentence: 'I could build the keyboard its own sorting system, but the state, the clamps and the slides already exist. So this track is about access: focus reaches every grip and every header, and two arrow keys do everything a drag does.'},
@@ -1398,6 +1398,12 @@ describe('the tables tutorials’ vocabulary', () => {
     expect(firstSaying(blocks, /\bpromises?\b/)).toHaveTextContent('This particular table keeps three more promises. A dial’s promise is what the table guarantees under that setting.');
   });
 
+  test('should say what the DOM is where the resize build first names it', async () => {
+    const blocks = await prose('tut=resize', 'build the drag resize yourself');
+
+    expect(firstSaying(blocks, /\bDOM\b/)).toHaveTextContent('asking the DOM, the page’s tree of elements and text that the browser builds from the HTML, for the table’s width on every move forces a layout each time.');
+  });
+
   test('should name the ledger before the resize build uses it', async () => {
     const blocks = await prose('tut=resize', 'build the drag resize yourself');
 
@@ -1407,7 +1413,11 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each([
     {world: 'react', term: /\bthe hand\b/, region: 'the still table', saying: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked.'},
     {world: 'vanilla', term: /\bthe hand\b/, region: 'the still table', saying: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked.'},
-    {world: 'vanilla', term: /\breconcile\b/, region: 'the still table', saying: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'}
+    {world: 'vanilla', term: /\breconcile\b/, region: 'the still table', saying: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'},
+    {world: 'react', term: /\bnodes?\b/, region: 'build the drag sort yourself', saying: 'a move of a node, one element or piece of text in the DOM, is insertBefore'},
+    {world: 'vanilla', term: /\bnodes?\b/, region: 'build the drag sort yourself', saying: 'a move of a node, one element or piece of text in the DOM, is insertBefore'},
+    {world: 'react', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'I could ask the DOM, the page’s tree of elements and text that the browser builds from the HTML, where everything is as the pointer moves'},
+    {world: 'vanilla', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'I could ask the DOM, the page’s tree of elements and text that the browser builds from the HTML, where everything is as the pointer moves'}
   ])('should define $term where the $world world first uses it, in $region', async ({world, term, region, saying}) => {
     const blocks = await prose(`world=${world}`, region);
 
