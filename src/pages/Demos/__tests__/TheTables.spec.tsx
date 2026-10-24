@@ -44,7 +44,7 @@ describe('the tables tab’s own words', () => {
     'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
     'a column sized by its content widens with a longer number and moves every column beside it.',
     'Everything gets measured once, at the grab: the table’s bounding rect and every header in it. Every later answer is arithmetic against that one'
-  ])('should say, whatever the dials, words and links together: %s', async sentence => {
+  ])('should say, at the opening dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
