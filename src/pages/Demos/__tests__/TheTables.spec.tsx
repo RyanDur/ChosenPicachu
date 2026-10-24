@@ -29,7 +29,7 @@ describe('the tables tab’s own words', () => {
     'I could let each chart and each table keep its own copy of the trades.',
     'My first draft dispatched functions from state to state and called them reducers. They were not reducers: a reducer interprets an action it did not write.',
     'I could reorder the data itself, but every trade that lands would fight every drag. So the columns and the seats are the state, in their order; a trade rewrites a row’s values under its key, and the markup renders through them.',
-    'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves, but each answer makes the browser do its layout, the work of deciding every box’s size and place, and a drag that waits on that work stutters.',
+    'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves, but each answer after the page has changed makes the browser redo its layout, and a drag that waits on that work stutters.',
     'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: a move of a node, one element or piece of text in the DOM, is insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
@@ -1383,7 +1383,7 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each(builds)('should keep the figures the plain verbs replaced out of $region, with $at', async ({at, region}) => {
     const words = (await prose(at, region)).map(block => block.textContent).join(' ');
 
-    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)|undress\w*|buys|owes?|sells|born|hands|handed)\b/i);
+    expect(words).not.toMatch(/\b(hears?|speaks?|rides?|dress(es|ed)|undress\w*|buys|owes?|sells|born|hands|handed|jank\w*|thrash\w*)\b/i);
   });
 
   test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
@@ -1404,12 +1404,6 @@ describe('the tables tutorials’ vocabulary', () => {
     expect(firstSaying(blocks, /\bDOM\b/)).toHaveTextContent('The DOM is the page’s tree of elements and text that the browser builds from the HTML. Asking it for the table’s width');
   });
 
-  test('should say what layout is where the resize build first names it', async () => {
-    const blocks = await prose('tut=resize', 'build the drag resize yourself');
-
-    expect(firstSaying(blocks, /(?<!table[- ])\blayout\b/)).toHaveTextContent('forces a layout each time, the browser’s work of deciding every box’s size and place.');
-  });
-
   test('should name the ledger before the resize build uses it', async () => {
     const blocks = await prose('tut=resize', 'build the drag resize yourself');
 
@@ -1424,8 +1418,8 @@ describe('the tables tutorials’ vocabulary', () => {
     {world: 'vanilla', term: /\bnodes?\b/, region: 'build the drag sort yourself', saying: 'a move of a node, one element or piece of text in the DOM, is insertBefore'},
     {world: 'react', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves'},
     {world: 'vanilla', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves'},
-    {world: 'react', term: /(?<!table[- ])\blayout\b/, region: 'build the drag sort yourself', saying: 'each answer makes the browser do its layout, the work of deciding every box’s size and place'},
-    {world: 'vanilla', term: /(?<!table[- ])\blayout\b/, region: 'build the drag sort yourself', saying: 'each answer makes the browser do its layout, the work of deciding every box’s size and place'}
+    {world: 'react', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'every new number makes the browser redo its layout, the work of deciding every box’s size and place.'},
+    {world: 'vanilla', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'every new number makes the browser redo its layout, the work of deciding every box’s size and place.'}
   ])('should define $term where the $world world first uses it, in $region', async ({world, term, region, saying}) => {
     const blocks = await prose(`world=${world}`, region);
 

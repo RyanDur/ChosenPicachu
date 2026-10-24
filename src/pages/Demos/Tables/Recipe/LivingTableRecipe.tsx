@@ -26,7 +26,7 @@ const dealPlans: Record<World, ReactNode> = {
   react: <>
     <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared
       once, each with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content, but a live table
-      would never hold still: every new number re-negotiates the layout. And you could carry widths in
+      would never hold still: every new number makes the browser redo its layout, the work of deciding every box’s size and place. And you could carry widths in
       the data, but they are layout, not data. So I deal the opening widths from the page’s stylesheet.
       With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills
       its container and the columns hold still while the values change.</Says>
@@ -37,7 +37,7 @@ const dealPlans: Record<World, ReactNode> = {
   </>,
   vanilla: <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are
     declared once, each a header cell with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content,
-    but a live table would never hold still: every new number re-negotiates the layout. And you
+    but a live table would never hold still: every new number makes the browser redo its layout, the work of deciding every box’s size and place. And you
     could carry widths in the markup, but they are layout, not content. So I deal the opening widths from the page’s
     stylesheet. With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills its
     container and the columns
