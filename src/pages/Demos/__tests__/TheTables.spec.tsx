@@ -41,7 +41,9 @@ describe('the tables tab’s own words', () => {
     '// a cancel, or a move with no buttons down, is the drop itself',
     'I could build rows their own machinery, but the need is the same motion turned vertical, so rows reuse what the columns built. Three things differ: a grip button to grab, row heights in the survey, and a vertical hit test. The promises the dials set carry over unchanged.',
     'focusable by birth; the keyboard track builds on it',
-    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.'
+    'Ask, dispatch and subscribe together are the store, one plain object that both worlds mount unchanged.',
+    'a column sized by its content widens with a longer number and moves every column beside it.',
+    'Everything gets measured once, at the grab: the table’s bounding rect and every header in it. Every later answer is arithmetic against that one'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -150,8 +152,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are the button and the menu the page writes, marked data-sort-toggle and data-sort-menu. When boot calls dragSortable it finds the menu’s direction buttons and wires each.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it calls choose with the context dragSortable gave it, what the table knows about itself and the functions it answers with; choose raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls reconcile, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
-    {choice: 'tut=resize&world=vanilla', sentence: 'Asking it for the table’s width on every move forces a layout each time, since every move changes a width.'},
-    {choice: 'tut=sort&world=vanilla', sentence: 'Everything gets measured once, at the grab: the table’s bounding rect and every header in it. Every later answer is arithmetic against that one'},
+    {choice: 'tut=resize', sentence: 'Asking it for the table’s width on every move forces a layout each time, since every move changes a width.'},
     {choice: 'tut=menu&world=react', sentence: 'The toggle and the menu each stop the pointerdown, so the header never gets your press. The toggle sits itself at the header’s end edge.'},
     {choice: 'tut=menu&world=react', sentence: 'SortMenu is the whole chooser: three buttons naming the three choices, raising onSorted with which column asked for what.'},
     {choice: 'world=vanilla', sentence: 'Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.'},
@@ -1420,8 +1421,8 @@ describe('the tables tutorials’ vocabulary', () => {
     {world: 'vanilla', term: /\bnodes?\b/, region: 'build the drag sort yourself', saying: 'a move of a node, one element or piece of text in the DOM, is insertBefore'},
     {world: 'react', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves'},
     {world: 'vanilla', term: /\bDOM\b/, region: 'build the drag sort yourself', saying: 'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves'},
-    {world: 'react', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'every new number makes the browser redo its layout, the work of deciding every box’s size and place, and a column sized by its content widens with a longer number and moves every column beside it.'},
-    {world: 'vanilla', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'every new number makes the browser redo its layout, the work of deciding every box’s size and place, and a column sized by its content widens with a longer number and moves every column beside it.'}
+    {world: 'react', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'Each time, the browser redoes its layout, the work of deciding every box’s size and place.'},
+    {world: 'vanilla', term: /(?<!table[- ])\blayout\b/, region: 'the still table', saying: 'Each time, the browser redoes its layout, the work of deciding every box’s size and place.'}
   ])('should define $term where the $world world first uses it, in $region', async ({world, term, region, saying}) => {
     const blocks = await prose(`world=${world}`, region);
 
