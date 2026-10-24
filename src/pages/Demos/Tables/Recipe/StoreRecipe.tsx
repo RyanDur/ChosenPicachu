@@ -178,7 +178,7 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
         candlesRefused.</Says>
       <Says>On feedReleased it hangs up.</Says>
-      <Says>It lets every other action through untouched. Nothing in the page or in <code>dragSortable</code> knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
+      <Says>It lets every other action through untouched. Nothing in the page or in the table knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
       {world === 'react'
         ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
           one <Term word="effect">effect</Term> dispatches the request

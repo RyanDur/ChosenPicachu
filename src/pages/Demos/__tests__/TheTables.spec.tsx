@@ -88,7 +88,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize', sentence: 'of a hundred, created by measuring the rendered headers when a handle is first pressed or focused; until then, the stylesheet owns the widths and no ledger exists.'},
     {choice: 'world=vanilla', sentence: 'The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives dragSortable two functions that read its columns and rows. dragSortable keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.'},
     {choice: 'world=vanilla', sentence: 'The table reads the order and the standing from the page’s store, through the two functions it was given, at the moment it needs an answer, so a listener never keeps a stale copy of either.'},
-    {choice: 'world=vanilla', sentence: 'Nothing in the page or in dragSortable knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.'},
+    {choice: 'world=vanilla', sentence: 'Nothing in the page or in the table knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.'},
     {choice: 'world=vanilla', sentence: 'The page builds the store with the same layer and dispatches the request last, once it has called dragSortable on the table and is listening for what the trader does.'},
     {choice: 'world=vanilla', sentence: 'The page listens three times and subscribes once.'},
     {choice: 'world=vanilla', sentence: 'The three listeners take the events the table raises, column-moved, row-moved and sorted, each dispatched into the arrangement; the one subscription calls reconcile whenever the store changes, and reconcile moves the real cells, touching only the ones whose place changed.'},
@@ -1484,6 +1484,13 @@ describe('the tables tab’s audited words', () => {
 
     expect(tab).toHaveTextContent('as they stood before the sort.');
     expect(tab).toHaveTextContent('fallback: a centred popover.');
+  });
+
+  test('should name dragSortable in the React world only where a run says it speaks of the vanilla build', async () => {
+    const tab = await tabWithEveryStoryOpen('react');
+    const naming = tablesTab.blocksIn(tab).map(block => block.textContent ?? '').filter(block => block.includes('dragSortable'));
+
+    expect(naming.filter(block => !block.includes('vanilla'))).toEqual([]);
   });
 
   test('should say a table’s state, and where each build keeps the marks a move leaves', async () => {
