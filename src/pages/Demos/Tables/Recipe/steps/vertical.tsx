@@ -37,7 +37,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
             aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...span(frameHtml, '<row-grip><button type="button" tabindex="0" class="grip grabbable borderless unfilled focus-ringed" aria-label="move row 1">', '</button></row-grip>'),
+            ...span(frameHtml, '<row-grip>', '</row-grip>'),
             aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'

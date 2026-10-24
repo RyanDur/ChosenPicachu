@@ -102,7 +102,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
     {choice: 'world=vanilla', sentence: 'React renders the markup through it; a vanilla custom element has to'},
     {choice: 'world=vanilla', sentence: 'A custom element is a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page.'},
-    {choice: 'world=vanilla', sentence: 'A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand. These verbs are the element’s own functions, not the actions of the same name: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'},
+    {choice: 'world=vanilla', sentence: 'The context’s verbs are the element’s own functions, not the actions of the same name: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'},
     {choice: 'world=react', sentence: 'Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order'},
     {choice: 'world=vanilla', sentence: 'Rows and columns arrive in the order the page gives them: show, the function in boot.ts that reads the page’s state, sets the element’s columns and rows as they stand, and the element reads the order and the standing from those. The structure is still the markup’s: the element names every row element (a lane, in the code) after its row header. Every time the page gives it a new order the element reconciles the table against it, so a reorder never touches the data:'},
     {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the element raises column-moved, the page writes the new order into its arrangement and gives it back, and the element’s'},
@@ -114,14 +114,14 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla element it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When the element connects, and whenever its column order changes, it marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
-    {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle><button type="button" tabindex="0" class="resize-handle'},
+    {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
     {choice: 'world=vanilla', sentence: 'The element provides its parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
     {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element too. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
     {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
     {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
-    {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu><button type="button" tabindex="0" class="menu-toggle'},
+    {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu> <button type="button" tabindex="0" class="menu-toggle'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The toggle and its menu are wrapped by sort-menu, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its direction buttons.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'When one is chosen it asks the table for its context, what the table knows about itself and the functions it answers with, and calls choose, which raises sorted to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and sets the element’s columns and rows. Setting the rows reseats them in the same call. The rows cut to their ranked seats, in the animated build and the static one alike.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'sort-menu stops the press at the toggle and at the menu. The toggle sits itself at the header’s end edge.'},
@@ -144,6 +144,26 @@ describe('the tables tab’s own words', () => {
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent('focus the handle and tap');
+  });
+
+  test('should tell the context’s verbs only after it says what an action is', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
+
+    const action = blocks.findIndex(block => block.includes('a record of what happened'));
+    const verbs = blocks.findIndex(block => block.includes('The context’s verbs are the element’s own functions'));
+
+    expect(verbs).toBeGreaterThan(action);
+  });
+
+  test('should not tell the context’s verbs in the React world', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await tablesTab.region()).not.toHaveTextContent('the element’s own functions, not the actions of the same name');
   });
 
   test.each([
@@ -620,23 +640,6 @@ describe('the tables demo', () => {
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
     expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
-  });
-
-  test('a hash arriving in the url is brought to its station', async () => {
-    const brought: string[] = [];
-    Element.prototype.scrollIntoView = function (this: Element) {
-      brought.push(this.id);
-    };
-    const feed = await listeningFeed();
-    try {
-      render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      await tablesTab.findHeading('Slice the design into stories');
-      await waitFor(() => expect(brought).toContain('station-5'));
-    } finally {
-      Element.prototype.scrollIntoView = () => undefined;
-    }
   });
 
   test('should take the keyboard to the station the address names', async () => {

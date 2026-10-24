@@ -57,7 +57,7 @@ const edgeMarkup: Record<World, ReactNode> = {
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>'), gap,
-    ...span(tableSource, 'aria-label="resize trades"></button>', '</th>')
+    ...span(tableSource, '</sort-menu>', '</th>')
   ]}/>
 };
 
@@ -71,7 +71,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<resize-handle><button type="button" tabindex="0" class="resize-handle', 'aria-label="resize window"></button></resize-handle>')
+    ...span(tableSource, '<resize-handle>', '</resize-handle>')
   ]}/>
 };
 

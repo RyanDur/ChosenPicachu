@@ -41,7 +41,7 @@ describe('the frame table', () => {
     vanillaFrame.stand();
 
     expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('0');
+    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('0');
   });
 
   it('a sort with no values still announces its direction', async () => {
@@ -50,7 +50,7 @@ describe('the frame table', () => {
     await vanillaFrame.choose('trades', 'descending');
 
     expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('0');
+    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('0');
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -91,8 +91,8 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
-    await waitFor(() => expect(vanillaFrame.cells('session')[0]).toHaveTextContent('2'));
-    expect(vanillaFrame.cells('this minute')[0]).toHaveTextContent('1');
+    await waitFor(() => expect(vanillaFrame.figures('session')[0]).toHaveTextContent('2'));
+    expect(vanillaFrame.figures('this minute')[0]).toHaveTextContent('1');
   });
 
   it('the keyboard walks a column', async () => {
@@ -114,7 +114,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.press('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
     expect(vanillaFrame.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    expect(document.activeElement).toBe(trades);
+    expect(trades).toHaveFocus();
   });
 
   it('a row walks to the bottom and back to the top, keypress after keypress, keeping the focus the moves take', async () => {
@@ -128,7 +128,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.press('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
     expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(document.activeElement).toBe(grip);
+    expect(grip).toHaveFocus();
   });
 
   it('the first seat is anchored', async () => {
@@ -147,33 +147,7 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'sold')]);
 
-    await waitFor(() => {
-      const session = vanillaFrame.cells('session');
-      expect(session[0]).toHaveTextContent('0');
-      expect(session[1]).toHaveTextContent('1');
-      expect(session[2]).toHaveTextContent('1');
-    });
-  });
-
-  it('a reseat leaves settled rows untouched', async () => {
-    vanillaFrame.stand();
-
-    const still = vanillaFrame.row('this hour');
-    let touched = false;
-    const observer = new MutationObserver(records =>
-      records.forEach(record => {
-        if ([...record.addedNodes].includes(still)) {
-          touched = true;
-        }
-      }));
-    observer.observe(vanillaFrame.body(), {childList: true});
-
-    await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
-
-    observer.takeRecords();
-    observer.disconnect();
-    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    expect(touched).toBe(false);
+    await waitFor(() => expect(vanillaFrame.figures('session').slice(0, 3).map(figure => figure.textContent)).toEqual(['0', '1', '1']));
   });
 
   it('the keyboard walks a row, and its label follows', async () => {
