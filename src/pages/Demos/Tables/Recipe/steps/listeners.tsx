@@ -20,7 +20,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
     <Reveal>
       <Says>No listener here holds state. Where a handler needs the order, it takes the order
         as a function and calls it when the event fires. React remakes its handlers every render
-        and never needed the discipline; the vanilla table’s listeners attach once and cannot live without it.</Says>
+        and never needed the discipline; the vanilla listeners cannot count on being remade, so they live by it.</Says>
       {world === 'vanilla' && <Says><code>dragSortable</code> provides the parts a context: the mounted table and the verbs its pace decides, <code>lifted</code>, <code>moved</code> and <code>dropped</code> for a drag, and <code>rowNudged</code> and <code>rowMoved</code> for a row walked by the arrow keys. A grip or a handle asks the table it sits in for it each time an event fires, and nothing is passed by hand.</Says>}
       <Says>Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (<code>columnMovedBeside</code>, <code>lifted</code>, <code>dropped</code>), a record of what happened that one reducer turns into the next state. Whatever changes the order goes up to the page as an event, <code>onColumnMoved</code> or <code>onRowMoved</code> in React and <code>column-moved</code> or <code>row-moved</code> from the table, and comes back down as the next order.</Says>
       {world === 'vanilla' && <Says>The context’s verbs are the build’s own functions, not the actions of the same name: <code>lifted</code> dispatches the <code>lifted</code> action, <code>moved</code> dispatches <code>drifted</code>, and <code>dropped</code> dispatches <code>released</code>.</Says>}

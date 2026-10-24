@@ -210,7 +210,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <Term word="reconcile">reconcile</Term>, the function <code>dragSortable</code> returned, with the columns as they stood before the change, so the table follows the order the page now holds.</Says>
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <Term word="reconcile">reconcile</Term>, the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.</Says>
       {world === 'vanilla' && <Says><code>dragSortable</code> subscribes once itself, to its own hand.</Says>}
       <Says>A listener that mirrored the state to a backend would read the action and know exactly what to send.</Says>
     </Words>

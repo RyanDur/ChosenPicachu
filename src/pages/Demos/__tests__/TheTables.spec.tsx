@@ -97,7 +97,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu&world=vanilla', sentence: 'The sort is one value in the page’s arrangement, a column name and a direction.'},
     {choice: 'world=vanilla', sentence: 'When a vanilla listener attaches is nothing a handler can count on. The table’s listeners attach once, when boot calls dragSortable. A grip’s or a handle’s attach each time its element connects, and a move re-inserts some cells and leaves others in place, so a part’s listeners may be attached again on one move and not on the next.'},
     {choice: 'world=react', sentence: 'Sharing only works if a handler holds no state at all: it asks at event time and writes back through one dispatch.'},
-    {choice: 'world=vanilla', sentence: 'the vanilla table’s listeners attach once and cannot live without it.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla listeners cannot count on being remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'the vanilla page subscribes a listener that calls reconcile, and the table reads the order through the functions it was given and moves its nodes to match.'},
     {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
@@ -111,7 +111,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'reconcile writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.'},
     {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.'},
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls'},
-    {choice: 'world=vanilla', sentence: ', the function dragSortable returned, with the columns as they stood before the change, so the table follows the order the page now holds.'},
+    {choice: 'world=vanilla', sentence: ', the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.'},
     {choice: 'world=vanilla', sentence: 'dragSortable subscribes once itself, to its own hand.'},
     {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When boot calls dragSortable on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
@@ -188,6 +188,14 @@ describe('the tables tab’s own words', () => {
     const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
 
     expect(blocks.filter(block => block.includes('a tag of the page’s own, registered with the browser'))).toHaveLength(1);
+  });
+
+  test('should not tell the React world when a vanilla listener attaches', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await tablesTab.region()).not.toHaveTextContent('When a vanilla listener attaches is nothing a handler can count on');
   });
 
   test('should not tell the context’s verbs in the React world', async () => {
@@ -1377,9 +1385,10 @@ describe('the tables tutorials’ vocabulary', () => {
   });
 
   test('should mark reconcile as a defined term where the React world first reads it', async () => {
-    const blocks = await prose('world=react', 'the living table');
+    const first = firstSaying(await prose('world=react', 'the living table'), /\breconcile/);
 
-    expect(tablesTab.definedIn(firstSaying(blocks, /\breconcile\b/) ?? document.body, 'reconcile')).toBeInTheDocument();
+    expect(first).toBeDefined();
+    expect(first && tablesTab.definedIn(first, 'reconcile')).toBeInTheDocument();
   });
 
   test('should define a reconcile in prose once in the vanilla world, at the Deal step', async () => {
