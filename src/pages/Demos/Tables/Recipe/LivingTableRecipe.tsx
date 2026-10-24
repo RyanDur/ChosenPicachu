@@ -65,7 +65,7 @@ const suppliedBy: Record<World, ReactNode> = {
     <Says>At boot a script finds every table so marked and calls <code>dragSortable</code> on it. There are two builds
       of <code>dragSortable</code>, eager and lazy, one file each, and the pace is which one boot calls.</Says>
     <Says>The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
-      when asked. It takes actions, records of what happened, through its dispatch, and after each change it calls its
+      when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
       subscribers, the functions that asked to hear of changes. The hand holds what is held and the
       widths. The call also wires the table’s listeners at once.</Says>
     <Says>The call returns <code>reconcile</code>, the function the page calls whenever its own store changes. Reconcile

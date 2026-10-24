@@ -10,8 +10,12 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>, and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state
-        remembers the world as it stood when the listener was made, and a vanilla listener is never remade: the table’s listeners attach once, when boot calls <code>dragSortable</code>, and a grip’s or a handle’s attach each time its element connects, which is every time its row or its column moves. Sharing only works if a handler holds no state at all: it asks
+        remembers the world as it stood when the listener was made. Sharing only works if a handler holds no state at all: it asks
         at event time and writes back through one dispatch.</Says>
+      {world === 'vanilla' && <Says>When a vanilla listener attaches is nothing a handler can count on. The table’s listeners attach
+        once, when boot calls <code>dragSortable</code>. A grip’s or a handle’s attach each time its element connects, and a move
+        re-inserts some cells and leaves others in place, so a part’s listeners may be attached again on one move and not on the
+        next.</Says>}
     </Words>
     <Reveal>
       <Says>No listener here holds state. Where a handler needs the order, it takes the order
