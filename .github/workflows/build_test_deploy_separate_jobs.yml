@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Build
@@ -75,7 +75,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -165,7 +165,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -204,7 +204,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -232,7 +232,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -270,7 +270,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '24.22'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
