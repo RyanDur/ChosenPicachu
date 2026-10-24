@@ -210,8 +210,9 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <code>reconcile</code>, the function <code>dragSortable</code> returned, with the columns as they stood before the change, and <code>reconcile</code> moves the table’s cells to the order the page now holds; <code>dragSortable</code> subscribes once itself, to its own hand. A reconcile is the function that moves the table’s cells from the old order to the new one. A listener that mirrored the state to a backend
-        would read the action and know exactly what to send.</Says>
+      {world === 'react' && <Says>A reconcile is the function that moves the table’s cells from the old order to the new one.</Says>}
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <code>reconcile</code>, the function <code>dragSortable</code> returned, with the columns as they stood before the change, and <code>reconcile</code> moves the table’s cells to the order the page now holds; <code>dragSortable</code> subscribes once itself, to its own hand.</Says>
+      <Says>A listener that mirrored the state to a backend would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
       {world === 'react'
@@ -231,7 +232,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
           <Says><code>reconcile</code> writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
-          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own; the table keeps none of the page’s state either: it asks for the columns and rows each time.</Says>
+          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.</Says>
         </>}
       <Codes>
         {world === 'react'

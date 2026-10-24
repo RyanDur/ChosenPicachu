@@ -62,13 +62,16 @@ const suppliedBy: Record<World, ReactNode> = {
       one that drag-sorts. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
       column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
       table.</Says>
-    <Says>At boot a script finds every table so marked and calls <code>dragSortable</code> on it, the build the pace
-      names, eager or lazy. The call makes the hand, the table’s own store of what is held and the widths, wires the
-      listeners at once, and returns <code>reconcile</code>, the function the page calls whenever its store changes,
-      which moves the cells to the new order and writes the text that changed. The table keeps no copy of the order: the
-      page gives <code>dragSortable</code> two functions that read its columns and rows, and the table asks them when it
-      needs an answer. The table itself is the browser’s, so it shows with its rows before the script runs and without
-      it.</Says>
+    <Says>At boot a script finds every table so marked and calls <code>dragSortable</code> on it. There are two builds
+      of <code>dragSortable</code>, eager and lazy, one file each, and the pace is which one boot calls.</Says>
+    <Says>The call makes the hand, a store of the table’s own. A store is one plain object that holds state, answers when
+      asked, takes a dispatch, a record of what happened, and tells its subscribers. The hand holds what is held and the
+      widths. The call also wires the table’s listeners at once.</Says>
+    <Says>The call returns <code>reconcile</code>, the function the page calls whenever its own store changes. Reconcile
+      moves the cells to the new order and writes the text that changed.</Says>
+    <Says>The table keeps no copy of the order: the page gives <code>dragSortable</code> two functions that read its
+      columns and rows, and the table asks them when it needs an answer.</Says>
+    <Says>The table itself is the browser’s, so it shows with its rows before the script runs and without it.</Says>
     <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
       by the grip inside it.</Says>
   </>

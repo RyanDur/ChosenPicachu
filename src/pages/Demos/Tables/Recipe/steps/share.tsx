@@ -36,6 +36,10 @@ export const CssShare: FC<{world: World}> = ({world}) =>
         resize handle is a button that announces itself by name, and its <Term word="share">share</Term> once the ledger
         exists. Each button writes a tabindex it would not need anywhere but Safari, whose
         plain Tab skips a bare button; the keyboard track says why.</Says>
+      {world === 'vanilla' && <Says>In the vanilla build the grip’s button and the handle’s button are each wrapped in a
+        custom element, <code>row-grip</code> and <code>resize-handle</code>: a tag of the page’s own, registered with the
+        browser, that runs a function of its own when the browser connects it to the page. Each finds its button on connect
+        and attaches the behaviour to it.</Says>}
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>
       <Codes>

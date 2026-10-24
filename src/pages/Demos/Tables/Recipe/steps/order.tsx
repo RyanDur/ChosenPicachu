@@ -26,7 +26,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
           each row places its cells the same way. A moved column or row is an event the page
           dispatches into its own order. A reorder never touches the data, and nothing reads the
           markup back: the same key finds its new seat and React moves the real nodes.</Says>
-        : <Says>Rows and columns stand in the order the page holds: <code>dragSortable</code> reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes it calls <code>reconcile</code>, so a reorder never touches the data: the
+        : <Says>Rows and columns stand in the order the page holds: <code>dragSortable</code> reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes, the page calls <code>reconcile</code>, so a reorder never touches the data: the
           same lane finds its new seat, and <code>insertBefore</code> moves the real node only when its seat
           changed.</Says>}
       {world === 'react'

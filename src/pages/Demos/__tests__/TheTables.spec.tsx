@@ -95,35 +95,40 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'there is no render to catch the change, so the page refolds the trades and calls reconcile, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.'},
     {choice: 'world=vanilla', sentence: 'and the page calls reconcile, which writes what changed.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'The sort is one value in the page’s arrangement, a column name and a direction.'},
-    {choice: 'world=vanilla', sentence: 'a vanilla listener attaches once, when boot calls dragSortable.'},
-    {choice: 'world=vanilla', sentence: 'the vanilla element attaches once and cannot live without it.'},
-    {choice: 'world=vanilla', sentence: 'the vanilla element takes the order the page gives it and reconciles, which moves nodes.'},
+    {choice: 'world=vanilla', sentence: 'a vanilla listener attaches once: the table’s when boot calls dragSortable, a grip’s or a handle’s when its element connects.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla build attaches once and cannot live without it.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla page subscribes a listener that calls reconcile, and the table reads the order through the functions it was given and moves its nodes to match.'},
     {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
     {choice: 'world=vanilla', sentence: 'React renders the markup through it; a vanilla script has to'},
     {choice: 'world=vanilla', sentence: 'The context’s verbs are the build’s own functions, not the actions of the same name: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'},
     {choice: 'world=react', sentence: 'Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order'},
-    {choice: 'world=vanilla', sentence: 'Rows and columns stand in the order the page holds: dragSortable reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes it calls reconcile, so a reorder never touches the data:'},
+    {choice: 'world=vanilla', sentence: 'Rows and columns stand in the order the page holds: dragSortable reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes, the page calls reconcile, so a reorder never touches the data:'},
     {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the table raises column-moved, the page writes the new order into its arrangement and calls reconcile, which moves the real cells to match it.'},
     {choice: 'world=vanilla', sentence: 'This is the whole travel of the eager build,'},
     {choice: 'pace=lazy&world=vanilla', sentence: 'The lazy build is its own file, not a flag on the eager one: its travel records the landing in the hand, and its release, which also handles cancel, raises whatever the hand is holding on the table and then lets the hand go.'},
     {choice: 'world=vanilla', sentence: 'reconcile writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.'},
-    {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own; the table keeps none of the page’s state either: it asks for the columns and rows each time.'},
-    {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls reconcile, the function dragSortable returned, with the columns as they stood before the change, and reconcile moves the table’s cells to the order the page now holds; dragSortable subscribes once itself, to its own hand. A reconcile is'},
-    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla element it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
+    {choice: 'world=vanilla', sentence: 'The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.'},
+    {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls reconcile, the function dragSortable returned, with the columns as they stood before the change, and reconcile moves the table’s cells to the order the page now holds; dragSortable subscribes once itself, to its own hand.'},
+    {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the table; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When boot calls dragSortable on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
     {choice: 'world=vanilla', sentence: '<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable> <caption class="off-screen">Live aggregations by window</caption> <thead>'},
+    {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are each wrapped in a custom element, row-grip and resize-handle: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. Each finds its button on connect and attaches the behaviour to it.'},
     {choice: 'world=vanilla', sentence: 'The page writes the whole table as it would for any table: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. One attribute, data-drag-sortable, marks the table as one that drag-sorts. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
-    {choice: 'world=vanilla', sentence: 'At boot a script finds every table so marked and calls dragSortable on it, the build the pace names, eager or lazy. The call makes the hand, the table’s own store of what is held and the widths, wires the listeners at once, and returns reconcile, the function the page calls whenever its store changes, which moves the cells to the new order and writes the text that changed. The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer. The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
+    {choice: 'world=vanilla', sentence: 'At boot a script finds every table so marked and calls dragSortable on it. There are two builds of dragSortable, eager and lazy, one file each, and the pace is which one boot calls.'},
+    {choice: 'world=vanilla', sentence: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state, answers when asked, takes a dispatch, a record of what happened, and tells its subscribers. The hand holds what is held and the widths. The call also wires the table’s listeners at once.'},
+    {choice: 'world=vanilla', sentence: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'},
+    {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
+    {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the head and the body as children of DragSortableTable.'},
     {choice: 'world=react', sentence: 'As props, the values a React component is given by the markup that uses it, the page passes the caption and two choices the later steps explain: origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate.'},
     {choice: 'world=react', sentence: 'The component supplies the table, the caption and the move report, the output that tells a screen reader what moved.'},
     {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks the table it sits in for it each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
-    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
+    {choice: 'world=vanilla', sentence: 'In the vanilla build the grip’s button is wrapped by row-grip, a custom element too. On connect it finds its button and attaches the lift, the carry and the arrow keys to it, with the verbs the table’s context gives it.'},
     {choice: 'tut=sort&track=keyboard&world=vanilla', sentence: 'The grip’s element handles the arrows itself, and the walk is the column walk with the axis turned:'},
     {choice: 'tut=resize&world=vanilla', sentence: 'In the vanilla build the button is wrapped by resize-handle, a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. On connect the element finds its button and attaches the resize to it, and every listener it attaches returns what undoes it, so the element lets the button go when it leaves the page.'},
     {choice: 'tut=menu&world=vanilla', sentence: '<sort-menu> <button type="button" tabindex="0" class="menu-toggle'},
@@ -199,7 +204,7 @@ describe('the tables tab’s own words', () => {
     {name: 'origin', choice: 'world=vanilla', run: /^The page writes the whole table as it would/},
     {name: 'motion', choice: 'world=vanilla', run: /^The page writes the whole table as it would/},
     {name: 'dragSortable', choice: 'world=vanilla', run: /^At boot a script finds every table/},
-    {name: 'reconcile', choice: 'world=vanilla', run: /^At boot a script finds every table/},
+    {name: 'reconcile', choice: 'world=vanilla', run: /^The call returns/},
     {name: 'origin', choice: 'world=react', run: /^As props, the values a React component/},
     {name: 'motion', choice: 'world=react', run: /^As props, the values a React component/},
     {name: 'DragSortableTable', choice: 'world=react', run: /^The page writes the head and the body as children/},
@@ -1361,8 +1366,8 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each([
     {world: 'react', term: /\bthe hand\b/, region: 'the living table', saying: 'In the vanilla build the code calls the table’s store the hand. It holds the drag and the widths once measured.'},
     {world: 'react', term: /\breconcile\b/, region: 'the living table', saying: 'A reconcile is the function that moves the table’s cells from the old order to the new one.'},
-    {world: 'vanilla', term: /\bthe hand\b/, region: 'the still table', saying: 'The call makes the hand, the table’s own store of what is held and the widths,'},
-    {world: 'vanilla', term: /\breconcile\b/, region: 'the still table', saying: 'returns reconcile, the function the page calls whenever its store changes, which moves the cells to the new order and writes the text that changed.'}
+    {world: 'vanilla', term: /\bthe hand\b/, region: 'the still table', saying: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state'},
+    {world: 'vanilla', term: /\breconcile\b/, region: 'the still table', saying: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'}
   ])('should define $term where the $world world first uses it, in $region', async ({world, term, region, saying}) => {
     const blocks = await prose(`world=${world}`, region);
 
@@ -1484,6 +1489,12 @@ describe('the tables tab’s audited words', () => {
 
     expect(tab).toHaveTextContent('as they stood before the sort.');
     expect(tab).toHaveTextContent('fallback: a centred popover.');
+  });
+
+  test('should define a reconcile once in the vanilla world, at the Deal step', async () => {
+    const tab = await tabWithEveryStoryOpen('vanilla');
+
+    expect(tab).not.toHaveTextContent('A reconcile is the function that moves the table’s cells');
   });
 
   test('should name dragSortable in the React world only where a run says it speaks of the vanilla build', async () => {

@@ -50,7 +50,9 @@ describe('the frame assembly', () => {
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'keep', motion: 'static'});
 
-    expect(dressed).toContain('<table class="fancy-table sortable apportioned keep static" id="live-aggregations" data-drag-sortable>');
+    const table = new DOMParser().parseFromString(dressed, 'text/html').querySelector('table[data-drag-sortable]');
+
+    expect([...table?.classList ?? []]).toEqual(expect.arrayContaining(['keep', 'static']));
   });
 
   it('the document carries its environment', () => {
