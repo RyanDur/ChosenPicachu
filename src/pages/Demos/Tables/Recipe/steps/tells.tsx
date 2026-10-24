@@ -52,8 +52,8 @@ export const OwnedPixels: FC<{world: World}> = ({world}) =>
     rule a class switches on. JavaScript only decides what the state is,
     and {world === 'react'
     ? 'React affords nothing the DOM does not give you'
-    : 'there is no framework in the document'}: the node moves
-    are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
+    : 'there is no framework in the document'}: a move of a node, one element or piece of text in the page’s tree,
+    is <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
     events, the state is a value. Each code block below is labelled with which of the
     three languages is doing the work.</Tell>;
 

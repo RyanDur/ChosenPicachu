@@ -30,7 +30,7 @@ describe('the tables tab’s own words', () => {
     'My first draft dispatched functions from state to state and called them reducers. They were not reducers: a reducer interprets an action it did not write.',
     'I could reorder the data itself, but every trade that lands would fight every drag. So the columns and the seats are the state, in their order; a trade rewrites a row’s values under its key, and the markup renders through them.',
     'I could ask the DOM where everything is as the pointer moves, but layout queries during a drag cause the jank you are trying to avoid.',
-    'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: the node moves are insertBefore, the handlers are events, the state is a value.',
+    'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: a move of a node, one element or piece of text in the page’s tree, is insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
     'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
     'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state.',
@@ -52,7 +52,7 @@ describe('the tables tab’s own words', () => {
 
   test.each([
     {choice: 'world=vanilla', sentence: 'So I deal the opening widths from the page’s stylesheet. With table-layout: fixed the header widths govern their whole columns, so the table always fills its container and the columns hold still while the values change.'},
-    {choice: 'world=vanilla', sentence: 'JavaScript only decides what the state is, and there is no framework in the document: the node moves are insertBefore, the handlers are events, the state is a value.'},
+    {choice: 'world=vanilla', sentence: 'JavaScript only decides what the state is, and there is no framework in the document: a move of a node, one element or piece of text in the page’s tree, is insertBefore, the handlers are events, the state is a value.'},
     {choice: 'world=vanilla', sentence: 'so a reorder never touches the data: the same lane finds its new seat, and insertBefore moves the real node only when its seat changed.'},
     {choice: 'world=vanilla', sentence: 'When the reconcile moves the cell in the DOM, the browser drops the capture with it and fires lostpointercapture at the next move, with that move’s coordinates on the event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler.'},
     {choice: 'track=keyboard', sentence: 'I could build the keyboard its own sorting system, but the state, the clamps and the slides already exist. So this track is about access: focus reaches every grip and every header, and two arrow keys do everything a drag does.'},
@@ -97,7 +97,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu&world=vanilla', sentence: 'The sort is one value in the page’s arrangement, a column name and a direction.'},
     {choice: 'world=vanilla', sentence: 'Every vanilla listener attaches once, when boot calls dragSortable: the table’s, and each grip’s, handle’s and menu’s. A move re-inserts cells, and a node keeps its listeners when it is moved, so nothing is attached twice and nothing is lost.'},
     {choice: 'world=react', sentence: 'Sharing only works if a handler holds no state at all: it asks at event time and writes back through one dispatch.'},
-    {choice: 'world=vanilla', sentence: 'the vanilla listeners are made once and never remade, so they live by it.'},
+    {choice: 'world=vanilla', sentence: 'the vanilla listeners are never remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'the vanilla page subscribes a listener that calls reconcile, and the table reads the order through the functions it was given and moves its nodes to match.'},
     {choice: 'world=react', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown the header takes the survey'},
     {choice: 'world=vanilla', sentence: 'The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press, and touch-action: none is why the pointer can drag on touch at all. On pointerdown, the header’s listener takes the survey'},
@@ -113,7 +113,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls'},
     {choice: 'world=vanilla', sentence: ', the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.'},
     {choice: 'world=react', sentence: ', the function the vanilla build returned, with the columns as they stood before the change'},
-    {choice: 'world=react', sentence: 'the vanilla listeners are made once and never remade, so they live by it.'},
+    {choice: 'world=react', sentence: 'the vanilla listeners are never remade, so they live by it.'},
     {choice: 'world=vanilla', sentence: 'dragSortable subscribes once itself, to its own hand.'},
     {choice: 'world=vanilla', sentence: 'Every shared listener from here on, the lift, the travel and the arrows, reads the order and calls the function its world gives it. It keeps no state and changes no world’s state itself, which is why each is in one shared file and every shared block below appears in both worlds unchanged. In React that function dispatches to the table’s store or calls the onColumnMoved or onRowMoved function the page gave the headers or the body; in the vanilla build it dispatches to the table’s store, or raises the event, writes the move report and moves the cells. The move report is the output that tells a screen reader where the moved column or row now sits.'},
     {choice: 'track=keyboard&world=vanilla', sentence: 'The row grip is already a button in the markup. When boot calls dragSortable on the table, and whenever the column order changes, the build marks each movable header grabbable and gives it a tabindex; the anchored edges hold the table, so their headers get neither. So Tab reaches every movable piece of the table in order.'},
@@ -140,7 +140,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=react', sentence: 'The page’s provider and useDragSortable each subscribe through useSyncExternalStore,'},
     {choice: 'world=react', sentence: '<table id="live-aggregations" className={sortable.className}> <caption className="off-screen">{caption}</caption>'},
     {choice: 'world=react', sentence: '<output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{reportOf(sortable)}</output>'},
-    {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. dragSortable gives each grip, handle and menu its context as it wires it, once; what the context answers about the order it still reads at event time, through the functions the page gave.'},
+    {choice: 'world=vanilla', sentence: 'dragSortable provides the parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. dragSortable gives each grip, handle and menu its context as it wires it; what the context answers about the order it still reads at event time, through the functions the page gave.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
     {choice: 'world=vanilla', sentence: 'and retakes the pointer in the same handler. In the vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the release and the capture loss.'},
     {choice: 'world=vanilla', sentence: 'In the vanilla build the grip is the button the page writes, marked data-row-grip. When boot calls dragSortable it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.'},
@@ -193,7 +193,7 @@ describe('the tables tab’s own words', () => {
     expect(tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent)).toContain(label);
   });
 
-  test.each(['sort', 'menu', 'resize'])('should define no custom element in the vanilla world, with tut=%s', async tutorial => {
+  test.each(['sort', 'menu', 'resize'])('should not tell of a custom element anywhere in the vanilla world’s words, with tut=%s', async tutorial => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=vanilla&tut=${tutorial}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
