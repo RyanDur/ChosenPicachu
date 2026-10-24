@@ -115,10 +115,12 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<row-grip><button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">…</button></row-grip>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<resize-handle> <button type="button" tabindex="0" class="resize-handle'},
     {choice: 'world=vanilla', sentence: '<drag-sortable-table caption="Live aggregations by window" origin="hide" motion="animated"> <template> <thead>'},
-    {choice: 'world=vanilla', sentence: 'The page writes only the head and the body, inside a template in drag-sortable-table. A template is an element whose contents the browser reads but does not show or run until a script takes them. On the element the page names the caption and two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate.'},
+    {choice: 'world=vanilla', sentence: 'The page writes only the head and the body, inside a template in drag-sortable-table. A template is an element whose contents the browser reads but does not show or run until a script takes them.'},
+    {choice: 'world=vanilla', sentence: 'The template is there because the element, not the page, supplies the table. Written straight inside the element with no table around them, the head and the rows would lose their own tags, which the parser, the part of the browser that reads markup into elements, drops outside a table, and everything they held would land loose in the section: grips, handles, menus, names and numbers, with no table to read.'},
     {choice: 'world=vanilla', sentence: 'drag-sortable-table is a custom element: a tag of the page’s own, registered with the browser, that runs a function of its own when the browser connects it to the page. That function supplies the table, the caption and the move report, the output that tells a screen reader what moved, and moves the head and the body from the template into the table.'},
-    {choice: 'world=vanilla', sentence: 'The template is there because the element, not the page, supplies the table. Written straight inside the element with no table around them, the head and the rows would lose their own tags, which the parser drops outside a table, and everything they held would land loose in the section: grips, handles, menus, names and numbers, with no table to read.'},
-    {choice: 'world=react', sentence: 'The page writes the head and the body as children of DragSortableTable, and passes it the caption and the same two choices, origin and motion, as props, the values a React component is given by the markup that uses it.'},
+    {choice: 'world=vanilla', sentence: 'On the element the page names the caption and two choices the later steps explain: origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate.'},
+    {choice: 'world=react', sentence: 'The page writes the head and the body as children of DragSortableTable.'},
+    {choice: 'world=react', sentence: 'It passes the component the caption and two choices the later steps explain as props, the values a React component is given by the markup that uses it: origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate.'},
     {choice: 'world=react', sentence: 'The component supplies the table, the caption and the move report, the output that tells a screen reader what moved.'},
     {choice: 'world=vanilla', sentence: 'The element provides its parts a context: the mounted table and the verbs its pace decides, lifted, moved and dropped for a drag, and rowNudged and rowMoved for a row walked by the arrow keys. A grip or a handle asks for it from inside the table each time an event fires, and nothing is passed by hand.'},
     {choice: 'world=vanilla', sentence: 'On pointerdown, the header’s listener takes the survey and the pointer and calls the context’s lifted, which is the build’s lift, and one dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried.'},
@@ -173,9 +175,9 @@ describe('the tables tab’s own words', () => {
     expect(tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent)).toContain(label);
   });
 
-  test('should define a custom element once, at the step that first supplies one', async () => {
+  test.each(['sort', 'menu', 'resize'])('should define a custom element once, at the step that first supplies one, with tut=%s', async tutorial => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=menu')} feed={feed}/>);
+    render(<TestApp at={demosAt(`?tab=tables&world=vanilla&tut=${tutorial}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
 
@@ -194,8 +196,10 @@ describe('the tables tab’s own words', () => {
     {name: 'announce', choice: 'tut=menu&world=vanilla', run: /walks them and/},
     {name: 'template', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
     {name: 'drag-sortable-table', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
-    {name: 'origin', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
-    {name: 'motion', choice: 'world=vanilla', run: /^The page writes only the head and the body/},
+    {name: 'origin', choice: 'world=vanilla', run: /^On the element the page names the caption/},
+    {name: 'motion', choice: 'world=vanilla', run: /^On the element the page names the caption/},
+    {name: 'origin', choice: 'world=react', run: /^It passes the component the caption/},
+    {name: 'motion', choice: 'world=react', run: /^It passes the component the caption/},
     {name: 'drag-sortable-table', choice: 'world=vanilla', run: /is a custom element: a tag of the page’s own/},
     {name: 'DragSortableTable', choice: 'world=react', run: /^The page writes the head and the body as children/},
     {name: 'th', choice: 'tut=menu&world=vanilla', run: /walks them and/},
