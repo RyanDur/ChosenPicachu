@@ -180,7 +180,7 @@ jobs:
       - name: Walk the journeys on the stub stage
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: journeys.json
-        run: npx playwright test --project=${{ matrix.browser }} --shard=${{ matrix.shard }} --reporter=line,json
+        run: npx playwright test --project="${{ matrix.browser }}*" --shard=${{ matrix.shard }} --reporter=line,json
       - name: Read the journeys in the run
         if: always() && hashFiles('journeys.json') != ''
         run: node scripts/playwright/summary.mjs "journeys, ${{ matrix.browser }} ${{ matrix.shard }}" journeys.json >> "$GITHUB_STEP_SUMMARY"

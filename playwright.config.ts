@@ -5,6 +5,8 @@ const stage = 'http://localhost:4517/ChosenPicachu/';
 const smoke = '**/smoke.e2e.ts';
 // it reads served HTML through the request fixture and opens no browser, so one engine's run covers it
 const browserless = '**/names.e2e.ts';
+// WebKit stalls the next page load after a worker has run every a11y page, so those pages get workers of their own
+const a11y = '**/a11y.e2e.ts';
 
 export default defineConfig({
   testDir: './e2e',
@@ -26,6 +28,7 @@ export default defineConfig({
   projects: [
     {name: 'chromium', use: {browserName: 'chromium'}},
     {name: 'firefox', use: {browserName: 'firefox'}, testIgnore: [smoke, browserless]},
-    {name: 'webkit', use: {browserName: 'webkit'}, testIgnore: [smoke, browserless]}
+    {name: 'webkit', use: {browserName: 'webkit'}, testIgnore: [smoke, browserless, a11y]},
+    {name: 'webkit-a11y', use: {browserName: 'webkit'}, testMatch: a11y}
   ]
 });
