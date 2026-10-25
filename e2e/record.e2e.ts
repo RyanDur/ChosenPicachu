@@ -25,7 +25,7 @@ test('a keyboard reader who follows a line in Presentation\'s story reaches that
 
   await pressTab(page);
 
-  await expect(moment.getByRole('link', {name: 'the Acid Test'})).toBeFocused();
+  await expect(moment.getByRole('link', {name: 'The Box Acid Test'})).toBeFocused();
 });
 
 test('an address that names a moment inside a year of two lands on that moment, with the year\'s fold open', async ({page}) => {

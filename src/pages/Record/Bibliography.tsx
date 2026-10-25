@@ -175,6 +175,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Netscape_Communicator"><cite>Netscape Communicator</cite></a>{' '}
+            <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li>
             <a className="signpost" href="https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/"><cite>Wired With Standards</cite></a>{' '}
             <span className="provenance caption">Eric Meyer, 11 October 2002</span>
           </li>
