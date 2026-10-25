@@ -12,8 +12,9 @@ export const Dynamic: FC = () =>
       consisting of pages that acted more like applications.
     </Quotation>
     <p className="paragraph">JavaScript says how things respond. Brendan Eich wrote its first interpreter in about ten
-      days to touch a page the server had already sent; the page then became the program, and the cost came with the
-      growth, until the document came first again with script only where a region must respond. So the document comes
-      first and the program only where the page needs one. Inside the program, the state is what is true, an event is
-      what happened, and the page is drawn from the two, so a framework can change under it and the core stays.</p>
+      days, for a page the server had already sent: a script could reach an element, change it, and answer an event.
+      Later the script became the whole page, and as those pages grew the costs came with them: a blank first paint, a
+      document no crawler could read, a back button rebuilt by hand. So the document comes first again, and a program
+      runs only where a part of the page must respond. Inside that program the state is what is true, an event is what
+      happened, and the page is drawn from the two, so a framework can change under it and the core stays.</p>
   </ConcernSection>;
