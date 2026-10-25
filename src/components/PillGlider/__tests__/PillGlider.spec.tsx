@@ -1,5 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {FC, useState} from 'react';
 import {PillGlider} from '../index';
 
 const styles = [
@@ -9,10 +10,15 @@ const styles = [
   {display: 'Hide Lazy', value: 'hide-lazy'}
 ];
 
+const Choosing: FC = () => {
+  const [chosen, choose] = useState('eager');
+  return <PillGlider label="drag style" name="drag-style" options={styles} chosen={chosen} onChosen={choose}/>;
+};
+
 describe('the pill glider', () => {
   test('offers every style as a radio in a named group, the chosen one checked', () => {
     render(<PillGlider label="drag style" name="drag-style" options={styles}
-      chosen="eager" onChosen={vi.fn()}/>);
+      chosen="eager" onChosen={() => undefined}/>);
 
     expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
     for (const {display} of styles) {
@@ -21,13 +27,12 @@ describe('the pill glider', () => {
     expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
   });
 
-  test('choosing a pill says which was chosen', async () => {
-    const onChosen = vi.fn();
-    render(<PillGlider label="drag style" name="drag-style" options={styles}
-      chosen="eager" onChosen={onChosen}/>);
+  test('choosing a pill makes it the chosen one', async () => {
+    render(<Choosing/>);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
 
-    expect(onChosen).toHaveBeenCalledWith('hide-lazy');
+    expect(screen.getByRole('radio', {name: 'Hide Lazy'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Eager'})).not.toBeChecked();
   });
 });

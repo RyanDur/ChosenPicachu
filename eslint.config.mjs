@@ -99,9 +99,14 @@ export default [
     rules: specs
   },
   {
+    files: ['src/**/__test_support/**/*.{ts,tsx}'],
+    plugins: {'testing-library': testingLibrary},
+    rules: {'testing-library/prefer-screen-queries': 'error'}
+  },
+  {
     files: ['e2e/**/*.ts'],
     ignores: ['e2e/looks/**', 'e2e/media/**'],
     plugins: {playwright},
-    rules: journeys
+    rules: {...journeys, 'playwright/no-skipped-test': ['error', {allowConditional: true}]}
   }
 ];

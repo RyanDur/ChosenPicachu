@@ -119,18 +119,4 @@ describe('the users store', () => {
 
     await vi.waitFor(() => expect(sent()).toMatchObject({info: {firstName: 'Renamed'}, friends: [second.id]}));
   });
-
-  it('an update says once when it is saved', async () => {
-    const saved = vi.fn();
-    setupUsersResponse(someUsers);
-    const store = usersStore(syncing(users, saved, () => undefined));
-    store.dispatch(opened());
-    await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
-    setupUserUpdatedResponse(first.id, [{...first, info: {...first.info, firstName: 'Renamed'}}, ...someUsers.slice(1)]);
-
-    store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
-
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({info}) => info.firstName).orNull()).toBe('Renamed'));
-    expect(saved).toHaveBeenCalledTimes(1);
-  });
 });

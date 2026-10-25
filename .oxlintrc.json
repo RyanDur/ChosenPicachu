@@ -10,6 +10,13 @@
   ],
   "rules": {
     "vitest/require-mock-type-parameters": "off",
+    "vitest/no-restricted-vi-methods": [
+      "error",
+      {
+        "fn": "Assert what the reader sees or the request the server received, not that a function was called.",
+        "mock": "Real collaborators: only the network, the users resource and the trade feed are stubbed."
+      }
+    ],
     "no-unused-expressions": [
       "error",
       {
