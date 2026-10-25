@@ -16,25 +16,25 @@ describe('the charts tutorials’ menus', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tutorial = await chartsDesk.findRegion('let’s build this feature');
+    const tutorial = await chartsDesk.findFeatureStories();
 
-    expect(chartsDesk.wordsIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
+    expect(chartsDesk.saysIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s own, on the charts tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tutorial = await chartsDesk.findRegion('let’s build this feature');
+    const tutorial = await chartsDesk.findFeatureStories();
 
-    expect(chartsDesk.wordsIn(tutorial, /^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
+    expect(chartsDesk.saysIn(tutorial, /^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const story = recipeFolds.story(await chartsDesk.findRegion('let’s build this feature'), 'The trader can lay out the workspace');
+    const story = recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
     expect(explanation.everyCodeBeside(story, /^A class is a name on an element/).join()).toMatch(/<Menu [^>]*className="/);
   });
 
@@ -43,7 +43,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findWords(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
+    expect(await chartsDesk.findSays(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
@@ -51,13 +51,13 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findWords(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(await chartsDesk.findSays(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-    await chartsDesk.findHeading('price line tutorial', 2);
+    await chartsDesk.findTitle('price line tutorial', 2);
     const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
     expect(explanation.everyCodeBeside(story, /^A class is a name written on an element that a stylesheet’s rules pick out\. Item/).join()).toMatch(/<Menu [^>]*className="/);
   });
@@ -70,8 +70,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findRegion('live trades')).toBeVisible();
-    expect(chartsDesk.missingRegion('candles')).not.toBeInTheDocument();
+    expect(await chartsDesk.findChart('live trades')).toBeVisible();
+    expect(chartsDesk.missingChart('candles')).not.toBeInTheDocument();
   });
 
   test('the trader can add a chart, and it goes to the front of the list', async () => {
@@ -79,12 +79,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.addChart('Candles');
 
-    const candles = await chartsDesk.findRegion('candles');
-    const price = chartsDesk.region('live trades');
+    const candles = await chartsDesk.findChart('candles');
+    const price = chartsDesk.chart('live trades');
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
@@ -94,12 +94,12 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const candles = await chartsDesk.findRegion('candles');
-    const price = chartsDesk.region('live trades');
-    expect(chartsDesk.headingIn(candles, 'candles')).toBeInTheDocument();
-    expect(chartsDesk.headingIn(price, 'live trades')).toBeInTheDocument();
-    expect(chartsDesk.headingIn(chartsDesk.region('pressure'), 'pressure')).toBeInTheDocument();
-    expect(chartsDesk.headingIn(chartsDesk.region('pie'), 'pie')).toBeInTheDocument();
+    const candles = await chartsDesk.findChart('candles');
+    const price = chartsDesk.chart('live trades');
+    expect(chartsDesk.titleIn(candles, 'candles')).toBeInTheDocument();
+    expect(chartsDesk.titleIn(price, 'live trades')).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.chart('pressure'), 'pressure')).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.chart('pie'), 'pie')).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {
@@ -107,12 +107,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.removeFirst();
 
-    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
-    expect(await chartsDesk.findRegion('candles')).toBeVisible();
+    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
+    expect(await chartsDesk.findChart('candles')).toBeVisible();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -121,10 +121,10 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
-    expect(chartsDesk.removeButton()).not.toBeInTheDocument();
-    expect(chartsDesk.anyGrip()).not.toBeInTheDocument();
+    expect(chartsDesk.removeOnOffer()).not.toBeInTheDocument();
+    expect(chartsDesk.gripOnOffer()).not.toBeInTheDocument();
   });
 
   test('a chart walked by keyboard takes the focus with it', async () => {
@@ -133,12 +133,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    const candles = chartsDesk.region('candles');
-    expect(candles.compareDocumentPosition(chartsDesk.region('live trades')))
+    const candles = chartsDesk.chart('candles');
+    expect(candles.compareDocumentPosition(chartsDesk.chart('live trades')))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(chartsDesk.doorway('Price line')).toHaveFocus();
   });
@@ -148,13 +148,13 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
     await chartsDesk.choosePeriod('price', 'day');
-    await chartsDesk.findButton('price period day');
+    await chartsDesk.findPeriodShown('price', 'day');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    expect(await chartsDesk.findButton('price period day')).toBeInTheDocument();
+    expect(await chartsDesk.findPeriodShown('price', 'day')).toBeInTheDocument();
     expect(chartsDesk.urlSearch()).toHaveTextContent('charts=candles%2Cprice%3Aday');
   });
 
@@ -163,7 +163,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
@@ -175,11 +175,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.keys('Price line', 'Delete');
 
-    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -188,11 +188,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.keys('Price line', 'Backspace');
 
-    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -201,7 +201,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.keys('Price line', 'Delete');
 
@@ -213,7 +213,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('candles');
+    await chartsDesk.findChart('candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
@@ -225,18 +225,18 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('candles');
+    await chartsDesk.findChart('candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
-    expect(chartsDesk.region('candles')).toBeVisible();
+    expect(chartsDesk.chart('candles')).toBeVisible();
   });
 
   test("a finger pressed on a chart's grip readies the chart to be moved, and lifted leaves it at rest", async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
     const finger = chartsDesk.fingerOn('Price line');
 
     await finger.press();
@@ -280,11 +280,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
-    expect(await chartsDesk.findHeading('let’s build this feature')).toBeVisible();
-    expect(chartsDesk.words(/the shape of the session/)).toBeVisible();
-    const recipe = chartsDesk.region('build the charts yourself');
+    expect(await chartsDesk.findTitle('let’s build this feature')).toBeVisible();
+    expect(chartsDesk.says(/the shape of the session/)).toBeVisible();
+    const recipe = chartsDesk.recipe('charts');
     expect(recipeFolds.story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/A third of the held chart’s height below the mark, the chart swaps with the one under it/);
     expect(recipe).toHaveTextContent(/export const strayed/);
@@ -295,11 +295,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.open('Price line');
 
-    expect(await chartsDesk.findRegion('build the price line yourself')).toBeVisible();
+    expect(await chartsDesk.findRecipe('price line')).toBeVisible();
   });
 
   test('enter on a chart opens its tutorial', async () => {
@@ -307,13 +307,13 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('candles');
+    await chartsDesk.findChart('candles');
 
     await chartsDesk.keys('Candles', 'Enter');
 
-    expect(await chartsDesk.findRegion('build the candles yourself')).toBeVisible();
-    expect(chartsDesk.region('candles')).toBeVisible();
-    expect(await chartsDesk.findWords(/read the same trades as candles/)).toBeVisible();
+    expect(await chartsDesk.findRecipe('candles')).toBeVisible();
+    expect(chartsDesk.chart('candles')).toBeVisible();
+    expect(await chartsDesk.findSays(/read the same trades as candles/)).toBeVisible();
   });
 
   test.each([
@@ -324,7 +324,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('candles');
+    await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
@@ -337,7 +337,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('candles');
+    await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
     expect(await recipeFolds.press(recipe, 'The trader can read the same trades as candles')).toHaveAttribute('open');
 
@@ -352,11 +352,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.addChart('Pressure');
 
-    expect(await chartsDesk.findRegion('pressure')).toBeVisible();
+    expect(await chartsDesk.findChart('pressure')).toBeVisible();
   });
 
   test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
@@ -364,17 +364,17 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
 
-    expect(await chartsDesk.findHeading('price line tutorial', 2)).toBeInTheDocument();
-    expect(chartsDesk.heading('let’s build this feature', 3)).toBeInTheDocument();
-    expect(chartsDesk.heading('The trader can watch the price move, live', 4)).toBeInTheDocument();
-    expect(chartsDesk.heading('Open a socket, and keep only what decodes', 5)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('price line tutorial', 2)).toBeInTheDocument();
+    expect(chartsDesk.title('let’s build this feature', 3)).toBeInTheDocument();
+    expect(chartsDesk.title('The trader can watch the price move, live', 4)).toBeInTheDocument();
+    expect(chartsDesk.title('Open a socket, and keep only what decodes', 5)).toBeInTheDocument();
   });
 
   describe('the price line’s story', () => {
     const priceStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-      await chartsDesk.findHeading('price line tutorial', 2);
+      await chartsDesk.findTitle('price line tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
@@ -412,7 +412,7 @@ describe('a list of charts', () => {
     const candlesStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('candles', '?graph=candles')} feed={feed}/>);
-      await chartsDesk.findHeading('candles tutorial', 2);
+      await chartsDesk.findTitle('candles tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can read the same trades as candles');
     };
 
@@ -447,7 +447,7 @@ describe('a list of charts', () => {
     const pressureStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
-      await chartsDesk.findHeading('pressure tutorial', 2);
+      await chartsDesk.findTitle('pressure tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
@@ -489,7 +489,7 @@ describe('a list of charts', () => {
     const pieStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pie', '?graph=pie')} feed={feed}/>);
-      await chartsDesk.findHeading('pie tutorial', 2);
+      await chartsDesk.findTitle('pie tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
@@ -547,8 +547,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findHeading('The trader can lay out the workspace', 3)).toBeInTheDocument();
-    expect(chartsDesk.heading('Read the charts from the address', 4)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('The trader can lay out the workspace', 3)).toBeInTheDocument();
+    expect(chartsDesk.title('Read the charts from the address', 4)).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {
@@ -556,12 +556,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('pressure');
+    await chartsDesk.findChart('pressure');
 
     await chartsDesk.open('Pressure');
 
-    expect(await chartsDesk.findRegion('build the pressure yourself')).toBeVisible();
-    expect(await chartsDesk.findWords(/who is driving/)).toBeVisible();
+    expect(await chartsDesk.findRecipe('pressure')).toBeVisible();
+    expect(await chartsDesk.findSays(/who is driving/)).toBeVisible();
   });
 
   test('a chart’s tutorial opens like a feature', async () => {
@@ -569,14 +569,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
-    const page = chartsDesk.article('price line tutorial');
-    expect(chartsDesk.headingIn(page, 'let’s build this feature', 3)).toBeVisible();
-    expect(chartsDesk.words(/without reading a single digit/)).toBeVisible();
-    expect(chartsDesk.words('a trader')).toBeVisible();
-    expect(chartsDesk.words(/build the story yourself first/)).toBeVisible();
-    const recipe = chartsDesk.region('build the price line yourself');
+    const page = chartsDesk.tutorial('price line');
+    expect(chartsDesk.titleIn(page, 'let’s build this feature', 3)).toBeVisible();
+    expect(chartsDesk.says(/without reading a single digit/)).toBeVisible();
+    expect(chartsDesk.says('a trader')).toBeVisible();
+    expect(chartsDesk.says(/build the story yourself first/)).toBeVisible();
+    const recipe = chartsDesk.recipe('price line');
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
@@ -585,9 +585,9 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
-    const recipe = chartsDesk.region('build the price line yourself');
+    const recipe = chartsDesk.recipe('price line');
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent('export const subscribeTo');
     expect(recipe).toHaveTextContent('export const decodeTrade');
@@ -604,7 +604,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('pressure');
+    await chartsDesk.findChart('pressure');
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
     const story = await recipeFolds.press(recipe, 'The trader can see who is driving the move');
     expect(story).toHaveAttribute('open');
@@ -617,8 +617,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=candles,price,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findRegion('candles')).toBeVisible();
-    expect(chartsDesk.regions('live trades')).toHaveLength(1);
+    expect(await chartsDesk.findChart('candles')).toBeVisible();
+    expect(chartsDesk.chartsNamed('live trades')).toHaveLength(1);
   });
 
   test('the add menu offers only what the desk lacks', async () => {
@@ -626,7 +626,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     expect(chartsDesk.offered('Price line')).not.toBeInTheDocument();
     expect(chartsDesk.offered('Candles')).not.toBeInTheDocument();
@@ -638,11 +638,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.addChart('Pie');
 
-    await chartsDesk.findRegion('pie');
+    await chartsDesk.findChart('pie');
     expect(chartsDesk.addMenu()).not.toBeInTheDocument();
   });
 
@@ -656,7 +656,7 @@ describe('a list of charts', () => {
 
     await chartsDesk.addChart('Pie');
 
-    const legend = chartsDesk.listIn(await chartsDesk.findRegion('pie'));
+    const legend = await chartsDesk.findPieLegend();
     expect(legend).toHaveTextContent('25% bought');
     expect(legend).toHaveTextContent('75% sold');
   });
@@ -666,11 +666,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('live trades');
+    await chartsDesk.findChart('live trades');
 
     await chartsDesk.addChart('Pie');
 
-    await chartsDesk.findRegion('pie');
+    await chartsDesk.findChart('pie');
     expect(chartsDesk.deskReport()).toHaveTextContent('Pie added');
   });
 
@@ -680,8 +680,8 @@ describe('a list of charts', () => {
     render(<TestApp at={chartPageAt('bogus')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findHeading(/BTC-USD/)).toBeVisible();
-    expect(chartsDesk.missingArticle(/tutorial/)).not.toBeInTheDocument();
+    expect(await chartsDesk.findTitle(/BTC-USD/)).toBeVisible();
+    expect(chartsDesk.anyTutorial()).not.toBeInTheDocument();
   });
 
   test('the pie is a doorway to who owns the session', async () => {
@@ -689,14 +689,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findRegion('pie');
+    await chartsDesk.findChart('pie');
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
     const story = await recipeFolds.press(recipe, 'The trader can see who owns the session');
     expect(story).toHaveAttribute('open');
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
     expect(recipe).toHaveTextContent('export const sweepGates');
-    expect(chartsDesk.words(/who owns the session/)).toBeVisible();
+    expect(chartsDesk.says(/who owns the session/)).toBeVisible();
   });
 });
 
@@ -721,7 +721,7 @@ describe('the demos page', () => {
 
       await demoTabs.open('Charts');
 
-      expect(await chartsDesk.findRegion('live trades')).toBeVisible();
+      expect(await chartsDesk.findChart('live trades')).toBeVisible();
     });
 
     test('trades gathered before the user opens the charts are already waiting', async () => {
@@ -806,7 +806,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await chartsDesk.findHeading(/BTC-USD/)).toBeVisible();
+      expect(await chartsDesk.findTitle(/BTC-USD/)).toBeVisible();
     });
 
     test('the charts explain what they show', async () => {
@@ -818,9 +818,9 @@ describe('the demos page', () => {
       const explainers = await chartsDesk.findExplainers();
       expect(explainers).toHaveLength(2);
       await chartsDesk.press(explainers[0]);
-      expect(chartsDesk.words(/price of one bitcoin in US dollars/)).toBeVisible();
+      expect(chartsDesk.says(/price of one bitcoin in US dollars/)).toBeVisible();
       await chartsDesk.press(explainers[1]);
-      expect(chartsDesk.words(/how much bitcoin changed hands/)).toBeVisible();
+      expect(chartsDesk.says(/how much bitcoin changed hands/)).toBeVisible();
     });
 
     test('the trades in a minute become one candle', async () => {
@@ -854,7 +854,7 @@ describe('the demos page', () => {
       expect(chartsDesk.onPriceCard('$50,003')).toBeVisible();
       expect(chartsDesk.onPriceCard('$50,001')).toBeVisible();
       expect(chartsDesk.onPriceCard('5 candles · 1m each')).toBeVisible();
-      const ticks = chartsDesk.timesIn(chartsDesk.priceCard());
+      const ticks = chartsDesk.priceTicks();
       expect(ticks.map(tick => tick.textContent))
         .toEqual([0, 1, 2, 3, 4].map(step => format(firstTradedAt + step * tenMinutes, 'HH:mm')));
     });
@@ -904,8 +904,8 @@ describe('the charts’ headings', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findHeading('live trades', 3)).toBeInTheDocument();
-    expect(chartsDesk.heading('candles', 3)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
+    expect(chartsDesk.title('candles', 3)).toBeInTheDocument();
   });
 
   test('should sit the chart under its tutorial’s title on its own page', async () => {
@@ -913,7 +913,7 @@ describe('the charts’ headings', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findHeading('live trades', 3)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
   });
 });
 
@@ -930,10 +930,10 @@ describe('the charts tab’s introduction', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const tab = await chartsDesk.findRegion('Charts');
-    const headline = chartsDesk.headingIn(tab, /^Bitcoin, live/, 2);
+    const tab = await chartsDesk.findChartsTab();
+    const headline = chartsDesk.titleIn(tab, /^Bitcoin, live/, 2);
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => chartsDesk.wordsIn(tab, paragraph)), headline])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => chartsDesk.saysIn(tab, paragraph)), headline])).toEqual([]);
   });
 });
 
@@ -942,7 +942,7 @@ describe('the workspace story', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    return recipeFolds.story(await chartsDesk.findRegion('let’s build this feature'), 'The trader can lay out the workspace');
+    return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
 
   test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
@@ -983,7 +983,7 @@ describe('the workspace story', () => {
   test('should draw, in step 2, the short chart dropping a tall chart’s height while the pointer stands still', async () => {
     const swap = recipeFolds.steps(await workspaceStory())[1];
 
-    expect(chartsDesk.figureIn(swap, /^A third from the pointer\./)).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
+    expect(chartsDesk.drawingIn(swap, /^A third from the pointer\./)).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
   });
 
   test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
@@ -991,7 +991,7 @@ describe('the workspace story', () => {
   });
 
   test('should drop the figures of speech from its words', async () => {
-    const words = chartsDesk.paragraphsIn(await workspaceStory()).map(paragraph => paragraph.textContent).join(' ');
+    const words = chartsDesk.toldIn(await workspaceStory());
 
     expect(words).not.toMatch(/dealt|whispers|slides home|strays|rides|walks|the address is the state|holds its post/);
   });
@@ -1003,8 +1003,8 @@ describe('the workspace story', () => {
   test('should say the card below is the workspace, each chart above opens its own, and name MDN as Mozilla’s web reference', async () => {
     await workspaceStory();
 
-    expect(chartsDesk.words(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
-    expect(chartsDesk.words(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
+    expect(chartsDesk.says(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
+    expect(chartsDesk.says(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
   });
 });
 
@@ -1013,22 +1013,22 @@ describe('the charts’ audited words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=charts&charts=${charts}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    return chartsDesk.findRegion('Charts');
+    return chartsDesk.findChartsTab();
   };
 
   test('should head the live charts with a colon, not a dash', async () => {
-    expect(chartsDesk.headingIn(await tabWith('price'), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(await tabWith('price'), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
   });
 
   test('should explain the price line by its period, its first close and its colour', async () => {
     await tabWith('price');
 
-    expect(chartsDesk.region('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
+    expect(chartsDesk.chart('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
   });
 
   test('should explain the candles as spans grouped from the same measurement', async () => {
     await tabWith('candles');
-    const candles = chartsDesk.region('candles');
+    const candles = chartsDesk.chart('candles');
 
     expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
     expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
-const openAddMenu = (): HTMLElement => {
+const theAddMenu = (): HTMLElement => {
   const menu = addMenu();
   if (!menu) {
     throw new Error('no add-a-chart menu on the desk');
@@ -12,7 +12,7 @@ const openAddMenu = (): HTMLElement => {
 };
 
 const addChart = async (name: string): Promise<void> =>
-  userEvent.click(within(openAddMenu()).getByRole('button', {name, hidden: true}));
+  userEvent.click(within(theAddMenu()).getByRole('button', {name, hidden: true}));
 
 const doorway = (chart: string): HTMLElement => screen.getByRole('link', {name: `${chart} tutorial`});
 
@@ -79,7 +79,7 @@ const releaseDrag = (at: string): void => {
 export const chartsDesk = {
   addMenu,
   addChart,
-  offered: (name: string): HTMLElement | null => within(openAddMenu()).queryByRole('button', {name, hidden: true}),
+  offered: (name: string): HTMLElement | null => within(theAddMenu()).queryByRole('button', {name, hidden: true}),
   doorway,
   walkThrough,
   slot,
@@ -91,28 +91,30 @@ export const chartsDesk = {
   releaseDrag,
   open: async (chart: string): Promise<void> => userEvent.click(doorway(chart)),
   removeFirst: async (): Promise<void> => userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]),
-  removeButton: (): HTMLElement | null => screen.queryByRole('button', {name: 'remove chart'}),
-  anyGrip: (): HTMLElement | null => screen.queryByRole('button', {name: 'move chart', hidden: true}),
+  removeOnOffer: (): HTMLElement | null => screen.queryByRole('button', {name: 'remove chart'}),
+  gripOnOffer: (): HTMLElement | null => screen.queryByRole('button', {name: 'move chart', hidden: true}),
   choosePeriod: async (chart: string, period: string): Promise<void> =>
     userEvent.click(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {name: period, hidden: true})),
-  findButton: (name: string): Promise<HTMLElement> => screen.findByRole('button', {name}),
-  region: (name: string): HTMLElement => screen.getByRole('region', {name}),
-  findRegion: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
-  missingRegion: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
-  regionIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('region', {name}),
-  regions: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
-  article: (name: string): HTMLElement => screen.getByRole('article', {name}),
-  missingArticle: (name: RegExp): HTMLElement | null => screen.queryByRole('article', {name}),
-  listIn: (holder: HTMLElement): HTMLElement => within(holder).getByRole('list'),
-  figureIn: (holder: HTMLElement, name: RegExp): HTMLElement => within(holder).getByRole('figure', {name}),
-  paragraphsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('paragraph'),
-  heading: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
-  findHeading: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
-  headingIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
-  words: (told: string | RegExp): HTMLElement => screen.getByText(told),
-  findWords: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
-  wordsIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
-  findWordsIn: (holder: HTMLElement, told: string | RegExp): Promise<HTMLElement> => within(holder).findByText(told),
+  findPeriodShown: (chart: string, period: string): Promise<HTMLElement> => screen.findByRole('button', {name: `${chart} period ${period}`}),
+  chart: (name: string): HTMLElement => screen.getByRole('region', {name}),
+  findChart: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
+  missingChart: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
+  chartsNamed: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
+  recipe: (subject: string): HTMLElement => screen.getByRole('region', {name: `build the ${subject} yourself`}),
+  findRecipe: (subject: string): Promise<HTMLElement> => screen.findByRole('region', {name: `build the ${subject} yourself`}),
+  findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'let’s build this feature'}),
+  findChartsTab: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Charts'}),
+  tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
+  anyTutorial: (): HTMLElement | null => screen.queryByRole('article', {name: /tutorial/}),
+  findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
+  drawingIn: (holder: HTMLElement, name: RegExp): HTMLElement => within(holder).getByRole('figure', {name}),
+  toldIn: (holder: HTMLElement): string => within(holder).getAllByRole('paragraph').map(paragraph => paragraph.textContent).join(' '),
+  title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
+  findTitle: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
+  titleIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
+  says: (told: string | RegExp): HTMLElement => screen.getByText(told),
+  findSays: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
+  saysIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   feedStatus: (): HTMLElement => screen.getByRole('status', {name: 'feed'}),
@@ -121,9 +123,9 @@ export const chartsDesk = {
   priceCard,
   onPriceCard: (told: string): HTMLElement => within(priceCard()).getByText(told),
   findOnPriceCard: (told: string): Promise<HTMLElement> => within(priceCard()).findByText(told),
+  priceTicks: (): HTMLElement[] => within(priceCard()).getAllByRole('time'),
   drawnCandles: (): number => parseInt(captionOf('candles'), 10),
   drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
-  timesIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('time'),
   findExplainers: (): Promise<HTMLElement[]> => screen.findAllByText('what am I looking at?'),
   press: async (control: HTMLElement): Promise<void> => userEvent.click(control)
 };
