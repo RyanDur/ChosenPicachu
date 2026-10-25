@@ -9,10 +9,10 @@ export const Structure: FC = () =>
       purpose, and structure of text within a document.
     </Quotation>
     <p className="paragraph">HTML says what each thing on the page is: a heading, a list, a button, a form. Choose the
-      element that means the content and its behavior comes with it: a button presses from the keyboard, a details
-      opens and shuts, and a screen reader is told the role and the state, before any script arrives. The same markup
-      tells the next person what the page is, and a search engine, a reader mode and a screen reader read the meaning
-      first. Build a button from a div and script instead, and the keyboard, the focus and the role each have to be
-      added back by hand, and until they are, a screen reader finds no button there, only text. So the rule is to
-      choose the element that means what the content is, and add the look and the behavior on top of it.</p>
+      element that means the content and its behavior comes with it, before any script arrives: a button presses from
+      the keyboard, a details opens and shuts, and a screen reader is told the role and the state. The same markup tells
+      the next person what the page is, and a search engine and a reader mode read the meaning, not the look. Build a
+      button from a div and script instead, and the keyboard, the focus and the role each have to be added back by hand.
+      Until they are, a screen reader finds no button there, only text. So the rule is to choose the element that means
+      what the content is, and add the look and the behavior on top of it.</p>
   </ConcernSection>;
