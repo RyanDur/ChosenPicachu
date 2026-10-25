@@ -10,8 +10,8 @@ const nextThirteenFour = 'https://nextjs.org/blog/next-13-4';
 
 export const DocumentComesBack: FC = () =>
   <Moment of={moments.documentComesBack}
-    tells={<>The question this time was where the page is rendered. In October 2016 Next.js brought server-side rendering to the
-      frameworks, sending real HTML first and attaching behavior after; static generation (pages rendered once, at build
+    tells={<>The question this time was where the page is rendered. In October 2016 Next.js opened as a framework for server-rendered
+      pages, sending real HTML first and attaching behavior after; static generation (pages rendered once, at build
       time), islands and server components are the same instinct refined: the document first, the program only where the
       page needs one.</>}>
     <p className="paragraph muted-ink hyphenated">Next.js opened on 25 October 2016 as <a className="signpost" href={next}>“a small framework for server-rendered universal JavaScript webapps”</a>, built on React, with <a className="signpost" href={next}>“Automatic server rendering and code splitting”</a> among its six principles. Static generation pre-rendered what never changes. <a className="signpost" href={rendering}>Hydration</a>, in web.dev’s definition, is <a className="signpost" href={rendering}>“Running client-side scripts to add application state and interactivity to server-rendered HTML”</a>, attaching listeners to markup that already stood. The first thing the browser drew was HTML again, and the program arrived second.</p>
