@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, demoTabs, Feed} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
-import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
+import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import userEvent from '@testing-library/user-event';
@@ -888,7 +888,7 @@ describe('the demos page', () => {
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50001)]);
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
-      feed.clients.forEach(socket => socket.close());
+      hangUp(feed);
       await waitFor(() =>
         expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent('live feed unavailable'));
       expect(within(priceCard()).getByText('$50,001.00')).toBeVisible();
