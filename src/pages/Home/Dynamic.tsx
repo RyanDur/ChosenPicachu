@@ -11,10 +11,11 @@ export const Dynamic: FC = () =>
       their properties, and respond to events, we envisioned a much livelier Web
       consisting of pages that acted more like applications.
     </Quotation>
-    <p className="paragraph">JavaScript says how things respond. Brendan Eich wrote its first interpreter in about ten
-      days, for a page the server had already sent: a script could reach an element, change it, and answer an event.
-      Later the script became the whole page, and as those pages grew the costs came with them: a blank first paint, a
-      document no crawler could read, a back button rebuilt by hand. So the document comes first again, and a program
-      runs only where a part of the page must respond. Inside that program the state is what is true, an event is what
-      happened, and the page is drawn from the two, so a framework can change under it and the core stays.</p>
+    <p className="paragraph">JavaScript says how things respond. Script adds what the elements lack: a behaviour no
+      element has yet, which is what Eich built it for, and a request that brings new information into the page without
+      a new page, which Ajax named in 2005. The costs arrive when the script becomes the whole page: a blank first paint
+      until it runs, a document no crawler or screen reader can read, a back button rebuilt by hand. So the document
+      comes first, and a program runs only where a part of the page must respond. Inside that program the state is what
+      is true, an event is what happened, and the page is drawn from the two, so a framework can change under it and the
+      core stays.</p>
   </ConcernSection>;
