@@ -6,8 +6,9 @@ export const Opener: FC = () =>
   <header className="opening">
     <p className="thesis paragraph">
       A webpage is three languages working in concert. HTML says what things are, CSS says how
-      they look, and JavaScript says how they respond. Each was designed to handle a specific concern. When
-      one could not yet do a job, another covered for it until the standard caught up and adopted
+      they look, and JavaScript says how they respond. Each was designed to handle one concern: structure,
+      presentation and behavior. When one could not yet do a job, another covered for it until its standard caught up
+      and adopted
       the workaround, which is what HTML’s own design principles ask: when a practice is already
       widespread,{' '}
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting
@@ -15,7 +16,8 @@ export const Opener: FC = () =>
     </p>
     <p className="thesis paragraph">
       This site is for the developer who has hit a bug on a page and wants to know what the
-      platform meant. Many of us write one of the three languages well and the other two by habit,
+      platform, the browser and the standards it follows, meant. Many of us write one of the three languages well and
+      the other two by habit,
       and the bug lives where the habit and the platform disagree. The habit might be a div where a
       button was meant, a class that names a margin instead of the reason for it, or a script that
       rebuilds what the browser already does: scrolling, focus, the back button. Each one works on
