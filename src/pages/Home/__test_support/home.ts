@@ -17,6 +17,6 @@ export const homePage = {
   quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
   summary: (name: string): HTMLElement => ownParagraphs(name)[0],
-  storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the record.'}),
+  storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'}),
   practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
 };

@@ -8,6 +8,6 @@ export const ConcernSection: FC<PropsWithChildren<{concern: Concern}>> = ({conce
   <section className="concern trim-rule-above" aria-labelledby={concernId(concern)}>
     <h2 className="concern-title title" id={concernId(concern)}>{concern}</h2>
     {children}
-    <p className="paragraph"><Link className="signpost" to={storyAddress(concern)}>Its story is on the record.</Link></p>
+    <p className="paragraph"><Link className="signpost" to={storyAddress(concern)}>Its story is on the Record.</Link></p>
     <p className="paragraph"><Link className="signpost" to={practiceAddress(concern)}>How I organize it is on Practice.</Link></p>
   </section>;
