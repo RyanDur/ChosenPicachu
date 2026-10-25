@@ -86,3 +86,5 @@ export const broadcast = (feed: Feed, frames: string[]): void =>
   feed.clients.forEach(socket => {
     frames.forEach(frame => socket.send(frame));
   });
+
+export const hangUpEveryFeed = (): void => feedLink.clients.forEach(socket => socket.close());

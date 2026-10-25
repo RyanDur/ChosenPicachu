@@ -1,5 +1,5 @@
 import {waitFor} from '@testing-library/react';
-import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
+import {broadcast, hangUpEveryFeed, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
@@ -43,6 +43,7 @@ describe('the frame table', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
+    hangUpEveryFeed();
   });
 
   it('without a feed the starting zeros stand', () => {
