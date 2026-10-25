@@ -167,3 +167,7 @@ export const accordionsTab = (page: Page) => {
 };
 
 export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', {includeHidden: true});
+
+export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)[]> =>
+  page.getByRole('region', {name: 'How we used to build a fold'}).getByRole('radio')
+    .evaluateAll(toggles => toggles.map(toggle => toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));

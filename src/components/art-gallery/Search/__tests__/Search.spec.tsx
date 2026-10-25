@@ -21,14 +21,6 @@ describe('search', () => {
     expect(await screen.findByRole('combobox', {name: 'Search For: 100%'})).toBeInTheDocument();
   });
 
-  it('should give suggestions for completion', async () => {
-    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
-
-    await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
-
-    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
-  });
-
   it('puts the searched word in the url', async () => {
     render(<TestApp at={Paths.artGallery}/>);
 
@@ -90,6 +82,16 @@ describe('search', () => {
   describe('with the clock held', () => {
     afterEach(() => {
       vi.useRealTimers();
+    });
+
+    it('should give suggestions for completion', async () => {
+      const search = heldSearch();
+      render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
+
+      await search.type(searchWord);
+      await search.pauseEnds();
+
+      await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
     });
 
     it("a museum that refuses the new word clears the old word's suggestions", async () => {

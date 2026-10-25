@@ -1,7 +1,6 @@
-import {render, waitFor} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
-import {itemHeadedBy} from '@__test_support/headed-item';
 import {practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
@@ -156,13 +155,5 @@ describe('the practice page', () => {
     await practicePage.arrivedOn(concern);
 
     expect(practicePage.citations()).toEqual(meant);
-  });
-
-  test('should land a moment link on its moment in the record, with focus there', async () => {
-    render(<TestApp at={Paths.practice}/>);
-
-    await practicePage.followMoment('2016 moment');
-
-    await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
 });

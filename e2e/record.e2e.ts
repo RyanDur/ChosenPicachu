@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {pressTab, recordPage, tabsTo} from './__test_support';
+import {practicePage, pressTab, recordPage, tabsTo} from './__test_support';
 
 test('opening one fuller story closes the one that was open', async ({page}) => {
   const record = recordPage(page);
@@ -72,4 +72,13 @@ test('a line in a story\'s list lands on that moment in the timeline below, with
 
   await expect(page).toHaveURL(/\/record\/#the-browsers-need-to-agree$/);
   await expect(record.moment('The browsers need to agree')).toBeFocused();
+});
+
+test('a reader who follows a moment link on Practice lands on that moment in the record, with focus there', async ({page}) => {
+  await page.goto('practice/');
+
+  await practicePage(page).momentLink('2016 moment').click();
+
+  await expect(page).toHaveURL(/\/record\/#the-document-needs-to-come-first$/);
+  await expect(recordPage(page).moment('The document needs to come first')).toBeFocused();
 });

@@ -1,9 +1,8 @@
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import {render, screen, waitFor, within} from '@testing-library/react';
-import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
-import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {render, screen, within} from '@testing-library/react';
+import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {DemoTopics, topicNames} from '@pages/Demos/types';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
@@ -14,23 +13,6 @@ describe('The Demos page', () => {
     await demoTabs.arrivedOn(topicNames[tab]);
 
     expect(britishSpellingsOnThePage()).toEqual([]);
-  });
-
-  test('the accordion labels survive a visit to the streaming charts', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt()} feed={feed}/>);
-
-    const foldLabels = async () => (await within(await screen.findByRole('region', {name: 'How we used to build a fold'})).findAllByRole<HTMLInputElement>('radio'))
-      .map(toggle => toggle.labels?.[0]?.textContent);
-    const before = await foldLabels();
-    await demoTabs.open('Charts');
-    await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
-    await feedIsSubscribed(feed);
-    broadcast(feed, [tradeFrame(50001)]);
-    expect(await within(screen.getByRole('region', {name: 'live trades'})).findByText('$50,001.00')).toBeVisible();
-    await demoTabs.open('Accordions');
-    expect(await foldLabels()).toEqual(before);
   });
 
   test('should open on what the tabs hold and where to start, above the tabs', async () => {
