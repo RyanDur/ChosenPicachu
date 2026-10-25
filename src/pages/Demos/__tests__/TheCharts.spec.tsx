@@ -1,10 +1,9 @@
 import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
-import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
 import {feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import userEvent from '@testing-library/user-event';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
@@ -244,35 +243,6 @@ describe('a list of charts', () => {
 
     await finger.lift();
     expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
-  });
-
-  test("a finger pressed on a chart's grip and taken over by the browser leaves the chart at rest", async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
-    const grip = within(chartsDesk.slot('Price line')).getByRole('button', {name: 'move chart', hidden: true});
-
-    await userEvent.pointer({keys: '[TouchA>]', target: grip});
-    fireEvent.pointerCancel(grip, {pointerType: 'touch'});
-
-    expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
-  });
-
-  test('the trader can drag a chart to a new seat', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
-    await chartsDesk.dragChart('Price line', 'Candles', 100);
-
-    expect(within(chartsDesk.seat(1)).getByRole('region', {name: 'candles'})).toBeVisible();
-
-    chartsDesk.releaseDrag('Price line');
-
-    expect(within(chartsDesk.seat(1)).getByRole('region', {name: 'candles'})).toBeVisible();
-    expect(within(chartsDesk.seat(2)).getByRole('region', {name: 'live trades'})).toBeVisible();
   });
 
   test('the workspace tells its story', async () => {

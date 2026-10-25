@@ -69,3 +69,19 @@ test.describe('a mouse carrying a chart past its neighbour', () => {
     expect(down - back).toBeLessThan(carried.height / 3 + 6);
   });
 });
+
+test.describe('a finger on a phone', () => {
+  test.use(iPhone);
+
+  test('a finger pressed on a chart\'s grip and taken over by the browser leaves the chart at rest', async ({page, browserName}) => {
+    test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
+    await page.goto('demos/?tab=charts&charts=price,candles');
+    const charts = chartsPage(page);
+
+    const finger = await charts.fingerOnTheGrip('live trades');
+    await expect(charts.seat('live trades')).toHaveAttribute('draggable', 'true');
+
+    await finger.cancelled();
+    await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
+  });
+});

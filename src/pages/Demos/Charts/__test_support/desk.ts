@@ -1,4 +1,4 @@
-import {createEvent, fireEvent, screen, within} from '@testing-library/react';
+import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
@@ -29,8 +29,6 @@ const slot = (chart: string): HTMLElement => {
   return seat;
 };
 
-const seat = (at: number): HTMLElement => within(screen.getByRole('list', {name: 'charts'})).getAllByRole('listitem')[at - 1];
-
 const grip = (chart: string): HTMLElement => within(slot(chart)).getByRole('button', {name: 'move chart', hidden: true});
 
 type Finger = {
@@ -59,23 +57,6 @@ const keys = async (chart: string, key: string): Promise<void> => {
   await userEvent.keyboard(`{${key}}`);
 };
 
-const dragChart = async (from: string, to: string, handAt: number): Promise<void> => {
-  await userEvent.pointer({keys: '[TouchA>]', target: within(slot(from)).getByRole('button', {name: 'move chart', hidden: true})});
-  const start = createEvent.dragStart(slot(from));
-  Object.defineProperty(start, 'clientY', {value: 0});
-  Object.defineProperty(start, 'dataTransfer', {value: {effectAllowed: '', dropEffect: ''}});
-  fireEvent(slot(from), start);
-  const over = createEvent.dragOver(slot(to));
-  Object.defineProperty(over, 'clientY', {value: handAt});
-  Object.defineProperty(over, 'dataTransfer', {value: {dropEffect: ''}});
-  fireEvent(slot(to), over);
-};
-
-const releaseDrag = (at: string): void => {
-  fireEvent.drop(slot(at));
-  fireEvent.dragEnd(slot(at));
-};
-
 export const chartsDesk = {
   addMenu,
   addChart,
@@ -83,12 +64,8 @@ export const chartsDesk = {
   doorway,
   walkThrough,
   slot,
-  seat,
-  grip,
   fingerOn,
   keys,
-  dragChart,
-  releaseDrag,
   open: async (chart: string): Promise<void> => userEvent.click(doorway(chart)),
   removeFirst: async (): Promise<void> => userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]),
   removeOnOffer: (): HTMLElement | null => screen.queryByRole('button', {name: 'remove chart'}),
