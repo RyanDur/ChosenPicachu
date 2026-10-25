@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {heldAICSuggestions} from '@components/art-gallery/__test_support';
+import {heldAICSuggestions, heldSearch} from '@components/art-gallery/__test_support';
 import {aicSuggestionsOf} from '@components/art-gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
 
@@ -27,17 +27,6 @@ describe('search', () => {
     await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
 
     await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
-  });
-
-  it("a museum that refuses the new word clears the old word's suggestions", async () => {
-    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
-    await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
-    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
-    anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
-
-    await userEvent.type(screen.getByLabelText(/Search For/), 'X');
-
-    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toBeEmptyDOMElement());
   });
 
   it('puts the searched word in the url', async () => {
@@ -98,51 +87,76 @@ describe('search', () => {
     expect(screen.getByRole('button', {name: 'submit search'})).toBeDisabled();
   });
 
-  it('a word asks the museum for suggestions once, and not again while it stands', async () => {
-    const suggestions: string[] = [];
-    const count = ({request}: {request: Request}) => {
-      if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
-    };
-    server.events.on('request:start', count);
-    try {
-      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+  describe('with the clock held', () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
-      await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
-      await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
+    it("a museum that refuses the new word clears the old word's suggestions", async () => {
+      const search = heldSearch();
+      render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
+      await search.type(searchWord);
+      await search.pauseEnds();
+      await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
+      anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
 
-      expect(suggestions).toHaveLength(1);
-      await expect(waitFor(() => expect(suggestions.length).toBeGreaterThan(1), {timeout: 700})).rejects.toThrow(/greater than 1/);
-    } finally {
-      server.events.removeListener('request:start', count);
-    }
-  });
+      await search.type('X');
+      await search.pauseEnds();
 
-  it("the page gives up on an old word's answer, so it cannot land over the new word's suggestions", async () => {
-    const asked: string[] = [];
-    const noted = ({request}: {request: Request}) => {
-      const word = new URL(request.url).searchParams.get('query[term][title]');
-      if (word !== null) asked.push(word);
-    };
-    server.events.on('request:start', noted);
-    const monk = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
-    const monet = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
-    try {
-      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+      await waitFor(() => expect(search.suggestions()).toBeEmptyDOMElement());
+    });
 
-      await userEvent.type(screen.getByLabelText(/Search For/), 'mon');
-      await waitFor(() => expect(asked).toContain('mon'));
-      await userEvent.type(screen.getByLabelText(/Search For/), 'et');
-      await waitFor(() => expect(asked).toContain('monet'));
-      monet.arrives();
-      await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET'));
-      monk.arrives();
+    it('a word asks the museum for suggestions once, and not again while it stands', async () => {
+      const suggestions: string[] = [];
+      const count = ({request}: {request: Request}) => {
+        if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
+      };
+      server.events.on('request:start', count);
+      try {
+        const search = heldSearch();
+        render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+        await search.type(searchWord);
+        await search.pauseEnds();
+        await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
 
-      expect(await monk.served).toEqual({aborted: true});
-      expect(asked).toEqual(['mon', 'monet']);
-      expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET');
-      expect(screen.getByRole('listbox', {hidden: true})).not.toHaveTextContent('MONK');
-    } finally {
-      server.events.removeListener('request:start', noted);
-    }
+        await search.pauseEnds();
+
+        expect(suggestions).toHaveLength(1);
+      } finally {
+        server.events.removeListener('request:start', count);
+      }
+    });
+
+    it("the page gives up on an old word's answer, so it cannot land over the new word's suggestions", async () => {
+      const asked: string[] = [];
+      const noted = ({request}: {request: Request}) => {
+        const word = new URL(request.url).searchParams.get('query[term][title]');
+        if (word !== null) asked.push(word);
+      };
+      server.events.on('request:start', noted);
+      const monk = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
+      const monet = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
+      try {
+        const search = heldSearch();
+        render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+
+        await search.type('mon');
+        await search.pauseEnds();
+        await waitFor(() => expect(asked).toContain('mon'));
+        await search.type('et');
+        await search.pauseEnds();
+        await waitFor(() => expect(asked).toContain('monet'));
+        monet.arrives();
+        await waitFor(() => expect(search.suggestions()).toHaveTextContent('MONET'));
+        monk.arrives();
+
+        expect(await monk.served).toEqual({aborted: true});
+        expect(asked).toEqual(['mon', 'monet']);
+        expect(search.suggestions()).toHaveTextContent('MONET');
+        expect(search.suggestions()).not.toHaveTextContent('MONK');
+      } finally {
+        server.events.removeListener('request:start', noted);
+      }
+    });
   });
 });

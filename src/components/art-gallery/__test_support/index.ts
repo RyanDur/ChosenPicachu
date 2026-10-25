@@ -16,3 +16,4 @@ export {
   setupVAMAllArtResponse
 } from './museums';
 export {galleryWall} from './wall';
+export {heldSearch} from './search';
