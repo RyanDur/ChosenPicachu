@@ -1,5 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {feedStatus} from '@pages/Demos/__test_support';
 
 const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
@@ -94,7 +95,7 @@ export const chartsDesk = {
   saysIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
-  feedStatus: (): HTMLElement => screen.getByRole('status', {name: 'feed'}),
+  feedStatus,
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
   findTrouble: (told: string): Promise<HTMLElement> => within(alert()).findByText(told),
   priceCard,
@@ -103,6 +104,6 @@ export const chartsDesk = {
   priceTicks: (): HTMLElement[] => within(priceCard()).getAllByRole('time'),
   drawnCandles: (): number => parseInt(captionOf('candles'), 10),
   drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
-  findExplainers: (): Promise<HTMLElement[]> => screen.findAllByText('what am I looking at?'),
-  press: async (control: HTMLElement): Promise<void> => userEvent.click(control)
+  explain: async (chart: string): Promise<void> =>
+    userEvent.click(within(await screen.findByRole('region', {name: chart})).getByText('what am I looking at?'))
 };

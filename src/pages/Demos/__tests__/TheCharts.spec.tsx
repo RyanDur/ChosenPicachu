@@ -785,11 +785,9 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      const explainers = await chartsDesk.findExplainers();
-      expect(explainers).toHaveLength(2);
-      await chartsDesk.press(explainers[0]);
+      await chartsDesk.explain('live trades');
       expect(chartsDesk.says(/price of one bitcoin in US dollars/)).toBeVisible();
-      await chartsDesk.press(explainers[1]);
+      await chartsDesk.explain('candles');
       expect(chartsDesk.says(/how much bitcoin changed hands/)).toBeVisible();
     });
 
