@@ -569,20 +569,20 @@ describe('the record', () => {
     const title = screen.getByRole('heading', {name: 'The record', level: 1});
     const record = screen.getByRole('heading', {name: 'How the web got its languages', level: 2});
     const research = screen.getByRole('heading', {name: 'The research', level: 2});
-    const demos = screen.getByRole('link', {name: /Start where the demos start/});
+    const demos = screen.getByRole('link', {name: 'The tables are built twice'});
 
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(demos.compareDocumentPosition(research) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(demos).toHaveAttribute('href', expect.stringContaining(Paths.demos));
+    expect(demos).toHaveAttribute('href', `${Paths.demos}?tab=tables`);
   });
 
-  test('should say, after the record, that the tables are built twice and why both are kept', () => {
+  test('should say, after the record, what the demos put to work, that the tables are built twice and why', () => {
     const record = screen.getByRole('region', {name: 'How the web got its languages'});
-    const seam = screen.getByText(/^The tables are built twice/);
+    const seam = screen.getByText(/^The Demos put that practice to work/);
 
     expect(record.compareDocumentPosition(seam)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(seam).toHaveTextContent('The tables are built twice: once in plain HTML, CSS and JavaScript with no framework, and once in React on the same three. I keep both so the line between the platform and the framework stays visible. The history above is why that line matters: what a framework had to do keeps moving into the platform.');
+    expect(seam).toHaveTextContent('The Demos put that practice to work on the site’s own code. The tables are built twice, once in plain HTML, CSS and JavaScript with no framework and once in React on the same three, so the line between the platform and a framework stays visible, and the history above is why that line matters: what a framework had to do keeps moving into the platform. The accordions set the trick used before the platform could do the job beside what it does now. Knowing what each element was built for is most of the work.');
   });
 
   test.each([
@@ -606,7 +606,7 @@ describe('the record', () => {
   });
 
   test('should open on the argument, each language designed for a concern and the three things the record argues from the sources', () => {
-    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, each designed to handle a specific concern. HTML says what things are, CSS says how they look, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN who had to share what they knew. The record argues three things from the sources. Each language got its job from a need. When one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform took the job back into the language it belonged to. And the standards were written after what shipped, each time the field ran ahead.');
+    expect(recordPage.argument()).toHaveTextContent('A webpage is three languages, each designed to handle one concern: HTML says what things are, CSS says how they look, and JavaScript says how they respond. Each began because someone needed something the web could not yet do, starting with several thousand people at CERN, the European physics laboratory, who had to share what they knew. The Record argues three things from the sources. First, each language got its job from a need. Second, when one language was made to do another’s job, the page worked on the day, the cost came with the growth, and the platform, the browsers and the standards they follow, took the job back into the language it belonged to. Third, the standards were written after what shipped, each time the field ran ahead.');
   });
 
   test('should say how the four parts support the argument, and where to start', () => {
@@ -754,20 +754,22 @@ describe('the record', () => {
     expect(within(itemHeadedBy('the timeline', title)).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
   });
 
-  test('should open the tee-up on how every page here is built, need first', () => {
-    expect(screen.getByText(/^I start from what someone needs/))
-      .toHaveTextContent('I start from what someone needs. The clues in that need point at an element the platform already has. I design around the element, cut the design into thin stories, and build the feature one story at a time. Every page here was built that way.');
+  test('should open the bridge on how every feature here is built, need first, in the record\'s voice', () => {
+    expect(screen.getByText(/^The record ends here and the practice begins/)).toHaveTextContent('The record ends here and the practice begins. Each feature on this site starts from what someone needs. The clues in that need point at an element the platform already has; the design is built around that element, cut into thin stories, and built one story at a time, and every page here was built that way. How each concern is organized, and why, is on the Practice page, one tab for each.');
   });
 
-  test('should send the reader into the demos at the accordions, and say what the demos teach', () => {
-    expect(screen.getByText(/with the accordions, which set the trick we used before/))
-      .toHaveTextContent('Start where the demos start, with the accordions, which set the trick we used before beside what the platform gives now. Knowing what each element was built for is most of the work.');
+  test.each([
+    ['the Practice page', Paths.practice],
+    ['The tables are built twice', `${Paths.demos}?tab=tables`],
+    ['The accordions', `${Paths.demos}?tab=accordions`]
+  ])('should send the reader on from the bridge: %s', (name, address) => {
+    expect(screen.getByRole('link', {name})).toHaveAttribute('href', address);
   });
 
   test('should tell the concert after the timeline closes and before the tee-up', () => {
     const closing = screen.getByText(/^Read the titles again, top to bottom/);
     const concert = screen.getByRole('region', {name: 'The concert'});
-    const teeUp = screen.getByText(/^I start from what someone needs/);
+    const teeUp = screen.getByText(/^The record ends here and the practice begins/);
 
     expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -1010,7 +1012,7 @@ describe('the record\'s three stories', () => {
       'Then the frameworks came to organize what the script was building, and each moved more of the page into it. AngularJS said in 2010 that HTML “falters when we try to use it for declaring dynamic views in web-applications”, and answered with “two-way data-binding that allowed for the automatic synchronization of models and views”: change the data and the page changes, change the page and the data changes. A framework is a program that owns the page’s structure and calls your code, the reverse of a library, which your code calls. React said in 2013 that what a component’s render returns is “a lightweight description of what the DOM should look like”, and redrew the page from it. By then the single-page application, a page that never reloads, had moved the whole document into the program, and the frameworks rebuilt the document’s own habits by hand: links as components, the back button as state, routers and scroll managers for what the browser had shipped for twenty years. As the applications grew, Osmani and Miller’s survey of rendering for Chrome put the cost in one line: “the amount of JavaScript required tends to grow as an application grows.”',
       'The language’s committee then spent years on a fourth edition too large to agree on, and by 2008 it had been split for over a year. That August Eich wrote to its list that “A split committee is good for no one and nothing, least of all any language specs that might come out of it”, and it agreed to “target two interoperable implementations by early next year”. The fifth edition came in December 2009 and the sixth, with classes and modules, in June 2015, and since then an edition has shipped every year, admitting a feature only with “Two compatible implementations which pass the Test262 acceptance tests”. The language that had been standardised too early now moves only on what two engines have already proved.',
       'In October 2016 Next.js opened as “a small framework for server-rendered universal JavaScript webapps”, and the program went second again: rendering on the server, SSR for short, sent the markup, and hydration attached the listeners to it afterwards. Islands, which Jason Miller documented in 2020 and credits to Etsy’s Katie Sylor-Miller, “render HTML pages on the server, and inject placeholders or slots around highly dynamic regions”, so that “individual regions of the page become interactive without anything else on the page needing to be loaded first”, and React’s server components, announced in December 2020 and stable in Next.js by May 2023, moved rendering back across the wire. The regions that must respond keep their script, and Miller says what the pattern returns to: progressive enhancement, “to which we’re essentially adding SSR hydration”. The survey’s authors “encourage developers to consider server-side rendering or static rendering over a full rehydration approach”.',
-      'One rule follows from that, and the story says why it holds. Script was built to touch a page that already existed, and every time it was asked to be the page instead, the cost arrived with the growth: blank first paints, a document no crawler could read, the back button rebuilt by hand. The platform then took in what the scripts had proved, XMLHttpRequest into every browser, custom elements into the Standard, and the language’s own committee learned to move only on two implementations. So the document comes first and the program only where the page needs one, and the survey says it plainly: “It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.” Inside the program, the state is what is true right now, an event is what just happened, and the page is drawn from the two, so a framework can change under it and the core stays. The rule costs two ways of rendering the same page, and the line between them has to stay visible, which is why the tables here are built twice, once in plain HTML, CSS and JavaScript and once in React on the same three.'
+      'One rule follows from that, and the story says why it holds. Script was built to touch a page that already existed, and every time it was asked to be the page instead, the cost arrived with the growth: blank first paints, a document no crawler could read, the back button rebuilt by hand. The platform then took in what the scripts had proved, XMLHttpRequest into every browser, custom elements into the Standard, and the language’s own committee learned to move only on two implementations. So the document comes first and the program only where the page needs one, and the survey says it plainly: “It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.” Inside the program, the state is what is true right now, an event is what just happened, and the page is drawn from the two. That is the program’s core. Keep it apart from a framework such as React, and the framework can change around it while the core stays. The rule costs two ways of rendering the same page, and the line between them has to stay visible, which is why the tables here are built twice, once in plain HTML, CSS and JavaScript and once in React on the same three.'
     ]);
   });
 
