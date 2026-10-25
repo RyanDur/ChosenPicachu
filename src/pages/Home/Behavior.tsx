@@ -13,11 +13,12 @@ export const Behavior: FC = () =>
     </Quotation>
     <p className="paragraph">JavaScript says how things respond. Script adds what the elements lack: a behavior no
       element has yet, which is what Brendan Eich built it for, and a request that brings new information into the page
-      without loading a new one, which Jesse James Garrett named Ajax in 2005. The costs arrive when the script becomes
-      the whole page. Until it runs, the first paint is blank and no crawler or screen reader has a document to read, and
-      even after it runs, the back button has to be rebuilt by hand.</p>
+      without loading a new one, which Jesse James Garrett named Ajax in 2005. The costs arrive when the script builds
+      the whole page, as a single-page application does. Until it runs, the first thing the browser draws is blank, and
+      no crawler or screen reader has a document to read. And because the app changes pages itself, the back button has
+      to be rebuilt by hand.</p>
     <p className="paragraph">Where a script does run, the state is what is true, an event is what happened, and the page
-      is drawn from the two. Keep that core apart from the framework, and the framework can change around it while the
-      core stays. So the rule is that the document comes first, and a script runs only where a part of the page must
-      respond.</p>
+      is drawn from the two. That is the program’s core. Keep it apart from a framework such as React, and the framework
+      can change around it while the core stays. So the rule is that the document comes first, and a script runs only
+      where a part of the page must respond.</p>
   </ConcernSection>;
