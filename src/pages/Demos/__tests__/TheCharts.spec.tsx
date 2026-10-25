@@ -904,8 +904,8 @@ describe('the charts’ headings', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {level: 3, name: 'live trades'})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {level: 3, name: 'candles'})).toBeInTheDocument();
+    expect(await chartsDesk.findHeading('live trades', 3)).toBeInTheDocument();
+    expect(chartsDesk.heading('candles', 3)).toBeInTheDocument();
   });
 
   test('should sit the chart under its tutorial’s title on its own page', async () => {
@@ -913,7 +913,7 @@ describe('the charts’ headings', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {level: 3, name: 'live trades'})).toBeInTheDocument();
+    expect(await chartsDesk.findHeading('live trades', 3)).toBeInTheDocument();
   });
 });
 
@@ -930,10 +930,10 @@ describe('the charts tab’s introduction', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const tab = await screen.findByRole('region', {name: 'Charts'});
-    const headline = within(tab).getByRole('heading', {level: 2, name: /^Bitcoin, live/});
+    const tab = await chartsDesk.findRegion('Charts');
+    const headline = chartsDesk.headingIn(tab, /^Bitcoin, live/, 2);
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraph => chartsDesk.wordsIn(tab, paragraph)), headline])).toEqual([]);
   });
 });
 
@@ -942,7 +942,7 @@ describe('the workspace story', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    return recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
+    return recipeFolds.story(await chartsDesk.findRegion('let’s build this feature'), 'The trader can lay out the workspace');
   };
 
   test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
@@ -983,7 +983,7 @@ describe('the workspace story', () => {
   test('should draw, in step 2, the short chart dropping a tall chart’s height while the pointer stands still', async () => {
     const swap = recipeFolds.steps(await workspaceStory())[1];
 
-    expect(within(swap).getByRole('figure', {name: /^A third from the pointer\./})).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
+    expect(chartsDesk.figureIn(swap, /^A third from the pointer\./)).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
   });
 
   test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
@@ -991,7 +991,7 @@ describe('the workspace story', () => {
   });
 
   test('should drop the figures of speech from its words', async () => {
-    const words = within(await workspaceStory()).getAllByRole('paragraph').map(paragraph => paragraph.textContent).join(' ');
+    const words = chartsDesk.paragraphsIn(await workspaceStory()).map(paragraph => paragraph.textContent).join(' ');
 
     expect(words).not.toMatch(/dealt|whispers|slides home|strays|rides|walks|the address is the state|holds its post/);
   });
@@ -1003,8 +1003,8 @@ describe('the workspace story', () => {
   test('should say the card below is the workspace, each chart above opens its own, and name MDN as Mozilla’s web reference', async () => {
     await workspaceStory();
 
-    expect(screen.getByText(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
-    expect(screen.getByText(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
+    expect(chartsDesk.words(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
+    expect(chartsDesk.words(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
   });
 });
 
@@ -1013,22 +1013,22 @@ describe('the charts’ audited words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=charts&charts=${charts}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    return screen.findByRole('region', {name: 'Charts'});
+    return chartsDesk.findRegion('Charts');
   };
 
   test('should head the live charts with a colon, not a dash', async () => {
-    expect(within(await tabWith('price')).getByRole('heading', {level: 2, name: 'Bitcoin, live: every BTC-USD trade on Coinbase'})).toBeInTheDocument();
+    expect(chartsDesk.headingIn(await tabWith('price'), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
   });
 
   test('should explain the price line by its period, its first close and its colour', async () => {
     await tabWith('price');
 
-    expect(screen.getByRole('region', {name: 'live trades'})).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
+    expect(chartsDesk.region('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
   });
 
   test('should explain the candles as spans grouped from the same measurement', async () => {
     await tabWith('candles');
-    const candles = screen.getByRole('region', {name: 'candles'});
+    const candles = chartsDesk.region('candles');
 
     expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
     expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
