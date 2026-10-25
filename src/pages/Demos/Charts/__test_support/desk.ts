@@ -47,6 +47,13 @@ const fingerOn = (chart: string): Finger => {
   };
 };
 
+const captionOf = (chart: string): string =>
+  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
+
+const priceCard = (): HTMLElement => screen.getByRole('region', {name: 'live trades'});
+
+const alert = (): HTMLElement => screen.getByRole('alert', {hidden: true});
+
 const keys = async (chart: string, key: string): Promise<void> => {
   doorway(chart).focus();
   await userEvent.keyboard(`{${key}}`);
@@ -102,8 +109,19 @@ export const chartsDesk = {
   headingIn: (holder: HTMLElement, name: string, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
   words: (told: string | RegExp): HTMLElement => screen.getByText(told),
   findWords: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
-  wordsIn: (holder: HTMLElement, told: RegExp): HTMLElement => within(holder).getByText(told),
+  wordsIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
   findWordsIn: (holder: HTMLElement, told: string | RegExp): Promise<HTMLElement> => within(holder).findByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
-  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'})
+  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
+  feedStatus: (): HTMLElement => screen.getByRole('status', {name: 'feed'}),
+  trouble: (told: string): HTMLElement => within(alert()).getByText(told),
+  findTrouble: (told: string): Promise<HTMLElement> => within(alert()).findByText(told),
+  priceCard,
+  onPriceCard: (told: string): HTMLElement => within(priceCard()).getByText(told),
+  findOnPriceCard: (told: string): Promise<HTMLElement> => within(priceCard()).findByText(told),
+  drawnCandles: (): number => parseInt(captionOf('candles'), 10),
+  drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
+  timesIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('time'),
+  findExplainers: (): Promise<HTMLElement[]> => screen.findAllByText('what am I looking at?'),
+  press: async (control: HTMLElement): Promise<void> => userEvent.click(control)
 };

@@ -1,8 +1,8 @@
 import {TestApp} from '@__test_support/TestApp';
-import {chartPageAt, demosAt, demoTabs, Feed} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
-import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import userEvent from '@testing-library/user-event';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
@@ -10,20 +10,6 @@ import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
 import {blurFocusOnMoves} from '@__test_support/focus';
-
-const feedIsLive = async (feed: Feed): Promise<void> => {
-  await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
-  await feedIsSubscribed(feed);
-};
-
-const priceCard = (): HTMLElement => screen.getByRole('region', {name: 'live trades'});
-
-const captionOf = (chart: string): string =>
-  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
-
-const drawnCandles = (): number => parseInt(captionOf('candles'), 10);
-
-const drawnPoints = (): number => parseInt(captionOf('live trades'), 10);
 
 describe('the charts tutorials’ menus', () => {
   test('should say the + menu is built from the site’s menu components, on the charts tab', async () => {
@@ -666,7 +652,7 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsLive(feed);
     broadcast(feed, [tradeFrame(50000, 1700000000000, '0.01', 'bought'), tradeFrame(50001, 1700000000500, '0.03', 'sold')]);
-    await chartsDesk.findWordsIn(chartsDesk.region('live trades'), '$50,001.00');
+    await chartsDesk.findOnPriceCard('$50,001.00');
 
     await chartsDesk.addChart('Pie');
 
@@ -723,8 +709,8 @@ describe('the demos page', () => {
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50000), tradeFrame(50001, 1700000000500), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
-      expect(await within(priceCard()).findByText('$50,005.00')).toBeVisible();
-      expect(within(priceCard()).getByText('+$4.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,005.00')).toBeVisible();
+      expect(chartsDesk.onPriceCard('+$4.00')).toBeVisible();
     });
 
     test('the user reaches the charts from the tab strip', async () => {
@@ -735,7 +721,7 @@ describe('the demos page', () => {
 
       await demoTabs.open('Charts');
 
-      expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
+      expect(await chartsDesk.findRegion('live trades')).toBeVisible();
     });
 
     test('trades gathered before the user opens the charts are already waiting', async () => {
@@ -746,7 +732,7 @@ describe('the demos page', () => {
       await feedIsSubscribed(feed);
       broadcast(feed, [tradeFrame(50001)]);
       await demoTabs.open('Charts');
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
     });
 
     test('leaving the charts tab and returning keeps the stream alive', async () => {
@@ -756,11 +742,11 @@ describe('the demos page', () => {
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50001)]);
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
       const opened = feed.connections();
       await demoTabs.open('Accordions');
       await demoTabs.open('Charts');
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
       expect(feed.connections()).toBe(opened);
     });
 
@@ -770,7 +756,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
+      await waitFor(() => expect(chartsDesk.feedStatus()).toHaveTextContent(/^live$/));
     });
 
     test('frames that are not trades never reach the user', async () => {
@@ -780,8 +766,8 @@ describe('the demos page', () => {
 
       await feedIsLive(feed);
       broadcast(feed, ['not even json', nonTradeFrame(99999), tradeFrame(50001)]);
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
-      expect(within(priceCard()).getByText('+$0.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
+      expect(chartsDesk.onPriceCard('+$0.00')).toBeVisible();
     });
 
     test('a refused feed tells the user the stream is unavailable', async () => {
@@ -790,9 +776,8 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
       await waitFor(() =>
-        expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent('live feed unavailable'));
-      expect(within(screen.getByRole('alert', {hidden: true}))
-        .getByText('the live feed refused the handshake')).toBeInTheDocument();
+        expect(chartsDesk.feedStatus()).toHaveTextContent('live feed unavailable'));
+      expect(chartsDesk.trouble('the live feed refused the handshake')).toBeInTheDocument();
     });
 
     test('a trade history that cannot be loaded tells the user', async () => {
@@ -801,8 +786,7 @@ describe('the demos page', () => {
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
-      expect(await within(screen.getByRole('alert', {hidden: true}))
-        .findByText('the trade history is having trouble')).toBeInTheDocument();
+      expect(await chartsDesk.findTrouble('the trade history is having trouble')).toBeInTheDocument();
     });
 
     test('the user sees the price trend drawn from every recent minute', async () => {
@@ -813,7 +797,7 @@ describe('the demos page', () => {
       await feedIsLive(feed);
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
         .map((price, minute) => tradeFrame(price, 1700000000000 + minute * 60000)));
-      await waitFor(() => expect(drawnPoints()).toBe(5));
+      await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(5));
     });
 
     test('the charts name what they measure', async () => {
@@ -822,7 +806,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await screen.findByRole('heading', {name: /BTC-USD/})).toBeVisible();
+      expect(await chartsDesk.findHeading(/BTC-USD/)).toBeVisible();
     });
 
     test('the charts explain what they show', async () => {
@@ -831,12 +815,12 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      const explainers = await screen.findAllByText('what am I looking at?');
+      const explainers = await chartsDesk.findExplainers();
       expect(explainers).toHaveLength(2);
-      await userEvent.click(explainers[0]);
-      expect(screen.getByText(/price of one bitcoin in US dollars/)).toBeVisible();
-      await userEvent.click(explainers[1]);
-      expect(screen.getByText(/how much bitcoin changed hands/)).toBeVisible();
+      await chartsDesk.press(explainers[0]);
+      expect(chartsDesk.words(/price of one bitcoin in US dollars/)).toBeVisible();
+      await chartsDesk.press(explainers[1]);
+      expect(chartsDesk.words(/how much bitcoin changed hands/)).toBeVisible();
     });
 
     test('the trades in a minute become one candle', async () => {
@@ -853,7 +837,7 @@ describe('the demos page', () => {
         tradeFrame(50004, bucketStart + 60000, '0.03'),
         tradeFrame(50000, bucketStart + 61000, '0.01')
       ]);
-      await waitFor(() => expect(drawnCandles()).toBe(2));
+      await waitFor(() => expect(chartsDesk.drawnCandles()).toBe(2));
     });
 
     test('the chart tells the user its price and time range', async () => {
@@ -866,12 +850,11 @@ describe('the demos page', () => {
       await feedIsLive(feed);
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
         .map((price, index) => tradeFrame(price, firstTradedAt + index * tenMinutes)));
-      const priceCard = screen.getByRole('region', {name: 'live trades'});
-      expect(await within(priceCard).findByText('$50,005')).toBeVisible();
-      expect(within(priceCard).getByText('$50,003')).toBeVisible();
-      expect(within(priceCard).getByText('$50,001')).toBeVisible();
-      expect(within(priceCard).getByText('5 candles · 1m each')).toBeVisible();
-      const ticks = within(priceCard).getAllByRole('time');
+      expect(await chartsDesk.findOnPriceCard('$50,005')).toBeVisible();
+      expect(chartsDesk.onPriceCard('$50,003')).toBeVisible();
+      expect(chartsDesk.onPriceCard('$50,001')).toBeVisible();
+      expect(chartsDesk.onPriceCard('5 candles · 1m each')).toBeVisible();
+      const ticks = chartsDesk.timesIn(chartsDesk.priceCard());
       expect(ticks.map(tick => tick.textContent))
         .toEqual([0, 1, 2, 3, 4].map(step => format(firstTradedAt + step * tenMinutes, 'HH:mm')));
     });
@@ -883,13 +866,12 @@ describe('the demos page', () => {
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50001)]);
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
       hangUp(feed);
       await waitFor(() =>
-        expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent('live feed unavailable'));
-      expect(within(priceCard()).getByText('$50,001.00')).toBeVisible();
-      expect(within(screen.getByRole('alert', {hidden: true}))
-        .getByText('the live feed hung up mid-stream')).toBeInTheDocument();
+        expect(chartsDesk.feedStatus()).toHaveTextContent('live feed unavailable'));
+      expect(chartsDesk.onPriceCard('$50,001.00')).toBeVisible();
+      expect(chartsDesk.trouble('the live feed hung up mid-stream')).toBeInTheDocument();
     });
 
     test('a trade whose price is not a number never reaches the user', async () => {
@@ -899,8 +881,8 @@ describe('the demos page', () => {
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrameWith({price: 'not a number', id: 900042}), tradeFrame(50001)]);
-      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
-      expect(within(priceCard()).getByText('+$0.00')).toBeVisible();
+      expect(await chartsDesk.findOnPriceCard('$50,001.00')).toBeVisible();
+      expect(chartsDesk.onPriceCard('+$0.00')).toBeVisible();
     });
 
     test('leaving the page closes the socket', async () => {
