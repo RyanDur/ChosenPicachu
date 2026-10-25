@@ -13,9 +13,9 @@ export const Dynamic: FC = () =>
     </Quotation>
     <p className="paragraph">JavaScript says how things respond. Script adds what the elements lack: a behaviour no
       element has yet, which is what Eich built it for, and a request that brings new information into the page without
-      a new page, which Ajax named in 2005. The costs arrive when the script becomes the whole page: a blank first paint
-      until it runs, a document no crawler or screen reader can read, a back button rebuilt by hand. So the document
-      comes first, and a program runs only where a part of the page must respond. Inside that program the state is what
-      is true, an event is what happened, and the page is drawn from the two, so a framework can change under it and the
-      core stays.</p>
+      a new page, which Garrett named Ajax in 2005. The costs arrive when the script becomes the whole page: until it
+      runs there is a blank first paint and a document no crawler or screen reader can read, and the back button is
+      rebuilt by hand. So the document comes first, and a program runs only where a part of the page must respond.
+      Inside that program the state is what is true, an event is what happened, and the page is drawn from the two, so a
+      framework can change under it and the core stays.</p>
   </ConcernSection>;
