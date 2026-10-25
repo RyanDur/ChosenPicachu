@@ -1,5 +1,7 @@
 import stylistic from '@stylistic/eslint-plugin';
 import parser from '@babel/eslint-parser';
+import testingLibrary from 'eslint-plugin-testing-library';
+import playwright from 'eslint-plugin-playwright';
 import classes from './scripts/lint/classes.mjs';
 
 const shape = {
@@ -35,6 +37,22 @@ const presence = {
     message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
   }]
 };
+
+const specs = Object.fromEntries([
+  'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
+  'no-container', 'no-debugging-utils', 'no-dom-import', 'no-global-regexp-flag-in-query', 'no-manual-cleanup',
+  'no-promise-in-fire-event', 'no-test-id-queries', 'no-unnecessary-act', 'no-wait-for-multiple-assertions',
+  'no-wait-for-side-effects', 'no-wait-for-snapshot', 'prefer-find-by', 'prefer-presence-queries',
+  'prefer-query-by-disappearance', 'render-result-naming-convention'
+].map(rule => [`testing-library/${rule}`, 'error']));
+
+const journeys = Object.fromEntries([
+  'missing-playwright-await', 'no-commented-out-tests', 'no-duplicate-hooks', 'no-element-handle', 'no-eval',
+  'no-focused-test', 'no-networkidle', 'no-page-pause', 'no-raw-locators', 'no-standalone-expect', 'no-unsafe-references',
+  'no-unused-locators', 'no-useless-await', 'no-useless-not', 'no-wait-for-navigation', 'no-wait-for-selector',
+  'no-wait-for-timeout', 'prefer-native-locators', 'prefer-web-first-assertions', 'require-annotation-reason',
+  'valid-describe-callback', 'valid-expect', 'valid-expect-in-promise'
+].map(rule => [`playwright/${rule}`, 'error']));
 
 export default [
   {
@@ -74,5 +92,16 @@ export default [
     files: ['src/**/*.html'],
     plugins: {classes},
     processor: 'classes/html'
+  },
+  {
+    files: ['src/**/__tests__/**/*.{ts,tsx}', 'src/**/__test_support/**/*.{ts,tsx}'],
+    plugins: {'testing-library': testingLibrary},
+    rules: specs
+  },
+  {
+    files: ['e2e/**/*.ts'],
+    ignores: ['e2e/looks/**', 'e2e/media/**'],
+    plugins: {playwright},
+    rules: journeys
   }
 ];
