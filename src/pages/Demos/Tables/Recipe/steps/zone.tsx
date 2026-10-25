@@ -6,7 +6,7 @@ import {Term} from '../Term';
 import {gap, surveySource} from './sources';
 
 export const DeadZone: FC = () =>
-  <Step title="Find the neighbour under the pointer, with a dead zone" id="step-dead-zone">
+  <Step title="Find the neighbor under the pointer, with a dead zone" id="step-dead-zone">
     <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving
@@ -21,7 +21,7 @@ export const DeadZone: FC = () =>
         quarter of that column’s width, or half the difference between it and the carried column when that is more,
         which is the case when a narrow column passes a much wider one.</Says>
       <Says>After a switch the pointer is over the carried column itself, which does nothing. Going back means crossing
-        the neighbour’s dead zone again.</Says>
+        the neighbor’s dead zone again.</Says>
       <Says>The decision is in struckPast, one function that doesn’t know which axis it is on. The step for rows uses it
         unchanged.</Says>
       <SlotsFigure/>

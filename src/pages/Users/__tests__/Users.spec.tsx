@@ -243,7 +243,7 @@ describe('the users page', () => {
       expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
     });
 
-    it('cancelling an edit returns to viewing the user', async () => {
+    it('canceling an edit returns to viewing the user', async () => {
       await userForm.cancel();
       expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
     });

@@ -341,7 +341,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <TheRuleMatchesTheBox/>
               </li>
               <li className="run">
-                <p className="paragraph">The bar’s colours are the page’s the other way round: light words on a
+                <p className="paragraph">The bar’s colors are the page’s the other way round: light words on a
                   dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own
                   stylesheet.
                   It is a class in a shared stylesheet, <code>inverse-filled</code>, and the bar wears it: the class sits in
@@ -359,7 +359,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   end, the arrow at the other. The arrow is an empty box drawn after the label’s words, with only its
                   top and right borders, from the shared class <code>corner-after</code>; the stylesheet sizes it and turns
                   it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own
-                  text colour, so the arrow changes colour with the words. When the {input} is checked, the ~
+                  text color, so the arrow changes color with the words. When the {input} is checked, the ~
                   combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn
                   is a transition, and a transform: a transform moves pixels the browser has already painted without
                   laying the page out again, so it is cheap.
@@ -379,12 +379,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A keyboard user needs to see which bar they are on. Here the {input} has the focus, but the label is what the reader
                   sees, so the label wears <code>prior-approached</code>, a shared class that reads an earlier sibling. The
                   :focus-visible pseudo-class picks the {input} while it has keyboard focus,
-                  and <code>:focus-visible ~ .prior-approached</code> gives the bar the approach colour, ink for its
+                  and <code>:focus-visible ~ .prior-approached</code> gives the bar the approach color, ink for its
                   words and a ring inside its edge. The browser treats hovering a label as hovering
                   its {input}, so the class’s :hover rule lights the bar too. That rule sits inside a media
                   query, <code>(hover: hover)</code>, which applies its rules only on a device whose pointer can
                   hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s borders take the
-                  ink colour with the words.</p>
+                  ink color with the words.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(surfaceCss, '@media (hover: hover) {\n  :hover ~ .prior-approached'), gap,
                   ...unit(surfaceCss, ':focus-visible ~ .prior-approached {')
@@ -415,7 +415,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what does
                   not fit. Whether a tall fold’s last line is cut off depends on where its lines fall, so the section
                   wears <code>foot-shadowed</code>. That class paints a shadow at the section’s foot, and over it a cover in
-                  the panel’s colour that scrolls with the text. The cover hides the shadow when the text is at its end,
+                  the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end,
                   or when the text fits.
                 {{
                   reveal: ' With reveal, the section sits at the panel’s top, so the text is uncovered from its first line down.',
@@ -469,9 +469,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               </li>}
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
-                  gets its own rule: a flex row that centres its one word. Its label fills the whole bar,
+                  gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
                   so a press anywhere on the bar counts. Its ground is <code>field-inverse</code> and its
-                  text <code>field-ink</code>, two plain colour classes with no hover or focus of their own.</p>
+                  text <code>field-ink</code>, two plain color classes with no hover or focus of their own.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&.close {'), gap,
                   ...unit(surfaceCss, '.field-inverse {'), gap,
@@ -517,8 +517,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
-                  summary, wearing the same classes: <code>inverse-filled</code> for its colours, <code>attentive</code> for
-                  the approach colour, the ring and a glow while it is pressed, and <code>field-outlined</code> for the
+                  summary, wearing the same classes: <code>inverse-filled</code> for its colors, <code>attentive</code> for
+                  the approach color, the ring and a glow while it is pressed, and <code>field-outlined</code> for the
                   hairline that draws the line between one bar and the next. Summary takes focus and hover itself,
                   where the {input} build carried focus from the hidden {input} to the label.</p>
                 <Snippet label="CSS" lines={[
@@ -638,7 +638,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   control says what they see. Its checked state is the fold’s state. The word that does not apply has
                   display: none, which takes it out of the page and out of the name the listener hears, so the
                   control is always called by the one word it shows. The control is a box drawn
-                  by <code>hairline-outline</code>, a hairline in the text’s own colour, and <code>field-pressed</code>,
+                  by <code>hairline-outline</code>, a hairline in the text’s own color, and <code>field-pressed</code>,
                   which gives it the page’s own ground and ink while it is pressed.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:has(:checked) .when-closed {'), gap,

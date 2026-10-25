@@ -51,7 +51,7 @@ const suppliedBy: Record<World, ReactNode> = {
       table it reports on. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
       column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
       table.</Says>
-    <Says>The behaviour arrives through <code>useDragSortable</code>, a hook: a function a component calls while it
+    <Says>The behavior arrives through <code>useDragSortable</code>, a hook: a function a component calls while it
       renders, to keep something across renders or to read something kept outside React. The page calls it with its
       columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
@@ -59,7 +59,7 @@ const suppliedBy: Record<World, ReactNode> = {
       subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a
       move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.</Says>
     <Says>The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the
-      classes the table wears, since the behaviour’s own sheets read them.</Says>
+      classes the table wears, since the behavior’s own sheets read them.</Says>
     <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
       inside it one value without adding an element to the page, and the headers, rows, grips, handles and menus read
       the hook’s answer from it.</Says>
@@ -178,10 +178,10 @@ const StillStory: FC<{world: World}> = ({world}) =>
             travels with every cell beside it, then a td per measure.</Says>
           {suppliedBy[world]}
           <Says>You could build this out of divs and grid, and it would look identical. But the table
-            element brings behaviour you would otherwise have to build: readers move through it row by row and cell by
+            element brings behavior you would otherwise have to build: readers move through it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
-            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the behaviour you
+            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the behavior you
             need.</Says>
           {dealCodes[world]}
         </Reveal>

@@ -27,13 +27,13 @@ export const TheWholeBuild: FC<{world: World; tableSource: Sample; buildSrc: Sam
 
 export const NamesInTheCode: FC = () =>
   <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far
-    enough into a neighbour to count. The drift is how far the pointer has moved since the grab. The survey is the one
+    enough into a neighbor to count. The drift is how far the pointer has moved since the grab. The survey is the one
     measurement taken at the grab: the table’s box, every column’s width, and later the row heights.</Tell>;
 
 export const TwoRoads: FC = () =>
   <Tell>There are two ways to drag something across a page, and I built both. The <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> uses
-    the native API, where the platform brings most of the behaviour for very little code;
+    the native API, where the platform brings most of the behavior for very little code;
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
     platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, which leave every pixel of the drag
     to the code, and no drag-and-drop library is anywhere in the build.</Tell>;
@@ -55,7 +55,7 @@ export const OwnedPixels: FC<{world: World}> = ({world}) =>
     ? 'React affords nothing the DOM does not give you'
     : 'there is no framework in the document'}: a move of a node, one element or piece of text in the DOM,
     is <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
-    events, the state is a value. Each code block below is labelled with which of the
+    events, the state is a value. Each code block below is labeled with which of the
     three languages is doing the work.</Tell>;
 
 export const TurnedVertical: FC = () =>

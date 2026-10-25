@@ -88,7 +88,7 @@ describe('the accordions tab’s own words', () => {
     'Every fold on this tab moves by transition, never by animation, because a reader may press again before the fold lands. If they do, a transition turns around from wherever it is. An animation plays a set of keyframes on its own clock, whatever the state does.',
     'A transition can move a height to a number, so the script supplies the number. When a fold opens, the script measures the text’s real height and gives the panel that height, and the stylesheet’s transition moves the panel from 0 to it.',
     'The script makes the moves in two layout effects, code React runs after it has updated the elements and before the browser paints them. The first answers a press by pinning where the motion starts. The second, once that start is on the page, sets where it ends. So the script measures the panel and pins its start with no frame showing in between.',
-    'Whether a tall fold’s last line is cut off depends on where its lines fall, so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s colour that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.',
+    'Whether a tall fold’s last line is cut off depends on where its lines fall, so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.',
     'The third sets view transitions, the browser’s moves from one page state to the next, to no animation at all.',
     'You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can choose the one the job needs.',
     'The sections below are about making it slide, starting with how we did it before the browser could.',
@@ -943,7 +943,7 @@ describe('the platform build’s bars', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(new RegExp(`^The bar is the same flex row as the label in the ${input} build, now on summary, wearing the same classes: inverse-filled for its colours, attentive for the approach colour, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\\. Summary takes focus and hover itself, where the ${input} build carried focus from the hidden ${input} to the label\\.`));
+    expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(new RegExp(`^The bar is the same flex row as the label in the ${input} build, now on summary, wearing the same classes: inverse-filled for its colors, attentive for the approach color, the ring and a glow while it is pressed, and field-outlined for the hairline that draws the line between one bar and the next\\. Summary takes focus and hover itself, where the ${input} build carried focus from the hidden ${input} to the label\\.`));
   });
 
   test('should show the classes the details bar wears beside its own rule', async () => {
@@ -971,7 +971,7 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent(`so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the ${input} while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach colour, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its ${input}, so the class’s :hover rule lights the bar too.`);
+    expect(explanation.runTelling(oldWay, /A keyboard user needs to see which bar they are on/)).toHaveTextContent(`so the label wears prior-approached, a shared class that reads an earlier sibling. The :focus-visible pseudo-class picks the ${input} while it has keyboard focus, and :focus-visible ~ .prior-approached gives the bar the approach color, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering its ${input}, so the class’s :hover rule lights the bar too.`);
   });
 
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
@@ -992,22 +992,22 @@ describe('the known-height build’s bars', () => {
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
   });
 
-  test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes colour with the words', async () => {
+  test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes color with the words', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The borders are drawn in currentcolor, the element’s own text colour, so the arrow changes colour with the words.');
+    expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('The borders are drawn in currentcolor, the element’s own text color, so the arrow changes color with the words.');
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, what wearing a shared class means before any class is named, with the class beside it', async type => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
-    const run = explanation.runTelling(oldWay, /The bar’s colours are the page’s the other way round/);
+    const run = explanation.runTelling(oldWay, /The bar’s colors are the page’s the other way round/);
 
-    expect(run).toHaveTextContent('The bar’s colours are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.');
-    expect(explanation.everyCodeBeside(oldWay, /The bar’s colours are the page’s the other way round/).join()).toMatch(/^&:not\(\.close\) \.info-label \{[^]*\.inverse-filled \{/);
+    expect(run).toHaveTextContent('The bar’s colors are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.');
+    expect(explanation.everyCodeBeside(oldWay, /The bar’s colors are the page’s the other way round/).join()).toMatch(/^&:not\(\.close\) \.info-label \{[^]*\.inverse-filled \{/);
     expect(outOfReadingOrder([
       run,
       explanation.runTelling(oldWay, /Each bar shows an arrow/),
@@ -1028,12 +1028,12 @@ describe('the known-height build’s bars', () => {
 });
 
 describe('the classes the bars wear', () => {
-  test('should say the Close bar’s ground and text are two plain colour classes, and show them beside its rule', async () => {
+  test('should say the Close bar’s ground and text are two plain color classes, and show them beside its rule', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /The Close bar is shorter than the others/)).toHaveTextContent('so a press anywhere on the bar counts. Its ground is field-inverse and its text field-ink, two plain colour classes with no hover or focus of their own.');
+    expect(explanation.runTelling(oldWay, /The Close bar is shorter than the others/)).toHaveTextContent('so a press anywhere on the bar counts. Its ground is field-inverse and its text field-ink, two plain color classes with no hover or focus of their own.');
     expect(explanation.everyCodeBeside(oldWay, /The Close bar is shorter than the others/).join()).toMatch(/&\.close \{[^]*\.field-inverse \{[^]*\.field-ink \{/);
   });
 
@@ -1045,7 +1045,7 @@ describe('the classes the bars wear', () => {
 
     const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
-    expect(explanation.runTelling(together, /^The bar carries the fold’s name/)).toHaveTextContent(`The bar carries the fold’s name. The control is a ${input} under a label. The label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the word, the fold and the state: “Open”, then the fold’s name, then “${input}, not checked”. Someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply has display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own colour, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
+    expect(explanation.runTelling(together, /^The bar carries the fold’s name/)).toHaveTextContent(`The bar carries the fold’s name. The control is a ${input} under a label. The label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the word, the fold and the state: “Open”, then the fold’s name, then “${input}, not checked”. Someone using voice control says what they see. Its checked state is the fold’s state. The word that does not apply has display: none, which takes it out of the page and out of the name the listener hears, so the control is always called by the one word it shows. The control is a box drawn by hairline-outline, a hairline in the text’s own color, and field-pressed, which gives it the page’s own ground and ink while it is pressed.`);
     expect(explanation.everyCodeBeside(together, /^The bar carries the fold’s name/).join()).toMatch(/\.when-closed \{[^]*\.when-open \{[^]*\.hairline-outline \{[^]*\.field-pressed:active \{/);
   });
 });
@@ -1065,7 +1065,7 @@ describe('the known-height build’s scroll sign', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s colour that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.');
+    expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.');
     expect(explanation.everyCodeBeside(oldWay, /Whether a tall fold’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
   });
 });

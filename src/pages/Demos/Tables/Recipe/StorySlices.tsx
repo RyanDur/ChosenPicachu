@@ -5,7 +5,7 @@ export const StorySlices: FC = () =>
   <Slices who="trader"
     can="The trader can watch the live market in windows they arrange"
     soThat="so that what they compare sits side by side, and what matters most sits on top"
-    slices="Too big to build in one motion, so I slice it: the smallest table that honours the shape first, then the flow of data, then each arrangement the trader asked for. The first two slices are stations of their own; the rest are cards in the last station, and each opens into its build. Station 5 ends with a
+    slices="Too big to build in one motion, so I slice it: the smallest table that honors the shape first, then the flow of data, then each arrangement the trader asked for. The first two slices are stations of their own; the rest are cards in the last station, and each opens into its build. Station 5 ends with a
       story told from the code’s side, the store the two worlds share."
     sliced={[
       ['The trader can read the market in a table', 4],

@@ -355,7 +355,7 @@
 
 .veiled-rule-below { border-block-end: var(--hairline) solid var(--charcoal-veil); }
 
-/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a colour */
+/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a color */
 @property --veil-alpha {
   syntax: '<number>';
   inherits: false;

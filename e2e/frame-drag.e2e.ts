@@ -20,7 +20,7 @@ for (const {name, at, table} of [...stagesWith('origin=keep'), ...stagesWith('or
 }
 
 for (const {name, at, table} of stages) {
-  test(`a column dragged past two neighbours is reported once, where it lands, in ${name}`, async ({page}) => {
+  test(`a column dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
     await page.goto(at);
     const trades = dragSortTable(page, table(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
@@ -34,7 +34,7 @@ for (const {name, at, table} of stages) {
 }
 
 for (const {name, at, table} of stages) {
-  test(`a row dragged past two neighbours is reported once, where it lands, in ${name}`, async ({page}) => {
+  test(`a row dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
     await page.goto(at);
     const trades = dragSortTable(page, table(page));
     await expect(trades.columnHeader('trades')).toBeVisible();

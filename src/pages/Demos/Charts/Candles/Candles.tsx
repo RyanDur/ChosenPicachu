@@ -87,7 +87,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <Explainer>
-      The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the
+      The same measurement, grouped: each candle summarizes one span of time. The body runs from the first to the
       last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low. The bars beneath show how much
       bitcoin changed hands in each span. New trades keep filling the newest
       candle; the period menu sets how much time the chart covers.

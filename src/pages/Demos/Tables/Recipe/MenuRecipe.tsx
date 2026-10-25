@@ -124,7 +124,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         </Reveal>
       </Step>
       <Step title="Anchored, not measured">
-        <Words want="The menu must land by its own button, not centred in the page, and nothing should measure to put it there.">
+        <Words want="The menu must land by its own button, not centered in the page, and nothing should measure to put it there.">
           <Says>A popover opened by its invoker is anchored to that invoker
             automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
               positioning</Mdn> can place it:
@@ -147,18 +147,18 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers
             are the reset’s job too; this site’s reset drops them for <code>menu</code> alongside <code>ol</code> and <code>ul</code>.</Says>
           <Says>One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code>inset: auto</code></Mdn>. The
-            browser’s default stylesheet centres every popover with <code>inset: 0</code>, and centred versus anchored is this menu’s own
+            browser’s default stylesheet centers every popover with <code>inset: 0</code>, and centered versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts <code>inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
-            your <Mdn path="Web/CSS/@supports"><code>@supports</code></Mdn> fallback: a centred popover.</Says>
+            your <Mdn path="Web/CSS/@supports"><code>@supports</code></Mdn> fallback: a centered popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
               ...span(menuCss, 'inset: auto;', 'inset: auto;'),
-              aside('/* centred is the browser’s default placement; this menu chooses the anchor */'), gap,
+              aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), gap,
               ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
               aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
               ...unit(menuCss, '@supports not (position-area: block-end)'),
-              aside('/* no anchor positioning? centred: worse placement, same menu */')
+              aside('/* no anchor positioning? centered: worse placement, same menu */')
             ]}/>
           </Codes>
         </Reveal>
@@ -275,7 +275,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the cell, which matches an element by what it
               contains, pads for the toggle when one is there, and <code>reconcile</code> reads the sortable set off the table’s markup each time it writes the cells.</Says>}
           <Says>The toggle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
-            browser’s button chrome, <code>muted-ink</code> greys its glyph, and <code>attentive</code> fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s
+            browser’s button chrome, <code>muted-ink</code> grays its glyph, and <code>attentive</code> fills it with the approach color, the pale green, under a hovering pointer and draws the site’s
             ring when the keyboard reaches it.</Says>
           <Codes>
             {world === 'react'

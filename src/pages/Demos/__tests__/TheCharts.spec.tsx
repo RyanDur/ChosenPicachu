@@ -402,8 +402,8 @@ describe('a list of charts', () => {
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
       ['the classes up and down', 'A class is a name written on an element that a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
       ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
-      ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colours. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
-      ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colours are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
+      ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
+      ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
     });
@@ -445,7 +445,7 @@ describe('a list of charts', () => {
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
       ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
       ['the bars wear their sides, which are shared classes', 'The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in the site’s shared sheet and that an element wears by name.'],
-      ['a side class sets custom properties that the bars read, and the middle line wears drawn', 'A side class sets a side’s colours as custom properties, values a stylesheet names once and other rules read. side-face reads the face colour for the bar. side-wall reads the wall colour for the second rectangle set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal stroke.']
+      ['a side class sets custom properties that the bars read, and the middle line wears drawn', 'A side class sets a side’s colors as custom properties, values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal stroke.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
     });
@@ -486,7 +486,7 @@ describe('a list of charts', () => {
     });
 
     test.each([
-      ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
+      ['the whole pie stays put', 'Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole pie.'],
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
       ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
       ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.'],
@@ -503,7 +503,7 @@ describe('a list of charts', () => {
       const cut = recipeFolds.steps(await pieStory())[1];
 
       expect(cut).toHaveTextContent(/@property --explode-x \{[^]*@property --explode-y \{[^]*@property --turn \{[^]*@property --swing \{[^]*initial-value: -180deg;[^]*\.slice \{/);
-      expect(cut).toHaveTextContent('The sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the centre is two lengths. Before the markup sets them, a slice sits unturned at the centre.');
+      expect(cut).toHaveTextContent('The sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits unturned at the center.');
     });
 
     test('should say what a custom property is where the pie first names it', async () => {
@@ -918,7 +918,7 @@ describe('the workspace story', () => {
   test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
     const story = await workspaceStory();
 
-    expect(story).toHaveTextContent('It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbour slides into the place it left.');
+    expect(story).toHaveTextContent('It swaps with its neighbor once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbor slides into the place it left.');
     expect(story).toHaveTextContent('Delete or Backspace removes it.');
     expect(story).toHaveTextContent('grip and no remove button, and the key does nothing, so the workspace always has a chart.');
   });
@@ -943,7 +943,7 @@ describe('the workspace story', () => {
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
     ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the pointer with that mark.'],
     ['where the drag starts', 'A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.'],
-    ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
+    ['a keyframe animation', 'The neighbor’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
     ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
     ['the last chart', 'With one chart left there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.']
   ])('should say %s in plain words', async (_term, sentence) => {
@@ -957,7 +957,7 @@ describe('the workspace story', () => {
   });
 
   test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
-    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the pointer. It swaps with its neighbour once the pointer has moved');
+    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the pointer. It swaps with its neighbor once the pointer has moved');
   });
 
   test('should drop the figures of speech from its words', async () => {
@@ -990,17 +990,17 @@ describe('the charts’ audited words', () => {
     expect(chartsDesk.titleIn(await tabWith('price'), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
   });
 
-  test('should explain the price line by its period, its first close and its colour', async () => {
+  test('should explain the price line by its period, its first close and its color', async () => {
     await tabWith('price');
 
-    expect(chartsDesk.chart('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the colour shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
+    expect(chartsDesk.chart('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the color shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
   });
 
   test('should explain the candles as spans grouped from the same measurement', async () => {
     await tabWith('candles');
     const candles = chartsDesk.chart('candles');
 
-    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarises one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
+    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarizes one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
     expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
   });
 

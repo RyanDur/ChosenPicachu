@@ -15,7 +15,7 @@ export const PresentationPractice: FC = () =>
       hover, so the sheet uses those{' '}
     <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a> first.
       I add a state name only where there is no native one: carried for the thing being dragged, settling for the
-      one sliding back into place, shoved for a neighbour pushed aside. One sheet, the table’s, says what each does.
+      one sliding back into place, shoved for a neighbor pushed aside. One sheet, the table’s, says what each does.
       Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved has
       a rule per direction: two across for columns, two down for rows.</p>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can
@@ -36,7 +36,7 @@ export const PresentationPractice: FC = () =>
       runtime are written inline, mostly as{' '}
     <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">custom properties</a> the
       sheet already reads: a measured height, a position after a drag, the direction of a slide. Every size is a multiple of one base, and
-      every colour is a named token on the root.
+      every color is a named token on the root.
       Custom properties are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in
       script and now live in CSS.</p>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the

@@ -164,7 +164,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
     <Tell>I could resize with absolute pixel widths, but one drag would break the
       table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers
       at the first touch, and every resize is a trade
-      between neighbours: whatever one column gains, the next gives, and the sum cannot
+      between neighbors: whatever one column gains, the next gives, and the sum cannot
       change.</Tell>
     <Tell>The header cell lets each control find its own edge, and pads for whatever it holds,
       so the handle sits at the boundary without a box to arrange it. The handle captures its pointer and measures the
@@ -252,7 +252,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
       </Step>
       <Step title="Trade, never take">
         <Words want="Dragging one boundary must not change the table’s total width, and it must not starve a column down to nothing.">
-          <Says>Every resize should be a trade between neighbours. If a trade is the only move
+          <Says>Every resize should be a trade between neighbors. If a trade is the only move
             that exists, the total is safe by construction.</Says>
         </Words>
         <Reveal>

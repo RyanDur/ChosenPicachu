@@ -21,7 +21,7 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
       await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
     });
 
-    test('a column dropped past two neighbours is said once, where it lands', async ({page}) => {
+    test('a column dropped past two neighbors is said once, where it lands', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
       await expect(trades.columnHeader('trades')).toBeVisible();

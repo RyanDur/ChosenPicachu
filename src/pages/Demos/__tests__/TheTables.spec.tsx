@@ -19,11 +19,11 @@ const fourTrades = [
 
 describe('the tables tab’s own words', () => {
   test.each([
-    'Too big to build in one motion, so I slice it: the smallest table that honours the shape first, then the flow of data, then each arrangement the trader asked for.',
+    'Too big to build in one motion, so I slice it: the smallest table that honors the shape first, then the flow of data, then each arrangement the trader asked for.',
     'So I deal the opening widths from the page’s stylesheet. With table-layout: fixed the header widths govern their whole columns, so the table always fills its container and the columns hold still while the values change.',
     'No JavaScript knows these widths, because nothing needs the size until you touch something. The first press or focus of a resize handle measures the headers as they stand and creates the',
     'from them; the drag measures them at the lift. A value that changes at runtime is state, and until then nothing has changed.',
-    'This is the first rule of ARIA: use the native element when one already has the behaviour you need.',
+    'This is the first rule of ARIA: use the native element when one already has the behavior you need.',
     'The handshake subscribes to the product. Every message decodes into a trade, appended under a cap so a long session never grows without bound. A close marks the feed failed.',
     'The fold runs over the same capped trades each time, so the windows always match the trades the page holds.',
     'I could let each chart and each table keep its own copy of the trades.',
@@ -32,7 +32,7 @@ describe('the tables tab’s own words', () => {
     'The DOM is the page’s tree of elements and text that the browser builds from the HTML. I could ask it where everything is as the pointer moves, but each answer after the page has changed makes the browser redo its layout, and a drag that waits on that work stutters.',
     'Leaving the pixels to the code does not mean building in JavaScript. The markup stays a normal table. Every visible change (the cursors, the hiding, every slide) is a CSS rule a class switches on. JavaScript only decides what the state is, and React affords nothing the DOM does not give you: a move of a node, one element or piece of text in the DOM, is insertBefore, the handlers are events, the state is a value.',
     'The markup stays plain HTML, a real table with real headers.',
-    'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.',
+    'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behavior comes first, and most of it is a declaration in the stylesheet, not code.',
     'Writing back is the same shape in reverse. Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state.',
     'Whatever changes the order goes up to the page as an event, onColumnMoved or onRowMoved in React and column-moved or row-moved from the table, and comes back down as the next order.',
     'That is one dispatch, and after it the store holds the drag beside the columns and the seats: the one mark of what is',
@@ -67,7 +67,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'Picture your toggle as the middle cell of a three-by-three grid drawn over the page: position-area picks cells. block-end takes the row below the toggle; span-inline-start starts from the toggle’s own column and spreads toward the line’s start: under the toggle, hanging left, in this writing mode.'},
     {choice: 'tut=menu', sentence: 'position-try-fallbacks: flip-block is the escape hatch: when the row below has no room, the whole area flips above.'},
     {choice: 'tut=menu', sentence: 'your site reset already zeroes menu, and a page’s own styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the browser’s rules are aimed, because the cascade, the order CSS uses to choose between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers are the reset’s job too; this site’s reset drops them for menu alongside ol and ul.'},
-    {choice: 'tut=menu', sentence: 'One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centres every popover with inset: 0,'},
+    {choice: 'tut=menu', sentence: 'One line remains that no reset should write for you: inset: auto. The browser’s default stylesheet centers every popover with inset: 0,'},
     {choice: 'tut=resize', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=resize&world=vanilla', sentence: 'The col-resize cursor offers the gesture, and touch-action: none lets the pointer drag it on a touchscreen.'},
     {choice: 'tut=menu', sentence: 'So the sort is a question the page asks on every read, never a stored answer: each read re-ranks the rows by the sorting column, and as values change underneath, the rows move to stay sorted.'},
@@ -76,7 +76,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=menu', sentence: 'and a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'a :has() rule on the cell, which matches an element by what it contains, pads for the toggle when one is there, and reconcile reads the sortable set off the table’s markup each time it writes the cells.'},
     {choice: 'tut=menu&world=vanilla', sentence: 'When the page calls reconcile after a new sort, announceSort walks the columns and announce, one function, sets each th from what it was given: the sorting th gains aria-sort, and every other th loses it. One value holds the sort, so the headers always agree with it.'},
-    {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbours: whatever one column gains, the next gives, and the sum cannot change.'},
+    {choice: 'tut=resize', sentence: 'I could resize with absolute pixel widths, but one drag would break the table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers at the first touch, and every resize is a trade between neighbors: whatever one column gains, the next gives, and the sum cannot change.'},
     {choice: 'tut=resize', sentence: 'The handle captures its pointer and measures the table once, pixels per share.'},
     {choice: 'tut=resize', sentence: 'The header’s share is written as a custom property, --share, one of the values set by name on the cell and read back in the stylesheet with var().'},
     {choice: 'tut=resize', sentence: 'In Aggregations.css, beside the opening widths, three declarations in the table’s rule size it: a width, a minimum width and a table layout. width: 100% fills its container. Fixed table layout holds each column at its declared share of whatever width the table has.'},
@@ -107,7 +107,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The context’s verbs are the build’s own functions, not the actions of the same name: lifted dispatches the lifted action, moved dispatches drifted, and dropped dispatches released.'},
     {choice: 'world=react', sentence: 'Every handler ends in a dispatch of an action (columnMovedBeside, lifted, dropped), a record of what happened that one reducer turns into the next state. Whatever changes the order'},
     {choice: 'world=vanilla', sentence: 'Rows and columns stand in the order the page holds: dragSortable reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes, the page calls reconcile, so a reorder never touches the data:'},
-    {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbour is struck: the table raises column-moved, the page writes the new order into its arrangement and calls reconcile, which moves the real cells to match it.'},
+    {choice: 'world=vanilla', sentence: 'Tell the page as soon as a neighbor is struck: the table raises column-moved, the page writes the new order into its arrangement and calls reconcile, which moves the real cells to match it.'},
     {choice: 'world=vanilla', sentence: 'This is the whole travel of the eager build,'},
     {choice: 'pace=lazy&world=vanilla', sentence: 'The lazy build is its own file, not a flag on the eager one: its travel records the landing in the hand, and its release, which also handles cancel, raises whatever the hand is holding on the table and then lets the hand go.'},
     {choice: 'world=vanilla', sentence: 'reconcile writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.'},
@@ -122,7 +122,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=sort&track=pointer&world=vanilla', sentence: '<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'},
     {choice: 'tut=resize&world=vanilla', sentence: '<button type="button" tabindex="0" data-resize-handle class="resize-handle'},
     {choice: 'world=vanilla', sentence: '<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable> <caption class="off-screen">Live aggregations by window</caption> <thead>'},
-    {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are marked for what they do, data-row-grip and data-resize-handle, and dragSortable attaches the behaviour to each when boot calls it.'},
+    {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are marked for what they do, data-row-grip and data-resize-handle, and dragSortable attaches the behavior to each when boot calls it.'},
     {choice: 'world=vanilla', sentence: 'The page writes the whole table as it would for any table: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. One attribute, data-drag-sortable, marks the table as one that drag-sorts. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
     {choice: 'world=vanilla', sentence: 'At boot a script finds every table so marked and calls dragSortable on it. There are two builds of dragSortable, eager and lazy, one file each, and the pace is which one boot calls.'},
     {choice: 'world=vanilla', sentence: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths. The call also wires the table’s listeners at once.'},
@@ -130,15 +130,15 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
-    {choice: 'world=react', sentence: 'The behaviour arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices.'},
+    {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices.'},
     {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.'},
-    {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behaviour’s own sheets read them.'},
+    {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behavior’s own sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
     {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it.'},
     {choice: 'world=react', sentence: 'useDragSortable creates the table’s own store once, empty, and every part inside DragSortable, the provider, reads and writes through that one.'},
     {choice: 'world=react', sentence: 'and passes both to useDragSortable, the rows already in their standing.'},
     {choice: 'world=react', sentence: 'Both builds call the table’s store the hand. It holds the drag and the widths once measured. The React build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes.'},
-    {choice: 'world=vanilla', sentence: 'and passes that projection to the table’s behaviour in the order it should stand.'},
+    {choice: 'world=vanilla', sentence: 'and passes that projection to the table’s behavior in the order it should stand.'},
     {choice: 'world=react', sentence: 'The page’s provider and useDragSortable each subscribe through useSyncExternalStore,'},
     {choice: 'world=react', sentence: '<table id="live-aggregations" className={sortable.className}> <caption className="off-screen">{caption}</caption>'},
     {choice: 'world=react', sentence: '<output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{reportOf(sortable)}</output>'},
@@ -236,7 +236,7 @@ describe('the tables tab’s own words', () => {
     {name: 'for', choice: 'world=react', run: /^The page writes the whole table itself/},
     {name: 'origin', choice: 'world=react', run: /^The page writes the whole table itself/},
     {name: 'motion', choice: 'world=react', run: /^The page writes the whole table itself/},
-    {name: 'useDragSortable', choice: 'world=react', run: /^The behaviour arrives through/},
+    {name: 'useDragSortable', choice: 'world=react', run: /^The behavior arrives through/},
     {name: 'th', choice: 'tut=menu&world=vanilla', run: /walks the columns and/},
     {name: 'onRowMoved', choice: 'tut=menu', run: /^Move a row and the sort ends/},
     {name: 'columnMovedBeside', choice: 'track=pointer', run: /^Writing back is the same shape in reverse/},
@@ -264,7 +264,7 @@ describe('the tables tab’s own words', () => {
     {name: 'popoverTarget', choice: 'tut=menu', run: /accessibility relationship comes/},
     {name: 'popoverTarget', choice: 'tut=menu', run: /The platform provides the whole popup/},
     {name: 'popovertargetaction', choice: 'tut=menu', run: /accessibility relationship comes/},
-    {name: '@supports', choice: 'tut=menu', run: /fallback: a centred popover/},
+    {name: '@supports', choice: 'tut=menu', run: /fallback: a centered popover/},
     {name: 'menu', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ol', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
     {name: 'ul', choice: 'tut=menu', run: /^A popover also comes with auto margins/},
@@ -281,7 +281,7 @@ describe('the tables tab’s own words', () => {
     {name: 'block-end', choice: 'tut=menu', run: /takes the row below the toggle/},
     {name: 'span-inline-start', choice: 'tut=menu', run: /takes the row below the toggle/},
     {name: 'flip-block', choice: 'tut=menu', run: /is the escape hatch/},
-    {name: 'inset: 0', choice: 'tut=menu', run: /centred versus anchored/},
+    {name: 'inset: 0', choice: 'tut=menu', run: /centered versus anchored/},
     {name: '::after', choice: 'tut=resize', run: /only item is the 8px line its/},
     {name: 'col-resize', choice: 'tut=resize', run: /offers the gesture/},
     {name: 'dressColumn', choice: 'tut=resize&world=vanilla', run: /rewrites that label to state/},
@@ -324,7 +324,7 @@ describe('the tables tab’s own words', () => {
     render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await tablesTab.region()).toHaveTextContent('/* centred is the browser’s default placement; this menu chooses the anchor */');
+    expect(await tablesTab.region()).toHaveTextContent('/* centered is the browser’s default placement; this menu chooses the anchor */');
   });
 
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
@@ -450,7 +450,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed(feed);
     const controls = await tableControls.region();
-    expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
+    expect(controls).toHaveTextContent(/Neighbors swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/moves with the pointer, cells and all/);
     expect(controls).toHaveTextContent(/slide to their new places/);
     expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
@@ -461,7 +461,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/gives them no time/);
     expect(tableControls.readout('<LazyTable className="keep static"/>')).toBeVisible();
-    expect(controls).not.toHaveTextContent(/Neighbours swap/);
+    expect(controls).not.toHaveTextContent(/Neighbors swap/);
   });
 
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
@@ -1082,7 +1082,7 @@ describe('the living table’s terms', () => {
     ['selector', 'a named function that takes the state and returns one answer from it. Its name says what is being asked'],
     ['middleware', 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own'],
     ['provider', 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it'],
-    ['hook', 'a function, named use and something, that a React component calls to get state or behaviour from React'],
+    ['hook', 'a function, named use and something, that a React component calls to get state or behavior from React'],
     ['effect', 'code React runs after it has updated the page'],
     ['hydrate', 'fill the table with the recent past, fetched once, and join it to the live trades']
   ])('should define %s in plain words where the living table first uses it', async (term, definition) => {
@@ -1123,7 +1123,7 @@ describe('the living table’s terms', () => {
     await tablesTab.findPart('the living table');
     const defined = tablesTab.definedIn(tablesTab.part('the still table'), 'ledger');
 
-    expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
+    expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbor gives up');
   });
 
   test('should say what Redux is where the store story first names it', async () => {
@@ -1177,7 +1177,7 @@ describe('the drag sort recipe’s words', () => {
   });
 
   test.each([
-    ['the drawing', 'A dead zone at the near edge of its neighbour holds still: a quarter of the neighbour’s width, or more when the neighbour is much the wider. Past it, the two switch.'],
+    ['the drawing', 'A dead zone at the near edge of its neighbor holds still: a quarter of the neighbor’s width, or more when the neighbor is much the wider. Past it, the two switch.'],
     ['the walk', 'To find the column under the pointer, the code adds the columns’ widths from the left until the total passes the pointer’s x.'],
     ['the dead zone', 'The dead zone is a quarter of that column’s width, or half the difference between it and the carried column when that is more,'],
     ['the plain boundary', 'switch a narrow column past a wide one at first touch, and the wide one lands back under the resting pointer, ready to switch straight back.']
@@ -1237,7 +1237,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
-    expect(recipe).toHaveTextContent('The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink greys its glyph, and attentive fills it with the approach colour, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
+    expect(recipe).toHaveTextContent('The toggle’s look is shared classes. borderless and unfilled take off the browser’s button chrome, muted-ink grays its glyph, and attentive fills it with the approach color, the pale green, under a hovering pointer and draws the site’s ring when the keyboard reaches it.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \.menu-toggle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.muted-ink \{[^]*\.attentive:where\(/);
   });
 
@@ -1322,7 +1322,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
-    expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbours slide beneath the carried cells, and the paper keeps either from showing through the other.');
+    expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbors slide beneath the carried cells, and the paper keeps either from showing through the other.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
   });
 
@@ -1393,7 +1393,7 @@ describe('the tables tutorials’ vocabulary', () => {
   test.each(['pointer', 'keyboard'])('should name walk, strike, drift and survey before the %s track uses them', async track => {
     const blocks = await prose(`tut=sort&track=${track}`, 'build the drag sort yourself');
 
-    expect(firstSaying(blocks, /\b(walk|strike|drift|survey)\b/)).toHaveTextContent('A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far enough into a neighbour to count. The drift is how far the pointer has moved since the grab. The survey is the one measurement taken at the grab: the table’s box, every column’s width, and later the row heights.');
+    expect(firstSaying(blocks, /\b(walk|strike|drift|survey)\b/)).toHaveTextContent('A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far enough into a neighbor to count. The drift is how far the pointer has moved since the grab. The survey is the one measurement taken at the grab: the table’s box, every column’s width, and later the row heights.');
   });
 
   test('should say what a dial’s promise is where the drag sort first names the promises', async () => {
@@ -1492,7 +1492,7 @@ describe('the tables tab’s audited words', () => {
     ['react', 'tut=sort'], ['vanilla', 'tut=sort'],
     ['react', 'tut=sort&track=keyboard&pace=lazy&origin=keep&motion=static'], ['vanilla', 'tut=sort&track=keyboard&pace=lazy&origin=keep&motion=static'],
     ['react', 'tut=menu'], ['vanilla', 'tut=menu'], ['react', 'tut=resize'], ['vanilla', 'tut=resize']
-  ] as const)('should spell the whole tab’s prose the British way, in the %s world with %s', async (world, choices) => {
+  ] as const)('should spell the whole tab’s prose the American way, in the %s world with %s', async (world, choices) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt(`?tab=tables&world=${world}&${choices}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -1501,7 +1501,7 @@ describe('the tables tab’s audited words', () => {
 
     const words = tablesTab.blocksIn(tab).map(block => block.textContent).join(' ');
 
-    expect(words).not.toMatch(/\b(behaviors?|centered|centers|honors|labeled|colors?)\b/i);
+    expect(words).not.toMatch(/\b(behaviours?|centred|centres|honours|labelled|colours?|neighbours?)\b/i);
   });
 
   test.each([
@@ -1554,11 +1554,11 @@ describe('the tables tab’s audited words', () => {
     expect(await tabWithEveryStoryOpen('react')).toHaveTextContent('The first and last columns hold the table in place and cannot be lifted.');
   });
 
-  test('should say a reset returns the seats as they stood before the sort, and the fallback is a centred popover', async () => {
+  test('should say a reset returns the seats as they stood before the sort, and the fallback is a centered popover', async () => {
     const tab = await tabWithEveryStoryOpen('react', '&tut=menu');
 
     expect(tab).toHaveTextContent('as they stood before the sort.');
-    expect(tab).toHaveTextContent('fallback: a centred popover.');
+    expect(tab).toHaveTextContent('fallback: a centered popover.');
   });
 
   test('should name dragSortable in the React world only where a run says it speaks of the vanilla build', async () => {
@@ -1577,11 +1577,11 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent('dragSortable keeps only the hand, empty, as a store of its own');
   });
 
-  test('should name the drift as the drag’s drifted case, and say the seat number changes by the crossed neighbour’s width the other way', async () => {
+  test('should name the drift as the drag’s drifted case, and say the seat number changes by the crossed neighbor’s width the other way', async () => {
     const tab = await tabWithEveryStoryOpen('react');
 
     expect(tab).toHaveTextContent('is a field of the drag, written by the dragging reducer’s drifted case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the pointer has moved since.');
-    expect(tab).toHaveTextContent('the gap moves by the crossed neighbour’s width, and the seat number changes by that width the other way, so the carried cells stay under the pointer.');
+    expect(tab).toHaveTextContent('the gap moves by the crossed neighbor’s width, and the seat number changes by that width the other way, so the carried cells stay under the pointer.');
     expect(tab).toHaveTextContent('under keep and never leave their place.');
     expect(tab).toHaveTextContent('the same offset the drag already holds');
     expect(tab).toHaveTextContent('a column moved to a position,');
@@ -1591,7 +1591,7 @@ describe('the tables tab’s audited words', () => {
   test('should say the two ways to drag, where the drag is measured, and what the store story tells', async () => {
     const tab = await tabWithEveryStoryOpen('react');
 
-    expect(tab).toHaveTextContent('There are two ways to drag something across a page, and I built both. The Drag sort list demo uses the native API, where the platform brings most of the behaviour for very little code; its edges (the snapshot that cannot be animated, the cursor that belongs to the platform, the macOS cancel) are that demo’s own story. This table uses pointer events, which leave every pixel of the drag to the code, and no drag-and-drop library is anywhere in the build.');
+    expect(tab).toHaveTextContent('There are two ways to drag something across a page, and I built both. The Drag sort list demo uses the native API, where the platform brings most of the behavior for very little code; its edges (the snapshot that cannot be animated, the cursor that belongs to the platform, the macOS cancel) are that demo’s own story. This table uses pointer events, which leave every pixel of the drag to the code, and no drag-and-drop library is anywhere in the build.');
     expect(tab).toHaveTextContent('the rest are cards in the last station, and each opens into its build. Station 5 ends with a story told from the code’s side, the store the two worlds share.');
     expect(tab).toHaveTextContent('So the lift measures everything the drag needs at the grab, as the lift step shows');
   });

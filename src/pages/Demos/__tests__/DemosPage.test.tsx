@@ -34,7 +34,7 @@ describe('The Demos page', () => {
 
   test.each([
     ['Accordions', demosAt()],
-    ['Accordions', demosAt('?tab=behaviour')],
+    ['Accordions', demosAt('?tab=behavior')],
     ['Tables', demosAt('?tab=tables')]
   ])('should mark the demo it shows as the current tab, %s at %s', async (shown, at) => {
     render(<TestApp at={at}/>);

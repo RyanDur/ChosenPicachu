@@ -12,8 +12,8 @@ const definitions: Record<Word, ReactNode> = {
   aloft: 'whatever the pointer is carrying, a column by its name or a row by its key; the store holds it as the drag, absent until a lift',
   survey: 'the one measurement taken at the grab: the table’s box, every column’s width, later the row heights',
   drift: 'how far the pointer has moved since the grab; state on the drag, dispatched on every move',
-  strike: 'the moment the pointer crosses far enough into a neighbour to count',
-  settle: 'what a strike does: the reorder, and the shove it passes to the neighbours it crossed',
+  strike: 'the moment the pointer crosses far enough into a neighbor to count',
+  settle: 'what a strike does: the reorder, and the shove it passes to the neighbors it crossed',
   landing: 'the destination a lazy drag remembers instead of settling',
   seats: 'the rows’ order: a row keeps its key while its seat changes',
   share: 'a column’s slice of the table’s width: a fraction, not a pixel',
@@ -28,10 +28,10 @@ const definitions: Record<Word, ReactNode> = {
   selector: 'a named function that takes the state and returns one answer from it. Its name says what is being asked',
   middleware: 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own',
   provider: 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it',
-  hook: 'a function, named use and something, that a React component calls to get state or behaviour from React',
+  hook: 'a function, named use and something, that a React component calls to get state or behavior from React',
   effect: 'code React runs after it has updated the page',
   hydrate: 'fill the table with the recent past, fetched once, and join it to the live trades',
-  ledger: 'the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up'
+  ledger: 'the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbor gives up'
 };
 
 export const Term: FC<PropsWithChildren<{word: Word}>> = ({word, children}) =>

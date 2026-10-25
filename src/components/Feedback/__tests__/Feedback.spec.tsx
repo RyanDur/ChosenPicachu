@@ -86,7 +86,7 @@ describe('Feedback while a note is on its way', () => {
     expect(github.notes).toHaveLength(1);
   });
 
-  test('should send a note once when Feedback is cancelled and reopened before GitHub answers', async () => {
+  test('should send a note once when Feedback is canceled and reopened before GitHub answers', async () => {
     const github = githubHoldingItsAnswer();
     const words = await opened();
     await userEvent.type(words, 'The sort menu hides.{Enter}');

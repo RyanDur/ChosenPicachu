@@ -10,7 +10,7 @@ import '../Tutorials.css';
 
 const clues: [string, string][] = [
   ['the order is mine', 'The order belongs to the user, not us. Nothing reorders on its own.'],
-  ['belongs above something else', 'One dimension. Position against neighbours is the meaning.'],
+  ['belongs above something else', 'One dimension. Position against neighbors is the meaning.'],
   ['pick it up and put it there', 'Direct manipulation, by pointer or by key. The platform ships the drag.'],
   ['see it stay where I dropped it', 'The drop is the commit, and the landing has to be visible.']
 ];

@@ -8,7 +8,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
-    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbour slid, the walked column would simply jump.">
+    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbor slid, the walked column would simply jump.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
         where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
         one for the column that walked.</Says>
@@ -16,8 +16,8 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
     <Reveal>
       <Says>The arrow measures the header row at the keypress, the way the lift takes its
         survey, and passes the widths to the walk. The walk dispatches the reorder with two
-        marks: the neighbour is shoved by the walked column’s width, and the walked column
-        settles from across the neighbour’s. The stylesheet slides both, and each clears its
+        marks: the neighbor is shoved by the walked column’s width, and the walked column
+        settles from across the neighbor’s. The stylesheet slides both, and each clears its
         own mark when its keyframe ends, so a held key walks the column step by step, sliding
         every step.</Says>
       <Codes>

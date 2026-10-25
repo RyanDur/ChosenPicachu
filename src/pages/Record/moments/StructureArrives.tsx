@@ -12,12 +12,12 @@ export const StructureArrives: FC = () =>
   <Moment of={moments.structureArrives}
     tells={<>In November 1990 Tim Berners-Lee and Robert Cailliau proposed{' '}
       <a className="signpost" href={proposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
-      browser. HTML’s tags came from CERN’s SGML guide, so the documents world would recognise them. The one tag of his
+      browser. HTML’s tags came from CERN’s SGML guide, so the documents world would recognize them. The one tag of his
       own was <a className="signpost" href={tags}>the anchor</a>, an idea hypertext already had; the new thing was
       what his could carry, the address of a document on another machine.</>}>
     <p className="paragraph muted-ink hyphenated">The second proposal came in November 1990, twenty months after the first, and Robert Cailliau wrote it with him. It names the need from the reader’s side: CERN’s information sat in systems that could not read each other, and <a className="signpost" href={proposal}>“the current incompatibilities of the platforms and tools make it impossible to access existing information through a common interface”</a>. The answer was hypertext, defined in the sentence this page opens with, and a scheme in which the stores CERN already had, among them its news and file servers, could be read through one browser as one web. The document names the project <a className="signpost" href={proposal}>“WorldWideWeb (or W3)”</a>, asks for <a className="signpost" href={proposal}>“4 software engineers and a programmer”</a>, and plans two phases of three months each. First, browsers for dumb terminals, the Macintosh and the NeXT, with a server <a className="signpost" href={proposal}>“which may be installed on any machine to allow files on that machine to be accessed as hypertext”</a>. Then editing, at which point <a className="signpost" href={proposal}>“authorship becomes universal”</a>. It gives the software away <a className="signpost" href={proposal}>“free of charge to anyone”</a>, and lists what it will not do, among it <a className="signpost" href={proposal}>“research into fancy multimedia facilities such as sound and video”</a>. Neither this proposal nor the 1989 one mentions a language running in the page.</p>
     <p className="paragraph muted-ink hyphenated">Links inside a document were already for sale; the proposal budgets
-      licences for Guide and KMS, two commercial hypertext systems. The new thing fits in one line:{' '}
+      licenses for Guide and KMS, two commercial hypertext systems. The new thing fits in one line:{' '}
     <a className="signpost" href={proposal}>“Nodes do not need to be on the same machine: links may point across
       machine boundaries.”</a> A link is an address a browser knows how to fetch, so each server serves its own
       documents and nothing more; the proposal says the server{' '}

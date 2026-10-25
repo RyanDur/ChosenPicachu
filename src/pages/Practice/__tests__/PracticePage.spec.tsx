@@ -7,7 +7,7 @@ import {practicePage} from '@pages/Practice/__test_support/practice';
 const practices = [
   ['Structure', 'structure', /^I start from what the content is and pick the element for it/, /^The test is to read the page with the styles turned off/],
   ['Presentation', 'presentation', /^I write CSS in two kinds of sheet/, /^The test is to read a class list on its own/],
-  ['Behavior', 'behavior', /^Behaviour splits into what is true and what happened/, /^The test is to read the state on its own/]
+  ['Behavior', 'behavior', /^Behavior splits into what is true and what happened/, /^The test is to read the state on its own/]
 ] as const;
 
 describe('the practice page', () => {
@@ -33,7 +33,7 @@ describe('the practice page', () => {
   });
 
   test('should open on Structure, marked as the current tab, when the address names a tab the page does not have', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=behaviour`}/>);
+    render(<TestApp at={`${Paths.practice}?tab=interaction`}/>);
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
@@ -59,7 +59,7 @@ describe('the practice page', () => {
 
   test.each([
     ['Presentation', 'Structure', Paths.practice, /^I write CSS in two kinds of sheet/],
-    ['Behavior', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
+    ['Behavior', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behavior splits into what is true and what happened/],
     ['Structure', 'Behavior', `${Paths.practice}?tab=behavior`, /^I start from what the content is and pick the element for it/]
   ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at, firstRule) => {
     render(<TestApp at={at}/>);
@@ -129,7 +129,7 @@ describe('the practice page', () => {
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
     expect(practicePage.paragraph(/so I name them in the past tense: lifted, dropped, chosen\./)).toBeInTheDocument();
     expect(practicePage.paragraph(/I keep the state in one place, and replacing it is the only way anything on screen changes\./)).toBeInTheDocument();
-    expect(practicePage.paragraph(/^Behaviour splits into what is true and what happened/))
+    expect(practicePage.paragraph(/^Behavior splits into what is true and what happened/))
       .toHaveTextContent(/AngularJS, in the 2010 moment, bound model and view both ways\. I keep one direction\./);
     expect(practicePage.paragraph(/^Not every event starts at the pointer/))
       .toHaveTextContent(/The 2005 moment is where that pattern got its name, Ajax, and became ordinary\./);

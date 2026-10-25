@@ -5,7 +5,7 @@ const asDealt = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'
 
 for (const {name, at, table} of stages) {
   test.describe(`resizing a column, in ${name}`, () => {
-    test('an arrow on a handle trades two points with its neighbour either way, says the new share, and never moves the column', async ({page}) => {
+    test('an arrow on a handle trades two points with its neighbor either way, says the new share, and never moves the column', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
       await trades.resizeHandle('window').focus();
@@ -147,7 +147,7 @@ for (const {name, at, table} of stages) {
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`trades resized to ${share}%`]);
     });
 
-    test('a resize whose finger is cancelled stops following the pointer', async ({page, browserName}) => {
+    test('a resize whose finger is canceled stops following the pointer', async ({page, browserName}) => {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
       await page.goto(at);
       const trades = dragSortTable(page, table(page));

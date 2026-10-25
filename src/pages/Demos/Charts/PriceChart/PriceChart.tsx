@@ -108,7 +108,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <Explainer>
       This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the
       period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line
-      marks the first price in the period, the close of its first candle, and the colour shows the trend against it.
+      marks the first price in the period, the close of its first candle, and the color shows the trend against it.
       High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The
       period menu sets how much time the chart covers. Every period stays live.
     </Explainer>

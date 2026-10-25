@@ -22,13 +22,13 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
         shuffle. The settle is the same story: the moved row takes its new seat, and the rest
         carry over.</Says>
       {world === 'react'
-        ? <Says>The grip does the travelling as well as the lifting, and that is Safari’s doing.
+        ? <Says>The grip does the traveling as well as the lifting, and that is Safari’s doing.
           The grip takes the pointer at the lift; if the header cell retakes it on the first
           move, WebKit lets the grip’s capture go at once, with no button down, and the drag
           reads that loss as the drop. Chrome lets go lazily, on the next move, so it never
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
-        : <Says>The grip does the travelling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.</Says>}
+        : <Says>The grip does the traveling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.</Says>}
       {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes, marked <code>data-row-grip</code>. When boot calls <code>dragSortable</code> it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.</Says>}
       <Codes>
         {world === 'react'

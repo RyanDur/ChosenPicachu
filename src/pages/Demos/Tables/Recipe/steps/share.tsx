@@ -20,8 +20,8 @@ const shareMarkup: Record<World, ReactNode> = {
 
 export const CssShare: FC<{world: World}> = ({world}) =>
   <Step title="Let CSS carry its share">
-    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behaviour comes first, and most of it is a declaration in the stylesheet, not code.">
-      <Says>Your first pass writes no behaviour: the stylesheet already covers most of
+    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behavior comes first, and most of it is a declaration in the stylesheet, not code.">
+      <Says>Your first pass writes no behavior: the stylesheet already covers most of
         this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
         fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
         on a touchscreen instead of scrolling it,
@@ -38,7 +38,7 @@ export const CssShare: FC<{world: World}> = ({world}) =>
         plain Tab skips a bare button; the keyboard track says why.</Says>
       {world === 'vanilla' && <Says>In the vanilla build the grip’s button and the handle’s button are marked for what
         they do, <code>data-row-grip</code> and <code>data-resize-handle</code>, and <code>dragSortable</code> attaches the
-        behaviour to each when boot calls it.</Says>}
+        behavior to each when boot calls it.</Says>}
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>
       <Codes>

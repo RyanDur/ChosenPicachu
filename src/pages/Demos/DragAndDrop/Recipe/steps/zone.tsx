@@ -6,11 +6,11 @@ import {crossingSource} from './sources';
 import {CrossingFigure} from '../CrossingFigure';
 
 export const InnerHalf: FC = () =>
-  <Step title="A swap counts once the pointer is a quarter of the way into a neighbour">
-    <Words want="Swap at the first touch of a neighbour and the order flickers: at the boundary, every pixel of movement flips it back and forth.">
+  <Step title="A swap counts once the pointer is a quarter of the way into a neighbor">
+    <Words want="Swap at the first touch of a neighbor and the order flickers: at the boundary, every pixel of movement flips it back and forth.">
       <Says>Nothing has to be measured ahead of time. The browser fires dragover on whatever the pointer is over, so the
-        event’s own target is the neighbour, and the neighbour’s bounding box, the rectangle the browser reports for an
-        element’s place and size, is the space to cross. A <Term word="crossing">crossing</Term> counts only once the pointer is past the neighbour’s outer quarter.</Says>
+        event’s own target is the neighbor, and the neighbor’s bounding box, the rectangle the browser reports for an
+        element’s place and size, is the space to cross. A <Term word="crossing">crossing</Term> counts only once the pointer is past the neighbor’s outer quarter.</Says>
       <CrossingFigure/>
     </Words>
     <Codes>

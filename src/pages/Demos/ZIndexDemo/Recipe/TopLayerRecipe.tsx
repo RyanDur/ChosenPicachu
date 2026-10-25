@@ -82,10 +82,10 @@ export const TopLayerRecipe: FC = () => {
       </Step>
       <Step title="Place the panel with two class names"
         dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
-        <Words want="Nine places, and no arithmetic: the browser already centres a popover.">
+        <Words want="Nine places, and no arithmetic: the browser already centers a popover.">
           <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
             size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
-            It takes only the room its content needs, and the auto margins share the rest, which centres it in the
+            It takes only the room its content needs, and the auto margins share the rest, which centers it in the
             window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
             and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
           <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
@@ -113,10 +113,10 @@ export const TopLayerRecipe: FC = () => {
       <Step title="Style each banner">
         <Words want="A banner is read at a glance, by someone busy with something else.">
           <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
-            site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s colour, and hairline-outline for a thin border in that colour. The dismiss button is a square of fixed size that does not
+            site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color, and hairline-outline for a thin border in that color. The dismiss button is a square of fixed size that does not
             shrink when the message is long. Its look is shared classes too: borderless and unfilled take off the
             browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and
-            muted-ink greys it.</Says>
+            muted-ink grays it.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[

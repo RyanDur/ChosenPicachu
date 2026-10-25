@@ -37,14 +37,14 @@ describe('the pointer vocabulary', () => {
     return columnUnder(order, {left: 0, top: 0, width, height: 100, columnWidths});
   };
 
-  it('switches with an even neighbour only once the pointer is a quarter into it', () => {
+  it('switches with an even neighbor only once the pointer is a quarter into it', () => {
     const under = across({window: 100, trades: 100, buys: 100, change: 100});
 
     expect(under(224, 50, 'trades')).toBeUndefined();
     expect(under(226, 50, 'trades')).toBe('buys');
   });
 
-  it('a slim column reaches deeper into a wide neighbour before switching', () => {
+  it('a slim column reaches deeper into a wide neighbor before switching', () => {
     const under = across({window: 100, trades: 40, buys: 360, change: 100});
 
     expect(under(140 + 360 / 3, 50, 'trades')).toBeUndefined();

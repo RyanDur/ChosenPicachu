@@ -4,8 +4,8 @@ import './SlotsFigure.css';
 
 export const SlotsFigure: FC = () =>
   <Figure className="slots" viewBox="0 -20 480 150" title="Where a switch counts" says={<>
-    The carried column is moving right. A dead zone at the near edge of its neighbour holds still: a quarter of the
-    neighbour’s width, or more when the neighbour is much the wider. Past it, the two switch. Coming back the other way,
+    The carried column is moving right. A dead zone at the near edge of its neighbor holds still: a quarter of the
+    neighbor’s width, or more when the neighbor is much the wider. Past it, the two switch. Coming back the other way,
     the dead zone is at the other edge.
   </>}>
     <rect className="slot paper-filled drawn" x="10" y="20" width="110" height="70"/>

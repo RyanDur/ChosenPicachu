@@ -75,7 +75,7 @@ const ActionsAreData: FC = () =>
       <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries the
         column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’ order as shown, ranked while a sort
         holds.
-        columnMovedBeside carries the neighbour and the widths.</Says>
+        columnMovedBeside carries the neighbor and the widths.</Says>
       <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> reads the type and returns the
         next state.</Says>
     </Words>
@@ -96,14 +96,14 @@ const ActionsAreData: FC = () =>
         sorting. Each is a short switch that handles the actions it cares about and returns the state untouched
         for the rest.</Says>
       <Says>Each case passes the state and the facts to one verb of the table’s own, the way a move passes its
-        neighbours a shove and the thing that moved a <Term word="settle">settle</Term>.</Says>
+        neighbors a shove and the thing that moved a <Term word="settle">settle</Term>.</Says>
       <Says>The marks a move leaves are measured from the order the page showed, which is carried in the action,
         because the table keeps no order of its own.</Says>
       <Says>The drag is a key on the same state, absent from a table that never lifts, and dragging is the only
         reducer that writes it.</Says>
       <Says>The parts hold no state and compose no reducers: they ask the store, and they dispatch to it.</Says>
       <Says>The table is never given the trades. The page projects them into rows, a key and the value under each
-        column, ranked by the sort while one holds, and passes that projection to the table’s behaviour in the order it should stand.</Says>
+        column, ranked by the sort while one holds, and passes that projection to the table’s behavior in the order it should stand.</Says>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[

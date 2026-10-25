@@ -196,7 +196,7 @@ const CandlesStory: FC = () =>
             in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
             the chart’s size, the wick’s hairline width and how the shapes move.</Says>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
-            wears sell-side, shared classes that set a side’s colours. The body wears side-face and the wall side-wall,
+            wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
         </Words>
         <Codes>
@@ -222,7 +222,7 @@ const CandlesStory: FC = () =>
           <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
             busiest span on the chart, and every other bar is in proportion to it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
-          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colours are custom
+          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
             properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side
             sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.</Says>
         </Words>
@@ -242,7 +242,7 @@ const CandlesStory: FC = () =>
         </Codes>
       </Step>
       <Step title="Use the same axes">
-        <Words want="Candles with no labels are a shape, not a chart. They need their prices labelled and their time marked.">
+        <Words want="Candles with no labels are a shape, not a chart. They need their prices labeled and their time marked.">
           <Says>The same Axes wraps this chart. Its prices come from the highest high and the lowest low of the candles on
             show, and its time marks follow the period, as on the price line.</Says>
           <Says>Axes does one job, so every chart that has that job uses it.</Says>
@@ -304,8 +304,8 @@ const PressureStory: FC = () =>
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
             below. The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in
             the site’s shared sheet and that an element wears by name.</Says>
-          <Says>A side class sets a side’s colours as custom properties, values a stylesheet names once and other rules
-            read. side-face reads the face colour for the bar. side-wall reads the wall colour for the second rectangle
+          <Says>A side class sets a side’s colors as custom properties, values a stylesheet names once and other rules
+            read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
             stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
@@ -357,7 +357,7 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Cut the circle with rotations only">
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
-          <Says>You could paint the split with a conic gradient, a background that sweeps colour round a point. But a
+          <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
             painted background has no parts: nothing to give a class, which is a name a stylesheet’s rules pick an
             element out by, nothing to label, and nothing for a test to find.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
@@ -375,13 +375,13 @@ const PieStory: FC = () =>
             second half-disc turned out of sight.</Says>
           <Says>A side that took everything is both half-discs fully in view. Nothing changes shape. Everything that moves is
             a rotation or a shift, each over 300 milliseconds.</Says>
-          <Says>Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole
+          <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
           <Says>The markup passes each number to the stylesheet as a custom property: a value set by name on the element,
             such as <code>--turn</code>, and read back in the sheet with <code>var()</code>. The sheet declares each one
             with <code>@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
-            swing are angles, and the push out from the centre is two lengths. Before the markup sets them, a slice sits
-            unturned at the centre.</Says>
+            swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits
+            unturned at the center.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -402,7 +402,7 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Print each share">
         <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
-          <Says>The legend prints each share as a whole percentage, in its slice’s colour. The caption says what the pie is:
+          <Says>The legend prints each share as a whole percentage, in its slice’s color. The caption says what the pie is:
             the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>
@@ -423,7 +423,7 @@ const WorkspaceStory: FC = () =>
     <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
       the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
       chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
-      pointer. It swaps with its neighbour once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbour slides into the place it left.</Tell>
+      pointer. It swaps with its neighbor once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbor slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
       and down arrows move it one place and focus stays on it. Delete or Backspace removes it. When one chart is left it has no
       grip and no remove button, and the key does nothing, so the workspace always has a chart.</Tell>
@@ -463,7 +463,7 @@ const WorkspaceStory: FC = () =>
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
           <AThirdFromThePointer/>
-          <Says>The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
+          <Says>The neighbor’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
             starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
             with one that is still sliding.</Says>
         </Words>

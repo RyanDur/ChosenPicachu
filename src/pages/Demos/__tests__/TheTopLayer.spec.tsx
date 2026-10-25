@@ -145,7 +145,7 @@ describe('the banner tutorial’s first story', () => {
   test('should say what inset: 0 does where step 3 first names it', async () => {
     await openZIndexTab();
 
-    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the auto margins share the rest, which centres it in the window.');
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the auto margins share the rest, which centers it in the window.');
   });
 
   test('should not call stacking contexts a cascade', async () => {
@@ -202,7 +202,7 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centres it in the window\. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it show\.$/);
+    expect(within(placing).getByText(/^The browser’s own stylesheet/)).toHaveTextContent(/which centers it in the window\. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it show\.$/);
     expect(within(placing).getByText(/^The \.banners rule’s overflow: visible/)).toHaveTextContent('The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen that The user can have multiple banners explains in its step Slide in from off screen.');
     expect(within(placing).getByText(/^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(within(placing).getByText(/^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
@@ -269,13 +269,13 @@ describe('the banner tutorial’s first story', () => {
     expect(within(recipeFolds.steps(news)[2]).getAllByRole('code').map(code => code.textContent).join()).toMatch(/\.banners \{[^]*overflow: visible;/);
   });
 
-  test('should say the message’s colour and border and the dismiss button’s look are shared classes, and carve each after its rule', async () => {
+  test('should say the message’s color and border and the dismiss button’s look are shared classes, and carve each after its rule', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const styling = recipeFolds.steps(news)[3];
 
-    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/^Each message sits in a paragraph with the class news\. Its look comes from classes shared across this site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s colour, and hairline-outline for a thin border in that colour\./);
-    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and muted-ink greys it\.$/);
+    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/^Each message sits in a paragraph with the class news\. Its look comes from classes shared across this site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color, and hairline-outline for a thin border in that color\./);
+    expect(within(styling).getByText(/^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and muted-ink grays it\.$/);
     expect(within(styling).getByRole('code')).toHaveTextContent(/\.floating \{[^]*\.alarm-ink \{[^]*\.hairline-outline \{[^]*\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
@@ -485,7 +485,7 @@ describe('the z-index tab’s own words', () => {
     'To build this banner yourself, go to the tutorial below. It opens at the step where the panel becomes a popover and so is shown in the top layer.',
     'The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step.',
     'A banner is read at a glance, by someone busy with something else.',
-    'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centres the menu on the screen.'
+    'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centers the menu on the screen.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
@@ -520,7 +520,7 @@ describe('the banner dials’ readings', () => {
     ['side=middle', 'The panel sits in the window’s middle.'],
     ['side=bottom', 'The panel holds to the window’s bottom edge.'],
     ['align=left', 'The panel holds to the window’s left edge.'],
-    ['align=center', 'The browser centres the panel across the window.'],
+    ['align=center', 'The browser centers the panel across the window.'],
     ['align=right', 'The panel holds to the window’s right edge.'],
     ['enter=above', 'A new banner slides in from above the window’s top edge.'],
     ['enter=below', 'A new banner slides in from below the window’s bottom edge.'],

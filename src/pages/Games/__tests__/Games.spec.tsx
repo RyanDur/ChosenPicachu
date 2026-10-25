@@ -16,7 +16,7 @@ describe('Games', () => {
     expect(await screen.findByRole('link', {name: 'Three in a row'})).toBeVisible();
   });
 
-  test("following the game's link opens the colour game", async () => {
+  test("following the game's link opens the color game", async () => {
     render(<TestApp at={Paths.games}/>);
 
     await userEvent.click(await screen.findByRole('link', {name: 'Three in a row'}));

@@ -52,7 +52,7 @@ for (const {reader, device, press} of [
   });
 }
 
-test.describe('a mouse carrying a chart past its neighbour', () => {
+test.describe('a mouse carrying a chart past its neighbor', () => {
   test.use(desktop);
 
   test('the chart swaps back only once the pointer has come a third of its height back', async ({page}) => {

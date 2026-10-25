@@ -38,7 +38,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         the seat, where the grab box sits against where the column rests in the order as it stands now. The second is
         the drift. That
         subtraction is why a settle mid-drag never makes the carried column jump: the order
-        changes, the gap moves by the crossed neighbour’s width, and the seat number changes by that width the
+        changes, the gap moves by the crossed neighbor’s width, and the seat number changes by that width the
         other way, so the carried
         cells stay under the pointer. The stylesheet adds the two and does
         the moving, and only the hide sheet adds them: the same cells wear the same numbers
@@ -118,7 +118,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
       {world === 'react'
         ? <>
           <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
-            What follows the hand is the order: the neighbours move around it as it is struck, or
+            What follows the hand is the order: the neighbors move around it as it is struck, or
             at the drop. The table dispatches the same drift and the cells wear the same numbers;
             the table wears the word keep, and no rule in the sheet translates a carried cell
             under it.</Says>
@@ -129,12 +129,12 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
             and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
             which is why the carried cell is also <code>position: relative</code>. So the
-            neighbours slide beneath the carried cells, and the paper keeps either from showing through the
+            neighbors slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>
         : <>
           <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
-            What follows the hand is the order: the neighbours move around it as it is struck, or
+            What follows the hand is the order: the neighbors move around it as it is struck, or
             at the drop. The build dispatches the same drift and marks the same cells; the table
             wears the word keep, and no rule in the sheet translates a carried cell under it.</Says>
           <Says>A cell wears <code>paper-in-motion</code>, a shared class, a look from the site’s shared
@@ -144,7 +144,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
             and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
             which is why the carried cell is also <code>position: relative</code>. So the
-            neighbours slide beneath the carried cells, and the paper keeps either from showing through the
+            neighbors slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>}
       <Codes>
@@ -153,7 +153,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
           ...unit(cssSource, '.sortable .carried {'), gap,
           ...unit(cssSource, '.sortable.hide .carried {'), gap,
           ...unit(surfaceCss, '.paper-in-motion {'),
-          aside('/* the carried cell rises above its neighbours in every table; only under hide does it move */')
+          aside('/* the carried cell rises above its neighbors in every table; only under hide does it move */')
         ]}/>
       </Codes>
     </Reveal>

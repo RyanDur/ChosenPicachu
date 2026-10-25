@@ -17,7 +17,7 @@ const copy: Copy = {
   },
   align: {
     left: 'The panel holds to the window’s left edge.',
-    center: 'The browser centres the panel across the window.',
+    center: 'The browser centers the panel across the window.',
     right: 'The panel holds to the window’s right edge.'
   },
   enter: {

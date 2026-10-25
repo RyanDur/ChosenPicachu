@@ -8,7 +8,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> = ({world, headerSource, cssSource, buildSrc}) =>
   <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
-    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbour that has already jumped, leaves the reader to work out both.">
+    <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbor that has already jumped, leaves the reader to work out both.">
       <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
         carries nothing the moment you let go. What should move is the real thing, from where it is: the
         column you dropped starts where you dropped it and settles into its slot, and every
@@ -25,7 +25,7 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
             and CSS owns the motion from there: a keyframe puts the cell where it came from on the
             first frame and lets it slide into its slot.</Says>
           <Says>The direction is in the class, not the property, on purpose. A column carried
-            back over the same neighbour shoves it the other way, the class changes, and the
+            back over the same neighbor shoves it the other way, the class changes, and the
             browser plays the new keyframe. A mark lives exactly as long as its animation: when the
             keyframe ends, the element gets its own animationend and dispatches that it has
             settled, so the same walk can play again on the next keypress. The lift clears whatever
@@ -39,7 +39,7 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
             drag and the settle agree to the pixel. CSS owns the motion from there: a keyframe puts the cell
             where it came from on the first frame and lets it slide into its slot.</Says>
           <Says>The direction is in the class, not the property, on purpose. A column carried back over the
-            same neighbour shoves it the other way, the class changes, and the browser plays the new keyframe.
+            same neighbor shoves it the other way, the class changes, and the browser plays the new keyframe.
             A class lives exactly as long as its animation: when the keyframe ends, the first cell’s
             animationend removes the class from every cell in the column, so the same walk can play again on
             the next keypress. The lift clears whatever is still mid-flight, so a new drag starts clean.</Says>
