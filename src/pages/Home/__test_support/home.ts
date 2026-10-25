@@ -7,6 +7,9 @@ const ownParagraphs = (name: string): HTMLElement[] => {
   return within(concern(name)).getAllByRole('paragraph').filter(paragraph => !quotation.contains(paragraph));
 };
 
+const claim = (name: string): HTMLElement[] =>
+  ownParagraphs(name).filter(paragraph => within(paragraph).queryByRole('link', {name: /^(Its story is on|How I organize it is on)/}) === null);
+
 export const homePage = {
   arrived: (): Promise<HTMLElement> => screen.findByText(/^A webpage is three languages working in concert/),
   paragraph: (opening: RegExp): HTMLElement => screen.getByText(opening),
@@ -16,7 +19,8 @@ export const homePage = {
   quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
-  summary: (name: string): HTMLElement => ownParagraphs(name)[0],
+  claim,
+  claimLinks: (name: string): HTMLElement[] => claim(name).flatMap(paragraph => within(paragraph).queryAllByRole('link')),
   storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'}),
   practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
 };

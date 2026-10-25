@@ -11,11 +11,13 @@ export const Dynamic: FC = () =>
       their properties, and respond to events, we envisioned a much livelier Web
       consisting of pages that acted more like applications.
     </Quotation>
-    <p className="paragraph">JavaScript says how things respond. Script adds what the elements lack: a behaviour no
-      element has yet, which is what Eich built it for, and a request that brings new information into the page without
-      a new page, which Garrett named Ajax in 2005. The costs arrive when the script becomes the whole page: until it
-      runs there is a blank first paint and a document no crawler or screen reader can read, and the back button is
-      rebuilt by hand. So the document comes first, and a program runs only where a part of the page must respond.
-      Inside that program the state is what is true, an event is what happened, and the page is drawn from the two, so a
-      framework can change under it and the core stays.</p>
+    <p className="paragraph">JavaScript says how things respond. Script adds what the elements lack: a behavior no
+      element has yet, which is what Brendan Eich built it for, and a request that brings new information into the page
+      without loading a new one, which Jesse James Garrett named Ajax in 2005. The costs arrive when the script becomes
+      the whole page. Until it runs, the first paint is blank and no crawler or screen reader has a document to read, and
+      even after it runs, the back button has to be rebuilt by hand.</p>
+    <p className="paragraph">Where a script does run, the state is what is true, an event is what happened, and the page
+      is drawn from the two. Keep that core apart from the framework, and the framework can change around it while the
+      core stays. So the rule is that the document comes first, and a script runs only where a part of the page must
+      respond.</p>
   </ConcernSection>;
