@@ -360,6 +360,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">MDN</span>
           </li>
           <li>
+            <a className="signpost" href="https://web.dev/blog/web-platform-12-2025"><cite>New to the web platform in December</cite></a>{' '}
+            <span className="provenance caption">Rachel Andrew, web.dev, 16 December 2025</span>
+          </li>
+          <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a>{' '}
             <span className="provenance caption">Wikipedia</span>
           </li>
