@@ -388,7 +388,7 @@ describe('a list of charts', () => {
     const priceStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-      await screen.findByRole('heading', {name: 'price line tutorial', level: 2});
+      await chartsDesk.findHeading('price line tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
@@ -426,7 +426,7 @@ describe('a list of charts', () => {
     const candlesStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('candles', '?graph=candles')} feed={feed}/>);
-      await screen.findByRole('heading', {name: 'candles tutorial', level: 2});
+      await chartsDesk.findHeading('candles tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can read the same trades as candles');
     };
 
@@ -461,7 +461,7 @@ describe('a list of charts', () => {
     const pressureStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
-      await screen.findByRole('heading', {name: 'pressure tutorial', level: 2});
+      await chartsDesk.findHeading('pressure tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
@@ -503,7 +503,7 @@ describe('a list of charts', () => {
     const pieStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pie', '?graph=pie')} feed={feed}/>);
-      await screen.findByRole('heading', {name: 'pie tutorial', level: 2});
+      await chartsDesk.findHeading('pie tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
@@ -561,8 +561,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {name: 'The trader can lay out the workspace', level: 3})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'Read the charts from the address', level: 4})).toBeInTheDocument();
+    expect(await chartsDesk.findHeading('The trader can lay out the workspace', 3)).toBeInTheDocument();
+    expect(chartsDesk.heading('Read the charts from the address', 4)).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {
@@ -570,12 +570,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'pressure'});
+    await chartsDesk.findRegion('pressure');
 
-    await userEvent.click(chartsDesk.doorway('Pressure'));
+    await chartsDesk.open('Pressure');
 
-    expect(await screen.findByRole('region', {name: 'build the pressure yourself'})).toBeVisible();
-    expect(await screen.findByText(/who is driving/)).toBeVisible();
+    expect(await chartsDesk.findRegion('build the pressure yourself')).toBeVisible();
+    expect(await chartsDesk.findWords(/who is driving/)).toBeVisible();
   });
 
   test('a chart’s tutorial opens like a feature', async () => {
@@ -583,14 +583,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    const page = screen.getByRole('article', {name: 'price line tutorial'});
-    expect(within(page).getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeVisible();
-    expect(screen.getByText(/without reading a single digit/)).toBeVisible();
-    expect(screen.getByText('a trader')).toBeVisible();
-    expect(screen.getByText(/build the story yourself first/)).toBeVisible();
-    const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    const page = chartsDesk.article('price line tutorial');
+    expect(chartsDesk.headingIn(page, 'let’s build this feature', 3)).toBeVisible();
+    expect(chartsDesk.words(/without reading a single digit/)).toBeVisible();
+    expect(chartsDesk.words('a trader')).toBeVisible();
+    expect(chartsDesk.words(/build the story yourself first/)).toBeVisible();
+    const recipe = chartsDesk.region('build the price line yourself');
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
@@ -599,9 +599,9 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    const recipe = chartsDesk.region('build the price line yourself');
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent('export const subscribeTo');
     expect(recipe).toHaveTextContent('export const decodeTrade');
@@ -618,7 +618,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'pressure'});
+    await chartsDesk.findRegion('pressure');
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
     const story = await recipeFolds.press(recipe, 'The trader can see who is driving the move');
     expect(story).toHaveAttribute('open');
@@ -631,8 +631,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=candles,price,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.getAllByRole('region', {name: 'live trades'})).toHaveLength(1);
+    expect(await chartsDesk.findRegion('candles')).toBeVisible();
+    expect(chartsDesk.regions('live trades')).toHaveLength(1);
   });
 
   test('the add menu offers only what the desk lacks', async () => {
@@ -640,13 +640,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    const menu = chartsDesk.addMenu();
-    if (!menu) throw new Error('no add-a-chart menu on the desk');
-    expect(within(menu).queryByRole('button', {name: 'Price line', hidden: true})).not.toBeInTheDocument();
-    expect(within(menu).queryByRole('button', {name: 'Candles', hidden: true})).not.toBeInTheDocument();
-    expect(within(menu).queryByRole('button', {name: 'Pressure', hidden: true})).not.toBeInTheDocument();
+    expect(chartsDesk.offered('Price line')).not.toBeInTheDocument();
+    expect(chartsDesk.offered('Candles')).not.toBeInTheDocument();
+    expect(chartsDesk.offered('Pressure')).not.toBeInTheDocument();
   });
 
   test('a full desk offers no add menu', async () => {
@@ -654,11 +652,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.addChart('Pie');
 
-    await screen.findByRole('region', {name: 'pie'});
+    await chartsDesk.findRegion('pie');
     expect(chartsDesk.addMenu()).not.toBeInTheDocument();
   });
 
@@ -668,11 +666,11 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsLive(feed);
     broadcast(feed, [tradeFrame(50000, 1700000000000, '0.01', 'bought'), tradeFrame(50001, 1700000000500, '0.03', 'sold')]);
-    await within(screen.getByRole('region', {name: 'live trades'})).findByText('$50,001.00');
+    await chartsDesk.findWordsIn(chartsDesk.region('live trades'), '$50,001.00');
 
     await chartsDesk.addChart('Pie');
 
-    const legend = within(await screen.findByRole('region', {name: 'pie'})).getByRole('list');
+    const legend = chartsDesk.listIn(await chartsDesk.findRegion('pie'));
     expect(legend).toHaveTextContent('25% bought');
     expect(legend).toHaveTextContent('75% sold');
   });
@@ -682,12 +680,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.addChart('Pie');
 
-    await screen.findByRole('region', {name: 'pie'});
-    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Pie added');
+    await chartsDesk.findRegion('pie');
+    expect(chartsDesk.deskReport()).toHaveTextContent('Pie added');
   });
 
   test('a doorway that leads nowhere returns the trader to the workspace', async () => {
@@ -696,8 +694,8 @@ describe('a list of charts', () => {
     render(<TestApp at={chartPageAt('bogus')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {name: /BTC-USD/})).toBeVisible();
-    expect(screen.queryByRole('article', {name: /tutorial/})).not.toBeInTheDocument();
+    expect(await chartsDesk.findHeading(/BTC-USD/)).toBeVisible();
+    expect(chartsDesk.missingArticle(/tutorial/)).not.toBeInTheDocument();
   });
 
   test('the pie is a doorway to who owns the session', async () => {
@@ -705,14 +703,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'pie'});
+    await chartsDesk.findRegion('pie');
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
     const story = await recipeFolds.press(recipe, 'The trader can see who owns the session');
     expect(story).toHaveAttribute('open');
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
     expect(recipe).toHaveTextContent('export const sweepGates');
-    expect(screen.getByText(/who owns the session/)).toBeVisible();
+    expect(chartsDesk.words(/who owns the session/)).toBeVisible();
   });
 });
 

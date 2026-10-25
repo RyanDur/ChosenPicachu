@@ -3,13 +3,16 @@ import userEvent from '@testing-library/user-event';
 
 const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
-const addChart = async (name: string): Promise<void> => {
+const openAddMenu = (): HTMLElement => {
   const menu = addMenu();
   if (!menu) {
     throw new Error('no add-a-chart menu on the desk');
   }
-  await userEvent.click(within(menu).getByRole('button', {name, hidden: true}));
+  return menu;
 };
+
+const addChart = async (name: string): Promise<void> =>
+  userEvent.click(within(openAddMenu()).getByRole('button', {name, hidden: true}));
 
 const doorway = (chart: string): HTMLElement => screen.getByRole('link', {name: `${chart} tutorial`});
 
@@ -69,6 +72,7 @@ const releaseDrag = (at: string): void => {
 export const chartsDesk = {
   addMenu,
   addChart,
+  offered: (name: string): HTMLElement | null => within(openAddMenu()).queryByRole('button', {name, hidden: true}),
   doorway,
   walkThrough,
   slot,
@@ -89,12 +93,17 @@ export const chartsDesk = {
   findRegion: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
   missingRegion: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
   regionIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('region', {name}),
+  regions: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
+  article: (name: string): HTMLElement => screen.getByRole('article', {name}),
+  missingArticle: (name: RegExp): HTMLElement | null => screen.queryByRole('article', {name}),
+  listIn: (holder: HTMLElement): HTMLElement => within(holder).getByRole('list'),
   heading: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
-  findHeading: (name: string, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
-  headingIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('heading', {name}),
-  words: (told: RegExp): HTMLElement => screen.getByText(told),
+  findHeading: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
+  headingIn: (holder: HTMLElement, name: string, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
+  words: (told: string | RegExp): HTMLElement => screen.getByText(told),
   findWords: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
   wordsIn: (holder: HTMLElement, told: RegExp): HTMLElement => within(holder).getByText(told),
+  findWordsIn: (holder: HTMLElement, told: string | RegExp): Promise<HTMLElement> => within(holder).findByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'})
 };
