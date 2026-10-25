@@ -650,7 +650,7 @@ describe('the record', () => {
   test.each([
     ['1995', 'Pages need to respond, and the browsers’ tags need a standard',
       'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.',
-      [['1995-05', 'May', 'Dynamic', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
+      [['1995-05', 'May', 'Behavior', 'Pages need to respond'], ['1995-11', 'November', 'Structure', 'The browsers’ tags need a standard']]],
     ['1996', 'The pages need to look the same, and the style sheet needs a standard',
       'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4 CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
       [['1996-08', 'August', 'Structure, Presentation', 'The pages need to look the same'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
@@ -663,7 +663,7 @@ describe('the record', () => {
     expect(within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
       within(moment).getByRole('time').getAttribute('datetime'),
       within(moment).getByRole('time').textContent,
-      within(moment).getByText(/^(Structure|Presentation|Dynamic)/).textContent,
+      within(moment).getByText(/^(Structure|Presentation|Behavior)/).textContent,
       within(moment).getByRole('heading', {level: 4}).textContent
     ])).toEqual(concerns);
   });
@@ -807,8 +807,8 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
-  test('the research shelves are headed by the three concerns, the third named Dynamic', () => {
-    expect(recordPage.shelfHeadings()).toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Dynamic']));
+  test('the research shelves are headed by the three concerns, the third named Behavior', () => {
+    expect(recordPage.shelfHeadings()).toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Behavior']));
   });
 
   test('the research stands collected, closed until asked', () => {
@@ -850,8 +850,8 @@ describe('the record\'s three stories', () => {
     await recordPage.arrived();
   });
 
-  test('should open on the quotation, then the argument, then the four parts, then the three stories, Structure, Presentation, Dynamic, then the timeline', () => {
-    expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.argument(), recordPage.parts(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Dynamic'), recordPage.timelineHeading()])).toEqual([]);
+  test('should open on the quotation, then the argument, then the four parts, then the three stories, Structure, Presentation, Behavior, then the timeline', () => {
+    expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.argument(), recordPage.parts(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Behavior'), recordPage.timelineHeading()])).toEqual([]);
   });
 
   test('should tell Structure\'s story as the words give it, 8 paragraphs, paragraph for paragraph', () => {
@@ -1002,8 +1002,8 @@ describe('the record\'s three stories', () => {
     recordPage.storyQuotations('Presentation', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
   });
 
-  test('should tell Dynamic\'s story as the words give it, 7 paragraphs, paragraph for paragraph', () => {
-    expect(recordPage.storyEssay('Dynamic')).toEqual([
+  test('should tell Behavior\'s story as the words give it, 7 paragraphs, paragraph for paragraph', () => {
+    expect(recordPage.storyEssay('Behavior')).toEqual([
       'In April 1995 Brendan Eich joined Netscape to put a programming language in the browser, and in about ten days of May he wrote the interpreter. The need, in his words, was that “the lack of programmability of Web pages made them static, text-heavy, with at best images in tables or floating on the right or left”. Netscape had two audiences in mind, component authors writing Java and the scripters, “amateur or pro, who would write code directly embedded in HTML”, and the language was for the second, a “glue language” for “the Web designers and part time programmers who were building Web content from components such as images, plugins, and Java applets”. You could, he said, “buy it by the yard”. The script could touch the page the server had sent, change its properties and respond to events. Some early adopters, “even in late 1995”, built applications from script and frames, but “the means to communicate with servers generally involved reloading whole Web pages”.',
       'Microsoft answered in August 1996 with JScript in Internet Explorer 3, the two dialects differed, and “These differences made it difficult for developers to make their websites work well in both browsers”. So “In November 1996, Netscape submitted JavaScript to Ecma International, as the starting point for a standard specification that all browser vendors could conform to”, and Ecma adopted the first edition of ECMA-262 in June 1997. Eich’s own reading is that the browser war “forced premature standardization after a furious period of innovation”. The standard “codifies just the core language, not the DOM”, the DOM being the objects a script uses to reach the page, so those stayed each browser’s own. The third edition, in December 1999, became the JavaScript the web ran on for a decade, “the programming language that is supported by essentially all web browsers”, and then the standard stood still.',
       'In February 2005 Jesse James Garrett wrote down what the pages Google had just shipped were doing. Desktop applications “have a richness and responsiveness that has seemed out of reach on the Web”, because in the classic model most actions send a request to the server and “the user waits some more”. The new pages put an engine in the page instead, with “JavaScript binding everything together”, and he named the pattern Ajax. He claimed practicality, not invention, “Neither Adaptive Path nor Google invented Ajax”: the object behind it had shipped in Internet Explorer 5 in 1999, and what was new was “the prominent use of these techniques in real-world applications to change the fundamental interaction model of the Web”. The browsers still differed in the objects a script used to reach the page, so libraries came before frameworks to hide the differences: Prototype in 2005, which “smooths over the rough edges of cross-browser development”, and jQuery in 2006, “an easy-to-use API that works across a multitude of browsers”. Eich’s summary of the era: “JS was the tap root.”',
@@ -1014,16 +1014,16 @@ describe('the record\'s three stories', () => {
     ]);
   });
 
-  test('should end Dynamic\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
-    expect(recordPage.storyMomentsHeading('Dynamic')).toBeVisible();
-    expect(recordPage.storyMomentLines('Dynamic')).toEqual(['1995 Pages need to respond', '1997 The language needs a standard', '2005 The page needs to update in place', '2009 The standard needs to move again', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']);
-    expect(recordPage.storyMomentLine('Dynamic', '1995 Pages need to respond')).toHaveAttribute('href', `${Paths.record}#pages-need-to-respond`);
-    expect(recordPage.storyMomentLine('Dynamic', '1997 The language needs a standard')).toHaveAttribute('href', `${Paths.record}#the-language-needs-a-standard`);
-    expect(recordPage.storyMomentLine('Dynamic', '2005 The page needs to update in place')).toHaveAttribute('href', `${Paths.record}#the-page-needs-to-update-in-place`);
-    expect(recordPage.storyMomentLine('Dynamic', '2009 The standard needs to move again')).toHaveAttribute('href', `${Paths.record}#the-standard-needs-to-move-again`);
-    expect(recordPage.storyMomentLine('Dynamic', '2010 The application needs a frame')).toHaveAttribute('href', `${Paths.record}#the-application-needs-a-frame`);
-    expect(recordPage.storyMomentLine('Dynamic', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
-    expect(recordPage.storyMomentLine('Dynamic', '2016 The document needs to come first')).toHaveAttribute('href', `${Paths.record}#the-document-needs-to-come-first`);
+  test('should end Behavior\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
+    expect(recordPage.storyMomentsHeading('Behavior')).toBeVisible();
+    expect(recordPage.storyMomentLines('Behavior')).toEqual(['1995 Pages need to respond', '1997 The language needs a standard', '2005 The page needs to update in place', '2009 The standard needs to move again', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']);
+    expect(recordPage.storyMomentLine('Behavior', '1995 Pages need to respond')).toHaveAttribute('href', `${Paths.record}#pages-need-to-respond`);
+    expect(recordPage.storyMomentLine('Behavior', '1997 The language needs a standard')).toHaveAttribute('href', `${Paths.record}#the-language-needs-a-standard`);
+    expect(recordPage.storyMomentLine('Behavior', '2005 The page needs to update in place')).toHaveAttribute('href', `${Paths.record}#the-page-needs-to-update-in-place`);
+    expect(recordPage.storyMomentLine('Behavior', '2009 The standard needs to move again')).toHaveAttribute('href', `${Paths.record}#the-standard-needs-to-move-again`);
+    expect(recordPage.storyMomentLine('Behavior', '2010 The application needs a frame')).toHaveAttribute('href', `${Paths.record}#the-application-needs-a-frame`);
+    expect(recordPage.storyMomentLine('Behavior', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
+    expect(recordPage.storyMomentLine('Behavior', '2016 The document needs to come first')).toHaveAttribute('href', `${Paths.record}#the-document-needs-to-come-first`);
   });
 
   test.each([
@@ -1060,7 +1060,7 @@ describe('the record\'s three stories', () => {
     ['“to which we’re essentially adding SSR hydration”', 'https://jasonformat.com/islands-architecture/'],
     ['“encourage developers to consider server-side rendering or static rendering over a full rehydration approach”', 'https://web.dev/rendering-on-the-web/'],
     ['“It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.”', 'https://web.dev/rendering-on-the-web/']
-  ])('should link Dynamic\'s quotation %s to the page it was taken from', (quoted, page) => {
-    recordPage.storyQuotations('Dynamic', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
+  ])('should link Behavior\'s quotation %s to the page it was taken from', (quoted, page) => {
+    recordPage.storyQuotations('Behavior', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
   });
 });

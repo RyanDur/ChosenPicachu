@@ -12,7 +12,7 @@ import {useConcernShown} from './useConcernShown';
 const listings: Record<Concern, Listing> = {
   'Structure': names.practice.structure,
   'Presentation': names.practice.presentation,
-  'Dynamic': names.practice.dynamic
+  'Behavior': names.practice.behavior
 };
 
 const PracticeHeader = () => {

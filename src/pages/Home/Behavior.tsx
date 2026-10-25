@@ -2,8 +2,8 @@ import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {ConcernSection} from './ConcernSection';
 
-export const Dynamic: FC = () =>
-  <ConcernSection concern="Dynamic">
+export const Behavior: FC = () =>
+  <ConcernSection concern="Behavior">
     <Quotation voice="paragraph" source={<a className="signpost"
       href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan
       Eich, in Computerworld’s A-Z of Programming Languages</a>}>

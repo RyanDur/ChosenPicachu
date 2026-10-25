@@ -16,7 +16,7 @@ export const pages: readonly SitePage[] = [
   {name: 'record', path: 'record/', ready: 'navigation', budgeted: true},
   {name: 'practice structure', path: 'practice/', ready: 'navigation', budgeted: true},
   {name: 'practice presentation', path: 'practice/?tab=presentation', ready: 'navigation', budgeted: true},
-  {name: 'practice dynamic', path: 'practice/?tab=dynamic', ready: 'navigation', budgeted: true},
+  {name: 'practice behavior', path: 'practice/?tab=behavior', ready: 'navigation', budgeted: true},
   {name: 'demos', path: 'demos/?tab=accordions', ready: 'navigation', budgeted: true},
   {name: 'demos, inclusive folds', path: 'demos/?tab=accordions&type=inclusive', ready: 'navigation'},
   {name: 'charts', path: 'demos/?tab=charts', ready: 'navigation', loaded: page => chartsPage(page).priceDelta},

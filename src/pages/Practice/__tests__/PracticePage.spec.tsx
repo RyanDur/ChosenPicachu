@@ -7,7 +7,7 @@ import {practicePage} from '@pages/Practice/__test_support/practice';
 const practices = [
   ['Structure', 'structure', /^I start from what the content is and pick the element for it/, /^The test is to read the page with the styles turned off/],
   ['Presentation', 'presentation', /^I write CSS in two kinds of sheet/, /^The test is to read a class list on its own/],
-  ['Dynamic', 'dynamic', /^Behaviour splits into what is true and what happened/, /^The test is to read the state on its own/]
+  ['Behavior', 'behavior', /^Behaviour splits into what is true and what happened/, /^The test is to read the state on its own/]
 ] as const;
 
 describe('the practice page', () => {
@@ -18,11 +18,11 @@ describe('the practice page', () => {
     expect(practicePage.currentTab()).toBe('Structure');
   });
 
-  test('should open a link saved under the old tab name, dynamic-interaction, on the Dynamic tab', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=dynamic-interaction`}/>);
+  test.each(['dynamic', 'dynamic-interaction'])('should open a link saved under the old tab name, %s, on the Behavior tab', async former => {
+    render(<TestApp at={`${Paths.practice}?tab=${former}`}/>);
 
-    expect(await practicePage.arrivedOn('Dynamic')).toBeInTheDocument();
-    expect(practicePage.currentTab()).toBe('Dynamic');
+    expect(await practicePage.arrivedOn('Behavior')).toBeInTheDocument();
+    expect(practicePage.currentTab()).toBe('Behavior');
   });
 
   test.each(['constructor', 'toString', '__proto__'])('should open on Structure when the address names %s, a word every object answers to', async word => {
@@ -59,8 +59,8 @@ describe('the practice page', () => {
 
   test.each([
     ['Presentation', 'Structure', Paths.practice, /^I write CSS in two kinds of sheet/],
-    ['Dynamic', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
-    ['Structure', 'Dynamic', `${Paths.practice}?tab=dynamic`, /^I start from what the content is and pick the element for it/]
+    ['Behavior', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behaviour splits into what is true and what happened/],
+    ['Structure', 'Behavior', `${Paths.practice}?tab=behavior`, /^I start from what the content is and pick the element for it/]
   ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at, firstRule) => {
     render(<TestApp at={at}/>);
 
@@ -120,9 +120,9 @@ describe('the practice page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
-  test('the dynamic tab tells how I organize behaviour', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=dynamic`}/>);
-    await practicePage.arrivedOn('Dynamic');
+  test('the behavior tab tells how I organize behavior', async () => {
+    render(<TestApp at={`${Paths.practice}?tab=behavior`}/>);
+    await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.heading()).toBeVisible();
     expect(practicePage.link(/operable through a keyboard interface/))
@@ -142,7 +142,7 @@ describe('the practice page', () => {
   test.each([
     ['Structure', Paths.practice, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
     ['Presentation', `${Paths.practice}?tab=presentation`, [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
-    ['Dynamic', `${Paths.practice}?tab=dynamic`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
+    ['Behavior', `${Paths.practice}?tab=behavior`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
   ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
     render(<TestApp at={at}/>);
     await practicePage.arrivedOn(concern);

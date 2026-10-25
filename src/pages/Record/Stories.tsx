@@ -5,12 +5,12 @@ import {inOrder, moments} from './moments/moments';
 import {momentAddress} from './MomentLink';
 import {StructureStory} from './stories/StructureStory';
 import {PresentationStory} from './stories/PresentationStory';
-import {DynamicStory} from './stories/DynamicStory';
+import {BehaviorStory} from './stories/BehaviorStory';
 
 const stories: Record<Concern, FC> = {
   'Structure': StructureStory,
   'Presentation': PresentationStory,
-  'Dynamic': DynamicStory
+  'Behavior': BehaviorStory
 };
 
 const StoryOf: FC<{concern: Concern}> = ({concern}) => {

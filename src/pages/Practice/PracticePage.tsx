@@ -5,13 +5,13 @@ import {concernTabs} from './types';
 import {useConcernShown} from './useConcernShown';
 import {StructurePractice} from './StructurePractice';
 import {PresentationPractice} from './PresentationPractice';
-import {DynamicPractice} from './DynamicPractice';
+import {BehaviorPractice} from './BehaviorPractice';
 import './Practice.css';
 
 const practices: Record<Concern, FC> = {
   'Structure': StructurePractice,
   'Presentation': PresentationPractice,
-  'Dynamic': DynamicPractice
+  'Behavior': BehaviorPractice
 };
 
 export const PracticePage: FC = () => {
