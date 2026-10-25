@@ -660,17 +660,10 @@ describe('the record', () => {
       'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4, which came the next year, CSS itself ran as JavaScript. The same year CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.',
       [['1996-08', 'August', 'Structure, Presentation', 'The pages need to look the same'], ['1996-12-17', 'December', 'Presentation', 'The style sheet needs a standard']]]
   ])('should tell %s as one entry, and open its fuller story on each moment, dated by its month and captioned by its concern', async (year, title, tells, concerns) => {
-    const theYear = itemHeadedBy('the timeline', title);
+    expect(itemHeadedBy('the timeline', title)).toHaveTextContent(tells);
+    await recordPage.openFullerStory(title);
 
-    expect(theYear).toHaveTextContent(tells);
-    await userEvent.click(within(theYear).getByText('the fuller story'));
-
-    expect(within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
-      within(moment).getByRole('time').getAttribute('datetime'),
-      within(moment).getByRole('time').textContent,
-      within(moment).getByText(/^(Structure|Presentation|Behavior)/).textContent,
-      within(moment).getByRole('heading', {level: 4}).textContent
-    ])).toEqual(concerns);
+    expect(recordPage.momentsOf(year)).toEqual(concerns);
   });
 
   test('every beat opens into its fuller story, closed until asked', () => {
@@ -814,8 +807,8 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
-  test('the research shelves are headed by the three concerns, the third named Behavior', () => {
-    expect(recordPage.shelfHeadings()).toEqual(expect.arrayContaining(['Structure', 'Presentation', 'Behavior']));
+  test('should head the research shelves The web, Structure, Presentation, Behavior, then The concert', () => {
+    expect(recordPage.shelfHeadings()).toEqual(['The web', 'Structure', 'Presentation', 'Behavior', 'The concert']);
   });
 
   test('the research stands collected, closed until asked', () => {

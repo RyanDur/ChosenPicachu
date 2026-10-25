@@ -127,7 +127,7 @@ describe('the practice page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
-  test('the behavior tab tells how I organize behavior', async () => {
+  test('should tell how I organize behavior on the Behavior tab', async () => {
     render(<TestApp at={`${Paths.practice}?tab=behavior`}/>);
     await practicePage.arrivedOn('Behavior');
 

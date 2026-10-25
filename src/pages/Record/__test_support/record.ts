@@ -1,4 +1,6 @@
 import {screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {itemHeadedBy} from '@__test_support/headed-item';
 
 const research = (): HTMLElement => screen.getByRole('region', {name: 'The research'});
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
@@ -33,5 +35,13 @@ export const recordPage = {
       .map(link => link.getAttribute('href') ?? '')
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
+  openFullerStory: async (title: string): Promise<void> =>
+    userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story')),
+  momentsOf: (year: string): (string | null)[][] => within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
+    within(moment).getByRole('time').getAttribute('datetime'),
+    within(moment).getByRole('time').textContent,
+    within(moment).getByText(/^(Structure|Presentation|Behavior)/).textContent,
+    within(moment).getByRole('heading', {level: 4}).textContent
+  ]),
   shelfHeadings: (): (string | null)[] => within(research()).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent)
 };
