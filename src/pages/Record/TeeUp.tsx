@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {DemoTopics} from '@pages/Demos/types';
+import {DemoTopics, demoAddress} from '@pages/Demos/types';
 
 export const TeeUp: FC<PropsWithChildren> = ({children}) =>
   <footer className="tee-up">
@@ -13,10 +13,10 @@ export const TeeUp: FC<PropsWithChildren> = ({children}) =>
     </p>
     <p className="sub-title">
       The Demos put that practice to work on the site’s own code. <Link className="signpost"
-        to={`${Paths.demos}?tab=${DemoTopics.tables}`}>The tables are built twice</Link>, once in plain HTML, CSS and
+        to={demoAddress(DemoTopics.tables)}>The tables are built twice</Link>, once in plain HTML, CSS and
       JavaScript with no framework and once in React on the same three, so the line between the platform and a framework
       stays visible, and the history above is why that line matters: what a framework had to do keeps moving into the
-      platform. <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.accordions}`}>The accordions</Link> set
+      platform. <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>The accordions</Link> set
       the trick used before the platform could do the job beside what it does now. Knowing what each element was built
       for is most of the work.
     </p>

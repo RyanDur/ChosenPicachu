@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Paths} from '@pages/Paths';
-import {DemoTopics} from '../../../types';
+import {DemoTopics, demoAddress} from '../../../types';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
@@ -15,7 +14,7 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
         <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from, the keyframe’s starting state, is one place over: the
         browser draws the item where it used to be and slides it to its new place.</Says>
       <Says>It is the{' '}
-        <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>charts demo</Link>’s keyframe turned
+        <Link className="signpost" to={demoAddress(DemoTopics.charts)}>charts demo</Link>’s keyframe turned
         horizontal, with the direction as data: <code>--toward</code>, a custom property, a value given a name once and read
         back with <code>var()</code>,
         flips the sign of one keyframe instead of naming two.</Says>

@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Quotation} from '@components/Quotation';
-import {Paths} from '@pages/Paths';
-import {DemoTopics} from '@pages/Demos/types';
+import {DemoTopics, demoAddress} from '@pages/Demos/types';
 import {ConcernSection} from './ConcernSection';
 
 export const Presentation: FC = () =>
@@ -23,7 +22,7 @@ export const Presentation: FC = () =>
       many cases on its compositor thread, which moves layers already drawn, rather than the main thread the script runs
       on. So a transition the sheet owns can keep going while the script is busy, and a script that moves things frame
       by frame cannot. Script names the state, with a class or an attribute, and the sheet says how the state looks.
-      When the sheet cannot yet say a look, <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.zIndex}`}>the
+      When the sheet cannot yet say a look, <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>the
         workaround sits beside the rule it stands in for</Link>, and goes when the platform catches up. So the rule is that
       a look belongs in the sheet, and the HTML never says how anything looks.</p>
   </ConcernSection>;

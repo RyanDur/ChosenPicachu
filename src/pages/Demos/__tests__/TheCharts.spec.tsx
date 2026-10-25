@@ -786,9 +786,9 @@ describe('the demos page', () => {
       await feedIsSubscribed(feed);
 
       await chartsDesk.explain('live trades');
-      expect(chartsDesk.says(/price of one bitcoin in US dollars/)).toBeVisible();
+      expect(chartsDesk.saysIn(chartsDesk.chart('live trades'), /price of one bitcoin in US dollars/)).toBeVisible();
       await chartsDesk.explain('candles');
-      expect(chartsDesk.says(/how much bitcoin changed hands/)).toBeVisible();
+      expect(chartsDesk.saysIn(chartsDesk.chart('candles'), /how much bitcoin changed hands/)).toBeVisible();
     });
 
     test('the trades in a minute become one candle', async () => {

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {DemoTopics} from '../../../types';
+import {DemoTopics, demoAddress} from '../../../types';
 import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
 import {withoutImports} from '../../../Recipe/carve';
 import {World} from '../../params';
@@ -32,7 +32,7 @@ export const NamesInTheCode: FC = () =>
 
 export const TwoRoads: FC = () =>
   <Tell>There are two ways to drag something across a page, and I built both. The <Link className="signpost"
-    to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> uses
+    to={demoAddress(DemoTopics.dragAndDrop)}>Drag sort list demo</Link> uses
     the native API, where the platform brings most of the behavior for very little code;
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
     platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, which leave every pixel of the drag

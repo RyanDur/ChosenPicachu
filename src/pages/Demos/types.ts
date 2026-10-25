@@ -1,4 +1,5 @@
 import * as schema from 'schemawax';
+import {Paths} from '@pages/Paths';
 
 export enum DemoTopics {
   accordions = 'accordions',
@@ -7,6 +8,8 @@ export enum DemoTopics {
   charts = 'charts',
   tables = 'tables'
 }
+
+export const demoAddress = (topic: DemoTopics): string => `${Paths.demos}?tab=${topic}`;
 
 export const topicNames: Record<DemoTopics, string> = {
   [DemoTopics.accordions]: 'Accordions',
