@@ -30,25 +30,25 @@ describe('the charts tutorials’ menus', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
+    const tutorial = await chartsDesk.findRegion('let’s build this feature');
 
-    expect(within(tutorial).getByText(/^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
+    expect(chartsDesk.wordsIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s own, on the charts tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
+    const tutorial = await chartsDesk.findRegion('let’s build this feature');
 
-    expect(within(tutorial).getByText(/^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
+    expect(chartsDesk.wordsIn(tutorial, /^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const story = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
+    const story = recipeFolds.story(await chartsDesk.findRegion('let’s build this feature'), 'The trader can lay out the workspace');
     expect(explanation.everyCodeBeside(story, /^A class is a name on an element/).join()).toMatch(/<Menu [^>]*className="/);
   });
 
@@ -57,7 +57,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByText(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
+    expect(await chartsDesk.findWords(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
@@ -65,13 +65,13 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByText(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(await chartsDesk.findWords(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-    await screen.findByRole('heading', {name: 'price line tutorial', level: 2});
+    await chartsDesk.findHeading('price line tutorial', 2);
     const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
     expect(explanation.everyCodeBeside(story, /^A class is a name written on an element that a stylesheet’s rules pick out\. Item/).join()).toMatch(/<Menu [^>]*className="/);
   });
@@ -84,8 +84,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
-    expect(screen.queryByRole('region', {name: 'candles'})).not.toBeInTheDocument();
+    expect(await chartsDesk.findRegion('live trades')).toBeVisible();
+    expect(chartsDesk.missingRegion('candles')).not.toBeInTheDocument();
   });
 
   test('the trader can add a chart, and it goes to the front of the list', async () => {
@@ -93,12 +93,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.addChart('Candles');
 
-    const candles = await screen.findByRole('region', {name: 'candles'});
-    const price = screen.getByRole('region', {name: 'live trades'});
+    const candles = await chartsDesk.findRegion('candles');
+    const price = chartsDesk.region('live trades');
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
@@ -108,12 +108,12 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const candles = await screen.findByRole('region', {name: 'candles'});
-    const price = screen.getByRole('region', {name: 'live trades'});
-    expect(within(candles).getByRole('heading', {name: 'candles'})).toBeInTheDocument();
-    expect(within(price).getByRole('heading', {name: 'live trades'})).toBeInTheDocument();
-    expect(within(screen.getByRole('region', {name: 'pressure'})).getByRole('heading', {name: 'pressure'})).toBeInTheDocument();
-    expect(within(screen.getByRole('region', {name: 'pie'})).getByRole('heading', {name: 'pie'})).toBeInTheDocument();
+    const candles = await chartsDesk.findRegion('candles');
+    const price = chartsDesk.region('live trades');
+    expect(chartsDesk.headingIn(candles, 'candles')).toBeInTheDocument();
+    expect(chartsDesk.headingIn(price, 'live trades')).toBeInTheDocument();
+    expect(chartsDesk.headingIn(chartsDesk.region('pressure'), 'pressure')).toBeInTheDocument();
+    expect(chartsDesk.headingIn(chartsDesk.region('pie'), 'pie')).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {
@@ -121,13 +121,13 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    await userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]);
+    await chartsDesk.removeFirst();
 
-    expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
-    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
+    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
+    expect(await chartsDesk.findRegion('candles')).toBeVisible();
+    expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
   test('the last chart can be neither removed nor moved', async () => {
@@ -135,10 +135,10 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    expect(screen.queryByRole('button', {name: 'remove chart'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', {name: 'move chart', hidden: true})).not.toBeInTheDocument();
+    expect(chartsDesk.removeButton()).not.toBeInTheDocument();
+    expect(chartsDesk.anyGrip()).not.toBeInTheDocument();
   });
 
   test('a chart walked by keyboard takes the focus with it', async () => {
@@ -147,12 +147,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    const candles = screen.getByRole('region', {name: 'candles'});
-    expect(candles.compareDocumentPosition(screen.getByRole('region', {name: 'live trades'})))
+    const candles = chartsDesk.region('candles');
+    expect(candles.compareDocumentPosition(chartsDesk.region('live trades')))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(chartsDesk.doorway('Price line')).toHaveFocus();
   });
@@ -162,14 +162,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
-    await userEvent.click(within(screen.getByLabelText('price period by')).getByRole('button', {name: 'day', hidden: true}));
-    await screen.findByRole('button', {name: 'price period day'});
+    await chartsDesk.findRegion('live trades');
+    await chartsDesk.choosePeriod('price', 'day');
+    await chartsDesk.findButton('price period day');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    expect(await screen.findByRole('button', {name: 'price period day'})).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('charts=candles%2Cprice%3Aday');
+    expect(await chartsDesk.findButton('price period day')).toBeInTheDocument();
+    expect(chartsDesk.urlSearch()).toHaveTextContent('charts=candles%2Cprice%3Aday');
   });
 
   test('a chart walked by keyboard says where it landed', async () => {
@@ -177,11 +177,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line moved to 2 of 2');
+    expect(chartsDesk.deskReport()).toHaveTextContent('Price line moved to 2 of 2');
   });
 
   test('the delete key removes a chart', async () => {
@@ -189,12 +189,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.keys('Price line', 'Delete');
 
-    expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
+    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
   test('the backspace key removes a chart', async () => {
@@ -202,12 +202,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.keys('Price line', 'Backspace');
 
-    expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
+    expect(chartsDesk.missingRegion('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
   test("the chart that takes the removed one's seat takes the focus", async () => {
@@ -215,7 +215,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.keys('Price line', 'Delete');
 
@@ -227,7 +227,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
+    await chartsDesk.findRegion('candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
@@ -239,25 +239,24 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
+    await chartsDesk.findRegion('candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
-    expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(chartsDesk.region('candles')).toBeVisible();
   });
 
   test("a finger pressed on a chart's grip readies the chart to be moved, and lifted leaves it at rest", async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
-    const finger = userEvent.setup();
-    const grip = within(chartsDesk.slot('Price line')).getByRole('button', {name: 'move chart', hidden: true});
+    await chartsDesk.findRegion('live trades');
+    const finger = chartsDesk.fingerOn('Price line');
 
-    await finger.pointer({keys: '[TouchA>]', target: grip});
+    await finger.press();
     expect(chartsDesk.slot('Price line')).toHaveAttribute('draggable', 'true');
 
-    await finger.pointer({keys: '[/TouchA]', target: grip});
+    await finger.lift();
     expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
   });
 
@@ -295,11 +294,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    expect(await screen.findByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
-    expect(screen.getByText(/the shape of the session/)).toBeVisible();
-    const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
+    expect(await chartsDesk.findHeading('let’s build this feature')).toBeVisible();
+    expect(chartsDesk.words(/the shape of the session/)).toBeVisible();
+    const recipe = chartsDesk.region('build the charts yourself');
     expect(recipeFolds.story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/A third of the held chart’s height below the mark, the chart swaps with the one under it/);
     expect(recipe).toHaveTextContent(/export const strayed/);
@@ -310,11 +309,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
-    await userEvent.click(chartsDesk.doorway('Price line'));
+    await chartsDesk.open('Price line');
 
-    expect(await screen.findByRole('region', {name: 'build the price line yourself'})).toBeVisible();
+    expect(await chartsDesk.findRegion('build the price line yourself')).toBeVisible();
   });
 
   test('enter on a chart opens its tutorial', async () => {
@@ -322,14 +321,13 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
+    await chartsDesk.findRegion('candles');
 
-    chartsDesk.doorway('Candles').focus();
-    await userEvent.keyboard('{Enter}');
+    await chartsDesk.keys('Candles', 'Enter');
 
-    expect(await screen.findByRole('region', {name: 'build the candles yourself'})).toBeVisible();
-    expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
-    expect(await screen.findByText(/read the same trades as candles/)).toBeVisible();
+    expect(await chartsDesk.findRegion('build the candles yourself')).toBeVisible();
+    expect(chartsDesk.region('candles')).toBeVisible();
+    expect(await chartsDesk.findWords(/read the same trades as candles/)).toBeVisible();
   });
 
   test.each([
@@ -340,7 +338,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
+    await chartsDesk.findRegion('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
@@ -353,14 +351,14 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'candles'});
+    await chartsDesk.findRegion('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
     expect(await recipeFolds.press(recipe, 'The trader can read the same trades as candles')).toHaveAttribute('open');
 
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
     expect(story).not.toHaveAttribute('open');
-    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('graph=candles');
+    expect(chartsDesk.urlSearch()).not.toHaveTextContent('graph=candles');
   });
 
   test('the trader can add the pressure chart', async () => {
@@ -368,11 +366,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await screen.findByRole('region', {name: 'live trades'});
+    await chartsDesk.findRegion('live trades');
 
     await chartsDesk.addChart('Pressure');
 
-    expect(await screen.findByRole('region', {name: 'pressure'})).toBeVisible();
+    expect(await chartsDesk.findRegion('pressure')).toBeVisible();
   });
 
   test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
@@ -380,10 +378,10 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
 
-    expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'The trader can watch the price move, live', level: 4})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'Open a socket, and keep only what decodes', level: 5})).toBeInTheDocument();
+    expect(await chartsDesk.findHeading('price line tutorial', 2)).toBeInTheDocument();
+    expect(chartsDesk.heading('let’s build this feature', 3)).toBeInTheDocument();
+    expect(chartsDesk.heading('The trader can watch the price move, live', 4)).toBeInTheDocument();
+    expect(chartsDesk.heading('Open a socket, and keep only what decodes', 5)).toBeInTheDocument();
   });
 
   describe('the price line’s story', () => {

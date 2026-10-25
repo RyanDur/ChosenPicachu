@@ -28,6 +28,22 @@ const slot = (chart: string): HTMLElement => {
 
 const seat = (at: number): HTMLElement => within(screen.getByRole('list', {name: 'charts'})).getAllByRole('listitem')[at - 1];
 
+const grip = (chart: string): HTMLElement => within(slot(chart)).getByRole('button', {name: 'move chart', hidden: true});
+
+type Finger = {
+  readonly press: () => Promise<void>;
+  readonly lift: () => Promise<void>;
+};
+
+const fingerOn = (chart: string): Finger => {
+  const finger = userEvent.setup();
+  const held = grip(chart);
+  return {
+    press: async (): Promise<void> => finger.pointer({keys: '[TouchA>]', target: held}),
+    lift: async (): Promise<void> => finger.pointer({keys: '[/TouchA]', target: held})
+  };
+};
+
 const keys = async (chart: string, key: string): Promise<void> => {
   doorway(chart).focus();
   await userEvent.keyboard(`{${key}}`);
@@ -50,4 +66,35 @@ const releaseDrag = (at: string): void => {
   fireEvent.dragEnd(slot(at));
 };
 
-export const chartsDesk = {addMenu, addChart, doorway, walkThrough, slot, seat, keys, dragChart, releaseDrag};
+export const chartsDesk = {
+  addMenu,
+  addChart,
+  doorway,
+  walkThrough,
+  slot,
+  seat,
+  grip,
+  fingerOn,
+  keys,
+  dragChart,
+  releaseDrag,
+  open: async (chart: string): Promise<void> => userEvent.click(doorway(chart)),
+  removeFirst: async (): Promise<void> => userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]),
+  removeButton: (): HTMLElement | null => screen.queryByRole('button', {name: 'remove chart'}),
+  anyGrip: (): HTMLElement | null => screen.queryByRole('button', {name: 'move chart', hidden: true}),
+  choosePeriod: async (chart: string, period: string): Promise<void> =>
+    userEvent.click(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {name: period, hidden: true})),
+  findButton: (name: string): Promise<HTMLElement> => screen.findByRole('button', {name}),
+  region: (name: string): HTMLElement => screen.getByRole('region', {name}),
+  findRegion: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
+  missingRegion: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
+  regionIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('region', {name}),
+  heading: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
+  findHeading: (name: string, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
+  headingIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('heading', {name}),
+  words: (told: RegExp): HTMLElement => screen.getByText(told),
+  findWords: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
+  wordsIn: (holder: HTMLElement, told: RegExp): HTMLElement => within(holder).getByText(told),
+  deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
+  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'})
+};
