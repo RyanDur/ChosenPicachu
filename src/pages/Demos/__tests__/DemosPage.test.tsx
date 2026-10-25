@@ -4,8 +4,18 @@ import {expect, test} from 'vitest';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {DemoTopics, topicNames} from '@pages/Demos/types';
+import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 describe('The Demos page', () => {
+  test.each([DemoTopics.accordions, DemoTopics.zIndex, DemoTopics.dragAndDrop, DemoTopics.charts])('should spell the %s tab\'s prose the American way', async tab => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt(`?tab=${tab}`)} feed={feed}/>);
+    await demoTabs.arrivedOn(topicNames[tab]);
+
+    expect(britishSpellingsOnThePage()).toEqual([]);
+  });
+
   test('the accordion labels survive a visit to the streaming charts', async () => {
     const feed = await listeningFeed();
 

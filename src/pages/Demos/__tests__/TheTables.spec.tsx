@@ -8,6 +8,7 @@ import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
+import {britishSpellingsIn} from '@__test_support/spelling';
 
 const now = 1700000000000;
 const fourTrades = [
@@ -1499,9 +1500,7 @@ describe('the tables tab’s audited words', () => {
     const tab = await tablesTab.region();
     await tablesTab.findHeadingsIn(tab, /^The trader can/);
 
-    const words = tablesTab.blocksIn(tab).map(block => block.textContent).join(' ');
-
-    expect(words).not.toMatch(/\b(behaviours?|centred|centres|honours|labelled|colours?|neighbours?)\b/i);
+    expect(britishSpellingsIn(tab)).toEqual([]);
   });
 
   test.each([

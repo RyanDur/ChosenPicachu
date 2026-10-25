@@ -197,7 +197,7 @@ describe('the banner tutorial’s first story', () => {
       .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
   });
 
-  test('should tell step 3 in five paragraphs after its want: the centring, where overflow is explained, the classes, the margins for the dials chosen, then the sample', async () => {
+  test('should tell step 3 in five paragraphs after its want: the centering, where overflow is explained, the classes, the margins for the dials chosen, then the sample', async () => {
     await openZIndexTab();
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];

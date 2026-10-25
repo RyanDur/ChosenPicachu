@@ -3,6 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {practicePage} from '@pages/Practice/__test_support/practice';
+import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 const practices = [
   ['Structure', 'structure', /^I start from what the content is and pick the element for it/, /^The test is to read the page with the styles turned off/],
@@ -11,6 +12,13 @@ const practices = [
 ] as const;
 
 describe('the practice page', () => {
+  test.each(practices)('should spell the %s tab\'s prose the American way', async (concern, tab) => {
+    render(<TestApp at={`${Paths.practice}?tab=${tab}`}/>);
+    await practicePage.arrivedOn(concern);
+
+    expect(britishSpellingsOnThePage()).toEqual([]);
+  });
+
   test('should open on Structure when no tab is named', async () => {
     render(<TestApp at={Paths.practice}/>);
 

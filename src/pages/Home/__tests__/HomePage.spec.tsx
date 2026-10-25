@@ -3,11 +3,16 @@ import {render} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {homePage} from '@pages/Home/__test_support/home';
+import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 describe('the home page', () => {
   beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();
+  });
+
+  test('should spell its own prose the American way', () => {
+    expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
   test('should open on the thesis, then say who the site is for, then what the sections, the Record, Practice and the Demos give', () => {
