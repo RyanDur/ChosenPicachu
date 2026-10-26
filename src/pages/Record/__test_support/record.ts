@@ -8,6 +8,7 @@ const storyMoments = (name: string): HTMLElement => within(story(name)).getByRol
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
+  paragraphOpening: (words: string): HTMLElement => screen.getByText((_, element) => element instanceof HTMLParagraphElement && (element.textContent ?? '').startsWith(words)),
   argument: (): HTMLElement => screen.getByText(/^A webpage is three languages, each designed to handle one concern/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),

@@ -574,20 +574,20 @@ describe('the record', () => {
     const title = screen.getByRole('heading', {name: 'The record', level: 1});
     const record = screen.getByRole('heading', {name: 'How the web got its languages', level: 2});
     const research = screen.getByRole('heading', {name: 'The research', level: 2});
-    const demos = screen.getByRole('link', {name: 'The tables are built twice'});
+    const demos = screen.getByRole('link', {name: 'The Demos'});
 
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(demos.compareDocumentPosition(research) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(demos).toHaveAttribute('href', `${Paths.demos}?tab=tables`);
+    expect(demos).toHaveAttribute('href', Paths.demos);
   });
 
-  test('should say, after the record, what the demos put to work, that the tables are built twice and why', () => {
+  test('should say, after the record, how the demos run, how each tab opens, and the question each asks', () => {
     const record = screen.getByRole('region', {name: 'How the web got its languages'});
-    const seam = screen.getByText(/^The Demos put that practice to work/);
+    const seam = recordPage.paragraphOpening('The Demos run from simple to expert');
 
     expect(record.compareDocumentPosition(seam)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(seam).toHaveTextContent('The Demos put that practice to work on the site’s own code. The tables are built twice, once in plain HTML, CSS and JavaScript with no framework and once in React on the same three, so the line between the platform and a framework stays visible, and the history above is why that line matters: what a framework had to do keeps moving into the platform. The accordions set the trick used before the platform could do the job beside what it does now. Knowing what each element was built for is most of the work.');
+    expect(seam).toHaveTextContent('The Demos run from simple to expert, the accordions first. A reader new to HTML, CSS and JavaScript starts there; a reader who came with a bug goes to its tab. Every tab opens by saying what the thing is, the bug most of us have met with it, and the page’s view, before anything is built. The accordions and z-index compare the trick used before the platform could do the job with what it does now. Drag sort, charts and tables show what the platform does with no library for the job, and the tables are built twice, in plain HTML, CSS and JavaScript and again in React, so the line between the platform and a framework stays visible. Every claim comes with a working example beside it, so a reader can check it with a keyboard or a screen reader instead of taking the page’s word for it. The detail on every tab waits in a fold below the point, and the code shown is the site’s own, linked to its source. Each demo asks the question the Record answers: which language the job belonged to.');
   });
 
   test.each([
@@ -753,13 +753,13 @@ describe('the record', () => {
   });
 
   test('should open the bridge on how every feature here is built, need first, in the record\'s voice', () => {
-    expect(screen.getByText(/^The record ends here and the practice begins/)).toHaveTextContent('The record ends here and the practice begins. Each feature on this site starts from what someone needs. The clues in that need point at an element the platform already has; the design is built around that element, cut into thin stories, and built one story at a time, and every page here was built that way. How each concern is organized, and why, is on the Practice page, one tab for each.');
+    expect(screen.getByText(/^The Record ends here, and the practice begins/)).toHaveTextContent('The Record ends here, and the practice begins. Each feature on this site starts from what someone needs. The clues in that need point at an element the platform already has. The design is built around that element and cut into thin slices, each something a reader can use, and the feature grows one slice at a time. How each concern is organized, and why, is on the Practice page, one tab for each.');
   });
 
   test.each([
     ['the Practice page', Paths.practice],
-    ['The tables are built twice', `${Paths.demos}?tab=tables`],
-    ['The accordions', `${Paths.demos}?tab=accordions`]
+    ['The Demos', Paths.demos],
+    ['the accordions', `${Paths.demos}?tab=accordions`]
   ])('should send the reader on from the bridge: %s', (name, address) => {
     expect(screen.getByRole('link', {name})).toHaveAttribute('href', address);
   });
@@ -767,7 +767,7 @@ describe('the record', () => {
   test('should tell the concert after the timeline closes and before the tee-up', () => {
     const closing = screen.getByText(/^Read the titles again, top to bottom/);
     const concert = screen.getByRole('region', {name: 'The concert'});
-    const teeUp = screen.getByText(/^The record ends here and the practice begins/);
+    const teeUp = screen.getByText(/^The Record ends here, and the practice begins/);
 
     expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
