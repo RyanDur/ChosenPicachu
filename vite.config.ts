@@ -10,7 +10,9 @@ import {usersServerScript} from './src/components/Users/resource/usersServer';
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
+import {reactRouter} from '@react-router/dev/vite';
 import svgr from 'vite-plugin-svgr';
+import {has} from '@ryandur/sand';
 
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
@@ -146,7 +148,7 @@ const usersServerPlugin = (): Plugin => {
       });
     },
     async generateBundle() {
-      this.emitFile({type: 'asset', fileName: script, source: await built()});
+      if (this.environment.name === 'client') this.emitFile({type: 'asset', fileName: script, source: await built()});
     }
   };
 };
@@ -166,15 +168,8 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     usersDomain: env.VITE_APP_USERS_API ?? '',
     feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? ''
   }, null, 2)};\n`;
-  let base = '/';
   return {
     name: 'runtime-env',
-    configResolved(config) {
-      base = config.base;
-    },
-    transformIndexHtml() {
-      return [{tag: 'script', attrs: {src: `${base}env.js`}, injectTo: 'head'}];
-    },
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         if ((request.url ?? '').split('?')[0].endsWith('/env.js')) {
@@ -186,7 +181,7 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
       });
     },
     generateBundle() {
-      this.emitFile({type: 'asset', fileName: 'env.js', source: body});
+      if (this.environment.name === 'client') this.emitFile({type: 'asset', fileName: 'env.js', source: body});
     }
   };
 };
@@ -200,7 +195,7 @@ export default defineConfig(({mode}) => ({
   build: {
     manifest: true
   },
-  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

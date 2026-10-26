@@ -1,5 +1,4 @@
-import {Navigate, useLocation} from 'react-router';
-import {Paths} from '@pages/Paths';
+import {FC} from 'react';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
@@ -20,18 +19,8 @@ const PracticeHeader = () => {
   return <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
 };
 
-const movedFrom = '/development/';
+export const ErrorBoundary: FC = () => <Page header={<PracticeHeader/>}><PageError/></Page>;
 
-const ToPractice = () => {
-  const {search} = useLocation();
-  return <Navigate replace to={`${Paths.practice}${search}`}/>;
-};
+const Room: FC = () => <Page header={<PracticeHeader/>}><PracticePage/></Page>;
 
-export const Practice = [
-  {
-    path: Paths.practice,
-    errorElement: <Page header={<PracticeHeader/>}><PageError/></Page>,
-    element: <Page header={<PracticeHeader/>}><PracticePage/></Page>
-  },
-  {path: movedFrom, element: <ToPractice/>}
-];
+export default Room;

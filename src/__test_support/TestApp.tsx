@@ -4,6 +4,7 @@ import {
   FC,
   PropsWithChildren,
   ReactNode,
+  StrictMode,
   createContext,
   isValidElement,
   startTransition,
@@ -11,9 +12,10 @@ import {
   useLayoutEffect,
   useState
 } from 'react';
-import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
-import {App} from '../App';
-import {router} from '../router';
+import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
+import {SiteProviders} from '../SiteProviders';
+import * as root from '../root';
+import rooms from '../routes';
 import {Env, env} from '@env';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
@@ -38,6 +40,23 @@ const Probes: FC = () => {
   </>;
 };
 
+type RouteModule = {readonly default: FC; readonly ErrorBoundary?: FC};
+
+const modules = import.meta.glob<RouteModule>('../pages/**/route.tsx', {eager: true});
+
+const roomOf = ({path, file}: {path?: string; file: string}): RouteObject => {
+  const {default: Component, ErrorBoundary} = modules[`../${file}`];
+  return {path, Component, ErrorBoundary};
+};
+
+const router = {
+  path: '/',
+  Component: root.default,
+  ErrorBoundary: root.ErrorBoundary,
+  HydrateFallback: root.HydrateFallback,
+  children: rooms.map(roomOf)
+};
+
 const described = (error: unknown): string => error instanceof Error ? error.message : String(error);
 
 const routed = (children: ReactNode): boolean =>
@@ -52,7 +71,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)
     ? createRoutesFromElements(children)
     : maybe(roomAt(at))
-      .map(({path, errorElement}): RouteObject[] => [{path, errorElement, element: children}])
+      .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
 export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
@@ -71,6 +90,10 @@ export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) =
     startTransition(() => setReported(errors => [...errors, described(error)]));
 
   return <Reported.Provider value={reported}>
-    <App router={memory} onError={report} env={{...env, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}/>
+    <StrictMode>
+      <SiteProviders env={{...env, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}>
+        <RouterProvider router={memory} onError={report}/>
+      </SiteProviders>
+    </StrictMode>
   </Reported.Provider>;
 };

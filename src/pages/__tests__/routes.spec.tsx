@@ -6,6 +6,7 @@ import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
 import {chartPageAt} from '@pages/Demos/__test_support';
+import {homePage} from '@pages/Home/__test_support/home';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -75,7 +76,7 @@ describe('page error boundaries', () => {
   test('a room still loading is not called closed', async () => {
     render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
 
-    await site.nav();
+    expect(await site.address()).toHaveTextContent('/');
     expect(screen.queryByRole('heading', {level: 1})).not.toBeInTheDocument();
     expect(screen.queryByText('This room is closed.')).not.toBeInTheDocument();
   });
@@ -161,14 +162,24 @@ describe('the rail says which page the reader is on', () => {
     expect(within(nav).getAllByRole('link', {current: 'page'})).toHaveLength(1);
   });
 
-  test('should move the mark to the page the reader follows', async () => {
+  test('should move the mark to the page the reader follows, and keep the reader on it', async () => {
     render(<TestApp at={Paths.home}/>);
-    const nav = await site.nav();
 
-    await userEvent.click(within(nav).getByRole('link', {name: 'Demos'}));
+    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Demos'}));
 
-    expect(await within(nav).findByRole('link', {name: 'Demos', current: 'page'})).toBeInTheDocument();
-    expect(within(nav).getByRole('link', {name: 'Home', current: false})).toBeInTheDocument();
+    await waitFor(() => expect(site.railLink('Demos')).toHaveAttribute('aria-current', 'page'));
+    expect(site.railLink('Demos')).toHaveFocus();
+    expect(site.railLink('Home')).not.toHaveAttribute('aria-current');
+  });
+
+  test('should leave focus to the platform after a link followed from the page itself', async () => {
+    render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
+
+    await userEvent.click(homePage.storySignpost('Structure'));
+
+    await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
+    expect(site.railLink('Record')).not.toHaveFocus();
   });
 });
 

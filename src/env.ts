@@ -36,4 +36,5 @@ export const unconfigured: Env = {
   feedbackToken: ''
 };
 
-export const env: Env = window.__env ?? unconfigured;
+// the build renders the page shell in Node, where there is no window and so no env.js
+export const env: Env = typeof window === 'undefined' ? unconfigured : window.__env ?? unconfigured;
