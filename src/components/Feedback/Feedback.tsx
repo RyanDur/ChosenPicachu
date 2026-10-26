@@ -20,13 +20,13 @@ import {Draft, draftAt, feedbackReducer} from './reducer';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
 
-const invokersMissing = (): boolean => not('command' in HTMLButtonElement.prototype);
-const lightDismissMissing = (): boolean => not('closedBy' in HTMLDialogElement.prototype);
+const invokersMissing = not('command' in HTMLButtonElement.prototype);
+const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
 
 const commandWithoutInvokers = (event: MouseEvent<HTMLButtonElement>) => {
   const button = event.currentTarget;
   const dialog = document.getElementById(button.getAttribute('commandfor') ?? '');
-  if (invokersMissing() && dialog instanceof HTMLDialogElement) {
+  if (invokersMissing && dialog instanceof HTMLDialogElement) {
     if (button.getAttribute('command') === 'show-modal') {
       dialog.showModal();
     } else {
@@ -45,7 +45,7 @@ const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
 const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
   const box = event.currentTarget.getBoundingClientRect();
   const onTheVeil = event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
-  if (lightDismissMissing() && event.target === event.currentTarget && onTheVeil) {
+  if (lightDismissMissing && event.target === event.currentTarget && onTheVeil) {
     event.currentTarget.close();
   }
 };

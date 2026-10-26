@@ -1,7 +1,7 @@
 import {defineConfig} from '@playwright/test';
 
 const unnamed = (): never => {
-  throw new Error('LOOKS_BEFORE names the build to compare against: node scripts/looks/before.mjs main');
+  throw new Error('LOOKS_BEFORE names the dist to compare against: node scripts/looks/before.mjs main');
 };
 
 const before = process.env.LOOKS_BEFORE ?? unnamed();

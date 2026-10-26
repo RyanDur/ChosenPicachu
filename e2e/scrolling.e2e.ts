@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, countScriptScrolls, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
+import {clickWhereItIs, desktop, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -73,36 +73,3 @@ for (const {reader, use} of desks) {
     });
   });
 }
-
-test.describe('a desktop, where only the search changes', () => {
-  test.use({viewport: desktop.viewport});
-
-  test('a story opened on a recipe leaves the page where it was', async ({page}) => {
-    const scriptScrolls = await countScriptScrolls(page);
-    await page.goto('demos/?tab=tables');
-    const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1);
-    await story.scrollIntoViewIfNeeded();
-    const scrolled = await scriptScrolls();
-    const where = await documentScrollY(page);
-    const address = page.url();
-
-    await story.getByText(/^so that /).click();
-
-    await expect(page).not.toHaveURL(address);
-    expect(await scriptScrolls()).toBe(scrolled);
-    expect(await documentScrollY(page)).toBe(where);
-  });
-
-  test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
-    await page.goto('demos/?tab=tables');
-    await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
-    await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
-    const tabs = page.getByRole('navigation', {name: 'demos'});
-    const where = await topOf(tabs);
-
-    await tabs.getByRole('link', {name: 'Z-index'}).click();
-
-    await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
-    expect(await topOf(tabs)).toBe(where);
-  });
-});

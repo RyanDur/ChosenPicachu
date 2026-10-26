@@ -7,8 +7,8 @@ export const staticRoutesOf = pathsSource =>
   [...pathsSource.matchAll(/= '(\/[^':]+)'/g)].map(match => match[1]);
 
 export const baseOf = shell => {
-  const match = shell.match(/(?:src|href)="([^"]*?)assets\//);
-  if (match === null) throw new Error('the shell has no assets link to read the base from');
+  const match = shell.match(/src="(.*?)assets\//);
+  if (match === null) throw new Error('the shell has no assets script tag to read the base from');
   return match[1];
 };
 
@@ -20,16 +20,11 @@ export const closure = (manifest, key, seen = new Set()) => {
   return seen;
 };
 
-const keysStarting = (manifest, start) => Object.keys(manifest).filter(key => key.startsWith(start));
-
 export const demosLinks = (manifest, base) => {
   const demosKey = Object.keys(manifest).find(key => key.endsWith('pages/Demos/DemosPage.tsx'));
   if (empty(demosKey)) throw new Error('the demos page is missing from the build manifest');
-  const shellHolds = new Set([...keysStarting(manifest, 'src/entry.client.tsx'), ...keysStarting(manifest, 'src/root.tsx')]
-    .flatMap(key => [...closure(manifest, key)]));
-  const demos = [...keysStarting(manifest, 'src/pages/Demos/route.tsx'), demosKey]
-    .reduce((seen, key) => closure(manifest, key, seen), new Set());
-  return [...demos]
+  const shellHolds = closure(manifest, 'index.html');
+  return [...closure(manifest, demosKey)]
     .filter(key => !shellHolds.has(key))
     .map(key => `    <link rel="modulepreload" crossorigin href="${base}${manifest[key].file}">`);
 };
@@ -44,14 +39,22 @@ export const preloaded = (shell, links, route) => route.startsWith('/demos/')
   : shell;
 
 const escaped = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const headless = () => {
-  throw new Error('the shell has no head for the build to list the page in');
+const untagged = tag => {
+  throw new Error(`index.html has no one-line ${tag} tag for the build to fill`);
 };
+/**
+ * @param {string} html
+ * @param {string} tag
+ * @param {RegExp} found
+ * @param {string} written
+ */
+const filled = (html, tag, found, written) => found.test(html) ? html.replace(found, written) : untagged(tag);
 
 /**
  * @param {string} shell
  * @param {{title: string, description: string}} listing
  */
-export const listedIn = (shell, {title, description}) => shell.includes('</head>')
-  ? shell.replace('</head>', `<title>${escaped(title)}</title><meta name="description" content="${escaped(description)}"/></head>`)
-  : headless();
+export const listedIn = (shell, {title, description}) => {
+  const titled = filled(shell, 'title', /<title>[^<]*<\/title>/, `<title>${escaped(title)}</title>`);
+  return filled(titled, 'description', /<meta name="description" content="[^"]*"\/>/, `<meta name="description" content="${escaped(description)}"/>`);
+};
