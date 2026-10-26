@@ -6,9 +6,11 @@ import {sent} from '../github';
 
 type Asked = {query: string; variables: Record<string, string>};
 
+const asking = {endpoint: 'https://api.github.com/graphql', token: 'token'};
+
 const github = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
   const asked: Asked[] = [];
-  server.use(http.post('https://api.github.com/graphql', async ({request}) => {
+  server.use(http.post(asking.endpoint, async ({request}) => {
     const body: unknown = await request.json();
     const question = typeof body === 'object' && body !== null && 'query' in body && 'variables' in body
       ? {query: String(body.query), variables: Object.fromEntries(Object.entries(Object(body.variables)).map(([key, value]) => [key, String(value)]))}
@@ -32,7 +34,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1', url: 'https://github.test/discussions/1'}}}});
 
-    const where = await sent('token', note).orNull();
+    const where = await sent(asking, note).orNull();
 
     expect(where).toBe('https://github.test/discussions/1');
     expect(asked[1].variables.categoryId).toBe('DIC_kwDOFnONa84DGhfO');
@@ -46,7 +48,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
       : {data: {addDiscussionComment: {comment: {url: 'https://github.test/discussions/7#c'}}}});
 
-    const where = await sent('token', {page: note.page, words: note.words, from: note.from}).orNull();
+    const where = await sent(asking, {page: note.page, words: note.words, from: note.from}).orNull();
 
     expect(where).toBe('https://github.test/discussions/7');
     expect(asked[1].variables.discussionId).toBe('D_7');
@@ -58,7 +60,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: [{id: 'D_2', url: 'https://github.test/discussions/2', title: 'Feedback: Demos (/demos/?tab=tables-old)'}]}}}
       : {data: {createDiscussion: {discussion: {id: 'D_3', url: 'https://github.test/discussions/3'}}}});
 
-    await sent('token', note).value;
+    await sent(asking, note).value;
 
     expect(asked[1].query).toContain('createDiscussion');
   });
@@ -66,7 +68,7 @@ describe('sending a note to GitHub', () => {
   test('should fail as forbidden when GitHub answers with errors', async () => {
     github(() => ({data: null, errors: [{type: 'FORBIDDEN', message: 'Resource not accessible by integration'}]}));
 
-    const refused = (await sent('token', note).value).inspect();
+    const refused = (await sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
   });
@@ -76,7 +78,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
       : {data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]});
 
-    const refused = (await sent('token', note).value).inspect();
+    const refused = (await sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.NOT_FOUND).inspect());
   });
@@ -86,7 +88,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1'}}}});
 
-    const refused = (await sent('token', note).value).inspect();
+    const refused = (await sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.CANNOT_DECODE).inspect());
   });

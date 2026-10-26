@@ -8,7 +8,7 @@ export type Posted = {query: string; variables: Record<string, string>};
 
 export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise<Posted[]> => {
   const posted: Posted[] = [];
-  await page.route('https://api.github.com/graphql', async (route: Route) => {
+  await page.route('**/feedback-graphql', async (route: Route) => {
     const asked: unknown = route.request().postDataJSON();
     const question: Posted = typeof asked === 'object' && asked !== null && 'query' in asked && 'variables' in asked
       ? {query: String(asked.query), variables: Object.fromEntries(Object.entries(Object(asked.variables)).map(([key, value]) => [key, String(value)]))}

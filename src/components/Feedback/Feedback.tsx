@@ -77,7 +77,7 @@ export const FeedbackProvider: FC<PropsWithChildren> = ({children}) => {
 };
 
 export const Feedback: FC = () => {
-  const {feedbackToken} = useEnv();
+  const {feedbackToken, feedbackEndpoint} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
   const pageName = usePageName();
@@ -101,7 +101,7 @@ export const Feedback: FC = () => {
     commandWithoutInvokers(event);
     const here = {key, name: pageName};
     dispatch(opened(key));
-    threadFor(feedbackToken, here)
+    threadFor({endpoint: feedbackEndpoint, token: feedbackToken}, here)
       .onSuccess(found => dispatch(found.either(({url}) => threadFound(here.key, url), () => threadUnknown(here.key))))
       .onFailure(() => dispatch(threadUnknown(here.key)));
   };
@@ -113,7 +113,7 @@ export const Feedback: FC = () => {
     }
     const {openings, words, reach} = draft;
     dispatch(noteSubmitted());
-    sent(feedbackToken, {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
+    sent({endpoint: feedbackEndpoint, token: feedbackToken}, {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
       .onSuccess(url => dispatch(noteSent(openings, url)))
       .onFailure(why => dispatch(noteRefused(why)));
   };

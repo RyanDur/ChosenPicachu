@@ -11,6 +11,7 @@ export type Env = {
   clevelandDomain: string;
   usersDomain: string;
   feedbackToken: string;
+  feedbackEndpoint: string;
 };
 
 declare global {
@@ -33,7 +34,8 @@ export const unconfigured: Env = {
   vamPictures: '',
   clevelandDomain: '',
   usersDomain: '',
-  feedbackToken: ''
+  feedbackToken: '',
+  feedbackEndpoint: ''
 };
 
 export const env: Env = window.__env ?? unconfigured;

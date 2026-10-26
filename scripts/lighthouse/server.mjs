@@ -14,6 +14,7 @@ const fixtures = join(here, 'fixtures');
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
   .map(({key, ...entry}) => [key, entry]));
 const frames = JSON.parse(readFileSync(join(fixtures, 'frames.json'), 'utf8'));
+const threads = JSON.parse(readFileSync(join(fixtures, 'threads.json'), 'utf8'));
 
 const types = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
@@ -22,6 +23,20 @@ const types = {
   '.woff2': 'font/woff2', '.map': 'application/json'
 };
 const compressible = new Set(['.html', '.js', '.css', '.json', '.svg', '.txt', '.map']);
+
+/**
+ * @param {{query: string, variables: Record<string, string>}} asked
+ */
+const feedbackAnswerTo = ({query, variables}) => {
+  if (query.includes('search')) {
+    return {search: {nodes: threads.filter(({title}) => variables.search.includes(title.slice(title.lastIndexOf('('))))}};
+  }
+  const thread = threads.find(({id}) => id === variables.discussionId);
+  return {
+    createDiscussion: {discussion: {id: 'D_9', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/9'}},
+    addDiscussionComment: {comment: {url: thread?.url ?? ''}}
+  };
+};
 
 /**
  * @param {import('node:http').IncomingMessage} request
@@ -53,8 +68,18 @@ const answers = (request, response) => {
       vamPictures: '/vam-image',
       clevelandDomain: '/cleveland',
       usersDomain: '/api/users',
-      feedbackToken: 'recorded'
+      feedbackToken: 'recorded',
+      feedbackEndpoint: '/feedback-graphql'
     })};`, 'text/javascript', true);
+  }
+
+  if (request.method === 'POST' && url === '/feedback-graphql') {
+    let asked = '';
+    request.on('data', chunk => {
+      asked += chunk;
+    });
+    request.on('end', () => send(200, JSON.stringify({data: feedbackAnswerTo(JSON.parse(asked))}), 'application/json', false));
+    return;
   }
 
   if (/^\/(aic|vam)-image\/[^/]+\/info\.json$/.test(url)) {

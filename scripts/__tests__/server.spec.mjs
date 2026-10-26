@@ -117,3 +117,43 @@ describe('the stub stage', () => {
     }
   });
 });
+
+const asked = (query, variables) => {
+  const body = JSON.stringify({query, variables});
+  return `POST /feedback-graphql HTTP/1.1\r\nHost: localhost\r\nContent-Type: application/json\r\nContent-Length: ${Buffer.byteLength(body)}\r\nConnection: close\r\n\r\n${body}`;
+};
+
+const searchFor = key => asked('query($search: String!) { search(query: $search) { nodes { id } } }', {search: `repo:RyanDur/ChosenPicachu in:title "(${key})"`});
+
+const bodyOf = answer => JSON.parse(answer.slice(answer.indexOf('{'), answer.lastIndexOf('}') + 1));
+
+describe('the stub stage answers Feedback’s questions in place of GitHub', () => {
+  test('should name its own endpoint in env.js', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port, get('/ChosenPicachu/env.js'));
+    stage.kill();
+
+    expect(answer).toContain('"feedbackEndpoint":"/feedback-graphql"');
+  });
+
+  test('should find the thread of a page that has one', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port, searchFor('/demos/?tab=accordions'));
+    stage.kill();
+
+    expect(bodyOf(answer).data.search.nodes).toEqual([
+      {id: 'D_4', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/4', title: 'Feedback: Demos Accordions (/demos/?tab=accordions)'}
+    ]);
+  });
+
+  test('should find no thread for a page that has none', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port, searchFor('/record/'));
+    stage.kill();
+
+    expect(bodyOf(answer).data.search.nodes).toEqual([]);
+  });
+});

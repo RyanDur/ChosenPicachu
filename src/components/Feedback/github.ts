@@ -4,12 +4,12 @@ import {http} from '@transport/http';
 import {HTTPError} from '@transport/types';
 import {validate} from '@transport/validate';
 
-const endpoint = 'https://api.github.com/graphql';
 const repositoryId = 'MDEwOlJlcG9zaXRvcnkzNzY2NzE1OTU=';
 const feedbackCategoryId = 'DIC_kwDOFnONa84DGhfO';
 
 export const discussions = 'https://github.com/RyanDur/ChosenPicachu/discussions';
 
+export type GitHub = {readonly endpoint: string; readonly token: string};
 export type Page = {key: string; name: string};
 export type Note = {page: Page; words: string; reach?: string; from: string};
 
@@ -24,7 +24,7 @@ const failureIn = ({errors}: schema.Output<typeof refusal>): HTTPError =>
 
 const answered = <T>(data: schema.Decoder<T>) => schema.object({required: {data}});
 
-const asked = <T>(token: string, query: string, variables: Record<string, string>, data: schema.Decoder<T>): Result.Async<T, HTTPError> =>
+const asked = <T>({endpoint, token}: GitHub, query: string, variables: Record<string, string>, data: schema.Decoder<T>): Result.Async<T, HTTPError> =>
   http.post<unknown>(endpoint, {query, variables}, {headers: {authorization: `bearer ${token}`}})
     .mBind(reply => maybe(refusal.decode(reply))
       .map(refused => asyncFailure<HTTPError, T>(failureIn(refused)))
@@ -44,8 +44,8 @@ const found = schema.object({
   }
 });
 
-export const threadFor = (token: string, page: Page): Result.Async<Maybe<Thread>, HTTPError> =>
-  asked(token, searching, {search: `repo:RyanDur/ChosenPicachu in:title "(${page.key})"`}, found)
+export const threadFor = (github: GitHub, page: Page): Result.Async<Maybe<Thread>, HTTPError> =>
+  asked(github, searching, {search: `repo:RyanDur/ChosenPicachu in:title "(${page.key})"`}, found)
     .map(({search}) => maybe(search.nodes.find(node => node.title.endsWith(`(${page.key})`)))
       .map(({id, url}) => ({id, url})));
 
@@ -68,8 +68,8 @@ const commented = schema.object({
 const bodyOf = ({words, reach, from}: Note): string =>
   [words, ...maybe(reach).map(way => [`A way to reach them: ${way}`]).orElse([]), `Sent from ${from}`].join('\n\n');
 
-export const sent = (token: string, note: Note): Result.Async<string, HTTPError> =>
-  threadFor(token, note.page).mBind(thread => thread.either(
-    ({id, url}) => asked(token, replying, {discussionId: id, body: bodyOf(note)}, commented).map(() => url),
-    () => asked(token, opening, {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)}, opened)
+export const sent = (github: GitHub, note: Note): Result.Async<string, HTTPError> =>
+  threadFor(github, note.page).mBind(thread => thread.either(
+    ({id, url}) => asked(github, replying, {discussionId: id, body: bodyOf(note)}, commented).map(() => url),
+    () => asked(github, opening, {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)}, opened)
       .map(({createDiscussion}) => createDiscussion.discussion.url)));

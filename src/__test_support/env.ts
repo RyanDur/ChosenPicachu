@@ -10,7 +10,8 @@ window.__env = {
   vamPictures: import.meta.env.VITE_APP_VAM_PICTURES,
   clevelandDomain: import.meta.env.VITE_APP_CLEVELAND_API,
   usersDomain: import.meta.env.VITE_APP_USERS_API,
-  feedbackToken: import.meta.env.VITE_APP_FEEDBACK_TOKEN
+  feedbackToken: import.meta.env.VITE_APP_FEEDBACK_TOKEN,
+  feedbackEndpoint: 'https://api.github.com/graphql'
 };
 
 export {};

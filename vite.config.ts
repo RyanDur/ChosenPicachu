@@ -164,7 +164,8 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     vamPictures: env.VITE_APP_VAM_PICTURES ?? '',
     clevelandDomain: env.VITE_APP_CLEVELAND_API ?? '',
     usersDomain: env.VITE_APP_USERS_API ?? '',
-    feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? ''
+    feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? '',
+    feedbackEndpoint: env.VITE_APP_FEEDBACK_ENDPOINT ?? 'https://api.github.com/graphql'
   }, null, 2)};\n`;
   let base = '/';
   return {

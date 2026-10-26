@@ -151,13 +151,22 @@ test('a note GitHub refuses stays in the open dialog, and it says so', async ({p
 });
 
 test('the first line links to the page’s own thread', async ({page}) => {
-  await github(page, {thread: {url: 'https://github.com/RyanDur/ChosenPicachu/discussions/4', title: 'Feedback: Demos Accordions (/demos/?tab=accordions)'}});
   const feedback = feedbackOn(page);
   await page.goto('demos/?tab=accordions');
 
   await feedback.open.click();
 
   await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/4');
+});
+
+test('a page with no thread yet links its first line to the Discussions page', async ({page}) => {
+  const feedback = feedbackOn(page);
+  await page.goto('record/');
+
+  await feedback.open.click();
+
+  await expect(feedback.dialog).toBeVisible();
+  await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
 });
 
 for (const {reader, device} of [
