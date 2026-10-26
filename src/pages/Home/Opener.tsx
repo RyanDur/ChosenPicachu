@@ -30,6 +30,6 @@ export const Opener: FC = () =>
       how I organize each one, with a tab for each language. The Demos are where I put the practice to
       work: {spelledOut(Object.values(DemoTopics).length)} features built from this site’s own
       code and explained beside it. Two compare the trick we used before the platform could do the job
-      with what it does now; the other three show what the platform does with no library at all.
+      with what it does now; the other three show what the platform does with no library for the job.
     </p>
   </header>;
