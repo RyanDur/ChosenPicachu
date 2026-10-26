@@ -25,18 +25,10 @@ const types = {
 const compressible = new Set(['.html', '.js', '.css', '.json', '.svg', '.txt', '.map']);
 
 /**
- * @param {{query: string, variables: Record<string, string>}} asked
+ * @param {{variables: {search: string}}} asked
  */
-const feedbackAnswerTo = ({query, variables}) => {
-  if (query.includes('search')) {
-    return {search: {nodes: threads.filter(({title}) => variables.search.includes(title.slice(title.lastIndexOf('('))))}};
-  }
-  const thread = threads.find(({id}) => id === variables.discussionId);
-  return {
-    createDiscussion: {discussion: {id: 'D_9', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/9'}},
-    addDiscussionComment: {comment: {url: thread?.url ?? ''}}
-  };
-};
+const feedbackAnswerTo = ({variables}) =>
+  ({search: {nodes: threads.filter(({title}) => variables.search.includes(title.slice(title.lastIndexOf('('))))}});
 
 /**
  * @param {import('node:http').IncomingMessage} request

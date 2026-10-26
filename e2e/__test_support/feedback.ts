@@ -1,12 +1,11 @@
 import type {Page, Route} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 
-type Thread = {url: string; title: string};
-type GitHub = {thread?: Thread; refuse?: string};
+type GitHub = {refuse?: string};
 
 export type Posted = {query: string; variables: Record<string, string>};
 
-export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise<Posted[]> => {
+export const github = async (page: Page, {refuse}: GitHub = {}): Promise<Posted[]> => {
   const posted: Posted[] = [];
   await page.route('**/feedback-graphql', async (route: Route) => {
     const asked: unknown = route.request().postDataJSON();
@@ -14,7 +13,7 @@ export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise
       ? {query: String(asked.query), variables: Object.fromEntries(Object.entries(Object(asked.variables)).map(([key, value]) => [key, String(value)]))}
       : {query: '', variables: {}};
     if (question.query.includes('search')) {
-      await route.fulfill({json: {data: {search: {nodes: thread ? [{id: 'D_1', ...thread}] : []}}}});
+      await route.fallback();
       return;
     }
     posted.push(question);

@@ -162,10 +162,11 @@ test('the first line links to the page’s own thread', async ({page}) => {
 test('a page with no thread yet links its first line to the Discussions page', async ({page}) => {
   const feedback = feedbackOn(page);
   await page.goto('record/');
+  const searched = page.waitForResponse('**/feedback-graphql');
 
   await feedback.open.click();
 
-  await expect(feedback.dialog).toBeVisible();
+  await searched;
   await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
 });
 
