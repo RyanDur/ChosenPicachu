@@ -24,8 +24,8 @@
     "@ryandur/sand": "^10.0.0",
     "date-fns": "4.1.0",
     "random-avatar-generator": "^2.0.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-router": "^7.18.1",
     "schemawax": "^1.0.12"
   },
