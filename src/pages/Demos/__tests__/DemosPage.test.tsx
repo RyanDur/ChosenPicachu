@@ -1,7 +1,9 @@
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
+import {appAddress} from '@__test_support/address';
+import {site} from '@pages/__test_support';
 import {Paths} from '@pages/Paths';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {DemoTopics, topicNames} from '@pages/Demos/types';
@@ -56,21 +58,19 @@ describe('The Demos page', () => {
   ])('an address of the demos page, %s, lands on its tab at %s with its dials kept', async (from, to) => {
     render(<TestApp at={from}/>);
 
-    await waitFor(() => expect(`${screen.getByRole('status', {name: 'url path'}).textContent}${screen.getByRole('status', {name: 'url search'}).textContent}`).toBe(to));
+    expect(await appAddress.movedOnFrom(from)).toBe(to);
   });
 
   test('a tab the demos do not have is no such room', async () => {
     render(<TestApp at={demosAt('behavior')}/>);
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'No such room'})).toBeInTheDocument();
+    expect(await site.pageTitled()).toHaveTextContent('No such room');
   });
 
   test('each tab links to its own address and carries the dials along', async () => {
     render(<TestApp at={demosAt('tables', '?world=vanilla')}/>);
 
-    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
-
-    expect(tabs.getAllByRole('link').map(tab => tab.getAttribute('href'))).toEqual(
+    expect(await demoTabs.addresses()).toEqual(
       ['accordions', 'z-index', 'drag-and-drop', 'charts', 'tables'].map(topic => demosAt(topic, '?world=vanilla')));
   });
 

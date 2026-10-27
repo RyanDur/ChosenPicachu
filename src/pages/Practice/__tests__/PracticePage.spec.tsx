@@ -1,4 +1,6 @@
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render} from '@testing-library/react';
+import {appAddress} from '@__test_support/address';
+import {site} from '@pages/__test_support';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
@@ -23,27 +25,26 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
-    expect(practicePage.address()).toBe(practiceAt('structure'));
+    expect(appAddress.shown()).toBe(practiceAt('structure'));
   });
 
   test.each(['structure', 'presentation', 'behavior'])('should send a link saved as ?tab=%s to that tab\'s own address', async tab => {
     render(<TestApp at={`${Paths.practice}?tab=${tab}`}/>);
 
-    await waitFor(() => expect(practicePage.address()).toBe(practiceAt(tab)));
+    expect(await appAddress.movedOnFrom(`${Paths.practice}?tab=${tab}`)).toBe(practiceAt(tab));
   });
 
   test('should be no such room at a tab the page does not have', async () => {
     render(<TestApp at={practiceAt('interaction')}/>);
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'No such room'})).toBeInTheDocument();
+    expect(await site.pageTitled()).toHaveTextContent('No such room');
   });
 
   test('should link each tab to its own address', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(within(screen.getByRole('navigation', {name: 'practice'})).getAllByRole('link').map(tab => tab.getAttribute('href')))
-      .toEqual(['structure', 'presentation', 'behavior'].map(practiceAt));
+    expect(practicePage.tabAddresses()).toEqual(['structure', 'presentation', 'behavior'].map(practiceAt));
   });
 
   test.each(['dynamic', 'dynamic-interaction'])('should open a link saved under the old tab name, %s, on the Behavior tab', async former => {
@@ -51,7 +52,7 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Behavior')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Behavior');
-    expect(practicePage.address()).toBe(practiceAt('behavior'));
+    expect(appAddress.shown()).toBe(practiceAt('behavior'));
   });
 
   test.each(['constructor', 'toString', '__proto__'])('should open on Structure when the address names %s, a word every object answers to', async word => {
@@ -59,7 +60,7 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
-    expect(practicePage.address()).toBe(practiceAt('structure'));
+    expect(appAddress.shown()).toBe(practiceAt('structure'));
   });
 
   test('should open on Structure, marked as the current tab, when an old address names a tab the page does not have', async () => {
@@ -67,7 +68,7 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
-    expect(practicePage.address()).toBe(practiceAt('structure'));
+    expect(appAddress.shown()).toBe(practiceAt('structure'));
   });
 
   test('should say above the tabs what each one holds', async () => {

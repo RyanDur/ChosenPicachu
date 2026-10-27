@@ -7,6 +7,7 @@ export const site = {
   roomSays: (words: string): Promise<HTMLElement> => within(room()).findByText(words),
   pageTitle: (): HTMLElement => screen.getByRole('heading', {level: 1}),
   pageTitled: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1}),
+  titled: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
   nav: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'site'}),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
   frontDoor: (): HTMLElement => screen.getByRole('link', {name: 'Back to the front door'}),

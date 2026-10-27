@@ -5,8 +5,9 @@ import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
-import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
-import {practiceAt} from '@pages/Practice/__test_support/practice';
+import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
+import {appAddress} from '@__test_support/address';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -134,8 +135,8 @@ describe('a link saved to the old Development address', () => {
   test('should land a former tab name on the tab it became', async () => {
     render(<TestApp at="/development/?tab=dynamic"/>);
 
-    expect(await screen.findByRole('heading', {name: 'Practice Behavior', level: 1})).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(practiceAt('behavior'));
+    expect(await appAddress.movedOnFrom('/development/?tab=dynamic')).toBe(practiceAt('behavior'));
+    expect(site.pageTitle()).toHaveTextContent('Practice Behavior');
   });
 });
 
@@ -204,16 +205,16 @@ describe('leaving a page', () => {
   });
 
   test.each([
-    {page: 'Demos', at: demosAt('accordions'), strip: 'demos', tab: 'Charts', title: 'Demos Charts'},
-    {page: 'Practice', at: practiceAt('structure'), strip: 'practice', tab: 'Behavior', title: 'Practice Behavior'}
-  ])('switching $page tabs keeps the reader where they were on the page', async ({at, strip, tab, title}) => {
+    {page: 'Demos', at: demosAt('accordions'), switchTab: () => demoTabs.open('Charts'), title: 'Demos Charts'},
+    {page: 'Practice', at: practiceAt('structure'), switchTab: () => practicePage.pickTab('Behavior'), title: 'Practice Behavior'}
+  ])('switching $page tabs keeps the reader where they were on the page', async ({at, switchTab, title}) => {
     render(<TestApp at={at}/>);
-    const tabs = within(await screen.findByRole('navigation', {name: strip}));
+    await site.pageTitled();
     const landings = scrolling.recordLandings();
 
-    await userEvent.click(tabs.getByRole('link', {name: tab}));
+    await switchTab();
 
-    expect(await screen.findByRole('heading', {level: 1, name: title})).toBeInTheDocument();
+    await site.titled(title);
     expect(landings).toEqual([]);
   });
 

@@ -4,5 +4,7 @@ import userEvent from '@testing-library/user-event';
 export const demoTabs = {
   arrivedOn: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
   open: async (name: string): Promise<void> =>
-    userEvent.click(within(await screen.findByRole('navigation', {name: 'demos'})).getByRole('link', {name}))
+    userEvent.click(within(await screen.findByRole('navigation', {name: 'demos'})).getByRole('link', {name})),
+  addresses: async (): Promise<(string | null)[]> =>
+    within(await screen.findByRole('navigation', {name: 'demos'})).getAllByRole('link').map(tab => tab.getAttribute('href'))
 };

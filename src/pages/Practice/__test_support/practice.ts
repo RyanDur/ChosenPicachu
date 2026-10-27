@@ -8,8 +8,8 @@ const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'
 export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
 
 export const practicePage = {
-  address: (): string => `${screen.getByRole('status', {name: 'url path'}).textContent}${screen.getByRole('status', {name: 'url search'}).textContent}`,
   arrivedOn: (concern: string): Promise<HTMLElement> => screen.findByRole('heading', {name: `Practice ${concern}`, level: 1}),
+  tabAddresses: (): (string | null)[] => within(tabs()).getAllByRole('link').map(tab => tab.getAttribute('href')),
   currentTab: (): string => within(tabs()).getByRole('link', {current: 'page'}).textContent ?? '',
   pickTab: (concern: string): Promise<void> => userEvent.click(within(tabs()).getByRole('link', {name: concern})),
   opener: (): Promise<HTMLElement> => screen.findByText(/^Each tab below is one of the three concerns/),
