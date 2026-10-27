@@ -13,7 +13,7 @@ import {blurFocusOnMoves} from '@__test_support/focus';
 describe('the charts tutorials’ menus', () => {
   test('should say the + menu is built from the site’s menu components, on the charts tab', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const tutorial = await chartsDesk.findFeatureStories();
 
@@ -22,7 +22,7 @@ describe('the charts tutorials’ menus', () => {
 
   test('should say what a class is, and that the page passes Menu the menu’s own, on the charts tab', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const tutorial = await chartsDesk.findFeatureStories();
 
@@ -31,7 +31,7 @@ describe('the charts tutorials’ menus', () => {
 
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const story = recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
     expect(explanation.everyCodeBeside(story, /^A class is a name on an element/).join()).toMatch(/<Menu [^>]*className="/);
@@ -66,7 +66,7 @@ describe('a list of charts', () => {
   test('the trader starts with one chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findChart('live trades')).toBeVisible();
@@ -76,7 +76,7 @@ describe('a list of charts', () => {
   test('the trader can add a chart, and it goes to the front of the list', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -90,7 +90,7 @@ describe('a list of charts', () => {
   test('each chart card names itself in the heading outline', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     const candles = await chartsDesk.findChart('candles');
@@ -104,7 +104,7 @@ describe('a list of charts', () => {
   test('the trader can remove a chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -118,7 +118,7 @@ describe('a list of charts', () => {
   test('the last chart can be neither removed nor moved', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -130,7 +130,7 @@ describe('a list of charts', () => {
     blurFocusOnMoves();
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -145,7 +145,7 @@ describe('a list of charts', () => {
   test('a chart keeps the period chosen for it when the charts are reordered', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
     await chartsDesk.choosePeriod('price', 'day');
@@ -160,7 +160,7 @@ describe('a list of charts', () => {
   test('a chart walked by keyboard says where it landed', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -172,7 +172,7 @@ describe('a list of charts', () => {
   test('the delete key removes a chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -185,7 +185,7 @@ describe('a list of charts', () => {
   test('the backspace key removes a chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -198,7 +198,7 @@ describe('a list of charts', () => {
   test("the chart that takes the removed one's seat takes the focus", async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -210,7 +210,7 @@ describe('a list of charts', () => {
   test('the chart that is now last takes the focus when the last chart is deleted', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
 
@@ -222,7 +222,7 @@ describe('a list of charts', () => {
   test('the delete key leaves the last chart standing', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
 
@@ -233,7 +233,7 @@ describe('a list of charts', () => {
 
   test("a finger pressed on a chart's grip readies the chart to be moved, and lifted leaves it at rest", async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
     const finger = chartsDesk.fingerOn('Price line');
@@ -248,7 +248,7 @@ describe('a list of charts', () => {
   test('the workspace tells its story', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -263,7 +263,7 @@ describe('a list of charts', () => {
   test('a chart is a doorway to its own tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -275,7 +275,7 @@ describe('a list of charts', () => {
   test('enter on a chart opens its tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
 
@@ -292,7 +292,7 @@ describe('a list of charts', () => {
   ])('the candles story %s', async (_claim, shown) => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
@@ -305,7 +305,7 @@ describe('a list of charts', () => {
   test('a story the trader opened folds shut when they press its summary again', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
@@ -320,7 +320,7 @@ describe('a list of charts', () => {
   test('the trader can add the pressure chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -514,7 +514,7 @@ describe('a list of charts', () => {
   test('the workspace tutorial names its story and steps in the heading outline', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findTitle('The trader can lay out the workspace', 3)).toBeInTheDocument();
@@ -524,7 +524,7 @@ describe('a list of charts', () => {
   test('the pressure chart is a doorway to its tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('pressure');
 
@@ -572,7 +572,7 @@ describe('a list of charts', () => {
   test('the pressure story proves the side is a fact, not a guess', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('pressure');
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
@@ -584,7 +584,7 @@ describe('a list of charts', () => {
   test('the charts travel in the url, one of each kind', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=candles,price,price')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles,price,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findChart('candles')).toBeVisible();
@@ -594,7 +594,7 @@ describe('a list of charts', () => {
   test('the add menu offers only what the desk lacks', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -606,7 +606,7 @@ describe('a list of charts', () => {
   test('a full desk offers no add menu', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -619,7 +619,7 @@ describe('a list of charts', () => {
   test('a pie added after trades arrive starts with their shares', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsLive(feed);
     broadcast(feed, [tradeFrame(50000, 1700000000000, '0.01', 'bought'), tradeFrame(50001, 1700000000500, '0.03', 'sold')]);
     await chartsDesk.findOnPriceCard('$50,001.00');
@@ -634,7 +634,7 @@ describe('a list of charts', () => {
   test('an added chart says so', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -657,7 +657,7 @@ describe('a list of charts', () => {
   test('the pie is a doorway to who owns the session', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=pie,price')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('pie');
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
@@ -675,7 +675,7 @@ describe('the demos page', () => {
     test('the user watches the latest trades stream in, newest last, measured from the first minute’s close', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50000), tradeFrame(50001, 1700000000500), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
@@ -686,7 +686,7 @@ describe('the demos page', () => {
     test('the user reaches the charts from the tab strip', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt()} feed={feed}/>);
+      render(<TestApp at={demosAt('accordions')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       await demoTabs.open('Charts');
@@ -697,7 +697,7 @@ describe('the demos page', () => {
     test('trades gathered before the user opens the charts are already waiting', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt()} feed={feed}/>);
+      render(<TestApp at={demosAt('accordions')} feed={feed}/>);
 
       await feedIsSubscribed(feed);
       broadcast(feed, [tradeFrame(50001)]);
@@ -708,7 +708,7 @@ describe('the demos page', () => {
     test('leaving the charts tab and returning keeps the stream alive', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50001)]);
@@ -723,7 +723,7 @@ describe('the demos page', () => {
     test('a connected feed tells the user the stream is live', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       await waitFor(() => expect(chartsDesk.feedStatus()).toHaveTextContent(/^live$/));
@@ -732,7 +732,7 @@ describe('the demos page', () => {
     test('frames that are not trades never reach the user', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, ['not even json', nonTradeFrame(99999), tradeFrame(50001)]);
@@ -743,7 +743,7 @@ describe('the demos page', () => {
     test('a refused feed tells the user the stream is unavailable', async () => {
       const feed = await listeningFeed(true);
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await waitFor(() =>
         expect(chartsDesk.feedStatus()).toHaveTextContent('live feed unavailable'));
@@ -754,7 +754,7 @@ describe('the demos page', () => {
       tradeHistoryRefuses();
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       expect(await chartsDesk.findTrouble('the trade history is having trouble')).toBeInTheDocument();
     });
@@ -762,7 +762,7 @@ describe('the demos page', () => {
     test('the user sees the price trend drawn from every recent minute', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
@@ -773,7 +773,7 @@ describe('the demos page', () => {
     test('the charts name what they measure', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await chartsDesk.findTitle(/BTC-USD/)).toBeVisible();
@@ -782,7 +782,7 @@ describe('the demos page', () => {
     test('the charts explain what they show', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       await chartsDesk.explain('live trades');
@@ -795,7 +795,7 @@ describe('the demos page', () => {
       const feed = await listeningFeed();
       const bucketStart = 1700000000000;
 
-      render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [
@@ -813,7 +813,7 @@ describe('the demos page', () => {
       const tenMinutes = 600000;
       const firstTradedAt = Math.ceil(1700000000000 / tenMinutes) * tenMinutes;
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
@@ -830,7 +830,7 @@ describe('the demos page', () => {
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrame(50001)]);
@@ -845,7 +845,7 @@ describe('the demos page', () => {
     test('a trade whose price is not a number never reaches the user', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       broadcast(feed, [tradeFrameWith({price: 'not a number', id: 900042}), tradeFrame(50001)]);
@@ -856,7 +856,7 @@ describe('the demos page', () => {
     test('leaving the page closes the socket', async () => {
       const feed = await listeningFeed();
 
-      const {unmount} = render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      const {unmount} = render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
       await waitFor(() => expect(feed.clients.size).toBe(1));
@@ -869,7 +869,7 @@ describe('the demos page', () => {
 describe('the charts’ headings', () => {
   test('should sit each chart under the live headline on the tab', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
@@ -895,7 +895,7 @@ describe('the charts tab’s introduction', () => {
 
   test('should tell the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     const tab = await chartsDesk.findChartsTab();
@@ -908,7 +908,7 @@ describe('the charts tab’s introduction', () => {
 describe('the workspace story', () => {
   const workspaceStory = async (): Promise<HTMLElement> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
@@ -979,7 +979,7 @@ describe('the workspace story', () => {
 describe('the charts’ audited words', () => {
   const tabWith = async (charts: string): Promise<HTMLElement> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=charts&charts=${charts}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('charts', `?charts=${charts}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     return chartsDesk.findChartsTab();
   };

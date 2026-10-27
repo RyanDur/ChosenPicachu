@@ -27,7 +27,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     test.use(device);
 
     test('choosing each thing card one wears in turn opens the menu over card two for the three that form no context, and under it for the four that do', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
 
       for (const [worn, where] of whereTheListOpens) {
         await test.step(`card one wears ${worn}, and the menu opens ${where} card two`, () => wearsThenOpens(page, worn, where));
@@ -37,7 +37,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 }
 
 test('going back past a choice takes back the sentence, which no longer matches the cards', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
   const chooser = contextChooser(page);
   await chooser.wearing('opacity: 0.9').click();
   await chooser.open();

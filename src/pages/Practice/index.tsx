@@ -1,13 +1,13 @@
-import {Navigate, useLocation} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
 import {Listing} from '@pages/BasePage/useListing';
-import {Concern} from '@pages/Record/moments/concerns';
+import {Concern, concernsInOrder} from '@pages/Record/moments/concerns';
+import {ToSavedTab} from '@components/Tabs';
 import names from '@pages/names.json';
 import {PracticePage} from './PracticePage';
-import {useConcernShown} from './useConcernShown';
+import {concernOf, practiceAddress} from './types';
 
 const listings: Record<Concern, Listing> = {
   'Structure': names.practice.structure,
@@ -15,23 +15,21 @@ const listings: Record<Concern, Listing> = {
   'Behavior': names.practice.behavior
 };
 
-const PracticeHeader = () => {
-  const concern = useConcernShown();
-  return <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
-};
-
 const movedFrom = '/development/';
 
-const ToPractice = () => {
-  const {search} = useLocation();
-  return <Navigate replace to={`${Paths.practice}${search}`}/>;
+const practiceTab = (concern: Concern) => {
+  const header = <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
+  return {
+    path: practiceAddress(concern),
+    errorElement: <Page header={header}><PageError/></Page>,
+    element: <Page header={header}><PracticePage concern={concern}/></Page>
+  };
 };
 
+const toSavedConcern = <ToSavedTab addressOf={tab => practiceAddress(concernOf(tab))}/>;
+
 export const Practice = [
-  {
-    path: Paths.practice,
-    errorElement: <Page header={<PracticeHeader/>}><PageError/></Page>,
-    element: <Page header={<PracticeHeader/>}><PracticePage/></Page>
-  },
-  {path: movedFrom, element: <ToPractice/>}
+  {path: Paths.practice, element: toSavedConcern},
+  ...concernsInOrder.map(practiceTab),
+  {path: movedFrom, element: toSavedConcern}
 ];

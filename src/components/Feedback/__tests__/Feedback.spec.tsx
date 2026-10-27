@@ -2,7 +2,8 @@ import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {site} from '@pages/__test_support';
-import {githubFindingNoThread, githubHoldingItsAnswer, githubLosingThePageThread} from '../__test_support/github';
+import {demosAt} from '@pages/Demos/__test_support';
+import {githubFindingNoThread, githubHoldingAThread, githubHoldingItsAnswer, githubLosingThePageThread} from '../__test_support/github';
 import {setupAICAllArtResponse} from '@components/art-gallery/__test_support';
 import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 
@@ -205,11 +206,21 @@ describe('Feedback while a note is on its way', () => {
 describe('Feedback about the page', () => {
   test('should name the page in the About line once its header names it', async () => {
     githubFindingNoThread();
-    render(<TestApp at="/demos/?tab=tables"/>);
+    render(<TestApp at={demosAt('tables')}/>);
 
     await userEvent.click(await screen.findByRole('button', {name: 'Feedback'}));
 
     expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByText('About: Demos Tables')).toBeInTheDocument();
+  });
+
+  test('should find the thread a demos tab already has, kept under the tab\'s own address', async () => {
+    githubHoldingAThread('Feedback: Demos Tables (/demos/tables/)');
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await userEvent.click(await screen.findByRole('button', {name: 'Feedback'}));
+
+    expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByRole('link', {name: 'this page’s thread on GitHub'}))
+      .toHaveAttribute('href', 'https://github.test/discussions/9');
   });
 });
 

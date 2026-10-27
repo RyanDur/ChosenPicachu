@@ -3,7 +3,7 @@ import {chartsPage, desktop, feedStillConnecting, iPhone} from './__test_support
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
-  await page.goto('demos?tab=charts');
+  await page.goto('demos/charts/');
 
   await expect(charts.periodToggle).toBeVisible();
   await expect(charts.period('week')).toBeHidden();
@@ -15,7 +15,7 @@ test('the price period menu stays hidden until the reader asks for it', async ({
 test('the feed says it is connecting, then that it is live', async ({page}) => {
   const feed = await feedStillConnecting(page, [50000, 50100]);
   const status = page.getByRole('status', {name: 'feed'});
-  await page.goto('demos/?tab=charts');
+  await page.goto('demos/charts/');
   await expect(status).toHaveText('connecting to the live feed…');
 
   feed.opens();
@@ -37,7 +37,7 @@ for (const {reader, device, press} of [
       {kind: 'pie', region: 'pie'}
     ]) {
       test(`a press in the middle of the ${kind} drawing opens its tutorial`, async ({page}) => {
-        await page.goto(`demos/?tab=charts&charts=${kind}`);
+        await page.goto(`demos/charts/?charts=${kind}`);
         const drawing = page.getByRole('region', {name: region, exact: true}).getByRole('figure');
         await drawing.scrollIntoViewIfNeeded();
         const box = await drawing.boundingBox();
@@ -56,7 +56,7 @@ test.describe('a mouse carrying a chart past its neighbor', () => {
   test.use(desktop);
 
   test('the chart swaps back only once the pointer has come a third of its height back', async ({page}) => {
-    await page.goto('demos/?tab=charts&charts=price,pie');
+    await page.goto('demos/charts/?charts=price,pie');
     const charts = chartsPage(page);
     const carried = await charts.carryByTheGrip('live trades');
 
@@ -75,7 +75,7 @@ test.describe('a finger on a phone', () => {
 
   test('a finger pressed on a chart\'s grip and taken over by the browser leaves the chart at rest', async ({page, browserName}) => {
     test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
-    await page.goto('demos/?tab=charts&charts=price,candles');
+    await page.goto('demos/charts/?charts=price,candles');
     const charts = chartsPage(page);
 
     const finger = await charts.fingerOnTheGrip('live trades');

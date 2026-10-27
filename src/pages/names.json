@@ -12,7 +12,7 @@
       "title": "Z-index · Chosen Picachu",
       "description": "Why a z-index of 9999 can still lose: stacking contexts, what they trap, and the top layer as the browser’s way out."
     },
-    "dragAndDrop": {
+    "drag-and-drop": {
       "title": "Drag sort · Chosen Picachu",
       "description": "A list arranged by hand, by pointer on the platform’s own drag and drop and by keyboard, built step by step."
     },

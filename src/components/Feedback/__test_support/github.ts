@@ -33,3 +33,7 @@ export const githubLosingThePageThread = () =>
     }
     return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_8', url: 'https://github.test/discussions/8'}}}});
   }));
+
+export const githubHoldingAThread = (title: string) =>
+  server.use(http.post('https://api.github.com/graphql', () =>
+    HttpResponse.json({data: {search: {nodes: [{id: 'D_9', url: 'https://github.test/discussions/9', title}]}}})));

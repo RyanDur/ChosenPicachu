@@ -1,15 +1,14 @@
-import * as schema from 'schemawax';
 import {Paths} from '@pages/Paths';
 
 export enum DemoTopics {
   accordions = 'accordions',
   zIndex = 'z-index',
-  dragAndDrop = 'dragAndDrop',
+  dragAndDrop = 'drag-and-drop',
   charts = 'charts',
   tables = 'tables'
 }
 
-export const demoAddress = (topic: DemoTopics): string => `${Paths.demos}?tab=${topic}`;
+export const demoAddress = (topic: DemoTopics): string => `${Paths.demos}${topic}/`;
 
 export const topicNames: Record<DemoTopics, string> = {
   [DemoTopics.accordions]: 'Accordions',
@@ -19,5 +18,9 @@ export const topicNames: Record<DemoTopics, string> = {
   [DemoTopics.tables]: 'Tables'
 };
 
-export const demoTopicParam: schema.Decoder<DemoTopics> = schema.literalUnion(...Object.values(DemoTopics));
+const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
+
+export const demoTopicOf = (tab = ''): DemoTopics =>
+  formerTabs.get(tab) ?? Object.values(DemoTopics).find(topic => topic === tab) ?? DemoTopics.accordions;
+
 export type PropsWithClassName = {className?: string};

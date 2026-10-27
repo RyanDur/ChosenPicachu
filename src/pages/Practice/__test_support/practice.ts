@@ -5,7 +5,10 @@ import {Paths} from '@pages/Paths';
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});
 
+export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
+
 export const practicePage = {
+  address: (): string => `${screen.getByRole('status', {name: 'url path'}).textContent}${screen.getByRole('status', {name: 'url search'}).textContent}`,
   arrivedOn: (concern: string): Promise<HTMLElement> => screen.findByRole('heading', {name: `Practice ${concern}`, level: 1}),
   currentTab: (): string => within(tabs()).getByRole('link', {current: 'page'}).textContent ?? '',
   pickTab: (concern: string): Promise<void> => userEvent.click(within(tabs()).getByRole('link', {name: concern})),

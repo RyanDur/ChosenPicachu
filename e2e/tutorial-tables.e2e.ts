@@ -3,7 +3,7 @@ import {iPhone, tutorialTable, type TutorialTableName} from './__test_support';
 
 const tables: {tab: string; name: TutorialTableName}[] = [
   {tab: 'tables', name: 'the clues'},
-  {tab: 'dragAndDrop', name: 'the clues'},
+  {tab: 'drag-and-drop', name: 'the clues'},
   {tab: 'tables', name: 'the layers'}
 ];
 
@@ -12,7 +12,7 @@ test.describe('a phone', () => {
 
   for (const {tab, name} of tables) {
     test(`passes over ${name} on the ${tab} tab with the Tab key`, async ({page}) => {
-      await page.goto(`demos/?tab=${tab}`);
+      await page.goto(`demos/${tab}/`);
 
       expect(await tutorialTable(page, name).tabLandsInside()).toBe(false);
     });

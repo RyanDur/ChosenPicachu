@@ -13,7 +13,9 @@ const listed = {
   'gallery/': names.gallery,
   'games/': names.games,
   'record/': names.record,
-  'practice/': names.practice.structure
+  'practice/': names.practice.structure,
+  ...Object.fromEntries(Object.entries(names.demos).map(([tab, listing]) => [`demos/${tab}/`, listing])),
+  ...Object.fromEntries(Object.entries(names.practice).map(([tab, listing]) => [`practice/${tab}/`, listing]))
 };
 
 test('a search engine that runs no script reads each page’s own title and description', async ({request}) => {

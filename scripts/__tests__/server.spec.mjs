@@ -140,11 +140,11 @@ describe('the stub stage answers Feedback’s questions in place of GitHub', () 
   test('should find the thread of a page that has one', async () => {
     const {stage, port} = await stageUp();
 
-    const answer = await answerTo(port, searchFor('/demos/?tab=accordions'));
+    const answer = await answerTo(port, searchFor('/demos/accordions/'));
     stage.kill();
 
     expect(bodyOf(answer).data.search.nodes).toEqual([
-      {id: 'D_4', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/4', title: 'Feedback: Demos Accordions (/demos/?tab=accordions)'}
+      {id: 'D_4', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/4', title: 'Feedback: Demos Accordions (/demos/accordions/)'}
     ]);
   });
 

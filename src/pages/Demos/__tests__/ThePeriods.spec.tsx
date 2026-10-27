@@ -33,7 +33,7 @@ const drawnPoints = (): number => parseInt(captionOf('live trades'), 10);
 
 const chartsWithHistory = async (stepSeconds: number): Promise<void> => {
   server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(stepSeconds))));
-  render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+  render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
   await screen.findByRole('region', {name: 'candles'});
 };
 
@@ -45,7 +45,7 @@ describe('the chart periods', () => {
       return HttpResponse.json(rowsSpaced(60));
     }));
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'hour', hidden: true}));
@@ -65,7 +65,7 @@ describe('the chart periods', () => {
 
   test('a period with one candle names it in the singular', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(60).slice(0, 1))));
-    render(<TestApp at={demosAt('?tab=charts&charts=candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
 
     expect(await within(await screen.findByRole('region', {name: 'candles'})).findByText('1 candle · 1m each')).toBeVisible();
   });
@@ -111,7 +111,7 @@ describe('the chart periods', () => {
   test('history that cannot load says so', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.error()));
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'week', hidden: true}));
@@ -127,7 +127,7 @@ describe('the chart periods', () => {
       return HttpResponse.json(rowsSpaced(3600));
     }));
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'day', hidden: true}));
@@ -145,7 +145,7 @@ describe('the chart periods', () => {
 
   test('while history loads the captions say so', async () => {
     slowHistory();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     const candleCard = await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
 
@@ -160,7 +160,7 @@ describe('the chart periods', () => {
 
   test('while history loads the price shows no number', async () => {
     slowHistory();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
 
@@ -173,7 +173,7 @@ describe('the chart periods', () => {
 
   test('while history loads the candles draw no scale', async () => {
     slowHistory();
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     const candlesCard = await screen.findByRole('region', {name: 'candles'});
 
     await within(candlesCard).findByText('loading history');
@@ -182,7 +182,7 @@ describe('the chart periods', () => {
   });
 
   test('with history in hand and no trade yet, the captions wait', async () => {
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     const candleCard = await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
 

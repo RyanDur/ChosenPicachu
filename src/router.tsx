@@ -4,7 +4,7 @@ import {FC, ReactNode, useEffect, useState} from 'react';
 import './BasePage.css';
 import {FeedbackProvider} from '@components/Feedback';
 import {PageNameProvider} from '@components/PageName';
-import {gotoTopOfPage} from '@components/scroll';
+import {gotoTopOfPage, placeKept} from '@components/scroll';
 import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
@@ -20,8 +20,8 @@ import {Demos} from '@pages/Demos/routes';
 
 type Arrival = 'left alone' | 'at the top of the page';
 
-const arrivalOf = (hash: string, navigation: NavigationType): Arrival =>
-  hash === '' && navigation !== NavigationType.Pop ? 'at the top of the page' : 'left alone';
+const arrivalOf = (hash: string, navigation: NavigationType, state: unknown): Arrival =>
+  hash === '' && navigation !== NavigationType.Pop && state !== placeKept ? 'at the top of the page' : 'left alone';
 
 const arrive: Record<Arrival, () => void> = {
   'left alone': () => undefined,
@@ -29,11 +29,11 @@ const arrive: Record<Arrival, () => void> = {
 };
 
 const Site: FC<{room: ReactNode}> = ({room}) => {
-  const {pathname, hash} = useLocation();
+  const {pathname, hash, state} = useLocation();
   const navigation = useNavigationType();
   const [place, setPlace] = useState<{pathname: string; hash: string; arrival: Arrival}>({pathname, hash, arrival: 'left alone'});
   if (place.pathname !== pathname || place.hash !== hash) {
-    setPlace({pathname, hash, arrival: arrivalOf(hash, navigation)});
+    setPlace({pathname, hash, arrival: arrivalOf(hash, navigation, state)});
   }
   useEffect(() => arrive[place.arrival](), [place]);
 

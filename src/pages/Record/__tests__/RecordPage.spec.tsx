@@ -759,7 +759,7 @@ describe('the record', () => {
   test.each([
     ['the Practice page', Paths.practice],
     ['The Demos', Paths.demos],
-    ['the accordions', `${Paths.demos}?tab=accordions`]
+    ['the accordions', `${Paths.demos}accordions/`]
   ])('should send the reader on from the bridge: %s', (name, address) => {
     expect(screen.getByRole('link', {name})).toHaveAttribute('href', address);
   });

@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
+import {useLocation} from 'react-router';
 import {randParagraph, wordDeck} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './DemosPage.css';
@@ -14,7 +15,7 @@ import {
   LazyKeepAnimatedList,
   LazyKeepStaticList
 } from './DragAndDrop';
-import {demoTopicParam, DemoTopics, topicNames} from './types';
+import {demoAddress, DemoTopics, topicNames} from './types';
 import {BannerExplained, cardOneParam, FormsContextExplained, MenuExplained, PopoverExplained, raisedParam, StackingExplained, wornParam} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
@@ -35,13 +36,11 @@ const paragraphs = (count: number, dealt: () => string) => Array.from({length: c
   value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
 }));
 
-const topics = Object.values(DemoTopics).map(param => ({display: topicNames[param], param}));
-
-export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams} =
+export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
+  const {search} = useLocation();
+  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam},
-      {tab: DemoTopics.accordions});
+      {pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
   const [accordionContents] = useState(() => {
     const dealt = wordDeck();
     return {
@@ -67,8 +66,9 @@ export const DemosPage = () => {
       page. Start with the accordions if HTML, CSS and
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
-    <Tabs label="demos" current={tab} values={topics}/>
-    <section id="about" aria-label={topicNames[tab]} className="about">
+    <Tabs label="demos" current={topic}
+      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${search}`}))}/>
+    <section id="about" aria-label={topicNames[topic]} className="about">
       {({
         [DemoTopics.accordions]:
               <>
@@ -113,7 +113,7 @@ export const DemosPage = () => {
           })()}
           <ListTutorials/>
         </>
-      })[tab]}
+      })[topic]}
     </section>
   </>;
 };

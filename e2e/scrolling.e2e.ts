@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, twoFramesLater, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -39,7 +39,7 @@ for (const {reader, use} of desks) {
     test.use(use);
 
     test('Page Down moves the page straight after it arrives', async ({page}) => {
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
       const opening = page.getByRole('heading', {name: 'let’s build this feature'});
       await expect(opening).toBeVisible();
       const before = await topOf(opening);
@@ -49,15 +49,29 @@ for (const {reader, use} of desks) {
       await expect.poll(() => topOf(opening)).toBeLessThan(before);
     });
 
+    test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
+      await page.goto('demos/tables/');
+      await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
+      await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
+      const tabs = page.getByRole('navigation', {name: 'demos'});
+      const where = await topOf(tabs);
+
+      await clickWhereItIs(page, tabs.getByRole('link', {name: 'Z-index'}));
+
+      await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
+      await twoFramesLater(page);
+      expect(await topOf(tabs)).toBe(where);
+    });
+
     test('an address that names a step shows the step', async ({page}) => {
-      await page.goto('demos/?tab=tables#station-5');
+      await page.goto('demos/tables/#station-5');
       const step = page.getByRole('heading', {name: 'The trader can watch the market live, in windows'});
 
       await expect(step).toBeInViewport();
     });
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
       const held = page.getByRole('heading', {name: 'Slice the design into stories'});
       await held.scrollIntoViewIfNeeded();
       const shut = await topOf(held);

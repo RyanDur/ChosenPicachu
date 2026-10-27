@@ -6,7 +6,7 @@ import {Tabs} from '@components/Tabs';
 import {useSearchParamsObject} from '@components/search-params';
 import {TestApp} from '../TestApp';
 
-const doors = [{display: 'First', param: 'first'}, {display: 'Second', param: 'second'}];
+const doors = [{display: 'First', param: 'first', to: '?tab=first'}, {display: 'Second', param: 'second', to: '?tab=second'}];
 
 const Doors = () => {
   const {tab} = useSearchParamsObject({tab: schema.string});

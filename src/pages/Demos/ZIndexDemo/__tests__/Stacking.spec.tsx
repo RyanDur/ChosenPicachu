@@ -6,7 +6,7 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 describe('the stacking pile', () => {
   test('should name the pile by its caption, inside the part that asks why Third is on top', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why Third is on top'});
 
@@ -14,7 +14,7 @@ describe('the stacking pile', () => {
   });
 
   test('should say what a class is where the tab first names one', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why Third is on top'});
 
@@ -22,7 +22,7 @@ describe('the stacking pile', () => {
   });
 
   test('should open with no card raised', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const raised = await screen.findByRole('group', {name: 'card raised'});
 
@@ -30,7 +30,7 @@ describe('the stacking pile', () => {
   });
 
   test('should check the card chosen, and write it into the address', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const raised = await screen.findByRole('group', {name: 'card raised'});
 
     await userEvent.click(within(raised).getByRole('radio', {name: 'Second'}));
@@ -40,7 +40,7 @@ describe('the stacking pile', () => {
   });
 
   test('should open with the card the address names raised', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&raised=third')}/>);
+    render(<TestApp at={demosAt('z-index', '?raised=third')}/>);
 
     const raised = await screen.findByRole('group', {name: 'card raised'});
 
@@ -48,7 +48,7 @@ describe('the stacking pile', () => {
   });
 
   test('should show the pile’s list and its positioning beside the drawing of the pile from the side', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Z-index'});
 
@@ -56,7 +56,7 @@ describe('the stacking pile', () => {
   });
 
   test('should show the rule that raises a card beside the drawing of one card lifted', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Z-index'});
 

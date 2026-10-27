@@ -44,11 +44,11 @@ await page.waitForSelector('figure.frame img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
 console.log('recording the feed…');
-await page.goto(`${site}demos/?tab=tables`);
+await page.goto(`${site}demos/tables/`);
 await page.waitForSelector('.aggregations .column-name', {timeout: 30_000});
 await page.waitForTimeout(6000);
 
-await page.goto(`${site}demos/?tab=dragAndDrop`);
+await page.goto(`${site}demos/drag-and-drop/`);
 await page.waitForSelector('.sortable-list .draggable', {timeout: 30_000});
 await page.waitForTimeout(2000);
 

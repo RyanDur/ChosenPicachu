@@ -7,7 +7,7 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
 
     test('lifts a list item from a press just beside its grip and moves it to a new seat', async ({page}) => {
       const list = sortableList(page);
-      await page.goto('demos/?tab=dragAndDrop');
+      await page.goto('demos/drag-and-drop/');
       await expect(list.items.first()).toBeVisible();
       const first = await list.items.first().textContent();
 
@@ -28,7 +28,7 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
 
     test('changes the price period from a finger that lands just off the toggle', async ({page}) => {
       const charts = chartsPage(page);
-      await page.goto('demos/?tab=charts');
+      await page.goto('demos/charts/');
       await expect(charts.periodToggle).toBeVisible({timeout: 30_000});
 
       await fingerTap(page, charts.periodToggle);

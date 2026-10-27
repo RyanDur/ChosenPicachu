@@ -1,5 +1,9 @@
 import {readFileSync} from 'node:fs';
-import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf} from '../entry-points.mjs';
+import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf, tabEntriesOf} from '../entry-points.mjs';
+import names from '@pages/names.json';
+import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {practiceAddress} from '@pages/Practice/types';
+import {concernsInOrder} from '@pages/Record/moments/concerns';
 import {Paths} from '@pages/Paths';
 import {not} from '@ryandur/sand';
 
@@ -23,6 +27,17 @@ const shell = '<html lang="en"><head><script type="module" src="https://site.tes
 const preloadOf = file => `    <link rel="modulepreload" crossorigin href="https://site.test/app/assets/${file}">`;
 
 describe('the entry points', () => {
+  test('each tab a page lists is an entry of its own beneath the page, under the tab\'s listing', () => {
+    expect(tabEntriesOf('/page/', {first: 'one', 'second-tab': 'two'})).toEqual([['/page/first/', 'one'], ['/page/second-tab/', 'two']]);
+  });
+
+  test.each([
+    ['demos', () => tabEntriesOf(Paths.demos, names.demos).map(([route]) => route), () => Object.values(DemoTopics).map(demoAddress)],
+    ['practice', () => tabEntriesOf(Paths.practice, names.practice).map(([route]) => route), () => concernsInOrder.map(practiceAddress)]
+  ])('the %s tabs the names list are the tabs the site has', (_page, listed, routed) => {
+    expect(listed()).toEqual(routed());
+  });
+
   test('a demos entry preloads the demos chunk and its unshared deps', () => {
     const links = demosLinks(manifest, baseOf(shell));
 

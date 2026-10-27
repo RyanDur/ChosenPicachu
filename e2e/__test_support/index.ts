@@ -8,7 +8,7 @@ export {dragSortTable, stages, stagesWith, tablesCard, type Hold, type Stage} fr
 export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
 export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, splitViewWide, justPastAPhone, desktop} from './devices';
-export {clickWhereItIs, countScriptScrolls, documentScrollY} from './scrolling';
+export {clickWhereItIs, countScriptScrolls, documentScrollY, twoFramesLater} from './scrolling';
 export {siteFrame} from './site';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';

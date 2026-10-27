@@ -102,7 +102,7 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
 const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build', 'the grid radio build'];
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
-  `demos/?tab=accordions&type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
+  `demos/accordions/?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
 

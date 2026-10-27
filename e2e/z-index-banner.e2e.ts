@@ -6,7 +6,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     test.use(device);
 
     test('the old banner stays on the window, and card two passes over it while its edge still shows', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const banners = bannerTrap(page);
       await banners.raiseOld.click();
       await expect(banners.oldBanner).toBeVisible();
@@ -18,7 +18,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     });
 
     test('the banner in the top layer stays over card two as it passes', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const banners = bannerTrap(page);
       await banners.raiseNew.click();
       await expect(banners.topLayerBanner).toBeVisible();
@@ -29,7 +29,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     });
 
     test('the tutorial below brings the step that makes the banner a popover into view, with its story heading in view', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
 
       await part.getByRole('link', {name: 'the tutorial below'}).click();
@@ -47,7 +47,7 @@ test.describe('a phone, where the page itself scrolls', () => {
     page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
 
   test('Back from the tutorial below returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
-    await page.goto('demos/?tab=z-index');
+    await page.goto('demos/z-index/');
     const link = tutorialBelow(page);
     await link.click();
     await expect(page.getByText('Make the panel a popover')).toBeInViewport();
@@ -61,7 +61,7 @@ test.describe('a phone, where the page itself scrolls', () => {
 });
 
 test('a keyboard reader who follows the tutorial below reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
   const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
   await tabsTo(page, link);
   await page.keyboard.press('Enter');
@@ -81,7 +81,7 @@ for (const motion of ['no-preference', 'reduce'] as const) {
   test.describe(`with ${motion} motion asked for`, () => {
     test('a reader who follows step 3\'s link to the slide step lands on that step, its story opened and the step focused', async ({page}) => {
       await page.emulateMedia({reducedMotion: motion});
-      await page.goto('demos/?tab=z-index&news=top');
+      await page.goto('demos/z-index/?news=top');
 
       await page.getByRole('link', {name: 'Slide in from off screen'}).click();
 
@@ -95,7 +95,7 @@ for (const motion of ['no-preference', 'reduce'] as const) {
 
 test('a reader who follows the tutorial below with motion allowed lands on the story\'s heading', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
 
   await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
 
@@ -107,7 +107,7 @@ const lessMotionEntrance = 'If your system asks for less motion, a new banner ap
 
 test('the entrance reads the chosen side, and reads that a new banner appears in place once the reader asks for less motion', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('demos/?tab=z-index&enter=right');
+  await page.goto('demos/z-index/?enter=right');
   const {reading} = dialRow(page, 'entrance');
   await reading.scrollIntoViewIfNeeded();
 

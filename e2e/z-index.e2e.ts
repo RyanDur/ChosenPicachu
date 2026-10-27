@@ -2,7 +2,7 @@ import {Page, expect, test} from '@playwright/test';
 import {stackingPile} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
   const layers = stackingPile(page).cards();
   const boxes = async () => [await layers.first().boundingBox(), await layers.last().boundingBox()];
   const stacked = async () => {
@@ -23,7 +23,7 @@ test('the z-index cards start in a stack, the button spreads them, and pressing 
 });
 
 test('the pile opens with Third on top, then Second, then First, in the order the code lists them', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
 
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 });
@@ -33,7 +33,7 @@ for (const {card, input, raising, fromTheTop} of [
   {card: 'Second', input: 'the keyboard', raising: (page: Page) => stackingPile(page).raiseByKeyboard('Second'), fromTheTop: ['Second', 'Third', 'First']}
 ]) {
   test(`${card} raised by ${input} lands on top, and the others keep their order under it`, async ({page}) => {
-    await page.goto('demos/?tab=z-index');
+    await page.goto('demos/z-index/');
     await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 
     await raising(page);
@@ -43,7 +43,7 @@ for (const {card, input, raising, fromTheTop} of [
 }
 
 test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
+  await page.goto('demos/z-index/');
   const pile = stackingPile(page);
   await pile.expand();
 

@@ -5,7 +5,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {name, path} of [{name: 'the home page', path: ''}, {name: 'the accordions tab', path: 'demos/?tab=accordions'}, {name: 'the tables tab', path: 'demos/?tab=tables'}]) {
+    for (const {name, path} of [{name: 'the home page', path: ''}, {name: 'the accordions tab', path: 'demos/accordions/'}, {name: 'the tables tab', path: 'demos/tables/'}]) {
       test(`finds Feedback on ${name} without scrolling and opens it onto the field`, async ({page}) => {
         await github(page);
         const feedback = feedbackOn(page);
@@ -23,7 +23,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 }
 
 for (const {name, path, title, chunk, arrived} of [
-  {name: 'the tables tab', path: 'demos/?tab=tables', title: 'Demos Tables', chunk: '**/assets/DemosPage-*.js', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
+  {name: 'the tables tab', path: 'demos/tables/', title: 'Demos Tables', chunk: '**/assets/DemosPage-*.js', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
   {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts', chunk: '**/assets/ChartPage-*.js', arrived: (page: Page) => page.getByRole('article', {name: 'price line tutorial'})}
 ]) {
   test.describe('a phone held upright', () => {
@@ -64,7 +64,7 @@ for (const {way, closing} of [
   test(`${way} closes Feedback and gives focus back to it`, async ({page}) => {
     await github(page);
     const feedback = feedbackOn(page);
-    await page.goto('demos/?tab=accordions');
+    await page.goto('demos/accordions/');
     await feedback.open.click();
     await expect(feedback.words).toBeFocused();
 
@@ -78,7 +78,7 @@ for (const {way, closing} of [
 test('a click inside the dialog’s edge keeps Feedback open', async ({page}) => {
   await github(page);
   const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
   await feedback.open.click();
   const edge = await feedback.dialog.boundingBox();
   expect(edge).not.toBeNull();
@@ -91,7 +91,7 @@ test('a click inside the dialog’s edge keeps Feedback open', async ({page}) =>
 test('Tab never lands on the page behind the open dialog', async ({page}) => {
   await github(page);
   const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
   await feedback.open.click();
 
   await expect(feedback.words).toBeFocused();
@@ -105,7 +105,7 @@ test('Tab never lands on the page behind the open dialog', async ({page}) => {
 test('an empty note is refused by the platform', async ({page}) => {
   const posted = await github(page);
   const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
   await feedback.open.click();
   await expect(feedback.words).toBeFocused();
 
@@ -120,7 +120,7 @@ for (const field of ['words', 'reach'] as const) {
   test(`Enter in the ${field === 'words' ? 'note' : 'reach'} field sends, and the dialog closes onto Sent`, async ({page}) => {
     const posted = await github(page);
     const feedback = feedbackOn(page);
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     await expect(siteFrame(page).title).toHaveText('Demos Tables');
     await feedback.open.click();
     await feedback.words.pressSequentially('The sort menu hides behind the header.');
@@ -131,7 +131,7 @@ for (const field of ['words', 'reach'] as const) {
     await expect(feedback.dialog).toBeHidden();
     await expect(feedback.sent).toContainText('Sent.');
     await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
-    expect(posted[0].variables.title).toBe('Feedback: Demos Tables (/demos/?tab=tables)');
+    expect(posted[0].variables.title).toBe('Feedback: Demos Tables (/demos/tables/)');
     expect(posted[0].variables.body).toContain('The sort menu hides behind the header.');
   });
 }
@@ -139,7 +139,7 @@ for (const field of ['words', 'reach'] as const) {
 test('a note GitHub refuses stays in the open dialog, and it says so', async ({page}) => {
   await github(page, {refuse: 'Bad credentials'});
   const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
   await feedback.open.click();
   await feedback.words.pressSequentially('A step does not build.');
 
@@ -152,7 +152,7 @@ test('a note GitHub refuses stays in the open dialog, and it says so', async ({p
 
 test('the first line links to the page’s own thread', async ({page}) => {
   const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
 
   await feedback.open.click();
 
@@ -182,7 +182,7 @@ for (const {reader, device} of [
     test('opens Feedback onto its field, with Send shown', async ({page}) => {
       await github(page);
       const feedback = feedbackOn(page);
-      await page.goto('demos/?tab=accordions');
+      await page.goto('demos/accordions/');
       const toggles = await feedback.pressed();
       await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
       await expect(feedback.words).toBeFocused();

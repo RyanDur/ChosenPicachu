@@ -1,16 +1,18 @@
 import {copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
-import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf} from './entry-points.mjs';
+import {baseOf, demosLinks, listedIn, preloaded, staticRoutesOf, tabEntriesOf} from './entry-points.mjs';
 
 const names = JSON.parse(readFileSync('src/pages/names.json', 'utf-8'));
+const tabs = Object.fromEntries([...tabEntriesOf('/demos/', names.demos), ...tabEntriesOf('/practice/', names.practice)]);
 const listings = {
-  '/': names.home, '/demos/': names.demos.accordions, '/users/': names.users, '/gallery/': names.gallery, '/games/': names.games, '/record/': names.record, '/practice/': names.practice.structure
+  '/': names.home, '/demos/': names.demos.accordions, '/users/': names.users, '/gallery/': names.gallery, '/games/': names.games, '/record/': names.record, '/practice/': names.practice.structure,
+  ...tabs
 };
 const unlisted = route => {
   throw new Error(`src/pages/names.json names no page at ${route}`);
 };
 const listed = (html, route) => listedIn(html, listings[route] ?? unlisted(route));
 
-const staticRoutes = staticRoutesOf(readFileSync('src/pages/Paths.ts', 'utf-8'));
+const staticRoutes = [...staticRoutesOf(readFileSync('src/pages/Paths.ts', 'utf-8')), ...Object.keys(tabs)];
 
 const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf-8'));
 const shell = readFileSync('dist/index.html', 'utf-8');

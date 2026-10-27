@@ -14,22 +14,22 @@ export type SitePage = {
 export const pages: readonly SitePage[] = [
   {name: 'home', path: '', ready: 'navigation', budgeted: true},
   {name: 'record', path: 'record/', ready: 'navigation', budgeted: true},
-  {name: 'practice structure', path: 'practice/', ready: 'navigation', budgeted: true},
-  {name: 'practice presentation', path: 'practice/?tab=presentation', ready: 'navigation', budgeted: true},
-  {name: 'practice behavior', path: 'practice/?tab=behavior', ready: 'navigation', budgeted: true},
-  {name: 'demos', path: 'demos/?tab=accordions', ready: 'navigation', budgeted: true},
-  {name: 'demos, inclusive folds', path: 'demos/?tab=accordions&type=inclusive', ready: 'navigation'},
-  {name: 'charts', path: 'demos/?tab=charts', ready: 'navigation', loaded: page => chartsPage(page).priceDelta},
+  {name: 'practice structure', path: 'practice/structure/', ready: 'navigation', budgeted: true},
+  {name: 'practice presentation', path: 'practice/presentation/', ready: 'navigation', budgeted: true},
+  {name: 'practice behavior', path: 'practice/behavior/', ready: 'navigation', budgeted: true},
+  {name: 'demos', path: 'demos/accordions/', ready: 'navigation', budgeted: true},
+  {name: 'demos, inclusive folds', path: 'demos/accordions/?type=inclusive', ready: 'navigation'},
+  {name: 'charts', path: 'demos/charts/', ready: 'navigation', loaded: page => chartsPage(page).priceDelta},
   {
     name: 'tables',
-    path: 'demos/?tab=tables',
+    path: 'demos/tables/',
     ready: 'navigation',
     loaded: page => page.getByRole('region', {name: 'live aggregations'}).getByRole('columnheader', {name: 'trades'}),
     budgeted: true
   },
   {
     name: 'tables in vanilla',
-    path: 'demos/?tab=tables&world=vanilla',
+    path: 'demos/tables/?world=vanilla',
     ready: 'navigation',
     loaded: page => page.getByTitle('the living table, in vanilla'),
     budgeted: true
@@ -38,11 +38,11 @@ export const pages: readonly SitePage[] = [
   {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
   {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
   {name: 'pie chart tutorial', path: 'demos/charts/pie/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
-  {name: 'menu tutorial', path: 'demos/?tab=tables&tut=menu', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
-  {name: 'resize tutorial', path: 'demos/?tab=tables&tut=resize', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
+  {name: 'menu tutorial', path: 'demos/tables/?tut=menu', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
+  {name: 'resize tutorial', path: 'demos/tables/?tut=resize', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
   {
     name: 'drag sort',
-    path: 'demos/?tab=dragAndDrop',
+    path: 'demos/drag-and-drop/',
     ready: 'navigation',
     loaded: page => page.getByRole('list', {name: 'sortable list'}).getByRole('listitem').first(),
     budgeted: true

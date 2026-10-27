@@ -1,4 +1,5 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
+import {useLocation} from 'react-router';
 import {Result, has, maybe, notEmpty} from '@ryandur/sand';
 import {Tabs} from '@components/Tabs';
 import {Loading} from '@components/Loading';
@@ -37,7 +38,8 @@ const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) => (a
 
 export const ArtGalleryPage: FC = () => {
   const [answers, updateAnswers] = useState<Answers>({});
-  const {tab, updateSearchParams} = useSearchParamsObject({tab: sourceParam});
+  const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam});
+  const {pathname} = useLocation();
 
   useEffect(() => {
     const asked = museums.map(({param}) => art.open(param).onComplete(answered(param, updateAnswers)));
@@ -53,7 +55,8 @@ export const ArtGalleryPage: FC = () => {
   }, [movingTo, updateSearchParams]);
 
   return <>
-    {notEmpty(open) && <Tabs label="museums" current={tab} values={open}/>}
+    {notEmpty(open) && <Tabs label="museums" current={tab}
+      values={open.map(museum => ({...museum, to: `${pathname}${createSearchParams({tab: museum.param})}`}))}/>}
     {{
       wall: <ArtGallery/>,
       noMuseumOpen: <StandIn src={missingWall} alt="no museum is open"/>,

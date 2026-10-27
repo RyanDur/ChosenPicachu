@@ -12,7 +12,7 @@ const theTrap = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /
 
 describe('the menu built the old way', () => {
   test('should open from a press, with its first choice in focus', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const sortBy = await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'});
     expect(sortBy).toHaveAttribute('aria-expanded', 'false');
 
@@ -24,7 +24,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should move through its choices by arrow, Home and End, and wrap at either end', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     (await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{Enter}');
@@ -41,7 +41,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should take the choice pressed, close, and give focus back to its button', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     (await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{Enter}{ArrowDown}{Enter}');
@@ -51,7 +51,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should mark the choice taken as current when it opens again', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
     await userEvent.click(screen.getByRole('menuitem', {name: 'date'}));
 
@@ -61,7 +61,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should close on Escape, and give focus back to its button', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
 
     await userEvent.keyboard('{Escape}');
@@ -71,7 +71,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should open from ArrowDown on its button, with its first choice in focus', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     (await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{ArrowDown}');
@@ -80,7 +80,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should close when focus leaves it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
 
     await userEvent.tab();
@@ -91,7 +91,7 @@ describe('the menu built the old way', () => {
 
 describe('the card that traps the menu', () => {
   test('should give its steps before any control', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
     const [steps] = within(trap).getAllByRole('list');
@@ -105,7 +105,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should keep the checkbox in card one, and tell each card’s z-index in a sentence', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
     const cardOne = within(trap).getAllByRole('listitem').find(card => within(card).queryByRole('checkbox', {name: 'Card one has z-index: 1'}) !== null);
@@ -115,7 +115,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should show Sort by on both buttons, under the way each is built, and name each by its words then its way', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
     const oldWay = within(trap).getByRole('button', {name: 'Sort by, the old way'});
@@ -129,7 +129,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should name a button by the choice it shows, then its way', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
 
     await userEvent.click(screen.getByRole('menuitem', {name: 'date'}));
@@ -138,13 +138,13 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say nothing before the first press', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await screen.findByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
   });
 
   test('should take back what it said when the box changes, since the next press answers', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
     await userEvent.keyboard('{Escape}');
 
@@ -154,7 +154,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened under card two when card one has its z-index', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     await userEvent.click(await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'}));
 
@@ -162,7 +162,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say where the list opened when ArrowDown opens it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     (await within(await theTrap()).findByRole('button', {name: 'Sort by, the old way'})).focus();
 
     await userEvent.keyboard('{ArrowDown}');
@@ -171,7 +171,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened over card two once the box is unchecked, and write it into the address', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     await userEvent.click(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'}));
 
     await userEvent.click(within(await theTrap()).getByRole('button', {name: 'Sort by, the old way'}));
@@ -181,7 +181,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened under card two again once the box is checked again', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&card-one=free')}/>);
+    render(<TestApp at={demosAt('z-index', '?card-one=free')}/>);
     const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
     await userEvent.click(within(await theTrap()).getByRole('button', {name: 'Sort by, the old way'}));
     await userEvent.keyboard('{Escape}');
@@ -193,7 +193,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should open freed when the address says so', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&card-one=free')}/>);
+    render(<TestApp at={demosAt('z-index', '?card-one=free')}/>);
 
     expect(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'})).not.toBeChecked();
   });
@@ -201,7 +201,7 @@ describe('the card that traps the menu', () => {
 
 describe('why 9999 still loses', () => {
   test('should say what focus is where the tab first speaks of it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -210,7 +210,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should show the list’s 9999 and the card’s context beside the run that says what the reader saw', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -219,7 +219,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should show card one, with the checkbox inside it, beside the run that says what unchecking it does', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -228,7 +228,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should say card one forms a stacking context because it is positioned and has a z-index of 1', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -236,7 +236,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should say the cards are compared in the tab’s panel, the nearest context that holds them both', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -245,7 +245,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should say, with the box unchecked, that the list joins the tab panel’s context, where card two is', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
@@ -253,7 +253,7 @@ describe('why 9999 still loses', () => {
   });
 
   test('should draw the layer and the tree of contexts beside the runs that tell them', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 

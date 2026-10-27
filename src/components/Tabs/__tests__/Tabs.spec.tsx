@@ -4,17 +4,16 @@ import userEvent from '@testing-library/user-event';
 import {Tabs} from '../index';
 import {expect} from 'vitest';
 
-const path = '/a/path';
+const path = '/a/path/';
 describe('Tabs', () => {
-  const tab1 = {display: 'Tab 1', param: 'tab1'};
-  const tab2 = {display: 'Tab 2', param: 'tab2'};
-  const tab3 = {display: 'Tab 3', param: 'tab3'};
+  const tab1 = {display: 'Tab 1', param: 'tab1', to: `${path}tab1/`};
+  const tab2 = {display: 'Tab 2', param: 'tab2', to: `${path}tab2/`};
+  const tab3 = {display: 'Tab 3', param: 'tab3', to: `${path}tab3/`};
 
-  it('the tab it is given is current, and the address is left alone', () => {
+  it('the tab it is given is current', () => {
     render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('tab=');
   });
 
   it('the tab strip is a list, one item per tab', () => {
@@ -30,21 +29,16 @@ describe('Tabs', () => {
     expect(screen.queryByRole('link', {current: 'page'})).not.toBeInTheDocument();
   });
 
-  it('should update the url', async () => {
+  it('each tab goes where it is told to', async () => {
     render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
-    await userEvent.click(screen.getByRole('link', {name: tab1.display}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
-
     await userEvent.click(screen.getByRole('link', {name: tab2.display}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab2.param}`);
 
-    await userEvent.click(screen.getByRole('link', {name: tab3.display}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab3.param}`);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(tab2.to);
   });
 
   it('marks only the tab it is given, whatever the address says', () => {
-    render(<TestApp at={`${path}?tab=${tab3.param}`}><Tabs label="tabs under test" current={tab2.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={tab3.to}><Tabs label="tabs under test" current={tab2.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
     expect(screen.getAllByRole('link', {current: 'page'})).toHaveLength(1);

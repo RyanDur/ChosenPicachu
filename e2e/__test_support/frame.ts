@@ -14,8 +14,8 @@ export const tablesCard = (page: Page) => {
 };
 
 export const stages: readonly Stage[] = [
-  {name: 'react', at: '/ChosenPicachu/demos/?tab=tables&world=react', table: page => tablesCard(page).card},
-  {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => tablesCard(page).vanillaFrame}
+  {name: 'react', at: '/ChosenPicachu/demos/tables/?world=react', table: page => tablesCard(page).card},
+  {name: 'vanilla', at: '/ChosenPicachu/demos/tables/?world=vanilla', table: page => tablesCard(page).vanillaFrame}
 ];
 
 export const stagesWith = (dials: string): readonly Stage[] =>

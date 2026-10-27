@@ -9,13 +9,13 @@ const oldBanner = /^An old banner\./;
 
 describe('the banner exhibit', () => {
   test('should say its point in its caption', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await screen.findByRole('figure', {name: 'The banners. A fixed banner with z-index: 9999 is covered by a card with z-index: 1.'})).toBeInTheDocument();
   });
 
   test('should give its steps before any control', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
     const [steps] = within(banners).getAllByRole('list');
@@ -29,7 +29,7 @@ describe('the banner exhibit', () => {
   });
 
   test('should tell each card’s z-index, and the old banner’s place, in a sentence', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
     await userEvent.click(within(banners).getByRole('button', {name: 'Raise a banner, the old way'}));
@@ -41,7 +41,7 @@ describe('the banner exhibit', () => {
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
     const oldWay = within(banners).getByRole('button', {name: 'Raise a banner, the old way'});
@@ -57,7 +57,7 @@ describe('the banner exhibit', () => {
 
 describe('the old banner', () => {
   test('should say nothing until it is raised', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     await screen.findByRole('button', {name: 'Raise a banner, the old way'});
 
@@ -65,7 +65,7 @@ describe('the old banner', () => {
   });
 
   test('should be announced when raised from card one', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     await userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, the old way'}));
 
@@ -73,7 +73,7 @@ describe('the old banner', () => {
   });
 
   test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     (await screen.findByRole('button', {name: 'Raise a banner, the old way'})).focus();
     await userEvent.keyboard('{Enter}');
     await userEvent.tab();
@@ -89,7 +89,7 @@ describe('the old banner', () => {
 
 describe('why a fixed banner still loses', () => {
   test('should show the old banner’s rule and card one’s context beside the run that explains it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
@@ -98,7 +98,7 @@ describe('why a fixed banner still loses', () => {
   });
 
   test('should show the site’s banner markup beside the run about the banner in the top layer', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
@@ -106,7 +106,7 @@ describe('why a fixed banner still loses', () => {
   });
 
   test('should open the banner tutorial at the step that makes it a popover, keeping the reader’s choices', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&raised=second')}/>);
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
@@ -116,7 +116,7 @@ describe('why a fixed banner still loses', () => {
   });
 
   test('should take the keyboard to the story the tutorial below names', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));

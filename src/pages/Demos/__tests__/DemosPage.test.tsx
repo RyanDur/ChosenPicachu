@@ -1,7 +1,8 @@
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
+import {Paths} from '@pages/Paths';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {DemoTopics, topicNames} from '@pages/Demos/types';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
@@ -9,14 +10,14 @@ import {britishSpellingsOnThePage} from '@__test_support/spelling';
 describe('The Demos page', () => {
   test.each([DemoTopics.accordions, DemoTopics.zIndex, DemoTopics.dragAndDrop, DemoTopics.charts])('should spell the %s tab\'s prose the American way', async tab => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=${tab}`)} feed={feed}/>);
+    render(<TestApp at={demosAt(tab)} feed={feed}/>);
     await demoTabs.arrivedOn(topicNames[tab]);
 
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
   test('should open on what the tabs hold and where to start, above the tabs', async () => {
-    render(<TestApp at={demosAt()}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const opening = await screen.findByText(/^Each tab below is one feature a page needs/);
 
@@ -25,9 +26,9 @@ describe('The Demos page', () => {
   });
 
   test.each([
-    ['Accordions', demosAt()],
-    ['Accordions', demosAt('?tab=behavior')],
-    ['Tables', demosAt('?tab=tables')]
+    ['Accordions', demosAt('accordions')],
+    ['Drag sort', demosAt('drag-and-drop')],
+    ['Tables', demosAt('tables')]
   ])('should mark the demo it shows as the current tab, %s at %s', async (shown, at) => {
     render(<TestApp at={at}/>);
 
@@ -38,21 +39,54 @@ describe('The Demos page', () => {
   });
 
   test('should run its tabs in the order the opening names them, simple to expert', async () => {
-    render(<TestApp at={demosAt()}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const tabs = within(await screen.findByRole('navigation', {name: 'demos'})).getAllByRole('link');
 
     expect(tabs.map(tab => tab.textContent)).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
-  test('the demos page opens on the accordions', async () => {
-    render(<TestApp at={demosAt()}/>);
+  test.each([
+    [Paths.demos, demosAt('accordions')],
+    [`${Paths.demos}?world=vanilla`, demosAt('accordions', '?world=vanilla')],
+    [`${Paths.demos}?tab=tables&world=vanilla&tut=menu`, demosAt('tables', '?world=vanilla&tut=menu')],
+    [`${Paths.demos}?tab=dragAndDrop&pace=lazy`, demosAt('drag-and-drop', '?pace=lazy')],
+    [`${Paths.demos}?tab=behavior`, demosAt('accordions')],
+    [`${Paths.demos}?tab=constructor`, demosAt('accordions')]
+  ])('an address of the demos page, %s, lands on its tab at %s with its dials kept', async (from, to) => {
+    render(<TestApp at={from}/>);
 
-    expect(await screen.findByRole('region', {name: 'Accordions'})).toBeInTheDocument();
+    await waitFor(() => expect(`${screen.getByRole('status', {name: 'url path'}).textContent}${screen.getByRole('status', {name: 'url search'}).textContent}`).toBe(to));
+  });
+
+  test('a tab the demos do not have is no such room', async () => {
+    render(<TestApp at={demosAt('behavior')}/>);
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'No such room'})).toBeInTheDocument();
+  });
+
+  test('each tab links to its own address and carries the dials along', async () => {
+    render(<TestApp at={demosAt('tables', '?world=vanilla')}/>);
+
+    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
+
+    expect(tabs.getAllByRole('link').map(tab => tab.getAttribute('href'))).toEqual(
+      ['accordions', 'z-index', 'drag-and-drop', 'charts', 'tables'].map(topic => demosAt(topic, '?world=vanilla')));
+  });
+
+  test('a tab switch keeps the page, so the exhibits already dealt stay as they were', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+    const dealt = (await demoTabs.arrivedOn('Accordions')).textContent;
+
+    await demoTabs.open('Charts');
+    await demoTabs.arrivedOn('Charts');
+    await demoTabs.open('Accordions');
+
+    expect((await demoTabs.arrivedOn('Accordions')).textContent).toBe(dealt);
   });
 
   test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should name the %s tab by its region, with no heading inside repeating it', async tab => {
-    render(<TestApp at={demosAt()}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     await demoTabs.open(tab);
 
@@ -61,7 +95,7 @@ describe('The Demos page', () => {
   });
 
   test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should title the page Demos %s, the name on its tab, once that tab is chosen', async tab => {
-    render(<TestApp at={demosAt()}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     await demoTabs.open(tab);
 

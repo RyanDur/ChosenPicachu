@@ -22,10 +22,10 @@ const github = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
 };
 
 const note = {
-  page: {key: '/demos/?tab=tables', name: 'Demos Tables'},
+  page: {key: '/demos/tables/', name: 'Demos Tables'},
   words: 'The sort menu hides behind the header.',
   reach: 'reader@example.test',
-  from: 'https://ryandur.github.io/ChosenPicachu/demos/?tab=tables'
+  from: 'https://ryandur.github.io/ChosenPicachu/demos/tables/'
 };
 
 describe('sending a note to GitHub', () => {
@@ -38,14 +38,14 @@ describe('sending a note to GitHub', () => {
 
     expect(where).toBe('https://github.test/discussions/1');
     expect(asked[1].variables.categoryId).toBe('DIC_kwDOFnONa84DGhfO');
-    expect(asked[1].variables.title).toBe('Feedback: Demos Tables (/demos/?tab=tables)');
+    expect(asked[1].variables.title).toBe('Feedback: Demos Tables (/demos/tables/)');
     expect(asked[1].variables.body).toContain('The sort menu hides behind the header.');
     expect(asked[1].variables.body).toContain('reader@example.test');
   });
 
   test('should add a later note to the thread the page already has', async () => {
     const asked = github(({query}) => query.includes('search')
-      ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
+      ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/tables/)'}]}}}
       : {data: {addDiscussionComment: {comment: {url: 'https://github.test/discussions/7#c'}}}});
 
     const where = await sent(asking, {page: note.page, words: note.words, from: note.from}).orNull();
@@ -57,7 +57,7 @@ describe('sending a note to GitHub', () => {
 
   test('should not mistake another page’s thread for this one', async () => {
     const asked = github(({query}) => query.includes('search')
-      ? {data: {search: {nodes: [{id: 'D_2', url: 'https://github.test/discussions/2', title: 'Feedback: Demos (/demos/?tab=tables-old)'}]}}}
+      ? {data: {search: {nodes: [{id: 'D_2', url: 'https://github.test/discussions/2', title: 'Feedback: Demos (/demos/tables-old/)'}]}}}
       : {data: {createDiscussion: {discussion: {id: 'D_3', url: 'https://github.test/discussions/3'}}}});
 
     await sent(asking, note).value;
@@ -75,7 +75,7 @@ describe('sending a note to GitHub', () => {
 
   test('should fail as not found when GitHub answers NOT_FOUND', async () => {
     github(({query}) => query.includes('search')
-      ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
+      ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/tables/)'}]}}}
       : {data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]});
 
     const refused = (await sent(asking, note).value).inspect();

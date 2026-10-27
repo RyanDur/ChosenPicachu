@@ -2,9 +2,9 @@ import {Page, expect, test} from '@playwright/test';
 import {demoSettings, desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
 
 const choicesOn = [
-  {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
-  {demo: 'the tables demo', at: 'demos/?tab=tables', groups: ['world', 'pace', 'origin', 'motion']},
-  {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
+  {demo: 'the accordions demo', at: 'demos/accordions/', groups: ['fold type', 'fold motion']},
+  {demo: 'the tables demo', at: 'demos/tables/', groups: ['world', 'pace', 'origin', 'motion']},
+  {demo: 'the z-index demo', at: 'demos/z-index/', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
 ];
 
 const shownGroup = async (page: Page, group: string): Promise<void> => {
@@ -47,7 +47,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     test.use(device);
 
     test('the pill chosen is checked, and the pill left behind is not', async ({page}) => {
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
       const world = pillSwitch(page, 'world');
       await expect(world.pill('React')).toBeChecked();
 

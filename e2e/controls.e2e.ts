@@ -7,7 +7,7 @@ for (const {reader, device} of [{reader: 'a phone', device: phone}, {reader: 'a 
 
     test('starts the table controls closed', async ({page}) => {
       const tables = tablesDemo(page);
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
 
       await expect(demoSettings(page).fold).toBeVisible();
       await expect(tables.controls).toBeHidden();
@@ -19,14 +19,14 @@ test.describe('a desktop', () => {
   test.use(desktop);
 
   test('starts the table controls open', async ({page}) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
 
     await expect(tablesDemo(page).controls).toBeVisible();
   });
 
   test('the settings a reader left open stay open when the window is made narrow', async ({page}) => {
     const tables = tablesDemo(page);
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     await expect(tables.controls).toBeVisible();
 
     await page.setViewportSize(phone.viewport);

@@ -22,7 +22,7 @@ const variants = ['eager', 'lazy'].flatMap(pace =>
     ['animated', 'static'].map(motion => ({pace, origin, motion}))));
 
 const urlOf = (params: {pace: string; origin: string; motion: string}) =>
-  `${demos}?tab=tables&pace=${params.pace}&origin=${params.origin}&motion=${params.motion}`;
+  `${demos}tables/?pace=${params.pace}&origin=${params.origin}&motion=${params.motion}`;
 
 for (const variant of variants) {
   const name = `${variant.pace}-${variant.origin}-${variant.motion}`;
@@ -48,7 +48,7 @@ for (const variant of variants) {
 }
 
 test('sort stills: the lift, the strike, the slide', async ({browser}) => {
-  const page = await staged(browser, `${demos}?tab=tables&pace=eager&origin=hide&motion=animated`);
+  const page = await staged(browser, `${demos}tables/?pace=eager&origin=hide&motion=animated`);
   const card = await livingCard(page);
   const frame = await tableFrame(card);
 
@@ -88,7 +88,7 @@ test('sort stills: the lift, the strike, the slide', async ({browser}) => {
 
 for (const motion of ['animated', 'static']) {
   test(`menu reel: ${motion}`, async ({browser}) => {
-    const {page, finish} = await recording(browser, `${demos}?tab=tables&motion=${motion}`);
+    const {page, finish} = await recording(browser, `${demos}tables/?motion=${motion}`);
     const card = await livingCard(page);
     const frame = await tableFrame(card);
     await shot(page, frame, `${mediaRoot}/menu/poster-${motion}.png`);
@@ -108,7 +108,7 @@ for (const motion of ['animated', 'static']) {
 }
 
 test('resize reel', async ({browser}) => {
-  const {page, finish} = await recording(browser, `${demos}?tab=tables`);
+  const {page, finish} = await recording(browser, `${demos}tables/`);
   const card = await livingCard(page);
   const frame = await tableFrame(card);
   await shot(page, frame, `${mediaRoot}/resize/poster.png`);
@@ -126,7 +126,7 @@ test('resize reel', async ({browser}) => {
 });
 
 test('keyboard reel', async ({browser}) => {
-  const {page, finish} = await recording(browser, `${demos}?tab=tables`, true);
+  const {page, finish} = await recording(browser, `${demos}tables/`, true);
   const card = await livingCard(page);
   const frame = await tableFrame(card);
   await chipInto(page, frame);

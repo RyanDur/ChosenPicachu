@@ -119,7 +119,7 @@ for (const {build, control} of [
 }
 
 test('a link to the inclusive type opens the tab on it, and it stays after a reload', async ({page}) => {
-  await page.goto('demos/?tab=accordions&type=inclusive');
+  await page.goto('demos/accordions/?type=inclusive');
   const inclusive = page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Inclusive'});
   const checkboxBuild = page.getByRole('heading', {name: 'Accordion using checkboxes and a known height'});
   await expect(inclusive).toBeChecked();
@@ -177,7 +177,7 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 everyBuildJourneys(builds);
 
 test('the accordion in HTML alone keeps two folds open with exclusive and static chosen', async ({page}) => {
-  await page.goto('demos/?tab=accordions&type=exclusive&style=static');
+  await page.goto('demos/accordions/?type=exclusive&style=static');
   const [basalt, cinder] = [accordionsTab(page).htmlAloneFold('basalt'), accordionsTab(page).htmlAloneFold('cinder')];
 
   await basalt.open();
@@ -188,7 +188,7 @@ test('the accordion in HTML alone keeps two folds open with exclusive and static
 });
 
 test('a fold of the accordion in HTML alone opens by pointer and closes by keyboard', async ({page}) => {
-  await page.goto('demos/?tab=accordions');
+  await page.goto('demos/accordions/');
   const fold = accordionsTab(page).htmlAloneFold('basalt');
   await expect.poll(fold.showsText).toBe(false);
 
@@ -235,7 +235,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     test.use(device);
 
     test('each fold choice shows its name, and a screen reader meets the named pills first, then the reading', async ({page}) => {
-      await page.goto('demos/?tab=accordions');
+      await page.goto('demos/accordions/');
 
       for (const name of ['fold type', 'fold motion']) {
         const {row, shownNames} = dialRow(page, name);
@@ -262,7 +262,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 
     test('the fold motion reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
-      await page.goto('demos/?tab=accordions&style=drawer');
+      await page.goto('demos/accordions/?style=drawer');
       const {reading} = dialRow(page, 'fold motion');
       await reading.scrollIntoViewIfNeeded();
 

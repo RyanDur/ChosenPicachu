@@ -5,6 +5,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
+import {practiceAt} from '@pages/Practice/__test_support/practice';
 import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 
@@ -21,11 +22,11 @@ describe('each page is named where a search shows it', () => {
 
   test.each([
     ['the home page', Paths.home, names.home],
-    ['the accordions tab', demosAt('?tab=accordions'), names.demos.accordions],
-    ['the z-index tab', demosAt('?tab=z-index'), names.demos['z-index']],
-    ['the drag sort tab', demosAt('?tab=dragAndDrop'), names.demos.dragAndDrop],
-    ['the charts tab', demosAt('?tab=charts'), names.demos.charts],
-    ['the tables tab', demosAt('?tab=tables'), names.demos.tables],
+    ['the accordions tab', demosAt('accordions'), names.demos.accordions],
+    ['the z-index tab', demosAt('z-index'), names.demos['z-index']],
+    ['the drag sort tab', demosAt('drag-and-drop'), names.demos['drag-and-drop']],
+    ['the charts tab', demosAt('charts'), names.demos.charts],
+    ['the tables tab', demosAt('tables'), names.demos.tables],
     ['the price line’s page', chartPageAt('price'), names.charts.price],
     ['the pie’s page', chartPageAt('pie'), names.charts.pie],
     ['the users page', Paths.users, names.users],
@@ -33,9 +34,9 @@ describe('each page is named where a search shows it', () => {
     ['the games page', Paths.games, names.games],
     ['the record', Paths.record, names.record],
     ['the practice page, on Structure when no tab is named', Paths.practice, names.practice.structure],
-    ['practice’s structure tab', `${Paths.practice}?tab=structure`, names.practice.structure],
-    ['practice’s presentation tab', `${Paths.practice}?tab=presentation`, names.practice.presentation],
-    ['practice’s behavior tab', `${Paths.practice}?tab=behavior`, names.practice.behavior],
+    ['practice’s structure tab', practiceAt('structure'), names.practice.structure],
+    ['practice’s presentation tab', practiceAt('presentation'), names.practice.presentation],
+    ['practice’s behavior tab', practiceAt('behavior'), names.practice.behavior],
     ['an address with no room', '/nowhere/', names.noRoom]
   ])('should give %s its own title and description', async (_page, path, {title, description}) => {
     render(<TestApp at={path}/>);
@@ -45,7 +46,7 @@ describe('each page is named where a search shows it', () => {
   });
 
   test('should describe the behavior tab by what it organizes', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=behavior`}/>);
+    render(<TestApp at={practiceAt('behavior')}/>);
 
     await waitFor(() => expect(described()).toBe('How I organize behavior: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action.'));
   });
@@ -102,7 +103,7 @@ describe('each page is named where a search shows it', () => {
   });
 
   test('should carry the new tab’s title and description when the reader moves to it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
     await waitFor(() => expect(document.title).toBe(names.demos.accordions.title));
 
     await demoTabs.open('Z-index');

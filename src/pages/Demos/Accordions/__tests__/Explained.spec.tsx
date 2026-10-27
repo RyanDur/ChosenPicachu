@@ -15,7 +15,7 @@ const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one
 
 describe('the accordions tab', () => {
   test.each(['inclusive', 'exclusive'])('should name no two regions the same, with %s chosen, so every landmark is its own', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     await screen.findByRole('region', {name: 'Accordions'});
     const names = screen.getAllByRole('region').map(region => computeAccessibleName(region));
@@ -24,7 +24,7 @@ describe('the accordions tab', () => {
   });
 
   test('should open on the three languages and the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
     const openings = [
@@ -39,7 +39,7 @@ describe('the accordions tab', () => {
   });
 
   test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how every fold moves', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
 
@@ -47,7 +47,7 @@ describe('the accordions tab', () => {
   });
 
   test('should name the fold choices’ section by its heading, with the line and both rows inside it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const choices = await screen.findByRole('region', {name: 'fold choices'});
 
@@ -57,7 +57,7 @@ describe('the accordions tab', () => {
   });
 
   test('should open on the exclusive type, and write the type chosen into the address', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
     const types = await screen.findByRole('group', {name: 'fold type'});
     expect(within(types).getByRole('radio', {name: 'Exclusive'})).toBeChecked();
 
@@ -75,7 +75,7 @@ describe('the accordions tab', () => {
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
     ['exclusive', togetherHeading('exclusive'), ['Exclusive accordion using radio group']]
   ])('should show, with %s chosen, under "%s" the build of that type', async (type, part, builds) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: part});
 
@@ -96,7 +96,7 @@ describe('the accordions tab’s own words', () => {
     'A ref is a handle on the element itself. The script uses the panel’s one ref only to measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a transition at all.',
     'You want the text to slide open, not appear at once.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     expect(await screen.findByRole('region', {name: 'Accordions'})).toHaveTextContent(sentence);
   });
@@ -114,7 +114,7 @@ describe('the accordions tab’s own words', () => {
     {choice: 'style=drawer', sentence: 'With the drawer, the height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, and the text slides down from under the bar.'},
     {choice: 'type=exclusive', sentence: 'This build is a disclosure: a bar you press to show the text under it. It has no script.'}
   ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&${choice}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?${choice}`)}/>);
 
     expect(await screen.findByRole('region', {name: 'Accordions'})).toHaveTextContent(sentence);
   });
@@ -122,7 +122,7 @@ describe('the accordions tab’s own words', () => {
 
 describe('the measured build’s Close bar', () => {
   test('should explain the Close bar in a run of its own, before the run on script, with exclusive chosen', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const closeBar = within(oldWay).getByText('Opening one fold closes the others, and the short Close bar at the top closes whichever is open.');
 
@@ -132,7 +132,7 @@ describe('the measured build’s Close bar', () => {
 
 describe('the accordions explanation', () => {
   test.each([parts[0], parts[1], togetherHeading('inclusive')])('should show, with inclusive chosen, none of the radio builds’ words or code under "%s"', async part => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: part});
 
@@ -142,7 +142,7 @@ describe('the accordions explanation', () => {
   });
 
   test('should show, with exclusive chosen, the radio builds’ words and code', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
 
@@ -152,7 +152,7 @@ describe('the accordions explanation', () => {
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, that the old build and the platform build have no script', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     expect(within(await screen.findByRole('region', {name: parts[0]})).getByText(/It has\s+no script/)).toBeInTheDocument();
     expect(within(screen.getByRole('region', {name: parts[1]})).getByText(/There is no script here either/)).toBeInTheDocument();
@@ -165,7 +165,7 @@ describe('the words and the code chosen by type', () => {
     {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"'},
     {type: 'exclusive', input: 'radio', announced: /a radio, one of six\./, carvedInput: 'type="radio" name="group"'}
   ])('should, with $type chosen, name the $input in the runs and show its build\'s list item', async ({type, input, announced, carvedInput}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const platform = screen.getByRole('region', {name: parts[1]});
@@ -182,7 +182,7 @@ describe('what the platform gives now', () => {
     ['inclusive', '<details className="fold">'],
     ['exclusive', '<details className="fold" name="exclusive-toggle-accordion">']
   ])('should show, with %s chosen, the details of that build beside the run that introduces details', async (type, carved) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: parts[1]});
 
@@ -192,7 +192,7 @@ describe('what the platform gives now', () => {
 
 describe('the two together', () => {
   test('should show, with inclusive chosen, the checkbox build\'s label beside its run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: togetherHeading('inclusive')});
 
@@ -200,7 +200,7 @@ describe('the two together', () => {
   });
 
   test('should show, with exclusive chosen, the script that lets a radio close beside its run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
@@ -210,7 +210,7 @@ describe('the two together', () => {
 
 describe('the measured build', () => {
   test('should say what React, a component, React state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
     const state = explanation.runTelling(explained, /The script keeps what it knows in React state/);
@@ -228,7 +228,7 @@ describe('the measured build', () => {
   });
 
   test('should say, with exclusive chosen, that the change bubbles to the list item that records its own key, in a run of its own', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -236,7 +236,7 @@ describe('the measured build', () => {
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, in a run of its own, that the measured build turns off the move to auto', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -244,7 +244,7 @@ describe('the measured build', () => {
   });
 
   test('should show the script that measures, then lets go, beside the run that opens a fold', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -252,7 +252,7 @@ describe('the measured build', () => {
   });
 
   test('should show @property beside the run that declares it, .sized beside the run that names the class, and .unmoving beside the run that closes', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -262,7 +262,7 @@ describe('the measured build', () => {
   });
 
   test('should tell the property, then the class, then closing, each in a run of its own', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -274,7 +274,7 @@ describe('the measured build', () => {
   });
 
   test('should say what @property is in the property’s run, and leave the class to the next', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const declared = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script hands each height to the stylesheet/);
 
@@ -283,7 +283,7 @@ describe('the measured build', () => {
   });
 
   test('should say what a class is, and that the panel’s height reads --measured-height while sized is on, in the class’s run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const named = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script marks the panel with a class/);
 
@@ -291,7 +291,7 @@ describe('the measured build', () => {
   });
 
   test('should not say the sized panel takes its own height, a moment the script never reaches', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const named = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^The script marks the panel with a class/);
 
@@ -299,7 +299,7 @@ describe('the measured build', () => {
   });
 
   test('should open the closing run with what closing does', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const closing = explanation.runTelling(await screen.findByRole('region', {name: parts[0]}), /^Closing runs the other way\./);
 
@@ -307,7 +307,7 @@ describe('the measured build', () => {
   });
 
   test('should show the script that turns a fold around beside the run that tells it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
@@ -323,7 +323,7 @@ describe('the fold choices', () => {
   };
 
   test('should read the chosen motion and the less-motion sentence as two sentences with the styles off', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const row = await rowOf('fold motion');
 
@@ -331,7 +331,7 @@ describe('the fold choices', () => {
   });
 
   test('should say, just before the rows, which accordions they set', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await screen.findByRole('group', {name: 'fold type'});
     const line = screen.getByText('Two choices set the four accordions in the sections below. The one above is HTML alone, so they don’t change it.');
@@ -341,7 +341,7 @@ describe('the fold choices', () => {
   });
 
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const row = await rowOf('fold type');
 
@@ -357,7 +357,7 @@ describe('the fold choices', () => {
     ['Drawer', 'static', 'The text slides down from under its bar.'],
     ['Static', 'reveal', 'The fold opens at once, with nothing moving.']
   ])('should read %s as the fold motion once it is chosen over %s', async (motion, from, reading) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${from}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${from}`)}/>);
 
     const row = await rowOf('fold motion');
     await userEvent.click(within(row).getByRole('radio', {name: motion}));
@@ -368,7 +368,7 @@ describe('the fold choices', () => {
 
 describe('the fold motion', () => {
   test('should sit after the accordion in HTML alone, right after the fold type, before the old way, and in no part', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
     const [start, oldWay] = [within(tab).getByRole('region', {name: htmlAlone}), within(tab).getByRole('region', {name: parts[0]})];
@@ -383,7 +383,7 @@ describe('the fold motion', () => {
   });
 
   test('should open on the reveal', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const motions = await screen.findByRole('group', {name: 'fold motion'});
 
@@ -391,7 +391,7 @@ describe('the fold motion', () => {
   });
 
   test('should write the motion chosen into the address', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
     const motions = await screen.findByRole('group', {name: 'fold motion'});
 
     await userEvent.click(within(motions).getByRole('radio', {name: 'Drawer'}));
@@ -411,7 +411,7 @@ describe('the fold motion', () => {
     {style: 'drawer', others: ['reveal', 'static']},
     {style: 'static', others: ['reveal', 'drawer']}
   ] as const)('should tell, with $style chosen, only what the details builds do under that motion', async ({style, others}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -422,7 +422,7 @@ describe('the fold motion', () => {
   });
 
   test('should carve the details drawer rule beside the details run under the drawer', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -430,7 +430,7 @@ describe('the fold motion', () => {
   });
 
   test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -450,7 +450,7 @@ describe('the fold motion', () => {
     {style: 'drawer', others: ['reveal', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height'], omits: ['.drawer & .info']},
     {style: 'static', others: ['reveal', 'drawer'], carves: knownHeight, omits: [':is(.reveal, .drawer) & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -480,7 +480,7 @@ describe('the fold motion', () => {
     {style: 'reveal', other: 'drawer'},
     {style: 'drawer', other: 'reveal'}
   ] as const)('should tell, with $style chosen, what that motion does to the section and to visibility, each in its own run', async ({style, other}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -491,7 +491,7 @@ describe('the fold motion', () => {
   });
 
   test.each(['reveal', 'drawer'] as const)('should show, with %s chosen, the rule that moves visibility beside the visibility run', async style => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -499,7 +499,7 @@ describe('the fold motion', () => {
   });
 
   test('should show, with static chosen, no transition rule beside the visibility run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -507,7 +507,7 @@ describe('the fold motion', () => {
   });
 
   test('should show, with drawer chosen, the drawer’s column rules beside the section’s run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -516,7 +516,7 @@ describe('the fold motion', () => {
   });
 
   test('should show, with reveal chosen, none of the drawer’s rules beside the section’s run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=reveal')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=reveal')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -524,7 +524,7 @@ describe('the fold motion', () => {
   });
 
   test('should tell, with static chosen, nothing about motion in the section’s run or the visibility run', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -537,7 +537,7 @@ describe('the fold motion', () => {
     {style: 'drawer', says: /With reveal and the drawer, a transition sits on every bar/, not: /With static the turn has no transition/},
     {style: 'static', says: /With static the turn has no transition, so the corner turns at once/, not: /With reveal and the drawer, a transition sits on every bar/}
   ])('should tell, with $style chosen, how the arrow turns', async ({style, says, not}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -556,7 +556,7 @@ describe('the fold motion', () => {
     {style: 'drawer', others: ['reveal', 'static'], drawn: ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']},
     {style: 'static', others: ['reveal', 'drawer'], drawn: ['A row that grows to its content', 'The padding inside the clip']}
   ] as const)('should tell, with $style chosen, only what that motion does under part three', async ({style, others, drawn}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -569,7 +569,7 @@ describe('the fold motion', () => {
   });
 
   test('should tell the drawer run under the drawer', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -577,7 +577,7 @@ describe('the fold motion', () => {
   });
 
   test('should keep the words around the drawer run’s quoted CSS apart', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -588,7 +588,7 @@ describe('the fold motion', () => {
   });
 
   test.each(['reveal', 'static'])('should tell no drawer run under %s', async style => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${style}`)}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -596,7 +596,7 @@ describe('the fold motion', () => {
   });
 
   test('should keep an open fold open when the reader chooses another motion', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
     const together = await screen.findByRole('region', {name: parts[2]});
     const first = within(together).getAllByRole('radio')[0];
     await userEvent.click(first);
@@ -609,7 +609,7 @@ describe('the fold motion', () => {
 
 describe('how every fold moves', () => {
   test('should show the one block that opens every fold at once for a reader who asks for less motion', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[3]});
     const shown = within(explained).getAllByRole('code').map(code => code.textContent ?? '').join('\n');
@@ -627,7 +627,7 @@ describe('the accordions diagrams', () => {
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: part});
 
@@ -636,7 +636,7 @@ describe('the accordions diagrams', () => {
   });
 
   test('should set out, with exclusive chosen, what each element promises, row by row, as a table', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: togetherHeading('exclusive')});
     const promises = within(explained).getByRole('table', {name: 'What each element promises'});
@@ -649,7 +649,7 @@ describe('the accordions diagrams', () => {
 
 describe('the max-height guess', () => {
   test('should say the old fold moved the panel’s max-height instead of its height', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -657,7 +657,7 @@ describe('the max-height guess', () => {
   });
 
   test('should open part one on the code of the guess, beside its heading', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -669,7 +669,7 @@ describe('the max-height guess', () => {
     ['inclusive', 'Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height'],
     ['exclusive', 'Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']
   ])('should outline part one, with %s chosen, as the guess, the measured height, then the known height', async (type, measured, known) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -681,7 +681,7 @@ const everyTypeAndMotion = ['inclusive', 'exclusive'].flatMap(type => ['reveal',
 
 describe('what the newer builds end', () => {
   test.each(everyTypeAndMotion)('should name, with $type and $style chosen, the three old ways the details builds replace', async ({type, style}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}&style=${style}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -689,7 +689,7 @@ describe('what the newer builds end', () => {
   });
 
   test('should say the grid row guesses, measures and fixes nothing, and scrolls no text', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -698,7 +698,7 @@ describe('what the newer builds end', () => {
   });
 
   test.each(everyTypeAndMotion)('should say no sentence twice in the runs’ paragraphs or the figures’ captions, with $type and $style chosen', async ({type, style}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}&style=${style}`)}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
     const sentences = [...within(tab).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''), ...explanation.captionsIn(tab)]
@@ -712,7 +712,7 @@ describe('what the newer builds end', () => {
 
 describe('the accordion in HTML alone', () => {
   test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const folds = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('group');
 
@@ -721,7 +721,7 @@ describe('the accordion in HTML alone', () => {
   });
 
   test('should open its part on the three folds, in the same run as their markup', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
 
@@ -729,7 +729,7 @@ describe('the accordion in HTML alone', () => {
   });
 
   test('should show the folds’ whole markup in the part’s first run, with no class and no script', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
     const code = within(firstRun).getAllByRole('code').map(sample => sample.textContent).join();
@@ -747,7 +747,7 @@ describe('the depth of each part', () => {
     {type: 'exclusive', part: parts[2], fold: 'How the radio and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/},
     {type: 'inclusive', part: togetherHeading('inclusive'), fold: 'How the checkbox and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/}
   ])('should keep, with $type chosen, under "$part", a closed fold named "$fold" with the depth inside it and the point outside it', async ({type, part, fold, point, depth}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const explained = await screen.findByRole('region', {name: part});
     const folded = within(explained).getByRole('group', {name: fold});
@@ -758,7 +758,7 @@ describe('the depth of each part', () => {
   });
 
   test('should tell, under reveal, what content-visibility is before what allow-discrete does with it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=reveal')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=reveal')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -769,7 +769,7 @@ describe('the depth of each part', () => {
 
 describe('the runs in view, with the folds shut', () => {
   test('should say what a transition is where the tab first uses it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -777,7 +777,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should, with %s chosen, say what the platform build replaces without the %s’s words', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = within(platform).getByText(/This build uses details and summary/);
@@ -788,7 +788,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should, with exclusive chosen, say in view what makes the build exclusive', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -797,7 +797,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
-    render(<TestApp at={demosAt(`?tab=accordions&style=${motion}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?style=${motion}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -806,7 +806,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should, with static chosen, say nothing about which browsers slide', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -814,7 +814,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say what grid and :has() are in the run on the grid row', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
@@ -823,7 +823,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say, with inclusive chosen, that the checkbox remembers as it did in the known-height build', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading('inclusive')});
 
@@ -834,7 +834,7 @@ describe('the runs in view, with the folds shut', () => {
     {type: 'inclusive', opening: /^The inclusive build keeps the checkbox/, sentence: 'The inclusive build keeps the checkbox from the old way, with no script, and takes its slide from the grid row. Each bar holds the fold’s name and, at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the known-height build. The name is only a name: pressing it does nothing. Only the control works the fold.'},
     {type: 'exclusive', opening: /^The exclusive build keeps the radio group/, sentence: 'The exclusive build keeps the radio group from the old way and takes its slide from the grid row. Each bar holds the fold’s name and, at its end, an Open or Close control; the name is only a name, and only the control works the fold.'}
   ])('should say, with $type chosen, that only the control at the bar’s end works the fold', async ({type, opening, sentence}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
@@ -842,7 +842,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say, with exclusive chosen, what an event and a handler are where the press reaches the list, then what a radio’s value and the data-open attribute are, in a paragraph of their own', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
@@ -851,7 +851,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say, with exclusive chosen, what keydown is where the list catches the space bar', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading('exclusive')});
 
@@ -862,7 +862,7 @@ describe('the runs in view, with the folds shut', () => {
     {type: 'inclusive', input: 'checkbox', pressed: 'checked or unchecked'},
     {type: 'exclusive', input: 'radio', pressed: 'checked'}
   ])('should say, with $type chosen, which event change is where the measured build first names it', async ({type, input, pressed}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -870,7 +870,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say, with exclusive chosen, that the radio and the stylesheet own whether a fold is open', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -878,7 +878,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should open the less-motion run on what the reader gets: every fold opens with no slide', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const motion = await screen.findByRole('region', {name: parts[3]});
 
@@ -886,7 +886,7 @@ describe('the runs in view, with the folds shut', () => {
   });
 
   test('should say that a transition turns around when the reader presses again midway', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const motion = await screen.findByRole('region', {name: parts[3]});
 
@@ -896,7 +896,7 @@ describe('the runs in view, with the folds shut', () => {
 
 describe('the word attribute', () => {
   test.each(['inclusive', 'exclusive'])('should be said, with %s chosen, and then what an id is, before the label’s for attribute', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -906,7 +906,7 @@ describe('the word attribute', () => {
 
 describe('the word display', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should be said first where display none is weighed against hiding the input off screen, with no text before it saying display, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -919,7 +919,7 @@ describe('the word display', () => {
 
 describe('the platform build’s bars', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say a flex bar loses the marker and draws the old build’s arrow in its place, in a run with no sample, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
     const run = explanation.runTelling(platform, /Summary also draws its own arrow/);
@@ -930,7 +930,7 @@ describe('the platform build’s bars', () => {
   });
 
   test('should say the browser marks an open details with the open attribute, and [open] picks it to turn the arrow, beside the rule that turns it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -939,7 +939,7 @@ describe('the platform build’s bars', () => {
   });
 
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should keep the bar’s own run to the row, the classes it wears and its focus, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -947,7 +947,7 @@ describe('the platform build’s bars', () => {
   });
 
   test('should show the classes the details bar wears beside its own rule', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
@@ -957,7 +957,7 @@ describe('the platform build’s bars', () => {
 
 describe('the known-height build’s stylesheet reading the hidden input', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say what a selector, a pseudo-class and a combinator are, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -967,7 +967,7 @@ describe('the known-height build’s stylesheet reading the hidden input', () =>
 
 describe('the known-height build’s bars', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say the label wears prior-approached, a shared class that reads an earlier sibling, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -975,7 +975,7 @@ describe('the known-height build’s bars', () => {
   });
 
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const beside = explanation.everyCodeBeside(oldWay, /A keyboard user needs to see which bar they are on/).join();
@@ -985,7 +985,7 @@ describe('the known-height build’s bars', () => {
   });
 
   test('should show the arrow’s one shared shape beside the run that draws it', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -993,7 +993,7 @@ describe('the known-height build’s bars', () => {
   });
 
   test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes color with the words', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -1001,7 +1001,7 @@ describe('the known-height build’s bars', () => {
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, what wearing a shared class means before any class is named, with the class beside it', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const run = explanation.runTelling(oldWay, /The bar’s colors are the page’s the other way round/);
@@ -1018,7 +1018,7 @@ describe('the known-height build’s bars', () => {
   });
 
   test('should show the arrow’s classes in the order its run names them: the sheet’s rules, the corner, then the turns', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -1029,7 +1029,7 @@ describe('the known-height build’s bars', () => {
 
 describe('the classes the bars wear', () => {
   test('should say the Close bar’s ground and text are two plain color classes, and show them beside its rule', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -1041,7 +1041,7 @@ describe('the classes the bars wear', () => {
     {type: 'inclusive', input: 'checkbox'},
     {type: 'exclusive', input: 'radio'}
   ])('should say, with $type chosen, what the eye and the ear meet on the control, beside the rules that show its word', async ({type, input}) => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const together = await screen.findByRole('region', {name: togetherHeading(type)});
 
@@ -1052,7 +1052,7 @@ describe('the classes the bars wear', () => {
 
 describe('the known-height build’s scroll sign', () => {
   test('should say a keyboard reaches and scrolls the section, sees its ring and hears it named by its bar, beside the ring', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
@@ -1061,7 +1061,7 @@ describe('the known-height build’s scroll sign', () => {
   });
 
   test('should say the sign is a shadow at the panel’s foot, under a cover that scrolls with the text', async () => {
-    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 

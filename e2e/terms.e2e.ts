@@ -10,10 +10,10 @@ test.describe('a phone', () => {
     {tab: 'tables', story: 'The page is a store, and so is the table', term: 'middleware'},
     {tab: 'tables', story: 'The trader can sort by column', term: 'survey'},
     {tab: 'tables', story: 'The page is a store, and so is the table', term: 'reducer'},
-    {tab: 'dragAndDrop', story: 'The user can arrange the list by hand', term: 'crossing'}
+    {tab: 'drag-and-drop', story: 'The user can arrange the list by hand', term: 'crossing'}
   ]) {
     test(`a tap on ${term} shows its definition`, async ({page}) => {
-      await page.goto(`demos/?tab=${tab}`);
+      await page.goto(`demos/${tab}/`);
       const {word, definition} = await definedTerm(page, story, term);
 
       await word.tap();
@@ -27,7 +27,7 @@ test.describe('a phone, with a definition open', () => {
   test.use(iPhone);
 
   const opened = async (page: Page) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const term = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     await term.word.tap();
     await expect(term.definition).toBeVisible();
@@ -56,7 +56,7 @@ test.describe('a phone, with a definition open', () => {
 
   test('Escape closes it', async ({page}) => {
     await page.clock.install();
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     const happened = await whatHappened(word, definition);
     await word.tap();
@@ -73,7 +73,7 @@ test.describe('a desk', () => {
   test.use(desktop);
 
   test('a mouse resting on a term opens its definition, and leaving it closes it', async ({page}) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
 
     await word.hover();
@@ -85,7 +85,7 @@ test.describe('a desk', () => {
 
   test('a click on a term the mouse has just reached, then Escape, leaves its definition closed', async ({page}) => {
     await page.clock.install();
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     await word.hover();
     await word.click();
@@ -98,7 +98,7 @@ test.describe('a desk', () => {
   });
 
   test('the keyboard reaching a term opens its definition', async ({page}) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
 
     await word.focus();
@@ -112,7 +112,7 @@ test.describe('a desk', () => {
   });
 
   test('Enter on a focused term leaves its definition open', async ({page}) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     await word.focus();
     await expect(definition).toBeVisible();
@@ -123,7 +123,7 @@ test.describe('a desk', () => {
   });
 
   test('Tab away from a term closes its definition', async ({page}) => {
-    await page.goto('demos/?tab=tables');
+    await page.goto('demos/tables/');
     const {word, definition} = await definedTerm(page, 'The page is a store, and so is the table', 'middleware');
     await word.focus();
     await expect(definition).toBeVisible();

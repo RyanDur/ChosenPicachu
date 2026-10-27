@@ -18,7 +18,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('opens and closes what am I looking at with a finger that lands just off the line', async ({page}) => {
-      await page.goto('demos/?tab=charts');
+      await page.goto('demos/charts/');
       const fold = chartsPage(page).explainer;
       const told = fold.getByRole('paragraph', {includeHidden: true}).first();
       await expect(fold).toBeVisible({timeout: 30_000});
@@ -32,7 +32,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('the trap\'s menu opens and chooses from a finger that lands just off its controls', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const menu = trappedMenu(page);
 
       await fingerTap(page, menu.sortBy);
@@ -43,7 +43,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('the menu in the top layer opens and chooses from a finger that lands just off its controls', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const menu = topLayerMenu(page);
       await menu.sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
 
@@ -55,7 +55,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('raises and dismisses the banners from a finger that lands just off their buttons', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const banners = bannerTrap(page);
 
       await fingerTap(page, banners.raiseOld);
@@ -68,7 +68,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       const menu = trappedMenu(page);
 
       await fingerTap(page, menu.contextWords);
@@ -88,7 +88,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', async ({page}) => {
-      await page.goto('demos/?tab=dragAndDrop');
+      await page.goto('demos/drag-and-drop/');
       const settings = demoSettings(page).fold;
       await expect(settings).toBeVisible();
 
@@ -104,7 +104,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('opens every how I built it fold in an open story on the tables tab from a finger that lands just off its bar', async ({page}) => {
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
       const reveals = await tablesDemo(page).howIBuiltItInTheFirstStory();
       await expect(reveals.first()).toBeVisible();
 
@@ -114,7 +114,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('opens every fold of the accordion in HTML alone from a finger that lands just off its name', async ({page}) => {
-      await page.goto('demos/?tab=accordions');
+      await page.goto('demos/accordions/');
       const folds = accordionsTab(page).htmlAloneFolds();
       await expect(nameOn(folds[0].fold)).toBeVisible();
 
@@ -125,7 +125,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {
-      await page.goto('demos/?tab=z-index');
+      await page.goto('demos/z-index/');
       await bannerTrap(page).raiseNew.tap();
       const dismiss = page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first();
       await expect(dismiss).toBeVisible();

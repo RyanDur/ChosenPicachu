@@ -6,6 +6,13 @@ import {empty, not} from '@ryandur/sand';
 export const staticRoutesOf = pathsSource =>
   [...pathsSource.matchAll(/= '(\/[^':]+)'/g)].map(match => match[1]);
 
+/**
+ * @param {string} page
+ * @param {Record<string, unknown>} listings
+ */
+export const tabEntriesOf = (page, listings) =>
+  Object.entries(listings).map(([tab, listing]) => [`${page}${tab}/`, listing]);
+
 export const baseOf = shell => {
   const match = shell.match(/src="(.*?)assets\//);
   if (match === null) throw new Error('the shell has no assets script tag to read the base from');

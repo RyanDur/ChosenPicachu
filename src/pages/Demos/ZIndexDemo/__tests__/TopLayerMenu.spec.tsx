@@ -5,7 +5,7 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 describe('the menu built the new way', () => {
   test('should sit in card one, beside Sort by', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
     const cardOne = within(trap).getAllByRole('listitem').filter(card => within(card).queryByRole('button', {name: 'Sort by, the old way'}) !== null)[0];
@@ -16,7 +16,7 @@ describe('the menu built the new way', () => {
 
 describe('why the popover wins', () => {
   test('should say the list opens over everything around it, wherever it opens', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -25,7 +25,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show the menu’s markup beside the run that says what popover gives for free', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -33,7 +33,7 @@ describe('why the popover wins', () => {
   });
 
   test('should say the placement is only for a menu that is also a popover, and why', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const run = within(part).getByText(/The menu’s own sheet places it/);
@@ -44,7 +44,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show the buttons’ tabIndex beside the run that says what it asks, and why Safari needs it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/);
@@ -58,7 +58,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show a choice carrying tabIndex={0} in the menu sample the tabIndex run points to', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -71,7 +71,7 @@ describe('why the popover wins', () => {
   });
 
   test('should say Menu, Entry and Item are the site’s components, each writing one element', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -79,7 +79,7 @@ describe('why the popover wins', () => {
   });
 
   test('should say the page passes Menu the menu’s look', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -87,7 +87,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -95,7 +95,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show that each choice in the menu sample is a button', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
@@ -104,7 +104,7 @@ describe('why the popover wins', () => {
   });
 
   test('should name the toggle in a run after the markup that holds it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const runs = within(part).getAllByRole('listitem');
@@ -115,7 +115,7 @@ describe('why the popover wins', () => {
   });
 
   test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
@@ -123,7 +123,7 @@ describe('why the popover wins', () => {
   });
 
   test('should draw the top layer above the page beside the run that says why nothing covers it', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 

@@ -47,7 +47,7 @@ describe('the tables tab’s own words', () => {
     'Everything gets measured once, at the grab: the table’s bounding rect and every header in it. Every later answer is arithmetic against that one'
   ])('should say, at the opening dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).toHaveTextContent(sentence);
@@ -162,7 +162,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'motion=static&world=vanilla', sentence: 'Its value is that nothing competes with the pointer.'}
   ])('should say, with $choice, words and links together: $sentence', async ({choice, sentence}) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?${choice}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).toHaveTextContent(sentence);
@@ -170,7 +170,7 @@ describe('the tables tab’s own words', () => {
 
   test('should not tell the reader to focus the handle and tap, which the gesture step’s want already says', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=resize')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent('focus the handle and tap');
@@ -178,7 +178,7 @@ describe('the tables tab’s own words', () => {
 
   test('should tell the context’s verbs only after it says what an action is', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const blocks = tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent ?? '');
 
@@ -192,7 +192,7 @@ describe('the tables tab’s own words', () => {
     {world: 'react', label: 'Each row header carries its window as its label, so a screen reader names the row by its window and not by the grip inside it.'}
   ])('should tell the row header’s label as its own idea in the $world world', async ({world, label}) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(tablesTab.blocksIn(await tablesTab.region()).map(block => block.textContent)).toContain(label);
@@ -200,7 +200,7 @@ describe('the tables tab’s own words', () => {
 
   test.each(['sort', 'menu', 'resize'])('should not tell of a custom element anywhere in the vanilla world’s words, with tut=%s', async tutorial => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=vanilla&tut=${tutorial}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=vanilla&tut=${tutorial}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent(/custom element/);
@@ -208,7 +208,7 @@ describe('the tables tab’s own words', () => {
 
   test('should not tell the React world when a vanilla listener attaches', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent('Every vanilla listener attaches once');
@@ -216,7 +216,7 @@ describe('the tables tab’s own words', () => {
 
   test('should not tell the context’s verbs in the React world', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent('the build’s own functions, not the actions of the same name');
@@ -307,14 +307,14 @@ describe('the tables tab’s own words', () => {
     ...['lifted', 'moved', 'dropped', 'rowNudged', 'rowMoved'].map(name => ({name, choice: 'world=vanilla', run: /provides the parts a context/}))
   ])('should set $name as code where its run names it, with $choice', async ({name, choice, run}) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&${choice}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?${choice}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     expect(await tablesTab.codeIn(run)).toContain(name);
   });
 
   test('should link the resize step’s :has() to MDN', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=resize')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.linkIn('drag resize', ':has()')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
@@ -322,7 +322,7 @@ describe('the tables tab’s own words', () => {
 
   test('should say in the menu’s code aside what the prose says: the browser’s default placement', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=menu')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).toHaveTextContent('/* centered is the browser’s default placement; this menu chooses the anchor */');
@@ -330,7 +330,7 @@ describe('the tables tab’s own words', () => {
 
   test('should picture position-area once, as a grid, with no second figure before it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=menu')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=menu')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).not.toHaveTextContent('Read the new syntax as a compass');
@@ -341,7 +341,7 @@ describe('the tables demo', () => {
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -365,7 +365,7 @@ describe('the tables demo', () => {
   test('the aggregations say plainly that the grid never grows, and that a sorted column reseats its rows', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -376,7 +376,7 @@ describe('the tables demo', () => {
   test('the glider offers a pace, an origin and a motion, eager by default', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     for (const axis of ['pace', 'origin', 'motion']) {
@@ -393,7 +393,7 @@ describe('the tables demo', () => {
   test('a direction from a column menu sorts the windows', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     broadcast(feed, fourTrades);
@@ -408,7 +408,7 @@ describe('the tables demo', () => {
   test('while a column is sorted, the windows reseat as trades change their numbers', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     broadcast(feed, fourTrades);
@@ -424,7 +424,7 @@ describe('the tables demo', () => {
   test('the controls fold behind their readout', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     expect(await tableControls.settings()).toHaveAttribute('open');
@@ -438,7 +438,7 @@ describe('the tables demo', () => {
   test("the controls' prompt reads settings apart from its readout", async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     expect(await tableControls.settings()).toHaveTextContent(/^settings \S/);
@@ -447,7 +447,7 @@ describe('the tables demo', () => {
   test('the controls read out whatever is chosen', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const controls = await tableControls.region();
@@ -468,7 +468,7 @@ describe('the tables demo', () => {
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -487,7 +487,7 @@ describe('the tables demo', () => {
 
   test('the recipe opens on the need with its stories closed', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -500,7 +500,7 @@ describe('the tables demo', () => {
 
   test('the recipe walks from need to design to interpretation', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -519,7 +519,7 @@ describe('the tables demo', () => {
 
   test('the recipe’s tables name their rows and columns', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -539,7 +539,7 @@ describe('the tables demo', () => {
 
   test('should open the slices by saying the work splits into user stories from the trader’s side', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.region()).toHaveTextContent('Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the trader’s side of the screen, and a promise of a conversation rather than a specification.');
@@ -547,7 +547,7 @@ describe('the tables demo', () => {
 
   test('the slices point at their stations', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -569,7 +569,7 @@ describe('the tables demo', () => {
 
   test('the recipe links out to the user story', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -578,7 +578,7 @@ describe('the tables demo', () => {
 
   test('the still table and the living table each tell their part', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -604,7 +604,7 @@ describe('the tables demo', () => {
 
   test('layering keeps both axes', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -616,7 +616,7 @@ describe('the tables demo', () => {
 
   test('each layer’s facts say their heading in their own words, so they pair without the table', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
@@ -627,7 +627,7 @@ describe('the tables demo', () => {
 
   test('opening the sort by column story shows the drag build with its steps closed', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -640,13 +640,13 @@ describe('the tables demo', () => {
 
   test('the drag build shows the code and links out to it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
 
-    expect((await tablesTab.linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
+    expect((await tablesTab.linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', '/demos/drag-and-drop/');
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
     const [definition] = await tablesTab.labelledIn('drag sort', 'survey');
@@ -665,7 +665,7 @@ describe('the tables demo', () => {
 
   test('the carry step declares the four numbers the carried cells read, and says what @property is', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -678,7 +678,7 @@ describe('the tables demo', () => {
 
   test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -693,7 +693,7 @@ describe('the tables demo', () => {
 
   test('the recipe teaches whatever the dials are set to', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     await recipeFolds.press(recipe, 'The trader can sort by column');
@@ -715,7 +715,7 @@ describe('the tables demo', () => {
 
   test('should take the keyboard to the station the address names', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
+    render(<TestApp at={`${demosAt('tables')}#station-5`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     await tablesTab.findHeading('The trader can watch the market live, in windows');
@@ -726,7 +726,7 @@ describe('the tables demo', () => {
   test('the keyboard track teaches the same sort with the arrow keys', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
@@ -748,7 +748,7 @@ describe('the tables demo', () => {
   test('the keyboard track answers the motion dial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
@@ -763,7 +763,7 @@ describe('the tables demo', () => {
   test('switching back to the pointer track restores its road', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
@@ -776,7 +776,7 @@ describe('the tables demo', () => {
   test('the chosen track travels in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
@@ -787,7 +787,7 @@ describe('the tables demo', () => {
   test('choosing drag resize swaps in the resize tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     expect(await tablesTab.recipe('drag sort')).toBeVisible();
@@ -809,7 +809,7 @@ describe('the tables demo', () => {
 
   test('the resize build shows a column’s floor beside the trade that clamps to it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     await tablesTab.pick('Drag resize');
@@ -822,7 +822,7 @@ describe('the tables demo', () => {
 
   test('the resize build says the handle stops both its press and its arrow keys from bubbling to the header', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     await tablesTab.pick('Drag resize');
@@ -836,7 +836,7 @@ describe('the tables demo', () => {
 
   test('the resize build no longer speaks of a descent or a road', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     await tablesTab.pick('Drag resize');
@@ -847,7 +847,7 @@ describe('the tables demo', () => {
   test('choosing drag sort brings the sort tutorial back', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await tablesTab.pick('Drag resize');
@@ -861,7 +861,7 @@ describe('the tables demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&sort=column')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?sort=column')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
@@ -874,7 +874,7 @@ describe('the tables demo', () => {
 
   test('a story folds shut without folding the story beside it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&sort=column,row')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?sort=column,row')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
@@ -888,7 +888,7 @@ describe('the tables demo', () => {
 
   test('the address holds every story the trader opens', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -902,7 +902,7 @@ describe('the tables demo', () => {
 
   test("a story card's tally matches the steps the recipe renders", async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -913,7 +913,7 @@ describe('the tables demo', () => {
 
   test('a story card with one step says step, not steps', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -923,7 +923,7 @@ describe('the tables demo', () => {
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
@@ -933,7 +933,7 @@ describe('the tables demo', () => {
   test('the sort menu build says the toggle and the menu stop a press from bubbling to the header', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -946,7 +946,7 @@ describe('the tables demo', () => {
   test('the sort menu build no longer speaks of a descent', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -958,7 +958,7 @@ describe('the tables demo', () => {
   test('choosing the sort menu swaps in the sort menu tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -985,7 +985,7 @@ describe('the tables demo', () => {
   test('the chosen tutorial travels in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=resize')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     expect(await tablesTab.recipe('drag resize')).toBeVisible();
@@ -995,7 +995,7 @@ describe('the tables demo', () => {
   test('every column is resizable', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
@@ -1006,7 +1006,7 @@ describe('the tables demo', () => {
     test('react holds the stage by default, and no frame stands', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await aggregations.arrived()).toBeInTheDocument();
@@ -1016,7 +1016,7 @@ describe('the tables demo', () => {
     test('the tutorial stands unchanged in the html world', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await tablesTab.findHeading('The trader can watch the market live, in windows')).toBeInTheDocument();
@@ -1026,7 +1026,7 @@ describe('the tables demo', () => {
     test('only the build under the tutorial swaps', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect((await tablesTab.findRadios('Eager')).length).toBeGreaterThan(0);
@@ -1036,7 +1036,7 @@ describe('the tables demo', () => {
     test('the menu story stands in the html world', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=menu')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', '?world=vanilla&tut=menu')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await tablesTab.findHeading('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
@@ -1045,7 +1045,7 @@ describe('the tables demo', () => {
     test('the resize story stands in the html world', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=resize')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', '?world=vanilla&tut=resize')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await tablesTab.findHeading('The trader can widen a column')).toBeInTheDocument();
@@ -1054,7 +1054,7 @@ describe('the tables demo', () => {
     test.each(['react', 'vanilla'])('the sort tutorial stands on both tracks in the %s world', async world => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt(`?tab=tables&tut=sort&world=${world}`)} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', `?tut=sort&world=${world}`)} feed={feed}/>);
 
       expect(await tablesTab.findWords('The trader can sort by column')).toBeInTheDocument();
       await tablesTab.pick('By keyboard');
@@ -1064,7 +1064,7 @@ describe('the tables demo', () => {
     test('the explainer stands in the html world too', async () => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       expect(await tablesTab.findWords('what am I looking at?')).toBeInTheDocument();
@@ -1088,7 +1088,7 @@ describe('the living table’s terms', () => {
     ['hydrate', 'fill the table with the recent past, fetched once, and join it to the live trades']
   ])('should define %s in plain words where the living table first uses it', async (term, definition) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const livingTable = await tablesTab.findPart('the living table');
     const defined = tablesTab.definedIn(livingTable, term);
@@ -1101,7 +1101,7 @@ describe('the living table’s terms', () => {
     ['vanilla', 'A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
   ])('should define class in plain words where the still table first uses it, in the %s world', async (world, sentence) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await tablesTab.findPart('the still table')).toHaveTextContent(sentence);
@@ -1109,7 +1109,7 @@ describe('the living table’s terms', () => {
 
   test('should show the page’s useDragSortable call in the React Deal sample, in the still table', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const still = await tablesTab.findPart('the still table');
 
@@ -1119,7 +1119,7 @@ describe('the living table’s terms', () => {
 
   test('should define the ledger in plain words where the still table first uses it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.findPart('the living table');
     const defined = tablesTab.definedIn(tablesTab.part('the still table'), 'ledger');
@@ -1129,7 +1129,7 @@ describe('the living table’s terms', () => {
 
   test('should say what Redux is where the store story first names it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
@@ -1137,7 +1137,7 @@ describe('the living table’s terms', () => {
 
   test('should open the store story with the terms its steps lean on', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const livingTable = await tablesTab.findPart('the living table');
     const story = recipeFolds.story(livingTable, 'The page is a store, and so is the table');
@@ -1153,7 +1153,7 @@ describe('the living table’s terms', () => {
     ['the table’s reducer combines four', 'The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and sorting.']
   ])('should say %s, as the code does', async (_fact, sentence) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent(sentence);
@@ -1161,7 +1161,7 @@ describe('the living table’s terms', () => {
 
   test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const livingTable = await tablesTab.findPart('the living table');
     expect(livingTable).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
@@ -1171,7 +1171,7 @@ describe('the living table’s terms', () => {
 describe('the drag sort recipe’s words', () => {
   test('should title the slots drawing where a switch counts', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     expect(tablesTab.figureIn(recipe, /^Where a switch counts\. /)).toBeInTheDocument();
@@ -1184,7 +1184,7 @@ describe('the drag sort recipe’s words', () => {
     ['the plain boundary', 'switch a narrow column past a wide one at first touch, and the wide one lands back under the resting pointer, ready to switch straight back.']
   ])('should say where a switch counts as the code decides it, in %s', async (_where, sentence) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     expect(recipe).toHaveTextContent(sentence);
@@ -1192,7 +1192,7 @@ describe('the drag sort recipe’s words', () => {
 
   test('should not say only the inner half switches', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     expect(recipe).not.toHaveTextContent(/inner half/);
@@ -1200,7 +1200,7 @@ describe('the drag sort recipe’s words', () => {
 
   test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     const defined = tablesTab.definedIn(recipe, 'reconcile');
@@ -1212,7 +1212,7 @@ describe('the drag sort recipe’s words', () => {
 describe('the classes the table wears, as its recipes tell them', () => {
   test.each(['react', 'vanilla'])('should say the react menu is built from the site’s menu components, in the %s world', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
@@ -1224,7 +1224,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, looks that live in the site’s shared sheet and that an element wears by name, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
   ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, opening, sentence, classedMenu) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
@@ -1234,7 +1234,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should name the menu toggle’s classes in the %s world, with their blocks after its rule', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&tut=menu&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?tut=menu&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
@@ -1244,7 +1244,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should name the resize handle’s classes in the %s world, with their blocks after its rule', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?tut=resize&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
 
@@ -1254,7 +1254,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should name the ledger’s class as the table’s own, not a shared class, in the %s world', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&tut=resize&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?tut=resize&world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
 
@@ -1264,7 +1264,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test('should label the ledger’s headerStates TS, in the react world', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=resize&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
     const states = tablesTab.figureIn(recipe, /DragSortableTable\/looks\.ts on GitHub/);
@@ -1275,7 +1275,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test('should carve the rule that papers a moving cell, in the react world', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1284,7 +1284,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test('should carve the line that gives a traded header shared, in the react world', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&tut=resize&world=react')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?tut=resize&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
 
@@ -1293,7 +1293,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test('should say every motion class changes through changeMotion in the vanilla world, with it carved after the reconcile', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1303,7 +1303,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should say a moving cell wears paper-in-motion in the %s world, with its block after the carried cells’ rules', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1313,7 +1313,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should say what z-index decides and why the carried cell is positioned, in the %s world', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1329,7 +1329,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should say which cells paper-in-motion covers in the keep step, in the %s world', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1342,7 +1342,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
 
   test.each(['react', 'vanilla'])('should say the keyboard ring is focus-ringed in the %s world, with its block after the header’s rule', async world => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}&track=keyboard`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}&track=keyboard`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
@@ -1371,7 +1371,7 @@ describe('the tables tutorials’ vocabulary', () => {
 
   const prose = async (at: string, region: string): Promise<HTMLElement[]> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&${at}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?${at}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     return tablesTab.blocksIn(await tablesTab.findPart(region))
       .sort((one, other) => one.compareDocumentPosition(other) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
@@ -1462,7 +1462,7 @@ describe('the tables tab’s introduction', () => {
   ];
 
   test('should tell what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
-    render(<TestApp at={demosAt('?tab=tables')}/>);
+    render(<TestApp at={demosAt('tables')}/>);
 
     const tab = await tablesTab.region();
 
@@ -1473,7 +1473,7 @@ describe('the tables tab’s introduction', () => {
 describe('the tables tab’s audited words', () => {
   const tabWithEveryStoryOpen = async (world: 'react' | 'vanilla', also = ''): Promise<HTMLElement> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}&sort=column,row&living=still,flow,store&menu=rank&resize=widen${also}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}&sort=column,row&living=still,flow,store&menu=rank&resize=widen${also}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     await tablesTab.recipe(also.includes('tut=menu') ? 'sort menu' : 'drag sort');
     return tablesTab.region();
@@ -1495,7 +1495,7 @@ describe('the tables tab’s audited words', () => {
     ['react', 'tut=menu'], ['vanilla', 'tut=menu'], ['react', 'tut=resize'], ['vanilla', 'tut=resize']
   ] as const)('should spell the whole tab’s prose the American way, in the %s world with %s', async (world, choices) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=tables&world=${world}&${choices}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
+    render(<TestApp at={demosAt('tables', `?world=${world}&${choices}&sort=column,row&living=still,flow,store&menu=rank&resize=widen`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const tab = await tablesTab.region();
     await tablesTab.findHeadingsIn(tab, /^The trader can/);

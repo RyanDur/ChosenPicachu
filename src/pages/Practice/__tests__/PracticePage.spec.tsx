@@ -1,7 +1,7 @@
-import {render} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
-import {practicePage} from '@pages/Practice/__test_support/practice';
+import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 const practices = [
@@ -12,17 +12,38 @@ const practices = [
 
 describe('the practice page', () => {
   test.each(practices)('should spell the %s tab\'s prose the American way', async (concern, tab) => {
-    render(<TestApp at={`${Paths.practice}?tab=${tab}`}/>);
+    render(<TestApp at={practiceAt(tab)}/>);
     await practicePage.arrivedOn(concern);
 
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
-  test('should open on Structure when no tab is named', async () => {
+  test('should open on Structure, at its own address, when no tab is named', async () => {
     render(<TestApp at={Paths.practice}/>);
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
+    expect(practicePage.address()).toBe(practiceAt('structure'));
+  });
+
+  test.each(['structure', 'presentation', 'behavior'])('should send a link saved as ?tab=%s to that tab\'s own address', async tab => {
+    render(<TestApp at={`${Paths.practice}?tab=${tab}`}/>);
+
+    await waitFor(() => expect(practicePage.address()).toBe(practiceAt(tab)));
+  });
+
+  test('should be no such room at a tab the page does not have', async () => {
+    render(<TestApp at={practiceAt('interaction')}/>);
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'No such room'})).toBeInTheDocument();
+  });
+
+  test('should link each tab to its own address', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(within(screen.getByRole('navigation', {name: 'practice'})).getAllByRole('link').map(tab => tab.getAttribute('href')))
+      .toEqual(['structure', 'presentation', 'behavior'].map(practiceAt));
   });
 
   test.each(['dynamic', 'dynamic-interaction'])('should open a link saved under the old tab name, %s, on the Behavior tab', async former => {
@@ -30,6 +51,7 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Behavior')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Behavior');
+    expect(practicePage.address()).toBe(practiceAt('behavior'));
   });
 
   test.each(['constructor', 'toString', '__proto__'])('should open on Structure when the address names %s, a word every object answers to', async word => {
@@ -37,13 +59,15 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
+    expect(practicePage.address()).toBe(practiceAt('structure'));
   });
 
-  test('should open on Structure, marked as the current tab, when the address names a tab the page does not have', async () => {
+  test('should open on Structure, marked as the current tab, when an old address names a tab the page does not have', async () => {
     render(<TestApp at={`${Paths.practice}?tab=interaction`}/>);
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
+    expect(practicePage.address()).toBe(practiceAt('structure'));
   });
 
   test('should say above the tabs what each one holds', async () => {
@@ -56,7 +80,7 @@ describe('the practice page', () => {
   });
 
   test.each(practices)('should open the %s tab from its address, reading how I organize it from its first rule to its test', async (concern, param, firstRule, theTest) => {
-    render(<TestApp at={`${Paths.practice}?tab=${param}`}/>);
+    render(<TestApp at={practiceAt(param)}/>);
 
     expect(await practicePage.arrivedOn(concern)).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe(concern);
@@ -65,9 +89,9 @@ describe('the practice page', () => {
   });
 
   test.each([
-    ['Presentation', 'Structure', Paths.practice, /^I write CSS in two kinds of sheet/],
-    ['Behavior', 'Presentation', `${Paths.practice}?tab=presentation`, /^Behavior splits into what is true and what happened/],
-    ['Structure', 'Behavior', `${Paths.practice}?tab=behavior`, /^I start from what the content is and pick the element for it/]
+    ['Presentation', 'Structure', practiceAt('structure'), /^I write CSS in two kinds of sheet/],
+    ['Behavior', 'Presentation', practiceAt('presentation'), /^Behavior splits into what is true and what happened/],
+    ['Structure', 'Behavior', practiceAt('behavior'), /^I start from what the content is and pick the element for it/]
   ])('should read %s’s practice when the reader picks its tab from %s', async (concern, _from, at, firstRule) => {
     render(<TestApp at={at}/>);
 
@@ -102,7 +126,7 @@ describe('the practice page', () => {
   });
 
   test('the presentation tab tells how I organize presentation', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=presentation`}/>);
+    render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.heading()).toBeVisible();
@@ -128,7 +152,7 @@ describe('the practice page', () => {
   });
 
   test('should tell how I organize behavior on the Behavior tab', async () => {
-    render(<TestApp at={`${Paths.practice}?tab=behavior`}/>);
+    render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.heading()).toBeVisible();
@@ -148,8 +172,8 @@ describe('the practice page', () => {
 
   test.each([
     ['Structure', Paths.practice, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
-    ['Presentation', `${Paths.practice}?tab=presentation`, [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
-    ['Behavior', `${Paths.practice}?tab=behavior`, [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
+    ['Presentation', practiceAt('presentation'), [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
+    ['Behavior', practiceAt('behavior'), [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
   ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
     render(<TestApp at={at}/>);
     await practicePage.arrivedOn(concern);

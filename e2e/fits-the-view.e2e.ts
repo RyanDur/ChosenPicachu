@@ -24,7 +24,7 @@ for (const {reader, device} of [
     });
 
     test('scrolls the wide table to its last column', async ({page}) => {
-      await page.goto('demos/?tab=tables');
+      await page.goto('demos/tables/');
       const table = page.getByRole('table', {name: 'Live aggregations by window'});
       await table.hover();
 

@@ -12,7 +12,7 @@ const troublesIn = (alert: HTMLElement): HTMLElement[] =>
   within(alert).queryAllByRole('button', {name: /^dismiss /, hidden: true});
 
 const openZIndexTab = async () => {
-  render(<TestApp at={demosAt()}/>);
+  render(<TestApp at={demosAt('accordions')}/>);
   await demoTabs.open('Z-index');
 };
 
@@ -191,7 +191,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should say where each placement class puts the panel, for the dials chosen', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?side=bottom&align=right')}/>);
 
     expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story))
       .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
@@ -218,7 +218,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should carve the rules for the side and align the dials chose', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?side=bottom&align=right')}/>);
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
@@ -226,7 +226,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should carve the panel’s own line, and say the class names the dials chose', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?side=bottom&align=right')}/>);
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
 
@@ -235,7 +235,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should label the panel’s carved line TS, in the step and in the explanation', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?side=bottom&align=right')}/>);
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
     const placing = recipeFolds.steps(news)[2];
     const explained = screen.getByRole('region', {name: 'Why a fixed banner still loses'});
@@ -252,7 +252,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should open the second story from step 3’s slide-step link, keeping the side and align chosen', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&news=top&side=bottom&align=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?news=top&side=bottom&align=right')}/>);
     const tutorial = await screen.findByRole('region', {name: 'let’s build this feature'});
     const placing = recipeFolds.steps(recipeFolds.story(tutorial, story))[2];
 
@@ -293,7 +293,7 @@ describe('the banner tutorial’s second story', () => {
     recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
   test('should head each step with what happens, with the height step only for a sideways stack', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
     const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
     expect(recipeFolds.stepTitles(many)).toEqual([
@@ -324,7 +324,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should show a sideways stack’s own rules in step 2’s sample, and none of a column’s', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[1]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.trouble \{ grid-template-columns: 1fr;/);
@@ -339,7 +339,7 @@ describe('the banner tutorial’s second story', () => {
     ['right', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.', 'a margin to the right of every banner but the one at the right, the last child when the stack grows rightward', 'carries the leftward stack’s selector, where the banner at the right is the first child'],
     ['left', ':where(.stack-left, .stack-right) is the part of the rule’s selector that matches the panel with either class, and the rule applies to each banner in it. So I write the grid-template-columns rule once for the leftward and rightward stacks, and the grid-template-rows rule once for the two vertical stacks.', 'a margin to the right of every banner but the one at the right, the first child when the stack grows leftward', 'carries the rightward stack’s selector, where the banner at the right is the last child']
   ])('should say, for a stack that grows %s, which rule its axis shares and where its gap is', async (stack, axis, gap, shared) => {
-    render(<TestApp at={demosAt(`?tab=z-index&stack=${stack}`)}/>);
+    render(<TestApp at={demosAt('z-index', `?stack=${stack}`)}/>);
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[1]).toHaveTextContent(axis);
@@ -348,7 +348,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should show the chosen entrance’s distance in step 3’s sample', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?enter=left')}/>);
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[2]).toHaveTextContent('&.from-left { --arrive: -100dvw 0; }');
@@ -356,7 +356,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should show a sideways stack’s own leaving rules in step 4’s sample, and none of a column’s', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[3]).toHaveTextContent(/&:where\(\.stack-left, \.stack-right\) \.trouble\.leaving \{ grid-template-columns: 0fr; margin-inline-end: 0; transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\), grid-template-columns 0\.3s 0\.6s, margin-inline-end 0\.3s 0\.6s; }/);
@@ -365,14 +365,14 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should leave out the height step for a stack that grows down', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=down')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=down')}/>);
     const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
     expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
   });
 
   test('should declare the banner’s height above the rule that reads it, and say what @property is, in the height step', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
     const steps = recipeFolds.steps(await secondStory());
 
     expect(steps[4]).toHaveTextContent(/@property --news-block-size \{[^]*initial-value: auto;[^]*block-size: var\(--news-block-size\)/);
@@ -409,7 +409,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should say what a ResizeObserver and block-size are, for a sideways stack', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=right')}/>);
 
     const many = await secondStory();
 
@@ -418,13 +418,13 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should say the code removes the old height before it measures, for a sideways stack', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=right')}/>);
 
     expect(await secondStory()).toHaveTextContent('Before it measures, the code removes the height it set last time.');
   });
 
   test('should say what scrollHeight is before the height step uses it, for a sideways stack', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
+    render(<TestApp at={demosAt('z-index', '?stack=right')}/>);
 
     expect(await secondStory()).toHaveTextContent('scrollHeight, the height of everything inside the element even where it overflows, is never less than the element’s own height');
   });
@@ -451,7 +451,7 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test('should say where the banner starts, for the entrance chosen', async () => {
-    render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
+    render(<TestApp at={demosAt('z-index', '?enter=left')}/>);
 
     expect(await secondStory()).toHaveTextContent('Here the banner starts a full window’s width to the left of its place. The distance is a custom property');
   });
@@ -487,13 +487,13 @@ describe('the z-index tab’s own words', () => {
     'A banner is read at a glance, by someone busy with something else.',
     'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centers the menu on the screen.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await screen.findByRole('region', {name: 'Z-index'})).toHaveTextContent(sentence);
   });
 
   test('should define the top layer once, with no second sentence saying it again', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await screen.findByRole('region', {name: 'Z-index'})).not.toHaveTextContent('Whatever the page stacks, the top layer sits over it.');
   });
@@ -507,7 +507,7 @@ describe('the names the code uses', () => {
     {name: 'middle', run: /set auto again/},
     {name: 'center', run: /set auto again/}
   ])('should set $name as code where its run names it', async ({name, run}) => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    render(<TestApp at={demosAt('z-index')}/>);
     const told = within(await screen.findByRole('region', {name: 'Z-index'})).getByText(run);
 
     expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
@@ -531,7 +531,7 @@ describe('the banner dials’ readings', () => {
     ['stack=left', 'The stack grows leftward, with the newest banner at the left.'],
     ['stack=right', 'The stack grows rightward, with the newest banner at the right.']
   ])('should read, with %s chosen, “%s”', async (choice, reading) => {
-    render(<TestApp at={demosAt(`?tab=z-index&${choice}`)}/>);
+    render(<TestApp at={demosAt('z-index', `?${choice}`)}/>);
 
     expect(await screen.findByText(reading)).toBeInTheDocument();
   });

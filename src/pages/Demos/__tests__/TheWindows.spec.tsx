@@ -18,7 +18,7 @@ describe('the windows hydrate from history', () => {
   test('a pull of recent trades fills the windows before the socket speaks', async () => {
     tradeHistoryAnswers(recentTradesNewestFirst);
 
-    render(<TestApp at={demosAt('?tab=tables')}/>);
+    render(<TestApp at={demosAt('tables')}/>);
 
     const card = await screen.findByRole('region', {name: 'live aggregations'});
     const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
@@ -31,7 +31,7 @@ describe('the windows hydrate from history', () => {
   test('a history that cannot be reached leaves the windows empty, and the page says so', async () => {
     tradeHistoryUnreachable();
 
-    render(<TestApp at={demosAt('?tab=tables')}/>);
+    render(<TestApp at={demosAt('tables')}/>);
 
     const card = await screen.findByRole('region', {name: 'live aggregations'});
     expect(await within(card).findByText('session')).toBeVisible();

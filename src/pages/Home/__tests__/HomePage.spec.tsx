@@ -48,7 +48,7 @@ describe('the home page', () => {
   ])('should state the %s claim, then send the reader on, to its story on the Record and to how I organize it on Practice', (concern, claim, id) => {
     expect(homePage.concernText(concern)).toEqual([...claim, 'Its story is on the Record.', 'How I organize it is on Practice.']);
     expect(homePage.storySignpost(concern)).toHaveAttribute('href', `${Paths.record}#${id}`);
-    expect(homePage.practiceSignpost(concern)).toHaveAttribute('href', `${Paths.practice}?tab=${id}`);
+    expect(homePage.practiceSignpost(concern)).toHaveAttribute('href', `${Paths.practice}${id}/`);
     expect(outOfReadingOrder([
       homePage.concernHeading(concern),
       homePage.quotationIn(concern),
@@ -64,13 +64,13 @@ describe('the home page', () => {
 
   test('should send the Structure claim\'s details element to the accordions demo', () => {
     expect(homePage.claimLinks('Structure').map(link => [link.textContent, link.getAttribute('href')]))
-      .toEqual([['a details element', `${Paths.demos}?tab=accordions`]]);
+      .toEqual([['a details element', `${Paths.demos}accordions/`]]);
   });
 
   test('should send the Presentation motion claim to web.dev\'s account of which animations stay cheap, and the workaround to the z-index demo', () => {
     expect(homePage.claimLinks('Presentation').map(link => [link.textContent, link.getAttribute('href')])).toEqual([
       ['A browser can animate transform and opacity cheaply', 'https://web.dev/articles/animations-overview'],
-      ['the workaround sits beside the rule it stands in for', `${Paths.demos}?tab=z-index`]
+      ['the workaround sits beside the rule it stands in for', `${Paths.demos}z-index/`]
     ]);
   });
 });

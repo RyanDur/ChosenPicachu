@@ -7,7 +7,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
 
     test('Back to a tutorial from another tab, and Forward again, leave the scroll to the browser', async ({page}) => {
       const scriptScrolls = await countScriptScrolls(page);
-      await page.goto('demos/?tab=tables#station-5');
+      await page.goto('demos/tables/#station-5');
       await expect(page.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
       await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}).click();
       await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();

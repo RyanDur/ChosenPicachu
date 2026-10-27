@@ -60,7 +60,7 @@ for (const {trend, sign, prices} of markets) {
   test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
     const charts = chartsPage(page);
     await scriptedMarket(page, prices);
-    await page.goto('demos?tab=charts');
+    await page.goto('demos/charts/');
 
     await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
     await expect(charts.priceDelta).toHaveText(sign);

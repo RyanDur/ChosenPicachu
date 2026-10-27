@@ -5,7 +5,8 @@ import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
-import {chartPageAt} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
+import {practiceAt} from '@pages/Practice/__test_support/practice';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -127,7 +128,14 @@ describe('a link saved to the old Development address', () => {
     render(<TestApp at="/development/?tab=presentation"/>);
 
     expect(await screen.findByRole('heading', {name: 'Practice Presentation', level: 1})).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(Paths.practice);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(practiceAt('presentation'));
+  });
+
+  test('should land a former tab name on the tab it became', async () => {
+    render(<TestApp at="/development/?tab=dynamic"/>);
+
+    expect(await screen.findByRole('heading', {name: 'Practice Behavior', level: 1})).toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(practiceAt('behavior'));
   });
 });
 
@@ -142,16 +150,28 @@ describe('the rail takes the reader to Practice', () => {
   });
 });
 
+describe('the rail goes straight to the first tab', () => {
+  test.each([
+    ['Demos', demosAt('accordions')],
+    ['Practice', practiceAt('structure')]
+  ])('should link %s to %s', async (name, address) => {
+    render(<TestApp at={Paths.home}/>);
+
+    expect(within(await site.nav()).getByRole('link', {name})).toHaveAttribute('href', address);
+  });
+});
+
 describe('the rail says which page the reader is on', () => {
   test.each([
     ['Home', Paths.home],
     ['Demos', Paths.demos],
+    ['Demos', demosAt('tables')],
     ['Users', Paths.users],
     ['Gallery', `${Paths.artGallery}?page=3&size=8&tab=aic`],
     ['Games', Paths.games],
     ['Record', Paths.record],
     ['Practice', Paths.practice],
-    ['Practice', `${Paths.practice}?tab=presentation`],
+    ['Practice', practiceAt('presentation')],
     ['Demos', chartPageAt('price')]
   ])('should announce %s as the current page, and no other', async (name, path) => {
     render(<TestApp at={path}/>);
@@ -181,6 +201,20 @@ describe('leaving a page', () => {
     await userEvent.click(within(await site.rail()).getByRole('link', {name: 'Record'}));
 
     await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
+  });
+
+  test.each([
+    {page: 'Demos', at: demosAt('accordions'), strip: 'demos', tab: 'Charts', title: 'Demos Charts'},
+    {page: 'Practice', at: practiceAt('structure'), strip: 'practice', tab: 'Behavior', title: 'Practice Behavior'}
+  ])('switching $page tabs keeps the reader where they were on the page', async ({at, strip, tab, title}) => {
+    render(<TestApp at={at}/>);
+    const tabs = within(await screen.findByRole('navigation', {name: strip}));
+    const landings = scrolling.recordLandings();
+
+    await userEvent.click(tabs.getByRole('link', {name: tab}));
+
+    expect(await screen.findByRole('heading', {level: 1, name: title})).toBeInTheDocument();
+    expect(landings).toEqual([]);
   });
 
   test('arriving at a place on the page keeps that place', async () => {

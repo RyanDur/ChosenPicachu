@@ -32,7 +32,7 @@ const draggedOver = (item: string, clientX: number) => {
 
 const nativeRecipe = async (): Promise<HTMLElement> => {
   const feed = await listeningFeed();
-  render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+  render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
   await feedIsSubscribed(feed);
   return await screen.findByRole('region', {name: 'build the native drag sort yourself'});
 };
@@ -42,7 +42,7 @@ const theListArrives = (): Promise<HTMLElement> => screen.findByRole('list', {na
 describe('the sortable list demo', () => {
   test('a finger pressed on a grip readies its item to be dragged', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const first = within(await theListArrives()).getAllByRole('listitem')[0];
     expect(first).toHaveAttribute('draggable', 'false');
@@ -54,7 +54,7 @@ describe('the sortable list demo', () => {
 
   test('a finger pressed and taken over by the browser leaves its item at rest', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
@@ -66,7 +66,7 @@ describe('the sortable list demo', () => {
 
   test('a finger pressed and lifted without a drag leaves a kept item at rest', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop&origin=keep')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?origin=keep')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
@@ -77,7 +77,7 @@ describe('the sortable list demo', () => {
 
   test('the list controls are headed at level four', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('heading', {name: 'list controls', level: 4})).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('the sortable list demo', () => {
 
   test('a finger pressed and lifted without a drag leaves its item at rest', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const first = within(await theListArrives()).getAllByRole('listitem')[0];
 
@@ -97,7 +97,7 @@ describe('the sortable list demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop&native=sort')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?native=sort')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
@@ -108,7 +108,7 @@ describe('the sortable list demo', () => {
   test('the list starts eager, hiding and animated, and says so', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -122,7 +122,7 @@ describe('the sortable list demo', () => {
 
   test('letting go of the grip does not end a drag under way', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await theListArrives();
 
@@ -136,7 +136,7 @@ describe('the sortable list demo', () => {
   test('an eager drag commits on the crossing', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -148,7 +148,7 @@ describe('the sortable list demo', () => {
 
   const lazyListWithALifted = async (): Promise<void> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await theListArrives();
     const controls = screen.getByRole('region', {name: 'list controls'});
@@ -174,7 +174,7 @@ describe('the sortable list demo', () => {
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -188,7 +188,7 @@ describe('the sortable list demo', () => {
   test('an arrow key walks an item past its neighbor, and back', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -206,7 +206,7 @@ describe('the sortable list demo', () => {
   test('both parties slide toward their new seats', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -220,7 +220,7 @@ describe('the sortable list demo', () => {
   test('an arrow walk says the move', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -234,7 +234,7 @@ describe('the sortable list demo', () => {
   test('an eager crossing says the move', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await theListArrives();
@@ -321,7 +321,7 @@ describe('the sortable list demo', () => {
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     const steps = recipeFolds.steps(recipeFolds.story(recipe, 'The user can arrange the list by hand'));
     expect(within(steps[steps.length - 1]).getByRole('link', {name: /Tables demo/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=tables'));
+      .toHaveAttribute('href', '/demos/tables/');
   });
 
   const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
@@ -353,7 +353,7 @@ describe('the sortable list demo', () => {
 describe('arriving at a station', () => {
   test('should take the keyboard to the station the address names', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={`${demosAt('?tab=dragAndDrop')}#station-4`} feed={feed}/>);
+    render(<TestApp at={`${demosAt('drag-and-drop')}#station-4`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     await screen.findByRole('heading', {name: 'Layer on functionality, in the order it was asked for'}, {timeout: 5000});
@@ -441,7 +441,7 @@ describe('the native drag sort tutorial’s words', () => {
     'pace=lazy&origin=hide&motion=animated', 'pace=lazy&origin=hide&motion=static'
   ])('should show the item’s dragover setting dropEffect beside the run that names it, with %s', async choices => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
 
@@ -450,7 +450,7 @@ describe('the native drag sort tutorial’s words', () => {
 
   test('should say what the list’s dragleave handler does where the lazy pace meets it, with the handler beside it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it.');
@@ -459,7 +459,7 @@ describe('the native drag sort tutorial’s words', () => {
 
   test('should say what a tick is where the lazy glide meets it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('run the settle a tick after the release, a setTimeout with no delay, which runs once the drag has ended.');
@@ -467,7 +467,7 @@ describe('the native drag sort tutorial’s words', () => {
 
   test('should say what a view transition is where the lazy glide meets it', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running,');
@@ -495,7 +495,7 @@ describe('the drag sort tab’s own words', () => {
     'The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or right arrow into a move of one place and reports the new order up to the list, with no drag involved. While the item is still sliding, the handler ignores the keys.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
@@ -513,7 +513,7 @@ describe('the drag sort tab’s own words', () => {
     ['pace=lazy&origin=keep&motion=static', 'This is the static list, and it has no motion code. The handler sets the order and React draws it on the next frame; a keyboard move sets the order the same way.']
   ])('should say, with %s, words and links together: %s', async (choices, sentence) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
@@ -535,7 +535,7 @@ describe('the names the code uses', () => {
     {name: 'var()', choices: '', run: /keyframe turned/}
   ])('should set $name as code where its run names it', async ({name, choices, run}) => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     const told = within(await screen.findByRole('region', {name: 'Drag sort'})).getByText(run);
@@ -554,7 +554,7 @@ describe('the drag sort tab’s introduction', () => {
   ];
 
   test('should tell what the list is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
-    render(<TestApp at={demosAt('?tab=dragAndDrop')}/>);
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Drag sort'});
 
@@ -565,7 +565,7 @@ describe('the drag sort tab’s introduction', () => {
 describe('the drag sort tab’s audited words', () => {
   const tabAt = async (choices: string): Promise<void> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt(`?tab=dragAndDrop&${choices}`)} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
   };
 
@@ -620,7 +620,7 @@ describe('the drag sort tab’s audited words', () => {
     expect(within(sliding).getAllByRole('paragraph')).toHaveLength(3);
     expect(swap).toHaveTextContent(/its keyframe’s from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place\.$/);
     expect(sign).toHaveTextContent('It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
-    expect(within(sign).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', expect.stringContaining('tab=charts'));
+    expect(within(sign).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', '/demos/charts/');
   });
 
   test('should say, beside the fade step’s CSS, why the card fades and is not hidden', async () => {

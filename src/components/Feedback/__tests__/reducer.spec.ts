@@ -12,7 +12,7 @@ import {
 import {discussions} from '../github';
 import {draftAt, feedbackReducer} from '../reducer';
 
-const tables = '/demos/?tab=tables';
+const tables = '/demos/tables/';
 const gallery = '/gallery';
 
 const openOn = feedbackReducer(draftAt(tables), opened(tables));
