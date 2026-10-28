@@ -23,6 +23,7 @@ test.describe('a reader with script off', () => {
   for (const {path, needScript} of [
     {path: 'demos/tables/', needScript: (page: Page) => [page.getByRole('button', {name: /^move row \d/}), page.getByRole('button', {name: /^resize /}), page.getByRole('button', {name: /^sort /})]},
     {path: 'demos/drag-and-drop/', needScript: (page: Page) => [page.getByRole('button', {name: /^grip for /})]},
+    {path: 'users/', needScript: (page: Page) => [page.getByRole('button', {name: 'Draw a new avatar'}), page.getByRole('button', {name: 'Reset'}), page.getByRole('button', {name: 'Add'})]},
     {path: 'demos/z-index/', needScript: (page: Page) => [page.getByRole('group', {name: 'What card one wears'}).getByRole('radio'), page.getByRole('checkbox', {name: 'Card one has z-index: 1'})]}
   ]) {
     test(`finds the controls on /${path} that need the script there, and disabled`, async ({page}) => {

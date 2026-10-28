@@ -121,7 +121,7 @@ export const Feedback: FC = () => {
   };
 
   return <>
-    <p className="feedback-item field">
+    <p className={classNames('feedback-item', 'field', !hydrated && 'gap-filled')}>
       <button type="button" className={classNames('feedback-open', 'path', 'rail-aside', 'bold', 'attentive', 'field', 'borderless', 'reachable', !hydrated && 'awaiting-script')}
         inert={!hydrated} commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>

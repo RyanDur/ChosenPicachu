@@ -233,6 +233,18 @@ describe('a user form', () => {
   });
 });
 
+describe('the first face', () => {
+  test('a new form opens on the same face every time, so the page drawn at build time shows the face the form holds', () => {
+    const {unmount} = render(added().form);
+    const opened = userForm.avatarShown();
+    unmount();
+
+    render(added().form);
+
+    expect(userForm.avatarShown()).toEqual(opened);
+  });
+});
+
 describe('the avatar control plays fair with the keyboard', () => {
   test('enter draws a new avatar, like a click does', async () => {
     render(added().form);

@@ -434,3 +434,7 @@
   background: var(--field);
   color: var(--ink);
 }
+
+.gap-filled {
+  box-shadow: var(--filled-gap) var(--field);
+}

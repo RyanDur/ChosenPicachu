@@ -78,6 +78,8 @@
   }
 
   .feedback-item {
+    --filled-gap: 0 calc(-1 * var(--base));
+
     grid-area: feedback;
   }
 
@@ -282,6 +284,12 @@
 
 .rail {
   display: contents;
+}
+
+@media (width <= 1100px) {
+  #root .feedback-item {
+    --filled-gap: calc(-1 * var(--base)) 0;
+  }
 }
 
 @media (601px <= width <= 1100px) {

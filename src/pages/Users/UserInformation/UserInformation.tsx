@@ -17,7 +17,7 @@ import {
 } from './actions';
 import {Address} from './Address';
 import {avatarReport, draftOf, formReducer, userOf} from './reducer';
-import {drawAvatar} from './avatars';
+import {drawAvatar, firstAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
@@ -25,13 +25,14 @@ import {Maybe, maybe, not, some} from '@ryandur/sand';
 import {Opened, userAt} from '../mode';
 import {useUsersDispatch} from '../Provider';
 import {userAdded, userUpdated} from '../store';
+import {useHydrated} from '@components/hydrated';
 import './UserInformation.css';
 
-const newUser = (): NewUser => ({
+const newUser = (avatar: string): NewUser => ({
   info: {firstName: '', lastName: '', email: ''},
   friends: [],
   homeAddress: {city: '', state: '', streetAddress: '', zip: ''},
-  avatar: drawAvatar()
+  avatar
 });
 
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
@@ -41,13 +42,14 @@ export const UserInformation: FC<{open?: Opened; className?: string}> = ({open =
 
 const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
   const users = useUsersDispatch();
-  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started.either(user => user, newUser)));
+  const hydrated = useHydrated();
+  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started.either(user => user, () => newUser(firstAvatar))));
   const user = userOf(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
   const editing = open.mode === 'editing';
 
-  const reset = () => dispatch(formReset(shown(open).either(user => user, newUser)));
+  const reset = () => dispatch(formReset(shown(open).either(user => user, () => newUser(drawAvatar()))));
 
   return <form id="user-info-form"
     aria-labelledby="form-title"
@@ -89,9 +91,9 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
     <button type="button" id="avatar-cell"
       aria-label="Draw a new avatar"
       className="avatar borderless rounded-corners accent raisable"
-      disabled={readOnly}
+      disabled={readOnly || !hydrated}
       onClick={() => dispatch(avatarDrawn(drawAvatar()))}>
-      <img id="avatar" className="portrait" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
+      <img id="avatar" className="portrait" src={user.avatar} width="264" height="280" fetchPriority="high" alt="avatar"/>
     </button>
     <output className="off-screen"
       aria-label="avatar report">{avatarReport(draft)}</output>
@@ -115,14 +117,14 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       onChange={event => dispatch(detailsEdited(event.currentTarget.value))}/>
 
     {!readOnly &&
-        <button id="reset-form" type="reset" className="reset button secondary">Reset</button>}
+        <button id="reset-form" type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>}
     {open.mode === 'viewing' && <Link id="reset-form" to={userAt(open.user.id, 'edit')}
       className="reset button secondary">Edit</Link>}
     {!editing && !readOnly &&
-        <button id="submit" type="submit" className="submit button primary">Add</button>}
+        <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Add</button>}
     {open.mode === 'editing' && <Link id="cancel" to={userAt(open.user.id, 'view')}
       className="cancel button secondary" onClick={reset}>Cancel</Link>}
-    {editing && <button id="submit" type="submit" className="submit button primary">Update</button>}
+    {editing && <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Update</button>}
 
   </form>;
 };
