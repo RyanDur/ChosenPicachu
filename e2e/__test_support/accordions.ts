@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {siteFrame} from './site';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
@@ -149,6 +150,7 @@ export const accordionsTab = (page: Page) => {
     holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
     closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
+      await siteFrame(page).hydrated();
       const {opens, shuts} = pressesOfTheFirstPart(build);
       await shuts.evaluate((shut, open) => {
         if (!(shut instanceof HTMLElement && open instanceof HTMLElement)) {
@@ -158,9 +160,11 @@ export const accordionsTab = (page: Page) => {
         open.click();
       }, await opens.elementHandle());
     },
-    opensTheFirstPartThenChoosesOnceItStartsMoving: (build: Build, motion: 'Static'): Promise<void> =>
-      pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
-        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion})),
+    opensTheFirstPartThenChoosesOnceItStartsMoving: async (build: Build, motion: 'Static'): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}));
+    },
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
   };

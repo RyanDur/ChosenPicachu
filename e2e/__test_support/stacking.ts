@@ -1,4 +1,5 @@
 import type {Page} from '@playwright/test';
+import {siteFrame} from './site';
 
 export type Card = 'First' | 'Second' | 'Third';
 
@@ -17,8 +18,12 @@ export const stackingPile = (page: Page) => {
         .filter(element => cards.includes(element))
         .map(card => card.textContent ?? '');
     }),
-    raise: (card: Card): Promise<void> => raisedGroup.getByText(card, {exact: true}).click(),
+    raise: async (card: Card): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await raisedGroup.getByText(card, {exact: true}).click();
+    },
     raiseByKeyboard: async (card: Card): Promise<void> => {
+      await siteFrame(page).hydrated();
       await raisedGroup.getByRole('radio', {name: 'None'}).focus();
       for (let step = 0; step < order.indexOf(card); step += 1) {
         await page.keyboard.press('ArrowRight');

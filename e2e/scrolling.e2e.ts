@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, twoFramesLater} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -97,6 +97,7 @@ test.describe('a desktop, where only the search changes', () => {
     await story.scrollIntoViewIfNeeded();
     const where = await documentScrollY(page);
     const address = page.url();
+    await siteFrame(page).hydrated();
 
     await story.getByText(/^so that /).click();
 

@@ -1,5 +1,16 @@
-import {expect, test} from '@playwright/test';
+import {type Page, expect, test} from '@playwright/test';
 import {clickWhereItIs, desktop, documentScrollY, iPhone, siteFrame} from './__test_support';
+
+const settledScrollY = async (page: Page): Promise<number> => {
+  let last = Number.NaN;
+  await expect.poll(async () => {
+    const now = await documentScrollY(page);
+    const still = now === last;
+    last = now;
+    return still;
+  }, {message: 'the page to stop scrolling'}).toBe(true);
+  return last;
+};
 
 for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as const) {
   test.describe(frame, () => {
@@ -44,7 +55,7 @@ test('a reload returns the reader to where they were on the page', async ({page}
   await siteFrame(page).hydrated();
   await page.mouse.wheel(0, 3000);
   await expect.poll(() => documentScrollY(page)).toBeGreaterThan(300);
-  const where = await documentScrollY(page);
+  const where = await settledScrollY(page);
 
   // Playwright's reload in Firefox opens the address anew rather than reloading the entry the reader is on
   await Promise.all([page.waitForEvent('load'), page.evaluate(() => location.reload())]);

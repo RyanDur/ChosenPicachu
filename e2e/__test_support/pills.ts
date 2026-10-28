@@ -1,9 +1,13 @@
 import type {Locator, Page} from '@playwright/test';
+import {siteFrame} from './site';
 
 export const pillSwitch = (page: Page, name: string) => {
   const group = page.getByRole('group', {name, exact: true}).first();
   return {
-    choose: (pill: string): Promise<void> => group.getByText(pill, {exact: true}).click(),
+    choose: async (pill: string): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await group.getByText(pill, {exact: true}).click();
+    },
     pill: (name: string): Locator => group.getByRole('radio', {name, exact: true, includeHidden: true}),
     wordsOf: (pill: string): Locator => group.getByText(pill, {exact: true}).first(),
     names: async (): Promise<string[]> => [...(await group.ariaSnapshot()).matchAll(/radio "([^"]+)"/g)].map(([, name]) => name),
