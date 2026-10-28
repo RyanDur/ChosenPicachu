@@ -20,8 +20,8 @@ export const TeeUp: FC<PropsWithChildren> = ({children}) =>
       plain HTML, CSS and JavaScript and again in React, so the line between the platform and a framework stays visible.
       Every claim comes with a working example beside it, so a reader can check it with a keyboard or a screen reader
       instead of taking the page’s word for it. The detail on every tab waits in a fold below the point, and the code
-      shown is the site’s own, linked to its source. Each demo asks the question the Record answers: which language the
-      job belonged to.
+      shown is the site’s own, linked to its source. Each demo asks the question the Record answers: where the job
+      belongs.
     </p>
     {children}
   </footer>;

@@ -4,6 +4,8 @@ import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {homePage} from '@pages/Home/__test_support/home';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
+import {DemoTopics} from '@pages/Demos/types';
+import {spelledOut} from '@pages/Record/moments/spelled-out';
 
 describe('the home page', () => {
   beforeEach(async () => {
@@ -15,19 +17,25 @@ describe('the home page', () => {
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
-  test('should open on the thesis, then say who the site is for, then what the sections, the Record, Practice and the Demos give', () => {
-    expect(homePage.paragraph(/^A webpage is three languages working in concert/)).toHaveTextContent('A webpage is three languages working in concert. HTML says what things are, CSS says how they look, and JavaScript says how they respond. Each was designed to handle one concern: structure, presentation and behavior. When one could not yet do a job, another covered for it until its standard caught up and adopted the workaround, which is what HTML’s own design principles ask: when a practice is already widespread, “consider adopting it rather than forbidding it or inventing something new”.');
-    expect(homePage.paragraph(/^This site is for the developer/)).toHaveTextContent('This site is for the developer who has hit a bug on a page and wants to know what the platform, the browser and the standards it follows, meant. Many of us write one of the three languages well and the other two by habit, and the bug lives where the habit and the platform disagree. The habit might be a div where a button was meant, a class that names a margin instead of the reason for it, or a script that rebuilds what the browser already does: scrolling, focus, the back button. Each one works on the day it is written. The fix, when it stops working, is rarely more code. It is finding which language the job belonged to, and letting that language do it.');
-    expect(homePage.paragraph(/^Below, each language has one section/)).toHaveTextContent('Below, each language has one section: what it says, the rule its history teaches, and where to read more. The Record tells each language’s story, then every moment in order, then reads the three together. Practice shows how I organize each one, with a tab for each language. The Demos are where I put the practice to work: five features built from this site’s own code and explained beside it. Two compare the trick we used before the platform could do the job with what it does now; the other three show what the platform does with no library for the job.');
+  test('should say what the site is about, then who it’s for, then what the sections and the Record give, then Practice and the Demos', () => {
+    expect(homePage.paragraph(/^A webpage is built from three languages/)).toHaveTextContent('A webpage is built from three languages, and each has its own job. HTML says what things are, CSS says how they look, and JavaScript says how they respond: structure, presentation and behavior. This site is about that division of work: what each language is for, how it came to be that way, and how to build with it in mind.');
+    expect(homePage.paragraph(/^It’s written for the developer/)).toHaveTextContent('It’s written for the developer who learned the three the way most of us did, one at a time and on the job, and so asks one of them to do most of the work. A job then ends up in a language that can do it, rather than the one it belongs to: a div standing in for a button, a class named for a margin, a script taking over scrolling, focus or the back button. Each works well enough to ship. The bugs come later, when someone uses the page with a keyboard, with a screen reader, on a phone. Much of this work is already done by the platform: the browser and the standards it follows. It keeps getting better, too, because the people who write the standards listen to developers, watch what they build, and adopt what proves itself across the browsers. So more code rarely fixes these bugs. Putting the job where it belongs does.');
+    expect(homePage.paragraph(/^Below, each language has a section/)).toHaveTextContent('Below, each language has a section: what it says, the rule its history teaches, and where to read more. The Record tells how the work came to be divided. When one language could not yet do a job, another covered for it until its standard caught up and adopted the workaround, which is what HTML’s own design principles ask: when a practice is already widespread, “consider adopting it rather than forbidding it or inventing something new”. It goes through each language’s story, then every moment in order, then reads the three together.');
+    expect(homePage.paragraph(/^Practice shows how I organize/)).toHaveTextContent('Practice shows how I organize each language, with a tab for each. The Demos put that practice to work: five features built from this site’s own code and explained beside it, that run from simple to expert. Two compare the trick we used before the platform could do the job with what it does now; the other three build drag sorting, charts and tables with no library for any of them.');
     expect(outOfReadingOrder([
-      homePage.paragraph(/^A webpage is three languages working in concert/),
-      homePage.paragraph(/^This site is for the developer/),
-      homePage.paragraph(/^Below, each language has one section/)
+      homePage.paragraph(/^A webpage is built from three languages/),
+      homePage.paragraph(/^It’s written for the developer/),
+      homePage.paragraph(/^Below, each language has a section/),
+      homePage.paragraph(/^Practice shows how I organize/)
     ])).toEqual([]);
   });
 
-  test('should carry one quotation in the opening, linked to HTML’s design principles', () => {
-    const links = homePage.linksIn(homePage.paragraph(/^A webpage is three languages working in concert/));
+  test('should count the demos as many as the Demos have tabs', () => {
+    expect(homePage.paragraph(/^Practice shows how I organize/)).toHaveTextContent(`${spelledOut(Object.values(DemoTopics).length)} features`);
+  });
+
+  test('should carry one quotation in the opener, linked to HTML’s design principles', () => {
+    const links = homePage.linksIn(homePage.paragraph(/^Below, each language has a section/));
 
     expect(links).toHaveLength(1);
     expect(links[0]).toHaveAccessibleName('“consider adopting it rather than forbidding it or inventing something new”');
