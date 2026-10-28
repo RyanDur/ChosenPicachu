@@ -46,7 +46,7 @@ export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<
   const given: Partial<T> = {...defaults, ...decodeParams(decoders, Object.fromEntries(shown.entries()))};
 
   const createSearchParams = (params = {}): string =>
-    toQueryString({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
+    toQueryString({...Object.fromEntries(shown.entries()), ...filterEmpty(params)});
 
   const removeSearchParams = (...params: string[]) =>
     setSearchParams(Array.from(searchParams.entries())

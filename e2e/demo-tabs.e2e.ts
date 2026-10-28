@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {chartsPage, oldWayFoldLabels, scriptedMarket} from './__test_support';
+import {chartsPage, oldWayFoldLabels, scriptedMarket, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await scriptedMarket(page, [50000, 50001]);
@@ -13,4 +13,11 @@ test('the accordion labels survive a visit to the streaming charts', async ({pag
   await demos.getByRole('link', {name: 'Accordions'}).click();
 
   await expect.poll(() => oldWayFoldLabels(page)).toEqual(before);
+});
+
+test('a tab on a page reached with a dial carries the dial along once the script runs', async ({page}) => {
+  await page.goto('demos/tables/?world=vanilla');
+  await siteFrame(page).hydrated();
+
+  await expect(page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'})).toHaveAttribute('href', /world=vanilla/);
 });
