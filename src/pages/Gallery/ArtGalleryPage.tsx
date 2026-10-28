@@ -1,5 +1,6 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
+import {useHydrated} from '@components/hydrated';
 import {Result, has, maybe, notEmpty} from '@ryandur/sand';
 import {Tabs} from '@components/Tabs';
 import {Loading} from '@components/Loading';
@@ -40,6 +41,7 @@ export const ArtGalleryPage: FC = () => {
   const [answers, updateAnswers] = useState<Answers>({});
   const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam});
   const {pathname} = useLocation();
+  const hydrated = useHydrated();
 
   useEffect(() => {
     const asked = museums.map(({param}) => art.open(param).onComplete(answered(param, updateAnswers)));
@@ -51,8 +53,8 @@ export const ArtGalleryPage: FC = () => {
   const movingTo = shown.shown === 'movingToAnOpenMuseum' ? shown.museum : undefined;
 
   useEffect(() => {
-    if (has(movingTo)) updateSearchParams({tab: movingTo}, {replace: true});
-  }, [movingTo, updateSearchParams]);
+    if (hydrated && has(movingTo)) updateSearchParams({tab: movingTo}, {replace: true});
+  }, [hydrated, movingTo, updateSearchParams]);
 
   return <>
     {notEmpty(open) && <Tabs label="museums" current={tab}

@@ -1,6 +1,16 @@
-import {useSyncExternalStore} from 'react';
+import {startTransition, useEffect, useState} from 'react';
 
-const neverNotifies = () => () => undefined;
+let hydrated = false;
 
-// a page drawn at build time is taken over by the script, and React's first draw over it must match the document
-export const useHydrated = (): boolean => useSyncExternalStore(neverNotifies, () => true, () => false);
+// a page drawn at build time is taken over by the script, and React's first draw over it must match the document;
+// the draw that follows hydration may not yield, so what the script changes then arrives in a transition
+export const useHydrated = (): boolean => {
+  const [taken, take] = useState(hydrated);
+  useEffect(() => {
+    if (!taken) startTransition(() => {
+      hydrated = true;
+      take(true);
+    });
+  }, [taken]);
+  return taken;
+};
