@@ -138,6 +138,21 @@ const searchFor = key => asked('query($search: String!) { search(query: $search)
 
 const bodyOf = answer => JSON.parse(answer.slice(answer.indexOf('{'), answer.lastIndexOf('}') + 1));
 
+describe('the stub stage answers the gallery’s museums from recordings', () => {
+  test.each([
+    ['Harvard', '/harvard?q=imagepermissionlevel:0%20AND%20_exists_:primaryimageurl&page=1&size=8&fields=id,title,people,primaryimageurl&apikey=recorded'],
+    ['Cleveland', '/cleveland/?skip=0&limit=8&has_image=1&fields=id,title,creators,tombstone,images']
+  ])('should answer the gallery’s first look at %s with its recorded wall', async (_museum, address) => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port, get(address));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    expect(answer).toMatch(/\r\ncontent-type: application\/json/i);
+  });
+});
+
 describe('the stub stage answers Feedback’s questions in place of GitHub', () => {
   test('should name its own endpoint in env.js', async () => {
     const {stage, port} = await stageUp();
