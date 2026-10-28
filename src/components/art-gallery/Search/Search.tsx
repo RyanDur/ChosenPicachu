@@ -24,7 +24,7 @@ export const Search: FC<Props> = ({id, className}) => {
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);
-  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({
+  const {tab, search, removeSearchParams, searchWith} = useSearchParamsObject({
     tab: sourceParam,
     search: schema.string
   });
@@ -47,7 +47,7 @@ export const Search: FC<Props> = ({id, className}) => {
     event.preventDefault();
     if (searchString) void navigate({
       pathname: gallery,
-      search: createSearchParams({search: searchString})
+      search: searchWith({search: searchString})
     });
   };
 

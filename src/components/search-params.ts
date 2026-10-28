@@ -35,6 +35,7 @@ type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
   updateSearchParams: (params: Partial<T>, options?: {replace?: boolean}) => void;
   removeSearchParams: (...params: string[]) => void;
   createSearchParams: (params: Partial<T>) => string;
+  searchWith: (params: Partial<T>) => string;
 };
 type Params = {[p: string]: string | number};
 
@@ -48,6 +49,9 @@ export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<
   const createSearchParams = (params = {}): string =>
     toQueryString({...Object.fromEntries(shown.entries()), ...filterEmpty(params)});
 
+  const searchWith = (params = {}): string =>
+    toQueryString({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
+
   const removeSearchParams = (...params: string[]) =>
     setSearchParams(Array.from(searchParams.entries())
       .filter(([key]) => !params.includes(key)));
@@ -59,6 +63,7 @@ export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<
     ...given,
     updateSearchParams,
     createSearchParams,
+    searchWith,
     removeSearchParams
   };
 }
