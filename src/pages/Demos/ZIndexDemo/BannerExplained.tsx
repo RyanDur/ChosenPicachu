@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {Link, useSearchParams} from 'react-router';
+import {Link} from 'react-router';
+import {useSearchParamsOnceHydrated} from '@components/search-params';
 import {plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import {BannerTrap} from './BannerTrap';
@@ -14,7 +15,7 @@ import '../Runs.css';
 const gap = plain(' ');
 
 export const BannerExplained: FC = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParamsOnceHydrated();
 
   return <section aria-labelledby={fixedBannerLosesHeading} className="stacking-part">
     <h2 id={fixedBannerLosesHeading} className="title bold">Why a fixed banner still loses</h2>

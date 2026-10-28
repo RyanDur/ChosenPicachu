@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {Link, useSearchParams} from 'react-router';
-import {useSearchParamsObject} from '@components/search-params';
+import {Link} from 'react-router';
+import {useSearchParamsObject, useSearchParamsOnceHydrated} from '@components/search-params';
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
@@ -40,7 +40,7 @@ export const topLayerStory = {param: 'news', id: 'top'} as const;
 
 export const TopLayerRecipe: FC = () => {
   const {side = 'top', align = 'center'} = useSearchParamsObject({side: sideParam, align: alignParam});
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParamsOnceHydrated();
 
   return <Story {...topLayerStory}
     can="The user sees the news above everything"

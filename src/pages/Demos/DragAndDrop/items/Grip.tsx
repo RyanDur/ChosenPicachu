@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import Handle from '@components/grip.svg';
+import {useHydrated} from '@components/hydrated';
 
 const steps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
 
@@ -15,6 +16,7 @@ type Props = {
 
 export const Grip: FC<Props> = ({item, order, onPressed, onReleased, onArranged}) =>
   <button type="button"
+    disabled={!useHydrated()}
     className="grip handle borderless unfilled focus-ringed reachable"
     aria-label={`grip for ${item}`}
     onPointerDown={onPressed}

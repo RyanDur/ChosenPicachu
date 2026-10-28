@@ -5,6 +5,10 @@ const shown = (): string =>
 
 export const appAddress = {
   shown,
+  drawn: async (): Promise<string> => {
+    await screen.findByRole('status', {name: 'url path'});
+    return shown();
+  },
   movedOnFrom: (from: string): Promise<string> => waitFor(() => {
     const now = shown();
     if (now === from) throw new Error(`the app is still at ${from}`);

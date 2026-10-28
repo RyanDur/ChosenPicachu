@@ -55,8 +55,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v6
         with:
-          name: dist
-          path: ./dist
+          name: site
+          path: ./build/client
 
   review:
     needs: build_test
@@ -125,15 +125,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Download dist
+      - name: Download the site
         uses: actions/download-artifact@v7
         with:
-          name: dist
-          path: ./dist
+          name: site
+          path: ./build/client
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: ./dist
+          path: ./build/client
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
@@ -175,8 +175,8 @@ jobs:
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
-          name: dist
-          path: ./dist
+          name: site
+          path: ./build/client
       - name: Walk the journeys on the stub stage
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: journeys.json
@@ -242,8 +242,8 @@ jobs:
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
-          name: dist
-          path: ./dist
+          name: site
+          path: ./build/client
       - name: Lighthouse audit of ${{ matrix.page }}
         id: audit
         uses: treosh/lighthouse-ci-action@v12

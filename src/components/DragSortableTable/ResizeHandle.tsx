@@ -1,5 +1,6 @@
 import {FC, FocusEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
+import {useHydrated} from '@components/hydrated';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
@@ -12,6 +13,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const neighbour = useTableSelector(neighbourOfColumn(column));
   const namedShare = useTableSelector(namedShareOfColumn(column));
   const held = useTableSelector(columnGripped(column));
+  const hydrated = useHydrated();
 
   const awaken = (table: HTMLTableElement): void =>
     dispatch(awoken(measuredWidths(order, table), measuredFloors(order, table)));
@@ -22,6 +24,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
 
   return <button type="button"
     tabIndex={0}
+    disabled={!hydrated}
     className="resize-handle borderless unfilled held-bar-after focus-ringed"
     aria-label={resizeLabel(column, namedShare)}
     onFocus={(event: FocusEvent<HTMLElement>) =>

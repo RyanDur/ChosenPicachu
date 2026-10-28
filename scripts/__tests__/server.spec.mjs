@@ -64,19 +64,20 @@ const maskedText = text => {
 
 const unreadableFrame = Buffer.from([0x8f, 0x00]);
 
-const distWithAUsersPage = () => {
-  const dist = mkdtempSync(join(tmpdir(), 'stage-dist-'));
-  mkdirSync(join(dist, 'users'));
-  writeFileSync(join(dist, 'users', 'index.html'), '<title>users</title>');
-  writeFileSync(join(dist, 'index.html'), '<title>root</title>');
-  return dist;
+const siteWithAUsersPage = () => {
+  const site = mkdtempSync(join(tmpdir(), 'stage-site-'));
+  mkdirSync(join(site, 'users'));
+  writeFileSync(join(site, 'users', 'index.html'), '<title>users</title>');
+  writeFileSync(join(site, 'index.html'), '<title>root</title>');
+  writeFileSync(join(site, '404.html'), '<title>no page here</title>');
+  return site;
 };
 
 const get = path => `GET ${path} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n`;
 
 describe('the stub stage answers a page address as GitHub Pages does', () => {
   test('should send a page asked for without its slash to the address with it, keeping the query', async () => {
-    const {stage, port} = await stageUp({STAGE_DIST: distWithAUsersPage()});
+    const {stage, port} = await stageUp({STAGE_SITE: siteWithAUsersPage()});
 
     const answer = await answerTo(port, get('/ChosenPicachu/users?page=2'));
     stage.kill();
@@ -86,13 +87,23 @@ describe('the stub stage answers a page address as GitHub Pages does', () => {
   });
 
   test('should serve the page asked for with its slash', async () => {
-    const {stage, port} = await stageUp({STAGE_DIST: distWithAUsersPage()});
+    const {stage, port} = await stageUp({STAGE_SITE: siteWithAUsersPage()});
 
     const answer = await answerTo(port, get('/ChosenPicachu/users/'));
     stage.kill();
 
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
     expect(answer).toContain('<title>users</title>');
+  });
+
+  test('should answer an address with no page of its own with 404.html', async () => {
+    const {stage, port} = await stageUp({STAGE_SITE: siteWithAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/nowhere/'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 404/);
+    expect(answer).toContain('<title>no page here</title>');
   });
 });
 

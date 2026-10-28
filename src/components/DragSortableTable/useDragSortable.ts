@@ -22,7 +22,8 @@ export type Sortable = TableContext & {
 
 export const useDragSortable = <C extends Labelled>(columns: readonly TableColumn<C>[], rows: readonly Seated[], {origin, motion}: Choices): Sortable => {
   const [hand] = useState(() => tableStore());
-  const state = useSyncExternalStore(hand.subscribe, () => hand.state);
+  const held = () => hand.state;
+  const state = useSyncExternalStore(hand.subscribe, held, held);
   return {state, columns, rows, dispatch: hand.dispatch, className: classNames('fancy-table', 'sortable', 'apportioned', origin, motion)};
 };
 

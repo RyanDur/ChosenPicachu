@@ -9,7 +9,7 @@ type DemosContext = {
 const Demos = createContext<DemosContext>({state: demosSlice.initial, dispatch: () => undefined});
 
 export const DemosProvider = ({store, children}: PropsWithChildren<{store: DemosStore}>): ReactNode => {
-  const state = useSyncExternalStore(store.subscribe, () => store.state);
+  const state = useSyncExternalStore(store.subscribe, () => store.state, () => demosSlice.initial);
 
   return <Demos.Provider value={{state, dispatch: store.dispatch}}>
     {children}

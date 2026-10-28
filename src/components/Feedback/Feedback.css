@@ -31,6 +31,10 @@
   }
 }
 
+.feedback-open.awaiting-script {
+  visibility: hidden;
+}
+
 .feedback-dialog {
   inline-size: 100%;
   max-inline-size: 60ch;

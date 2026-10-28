@@ -83,11 +83,21 @@ const quotes = ['Simplicity is the whole of the craft.',
 
 export const news: readonly string[] = [...phrases, ...catchPhrases, ...quotes];
 
+// a random comparator leaves the order to each engine's sort, so a seed would deal Node one deck and Firefox another
+const shuffled = <T>(pool: readonly T[]): T[] => {
+  const cards = [...pool];
+  for (let at = cards.length - 1; at > 0; at -= 1) {
+    const other = Math.floor(roll() * (at + 1));
+    [cards[at], cards[other]] = [cards[other], cards[at]];
+  }
+  return cards;
+};
+
 export const decked = <T>(pool: readonly T[]): () => T => {
   let standing: T[] = [];
   return () => {
     if (standing.length === 0) {
-      standing = [...pool].sort(() => roll() - 0.5);
+      standing = shuffled(pool);
     }
     const [top, ...rest] = standing;
     standing = rest;

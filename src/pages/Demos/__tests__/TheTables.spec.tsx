@@ -379,6 +379,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
+    await tableControls.pressSettings();
     for (const axis of ['pace', 'origin', 'motion']) {
       expect(await tableControls.axis(axis)).toBeVisible();
     }
@@ -421,17 +422,17 @@ describe('the tables demo', () => {
     await waitFor(() => expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']));
   });
 
-  test('the controls fold behind their readout', async () => {
+  test('the controls start folded behind their readout, and a press opens them', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(await tableControls.settings()).toHaveAttribute('open');
+    expect(await tableControls.settings()).not.toHaveAttribute('open');
     expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await tableControls.pressSettings();
-    expect(await tableControls.region()).not.toBeVisible();
+    expect(await tableControls.region()).toBeVisible();
     expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 

@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {chartsPage, dragSortTable, stages} from './__test_support';
+import {chartsPage, dragSortTable, siteFrame, stages} from './__test_support';
 
 const menus: readonly {exhibit: string; at: string; toggle: (page: Page) => Locator; menu: (page: Page) => Locator}[] = [
   {exhibit: 'the price period', at: 'demos/charts/', toggle: page => chartsPage(page).periodToggle, menu: page => page.getByLabel('price period by')},
@@ -10,6 +10,7 @@ for (const {exhibit, at, toggle, menu} of menus) {
   test(`${exhibit} menu opens from the keyboard and closes on Escape`, async ({page}) => {
     await page.goto(at);
     await expect(toggle(page)).toBeVisible({timeout: 30_000});
+    await siteFrame(page).hydrated();
 
     await toggle(page).focus();
     await page.keyboard.press('Enter');

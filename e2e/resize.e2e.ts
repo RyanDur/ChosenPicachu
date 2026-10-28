@@ -1,10 +1,11 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {Stage, desktop, dragSortTable, fingertipMiss, iPadUpright, iPhone, stages} from './__test_support';
+import {Stage, desktop, dragSortTable, fingertipMiss, iPadUpright, iPhone, siteFrame, stages} from './__test_support';
 
 const standing = async (page: Page, stage: Stage) => {
   await page.goto(stage.at);
   const table = dragSortTable(page, stage.table(page));
   await expect(table.columnHeader('trades')).toBeVisible({timeout: 30_000});
+  await siteFrame(page).hydrated();
   return table;
 };
 

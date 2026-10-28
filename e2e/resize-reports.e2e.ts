@@ -8,7 +8,7 @@ for (const {name, at, table} of stages) {
     test('an arrow on a handle trades two points with its neighbor either way, says the new share, and never moves the column', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       const window = await trades.announcedShare('window');
       const neighbour = await trades.announcedShare('trades');
       await trades.listenToTheMoveReport();
@@ -32,7 +32,7 @@ for (const {name, at, table} of stages) {
       const trades = dragSortTable(page, table(page));
       await trades.moveColumnByKey('trades', 'ArrowRight');
       await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-      await trades.resizeHandle('buys').focus();
+      await trades.focusHandle('buys');
       const share = await trades.announcedShare('buys');
 
       await page.keyboard.press('ArrowRight');
@@ -43,7 +43,7 @@ for (const {name, at, table} of stages) {
     test('an arrow held through its repeats says the share once, when it is let go', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       const window = await trades.announcedShare('window');
       await trades.listenToTheMoveReport();
 
@@ -59,7 +59,7 @@ for (const {name, at, table} of stages) {
     test('a keyboard resize ends when the handle loses focus', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       const window = await trades.announcedShare('window');
       await trades.listenToTheMoveReport();
 
@@ -73,9 +73,9 @@ for (const {name, at, table} of stages) {
     test('a second resize replaces what the page said about the first', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       await page.keyboard.press('ArrowRight');
-      await trades.resizeHandle('trades').focus();
+      await trades.focusHandle('trades');
       const share = await trades.announcedShare('trades');
 
       await page.keyboard.press('ArrowRight');
@@ -103,7 +103,7 @@ for (const {name, at, table} of stages) {
     test('a handle dragged and then left says its share once', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       await trades.listenToTheMoveReport();
 
       const hold = await trades.holdHandle('window');
@@ -126,7 +126,7 @@ for (const {name, at, table} of stages) {
       await carried.carryTo(40);
       await carried.carryHome();
       await carried.letGo();
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       await page.keyboard.press('ArrowRight');
 
       const share = await trades.announcedShare('window');
@@ -136,7 +136,7 @@ for (const {name, at, table} of stages) {
     test('a handle dragged while another holds focus says only its own share', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       await trades.listenToTheMoveReport();
 
       const hold = await trades.holdHandle('trades');
@@ -151,7 +151,7 @@ for (const {name, at, table} of stages) {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
-      await trades.resizeHandle('window').focus();
+      await trades.focusHandle('window');
       const before = await trades.announcedShare('window');
 
       await trades.fingerCancelledOnHandle('window', 40);

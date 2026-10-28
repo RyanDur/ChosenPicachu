@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, documentScrollY, twoFramesLater, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -87,3 +87,21 @@ for (const {reader, use} of desks) {
     });
   });
 }
+
+test.describe('a desktop, where only the search changes', () => {
+  test.use({viewport: desktop.viewport});
+
+  test('a story opened on a recipe leaves the page where it was', async ({page}) => {
+    await page.goto('demos/tables/');
+    const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1);
+    await story.scrollIntoViewIfNeeded();
+    const where = await documentScrollY(page);
+    const address = page.url();
+
+    await story.getByText(/^so that /).click();
+
+    await expect(page).not.toHaveURL(address);
+    await twoFramesLater(page);
+    expect(await documentScrollY(page)).toBe(where);
+  });
+});

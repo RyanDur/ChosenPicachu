@@ -5,5 +5,6 @@ export const practiceAddress = (concern: Concern): string => `${Paths.practice}$
 
 const formerTabs: ReadonlyMap<string, Concern> = new Map([['dynamic', 'Behavior'], ['dynamic-interaction', 'Behavior']]);
 
-export const concernOf = (tab = ''): Concern =>
-  formerTabs.get(tab) ?? concernsInOrder.find(concern => concernId(concern) === tab) ?? 'Structure';
+export const concernAt = (segment?: string): Concern | undefined => concernsInOrder.find(concern => concernId(concern) === segment);
+
+export const concernOf = (tab = ''): Concern => formerTabs.get(tab) ?? concernAt(tab) ?? 'Structure';

@@ -8,7 +8,7 @@ import {WebSocketServer} from 'ws';
 
 const port = Number(process.env.STAGE_PORT ?? 4517);
 const here = dirname(fileURLToPath(import.meta.url));
-const dist = resolve(process.env.STAGE_DIST ?? join(here, '../../dist'));
+const site = resolve(process.env.STAGE_SITE ?? join(here, '../../build/client'));
 const fixtures = join(here, 'fixtures');
 
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
@@ -91,7 +91,7 @@ const answers = (request, response) => {
   }
 
   const path = url.replace(/^\/ChosenPicachu/, '').split('?')[0];
-  const file = join(dist, path);
+  const file = join(site, path);
   if (existsSync(file) && statSync(file).isFile()) {
     const kind = extname(file);
     return send(200, readFileSync(file), types[kind] ?? 'application/octet-stream',
@@ -106,7 +106,10 @@ const answers = (request, response) => {
     return response.end();
   }
   const entry = join(file, 'index.html');
-  send(200, readFileSync(existsSync(entry) ? entry : join(dist, 'index.html')), 'text/html', true);
+  if (existsSync(entry)) {
+    return send(200, readFileSync(entry), 'text/html', true);
+  }
+  send(404, readFileSync(join(site, '404.html')), 'text/html', true);
 };
 const server = createServer(answers);
 

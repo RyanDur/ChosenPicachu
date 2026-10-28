@@ -20,7 +20,8 @@ export const topicNames: Record<DemoTopics, string> = {
 
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
 
-export const demoTopicOf = (tab = ''): DemoTopics =>
-  formerTabs.get(tab) ?? Object.values(DemoTopics).find(topic => topic === tab) ?? DemoTopics.accordions;
+export const demoTopicAt = (segment?: string): DemoTopics | undefined => Object.values(DemoTopics).find(topic => topic === segment);
+
+export const demoTopicOf = (tab = ''): DemoTopics => formerTabs.get(tab) ?? demoTopicAt(tab) ?? DemoTopics.accordions;
 
 export type PropsWithClassName = {className?: string};

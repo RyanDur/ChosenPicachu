@@ -11,7 +11,9 @@ const validator = new HtmlValidate({
     'attribute-empty-style': 'off',
     'no-trailing-whitespace': 'off',
     'no-inline-style': 'off',
-    'form-dup-name': ['error', {shared: ['radio', 'checkbox']}]
+    'form-dup-name': ['error', {shared: ['radio', 'checkbox']}],
+    // React's server render names its own script _R_, and HTML asks only that an id hold no space
+    'valid-id': ['error', {relaxed: true}]
   }
 });
 

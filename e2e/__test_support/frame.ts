@@ -1,4 +1,5 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
+import {siteFrame} from './site';
 
 export type Stage = {name: string; at: string; table: (page: Page) => Locator | FrameLocator};
 
@@ -51,6 +52,7 @@ export type Hold = {
 };
 
 const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> => {
+  await siteFrame(page).hydrated();
   // a carry that runs past the edge of the view scrolls the page under the pointer, which no hand can do
   await grip.evaluate(element => element.scrollIntoView({block: 'center', inline: 'center'}));
   const home = centreOf(await boxOf(grip));
@@ -74,6 +76,7 @@ const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> 
 };
 
 const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void> => {
+  await siteFrame(page).hydrated();
   await carry(page, from, {x, y});
   await page.mouse.up();
 };
@@ -102,7 +105,9 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
   const grip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`, exact: true});
   const resizeHandle = (name: string): Locator => table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
+  const {hydrated} = siteFrame(page);
   const centreOfHandle = async (name: string): Promise<Point> => {
+    await hydrated();
     await resizeHandle(name).scrollIntoViewIfNeeded();
     return centreOf(await boxOf(resizeHandle(name)));
   };
@@ -137,6 +142,10 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.up();
     },
     resizeHandle,
+    focusHandle: async (name: string): Promise<void> => {
+      await hydrated();
+      await resizeHandle(name).focus();
+    },
     holdHandle: async (name: string): Promise<{carryTo: (by: number) => Promise<void>; carryHome: () => Promise<void>; letGo: () => Promise<void>}> => {
       const middle = await centreOfHandle(name);
       await page.mouse.move(middle.x, middle.y);
@@ -162,12 +171,14 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.move(middle.x + by, middle.y, {steps: 8});
     },
     narrowByKeys: async (name: string, presses: number): Promise<void> => {
+      await hydrated();
       await resizeHandle(name).focus();
       for (let press = 0; press < presses; press++) {
         await page.keyboard.press('ArrowLeft');
       }
     },
     announcedShare: async (name: string): Promise<number> => {
+      await hydrated();
       const label = await resizeHandle(name).getAttribute('aria-label') ?? '';
       const share = /, (\d+)%$/.exec(label)?.[1] ?? '';
       if (share === '') throw new Error(`the handle "${label}" names no share`);
@@ -192,10 +203,12 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       .filter(line => /^- (table|caption|columnheader|rowheader|img)\b/.test(line)),
     row: (name: RegExp): Locator => table.getByRole('row', {name}),
     moveColumnByKey: async (column: string, key: string): Promise<void> => {
+      await hydrated();
       await columnHeader(column).focus();
       await page.keyboard.press(key);
     },
     moveRowByKey: async (row: number, key: string): Promise<void> => {
+      await hydrated();
       await grip(row).focus();
       await page.keyboard.press(key);
     },
@@ -213,16 +226,20 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await dragTo(page, from, from.x + from.width / 2, target.y + target.height * 0.8);
     },
     moveReport: (): Locator => table.getByRole('status', {name: 'move report'}),
-    listenToTheMoveReport: (): Promise<void> => table.getByRole('status', {name: 'move report'}).evaluate(report => {
-      const said: string[] = [];
-      new MutationObserver(() => said.push(report.textContent ?? '')).observe(report, {childList: true, characterData: true, subtree: true});
-      Reflect.set(globalThis, 'moveReportSaid', said);
-    }),
+    listenToTheMoveReport: async (): Promise<void> => {
+      await hydrated();
+      await table.getByRole('status', {name: 'move report'}).evaluate(report => {
+        const said: string[] = [];
+        new MutationObserver(() => said.push(report.textContent ?? '')).observe(report, {childList: true, characterData: true, subtree: true});
+        Reflect.set(globalThis, 'moveReportSaid', said);
+      });
+    },
     whatTheMoveReportSaid: (): Promise<unknown[]> => table.getByRole('status', {name: 'move report'}).evaluate(() => {
       const said: unknown = Reflect.get(globalThis, 'moveReportSaid');
       return Array.isArray(said) ? said.filter(text => text !== '') : [];
     }),
     sortBy: async (column: string, direction: string): Promise<void> => {
+      await hydrated();
       await table.getByRole('button', {name: `sort ${column}`}).click();
       await table.getByRole('button', {name: direction}).click();
     }

@@ -2,6 +2,7 @@ import {ActionDispatch, createContext, FC, KeyboardEvent, MouseEvent, PropsWithC
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
+import {useHydrated} from '@components/hydrated';
 import {usePageName} from '@components/PageName';
 import {troubleWith} from '@transport/trouble';
 import {sent, threadFor} from './github';
@@ -20,13 +21,13 @@ import {Draft, draftAt, feedbackReducer} from './reducer';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
 
-const invokersMissing = not('command' in HTMLButtonElement.prototype);
-const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
+const invokersMissing = (): boolean => not('command' in HTMLButtonElement.prototype);
+const lightDismissMissing = (): boolean => not('closedBy' in HTMLDialogElement.prototype);
 
 const commandWithoutInvokers = (event: MouseEvent<HTMLButtonElement>) => {
   const button = event.currentTarget;
   const dialog = document.getElementById(button.getAttribute('commandfor') ?? '');
-  if (invokersMissing && dialog instanceof HTMLDialogElement) {
+  if (invokersMissing() && dialog instanceof HTMLDialogElement) {
     if (button.getAttribute('command') === 'show-modal') {
       dialog.showModal();
     } else {
@@ -45,7 +46,7 @@ const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
 const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
   const box = event.currentTarget.getBoundingClientRect();
   const onTheVeil = event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
-  if (lightDismissMissing && event.target === event.currentTarget && onTheVeil) {
+  if (lightDismissMissing() && event.target === event.currentTarget && onTheVeil) {
     event.currentTarget.close();
   }
 };
@@ -77,6 +78,7 @@ export const FeedbackProvider: FC<PropsWithChildren> = ({children}) => {
 };
 
 export const Feedback: FC = () => {
+  const hydrated = useHydrated();
   const {feedbackToken, feedbackEndpoint} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
@@ -120,10 +122,11 @@ export const Feedback: FC = () => {
 
   return <>
     <p className="feedback-item field">
-      <button type="button" className="feedback-open path rail-aside bold attentive field borderless reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
+      <button type="button" className={classNames('feedback-open', 'path', 'rail-aside', 'bold', 'attentive', 'field', 'borderless', 'reachable', !hydrated && 'awaiting-script')}
+        inert={!hydrated} commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    <dialog id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    {hydrated && <dialog id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
@@ -147,6 +150,6 @@ export const Feedback: FC = () => {
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
-    </dialog>
+    </dialog>}
   </>;
 };

@@ -1,6 +1,5 @@
 import {FC, useState} from 'react';
-import {useLocation} from 'react-router';
-import {randParagraph, wordDeck} from '@components/fibs';
+import {randNumber, randParagraph, seed, wordDeck} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
@@ -33,15 +32,15 @@ import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number, dealt: () => string) => Array.from({length: count}, () => ({
   key: dealt(),
-  value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
+  value: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
 }));
 
 export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
-  const {search} = useLocation();
-  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams} =
+  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, createSearchParams} =
     useSearchParamsObject(
       {pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
   const [accordionContents] = useState(() => {
+    seed('the accordion exhibits');
     const dealt = wordDeck();
     return {
       measuredCheckbox: paragraphs(5, dealt),
@@ -67,7 +66,7 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" current={topic}
-      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${search}`}))}/>
+      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${createSearchParams({})}`}))}/>
     <section id="about" aria-label={topicNames[topic]} className="about">
       {({
         [DemoTopics.accordions]:

@@ -1,12 +1,21 @@
-import {useSearchParams} from 'react-router';
+import {SetURLSearchParams, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
+import {useHydrated} from '@components/hydrated';
 
 const filterEmpty = (obj: {[p: string]: string | number}) =>
   Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
 
 export const numberParam: schema.Decoder<number> = schema.regex(/^-?\d+$/).andThen(Number);
+
+const noSearch = new URLSearchParams();
+
+// a page drawn at build time holds no search, so the dials apply once the script has taken the page over
+export const useSearchParamsOnceHydrated = (): [URLSearchParams, SetURLSearchParams] => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  return [useHydrated() ? searchParams : noSearch, setSearchParams];
+};
 
 type ParamDecoders<T> = {[K in keyof T]: schema.Decoder<T[K]>};
 
@@ -32,7 +41,7 @@ type Params = {[p: string]: string | number};
 export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>): SearchParamsObject<T, Record<never, never>>;
 export function useSearchParamsObject<T extends Params, D extends Partial<NoInfer<T>>>(decoders: ParamDecoders<T>, defaults: D): SearchParamsObject<T, D>;
 export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>, defaults: Partial<T> = {}): SearchParamsObject<T, Record<never, never>> {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParamsOnceHydrated();
   const given: Partial<T> = {...defaults, ...decodeParams(decoders, Object.fromEntries(searchParams.entries()))};
 
   const createSearchParams = (params = {}): string =>

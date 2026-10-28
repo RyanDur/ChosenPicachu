@@ -7,9 +7,9 @@
     "defaults"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "react-router dev",
     "test": "vitest",
-    "build": "tsc -b && vite build && node scripts/spa-fallback.mjs",
+    "build": "tsc -b && react-router build && node scripts/site-for-pages.mjs",
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
     "tsc": "tsc -b",
@@ -21,12 +21,14 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-router/node": "7.18.4",
     "@ryandur/sand": "^10.0.0",
     "date-fns": "4.1.0",
+    "isbot": "5.2.2",
     "random-avatar-generator": "^2.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-router": "^7.18.1",
+    "react-router": "7.18.4",
     "schemawax": "^1.0.12"
   },
   "devDependencies": {
@@ -38,6 +40,7 @@
     "@faker-js/faker": "10.5.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
+    "@react-router/dev": "7.18.4",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@testing-library/jest-dom": "7.0.0",
     "@testing-library/react": "16.3.2",
@@ -68,5 +71,14 @@
     "vitest": "^4.1.10",
     "vitest-location-mock": "^1.0.4",
     "ws": "^8.21.1"
+  },
+  "overrides": {
+    "@react-router/dev": {
+      "typescript": "$typescript"
+    },
+    "@react-router/node": {
+      "typescript": "$typescript"
+    },
+    "react-server-dom-webpack": "19.2.7"
   }
 }

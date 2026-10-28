@@ -2,7 +2,6 @@ import {FC, PropsWithChildren} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle, Motion, Origin} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
-import {roomToStandOpen} from '@components/room';
 import {DialGroup, DialRow} from './DialRow';
 import './Controls.css';
 
@@ -43,7 +42,7 @@ export type ControlsProps = Dials & {
 
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPaceChosen, onOriginChosen, onMotionChosen, children}) => {
   const heading = `${copy.kind}-controls-heading`;
-  return <Disclosure label="settings" className="demo-settings" startsOpen={roomToStandOpen}
+  return <Disclosure label="settings" className="demo-settings"
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>

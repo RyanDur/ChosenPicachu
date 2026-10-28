@@ -1,6 +1,6 @@
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
 import {StoryKey, storyAnchor} from './story-anchor';
-import {useSearchParams} from 'react-router';
+import {useSearchParamsOnceHydrated} from '@components/search-params';
 import {useRanks} from './ranks';
 import {Steps} from './Steps';
 
@@ -29,7 +29,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParamsOnceHydrated();
   const {story: Can} = useRanks();
   const steps = stepsIn(children);
   const toggled = (event: MouseEvent<HTMLElement>) => {

@@ -1,5 +1,5 @@
 import {expect, type Page, test} from '@playwright/test';
-import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, scriptedMarket, siteFrame} from './__test_support';
+import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
   test.describe(reader, () => {
@@ -19,40 +19,6 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
         await expect(feedback.words).toBeFocused();
       });
     }
-  });
-}
-
-for (const {name, path, title, chunk, arrived} of [
-  {name: 'the tables tab', path: 'demos/tables/', title: 'Demos Tables', chunk: '**/assets/DemosPage-*.js', arrived: (page: Page) => page.getByRole('region', {name: 'Tables', exact: true})},
-  {name: 'a chart tutorial', path: 'demos/charts/price/', title: 'Demos Charts', chunk: '**/assets/ChartPage-*.js', arrived: (page: Page) => page.getByRole('article', {name: 'price line tutorial'})}
-]) {
-  test.describe('a phone held upright', () => {
-    test.use(iPhone);
-
-    test(`aims at Feedback while ${name} is still arriving, and the press opens it onto the field`, async ({page}) => {
-      await github(page);
-      await scriptedMarket(page, []);
-      const feedback = feedbackOn(page);
-      const arriving = Promise.withResolvers<void>();
-      let held = false;
-      await page.route(chunk, async route => {
-        held = true;
-        await arriving.promise;
-        await route.continue();
-      });
-      await page.goto(path, {waitUntil: 'commit'});
-      await expect.poll(() => held, 'the page held back').toBe(true);
-      await expect(page.getByRole('heading', {level: 1, name: title})).toBeVisible();
-      const aim = await feedback.open.boundingBox();
-      if (aim === null) throw new Error('no Feedback to aim at');
-
-      arriving.resolve();
-      await expect(arrived(page)).toBeVisible();
-      await page.mouse.click(aim.x + aim.width / 2, aim.y + aim.height / 2);
-
-      await expect(feedback.dialog).toBeVisible();
-      await expect(feedback.words).toBeFocused();
-    });
   });
 }
 
@@ -195,10 +161,13 @@ for (const {reader, device} of [
 test.describe('a reader with script off', () => {
   test.use({javaScriptEnabled: false});
 
-  test('finds no Feedback button, and a line that links to Discussions instead', async ({page}) => {
-    await page.goto('');
+  for (const path of ['', 'record/', 'practice/behavior/', 'demos/tables/', 'demos/charts/price/', 'users/']) {
+    test(`finds no Feedback button at /${path}, and a line that links to Discussions instead`, async ({page}) => {
+      await page.goto(path);
 
-    await expect(page.getByRole('button', {name: 'Feedback'})).toHaveCount(0);
-    await expect(page.getByRole('link', {name: 'Discussions page on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
-  });
+      await expect(page.getByRole('heading', {level: 1})).toBeVisible();
+      await expect(feedbackOn(page).open).toHaveCount(0);
+      await expect(page.getByRole('link', {name: 'Discussions page on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
+    });
+  }
 });

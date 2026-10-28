@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import {useHydrated} from '@components/hydrated';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -14,8 +15,9 @@ type Props<T extends string> = {
   onChosen: (value: T) => void;
 };
 
-export const PillGlider = <T extends string>({label, name, options, chosen, onChosen}: Props<T>) =>
-  <fieldset className="pill-glider rounded-corners ringed hover-veiled black-rounded-before">
+export const PillGlider = <T extends string>({label, name, options, chosen, onChosen}: Props<T>) => {
+  const hydrated = useHydrated();
+  return <fieldset className="pill-glider rounded-corners ringed hover-veiled black-rounded-before">
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
       <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink choice-inverse-filled"
@@ -26,6 +28,8 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
           name={name}
           value={value}
           checked={chosen === value}
+          disabled={!hydrated}
           onChange={() => onChosen(value)}/>
       </label>)}
   </fieldset>;
+};

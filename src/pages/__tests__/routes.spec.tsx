@@ -8,6 +8,7 @@ import {site} from '../__test_support';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {appAddress} from '@__test_support/address';
+import {homePage} from '@pages/Home/__test_support/home';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -77,9 +78,9 @@ describe('page error boundaries', () => {
   test('a room still loading is not called closed', async () => {
     render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
 
-    await site.nav();
-    expect(screen.queryByRole('heading', {level: 1})).not.toBeInTheDocument();
-    expect(screen.queryByText('This room is closed.')).not.toBeInTheDocument();
+    expect(await appAddress.drawn()).toBe('/');
+    expect(site.pageTitleIfAny()).not.toBeInTheDocument();
+    expect(site.closedRoomIfAny()).not.toBeInTheDocument();
   });
 });
 
@@ -128,8 +129,8 @@ describe('a link saved to the old Development address', () => {
   test('should land on the Practice page, on the tab it named', async () => {
     render(<TestApp at="/development/?tab=presentation"/>);
 
-    expect(await screen.findByRole('heading', {name: 'Practice Presentation', level: 1})).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(practiceAt('presentation'));
+    expect(await appAddress.movedOnFrom('/development/?tab=presentation')).toBe(practiceAt('presentation'));
+    expect(site.pageTitle()).toHaveTextContent('Practice Presentation');
   });
 
   test('should land a former tab name on the tab it became', async () => {
@@ -182,14 +183,24 @@ describe('the rail says which page the reader is on', () => {
     expect(within(nav).getAllByRole('link', {current: 'page'})).toHaveLength(1);
   });
 
-  test('should move the mark to the page the reader follows', async () => {
+  test('should move the mark to the page the reader follows, and keep the reader on it', async () => {
     render(<TestApp at={Paths.home}/>);
-    const nav = await site.nav();
 
-    await userEvent.click(within(nav).getByRole('link', {name: 'Demos'}));
+    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Demos'}));
 
-    expect(await within(nav).findByRole('link', {name: 'Demos', current: 'page'})).toBeInTheDocument();
-    expect(within(nav).getByRole('link', {name: 'Home', current: false})).toBeInTheDocument();
+    await waitFor(() => expect(site.railLink('Demos')).toHaveAttribute('aria-current', 'page'));
+    expect(site.railLink('Demos')).toHaveFocus();
+    expect(site.railLink('Home')).not.toHaveAttribute('aria-current');
+  });
+
+  test('should leave focus to the platform after a link followed from the page itself', async () => {
+    render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
+
+    await userEvent.click(homePage.storySignpost('Structure'));
+
+    await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
+    expect(site.railLink('Record')).not.toHaveFocus();
   });
 });
 
@@ -205,11 +216,11 @@ describe('leaving a page', () => {
   });
 
   test.each([
-    {page: 'Demos', at: demosAt('accordions'), switchTab: () => demoTabs.open('Charts'), title: 'Demos Charts'},
-    {page: 'Practice', at: practiceAt('structure'), switchTab: () => practicePage.pickTab('Behavior'), title: 'Practice Behavior'}
-  ])('switching $page tabs keeps the reader where they were on the page', async ({at, switchTab, title}) => {
+    {page: 'Demos', at: demosAt('accordions'), arrived: () => demoTabs.arrivedOn('Accordions'), switchTab: () => demoTabs.open('Charts'), title: 'Demos Charts'},
+    {page: 'Practice', at: practiceAt('structure'), arrived: () => practicePage.arrivedOn('Structure'), switchTab: () => practicePage.pickTab('Behavior'), title: 'Practice Behavior'}
+  ])('switching $page tabs keeps the reader where they were on the page', async ({at, arrived, switchTab, title}) => {
     render(<TestApp at={at}/>);
-    await site.pageTitled();
+    await arrived();
     const landings = scrolling.recordLandings();
 
     await switchTab();

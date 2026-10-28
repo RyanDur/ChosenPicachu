@@ -1,4 +1,5 @@
 import {FC, useState} from 'react';
+import {useHydrated} from '@components/hydrated';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';
@@ -41,6 +42,7 @@ type Props = {
 };
 
 export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
+  const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Worn>>(nothing());
   const openedAsWorn = opened.mBind(wearing => wearing === worn ? some(wearing) : nothing());
 
@@ -54,7 +56,7 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
       <legend className="paragraph">What card one wears</legend>
       {inOrder.map(choice =>
         <label key={choice} className="context-choice reachable">
-          <input type="radio" name="card-one-wears" checked={worn === choice}
+          <input type="radio" name="card-one-wears" checked={worn === choice} disabled={!hydrated}
             onChange={() => {
               updateOpened(nothing());
               onWornChosen(choice);

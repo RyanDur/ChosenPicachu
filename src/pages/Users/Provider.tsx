@@ -9,7 +9,7 @@ type UsersContext = {
 const Users = createContext<UsersContext>({state: usersSlice.initial, dispatch: () => undefined});
 
 export const UsersProvider = ({store, children}: PropsWithChildren<{store: UsersStore}>): ReactNode => {
-  const state = useSyncExternalStore(store.subscribe, () => store.state);
+  const state = useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial);
 
   return <Users.Provider value={{state, dispatch: store.dispatch}}>
     {children}

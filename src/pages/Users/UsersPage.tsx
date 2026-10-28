@@ -9,7 +9,7 @@ import {Paths} from '@pages/Paths';
 import {UsersTable} from './UsersTable';
 import {UsersProvider} from './Provider';
 import {syncing} from './syncing';
-import {opened, usersStore, userWithId} from './store';
+import {opened, usersSlice, usersStore, userWithId} from './store';
 import {UserInformation} from './UserInformation';
 import {modeParam, openedOn} from './mode';
 import './UsersPage.css';
@@ -19,7 +19,7 @@ export const UsersPage: FC = () => {
   const {raise} = useBanners();
   const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: modeParam});
   const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
-  const open = openedOn(userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state)), param);
+  const open = openedOn(userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial)), param);
 
   useEffect(() => {
     store.dispatch(opened());

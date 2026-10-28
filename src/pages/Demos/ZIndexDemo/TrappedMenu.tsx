@@ -1,4 +1,5 @@
 import {FC, useState} from 'react';
+import {useHydrated} from '@components/hydrated';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
+  const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
   const openedAsTheCardsAre = opened.mBind(place => place === 'top layer' || place === cardOne ? some(place) : nothing());
 
@@ -31,7 +33,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
     <ol className="old-way-cards">
       <li className={classNames('old-way-card card rounded-corners floating positioned', cardOne === 'contained' && 'forms-context')}>
         <label className="context-choice reachable">
-          <input type="checkbox" checked={cardOne === 'contained'}
+          <input type="checkbox" checked={cardOne === 'contained'} disabled={!hydrated}
             onChange={({currentTarget}) => {
               updateOpened(nothing());
               onCardOneChosen(currentTarget.checked ? 'contained' : 'free');

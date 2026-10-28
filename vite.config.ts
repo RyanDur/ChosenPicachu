@@ -10,7 +10,9 @@ import {usersServerScript} from './src/components/Users/resource/usersServer';
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
+import {reactRouter} from '@react-router/dev/vite';
 import svgr from 'vite-plugin-svgr';
+import {has} from '@ryandur/sand';
 
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
@@ -34,7 +36,8 @@ const frameScript = (): Plugin => ({
   async load(id) {
     if (id.startsWith('\0framejs')) {
       const path = id.slice('\0framejs'.length, -'.js'.length);
-      const bundle = await rolldown({input: path, resolve: {alias: aliases}, logLevel: 'silent'});
+      // the frame is bundled outside Vite, which is what fills in import.meta.env, and it runs only in the browser
+      const bundle = await rolldown({input: path, resolve: {alias: aliases}, transform: {define: {'import.meta.env.SSR': 'false'}}, logLevel: 'silent'});
       const {output} = await bundle.generate({format: 'esm'});
       output[0].moduleIds
         .filter(module => !module.startsWith('\0'))
@@ -146,13 +149,13 @@ const usersServerPlugin = (): Plugin => {
       });
     },
     async generateBundle() {
-      this.emitFile({type: 'asset', fileName: script, source: await built()});
+      if (this.environment.name === 'client') this.emitFile({type: 'asset', fileName: script, source: await built()});
     }
   };
 };
 
 const runtimeEnv = (env: Record<string, string>): Plugin => {
-  const body = `window.__env = ${JSON.stringify({
+  const values = {
     tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
     tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
     tradeHistory: env.VITE_APP_TRADE_HISTORY ?? '',
@@ -166,16 +169,11 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     usersDomain: env.VITE_APP_USERS_API ?? '',
     feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? '',
     feedbackEndpoint: env.VITE_APP_FEEDBACK_ENDPOINT ?? 'https://api.github.com/graphql'
-  }, null, 2)};\n`;
-  let base = '/';
+  };
+  const body = `window.__env = ${JSON.stringify(values, null, 2)};\n`;
   return {
     name: 'runtime-env',
-    configResolved(config) {
-      base = config.base;
-    },
-    transformIndexHtml() {
-      return [{tag: 'script', attrs: {src: `${base}env.js`}, injectTo: 'head'}];
-    },
+    config: () => ({define: {__BUILT_ENV__: JSON.stringify(values)}}),
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         if ((request.url ?? '').split('?')[0].endsWith('/env.js')) {
@@ -187,7 +185,7 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
       });
     },
     generateBundle() {
-      this.emitFile({type: 'asset', fileName: 'env.js', source: body});
+      if (this.environment.name === 'client') this.emitFile({type: 'asset', fileName: 'env.js', source: body});
     }
   };
 };
@@ -199,9 +197,9 @@ export default defineConfig(({mode}) => ({
     alias: aliases
   },
   build: {
-    manifest: true
+    cssCodeSplit: false
   },
-  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'
