@@ -7,7 +7,7 @@ A React and TypeScript site whose home page states its own principles in three c
 - `npm ci` installs, and its postinstall applies the platform patches in `patches/`.
 - `git config core.hooksPath scripts/git-hooks` turns on the hooks that guard every commit and push.
 - `npm run dev` serves the site. Feedback appears only with `VITE_APP_FEEDBACK_TOKEN` in `.env`: any value shows it, and a real fine-grained token sends. Never commit a real token.
-- `npm run build` typechecks, builds `build/client` with `react-router build`, pre-renders every fixed path into it, and runs `scripts/spa-fallback.mjs`, which flattens the output, writes shell copies only for the routes that are not pre-rendered, and writes `404.html`.
+- `npm run build` typechecks, builds `build/client` with `react-router build`, pre-renders every fixed path into it, and runs `scripts/site-for-pages.mjs`, which lifts the pages out of the `ChosenPicachu` folder into `build/client` and copies the shell to `404.html`; no shell copies are written, since every fixed path is pre-rendered.
 
 ## Testing
 
