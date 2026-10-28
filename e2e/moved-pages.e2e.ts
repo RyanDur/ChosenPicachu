@@ -46,3 +46,14 @@ test('an address with no page answers that it is not found, and says there is no
   expect(answer?.status()).toBe(404);
   await expect(siteFrame(page).title).toHaveText('No such room');
 });
+
+test.describe('a reader with script off at the three-in-a-row game', () => {
+  test.use({javaScriptEnabled: false});
+
+  test('finds its page in the document, not the no-room answer', async ({page}) => {
+    const answer = await page.goto('games/colorGame');
+
+    expect(answer?.status()).toBe(200);
+    await expect(siteFrame(page).title).toHaveText('Play Games');
+  });
+});

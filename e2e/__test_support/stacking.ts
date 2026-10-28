@@ -29,7 +29,13 @@ export const stackingPile = (page: Page) => {
         await page.keyboard.press('ArrowRight');
       }
     },
-    expand: (): Promise<void> => pile.getByRole('button', {name: 'Expand'}).click(),
-    collapse: (): Promise<void> => pile.getByRole('button', {name: 'Collapse'}).click()
+    expand: async (): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await pile.getByRole('button', {name: 'Expand'}).click();
+    },
+    collapse: async (): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await pile.getByRole('button', {name: 'Collapse'}).click();
+    }
   };
 };

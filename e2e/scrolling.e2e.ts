@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -93,13 +93,12 @@ test.describe('a desktop, where only the search changes', () => {
 
   test('a story opened on a recipe leaves the page where it was', async ({page}) => {
     await page.goto('demos/tables/');
-    const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1);
-    await story.scrollIntoViewIfNeeded();
+    const tables = tablesDemo(page);
+    await tables.storyAt(1).scrollIntoViewIfNeeded();
     const where = await documentScrollY(page);
     const address = page.url();
-    await siteFrame(page).hydrated();
 
-    await story.getByText(/^so that /).click();
+    await tables.openStoryAt(1);
 
     await expect(page).not.toHaveURL(address);
     await twoFramesLater(page);
