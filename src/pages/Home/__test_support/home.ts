@@ -1,4 +1,5 @@
 import {screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const concern = (name: string): HTMLElement => screen.getByRole('region', {name});
 
@@ -22,5 +23,6 @@ export const homePage = {
   claim,
   claimLinks: (name: string): HTMLElement[] => claim(name).flatMap(paragraph => within(paragraph).queryAllByRole('link')),
   storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'}),
+  followStorySignpost: (name: string): Promise<void> => userEvent.click(within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'})),
   practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
 };

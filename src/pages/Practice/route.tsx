@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useParams} from 'react-router';
-import {maybe} from '@ryandur/sand';
+import {Maybe} from '@ryandur/sand';
 import {PageError} from '@pages/PageError';
 import {Header, Listing} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
@@ -18,14 +18,14 @@ const listings: Record<Concern, Listing> = {
 
 const headerOf = (concern: Concern) => <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
 
-const useConcern = (): Concern | undefined => concernAt(useParams().concern);
+const useConcern = (): Maybe<Concern> => concernAt(useParams().concern);
 
 export const ErrorBoundary: FC = () => {
-  const concern = useConcern();
-  return <Page header={maybe(concern).map(headerOf).orElse(null)}><PageError/></Page>;
+  const header = useConcern().map(headerOf).orElse(null);
+  return <Page header={header}><PageError/></Page>;
 };
 
-const Room: FC = () => maybe(useConcern()).either(
+const Room: FC = () => useConcern().either(
   concern => <Page header={headerOf(concern)}><PracticePage concern={concern}/></Page>,
   () => <NoSuchRoom/>);
 

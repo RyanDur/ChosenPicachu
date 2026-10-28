@@ -1,3 +1,4 @@
+import {Maybe, maybe} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 
 export enum DemoTopics {
@@ -20,8 +21,9 @@ export const topicNames: Record<DemoTopics, string> = {
 
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
 
-export const demoTopicAt = (segment?: string): DemoTopics | undefined => Object.values(DemoTopics).find(topic => topic === segment);
+export const demoTopicAt = (segment?: string): Maybe<DemoTopics> => maybe(Object.values(DemoTopics).find(topic => topic === segment));
 
-export const demoTopicOf = (tab = ''): DemoTopics => formerTabs.get(tab) ?? demoTopicAt(tab) ?? DemoTopics.accordions;
+export const demoTopicOf = (tab = ''): DemoTopics =>
+  maybe(formerTabs.get(tab)).either(former => former, () => demoTopicAt(tab).orElse(DemoTopics.accordions));
 
 export type PropsWithClassName = {className?: string};

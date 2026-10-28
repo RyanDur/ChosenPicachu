@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {maybe} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 
 export const gotoTopOfPage = (): void => {
   window.scrollTo(0, 0);
@@ -15,13 +15,13 @@ export type ReadersPlaces = {
 const keptUnder = 'the reader’s places';
 const placesByKey = schema.record(schema.number);
 
-const keyOf = (state: unknown): string | undefined =>
-  typeof state === 'object' && state !== null && 'key' in state && typeof state.key === 'string' ? state.key : undefined;
+const keyOf = (state: unknown): Maybe<string> =>
+  typeof state === 'object' && state !== null && 'key' in state && typeof state.key === 'string' ? some(state.key) : nothing();
 
-const entryKey = (): string | undefined => keyOf(window.history.state);
+const entryKey = (): Maybe<string> => keyOf(window.history.state);
 
 // a document opened by its address carries no key from the router, and every such document would share one place
-const keyTheEntry = (): void => maybe(entryKey()).either(
+const keyTheEntry = (): void => entryKey().either(
   () => undefined,
   () => window.history.replaceState({...window.history.state, key: crypto.randomUUID()}, ''));
 
@@ -44,7 +44,7 @@ const storedIfAllowed = (places: Record<string, number>): void => {
 export const readersPlaces = (): ReadersPlaces => {
   const at = kept();
   const note = (): void => {
-    maybe(entryKey()).map(key => {
+    entryKey().map(key => {
       at[key] = window.scrollY;
     });
   };
@@ -66,7 +66,7 @@ export const readersPlaces = (): ReadersPlaces => {
       };
     }).orElse(() => undefined),
     returnTo: () => {
-      maybe(entryKey()).mBind(key => maybe(at[key])).map(top => window.scrollTo(0, top));
+      entryKey().mBind(key => maybe(at[key])).map(top => window.scrollTo(0, top));
     }
   };
 };

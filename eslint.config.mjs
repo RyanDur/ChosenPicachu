@@ -56,7 +56,7 @@ const journeys = Object.fromEntries([
 
 export default [
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**']
+    ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**', '.react-router/**']
   },
   {
     files: ['**/*.{js,mjs,ts}'],

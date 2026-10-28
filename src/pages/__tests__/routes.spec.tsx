@@ -186,7 +186,7 @@ describe('the rail says which page the reader is on', () => {
   test('should move the mark to the page the reader follows, and keep the reader on it', async () => {
     render(<TestApp at={Paths.home}/>);
 
-    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Demos'}));
+    await site.followRail('Demos');
 
     await waitFor(() => expect(site.railLink('Demos')).toHaveAttribute('aria-current', 'page'));
     expect(site.railLink('Demos')).toHaveFocus();
@@ -197,7 +197,7 @@ describe('the rail says which page the reader is on', () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();
 
-    await userEvent.click(homePage.storySignpost('Structure'));
+    await homePage.followStorySignpost('Structure');
 
     await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
     expect(site.railLink('Record')).not.toHaveFocus();

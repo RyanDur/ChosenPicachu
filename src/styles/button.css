@@ -37,19 +37,27 @@
   box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
   border: var(--hairline) solid var(--primary-blue);
 
-  &:hover,
-  &:focus {
-    box-shadow: var(--drop-shadow);
+  &:where(:not(:disabled)) {
+    &:hover,
+    &:focus {
+      box-shadow: var(--drop-shadow);
+    }
+
+    &:hover,
+    &:active {
+      color: var(--ink-inverse);
+      background-color: var(--primary-dark-blue);
+    }
+
+    &:active {
+      box-shadow: initial;
+    }
   }
 
-  &:hover,
-  &:active {
-    color: var(--ink-inverse);
-    background-color: var(--primary-dark-blue);
-  }
-
-  &:active {
-    box-shadow: initial;
+  &:disabled {
+    color: var(--field);
+    background: var(--smoke);
+    border-color: var(--smoke);
   }
 }
 

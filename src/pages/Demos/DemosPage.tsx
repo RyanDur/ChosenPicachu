@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {randNumber, randParagraph, seed, wordDeck} from '@components/fibs';
+import {seeded} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
@@ -30,7 +30,9 @@ import {DragSortIntroduction} from './DragAndDrop/Introduction';
 import {TablesIntroduction} from './Tables/Introduction';
 import {useEnv} from '@components/Env';
 
-const paragraphs = (count: number, dealt: () => string) => Array.from({length: count}, () => ({
+type Draws = ReturnType<typeof seeded>;
+
+const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) => Array.from({length: count}, () => ({
   key: dealt(),
   value: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
 }));
@@ -40,17 +42,17 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
     useSearchParamsObject(
       {pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
   const [accordionContents] = useState(() => {
-    seed('the accordion exhibits');
-    const dealt = wordDeck();
+    const draws = seeded('the accordion exhibits');
+    const dealt = draws.wordDeck();
     return {
-      measuredCheckbox: paragraphs(5, dealt),
-      measuredRadio: paragraphs(5, dealt),
-      knownCheckbox: paragraphs(5, dealt),
-      knownRadio: paragraphs(5, dealt),
-      inclusiveDetails: paragraphs(5, dealt),
-      exclusiveDetails: paragraphs(5, dealt),
-      inclusiveCheckboxes: paragraphs(5, dealt),
-      exclusiveRadios: paragraphs(5, dealt)
+      measuredCheckbox: paragraphs(5, dealt, draws),
+      measuredRadio: paragraphs(5, dealt, draws),
+      knownCheckbox: paragraphs(5, dealt, draws),
+      knownRadio: paragraphs(5, dealt, draws),
+      inclusiveDetails: paragraphs(5, dealt, draws),
+      exclusiveDetails: paragraphs(5, dealt, draws),
+      inclusiveCheckboxes: paragraphs(5, dealt, draws),
+      exclusiveRadios: paragraphs(5, dealt, draws)
     };
   });
   const {tradeProduct} = useEnv();

@@ -1,25 +1,30 @@
+type Roll = () => number;
 
-let next = Math.floor(Math.random() * 0xffffffff);
-
-export const seed = (phrase: string): void => {
+const hashOf = (phrase: string): number => {
   let hash = 0x811c9dc5;
   for (let at = 0; at < phrase.length; at += 1) {
     hash = Math.imul(hash ^ phrase.charCodeAt(at), 0x01000193);
   }
-  next = hash >>> 0;
+  return hash >>> 0;
 };
 
-const roll = (): number => {
-  next = (next + 0x6d2b79f5) >>> 0;
-  let mixed = Math.imul(next ^ (next >>> 15), 1 | next);
-  mixed = (mixed + Math.imul(mixed ^ (mixed >>> 7), 61 | mixed)) ^ mixed;
-  return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296;
+const rollFrom = (start: number): Roll => {
+  let next = start;
+  return () => {
+    next = (next + 0x6d2b79f5) >>> 0;
+    let mixed = Math.imul(next ^ (next >>> 15), 1 | next);
+    mixed = (mixed + Math.imul(mixed ^ (mixed >>> 7), 61 | mixed)) ^ mixed;
+    return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296;
+  };
 };
 
-export const rand = <T>(pool: readonly T[]): T => pool[Math.floor(roll() * pool.length)];
+let sharedRoll: Roll = rollFrom(Math.floor(Math.random() * 0xffffffff));
 
-export const randNumber = ({min, max}: {min: number; max: number}): number =>
-  min + Math.floor(roll() * (max - min + 1));
+export const seed = (phrase: string): void => {
+  sharedRoll = rollFrom(hashOf(phrase));
+};
+
+const roll: Roll = () => sharedRoll();
 
 export const randBetweenDate = ({from, to}: {from: Date; to: Date}): Date =>
   new Date(from.getTime() + roll() * (to.getTime() - from.getTime()));
@@ -83,27 +88,42 @@ const quotes = ['Simplicity is the whole of the craft.',
 
 export const news: readonly string[] = [...phrases, ...catchPhrases, ...quotes];
 
-// a random comparator leaves the order to each engine's sort, so a seed would deal Node one deck and Firefox another
-const shuffled = <T>(pool: readonly T[]): T[] => {
-  const cards = [...pool];
-  for (let at = cards.length - 1; at > 0; at -= 1) {
-    const other = Math.floor(roll() * (at + 1));
-    [cards[at], cards[other]] = [cards[other], cards[at]];
-  }
-  return cards;
+const drawsWith = (rolled: Roll) => {
+  const rand = <T>(pool: readonly T[]): T => pool[Math.floor(rolled() * pool.length)];
+  const randNumber = ({min, max}: {min: number; max: number}): number => min + Math.floor(rolled() * (max - min + 1));
+  // a random comparator leaves the order to each engine's sort, so a seed would deal Node one deck and Firefox another
+  const shuffled = <T>(pool: readonly T[]): T[] => {
+    const cards = [...pool];
+    for (let at = cards.length - 1; at > 0; at -= 1) {
+      const other = Math.floor(rolled() * (at + 1));
+      [cards[at], cards[other]] = [cards[other], cards[at]];
+    }
+    return cards;
+  };
+  const decked = <T>(pool: readonly T[]): () => T => {
+    let standing: T[] = [];
+    return () => {
+      if (standing.length === 0) {
+        standing = shuffled(pool);
+      }
+      const [top, ...rest] = standing;
+      standing = rest;
+      return top;
+    };
+  };
+  const randWord = (): string => rand(words);
+  const randSentence = (): string => {
+    const length = randNumber({min: 6, max: 12});
+    const [head, ...rest] = Array.from({length}, randWord);
+    return `${head[0].toUpperCase()}${head.slice(1)} ${rest.join(' ')}.`;
+  };
+  const randParagraph = (): string => Array.from({length: randNumber({min: 3, max: 6})}, randSentence).join(' ');
+  return {rand, randNumber, decked, randWord, randSentence, randParagraph, wordDeck: (): () => string => decked(words)};
 };
 
-export const decked = <T>(pool: readonly T[]): () => T => {
-  let standing: T[] = [];
-  return () => {
-    if (standing.length === 0) {
-      standing = shuffled(pool);
-    }
-    const [top, ...rest] = standing;
-    standing = rest;
-    return top;
-  };
-};
+export const {rand, randNumber, decked, randWord, randSentence, randParagraph, wordDeck} = drawsWith(roll);
+
+export const seeded = (phrase: string) => drawsWith(rollFrom(hashOf(phrase)));
 
 export const randFirstName: () => string = decked(firstNames);
 export const randLastName: () => string = decked(lastNames);
@@ -113,14 +133,3 @@ export const randStateAbbr = (): string => rand(states);
 export const randZipCode = (): string => String(randNumber({min: 10000, max: 99999}));
 export const randEmail = (): string =>
   `${rand(firstNames).toLowerCase()}.${rand(lastNames).toLowerCase()}@example.com`;
-export const randWord = (): string => rand(words);
-export const wordDeck = (): () => string => decked(words);
-
-export const randSentence = (): string => {
-  const length = randNumber({min: 6, max: 12});
-  const [head, ...rest] = Array.from({length}, randWord);
-  return `${head[0].toUpperCase()}${head.slice(1)} ${rest.join(' ')}.`;
-};
-
-export const randParagraph = (): string =>
-  Array.from({length: randNumber({min: 3, max: 6})}, randSentence).join(' ');
