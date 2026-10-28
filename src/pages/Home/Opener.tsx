@@ -10,7 +10,7 @@ export const Opener: FC = () =>
     <p className="thesis paragraph">
       It’s written for the developer who learned the three the way most of us did, one at a time and on the job, and
       so asks one of them to do most of the work. A job then ends up in a language that can do it, rather than the one
-      it belongs to: a div standing in for a button, a class named for a margin, a script taking over scrolling, focus
+      it belongs to: a div standing in for a button, a class named for a color, a script taking over scrolling, focus
       or the back button. Each works well enough to ship. The bugs come later, when someone uses the page with a
       keyboard, with a screen reader, on a phone. Much of this work is already done by the platform: the browser and
       the standards it follows. It keeps getting better, too, because the people who write the standards listen to
