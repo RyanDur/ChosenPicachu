@@ -6,6 +6,7 @@ const room = (): HTMLElement => screen.getByRole('main');
 export const site = {
   room,
   roomSays: (words: string): Promise<HTMLElement> => within(room()).findByText(words),
+  roomLinks: (): HTMLElement[] => within(room()).queryAllByRole('link'),
   pageTitle: (): HTMLElement => screen.getByRole('heading', {level: 1}),
   pageTitled: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1}),
   titled: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
