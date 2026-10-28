@@ -47,13 +47,10 @@ test('an address with no page answers that it is not found, and says there is no
   await expect(siteFrame(page).title).toHaveText('No such room');
 });
 
-test.describe('a reader with script off at the three-in-a-row game', () => {
-  test.use({javaScriptEnabled: false});
+test('the old address of the game that was never built answers that it is not found, with Games still current', async ({page}) => {
+  const answer = await page.goto('games/colorGame');
 
-  test('finds its page in the document, not the no-room answer', async ({page}) => {
-    const answer = await page.goto('games/colorGame');
-
-    expect(answer?.status()).toBe(200);
-    await expect(siteFrame(page).title).toHaveText('Play Games');
-  });
+  expect(answer?.status()).toBe(404);
+  await expect(siteFrame(page).title).toHaveText('No such room');
+  await expect(page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Games'})).toHaveAttribute('aria-current', 'page');
 });

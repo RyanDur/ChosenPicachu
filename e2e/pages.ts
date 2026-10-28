@@ -56,7 +56,6 @@ export const pages: readonly SitePage[] = [
     budgeted: true
   },
   {name: 'games', path: 'games/', ready: 'main', budgeted: true},
-  {name: 'three-in-a-row', path: 'games/colorGame', ready: 'main'},
   {name: 'no room', path: 'nowhere/', ready: 'navigation'}
 ];
 

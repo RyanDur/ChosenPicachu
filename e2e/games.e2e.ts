@@ -8,7 +8,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     test('meets the games page\'s first sentence', async ({page}) => {
       await page.goto('games');
 
-      await expect(page.getByText('One game so far.')).toBeVisible();
+      await expect(page.getByText('No game yet. The first will be three in a row.')).toBeVisible();
     });
   });
 }

@@ -3,7 +3,7 @@ import {siteFrame, twoFramesLater} from './__test_support';
 
 for (const path of [
   '', 'record/', 'practice/behavior/', 'demos/accordions/', 'demos/accordions/?type=inclusive', 'demos/z-index/', 'demos/drag-and-drop/',
-  'demos/charts/', 'demos/charts/price/', 'demos/tables/', 'demos/tables/?world=vanilla', 'demos/tables/?tut=menu', 'users/', 'gallery/?page=1&size=8&tab=aic', 'games/', 'games/colorGame'
+  'demos/charts/', 'demos/charts/price/', 'demos/tables/', 'demos/tables/?world=vanilla', 'demos/tables/?tut=menu', 'users/', 'gallery/?page=1&size=8&tab=aic', 'games/'
 ]) {
   test(`the script takes over /${path} without an error`, async ({page}) => {
     const errors: string[] = [];
