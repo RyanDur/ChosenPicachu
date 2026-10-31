@@ -1,6 +1,7 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {itemHeadedBy} from '@__test_support/headed-item';
+import {paragraphOpening} from '@__test_support/paragraph';
 
 const research = (): HTMLElement => screen.getByRole('region', {name: 'The research'});
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
@@ -8,7 +9,7 @@ const storyMoments = (name: string): HTMLElement => within(story(name)).getByRol
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
-  paragraphOpening: (words: string): HTMLElement => screen.getByText((_, element) => element instanceof HTMLParagraphElement && (element.textContent ?? '').startsWith(words)),
+  paragraphOpening,
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),

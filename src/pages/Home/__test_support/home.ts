@@ -1,5 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {paragraphOpening} from '@__test_support/paragraph';
 
 const concern = (name: string): HTMLElement => screen.getByRole('region', {name});
 
@@ -13,7 +14,7 @@ const claim = (name: string): HTMLElement[] =>
 
 export const homePage = {
   arrived: (): Promise<HTMLElement> => screen.findByText(/^I made this site/),
-  paragraph: (opening: RegExp): HTMLElement => screen.getByText((_, element) => element?.tagName === 'P' && opening.test(element.textContent)),
+  paragraph: paragraphOpening,
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).queryAllByRole('link'),
   sectionHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),

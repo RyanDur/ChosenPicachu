@@ -108,7 +108,7 @@ describe('the Demos, as the home page and the Record describe them', () => {
 
     render(<TestApp at={Paths.record}/>);
     await recordPage.arrived();
-    const bridge = recordPage.paragraphOpening('The Demos run from simple to expert').textContent ?? '';
+    const bridge = recordPage.paragraphOpening(/^The Demos run from simple to expert/).textContent ?? '';
 
     expect(topicsNamedIn(opener)).toEqual([]);
     expect(topicsNamedIn(bridge)).toEqual(['Accordions', 'Tables']);
