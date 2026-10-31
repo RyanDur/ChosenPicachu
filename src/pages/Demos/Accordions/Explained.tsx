@@ -12,10 +12,12 @@ import {
   InclusiveToggleAccordion
 } from './Accordions';
 import {Mdn, plain, Snippet} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {span, unit, withoutImports} from '../Recipe/carve';
 import accordionsSource from './Accordions.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
+import foldSource from './Plain/fold.main.ts?sample';
+import {PlainFold} from './Plain/PlainFold';
 import htmlAloneSource from './HtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
@@ -155,28 +157,25 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         ]}/>
         <OneGuessTwoFolds/>
       </section>
-      {type === 'inclusive'
-        ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
-        : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
+      <div className={exhibit}>
+        <PlainFold/>
+        <p className="caption">Press the bar: the script measures the text, the sheet slides the panel to that height,
+          and a second press slides it shut.</p>
+      </div>
       <ol className={runs}>
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
-        </li>}
         <li className="run">
           <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
             so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
             the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
             moves the same way, short or tall, because the target is the text’s own height. When the motion
             ends, the script takes the number away, and the panel is auto again. A number left in place goes
-            stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
-          <Snippet label="TS" lines={[
-            ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [open, shown]);'), gap,
-            ...unit(panelSource, 'const settled')
-          ]}/>
+            stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
+            beside this run is the whole of it, with no library.</p>
+          <Snippet label="TS" lines={withoutImports(foldSource)}/>
         </li>
         <li className="run">
           <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
-            the {input} and the stylesheet own that, so if the script fails, a fold still opens and closes, at
+            the checkbox and the stylesheet own that, so if the script fails, a fold still opens and closes, at
             once.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
@@ -185,8 +184,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="measured-depth">
-            <summary id="measured-depth" className="opener bold">How the measured height works</summary>
+            <summary id="measured-depth" className="opener bold">How this site does it</summary>
+            <p className="paragraph">This site builds the same fold in React, which redraws the panel from state instead
+              of listening to it. So the measuring runs in two layout effects rather than two listeners: the first pins
+              where the motion starts before the browser paints, and the second sets where it ends.</p>
+            {type === 'inclusive'
+              ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
+              : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
             <ol className="runs">
+              {type === 'exclusive' && <li className="run">
+                <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
+              </li>}
               <li className="run">
                 <p className="paragraph">React is the library this site’s script is written in, and a component is a function
                   that returns the elements it draws. The script keeps what it knows in React state, a value a component
@@ -215,7 +223,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   and pins its start with no frame showing in between.</p>
                 <Snippet label="TS" lines={[
                   ...unit(panelSource, 'const pressed'), gap,
-                  ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);')
+                  ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), gap,
+                  ...unit(panelSource, 'const settled')
                 ]}/>
               </li>
               <li className="run">

@@ -121,12 +121,17 @@ describe('the accordions tab’s own words', () => {
 });
 
 describe('the measured build’s Close bar', () => {
-  test('should explain the Close bar in a run of its own, before the run on script, with exclusive chosen', async () => {
+  test('should explain the Close bar in a run of its own in "How this site does it", first after the build that has it, with exclusive chosen', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
     const oldWay = await screen.findByRole('region', {name: parts[0]});
-    const closeBar = within(oldWay).getByText('Opening one fold closes the others, and the short Close bar at the top closes whichever is open.');
+    const folded = within(oldWay).getByRole('group', {name: 'How this site does it'});
+    const closeBar = within(folded).getByText('Opening one fold closes the others, and the short Close bar at the top closes whichever is open.');
 
-    expect(closeBar.compareDocumentPosition(within(oldWay).getByText(/^Most of us turned next to script/))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(outOfReadingOrder([
+      within(folded).getByRole('heading', {name: 'Accordion using a radio group and a measured height', hidden: true}),
+      closeBar,
+      within(folded).getByText(/The script keeps what it knows in React state/)
+    ])).toEqual([]);
   });
 });
 
@@ -243,12 +248,48 @@ describe('the measured build', () => {
     expect(explanation.runTelling(explained, /^This page lets its other folds move to auto/)).toHaveTextContent('This page lets its other folds move to auto, and this build turns that off with interpolate-size, because the trick was for browsers that could only move between numbers.');
   });
 
-  test('should show the script that measures, then lets go, beside the run that opens a fold', async () => {
+  test('should show the whole plain script, with no React in it, beside the run that opens a fold, and say it is the whole of it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+    const run = explanation.runTelling(explained, /When the motion ends, the script takes the number away/);
+    const code = explanation.everyCodeBeside(explained, /When the motion ends, the script takes the number away/).join();
+
+    expect(run).toHaveTextContent('A number left in place goes stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script beside this run is the whole of it, with no library.');
+    expect(code).toMatch(/addEventListener\('change'[^]*getBoundingClientRect\(\)\.height/);
+    expect(code).toMatch(/addEventListener\('transitionend'/);
+    expect(code).toMatch(/classList\.remove\('sized'\)/);
+    expect(code).not.toMatch(/React|use[A-Z]|setMotion/);
+  });
+
+  test('should put the fold measured by plain script at that run, ahead of the run, with what to press', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+    const plain = await within(explained).findByTitle('A fold measured by plain script');
+
+    expect(within(explained).getByText('Press the bar: the script measures the text, the sheet slides the panel to that height, and a second press slides it shut.')).toBeVisible();
+    expect(outOfReadingOrder([plain, explanation.runTelling(explained, /^Most of us turned next to script/)])).toEqual([]);
+  });
+
+  test.each(['inclusive', 'exclusive'])('should keep, with %s chosen, the React build in "How this site does it", opening on why it differs from the plain script, then its accordion', async type => {
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+    const folded = within(explained).getByRole('group', {name: 'How this site does it'});
+    const why = within(folded).getByText(/^This site builds the same fold in React/);
+    const built = within(folded).getByRole('heading', {name: /and a measured height$/, hidden: true});
+
+    expect(why).toHaveTextContent('This site builds the same fold in React, which redraws the panel from state instead of listening to it. So the measuring runs in two layout effects rather than two listeners: the first pins where the motion starts before the browser paints, and the second sets where it ends.');
+    expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /The script keeps what it knows in React state/)])).toEqual([]);
+  });
+
+  test('should show both layout effects and the hand-off at the motion’s end beside the run that tells the two layout effects', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/if \(open === shown[^]*textHeight\(measured\)[^]*const settled[^]*setMotion\(resting\)/);
+    expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join()).toMatch(/if \(open === shown[^]*textHeight\(measured\)[^]*const settled[^]*setMotion\(resting\)/);
   });
 
   test('should show @property beside the run that declares it, .sized beside the run that names the class, and .unmoving beside the run that closes', async () => {
@@ -741,7 +782,7 @@ describe('the accordion in HTML alone', () => {
 
 describe('the depth of each part', () => {
   test.each([
-    {type: 'exclusive', part: parts[0], fold: 'How the measured height works', point: /Most of us turned next to script/, depth: /Closing runs the other way/},
+    {type: 'exclusive', part: parts[0], fold: 'How this site does it', point: /Most of us turned next to script/, depth: /Closing runs the other way/},
     {type: 'exclusive', part: parts[0], fold: 'How the known height works', point: /Here every panel is the same height/, depth: /You want the reader to see a bar/},
     {type: 'exclusive', part: parts[1], fold: 'How details works', point: /This replaces the three old ways/, depth: /A pseudo-element is a part of an element/},
     {type: 'exclusive', part: parts[2], fold: 'How the radio and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/},
@@ -869,12 +910,12 @@ describe('the runs in view, with the folds shut', () => {
     expect(within(oldWay).getByText(/^Closing runs the other way/)).toHaveTextContent(`The change event is the one the browser sends to the ${input} a press has just ${pressed}, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where the motion starts`);
   });
 
-  test('should say, with exclusive chosen, that the radio and the stylesheet own whether a fold is open', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+  test.each(['inclusive', 'exclusive'])('should say, with %s chosen, that the plain fold’s checkbox and the stylesheet own whether it is open', async type => {
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the radio and the stylesheet own that/);
+    expect(within(oldWay).getByText(/The cost was script/)).toHaveTextContent(/the checkbox and the stylesheet own that/);
   });
 
   test('should open the less-motion run on what the reader gets: every fold opens with no slide', async () => {

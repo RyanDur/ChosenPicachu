@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>A fold measured by plain script</title>
+    <style>
+        html {
+            overflow-y: clip;
+        }
+
+        /* the cascade */
+    </style>
+</head>
+<body>
+<article class="inclusive-accordion reveal">
+    <fieldset>
+        <legend class="off-screen">folds</legend>
+        <ul class="accordion trim">
+            <li class="fold">
+                <input id="measured-fold-0-checkbox" class="info-toggle off-screen" type="checkbox">
+                <label id="measured-fold-0-checkbox-label" class="info-label opening-arrow inverse-filled prior-approached corner-after" for="measured-fold-0-checkbox">measured</label>
+                <section class="info-measured" aria-labelledby="measured-fold-0-checkbox-label">
+                    <p class="info-paragraph">This panel is as tall as its text, because the script measured that height when you pressed the bar and the sheet slid the panel to it. Then the script took the number away, so narrow the window and the lines wrap and the panel still fits.</p>
+                </section>
+            </li>
+        </ul>
+    </fieldset>
+</article>
+<script type="module">
+    /* the script */
+</script>
+</body>
+</html>

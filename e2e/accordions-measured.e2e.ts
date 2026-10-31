@@ -2,9 +2,10 @@ import {expect} from '@playwright/test';
 import {
   accordionsTab,
   desktop,
+  gapUnder,
   heightOnceSettled,
   measuredBuilds,
-  showing,
+  plainFold,
   textOf,
   type Part
 } from './__test_support';
@@ -14,10 +15,7 @@ import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-jo
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
-const gapUnderItsText = async (part: Part): Promise<number> => {
-  const [fold, text] = await Promise.all([part.fold.boundingBox(), textOf(part).boundingBox()]);
-  return Math.abs((fold?.y ?? 0) + (fold?.height ?? 0) - (text?.y ?? Infinity) - (text?.height ?? 0));
-};
+const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, textOf(part));
 
 const tallestOf = async (parts: Part[]): Promise<Part> => {
   const heights = await Promise.all(parts.map(part => textOf(part).evaluate(text => text.getBoundingClientRect().height)));
@@ -29,7 +27,7 @@ test.describe('a desktop', () => {
 
   for (const build of measuredBuilds) {
     test(`an open part of ${build} still ends at its text after the window narrows and widens`, async ({page}) => {
-      await page.goto(showing(build));
+      await accordionsTab(page).goTo(build);
       await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
       const part = await tallestOf(await accordionsTab(page).partsOf(build));
       await part.open();
@@ -46,7 +44,7 @@ test.describe('a desktop', () => {
 for (const build of measuredBuilds) {
   test(`a reader who allows motion opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    await page.goto(showing(build));
+    await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
 
@@ -64,7 +62,7 @@ const pressesNeverReachTheScript = (): void => ['click', 'change'].forEach(press
 for (const build of measuredBuilds) {
   test(`with its script never hearing the press, a part of ${build} still opens and closes`, async ({page}) => {
     await page.addInitScript(pressesNeverReachTheScript);
-    await page.goto(showing(build));
+    await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
 
@@ -82,7 +80,7 @@ for (const build of measuredBuilds) {
 
     test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
-      await page.goto(showing(build));
+      await accordionsTab(page).goTo(build);
       const part = accordionsTab(page).firstPartOf(build);
       await expect(part.fold).toBeVisible();
 
@@ -94,7 +92,7 @@ for (const build of measuredBuilds) {
 
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
-      await page.goto(showing(build));
+      await accordionsTab(page).goTo(build);
       const part = accordionsTab(page).firstPartOf(build);
       await part.open();
       await heightOnceSettled(part.fold);
@@ -107,3 +105,46 @@ for (const build of measuredBuilds) {
     });
   });
 }
+
+test.describe('the fold measured by plain script', () => {
+  test('opens to its text on a press, shown whole in its frame, and shuts on a second press', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    const fold = plainFold(page);
+    await fold.goTo();
+
+    await fold.bar.click();
+
+    await expect(fold.text).toBeVisible();
+    await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+    await expect.poll(fold.gapUnderTheFrame).toBeLessThanOrEqual(layoutRounding);
+    await fold.bar.click();
+    await expect(fold.text).toBeHidden();
+  });
+
+  test.describe('a desktop', () => {
+    test.use(desktop);
+
+    test('still ends at its text after the window narrows', async ({page}) => {
+      await page.emulateMedia({reducedMotion: 'no-preference'});
+      const fold = plainFold(page);
+      await fold.goTo();
+      await fold.bar.click();
+      await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+
+      await page.setViewportSize({width: 390, height: 900});
+
+      await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+    });
+  });
+
+  test('with its script never hearing the press, still opens and shuts', async ({page}) => {
+    await page.addInitScript(pressesNeverReachTheScript);
+    const fold = plainFold(page);
+    await fold.goTo();
+
+    await fold.bar.click();
+    await expect(fold.text).toBeVisible();
+    await fold.bar.click();
+    await expect(fold.text).toBeHidden();
+  });
+});

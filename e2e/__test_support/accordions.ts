@@ -144,6 +144,12 @@ export const accordionsTab = (page: Page) => {
     return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   return {
+    goTo: async (build: Build): Promise<void> => {
+      await page.goto(showing(build));
+      if (measuredBuilds.includes(build)) {
+        await page.getByText('How this site does it', {exact: true}).click();
+      }
+    },
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
@@ -175,3 +181,29 @@ export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', 
 export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)[]> =>
   page.getByRole('region', {name: 'How we used to build a fold'}).getByRole('radio')
     .evaluateAll(toggles => toggles.map(toggle => toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
+
+export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
+  const [outer, inner] = await Promise.all([around.boundingBox(), inside.boundingBox()]);
+  return Math.abs((outer?.y ?? 0) + (outer?.height ?? 0) - (inner?.y ?? Infinity) - (inner?.height ?? 0));
+};
+
+export const plainFold = (page: Page) => {
+  const frame = page.getByTitle('A fold measured by plain script');
+  const inside = frame.contentFrame();
+  const bar = inside.getByText('measured', {exact: true});
+  const panel = inside.getByRole('region', {name: 'measured', includeHidden: true});
+  const text = panel.getByRole('paragraph', {includeHidden: true});
+  return {
+    bar,
+    text,
+    goTo: async (): Promise<void> => {
+      await page.goto('demos/accordions/');
+      await panel.evaluate(() => new Promise<void>(loaded => {
+        if (document.readyState === 'complete') loaded();
+        else window.addEventListener('load', () => loaded());
+      }));
+    },
+    gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
+    gapUnderTheFrame: (): Promise<number> => gapUnder(frame, inside.getByRole('group', {name: 'folds'}))
+  };
+};
