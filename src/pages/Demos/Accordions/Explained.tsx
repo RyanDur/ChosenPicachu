@@ -135,6 +135,47 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
+      <section className={runs} aria-labelledby="remembers-heading">
+        <h3 id="remembers-heading" className="run-title sub-title bold">A box remembers the fold, and a rule reads it</h3>
+        <ol className="runs">
+          <li className="run">
+            {type === 'inclusive'
+              ? <p className="paragraph">To open and close a fold, something has to remember which way it is.
+                A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
+                checked or not, and pressing it switches between the two. So each fold is a list item
+                holding three things, in this order: the checkbox, its label, and the text. An attribute is a
+                name, often with a value, written inside an element’s opening tag. An id is an attribute
+                that gives an element a name no other element on the page shares. The
+                label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
+                id. That link makes a press anywhere on the label press the checkbox. Each id includes
+                the fold’s place in the list, so no two checkboxes share one.</p>
+              : <p className="paragraph">To open and close a fold, something has to remember which way it is.
+                A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> remembers: it is either checked or
+                not. Radios that share a name form a group, and checking one unchecks the others. So each
+                fold is a list item holding three things, in this order: the radio, its label, and the
+                text. An attribute is a name, often with a value, written inside an element’s opening
+                tag. An id is an attribute that gives an element a name no other element on the page
+                shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
+                radio’s id. That link makes a press anywhere on the label press the radio. Each id
+                includes the fold’s place in the list, so no two radios share one.</p>}
+            <Snippet label="TS" lines={type === 'inclusive'
+              ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
+              : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
+          </li>
+          <li className="run">
+            <p className="paragraph">Now a rule has to match on whether the {input} is checked. A selector
+              is the part of a CSS rule that picks which elements the rule styles,
+              and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
+              by its state: here, a checked {input}. The ~ is
+              a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
+              that says how their elements relate; it picks the siblings that come after the element on its left, the
+              elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
+              While it is not checked, this rule collapses the text. No script is involved.</p>
+            <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
+            <TheRuleMatchesTheBox/>
+          </li>
+        </ol>
+      </section>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
         <h3 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h3>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
@@ -299,31 +340,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="part-depth">
           <details aria-labelledby="known-depth">
             <summary id="known-depth" className="opener bold">How the known height works</summary>
+            <p className="paragraph">The fold is the three parts the top of this section gave it: the {input}, its label and
+              the text.</p>
             <ol className="runs">
-              <li className="run">
-                {type === 'inclusive'
-                  ? <p className="paragraph">To open and close a fold, something has to remember which way it is.
-                    A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
-                    checked or not, and pressing it switches between the two. So each fold is a list item
-                    holding three things, in this order: the checkbox, its label, and the text. An attribute is a
-                    name, often with a value, written inside an element’s opening tag. An id is an attribute
-                    that gives an element a name no other element on the page shares. The
-                    label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
-                    id. That link makes a press anywhere on the label press the checkbox. Each id includes
-                    the fold’s place in the list, so no two checkboxes share one.</p>
-                  : <p className="paragraph">To open and close a fold, something has to remember which way it is.
-                    A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> remembers: it is either checked or
-                    not. Radios that share a name form a group, and checking one unchecks the others. So each
-                    fold is a list item holding three things, in this order: the radio, its label, and the
-                    text. An attribute is a name, often with a value, written inside an element’s opening
-                    tag. An id is an attribute that gives an element a name no other element on the page
-                    shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
-                    radio’s id. That link makes a press anywhere on the label press the radio. Each id
-                    includes the fold’s place in the list, so no two radios share one.</p>}
-                <Snippet label="TS" lines={type === 'inclusive'
-                  ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
-                  : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
-              </li>
               <li className="run">
                 <p className="paragraph">You want the reader to see a bar, not a {input}, so you hide the {input}.
                   Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
@@ -336,18 +355,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   is still named by its label.</p>
                 <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
                 <OffScreenNotGone/>
-              </li>
-              <li className="run">
-                <p className="paragraph">Now a rule has to match on whether the {input} is checked. A selector
-                  is the part of a CSS rule that picks which elements the rule styles,
-                  and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
-                  by its state: here, a checked {input}. The ~ is
-                  a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
-                  that says how their elements relate; it picks the siblings that come after the element on its left, the
-                  elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
-                  While it is not checked, this rule collapses the text. No script is involved.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
-                <TheRuleMatchesTheBox/>
               </li>
               <li className="run">
                 <p className="paragraph">The bar’s colors are the page’s the other way round: light words on a

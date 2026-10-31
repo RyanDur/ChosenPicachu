@@ -663,8 +663,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['One guess, two folds', 'The known height', 'Off screen, not gone', 'The rule matches the box', 'Two borders, turned', 'Focus on the box, drawn on the bar']],
-    ['exclusive', parts[0], ['One guess, two folds', 'The known height', 'Off screen, not gone', 'The rule matches the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']],
+    ['inclusive', parts[0], ['The rule matches the box', 'One guess, two folds', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar']],
+    ['exclusive', parts[0], ['The rule matches the box', 'One guess, two folds', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
@@ -709,12 +709,12 @@ describe('the max-height guess', () => {
   test.each([
     ['inclusive', 'Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height'],
     ['exclusive', 'Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']
-  ])('should outline part one, with %s chosen, as the guess, the measured height, then the known height', async (type, measured, known) => {
+  ])('should outline part one, with %s chosen, as what a fold remembers, the guess, the measured height, then the known height', async (type, measured, known) => {
     render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getAllByRole('heading', {level: 3}).map(heading => heading.textContent)).toEqual(['The max-height guess', measured, known]);
+    expect(within(oldWay).getAllByRole('heading', {level: 3}).map(heading => heading.textContent)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', measured, known]);
   });
 });
 
@@ -1108,5 +1108,43 @@ describe('the known-height build’s scroll sign', () => {
 
     expect(explanation.runTelling(oldWay, /Whether a tall fold’s last line is cut off/)).toHaveTextContent('so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.');
     expect(explanation.everyCodeBeside(oldWay, /Whether a tall fold’s last line is cut off/).join()).toMatch(/\.info-text \{[^]*\.info-paragraph \{[^]*\.foot-shadowed \{/);
+  });
+});
+
+describe('what a fold remembers, before the first build that leans on it', () => {
+  const remembers = 'A box remembers the fold, and a rule reads it';
+
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should, with %s chosen, explain the %s, its label and the rule that reads it in plain view, before the max-height guess', async (type, input) => {
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const told = within(oldWay).getByRole('region', {name: remembers});
+    const box = within(told).getByText(/^To open and close a fold, something has to remember which way it is\./);
+    const rule = within(told).getByText(/^Now a rule has to match on whether the/);
+
+    expect(box).toBeVisible();
+    expect(box).toHaveTextContent(`The label’s for attribute names the ${input}’s id.`);
+    expect(rule).toBeVisible();
+    expect(rule).toHaveTextContent('The ~ is a combinator');
+    expect(explanation.everyCodeBeside(oldWay, /^Now a rule has to match on whether the/).join()).toMatch(/\.info-toggle:not\(:checked\) ~ \.info \{/);
+    expect(outOfReadingOrder([
+      within(oldWay).getByRole('heading', {level: 3, name: remembers}),
+      box,
+      rule,
+      within(oldWay).getByRole('heading', {level: 3, name: 'The max-height guess'})
+    ])).toEqual([]);
+  });
+
+  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should open "How the known height works", with %s chosen, on the fold the top of the section gave it, and explain nothing a build above already used', async (type, input) => {
+    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const folded = within(oldWay).getByRole('group', {name: 'How the known height works'});
+    const opening = within(folded).getAllByRole('paragraph', {hidden: true})[0];
+
+    expect(opening).toHaveTextContent(`The fold is the three parts the top of this section gave it: the ${input}, its label and the text.`);
+    expect(within(folded).queryByText(/^To open and close a fold/)).not.toBeInTheDocument();
+    expect(within(folded).queryByText(/^Now a rule has to match on whether the/)).not.toBeInTheDocument();
+    expect(outOfReadingOrder([opening, within(folded).getByText(/^You want the reader to see a bar/)])).toEqual([]);
   });
 });
