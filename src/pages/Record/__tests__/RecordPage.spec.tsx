@@ -5,6 +5,7 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
+import {homePage} from '@pages/Home/__test_support/home';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 describe('the 1989 moment', () => {
@@ -807,11 +808,6 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
-  test('should shelve Vue’s guide to single-file components, which the home page quotes', () => {
-    expect(recordPage.shelvedAs('Single-File Components')).toHaveTextContent('vuejs.org');
-    expect(recordPage.shelvedSources()).toContain('https://vuejs.org/guide/scaling-up/sfc');
-  });
-
   test('should head the research shelves The web, Structure, Presentation, Behavior, then The concert', () => {
     expect(recordPage.shelfHeadings()).toEqual(['The web', 'Structure', 'Presentation', 'Behavior', 'The concert']);
   });
@@ -1063,5 +1059,20 @@ describe('the record\'s three stories', () => {
     ['“It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.”', 'https://web.dev/rendering-on-the-web/']
   ])('should link Behavior\'s quotation %s to the page it was taken from', (quoted, page) => {
     recordPage.storyQuotations('Behavior', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
+  });
+});
+
+describe('the research shelf and the home page', () => {
+  test('should shelve every source the home page links to', async () => {
+    const {unmount} = render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
+    const linked = homePage.sourcesLinked();
+    unmount();
+
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+
+    expect(linked).not.toEqual([]);
+    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
   });
 });

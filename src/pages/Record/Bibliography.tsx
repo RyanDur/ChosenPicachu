@@ -282,6 +282,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://speakerdeck.com/vjeux/react-css-in-js"><cite>React: CSS in JS</cite></a>{' '}
             <span className="provenance caption">Christopher Chedeau, Facebook, November 2014</span>
           </li>
+          <li>
+            <a className="signpost" href="https://web.dev/articles/animations-overview"><cite>Why are some animations slow?</cite></a>{' '}
+            <span className="provenance caption">web.dev</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="behavior research">
