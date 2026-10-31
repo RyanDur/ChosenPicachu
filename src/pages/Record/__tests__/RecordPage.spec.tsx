@@ -808,6 +808,10 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('The A-Z of Programming Languages: JavaScript')).toHaveTextContent('Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via the Internet Archive');
   });
 
+  test('should shelve web.dev’s article on slow animations, which the home page’s Presentation claim rests on, by its author and year', () => {
+    expect(recordPage.shelvedAs('Why are some animations slow?')).toHaveTextContent('Rachel Andrew, web.dev, 2020');
+  });
+
   test('should shelve Jeremy Keith’s Resilient Web Design, which the home page names', () => {
     expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });

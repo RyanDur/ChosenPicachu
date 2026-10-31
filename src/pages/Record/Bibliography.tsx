@@ -288,7 +288,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://web.dev/articles/animations-overview"><cite>Why are some animations slow?</cite></a>{' '}
-            <span className="provenance caption">web.dev</span>
+            <span className="provenance caption">Rachel Andrew, web.dev, 2020</span>
           </li>
         </ul>
       </section>
