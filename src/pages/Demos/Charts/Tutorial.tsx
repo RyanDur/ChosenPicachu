@@ -462,7 +462,6 @@ const WorkspaceStory: FC = () =>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
-          <AThirdFromThePointer/>
           <Says>The neighbor’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
             starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
             with one that is still sliding.</Says>
@@ -473,6 +472,7 @@ const WorkspaceStory: FC = () =>
             ...unit(travelSource, 'const travel = (event'), gap,
             ...unit(travelSource, 'const swap = (held')
           ]}/>
+          <AThirdFromThePointer/>
           <Snippet label="CSS" lines={[
             ...unit(workspaceCss, '@keyframes chart-pushed')
           ]}/>

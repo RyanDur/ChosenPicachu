@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
-import {render, waitFor} from '@testing-library/react';
+import {render, waitFor, within} from '@testing-library/react';
 import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
 import {feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
@@ -912,6 +912,13 @@ describe('the workspace story', () => {
     await feedIsSubscribed(feed);
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
+
+  test('should put the drawing of a third from the pointer after the code that measures it, before the keyframes, on the code side of its step', async () => {
+    const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
+    const [measures, keyframes] = within(step).getAllByRole('code');
+
+    expect(outOfReadingOrder([within(step).getByText(/^The neighbor’s slide is a keyframe animation/), measures, explanation.drawingsIn(step)[0], keyframes])).toEqual([]);
+  });
 
   test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
     const story = await workspaceStory();
