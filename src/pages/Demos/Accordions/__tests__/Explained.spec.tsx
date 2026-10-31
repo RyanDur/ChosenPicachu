@@ -224,15 +224,23 @@ describe('the words and the code chosen by type', () => {
 });
 
 describe('what the platform gives now', () => {
-  test.each([
-    ['inclusive', '<details className="fold">'],
-    ['exclusive', '<details className="fold" name="exclusive-toggle-accordion">']
-  ])('should show, with %s chosen, the details of that build beside the run that introduces details', async (type, carved) => {
-    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+  test('should show the inclusive build’s own details, with no shared name, beside the run that introduces details', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.codeBeside(explained, /This build uses details and summary/)).toHaveTextContent(carved);
+    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.codeBeside(explained, /This build uses details and summary/)).toHaveTextContent('<details');
+    expect(explanation.codeBeside(explained, /This build uses details and summary/)).not.toHaveTextContent('name=');
+  });
+
+  test('should show the exclusive build’s own details sharing one name, which is what makes them exclusive, beside the run that introduces details', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[1]});
+
+    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.codeBeside(explained, /This build uses details and summary/)).toHaveTextContent(/<details[^>]* name=/);
   });
 });
 
