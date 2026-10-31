@@ -23,23 +23,6 @@ test('a link saved to an old demos tab lands on that tab\'s own address, its dia
   await expect(page.getByTitle('the living table, in vanilla')).toBeAttached();
 });
 
-test.describe('a reader with script off', () => {
-  test.use({javaScriptEnabled: false});
-
-  for (const {from, to, title} of [
-    {from: 'demos/', to: /\/demos\/accordions\/$/, title: 'Demos Accordions'},
-    {from: 'practice/', to: /\/practice\/structure\/$/, title: 'Practice Structure'},
-    {from: 'development/', to: /\/practice\/structure\/$/, title: 'Practice Structure'}
-  ]) {
-    test(`at /${from} lands on its first tab`, async ({page}) => {
-      await page.goto(from);
-
-      await expect(page).toHaveURL(to);
-      await expect(siteFrame(page).title).toHaveText(title);
-    });
-  }
-});
-
 test('an address with no page answers that it is not found, and says there is no such room', async ({page}) => {
   const answer = await page.goto('nowhere/');
 

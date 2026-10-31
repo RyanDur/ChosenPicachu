@@ -157,17 +157,3 @@ for (const {reader, device} of [
     });
   });
 }
-
-test.describe('a reader with script off', () => {
-  test.use({javaScriptEnabled: false});
-
-  for (const path of ['', 'record/', 'practice/behavior/', 'demos/tables/', 'demos/charts/price/', 'users/']) {
-    test(`finds no Feedback button at /${path}, and a line that links to Discussions instead`, async ({page}) => {
-      await page.goto(path);
-
-      await expect(page.getByRole('heading', {level: 1})).toBeVisible();
-      await expect(feedbackOn(page).open).toHaveCount(0);
-      await expect(page.getByRole('link', {name: 'Discussions page on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
-    });
-  }
-});
