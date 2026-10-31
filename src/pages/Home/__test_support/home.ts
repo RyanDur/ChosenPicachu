@@ -2,11 +2,11 @@ import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {paragraphOpening} from '@__test_support/paragraph';
 
-const concern = (name: string): HTMLElement => screen.getByRole('region', {name});
+const section = (name: string): HTMLElement => screen.getByRole('region', {name});
 
 const ownParagraphs = (name: string): HTMLElement[] => {
-  const quotation = within(concern(name)).getByRole('blockquote');
-  return within(concern(name)).getAllByRole('paragraph').filter(paragraph => !quotation.contains(paragraph));
+  const quotation = within(section(name)).getByRole('blockquote');
+  return within(section(name)).getAllByRole('paragraph').filter(paragraph => !quotation.contains(paragraph));
 };
 
 const claim = (name: string): HTMLElement[] =>
@@ -17,18 +17,18 @@ export const homePage = {
   paragraph: paragraphOpening,
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).queryAllByRole('link'),
   sectionHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
-  concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),
-  quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
-  quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
+  quotationIn: (name: string): HTMLElement => within(section(name)).getByRole('blockquote'),
+  quotationSource: (name: string): HTMLElement => within(section(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
   claim,
-  sectionText: (name: string): string[] => within(concern(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
-  sectionLinks: (name: string): HTMLElement[] => within(concern(name)).getAllByRole('link'),
+  sectionHeading: (name: string): HTMLElement => within(section(name)).getByRole('heading', {level: 2, name}),
+  sectionText: (name: string): string[] => within(section(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
+  sectionLinks: (name: string): HTMLElement[] => within(section(name)).getAllByRole('link'),
   sourcesLinked: (): string[] => within(screen.getByRole('main')).getAllByRole('link')
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   claimLinks: (name: string): HTMLElement[] => claim(name).flatMap(paragraph => within(paragraph).queryAllByRole('link')),
-  storySignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'}),
-  followStorySignpost: (name: string): Promise<void> => userEvent.click(within(concern(name)).getByRole('link', {name: 'Its story is on the Record.'})),
-  practiceSignpost: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
+  storySignpost: (name: string): HTMLElement => within(section(name)).getByRole('link', {name: 'Its story is on the Record.'}),
+  followStorySignpost: (name: string): Promise<void> => userEvent.click(within(section(name)).getByRole('link', {name: 'Its story is on the Record.'})),
+  practiceSignpost: (name: string): HTMLElement => within(section(name)).getByRole('link', {name: 'How I organize it is on Practice.'})
 };

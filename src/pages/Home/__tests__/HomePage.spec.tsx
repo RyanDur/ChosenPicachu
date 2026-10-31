@@ -7,7 +7,6 @@ import {recordPage} from '@pages/Record/__test_support/record';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {topicNames} from '@pages/Demos/types';
 import {spelledOut} from '@pages/Record/moments/spelled-out';
-import {storyAddress} from '@pages/Record/storyAddress';
 
 describe('the home page', () => {
   const opener = [/^I made this site/, /^Each language has its own job/, /^I wrote this for developers/, /^More code rarely fixes/, /^Below, each language has a section/, /^The Demos put that practice/];
@@ -57,7 +56,7 @@ describe('the home page', () => {
     expect(homePage.storySignpost(concern)).toHaveAttribute('href', `${Paths.record}#${id}`);
     expect(homePage.practiceSignpost(concern)).toHaveAttribute('href', `${Paths.practice}${id}/`);
     expect(outOfReadingOrder([
-      homePage.concernHeading(concern),
+      homePage.sectionHeading(concern),
       homePage.quotationIn(concern),
       ...homePage.claim(concern),
       homePage.storySignpost(concern),
@@ -68,8 +67,8 @@ describe('the home page', () => {
   test('should close on where the page is made, after Behavior, its one paragraph sending the reader to the Behavior story', () => {
     expect(homePage.sectionText('Where the page is made')).toEqual(['What changes between sites is where the HTML is made, and that is a trade. A server can send each page as a document, so it can be read before any script runs, and the browser handles moving between pages: scrolling, focus, the back button. That needs a server, or a build step that renders each page ahead of time. Or a script can make the page in the browser, as a single-page application does. That can be served as plain files and keeps its state as the reader moves around, and the browser’s jobs between pages become the app’s, done by hand or designed around. This site is one, and it also renders each page ahead of time when it is built: GitHub Pages serves it as plain files, and it talks to GitHub’s APIs and the browser directly. How the web moved between the two, and back, is the Behavior story on the Record. Knowing what HTML, CSS and the browser already do is what makes the trade visible: which jobs come free, which take work, and which are worth leaning into.']);
     expect(homePage.sectionLinks('Where the page is made').map(link => [link.textContent, link.getAttribute('href')]))
-      .toEqual([['the Behavior story', storyAddress('Behavior')]]);
-    expect(outOfReadingOrder([homePage.practiceSignpost('Behavior'), homePage.concernHeading('Where the page is made')])).toEqual([]);
+      .toEqual([['the Behavior story', `${Paths.record}#behavior`]]);
+    expect(outOfReadingOrder([homePage.practiceSignpost('Behavior'), homePage.sectionHeading('Where the page is made')])).toEqual([]);
   });
 
   test('should send the Behavior quotation\'s source to the Internet Archive\'s copy of Eich\'s interview, the live page being gone', () => {
