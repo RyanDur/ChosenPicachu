@@ -363,11 +363,12 @@ describe('arriving at a station', () => {
 });
 
 describe('the native drag sort tutorial’s words', () => {
-  test('should put the crossing’s drawing after the code that measures it, on the code side of its step', async () => {
+  test('should put the crossing’s drawing after the code that measures it', async () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
     const step = recipeFolds.stepHeaded(story, 'A swap counts once the pointer is a quarter of the way into a neighbor');
+    const [measures] = explanation.samplesIn(step);
 
-    expect(outOfReadingOrder([within(step).getByText(/^Nothing has to be measured ahead of time/), within(step).getAllByRole('code')[0], explanation.drawingsIn(step)[0]])).toEqual([]);
+    expect(outOfReadingOrder([explanation.saying(step, /^Nothing has to be measured ahead of time/), measures, explanation.drawingsIn(step)[0]])).toEqual([]);
   });
 
   test('should head its steps with what happens, not with aloft or the road', async () => {

@@ -45,6 +45,8 @@ const writtenForThePage = (run: HTMLElement): boolean =>
   within(run).queryByText('Written for this page, not taken from the site’s code.') !== null;
 
 export const explanation = {
+  samplesIn,
+  saying: (part: HTMLElement, words: RegExp): HTMLElement => within(part).getByText(words),
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
   writtenForThePageBeside: (part: HTMLElement, words: RegExp): boolean => writtenForThePage(runTelling(part, words)),
   runTelling,
