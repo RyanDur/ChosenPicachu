@@ -20,6 +20,8 @@ export const recordPage = {
   storyMomentsHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 3, name: 'the moments it rests on'}),
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),
   storyMomentLine: (name: string, line: string): HTMLElement => within(storyMoments(name)).getByRole('link', {name: line}),
+  timeline: (): HTMLElement => screen.getByRole('region', {name: 'How the web got its languages'}),
+  concert: (): HTMLElement => screen.getByRole('region', {name: 'The concert'}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedAs: (work: string): HTMLElement => {
     const entry = within(research()).getAllByRole('listitem', {hidden: true})
