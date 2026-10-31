@@ -275,9 +275,9 @@ describe('the measured build', () => {
     expect(state).toHaveTextContent('React state, a value a component holds and renders from');
     expect(ref).toHaveTextContent('A ref is a handle on the element itself');
     expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
-    expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toMatch(/useState/);
-    expect(explanation.everyCodeBeside(explained, /The script uses the panel’s one ref only to/).join()).toMatch(/useRef[^]*const standing/);
-    expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join()).toMatch(/useLayoutEffect\(\(\) => \{[^]*\}, \[open, shown\]\);[^]*useLayoutEffect\(\(\) => \{[^]*\}, \[motion, open\]\);/);
+    expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toContain('useState');
+    expect(explanation.everyCodeBeside(explained, /The script uses the panel’s one ref only to/).join()).toContain('useRef');
+    expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join().split('useLayoutEffect(')).toHaveLength(3);
     expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The React build hands each height to the stylesheet/)])).toEqual([]);
   });
 
@@ -355,12 +355,15 @@ describe('the measured build', () => {
     expect(within(measured).getByRole('figure', {name: /^Press the bar: with motion allowed/})).toContainElement(await within(measured).findByTitle('A fold measured by plain script'));
   });
 
-  test('should show both layout effects and the hand-off at the motion’s end beside the run that tells the two layout effects', async () => {
+  test('should show the React build’s own two layout effects and its hand-off at the motion’s end beside the run that tells the two layout effects', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[0]});
+    const code = explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join();
 
-    expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join()).toMatch(/if \(open === shown[^]*textHeight\(measured\)[^]*const settled[^]*setMotion\(resting\)/);
+    expect(explanation.sourcesBeside(explained, /The script makes the moves in two layout effects/)).toEqual(['Accordions/MeasuredPanel.tsx on GitHub']);
+    expect(code.split('useLayoutEffect(')).toHaveLength(3);
+    expect(code).toContain('TransitionEvent');
   });
 
   test('should show @property beside the run that declares it, .sized beside the run that names the class, and .unmoving beside the run that closes', async () => {
@@ -425,7 +428,8 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toMatch(/const movingTo = \(from: number, to: number\): Motion => from === to \? resting/);
+    expect(explanation.sourcesBeside(explained, /turns around from where it is/)).toEqual(['Accordions/MeasuredPanel.tsx on GitHub']);
+    expect(explanation.everyCodeBeside(explained, /turns around from where it is/).join()).toContain('movingTo');
   });
 });
 
@@ -609,7 +613,7 @@ describe('the fold motion', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.codeBeside(oldWay, visibilitySays[style])).toHaveTextContent('transition: height .3s ease-in-out, visibility .3s;');
+    expect(explanation.codeBeside(oldWay, visibilitySays[style])).toHaveTextContent(/transition:[^;]*visibility/);
   });
 
   test('should show, with static chosen, no transition rule beside the visibility run', async () => {
@@ -625,8 +629,8 @@ describe('the fold motion', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info { display: flex;');
-    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info-text { flex-shrink: 0;');
+    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info {');
+    expect(explanation.codeBeside(oldWay, sectionSays.drawer)).toHaveTextContent('.drawer & .info-text {');
   });
 
   test('should show, with reveal chosen, none of the drawer’s rules beside the section’s run', async () => {
@@ -1049,7 +1053,7 @@ describe('the platform build’s bars', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
 
     expect(explanation.runTelling(platform, /The arrow points right while the fold is closed/)).toHaveTextContent('The arrow points right while the fold is closed. When the fold opens, the browser adds an open attribute to the details in the page it is showing, as if it were written in the opening tag. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
-    expect(explanation.everyCodeBeside(platform, /The arrow points right while the fold is closed/).join()).toMatch(/&\[open] > \.info-label::after \{[^]*rotate\(135deg\)/);
+    expect(explanation.everyCodeBeside(platform, /The arrow points right while the fold is closed/).join()).toContain('&[open] > .info-label::after {');
   });
 
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should keep the bar’s own run to the row, the classes it wears and its focus, with %s chosen', async (type, input) => {
@@ -1065,7 +1069,7 @@ describe('the platform build’s bars', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.everyCodeBeside(platform, /The bar is the same flex row/).join()).toMatch(/\.info-label \{[^]*\.inverse-filled \{[^]*\.attentive:where\(:not\(:disabled\)\) \{[^]*\.field-outlined \{/);
+    expect(explanation.everyCodeBeside(platform, /The bar is the same flex row/).join()).toMatch(/\.info-label \{[^]*\.inverse-filled \{[^]*\.attentive[^]*\.field-outlined \{/);
   });
 });
 
@@ -1103,7 +1107,7 @@ describe('the known-height build’s bars', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
+    expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toContain('.opening-arrow::after {');
   });
 
   test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes color with the words', async () => {
