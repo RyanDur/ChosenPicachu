@@ -54,7 +54,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a>{' '}
-            <span className="provenance caption">Jeremy Keith, A Book Apart, 2016</span>
+            <span className="provenance caption">Jeremy Keith, 2016</span>
           </li>
         </ul>
       </section>

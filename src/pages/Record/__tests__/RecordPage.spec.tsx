@@ -809,7 +809,7 @@ describe('the record', () => {
   });
 
   test('should shelve Jeremy Keith’s Resilient Web Design, which the home page names', () => {
-    expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, A Book Apart, 2016');
+    expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });
 
   test('should head the research shelves The web, Structure, Presentation, Behavior, then The concert', () => {
