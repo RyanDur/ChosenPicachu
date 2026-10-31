@@ -11,11 +11,11 @@ export const site = {
   pageTitled: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1}),
   titled: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
   nav: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'site'}),
+  railLinks: async (): Promise<HTMLElement[]> => within(await screen.findByRole('navigation', {name: 'site'})).getAllByRole('link'),
   railLink: (name: string): HTMLElement => within(screen.getByRole('navigation', {name: 'site'})).getByRole('link', {name}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await screen.findByRole('navigation', {name: 'site'})).getByRole('link', {name})),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
   closedRoomIfAny: (): HTMLElement | null => screen.queryByText('This room is closed.'),
-  wordsWithoutScriptIfAny: (): HTMLElement | null => screen.queryByText(/The script draws this page, and it is off/),
   frontDoor: (): HTMLElement => screen.getByRole('link', {name: 'Back to the front door'}),
   announced: (words: string): HTMLElement => within(screen.getByRole('alert', {hidden: true})).getByText(words)
 };

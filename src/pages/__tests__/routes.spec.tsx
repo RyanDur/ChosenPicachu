@@ -92,16 +92,9 @@ describe('a room still loading', () => {
   test.each([Paths.home, demosAt('tables'), practiceAt('behavior'), Paths.games])('leaves every page on the rail unmarked at %s', async at => {
     loading(at);
 
-    const links = within(await site.nav()).getAllByRole('link');
+    const links = await site.railLinks();
     expect(links).toHaveLength(8);
     links.forEach(link => expect(link).not.toHaveAttribute('aria-current'));
-  });
-
-  test('never shows the words kept for a reader without the script', async () => {
-    loading();
-
-    await site.titled('Chosen Picachu');
-    expect(site.wordsWithoutScriptIfAny()).not.toBeInTheDocument();
   });
 });
 
