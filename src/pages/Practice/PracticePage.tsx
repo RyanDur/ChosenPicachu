@@ -30,21 +30,20 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
         the element is, what it needs, or what is true right now, and the number lives in the sheet under a name. An
         event says what happened, in the past tense; a type says what is true and refuses what cannot be; a condition
         reads as a sentence, <code>has</code>, <code>not</code>, <code>empty</code>, the same words the sheet uses
-        in <code>:has()</code>, <code>:not()</code> and <code>:is()</code>. Files sit by feature, the
+        in <code>:has()</code>, <code>:not()</code> and <code>:is()</code>. Files sit by feature too, the
         way <a className="signpost" href={appContinuum}>the App Continuum</a> lays them out, so a change to the gallery
         is in the gallery; its authors put it plainly: <a className="signpost" href={appContinuum}>“Naming, organizing,
-          and reducing circular dependencies are the three most important things you’ll ever do as a programmer”</a>,
-        and <a className="signpost" href={appContinuum}>“Common or Util tells the reader absolutely nothing”</a>.</p>
+          and reducing circular dependencies are the three most important things you’ll ever do as a programmer”</a>.</p>
       <p className="paragraph">Tailwind makes the other case, and it is worth reading in its own
         words: <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. A name
         is a cost, so stop paying it, and the CSS stops growing and changes feel safer because a class is local. I think
-        the energy is not wasted; it is the writer paying once what every reader would otherwise pay each
-        time. <code>shadow-md p-4 flex</code> says what an element looks like to someone who knows the
-        system; <code>lifted padded rounded-corners</code> says what it needs to anyone. Tailwind names its own
-        cost, <a className="signpost" href={utilityFirst}>“managing commonly repeated utility combinations”</a>, and
-        that cost is the name not given, coming due later. Where I agree with Tailwind is real (compose a look from shared
-        pieces, constrain the values, no abstraction before the second use; the Presentation tab says where), and where I
-        part is here: the name is the intent, and the intent is what the next reader needs.</p>
+        the energy is not wasted; it is the writer paying once what every reader would otherwise pay each time. Tailwind
+        names its own cost, <a className="signpost" href={utilityFirst}>“managing commonly repeated utility
+          combinations”</a>, and that cost is the name not given, coming due later. Where I agree with Tailwind is real
+        (compose a look from shared pieces, constrain the values, no abstraction before the second use; the Presentation
+        tab says where). Where I part is the name. <code>shadow-md p-4 flex</code> tells a reader who knows the system
+        what the element looks like; <code>lifted padded rounded-corners</code> tells any reader what it needs, and the
+        next reader is who the name is for.</p>
     </div>
     <Tabs label="practice" current={concernId(concern)}
       values={concernsInOrder.map(shown => ({display: shown, param: concernId(shown), to: practiceAddress(shown)}))}/>
