@@ -6,10 +6,11 @@ export const Opener: FC = () =>
   <header className="opening">
     <p className="thesis paragraph">I made this site because I couldn’t find one about how HTML, CSS and JavaScript work together. There is
       plenty on each. MDN documents all three in depth, the standards define each in its own specification, and
-      most courses teach them one at a time. But a page is all three at once, and in my experience much of what
-      goes wrong on a page happens where they meet. The closest thing I found is Jeremy Keith’s <cite>Resilient Web
-        Design</cite>, which treats the three as layers and tells their history, without code, by design. This site
-      follows the same languages through working code.</p>
+      most courses teach them one at a time. But a page is built from all three at once, and each has a job the
+      others can’t do. The closest thing I found is Jeremy Keith’s{' '}
+    <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a>, which
+      treats the three as layers and tells their history, without code, by design. This site follows the same
+      languages through working code.</p>
     <p className="thesis paragraph">Each language has its own job. HTML says what things are, CSS says how they look, and JavaScript says how
       they respond: structure, presentation and behavior.</p>
     <p className="thesis paragraph">I wrote this for developers who learned the three the way most of us did, one at a time and on the job,

@@ -14,7 +14,7 @@ const claim = (name: string): HTMLElement[] =>
 export const homePage = {
   arrived: (): Promise<HTMLElement> => screen.findByText(/^I made this site/),
   paragraph: (opening: RegExp): HTMLElement => screen.getByText((_, element) => element?.tagName === 'P' && opening.test(element.textContent)),
-  linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).getAllByRole('link'),
+  linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).queryAllByRole('link'),
   concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),
   quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
