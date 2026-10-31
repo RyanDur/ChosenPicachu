@@ -13,15 +13,16 @@ import {
 } from './Accordions';
 import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit, withoutImports} from '../Recipe/carve';
+import {Sample} from '../Recipe/sample';
 import accordionsSource from './Accordions.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
 import foldHtmlSource from './Plain/fold.html?sample';
 import {PlainFold} from './Plain/PlainFold';
-import htmlAloneSource from './HtmlAlone.tsx?sample';
+import inclusiveHtmlAloneSource from './InclusiveHtmlAlone.tsx?sample';
 import exclusiveHtmlAloneSource from './ExclusiveHtmlAlone.tsx?sample';
-import {HtmlAloneAccordion} from './HtmlAlone';
+import {InclusiveHtmlAloneAccordion} from './InclusiveHtmlAlone';
 import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
 import resetCss from '../../../styles/reset.css?sample';
@@ -73,6 +74,16 @@ const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
 const toldRun = 'run card rounded-corners lifted padded';
 const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
+
+type HtmlAloneBuild = {
+  readonly Accordion: FC;
+  readonly source: Sample;
+};
+
+const htmlAloneBuilds: Record<FoldType, HtmlAloneBuild> = {
+  inclusive: {Accordion: InclusiveHtmlAloneAccordion, source: inclusiveHtmlAloneSource},
+  exclusive: {Accordion: ExclusiveHtmlAloneAccordion, source: exclusiveHtmlAloneSource}
+};
 const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
 const foldMotions = [{display: 'Reveal', value: 'reveal'}, {display: 'Drawer', value: 'drawer'}, {display: 'Static', value: 'static'}] as const;
 const typeReadings: Record<FoldType, string> = {
@@ -95,6 +106,7 @@ type Props = {
 
 export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, motion, onMotionChosen}) => {
   const input = inputOf[type];
+  const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[type];
   return <>
     <header className="tab-introduction">
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
@@ -114,8 +126,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
       <ol className={runs}>
         <li className="run">
-          {type === 'exclusive' ? <ExclusiveHtmlAloneAccordion/> : <HtmlAloneAccordion/>}
-          <Snippet label="HTML" lines={span(type === 'exclusive' ? exclusiveHtmlAloneSource : htmlAloneSource, '<ul>', '</ul>')}/>
+          <HtmlAlone/>
+          <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
@@ -127,6 +139,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
             it and the browser shows the rest. Press it again and the browser hides it.</p>
         </li>
+        {type === 'exclusive' && <li className="run">
+          <p className="paragraph">Each of these details carries
+            a <Mdn path="Web/HTML/Element/details#name">name</Mdn> attribute, a setting written inside the element’s
+            opening tag, and details that share a name close one another: open one and the browser shuts the rest. That is
+            the whole of an exclusive accordion in HTML alone.</p>
+        </li>}
         <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
             which is software that reads the page aloud. The fold does not slide. The sections below are about making it slide,
@@ -136,9 +154,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices set the accordions on this tab, except the fold measured by plain script, which
-        is one checkbox fold and always reveals. The fold type reaches the one above too: with exclusive, its details share
-        a name and opening one closes the others. The motion does not, since it has no stylesheet.</p>
+      <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
+        script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with
+        exclusive, its details share a name and opening one closes the others. The motion does not, since that accordion
+        has no stylesheet.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
@@ -232,12 +251,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <li className="run">
             <p className="paragraph">The script hands the height to the stylesheet as a custom property
               named <code className="unbroken">--measured-height</code>. A custom property is a value the stylesheet can
-              read. It also marks the panel with a class, <code>sized</code>. A class is a name an element wears so a rule
-              can pick it out. While <code>sized</code> is on, a rule reads the number; with it off, the panel is auto
-              again. To close, the script first pins the open height with a second class, <code>unmoving</code>, which
-              turns the transition off. Then it reads the panel’s height once and throws the number away: the read makes
-              the browser apply the pinned start with the transition off, before it draws. Then it
-              takes <code>unmoving</code> off and sets the end, so the slide has a start to leave from.</p>
+              read. The script also marks the panel with a class, <code>sized</code>. A class is a name an element wears so
+              a rule can pick it out. While <code>sized</code> is on, a rule reads the number. On every press the script
+              first pins where the slide starts: it writes the panel’s current height, puts on a second
+              class, <code>unmoving</code>, which turns off the height’s transition, and reads the panel’s height once,
+              throwing the number away, so the browser applies the pinned start before it draws. Then it
+              takes <code>unmoving</code> off and sets the end, and the stylesheet slides between the two.</p>
             <Snippet label="CSS" lines={[
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
@@ -311,8 +330,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
                 </li>
                 <li className="run">
-                  <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
-                    the transition moves between them. The change event is the one the browser
+                  <p className="paragraph">Closing runs the other way, the pin at the open height and the end at 0,
+                    and the transition moves between them. The change event is the one the browser
                     sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to
                     no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where
                     the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
@@ -373,8 +392,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The fold is the three parts from “A box remembers the fold, and a rule reads
-                  it”: the {input}, its label and the text. The sample beside this run is the site’s React build of that
-                  fold, which writes class as <code>className</code> and for as <code>htmlFor</code>.</p>
+                  it”: the {input}, its label and the text. The sample beside this run is the same fold in React, the library
+                  this site’s script is written in, which writes class as <code>className</code> and for
+                  as <code>htmlFor</code>.</p>
                 <Snippet label="TS" lines={type === 'inclusive'
                   ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
                   : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
@@ -553,7 +573,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             reader announces the bar as a disclosure, collapsed or expanded.
           {type === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do. That is the inclusive build.'}
           {type === 'exclusive' && <> Give every details the same <Mdn path="Web/HTML/Element/details#name">name</Mdn>,
-            and the browser closes the others when one opens. Pressing the open one closes it, so the list needs no Close
+            as the first accordion does when exclusive is chosen, and the browser closes the others when one opens. Pressing the open one closes it, so the list needs no Close
             bar. That is the exclusive build.</>} This replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.
           {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and Safari open it at once, and it still works.'}</p>

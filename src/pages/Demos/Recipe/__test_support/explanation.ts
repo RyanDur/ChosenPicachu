@@ -46,11 +46,25 @@ const writtenForThePage = (run: HTMLElement): boolean =>
 
 export const explanation = {
   part: (heading: string): Promise<HTMLElement> => screen.findByRole('region', {name: heading}),
+  partIn: (holder: HTMLElement, heading: string): HTMLElement => within(holder).getByRole('region', {name: heading}),
+  partNames: (): string[] => screen.getAllByRole('region').map(region => computeAccessibleName(region)),
+  headingsIn: (holder: HTMLElement, level: number): string[] =>
+    within(holder).getAllByRole('heading', {level}).map(heading => heading.textContent),
+  headingIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement =>
+    within(holder).getByRole('heading', {name, level}),
+  foldedHeading: (fold: HTMLElement, name: string | RegExp): HTMLElement => within(fold).getByRole('heading', {name, hidden: true}),
+  foldsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('group'),
+  runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
+  paragraphsIn: (holder: HTMLElement): string[] => within(holder).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
+  codeIn: (holder: HTMLElement): HTMLElement => within(holder).getByRole('code'),
+  codesIn: (holder: HTMLElement): string[] => within(holder).getAllByRole('code').map(code => code.textContent),
   drawingNamed: (part: HTMLElement, name: RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   samplesIn,
-  saying: (part: HTMLElement, words: RegExp): HTMLElement => within(part).getByText(words),
-  tells: (part: HTMLElement, words: RegExp): boolean => within(part).queryByText(words) !== null,
+  saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
+  saidIn: (part: HTMLElement, words: RegExp): HTMLElement | null => within(part).queryByText(words),
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
+  linksBeside: (part: HTMLElement, words: RegExp): (string | null)[][] => within(runTelling(part, words)).getAllByRole('link')
+    .map(link => [link.textContent, link.getAttribute('href')]),
   writtenForThePageBeside: (part: HTMLElement, words: RegExp): boolean => writtenForThePage(runTelling(part, words)),
   runTelling,
   codeBeside: sampleBeside,

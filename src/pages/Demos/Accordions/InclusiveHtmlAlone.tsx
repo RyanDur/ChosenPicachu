@@ -1,6 +1,6 @@
 import {FC} from 'react';
 
-export const HtmlAloneAccordion: FC = () => (
+export const InclusiveHtmlAloneAccordion: FC = () => (
   <ul>
     <li>
       <details>
