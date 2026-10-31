@@ -9,7 +9,7 @@ const storyMoments = (name: string): HTMLElement => within(story(name)).getByRol
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
   paragraphOpening: (words: string): HTMLElement => screen.getByText((_, element) => element instanceof HTMLParagraphElement && (element.textContent ?? '').startsWith(words)),
-  argument: (): HTMLElement => screen.getByText(/^A webpage is three languages, each designed to handle one concern/),
+  argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
   openingQuotationSource: (): HTMLElement => screen.getByRole('link', {name: /^proposing the WorldWideWeb, 1990$/}),

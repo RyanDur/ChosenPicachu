@@ -52,6 +52,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/History.html"><cite>A Little History of the World Wide Web</cite></a>{' '}
             <span className="provenance caption">W3C</span>
           </li>
+          <li>
+            <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a>{' '}
+            <span className="provenance caption">Jeremy Keith, A Book Apart, 2016</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="structure research">
