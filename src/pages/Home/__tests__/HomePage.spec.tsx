@@ -3,8 +3,9 @@ import {render} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {homePage} from '@pages/Home/__test_support/home';
+import {recordPage} from '@pages/Record/__test_support/record';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
-import {DemoTopics} from '@pages/Demos/types';
+import {topicNames} from '@pages/Demos/types';
 import {spelledOut} from '@pages/Record/moments/spelled-out';
 import {storyAddress} from '@pages/Record/storyAddress';
 
@@ -26,12 +27,8 @@ describe('the home page', () => {
     expect(homePage.paragraph(/^I wrote this for developers/)).toHaveTextContent('I wrote this for developers who learned the three the way most of us did, one at a time and on the job, asking one language to do most of the work. Jobs then end up wherever they can be done: a div standing in for a button, a look written on the element itself, a script taking over scrolling, focus or the back button. Each of those works well enough to ship. The bugs come later, when someone uses the page with a keyboard, with a screen reader, or on a phone.');
     expect(homePage.paragraph(/^More code rarely fixes/)).toHaveTextContent('More code rarely fixes those bugs. Much of the work is already done by the platform: the browser and the standards it follows. The platform keeps getting better, too, because the people who write the standards listen to developers, watch what they build, and adopt what proves itself across the browsers. Putting the job where it belongs lets each language do what it already does.');
     expect(homePage.paragraph(/^Below, each language has a section/)).toHaveTextContent('Below, each language has a section of its own: what it says, what its history teaches, and where to read more. The Record tells that history in full: a story for each language, then every moment in order, then the three read together, and the pattern they follow, which HTML’s own design principles wrote down in 2007. Practice shows how I organize each language, with a tab for each.');
-    expect(homePage.paragraph(/^The Demos put that practice/)).toHaveTextContent('The Demos put that practice to work on five features built from this site’s own code, explained beside it and running from simple to expert. Two compare the trick we used before the platform could do the job with what it does now. The other three build drag sorting, charts and tables with no library for any of them.');
+    expect(homePage.paragraph(/^The Demos put that practice/)).toHaveTextContent('The Demos put that practice to work on features built from this site’s own code and explained beside it, running from simple to expert. Some compare the trick we used before the platform could do the job with what it does now; the rest show what the platform does with no library for the job.');
     expect(outOfReadingOrder(opener.map(homePage.paragraph))).toEqual([]);
-  });
-
-  test('should count the demos as many as the Demos have tabs', () => {
-    expect(homePage.paragraph(/^The Demos put that practice/)).toHaveTextContent(`${spelledOut(Object.values(DemoTopics).length)} features`);
   });
 
   test('should link the opener to the book it names, then its map to the Record, Practice and the Demos, and nothing else', () => {
@@ -94,5 +91,27 @@ describe('the home page', () => {
       ['A browser can animate transform and opacity cheaply', 'https://web.dev/articles/animations-overview'],
       ['the accordions', `${Paths.demos}accordions/`]
     ]);
+  });
+});
+
+describe('the Demos, as the home page and the Record describe them', () => {
+  const topicsNamedIn = (text: string): string[] =>
+    Object.values(topicNames).filter(name => new RegExp(`\\b${name}\\b`, 'i').test(text));
+  const countsIn = (text: string): string[] =>
+    Array.from({length: 100}, (_, count) => spelledOut(count)).filter(word => new RegExp(`\\b${word}\\b`, 'i').test(text));
+
+  test('should stay true when a demo is added: the home names no tab and the Record only the accordions and the tables, and neither counts them', async () => {
+    const {unmount} = render(<TestApp at={Paths.home}/>);
+    await homePage.arrived();
+    const opener = homePage.paragraph(/^The Demos put that practice/).textContent ?? '';
+    unmount();
+
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+    const bridge = recordPage.paragraphOpening('The Demos run from simple to expert').textContent ?? '';
+
+    expect(topicsNamedIn(opener)).toEqual([]);
+    expect(topicsNamedIn(bridge)).toEqual(['Accordions', 'Tables']);
+    expect([...countsIn(opener), ...countsIn(bridge)]).toEqual([]);
   });
 });
