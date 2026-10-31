@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, useEffect} from 'react';
+import {createContext, FC, PropsWithChildren, useContext, useEffect} from 'react';
 import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
@@ -11,16 +11,22 @@ const railPath = () => 'path rail-path bold attentive field void-dot-before reac
 
 const followedFromTheRail = 'followed from the rail';
 
+const PageUnknown = createContext(false);
+
 type RailLinkProps = PropsWithChildren<{readonly id: string; readonly to: string; readonly end?: boolean}>;
 
-const RailLink: FC<RailLinkProps> = ({id, to, end, children}) =>
-  <NavLink id={id} className={railPath} to={to} end={end} state={followedFromTheRail}>{children}</NavLink>;
+const RailLink: FC<RailLinkProps> = ({id, to, end, children}) => useContext(PageUnknown)
+  ? <Link id={id} className={railPath()} to={to} state={followedFromTheRail}>{children}</Link>
+  : <NavLink id={id} className={railPath} to={to} end={end} state={followedFromTheRail}>{children}</NavLink>;
 
 type SectionLinkProps = PropsWithChildren<{readonly id: string; readonly page: string; readonly to: string}>;
 
-const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) =>
-  <Link id={id} className={railPath()} to={to} state={followedFromTheRail}
-    aria-current={useMatch({path: page, end: false}) === null ? undefined : 'page'}>{children}</Link>;
+const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
+  const pageUnknown = useContext(PageUnknown);
+  const onThePage = useMatch({path: page, end: false}) !== null && !pageUnknown;
+  return <Link id={id} className={railPath()} to={to} state={followedFromTheRail}
+    aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
+};
 
 // React Router mounts each route's page anew, and the followed link goes with the page it was on
 const useFocusFollowsTheRail = (): void => {
@@ -33,10 +39,10 @@ const useFocusFollowsTheRail = (): void => {
   }, [key, state, navigation]);
 };
 
-export const SideNav: FC = () => {
+export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
   useFocusFollowsTheRail();
 
-  return <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
+  return <PageUnknown.Provider value={pageUnknown}><nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress('Structure')}>Practice</SectionLink>
@@ -51,5 +57,5 @@ export const SideNav: FC = () => {
     <RailLink id="navigate-games" to={Paths.games}>Games</RailLink>
     <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}
       rel="noopener noreferrer" target="_blank">Repo</a>
-  </nav>;
+  </nav></PageUnknown.Provider>;
 };

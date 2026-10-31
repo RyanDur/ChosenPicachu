@@ -14,8 +14,8 @@ export const site = {
   railLink: (name: string): HTMLElement => within(screen.getByRole('navigation', {name: 'site'})).getByRole('link', {name}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await screen.findByRole('navigation', {name: 'site'})).getByRole('link', {name})),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
-  pageTitleIfAny: (): HTMLElement | null => screen.queryByRole('heading', {level: 1}),
   closedRoomIfAny: (): HTMLElement | null => screen.queryByText('This room is closed.'),
+  wordsWithoutScriptIfAny: (): HTMLElement | null => screen.queryByText(/The script draws this page, and it is off/),
   frontDoor: (): HTMLElement => screen.getByRole('link', {name: 'Back to the front door'}),
   announced: (words: string): HTMLElement => within(screen.getByRole('alert', {hidden: true})).getByText(words)
 };

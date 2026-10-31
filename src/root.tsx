@@ -76,7 +76,12 @@ const Site: FC<{room: ReactNode}> = ({room}) => {
 export const ErrorBoundary: FC = () =>
   <Site room={<Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}><PageError/></Page>}/>;
 
-export const HydrateFallback: FC = () => null;
+export const HydrateFallback: FC = () =>
+  <Site room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false} pageUnknown>
+    <noscript>
+      <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here without it.</p>
+    </noscript>
+  </Page>}/>;
 
 const Root: FC = () => <Site room={<Outlet/>}/>;
 

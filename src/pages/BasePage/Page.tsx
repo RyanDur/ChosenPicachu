@@ -9,12 +9,13 @@ type PageProps = PropsWithChildren<{
   filters?: ReactNode;
   footer?: ReactNode;
   inView?: boolean;
+  pageUnknown?: boolean;
 }>;
 
-export const Page: FC<PageProps> = ({header, filters, footer, inView = true, children}) => <>
+export const Page: FC<PageProps> = ({header, filters, footer, inView = true, pageUnknown, children}) => <>
   {header}
   <section className="rail backdrop backdrop-below" aria-label="pages and feedback">
-    <SideNav/>
+    <SideNav pageUnknown={pageUnknown}/>
     <Feedback/>
   </section>
   {filters}

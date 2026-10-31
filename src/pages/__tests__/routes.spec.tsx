@@ -75,13 +75,33 @@ describe('page error boundaries', () => {
     expect(site.pageTitle()).toHaveTextContent('No such room');
     expect(site.railLink('Games')).toHaveAttribute('aria-current', 'page');
   });
+});
 
-  test('a room still loading is not called closed', async () => {
-    render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
+describe('a room still loading', () => {
+  const loading = (at = '/') => render(<TestApp at={at}><Route path={at} lazy={() => new Promise(() => undefined)}/></TestApp>);
+
+  test('stands in the site under the site’s own name, and is not called closed', async () => {
+    loading();
 
     expect(await appAddress.drawn()).toBe('/');
-    expect(site.pageTitleIfAny()).not.toBeInTheDocument();
+    expect(await site.titled('Chosen Picachu')).toBeVisible();
+    expect(site.room()).toBeInTheDocument();
     expect(site.closedRoomIfAny()).not.toBeInTheDocument();
+  });
+
+  test.each([Paths.home, demosAt('tables'), practiceAt('behavior'), Paths.games])('leaves every page on the rail unmarked at %s', async at => {
+    loading(at);
+
+    const links = within(await site.nav()).getAllByRole('link');
+    expect(links).toHaveLength(8);
+    links.forEach(link => expect(link).not.toHaveAttribute('aria-current'));
+  });
+
+  test('never shows the words kept for a reader without the script', async () => {
+    loading();
+
+    await site.titled('Chosen Picachu');
+    expect(site.wordsWithoutScriptIfAny()).not.toBeInTheDocument();
   });
 });
 

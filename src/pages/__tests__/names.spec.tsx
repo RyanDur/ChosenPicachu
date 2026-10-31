@@ -62,6 +62,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.closedRoom.description);
   });
 
+  test('should give a room still loading the site’s own title and description', async () => {
+    render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
+
+    await waitFor(() => expect(document.title).toBe(names.home.title));
+    expect(described()).toBe(names.home.description);
+  });
+
   describe('an artwork’s page', () => {
     const piece = aicArtResponse.data[0];
 
