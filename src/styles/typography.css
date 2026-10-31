@@ -163,3 +163,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+.unbroken {
+  white-space: nowrap;
+}

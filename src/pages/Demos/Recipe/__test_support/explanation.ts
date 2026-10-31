@@ -21,7 +21,8 @@ const runDrawing = (part: HTMLElement, drawing: RegExp): HTMLElement =>
   runWith(part, run => within(run).queryByRole('figure', {name: drawing}) !== null, `draws ${drawing}`);
 
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
-  within(part).getAllByRole('figure').filter(figure => figure.querySelector(':scope > svg') !== null);
+  within(part).getAllByRole('figure')
+    .filter(figure => within(figure).queryByRole('code') === null && within(figure).queryAllByTitle(/./).length === 0);
 
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
   within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
@@ -36,7 +37,16 @@ const sampleBeside = (part: HTMLElement, words: RegExp): HTMLElement => {
   return samples[0];
 };
 
+const sourcesIn = (run: HTMLElement): string[] =>
+  within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('link', {name: /on GitHub$/}))
+    .map(link => link.textContent ?? '');
+
+const writtenForThePage = (run: HTMLElement): boolean =>
+  within(run).queryByText('Written for this page, not taken from the site’s code.') !== null;
+
 export const explanation = {
+  sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
+  writtenForThePageBeside: (part: HTMLElement, words: RegExp): boolean => writtenForThePage(runTelling(part, words)),
   runTelling,
   codeBeside: sampleBeside,
   everyCodeBeside: (part: HTMLElement, words: RegExp): string[] => everyCodeIn(runTelling(part, words)),

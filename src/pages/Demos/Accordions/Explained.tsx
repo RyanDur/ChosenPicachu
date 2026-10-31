@@ -17,6 +17,7 @@ import accordionsSource from './Accordions.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
+import foldHtmlSource from './Plain/fold.html?sample';
 import {PlainFold} from './Plain/PlainFold';
 import htmlAloneSource from './HtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
@@ -56,6 +57,16 @@ export type Contents = {
 };
 
 const exhibit = 'card rounded-corners lifted padded';
+
+const radioFold = [
+  plain('<li class="fold">'),
+  plain('  <input id="measured-fold-0-radio" class="info-toggle off-screen" type="radio" name="measured-group">'),
+  plain('  <label id="measured-fold-0-radio-label" class="info-label" for="measured-fold-0-radio">measured</label>'),
+  plain('  <section class="info-measured" aria-labelledby="measured-fold-0-radio-label">'),
+  plain('    <p class="info-paragraph">…</p>'),
+  plain('  </section>'),
+  plain('</li>')
+];
 const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
 const toldRun = 'run card rounded-corners lifted padded';
@@ -124,7 +135,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
       <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
-        script, which shows one script and always reveals. The one above is HTML alone, so they don’t change it.</p>
+        script, which is one checkbox fold and always reveals. The one above is HTML alone, so they don’t change it.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
@@ -158,9 +169,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
                 radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="TS" lines={type === 'inclusive'
-              ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
-              : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
+            <Snippet label="HTML" lines={type === 'inclusive' ? span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is checked. A selector
@@ -218,11 +227,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <Snippet label="TS" lines={withoutImports(foldSource)}/>
           </li>
           <li className="run">
-            <p className="paragraph">The script hands the height to the stylesheet as a custom
-              property, <code>--measured-height</code>, and marks the panel <code>sized</code> while a number is on it, so a rule
-              reads the number only then. To close, it first pins the open height with a second
-              class, <code>unmoving</code>, which switches the transition off for one frame, so the slide has a start to
-              leave from.</p>
+            <p className="paragraph">The script hands the height to the stylesheet as a custom property, a value the
+              stylesheet can read, named <code className="unbroken">--measured-height</code>, and marks the panel with a
+              class, a name an element wears so a rule can pick it out: <code>sized</code>. While a number is on the panel a
+              rule reads it through <code>sized</code>, and only then. To close, it first pins the open height with a second
+              class, <code>unmoving</code>, which keeps the transition off while the script reads the height, before the
+              browser draws anything, so the slide has a start to leave from.</p>
             <Snippet label="CSS" lines={[
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
@@ -240,10 +250,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <li className="part-depth">
             <details aria-labelledby="measured-depth">
               <summary id="measured-depth" className="opener bold">How this site does it</summary>
-              <p className="paragraph">This site builds the same fold in React, and the runs below say what React, state and a
-                layout effect are as they come. What changes is the shape. The plain script listens for the press; the
-                React build redraws the panel from what it holds, so the measuring runs in two layout effects: the first
-                pins where the motion starts before the browser paints, and the second sets where it ends.</p>
+              <p className="paragraph">This site builds the same fold in React, and the runs below say what React and state are
+                as they come. What changes is the shape. The plain script listens for the press; the React build redraws the
+                panel from what it holds, so the measuring runs in two steps React takes before the browser paints: the
+                first pins where the motion starts, and the second sets where it ends.</p>
               {type === 'inclusive'
                 ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
                 : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
@@ -284,16 +294,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ]}/>
                 </li>
                 <li className="run">
-                  <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
-                    value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
+                  <p className="paragraph">The React build hands each height to the stylesheet through the
+                    same <code className="unbroken">--measured-height</code>. The stylesheet declares that
                     property with <code>@property</code>, a rule that tells the browser what kind of value a custom
                     property holds and what it is until something sets it: here a length or auto, starting as auto.</p>
                   <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
                 </li>
                 <li className="run">
-                  <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
-                    pick it out: <code>sized</code>. While <code>sized</code> is on, the panel’s height
-                    reads <code>--measured-height</code>.</p>
+                  <p className="paragraph">The React build marks the panel <code>sized</code> as the plain one does.
+                    While <code>sized</code> is on, the panel’s height reads <code className="unbroken">--measured-height</code>.</p>
                   <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
                 </li>
                 <li className="run">
@@ -356,9 +365,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="part-depth">
           <details aria-labelledby="known-depth">
             <summary id="known-depth" className="opener bold">How the known height works</summary>
-            <p className="paragraph">The fold is the three parts the top of this section gave it: the {input}, its label and
-              the text.</p>
             <ol className="runs">
+              <li className="run">
+                <p className="paragraph">The fold is the three parts “A box remembers the fold, and a rule reads it” gave
+                  it: the {input}, its label and the text.</p>
+                <Snippet label="TS" lines={type === 'inclusive'
+                  ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
+                  : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
+              </li>
               <li className="run">
                 <p className="paragraph">You want the reader to see a bar, not a {input}, so you hide the {input}.
                   Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
