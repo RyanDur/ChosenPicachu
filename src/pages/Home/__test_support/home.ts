@@ -15,12 +15,14 @@ export const homePage = {
   arrived: (): Promise<HTMLElement> => screen.findByText(/^I made this site/),
   paragraph: (opening: RegExp): HTMLElement => screen.getByText((_, element) => element?.tagName === 'P' && opening.test(element.textContent)),
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).queryAllByRole('link'),
-  concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
+  sectionHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   concernHeading: (name: string): HTMLElement => within(concern(name)).getByRole('heading', {level: 2, name}),
   quotationIn: (name: string): HTMLElement => within(concern(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(concern(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
   concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
   claim,
+  sectionText: (name: string): string[] => within(concern(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
+  sectionLinks: (name: string): HTMLElement[] => within(concern(name)).getAllByRole('link'),
   sourcesLinked: (): string[] => within(screen.getByRole('main')).getAllByRole('link')
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),

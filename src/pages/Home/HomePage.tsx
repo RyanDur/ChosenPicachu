@@ -3,6 +3,7 @@ import {Opener} from './Opener';
 import {Structure} from './Structure';
 import {Presentation} from './Presentation';
 import {Behavior} from './Behavior';
+import {WhereThePageIsMade} from './WhereThePageIsMade';
 import './Home.css';
 
 export const HomePage: FC = () =>
@@ -11,4 +12,5 @@ export const HomePage: FC = () =>
     <Structure/>
     <Presentation/>
     <Behavior/>
+    <WhereThePageIsMade/>
   </article>;
