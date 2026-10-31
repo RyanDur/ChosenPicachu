@@ -55,9 +55,9 @@ test('a search typed into the box lands in the address and the wall stays hung',
 });
 
 test('a piece page names the artwork it shows', async ({page}) => {
-  await page.goto('gallery/27992?tab=aic');
+  await page.goto('gallery/O9138?tab=vam');
 
-  await expect(page.getByRole('banner')).toContainText('La Grande Jatte', {timeout: 30_000});
+  await expect(page.getByRole('banner')).toContainText('Great Bed of Ware', {timeout: 30_000});
 });
 
 test('the users page opens with somewhere to add a person and the people already there', async ({page}) => {
