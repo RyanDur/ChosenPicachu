@@ -7,7 +7,6 @@ import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice'
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 const appContinuum = 'https://www.appcontinuum.io/';
-const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
 
 const practices = [
   ['Structure', 'structure', /^I start from what the content is and pick the element for it/, /^The test is to read the page with the styles turned off/],
@@ -89,25 +88,18 @@ describe('the practice page', () => {
     const principle = practicePage.openingParagraph(/^Code is read more often than it is written/);
 
     expect(principle).toHaveTextContent(
-      'Code is read more often than it is written, and the reader is usually someone who was not there, including me a year on. So I organize for the reader: the code says what it means. An element says what the thing is, and when no element does, I make one and name it for the one behavior it adds. A class says what the element is, what it needs, or what is true right now, and the number lives in the sheet under a name. An event says what happened, in the past tense; a type says what is true and refuses what cannot be; a condition reads as a sentence, has, not, empty, the same words the sheet uses in :has(), :not() and :is(). Files sit by feature too, the way the App Continuum lays them out, so a change to the gallery is in the gallery; its authors put it plainly: “Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”.');
+      'Code is read more often than it is written, and the reader is usually someone who was not there, including me when I come back to it. So I organize for the reader: the code says what it means. An element says what the thing is, and when no element does, I make one and name it for the one behavior it adds. A class says what the element is, what it needs, or what is true right now, and the sheet says what that means today. An event says what happened, in the past tense; a type says what is true and refuses what cannot be; a condition reads as a sentence, has, not, empty, the same words the sheet uses in :has(), :not() and :is(). Files sit by feature too, the way the App Continuum lays them out, so a change to the gallery is in the gallery; its authors put it plainly: “Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”.');
     expect(practicePage.comesBeforeTheTabs(principle)).toBe(true);
   });
 
-  test('should give Tailwind’s case in its own words before answering it, before the tabs', async () => {
-    render(<TestApp at={Paths.practice}/>);
-    await practicePage.opener();
-    const trade = practicePage.openingParagraph(/^Tailwind makes the other case/);
-
-    expect(trade).toHaveTextContent(
-      'Tailwind makes the other case, and it is worth reading in its own words: “You aren’t wasting energy inventing class names”. A name is a cost, so stop paying it, and the CSS stops growing and changes feel safer because a class is local. I think the energy is not wasted; it is the writer paying once what every reader would otherwise pay each time. Tailwind names its own cost, “managing commonly repeated utility combinations”, and that cost is the name not given, coming due later. Where I agree with Tailwind is real (compose a look from shared pieces, constrain the values, no abstraction before the second use; the Presentation tab says where). Where I part is the name. shadow-md p-4 flex tells a reader who knows the system what the element looks like; lifted padded rounded-corners tells any reader what it needs, and the next reader is who the name is for.');
-    expect(practicePage.comesBeforeTheTabs(trade)).toBe(true);
-  });
-
-  test('should set the two class lists Tailwind’s case is answered with as code', async () => {
+  test('should open on two paragraphs, what the tabs hold and the principle, and nothing more before the tabs', async () => {
     render(<TestApp at={Paths.practice}/>);
     await practicePage.opener();
 
-    expect(practicePage.codeIn(/^Tailwind makes the other case/)).toEqual(['shadow-md p-4 flex', 'lifted padded rounded-corners']);
+    expect(practicePage.beforeTheTabs()).toEqual([
+      expect.stringMatching(/^Each tab below is one of the three concerns/),
+      expect.stringMatching(/^Code is read more often than it is written/)
+    ]);
   });
 
   test('should link the App Continuum, and each quotation from it, to the Continuum', async () => {
@@ -117,16 +109,6 @@ describe('the practice page', () => {
     expect(practicePage.linksIn(/^Code is read more often than it is written/)).toEqual([
       ['the App Continuum', appContinuum],
       ['“Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”', appContinuum]
-    ]);
-  });
-
-  test('should link each quotation from Tailwind to its Utility-First Fundamentals', async () => {
-    render(<TestApp at={Paths.practice}/>);
-    await practicePage.opener();
-
-    expect(practicePage.linksIn(/^Tailwind makes the other case/)).toEqual([
-      ['“You aren’t wasting energy inventing class names”', utilityFirst],
-      ['“managing commonly repeated utility combinations”', utilityFirst]
     ]);
   });
 

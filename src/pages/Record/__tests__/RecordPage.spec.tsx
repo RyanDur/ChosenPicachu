@@ -819,12 +819,6 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });
 
-  test('should shelve Tailwind’s Utility-First Fundamentals on the Presentation shelf, at the address the Practice page quotes', () => {
-    expect(recordPage.shelvedAs('Utility-First Fundamentals')).toHaveTextContent('Tailwind CSS documentation, version 3');
-    expect(recordPage.shelfHolding('Utility-First Fundamentals')).toBe('Presentation');
-    expect(recordPage.shelvedAddress('Utility-First Fundamentals')).toBe('https://v3.tailwindcss.com/docs/utility-first');
-  });
-
   test('should shelve the Application Continuum on the Behavior shelf, at the address the Practice page quotes', () => {
     expect(recordPage.shelvedAs('The Application Continuum')).toHaveTextContent('appcontinuum.io');
     expect(recordPage.shelfHolding('The Application Continuum')).toBe('Behavior');

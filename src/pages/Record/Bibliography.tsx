@@ -290,10 +290,6 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://web.dev/articles/animations-overview"><cite>Why are some animations slow?</cite></a>{' '}
             <span className="provenance caption">Rachel Andrew, web.dev, 2020</span>
           </li>
-          <li>
-            <a className="signpost" href="https://v3.tailwindcss.com/docs/utility-first"><cite>Utility-First Fundamentals</cite></a>{' '}
-            <span className="provenance caption">Tailwind CSS documentation, version 3</span>
-          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="behavior research">
