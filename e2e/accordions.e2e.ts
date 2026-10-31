@@ -10,6 +10,7 @@ import {
   pressTab,
   nameOn,
   showing,
+  siteFrame,
   tabsTo,
   textOf
 } from './__test_support';
@@ -176,8 +177,21 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 
 everyBuildJourneys(builds);
 
-test('the accordion in HTML alone keeps two folds open with exclusive and static chosen', async ({page}) => {
-  await page.goto('demos/accordions/?type=exclusive&style=static');
+test('with exclusive chosen, opening a second fold of the accordion in HTML alone closes the first', async ({page}) => {
+  await page.goto('demos/accordions/?type=exclusive');
+  await siteFrame(page).hydrated();
+  const [basalt, cinder] = [accordionsTab(page).htmlAloneFold('basalt'), accordionsTab(page).htmlAloneFold('cinder')];
+
+  await basalt.open();
+  await cinder.open();
+
+  await expect.poll(cinder.isOpen).toBe(true);
+  await expect.poll(basalt.isOpen).toBe(false);
+});
+
+test('with inclusive chosen, the accordion in HTML alone keeps two folds open', async ({page}) => {
+  await page.goto('demos/accordions/?type=inclusive');
+  await siteFrame(page).hydrated();
   const [basalt, cinder] = [accordionsTab(page).htmlAloneFold('basalt'), accordionsTab(page).htmlAloneFold('cinder')];
 
   await basalt.open();

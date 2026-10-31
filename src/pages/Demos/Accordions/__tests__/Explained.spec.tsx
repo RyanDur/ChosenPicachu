@@ -52,7 +52,7 @@ describe('the accordions tab', () => {
 
     const choices = await screen.findByRole('region', {name: 'fold choices'});
 
-    expect(within(choices).getByText(/^Two choices set the accordions in the sections below/)).toBeVisible();
+    expect(within(choices).getByText(/^Two choices set the accordions on this tab/)).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold type'})).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold motion'})).toBeVisible();
   });
@@ -452,7 +452,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await screen.findByRole('group', {name: 'fold type'});
-    const line = screen.getByText('Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The one above is HTML alone, so they don’t change it.');
+    const line = screen.getByText('Two choices set the accordions on this tab, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type reaches the one above too: with exclusive, its details share a name and opening one closes the others. The motion does not, since it has no stylesheet.');
 
     expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(line.compareDocumentPosition(screen.getByRole('region', {name: 'An accordion in HTML alone'})) & Node.DOCUMENT_POSITION_PRECEDING).toBe(Node.DOCUMENT_POSITION_PRECEDING);
@@ -852,8 +852,26 @@ describe('the accordion in HTML alone', () => {
     const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
     const code = within(firstRun).getAllByRole('code').map(sample => sample.textContent).join();
 
-    expect(code).toMatch(/<ul>[^]*<details>[^]*<summary>basalt<\/summary>[^]*<summary>meadow<\/summary>[^]*<\/ul>/);
+    expect(code).toMatch(/<ul>[^]*<details[^]*<summary>basalt<\/summary>[^]*<summary>meadow<\/summary>[^]*<\/ul>/);
     expect(code).not.toMatch(/className|on[A-Z]\w*=/);
+  });
+
+  test('should show, with inclusive chosen, folds that share no name, so each opens on its own', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
+
+    const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
+
+    expect(within(firstRun).getAllByRole('code').map(sample => sample.textContent).join()).not.toContain('name=');
+  });
+
+  test('should show, with exclusive chosen, one name shared by every details, so opening one closes the others', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+
+    const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
+    const names = [...within(firstRun).getAllByRole('code').map(sample => sample.textContent).join().matchAll(/<details name="([^"]+)"/g)].map(([, name]) => name);
+
+    expect(names).toHaveLength(3);
+    expect(new Set(names).size).toBe(1);
   });
 });
 

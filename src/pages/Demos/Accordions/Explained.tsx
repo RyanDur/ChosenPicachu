@@ -20,7 +20,9 @@ import foldSource from './Plain/fold.main.ts?sample';
 import foldHtmlSource from './Plain/fold.html?sample';
 import {PlainFold} from './Plain/PlainFold';
 import htmlAloneSource from './HtmlAlone.tsx?sample';
+import exclusiveHtmlAloneSource from './ExclusiveHtmlAlone.tsx?sample';
 import {HtmlAloneAccordion} from './HtmlAlone';
+import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
 import resetCss from '../../../styles/reset.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
@@ -112,8 +114,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
       <ol className={runs}>
         <li className="run">
-          <HtmlAloneAccordion/>
-          <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
+          {type === 'exclusive' ? <ExclusiveHtmlAloneAccordion/> : <HtmlAloneAccordion/>}
+          <Snippet label="HTML" lines={span(type === 'exclusive' ? exclusiveHtmlAloneSource : htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
@@ -134,8 +136,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
-        script, which is one checkbox fold and always reveals. The one above is HTML alone, so they don’t change it.</p>
+      <p className="paragraph">Two choices set the accordions on this tab, except the fold measured by plain script, which
+        is one checkbox fold and always reveals. The fold type reaches the one above too: with exclusive, its details share
+        a name and opening one closes the others. The motion does not, since it has no stylesheet.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
