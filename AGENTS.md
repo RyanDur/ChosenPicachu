@@ -122,7 +122,7 @@ Each reviewer reads its rubric first and whole, reviews one half of the scope, t
 - rubric: `scripts/review/tutorials.md`
 - reviews: the site
 - scopes: full, changes
-- asks: what a tutorial on the demos tab owes its reader: claims that are true, terms defined where they first appear, headings that lead with the answer, an example to press for every idea, a tab that opens with why, the mechanism said in plain words, one idea in each run, a point stated and not staged
+- asks: what a tutorial on the demos tab owes its reader: claims that are true, terms defined where they first appear, headings that lead with the answer, an example to press for every idea, a tab that opens with why, the smallest script first with the site's build behind it, the mechanism said in plain words, one idea in each run, a point stated and not staged
 
 ### record
 - rubric: `scripts/review/record.md`

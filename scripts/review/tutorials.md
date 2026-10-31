@@ -8,7 +8,7 @@ A tutorial is written for a working developer who has hit the bug the tab is abo
 
 ## The order of the tabs
 
-The tabs run from simple to expert. Accordions come first, and the page begins with HTML alone, because the less a learner has to attend to, the more room they have to understand. Z-index is the next step. Drag sort, charts and tables are the deep end. A change that makes a simple tab harder to start, or puts expert depth in plain view on it, breaks this order. On a simple tab the depth belongs in a fold below the point.
+The tabs run from simple to expert. Accordions come first, and the page begins with HTML alone, because the less a learner has to attend to, the more room they have to understand. Z-index is the next step. Drag sort, charts and tables are the deep end. A change that makes a simple tab harder to start, or puts expert depth in plain view on it, breaks this order. On a simple tab the depth belongs in a fold below the point. The first script a learner meets on a tab is the smallest that does the job, carved whole beside the run that explains it with no library in it; the site's own build sits behind it, in a fold headed how this site does it. A tab whose first script in plain view is the site's React build is a finding.
 
 ## Eight questions, in order
 
