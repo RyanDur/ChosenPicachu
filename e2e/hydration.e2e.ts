@@ -19,7 +19,7 @@ for (const path of [
 
 for (const {path, where, title, current} of [
   {path: 'games/colorGame', where: 'an address with no page', title: 'No such room', current: 'Games'},
-  {path: 'gallery/O9138?tab=vam', where: 'a piece’s address', title: 'A piece', current: 'Gallery'}
+  {path: 'gallery/O9138?tab=vam', where: 'a piece’s address', title: 'Great Bed of Ware', current: 'Gallery'}
 ]) {
   test(`a reader whose script has yet to arrive at ${where} sees the site under its own name, and not the words kept for a reader without it`, async ({page}) => {
     await page.route('**/*.js', route => route.abort());
