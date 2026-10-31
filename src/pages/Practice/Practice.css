@@ -1,11 +1,4 @@
-.practice-opening {
-  padding: var(--base-x-5);
-
-  @media (width <= 600px) {
-    padding-inline: var(--base-x-2_5);
-  }
-}
-
+.practice-opening,
 .practice {
   display: grid;
   align-content: start;

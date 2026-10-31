@@ -7,6 +7,15 @@ const research = (): HTMLElement => screen.getByRole('region', {name: 'The resea
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
 const storyMoments = (name: string): HTMLElement => within(story(name)).getByRole('list', {name: `${name}, the moments it rests on`});
 
+const shelvedAs = (work: string): HTMLElement => {
+  const entry = within(research()).getAllByRole('listitem', {hidden: true})
+    .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
+  if (entry) {
+    return entry;
+  }
+  throw new Error(`no work on the research shelf named ${work}`);
+};
+
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
   paragraphOpening,
@@ -23,14 +32,10 @@ export const recordPage = {
   timeline: (): HTMLElement => screen.getByRole('region', {name: 'How the web got its languages'}),
   concert: (): HTMLElement => screen.getByRole('region', {name: 'The concert'}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
-  shelvedAs: (work: string): HTMLElement => {
-    const entry = within(research()).getAllByRole('listitem', {hidden: true})
-      .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
-    if (entry) {
-      return entry;
-    }
-    throw new Error(`no work on the research shelf named ${work}`);
-  },
+  shelvedAs,
+  shelfHolding: (work: string): string | null => within(shelvedAs(work).closest('section') ?? research())
+    .getByRole('heading', {level: 3, hidden: true}).textContent,
+  shelvedAddress: (work: string): string | null => within(shelvedAs(work)).getByRole('link', {hidden: true}).getAttribute('href'),
   shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
   sourcesLinked: (): string[] => {
     const shelf = research();

@@ -290,6 +290,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://web.dev/articles/animations-overview"><cite>Why are some animations slow?</cite></a>{' '}
             <span className="provenance caption">Rachel Andrew, web.dev, 2020</span>
           </li>
+          <li>
+            <a className="signpost" href="https://v3.tailwindcss.com/docs/utility-first"><cite>Utility-First Fundamentals</cite></a>{' '}
+            <span className="provenance caption">Tailwind CSS documentation, version 3</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="behavior research">
@@ -438,6 +442,10 @@ export const Bibliography: FC = () =>
           <li>
             <a className="signpost" href="https://vuejs.org/guide/scaling-up/sfc"><cite>Single-File Components</cite></a>{' '}
             <span className="provenance caption">The Vue guide, vuejs.org</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a>{' '}
+            <span className="provenance caption">appcontinuum.io</span>
           </li>
         </ul>
       </section>
