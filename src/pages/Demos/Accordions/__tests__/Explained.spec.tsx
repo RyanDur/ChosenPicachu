@@ -5,7 +5,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {demosAt} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const htmlAlone = 'An accordion in HTML alone';
 
@@ -173,25 +173,25 @@ describe('the words and the code chosen by type', () => {
   test('should, with inclusive chosen, call the box a checkbox where the runs hide it and say what a screen reader announces', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const oldWay = await explanation.part(parts[0]);
 
-    expect(within(oldWay).getByText(/so you hide the checkbox\./)).toBeInTheDocument();
+    expect(explanation.saying(oldWay, /so you hide the checkbox\./)).toBeInTheDocument();
     expect(oldWay).toHaveTextContent(/a checkbox, checked or not checked\./);
   });
 
   test('should, with exclusive chosen, call the box a radio where the runs hide it and say what a screen reader announces', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const oldWay = await explanation.part(parts[0]);
 
-    expect(within(oldWay).getByText(/so you hide the radio\./)).toBeInTheDocument();
+    expect(explanation.saying(oldWay, /so you hide the radio\./)).toBeInTheDocument();
     expect(oldWay).toHaveTextContent(/a radio, one of six\./);
   });
 
   test('should, with inclusive chosen, show the plain fold’s own HTML beside the run on the box, a checkbox whose label’s for names it', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const oldWay = await explanation.part(parts[0]);
     const html = explanation.codeBeside(oldWay, /To open and close a fold/).textContent ?? '';
 
     expect(explanation.sourcesBeside(oldWay, /To open and close a fold/)).toEqual(['Plain/fold.html on GitHub']);
@@ -202,7 +202,7 @@ describe('the words and the code chosen by type', () => {
   test('should, with exclusive chosen, show one fold’s HTML written for the page beside the run on the box, a radio in a named group whose label’s for names it', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const oldWay = await explanation.part(parts[0]);
     const html = explanation.codeBeside(oldWay, /To open and close a fold/).textContent ?? '';
 
     expect(explanation.writtenForThePageBeside(oldWay, /To open and close a fold/)).toBe(true);
@@ -213,13 +213,13 @@ describe('the words and the code chosen by type', () => {
   test('should, with inclusive chosen, draw the platform’s answer as needing a checkbox', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
-    expect(within(await screen.findByRole('region', {name: parts[1]})).getByRole('figure', {name: /needs a checkbox,/})).toBeInTheDocument();
+    expect(explanation.drawingNamed(await explanation.part(parts[1]), /needs a checkbox,/)).toBeInTheDocument();
   });
 
   test('should, with exclusive chosen, draw the platform’s answer as needing a radio', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
-    expect(within(await screen.findByRole('region', {name: parts[1]})).getByRole('figure', {name: /needs a radio,/})).toBeInTheDocument();
+    expect(explanation.drawingNamed(await explanation.part(parts[1]), /needs a radio,/)).toBeInTheDocument();
   });
 });
 
@@ -338,7 +338,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/)).toHaveTextContent('The script hands the height to the stylesheet as a custom property, a value the stylesheet can read, named --measured-height, and marks the panel with a class, a name an element wears so a rule can pick it out: sized. While a number is on the panel a rule reads it through sized, and only then. To close, it first pins the open height with a second class, unmoving, which keeps the transition off while the script reads the height, before the browser draws anything, so the slide has a start to leave from.');
+    expect(explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/)).toHaveTextContent('The script hands the height to the stylesheet as a custom property named --measured-height. A custom property is a value the stylesheet can read. It also marks the panel with a class, sized. A class is a name an element wears so a rule can pick it out. While sized is on, a rule reads the number; with it off, the panel is auto again. To close, the script first pins the open height with a second class, unmoving, which turns the transition off. Then it reads the panel’s height once and throws the number away: the read makes the browser apply the pinned start with the transition off, before it draws. Then it takes unmoving off and sets the end, so the slide has a start to leave from.');
     expect(explanation.everyCodeBeside(explained, /^The script hands the height to the stylesheet as a custom property/).join()).toMatch(/\.info-measured\.sized \{[^]*\.info-measured\.unmoving \{/);
     expect(outOfReadingOrder([
       explanation.runTelling(explained, /^Most of us turned next to script/),
@@ -1230,17 +1230,37 @@ describe('what a fold remembers, before the first build that leans on it', () =>
     ])).toEqual([]);
   });
 
-  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should open "How the known height works", with %s chosen, on the fold the top of the section gave it, and explain nothing a build above already used', async (type, input) => {
-    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+  const knownHeightWorks = 'How the known height works';
+  const threeParts = /^The fold is the three parts from/;
 
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-    const folded = within(oldWay).getByRole('group', {name: 'How the known height works'});
-    const opening = within(folded).getAllByRole('paragraph', {hidden: true})[0];
+  test('should open "How the known height works", with inclusive chosen, on the checkbox fold, beside the site’s React build of it', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
-    expect(opening).toHaveTextContent(`The fold is the three parts “A box remembers the fold, and a rule reads it” gave it: the ${input}, its label and the text.`);
-    expect(explanation.sourcesBeside(oldWay, /^The fold is the three parts/)).toEqual(['Accordions/Accordions.tsx on GitHub']);
-    expect(within(folded).queryByText(/^To open and close a fold/)).not.toBeInTheDocument();
-    expect(within(folded).queryByText(/^Now a rule has to match on whether the/)).not.toBeInTheDocument();
-    expect(outOfReadingOrder([opening, within(folded).getByText(/^You want the reader to see a bar/)])).toEqual([]);
+    const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
+
+    expect(explanation.runTelling(folded, threeParts)).toHaveTextContent('The fold is the three parts from “A box remembers the fold, and a rule reads it”: the checkbox, its label and the text. The sample beside this run is the site’s React build of that fold, which writes class as className and for as htmlFor.');
+    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.codeBeside(folded, threeParts)).toHaveTextContent('type="checkbox"');
+    expect(outOfReadingOrder([explanation.runTelling(folded, threeParts), explanation.runTelling(folded, /^You want the reader to see a bar/)])).toEqual([]);
+  });
+
+  test('should open "How the known height works", with exclusive chosen, on the radio fold, beside the site’s React build of it, a radio in a named group', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+
+    const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
+
+    expect(explanation.runTelling(folded, threeParts)).toHaveTextContent('The fold is the three parts from “A box remembers the fold, and a rule reads it”: the radio, its label and the text. The sample beside this run is the site’s React build of that fold, which writes class as className and for as htmlFor.');
+    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.codeBeside(folded, threeParts)).toHaveTextContent(/type="radio" name="/);
+    expect(outOfReadingOrder([explanation.runTelling(folded, threeParts), explanation.runTelling(folded, /^You want the reader to see a bar/)])).toEqual([]);
+  });
+
+  test('should explain nothing in "How the known height works" that the top of the section already told', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
+
+    expect(explanation.tells(folded, /^To open and close a fold/)).toBe(false);
+    expect(explanation.tells(folded, /^Now a rule has to match on whether the/)).toBe(false);
   });
 });

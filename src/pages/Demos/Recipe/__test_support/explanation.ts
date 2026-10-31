@@ -1,4 +1,4 @@
-import {within} from '@testing-library/react';
+import {screen, within} from '@testing-library/react';
 import {not} from '@ryandur/sand';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
@@ -45,8 +45,11 @@ const writtenForThePage = (run: HTMLElement): boolean =>
   within(run).queryByText('Written for this page, not taken from the site’s code.') !== null;
 
 export const explanation = {
+  part: (heading: string): Promise<HTMLElement> => screen.findByRole('region', {name: heading}),
+  drawingNamed: (part: HTMLElement, name: RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   samplesIn,
   saying: (part: HTMLElement, words: RegExp): HTMLElement => within(part).getByText(words),
+  tells: (part: HTMLElement, words: RegExp): boolean => within(part).queryByText(words) !== null,
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
   writtenForThePageBeside: (part: HTMLElement, words: RegExp): boolean => writtenForThePage(runTelling(part, words)),
   runTelling,

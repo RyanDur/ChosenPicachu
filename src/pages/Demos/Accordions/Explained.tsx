@@ -230,12 +230,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <Snippet label="TS" lines={withoutImports(foldSource)}/>
           </li>
           <li className="run">
-            <p className="paragraph">The script hands the height to the stylesheet as a custom property, a value the
-              stylesheet can read, named <code className="unbroken">--measured-height</code>, and marks the panel with a
-              class, a name an element wears so a rule can pick it out: <code>sized</code>. While a number is on the panel a
-              rule reads it through <code>sized</code>, and only then. To close, it first pins the open height with a second
-              class, <code>unmoving</code>, which keeps the transition off while the script reads the height, before the
-              browser draws anything, so the slide has a start to leave from.</p>
+            <p className="paragraph">The script hands the height to the stylesheet as a custom property
+              named <code className="unbroken">--measured-height</code>. A custom property is a value the stylesheet can
+              read. It also marks the panel with a class, <code>sized</code>. A class is a name an element wears so a rule
+              can pick it out. While <code>sized</code> is on, a rule reads the number; with it off, the panel is auto
+              again. To close, the script first pins the open height with a second class, <code>unmoving</code>, which
+              turns the transition off. Then it reads the panel’s height once and throws the number away: the read makes
+              the browser apply the pinned start with the transition off, before it draws. Then it
+              takes <code>unmoving</code> off and sets the end, so the slide has a start to leave from.</p>
             <Snippet label="CSS" lines={[
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
               ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
@@ -370,8 +372,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <summary id="known-depth" className="opener bold">How the known height works</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The fold is the three parts “A box remembers the fold, and a rule reads it” gave
-                  it: the {input}, its label and the text.</p>
+                <p className="paragraph">The fold is the three parts from “A box remembers the fold, and a rule reads
+                  it”: the {input}, its label and the text. The sample beside this run is the site’s React build of that
+                  fold, which writes class as <code>className</code> and for as <code>htmlFor</code>.</p>
                 <Snippet label="TS" lines={type === 'inclusive'
                   ? span(accordionsSource, '<li key={key} className="fold">', '</li>')
                   : span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
