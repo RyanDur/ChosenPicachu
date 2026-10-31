@@ -68,11 +68,12 @@ describe('page error boundaries', () => {
     expect(site.announced('There is no room at this address.')).toBeInTheDocument();
   });
 
-  test('an unknown address under the games is no room either', async () => {
-    render(<TestApp at="/games/nowhere/"/>);
+  test('the old address of the game that was never built is no room, with Games still current', async () => {
+    render(<TestApp at={`${Paths.games}colorGame`}/>);
 
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('No such room');
+    expect(site.railLink('Games')).toHaveAttribute('aria-current', 'page');
   });
 
   test('a room still loading is not called closed', async () => {
