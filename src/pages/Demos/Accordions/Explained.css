@@ -1,4 +1,4 @@
-.accordion-part {
+.accordion-part, .measured-part {
   display: grid;
   gap: var(--base-x-3);
 }

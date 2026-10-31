@@ -1,5 +1,5 @@
 .plain-fold {
-  --stage-block-size: auto;
+  --stage-block-size: var(--base-x-6_25);
 
   block-size: var(--stage-block-size);
   display: block;

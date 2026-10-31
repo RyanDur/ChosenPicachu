@@ -21,7 +21,7 @@ const runDrawing = (part: HTMLElement, drawing: RegExp): HTMLElement =>
   runWith(part, run => within(run).queryByRole('figure', {name: drawing}) !== null, `draws ${drawing}`);
 
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
-  within(part).getAllByRole('figure').filter(figure => within(figure).queryByRole('code') === null);
+  within(part).getAllByRole('figure').filter(figure => figure.querySelector(':scope > svg') !== null);
 
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
   within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));

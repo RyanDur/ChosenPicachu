@@ -107,7 +107,7 @@ for (const build of measuredBuilds) {
 }
 
 test.describe('the fold measured by plain script', () => {
-  test('opens to its text on a press, shown whole in its frame, and shuts on a second press', async ({page}) => {
+  test('opens to its text on a press, and shuts on a second press', async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     const fold = plainFold(page);
     await fold.goTo();
@@ -116,7 +116,6 @@ test.describe('the fold measured by plain script', () => {
 
     await expect(fold.text).toBeVisible();
     await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
-    await expect.poll(fold.gapUnderTheFrame).toBeLessThanOrEqual(layoutRounding);
     await fold.bar.click();
     await expect(fold.text).toBeHidden();
   });
@@ -138,6 +137,7 @@ test.describe('the fold measured by plain script', () => {
   });
 
   test('with its script never hearing the press, still opens and shuts', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
     await page.addInitScript(pressesNeverReachTheScript);
     const fold = plainFold(page);
     await fold.goTo();

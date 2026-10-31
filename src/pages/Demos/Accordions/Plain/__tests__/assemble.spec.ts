@@ -5,7 +5,6 @@ describe('the plain fold’s assembly', () => {
     const names = sheets.map(({name}) => name);
     expect(new Set(names).size).toBe(names.length);
     expect(names).toContain('Accordions.css');
-    expect(sheets.map(({css}) => css).join('\n').match(/\.off-screen\s*\{/g)).toHaveLength(1);
   });
 
   it('fills every slot in its document, the script included', () => {

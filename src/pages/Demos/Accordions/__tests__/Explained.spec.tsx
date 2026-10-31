@@ -51,7 +51,7 @@ describe('the accordions tab', () => {
 
     const choices = await screen.findByRole('region', {name: 'fold choices'});
 
-    expect(within(choices).getByText(/^Two choices set the four accordions/)).toBeVisible();
+    expect(within(choices).getByText(/^Two choices set the accordions in the sections below/)).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold type'})).toBeVisible();
     expect(within(choices).getByRole('group', {name: 'fold motion'})).toBeVisible();
   });
@@ -255,7 +255,7 @@ describe('the measured build', () => {
     const run = explanation.runTelling(explained, /When the motion ends, the script takes the number away/);
     const code = explanation.everyCodeBeside(explained, /When the motion ends, the script takes the number away/).join();
 
-    expect(run).toHaveTextContent('A number left in place goes stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script beside this run is the whole of it, with no library.');
+    expect(run).toHaveTextContent('A number left in place goes stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script beside this run is the whole script, with no library.');
     expect(code).toMatch(/addEventListener\('change'[^]*getBoundingClientRect\(\)\.height/);
     expect(code).toMatch(/addEventListener\('transitionend'/);
     expect(code).toMatch(/classList\.remove\('sized'\)/);
@@ -268,7 +268,7 @@ describe('the measured build', () => {
     const explained = await screen.findByRole('region', {name: parts[0]});
     const plain = await within(explained).findByTitle('A fold measured by plain script');
 
-    expect(within(explained).getByText('Press the bar: the script measures the text, the sheet slides the panel to that height, and a second press slides it shut.')).toBeVisible();
+    expect(within(explained).getByText('Press the bar: with motion allowed, the script measures the text and the stylesheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it opens at once.')).toBeVisible();
     expect(outOfReadingOrder([plain, explanation.runTelling(explained, /^Most of us turned next to script/)])).toEqual([]);
   });
 
@@ -280,8 +280,30 @@ describe('the measured build', () => {
     const why = within(folded).getByText(/^This site builds the same fold in React/);
     const built = within(folded).getByRole('heading', {name: /and a measured height$/, hidden: true});
 
-    expect(why).toHaveTextContent('This site builds the same fold in React, which redraws the panel from state instead of listening to it. So the measuring runs in two layout effects rather than two listeners: the first pins where the motion starts before the browser paints, and the second sets where it ends.');
+    expect(why).toHaveTextContent('This site builds the same fold in React, and the runs below say what React, state and a layout effect are as they come. What changes is the shape. The plain script listens for the press; the React build redraws the panel from what it holds, so the measuring runs in two layout effects: the first pins where the motion starts before the browser paints, and the second sets where it ends.');
     expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /The script keeps what it knows in React state/)])).toEqual([]);
+  });
+
+  test('should say, after the measured run, how the plain script hands the height to the stylesheet, beside the two rules that read it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/)).toHaveTextContent('The script hands the height to the stylesheet as a custom property, --measured-height, and marks the panel sized while a number is on it, so a rule reads the number only then. To close, it first pins the open height with a second class, unmoving, which switches the transition off for one frame, so the slide has a start to leave from.');
+    expect(explanation.everyCodeBeside(explained, /^The script hands the height to the stylesheet as a custom property/).join()).toMatch(/\.info-measured\.sized \{[^]*\.info-measured\.unmoving \{/);
+    expect(outOfReadingOrder([
+      explanation.runTelling(explained, /^Most of us turned next to script/),
+      explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/),
+      explanation.runTelling(explained, /^The cost was script/)
+    ])).toEqual([]);
+  });
+
+  test('should show the fold measured by plain script as a figure named by its caption, under the heading "The measured height"', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const measured = await screen.findByRole('region', {name: 'The measured height'});
+
+    expect(within(measured).getByRole('figure', {name: /^Press the bar: with motion allowed/})).toContainElement(await within(measured).findByTitle('A fold measured by plain script'));
   });
 
   test('should show both layout effects and the hand-off at the motion’s end beside the run that tells the two layout effects', async () => {
@@ -375,7 +397,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await screen.findByRole('group', {name: 'fold type'});
-    const line = screen.getByText('Two choices set the four accordions in the sections below. The one above is HTML alone, so they don’t change it.');
+    const line = screen.getByText('Two choices set the accordions in the sections below, except the fold measured by plain script, which shows one script and always reveals. The one above is HTML alone, so they don’t change it.');
 
     expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(line.compareDocumentPosition(screen.getByRole('region', {name: 'An accordion in HTML alone'})) & Node.DOCUMENT_POSITION_PRECEDING).toBe(Node.DOCUMENT_POSITION_PRECEDING);
@@ -714,7 +736,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getAllByRole('heading', {level: 3}).map(heading => heading.textContent)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', measured, known]);
+    expect(within(oldWay).getAllByRole('heading', {level: 3}).map(heading => heading.textContent)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', measured, known]);
   });
 });
 

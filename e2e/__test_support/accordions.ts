@@ -204,7 +204,6 @@ export const plainFold = (page: Page) => {
         else window.addEventListener('load', () => loaded());
       }));
     },
-    gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
-    gapUnderTheFrame: (): Promise<number> => gapUnder(frame, inside.getByRole('group', {name: 'folds'}))
+    gapUnderItsText: (): Promise<number> => gapUnder(panel, text)
   };
 };

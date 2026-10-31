@@ -42,5 +42,5 @@ export const PlainFold: FC = () => {
         maybe(event.currentTarget.contentDocument?.body).map(body => measured(body, setHeight));
       }}
       srcDoc={document}/>
-    : null;
+    : <div className="plain-fold"/>;
 };

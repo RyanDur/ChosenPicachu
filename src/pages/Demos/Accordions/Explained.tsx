@@ -123,8 +123,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices set the four accordions in the sections below. The one above is HTML alone, so
-        they don’t change it.</p>
+      <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
+        script, which shows one script and always reveals. The one above is HTML alone, so they don’t change it.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
@@ -198,130 +198,146 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         ]}/>
         <OneGuessTwoFolds/>
       </section>
-      <div className={exhibit}>
-        <PlainFold/>
-        <p className="caption">Press the bar: the script measures the text, the sheet slides the panel to that height,
-          and a second press slides it shut.</p>
-      </div>
-      <ol className={runs}>
-        <li className="run">
-          <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
-            so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
-            the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
-            moves the same way, short or tall, because the target is the text’s own height. When the motion
-            ends, the script takes the number away, and the panel is auto again. A number left in place goes
-            stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
-            beside this run is the whole of it, with no library.</p>
-          <Snippet label="TS" lines={withoutImports(foldSource)}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
-            the checkbox and the stylesheet own that, so if the script fails, a fold still opens and closes, at
-            once.</p>
-          <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
-            ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
-          ]}/>
-        </li>
-        <li className="part-depth">
-          <details aria-labelledby="measured-depth">
-            <summary id="measured-depth" className="opener bold">How this site does it</summary>
-            <p className="paragraph">This site builds the same fold in React, which redraws the panel from state instead
-              of listening to it. So the measuring runs in two layout effects rather than two listeners: the first pins
-              where the motion starts before the browser paints, and the second sets where it ends.</p>
-            {type === 'inclusive'
-              ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
-              : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
-            <ol className="runs">
-              {type === 'exclusive' && <li className="run">
-                <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
-              </li>}
-              <li className="run">
-                <p className="paragraph">React is the library this site’s script is written in, and a component is a function
-                  that returns the elements it draws. The script keeps what it knows in React state, a value a component
-                  holds and renders from: whether a fold is open, and, while it moves, first the height the motion starts
-                  from, then the height it ends at, and whether it has started.</p>
-                <Snippet label="TS" lines={[
-                  ...unit(panelSource, 'type Motion ='), gap,
-                  ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
-                ]}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">A ref is a handle on the element itself. The script uses the panel’s one ref only to
-                  measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a
-                  transition at all.</p>
-                <Snippet label="TS" lines={[
-                  ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
-                  ...unit(panelSource, 'const textHeight'), gap,
-                  ...unit(panelSource, 'const standing'), gap,
-                  ...unit(panelSource, 'const moves')
-                ]}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">The script makes the moves in two layout effects, code React runs after it has updated
-                  the elements and before the browser paints them. The first answers a press by pinning where the motion
-                  starts. The second, once that start is on the page, sets where it ends. So the script measures the panel
-                  and pins its start with no frame showing in between.</p>
-                <Snippet label="TS" lines={[
-                  ...unit(panelSource, 'const pressed'), gap,
-                  ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), gap,
-                  ...unit(panelSource, 'const settled')
-                ]}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
-                  value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
-                  property with <code>@property</code>, a rule that tells the browser what kind of value a custom
-                  property holds and what it is until something sets it: here a length or auto, starting as auto.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
-                  pick it out: <code>sized</code>. While <code>sized</code> is on, the panel’s height
-                  reads <code>--measured-height</code>.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
-                  the transition moves between them. The change event is the one the browser
-                  sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to
-                  no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where
-                  the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
-                  off for that moment.</p>
-                <Snippet label="TS" lines={[
-                  ...span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
-                  ...unit(panelSource, 'return <section ref={panel}')
-                ]}/>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
-              </li>
-              <li className="run">
-                <p className="paragraph">A press while the panel moves keeps <code>sized</code> on and only sets a new end, so the
-                  panel turns around from where it is. If that end is where the panel already stands, no motion is left
-                  to run, and the script takes the number away at once.</p>
-                <Snippet label="TS" lines={[
-                  ...unit(panelSource, 'const movingTo')
-                ]}/>
-              </li>
-              {type === 'exclusive' && <li className="run">
-                <p className="paragraph">A radio that loses its check gets no event at all. The change event the pressed
-                  radio gets rises from it through the elements around it, which is called bubbling. The list item around
-                  the radio handles it by recording its own key in React state as the open one, and the fold whose key is
-                  no longer the open one closes from that state.</p>
-                <Snippet label="TS" lines={[
-                  ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
-                  ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
-                ]}/>
-              </li>}
-              <li className="run">
-                <p className="paragraph">This page lets its other folds move to auto, and this build turns that off
-                  with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for browsers
-                  that could only move between numbers.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
-              </li>
-            </ol>
-          </details>
-        </li>
-      </ol>
+      <section className="measured-part" aria-labelledby="measured-heading">
+        <h3 id="measured-heading" className="sub-title bold">The measured height</h3>
+        <figure className={exhibit}>
+          <PlainFold/>
+          <figcaption className="caption">Press the bar: with motion allowed, the script measures the text and the
+            stylesheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it
+            opens at once.</figcaption>
+        </figure>
+        <ol className={runs}>
+          <li className="run">
+            <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
+              so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
+              the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
+              moves the same way, short or tall, because the target is the text’s own height. When the motion
+              ends, the script takes the number away, and the panel is auto again. A number left in place goes
+              stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
+              beside this run is the whole script, with no library.</p>
+            <Snippet label="TS" lines={withoutImports(foldSource)}/>
+          </li>
+          <li className="run">
+            <p className="paragraph">The script hands the height to the stylesheet as a custom
+              property, <code>--measured-height</code>, and marks the panel <code>sized</code> while a number is on it, so a rule
+              reads the number only then. To close, it first pins the open height with a second
+              class, <code>unmoving</code>, which switches the transition off for one frame, so the slide has a start to
+              leave from.</p>
+            <Snippet label="CSS" lines={[
+              ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
+              ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
+            ]}/>
+          </li>
+          <li className="run">
+            <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
+              the checkbox and the stylesheet own that, so if the script fails, a fold still opens and closes, at
+              once.</p>
+            <Snippet label="CSS" lines={[
+              ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
+              ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
+            ]}/>
+          </li>
+          <li className="part-depth">
+            <details aria-labelledby="measured-depth">
+              <summary id="measured-depth" className="opener bold">How this site does it</summary>
+              <p className="paragraph">This site builds the same fold in React, and the runs below say what React, state and a
+                layout effect are as they come. What changes is the shape. The plain script listens for the press; the
+                React build redraws the panel from what it holds, so the measuring runs in two layout effects: the first
+                pins where the motion starts before the browser paints, and the second sets where it ends.</p>
+              {type === 'inclusive'
+                ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
+                : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
+              <ol className="runs">
+                {type === 'exclusive' && <li className="run">
+                  <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
+                </li>}
+                <li className="run">
+                  <p className="paragraph">React is the library this site’s script is written in, and a component is a function
+                    that returns the elements it draws. The script keeps what it knows in React state, a value a component
+                    holds and renders from: whether a fold is open, and, while it moves, first the height the motion starts
+                    from, then the height it ends at, and whether it has started.</p>
+                  <Snippet label="TS" lines={[
+                    ...unit(panelSource, 'type Motion ='), gap,
+                    ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
+                  ]}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">A ref is a handle on the element itself. The script uses the panel’s one ref only to
+                    measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a
+                    transition at all.</p>
+                  <Snippet label="TS" lines={[
+                    ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
+                    ...unit(panelSource, 'const textHeight'), gap,
+                    ...unit(panelSource, 'const standing'), gap,
+                    ...unit(panelSource, 'const moves')
+                  ]}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">The script makes the moves in two layout effects, code React runs after it has updated
+                    the elements and before the browser paints them. The first answers a press by pinning where the motion
+                    starts. The second, once that start is on the page, sets where it ends. So the script measures the panel
+                    and pins its start with no frame showing in between.</p>
+                  <Snippet label="TS" lines={[
+                    ...unit(panelSource, 'const pressed'), gap,
+                    ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), gap,
+                    ...unit(panelSource, 'const settled')
+                  ]}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">The script hands each height to the stylesheet through a custom property, a
+                    value the stylesheet can read, named <code>--measured-height</code>. The stylesheet declares that
+                    property with <code>@property</code>, a rule that tells the browser what kind of value a custom
+                    property holds and what it is until something sets it: here a length or auto, starting as auto.</p>
+                  <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">The script marks the panel with a class, a name an element wears so a rule can
+                    pick it out: <code>sized</code>. While <code>sized</code> is on, the panel’s height
+                    reads <code>--measured-height</code>.</p>
+                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">Closing runs the other way. To close, the script sets the open height, then 0, and
+                    the transition moves between them. The change event is the one the browser
+                    sends to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to
+                    no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where
+                    the motion starts, with a second class, <code>unmoving</code>, that switches the height’s transition
+                    off for that moment.</p>
+                  <Snippet label="TS" lines={[
+                    ...span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
+                    ...unit(panelSource, 'return <section ref={panel}')
+                  ]}/>
+                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">A press while the panel moves keeps <code>sized</code> on and only sets a new end, so the
+                    panel turns around from where it is. If that end is where the panel already stands, no motion is left
+                    to run, and the script takes the number away at once.</p>
+                  <Snippet label="TS" lines={[
+                    ...unit(panelSource, 'const movingTo')
+                  ]}/>
+                </li>
+                {type === 'exclusive' && <li className="run">
+                  <p className="paragraph">A radio that loses its check gets no event at all. The change event the pressed
+                    radio gets rises from it through the elements around it, which is called bubbling. The list item around
+                    the radio handles it by recording its own key in React state as the open one, and the fold whose key is
+                    no longer the open one closes from that state.</p>
+                  <Snippet label="TS" lines={[
+                    ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
+                    ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
+                  ]}/>
+                </li>}
+                <li className="run">
+                  <p className="paragraph">This page lets its other folds move to auto, and this build turns that off
+                    with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for browsers
+                    that could only move between numbers.</p>
+                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
+                </li>
+              </ol>
+            </details>
+          </li>
+        </ol>
+      </section>
       {type === 'inclusive'
         ? <InclusiveAccordion className={exhibit} content={contents.knownCheckbox} motion={motion}/>
         : <ExclusiveAccordion className={exhibit} content={contents.knownRadio} motion={motion}/>}
