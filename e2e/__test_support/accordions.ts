@@ -146,6 +146,7 @@ export const accordionsTab = (page: Page) => {
   return {
     goTo: async (build: Build): Promise<void> => {
       await page.goto(showing(build));
+      await siteFrame(page).hydrated();
       if (measuredBuilds.includes(build)) {
         await page.getByText('How this site does it', {exact: true}).click();
       }

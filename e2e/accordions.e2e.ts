@@ -215,7 +215,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
       });
 
       test(`a press on Open in ${build} opens the fold and shows Close, and Close shuts it again`, async ({page}) => {
-        await page.goto(showing(build));
+        await accordionsTab(page).goTo(build);
         const part = accordionsTab(page).firstPartOf(build);
         await controlWord(part.fold, 'Open').click();
         await expect.poll(part.showsText).toBe(true);
