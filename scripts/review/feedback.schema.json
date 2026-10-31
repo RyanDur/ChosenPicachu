@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "required": ["overview", "nextSteps", "habits", "plusses", "deltas"],
   "$defs": {
-    "rubric": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests", "tutorials", "record"]},
+    "rubric": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests", "tutorials", "record", "voice"]},
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
     "evidence": {"type": "string", "enum": ["read", "inferred"]}
   },
