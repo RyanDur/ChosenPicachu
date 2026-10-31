@@ -13,7 +13,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const pagination = paginationOf(useGallery().wall);
   const {
     page,
-    createSearchParams
+    searchFromShown
   } = useSearchParamsObject({page: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
@@ -34,11 +34,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   return <nav className="pagination backdrop field-before field-after" aria-label="pagination" id={id}>
     {hasPrevPage && <>
-      <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: firstPage})}`} onClick={gotoTopOfPage}
         className="page first field attentive bold">
         FIRST
       </Link>
-      <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: prevPage})}`} onClick={gotoTopOfPage}
         className="page prev field attentive bold">
         PREV
       </Link>
@@ -50,11 +50,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
         <span>{total}</span>
       </output>).orNull()}
     {hasNextPage && <>
-      <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: nextPage})}`} onClick={gotoTopOfPage}
         className="page next field attentive bold">
         NEXT
       </Link>
-      <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: lastPage})}`} onClick={gotoTopOfPage}
         className="page last field attentive bold">
         LAST
       </Link>

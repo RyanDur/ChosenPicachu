@@ -38,7 +38,7 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 }));
 
 export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, createSearchParams} =
+  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
     useSearchParamsObject(
       {pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
   const [accordionContents] = useState(() => {
@@ -68,7 +68,7 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" current={topic}
-      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${createSearchParams({})}`}))}/>
+      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${searchFromShown({})}`}))}/>
     <section id="about" aria-label={topicNames[topic]} className="about">
       {({
         [DemoTopics.accordions]:
