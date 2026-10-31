@@ -427,6 +427,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html"><cite>Understanding Success Criterion 2.1.1: Keyboard</cite></a>{' '}
             <span className="provenance caption">W3C WAI</span>
           </li>
+          <li>
+            <a className="signpost" href="https://vuejs.org/guide/scaling-up/sfc"><cite>Single-File Components</cite></a>{' '}
+            <span className="provenance caption">The Vue guide, vuejs.org</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

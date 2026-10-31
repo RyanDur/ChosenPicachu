@@ -16,7 +16,7 @@ export const Structure: FC = () =>
       clicked. A form sends when Enter is pressed in one of its fields, and refuses an empty required field in the
       browser’s own words. A fold built from{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>a details element</Link> opens and shuts from
-      the mouse or the keyboard. A screen reader tells its user what each element is and what state it is in: a list
+      the mouse or the keyboard, a job that took a script for years before the element arrived. A screen reader tells its user what each element is and what state it is in: a list
       and how many items it holds, a button and whether it is disabled, a fold and whether it is open. Its user can also
       jump from heading to heading. None of this needs a script, only the right element. Knowing which one is the hard
       part, and sometimes no element fits yet.</p>

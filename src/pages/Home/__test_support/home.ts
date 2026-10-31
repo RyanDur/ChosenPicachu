@@ -12,7 +12,7 @@ const claim = (name: string): HTMLElement[] =>
   ownParagraphs(name).filter(paragraph => within(paragraph).queryByRole('link', {name: /^(Its story is on|How I organize it is on)/}) === null);
 
 export const homePage = {
-  arrived: (): Promise<HTMLElement> => screen.findByText(/^A webpage is built from three languages/),
+  arrived: (): Promise<HTMLElement> => screen.findByText(/^I made this site/),
   paragraph: (opening: RegExp): HTMLElement => screen.getByText(opening),
   linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).getAllByRole('link'),
   concernHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
