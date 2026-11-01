@@ -7,7 +7,7 @@ import {WhereARuleLives} from './WhereARuleLives';
 const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/';
 const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
 const bem = 'https://yandex.com/dev/bem/index';
-const bemHistory = 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/';
+const bemHistory = 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/';
 const stylingWithUtilities = 'https://tailwindcss.com/docs/styling-with-utility-classes';
 const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
 const smacss = 'https://smacss.com/';
@@ -18,7 +18,7 @@ const stylelintConfig = inTheRepository('stylelint.config.js');
 
 export const PresentationPractice: FC = () =>
   <>
-    <h3 className="part-title paragraph bold">What organizing CSS has to solve</h3>
+    <h3 className="paragraph bold">What organizing CSS has to solve</h3>
     <p className="paragraph">CSS has one global scope, so every rule can reach every element, and a cascade, the rule
       that decides which of several matching declarations wins. That is what makes it small to write and hard to
       organize: as a site grows, a rule written for one place reaches another, a value is written in forty places, and
@@ -86,40 +86,47 @@ export const PresentationPractice: FC = () =>
       <a className="signpost" href={mdn('@container')}>Container queries</a> since February 2023,{' '}
       <a className="signpost" href={mdn(':has')}>:has()</a> and{' '}
       <a className="signpost" href={mdn('Nesting_selector')}>nesting</a> since December 2023, and{' '}
-      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available, are isolation; and
-      with constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
+      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available, are isolation. With
+      constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
       a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
-      order and isolation, the rest of this tab shows what remains: where a rule lives, what a class is named for, and
-      the test a class list has to pass.</p>
-    <h3 className="part-title paragraph bold">What this site keeps</h3>
+      order and isolation, and reuse through the cascade, the rest of this tab shows what remains: where a rule lives,
+      what a class is named for, and the test a class list has to pass.</p>
+    <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory}>history</a> says that by 2006{' '}
       <a className="signpost" href={bemHistory}>“any changes to the code of one page affected the code of other pages”</a>,
       with more than a hundred services sharing one style library. The answer was the independent block, which{' '}
-      <a className="signpost" href={bemHistory}>“can be used anywhere on the page”</a> any number of times, and from
-      Lego 2.0 in 2009 a rule for where it lives:{' '}
+      <a className="signpost" href={bemHistory}>“can be used anywhere on the page”</a> any number of times. From Lego
+      2.0 in 2009, the second version of that shared block library, came a rule for where a block lives:{' '}
       <a className="signpost" href={bemHistory}>“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”</a>.
-      Every part and every variant is named through its block, <code className="monospaced">card__title</code> and{' '}
+      Every part and every variant is named through its block: <code className="monospaced">card__title</code> and{' '}
       <code className="monospaced">card_lifted</code> in Yandex’s own spelling,{' '}
-      <code className="monospaced">card--lifted</code> in the two-dash style many teams use, and every selector is one
+      <code className="monospaced">card--lifted</code> in the two-dash style many teams use. Every selector is one
       class, so nothing depends on where a block sits.</p>
-    <p className="paragraph">I keep three things from BEM: the block as the unit, the folder per block, which is how
-      every component and every table here is laid out, with its sheets beside its parts, and the flat selectors. I
-      leave the scoping of every look to its block. In BEM, lifted on a card and lifted on a menu are two modifiers and
-      two rules, so nothing is shared by accident and the same look is written twice; mine is one word any block can
-      wear, because a look is the sheet’s job. BEM also has no separate idea of a state, since a modifier{' '}
-    <a className="signpost" href={bemHistory}>“defines the appearance, state, and sometimes the behavior of the block”</a>;
+    <p className="paragraph">I keep three things from BEM:</p>
+    <ul className="kept">
+      <li className="paragraph">the block as the unit</li>
+      <li className="paragraph">the folder per block, which is how the site’s shared components and its tables are laid
+        out, with their sheets beside their parts</li>
+      <li className="paragraph">flat selectors, one class each</li>
+    </ul>
+    <p className="paragraph">I give up the scoping of every look to its block. In BEM,{' '}
+      <code className="monospaced">lifted</code> on a card and <code className="monospaced">lifted</code> on a menu are
+      two modifiers and two rules, so nothing is shared by accident and the same look is written twice. Mine is one
+      word any block can wear, because a look is the sheet’s job. BEM also has no separate idea of a state, since a
+      modifier{' '}
+      <a className="signpost" href={bemHistory}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
       I split them, and the class list below says why.</p>
     <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
       <a className="signpost" href={stylingWithUtilities}>styling with utility classes</a> says to start with
-      utilities and not to abstract until the duplication is real: a repeat you can fix with one loop or one
+      utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
       multi-cursor edit earns nothing, since{' '}
-      <a className="signpost" href={stylingWithUtilities}>“there’s no benefit to introducing any additional abstraction”</a>,
-      and when styles do repeat across files{' '}
+      <a className="signpost" href={stylingWithUtilities}>“there’s no benefit to introducing any additional abstraction”</a>.
+      When styles do repeat across files,{' '}
       <a className="signpost" href={stylingWithUtilities}>“the best strategy is to create a component”</a> in the
       framework, or a template partial, rather than a CSS class. I keep two things from that: no shared look before
-      its second use, and every value from a constrained set. I leave two: the value in the class name, and reuse in
+      its second use, and every value from a constrained set. I give up two: the value in the class name, and reuse in
       the component rather than the sheet.</p>
     <p className="paragraph">Here is how this site’s CSS is laid out, in the order{' '}
       <code className="monospaced">index.css</code> imports it. First the{' '}
@@ -167,18 +174,17 @@ export const PresentationPractice: FC = () =>
       and no new rule is written. Element selectors appear only in the reset. The{' '}
     <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued that the look should leave the markup for
       a style sheet.</p>
-    <p className="paragraph">Utilities are where I agree with Adam Wathan, who made Tailwind:{' '}
-      <a className="signpost" href={wathan}>compose a look from a shared set of pieces rather than write it again</a>,
-      and choose every value from a constrained set, so the design stays consistent as the site grows. Where I part
+    <p className="paragraph"><a className="signpost" href={wathan}>Compose a look from a shared set of pieces rather than write it again</a>:
+      that is Wathan’s rule, and mine. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
-      <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. Its case is
+    <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. Its case is
       that a name is a cost, so stop paying it, and the CSS stops growing. I think the energy is not wasted; it is the
       writer paying once what every reader would otherwise pay each time. Tailwind’s{' '}
-      <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
+    <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
       reader who knows the system sees what the element looks like, and a change of design is a change to every
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
       sheet says what lifted means today, through a token. A token is a named value, such as{' '}
-      <code className="monospaced">--light-box-shadow</code>, that every rule reads instead of writing the number.
+    <code className="monospaced">--light-box-shadow</code>, that every rule reads instead of writing the number.
       Change the token and every lifted element follows; the markup never knew the number. That keeps the sheet
       restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed the
       separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>

@@ -34,7 +34,20 @@ export const practicePage = {
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
-  paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
+  paragraph: (opening: RegExp): HTMLElement => {
+    const found = within(practice()).getAllByRole('paragraph').find(paragraph => opening.test(paragraph.textContent ?? ''));
+    if (found) {
+      return found;
+    }
+    throw new Error(`no paragraph opening ${opening}`);
+  },
+  itemsListedAfter: (opening: RegExp): string[] => {
+    const list = within(practice()).getAllByRole('paragraph').find(paragraph => opening.test(paragraph.textContent ?? ''))?.nextElementSibling;
+    if (list instanceof HTMLElement) {
+      return within(list).getAllByRole('listitem').map(item => item.textContent ?? '');
+    }
+    throw new Error(`no list after the paragraph opening ${opening}`);
+  },
   paragraphs,
   paragraphAfter: (opening: RegExp): string | undefined => {
     const found = paragraphs().findIndex(paragraph => opening.test(paragraph));

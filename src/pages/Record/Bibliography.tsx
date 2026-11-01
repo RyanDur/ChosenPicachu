@@ -371,8 +371,8 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Yandex, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://web.archive.org/web/2024/https://en.bem.info/methodology/history/"><cite>History</cite></a>{' '}
-            <span className="provenance caption">Yandex, bem.info; the page survives only in the archive</span>
+            <a className="signpost" href="https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/"><cite>History</cite></a>{' '}
+            <span className="provenance caption">Yandex, bem.info; archived copy, 24 December 2024</span>
           </li>
           <li>
             <a className="signpost" href="https://tailwindcss.com/docs/styling-with-utility-classes"><cite>Styling with utility classes</cite></a>{' '}

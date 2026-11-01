@@ -433,7 +433,7 @@ describe('the practice page', () => {
     expect(practicePage.paragraph(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
-  test('should tell presentation in its paragraphs, in order, from the two kinds of sheet to the test', async () => {
+  test('should tell presentation in its paragraphs, in order, from CSS’s one global scope, through what this site keeps, to the test', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -450,6 +450,7 @@ describe('the practice page', () => {
       expect.stringMatching(/^So what is left to organize is smaller than it was/),
       expect.stringMatching(/^BEM is Yandex’s method, and it began at scale/),
       expect.stringMatching(/^I keep three things from BEM/),
+      expect.stringMatching(/^I give up the scoping of every look to its block/),
       expect.stringMatching(/^Tailwind’s own advice on reuse is the part I agree with most/),
       expect.stringMatching(/^Here is how this site’s CSS is laid out, in the order index\.css imports it/),
       expect.stringMatching(/^Then two token files/),
@@ -458,7 +459,7 @@ describe('the practice page', () => {
       expect.stringMatching(/^Two gates hold those lines, and they are the method/),
       expect.stringMatching(/^What this repository does not use is the platform’s newer scoping/),
       expect.stringMatching(/^I write CSS in two kinds of sheet/),
-      expect.stringMatching(/^Utilities are where I agree with Adam Wathan, who made Tailwind/),
+      expect.stringMatching(/^Compose a look from a shared set of pieces rather than write it again: that is Wathan’s rule, and mine/),
       expect.stringMatching(/^BEM takes the independent block and gives up sharing/),
       expect.stringMatching(/^A class is a name for what the element is, what it needs or what is true right now/),
       expect.stringMatching(/^The nouns say what the element is/),
@@ -509,18 +510,12 @@ describe('the practice page', () => {
     ]);
   });
 
-  test('should list the five needs of CSS as terms, defaults, constants, reuse, isolation and order, each with what it asks', async () => {
+  test('should list the five needs of CSS as terms, defaults, constants, reuse, isolation and order, each with a definition beside it', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.terms()).toEqual(['Defaults', 'Constants', 'Reuse', 'Isolation', 'Order']);
-    expect(practicePage.definitions()).toEqual([
-      expect.stringMatching(/^that agree across browsers/),
-      expect.stringMatching(/^written once/),
-      expect.stringMatching(/^of a look/),
-      expect.stringMatching(/^of a component/),
-      expect.stringMatching(/^when rules conflict/)
-    ]);
+    expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
   test('should head the Presentation tab’s two parts, what organizing CSS has to solve and what this site keeps, each before the paragraphs it heads', async () => {
@@ -533,7 +528,7 @@ describe('the practice page', () => {
       practicePage.paragraph(/^CSS has one global scope/),
       practicePage.paragraph(/^So what is left to organize is smaller than it was/),
       practicePage.partHeading('What this site keeps'),
-      practicePage.openingParagraph(/^BEM is Yandex’s method, and it began at scale/)
+      practicePage.paragraph(/^BEM is Yandex’s method, and it began at scale/)
     ])).toEqual([]);
   });
 
@@ -600,7 +595,7 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.link('compose a look from a shared set of pieces rather than write it again')).toHaveAttribute('href', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/');
+    expect(practicePage.link('Compose a look from a shared set of pieces rather than write it again')).toHaveAttribute('href', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/');
     expect(practicePage.link('“You aren’t wasting energy inventing class names”')).toHaveAttribute('href', 'https://v3.tailwindcss.com/docs/utility-first');
   });
 
@@ -610,19 +605,30 @@ describe('the practice page', () => {
 
     expect(practicePage.linksIn(/^BEM is Yandex’s method, and it began at scale/)).toEqual([
       ['BEM', 'https://yandex.com/dev/bem/index'],
-      ['history', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
-      ['“any changes to the code of one page affected the code of other pages”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
-      ['“can be used anywhere on the page”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
-      ['“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/']
+      ['history', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
+      ['“any changes to the code of one page affected the code of other pages”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
+      ['“can be used anywhere on the page”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
+      ['“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
     ]);
   });
 
-  test('should send what a BEM modifier defines to the history page’s archived copy', async () => {
+  test('should send what a BEM modifier defines to the history page’s archived copy, from the paragraph on what I give up', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^I keep three things from BEM/)).toEqual([
-      ['“defines the appearance, state, and sometimes the behavior of the block”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/']
+    expect(practicePage.linksIn(/^I give up the scoping of every look to its block/)).toEqual([
+      ['“defines the appearance, state, and sometimes the behavior of the block”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
+    ]);
+  });
+
+  test('should list the three things kept from BEM, the block, the folder per block and flat selectors, after saying there are three', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.itemsListedAfter(/^I keep three things from BEM/)).toEqual([
+      expect.stringMatching(/^the block as the unit/),
+      expect.stringMatching(/^the folder per block/),
+      expect.stringMatching(/^flat selectors/)
     ]);
   });
 

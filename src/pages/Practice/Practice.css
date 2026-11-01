@@ -11,9 +11,14 @@
   }
 }
 
-.practice-title,
-.part-title {
+.practice-title {
   margin: 0;
+}
+
+.kept {
+  display: grid;
+  gap: var(--base-x-0_5);
+  padding-inline-start: var(--base-x-3);
 }
 
 .needs {

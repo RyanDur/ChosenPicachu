@@ -825,8 +825,8 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('CSS Utility Classes and “Separation of Concerns”')).toBe('Presentation');
   });
 
-  test('should shelve BEM’s history on the Presentation shelf, as Yandex’s page that survives only in the archive', () => {
-    expect(recordPage.shelvedAs('History')).toHaveTextContent('Yandex, bem.info; the page survives only in the archive');
+  test('should shelve BEM’s history on the Presentation shelf, as Yandex’s page in its archived copy of 24 December 2024', () => {
+    expect(recordPage.shelvedAs('History')).toHaveTextContent('Yandex, bem.info; archived copy, 24 December 2024');
     expect(recordPage.shelfHolding('History')).toBe('Presentation');
   });
 
