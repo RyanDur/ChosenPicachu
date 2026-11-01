@@ -80,11 +80,13 @@ export const bannerTrap = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The banners\./});
   const cardTwo = trap.getByRole('listitem').filter({hasText: /^Card two has z-index/});
   const oldBanner = page.getByRole('alert').filter({hasText: /^An old banner\./});
-  const topLayerBanner = page.getByRole('alert').filter({hasNot: page.getByText(/^An old banner\./)}).getByRole('listitem').last();
+  const topLayerNotes = page.getByRole('alert').filter({hasNot: page.getByText(/^An old banner\./)}).getByRole('listitem');
+  const topLayerBanner = topLayerNotes.last();
   return {
     raiseOld: trap.getByRole('button', {name: 'Raise a banner, the old way'}),
     raiseNew: trap.getByRole('button', {name: 'Raise a banner, in the top layer'}),
     oldBanner,
+    topLayerNotes,
     topLayerBanner,
     dismissOld: page.getByRole('button', {name: 'dismiss the old banner'}),
     scrollCardTwoOnto: async (banner: Locator): Promise<void> => {

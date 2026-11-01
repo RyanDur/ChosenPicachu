@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {paragraphReading} from '@__test_support/paragraph';
+import {paragraphOpening, paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
@@ -28,7 +28,7 @@ describe('the top layer', () => {
     expect(outOfReadingOrder([
       await demoPage.findWords(/^We are going to build this site’s banner/),
       demoPage.words('The parts above show what a z-index does and where it stops counting; the banner sets none.'),
-      demoPage.words(/^Here is how to use this page/)
+      demoPage.words(/^Every card below is told that way/)
     ])).toEqual([]);
   });
 
@@ -120,6 +120,79 @@ describe('the top layer', () => {
 
     expect(zIndexTab.collapseButton()).toBeInTheDocument();
     expect(zIndexTab.expandButtonIfAny()).not.toBeInTheDocument();
+  });
+});
+
+describe('the banner tutorial’s walked-through story', () => {
+  const definition = /^A user story is a card, a conversation and a confirmation/;
+  const conversation = /^The ask above settled two things/;
+
+  const arriveAtTheTutorial = async (): Promise<HTMLElement> => {
+    render(<TestApp at={demosAt('accordions')}/>);
+    await demoTabs.open('Z-index');
+    return zIndexTab.findFeatureStories();
+  };
+
+  test('should say what a user story is where the tutorial first names one, and that the banner’s is walked through once', async () => {
+    await arriveAtTheTutorial();
+
+    expect(paragraphOpening(definition)).toHaveTextContent('A user story is a card, a conversation and a confirmation. The card names who wants what and why. The conversation settles what the card leaves open. The confirmation says what a reader meets when the story is done. Here is the banner’s, walked through once.');
+  });
+
+  test('should link the term user story where it is defined', async () => {
+    await arriveAtTheTutorial();
+
+    expect(explanation.linkNamed(paragraphOpening(definition), 'user story')).toHaveAttribute('href', 'https://initialcapacity.io/insights/user-story');
+  });
+
+  test('should give the banner’s card', async () => {
+    await arriveAtTheTutorial();
+
+    expect(paragraphOpening(/^As a reader who missed the news/)).toHaveTextContent('As a reader who missed the news, I want the banner to raise it, so that I do not go looking.');
+  });
+
+  test('should read the two settled lines from the ask, say what a clue is, and say what the ask left open', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(explanation.saying(tutorial, conversation)).toHaveTextContent('The ask above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a screen reader announces a new note without the reader going to look. ‘Do not hide the note under the thing that broke’ means the banner sits in the top layer, where nothing on the page is drawn over it. Each phrase read that way is a clue: a line of the ask, and what it commits the build to. The ask left open where on the window the note sits, how it arrives, and how several stand at once; the dials below are those answers, and the cards below settle them one at a time.');
+  });
+
+  test('should quote each settled phrase from the ask on the page', async () => {
+    const tutorial = await arriveAtTheTutorial();
+    const ask = explanation.saying(tutorial, /^When something breaks/).textContent;
+
+    expect(ask).toContain('tell me');
+    expect(ask).toContain('do not hide the note under the thing that broke');
+  });
+
+  test('should give the confirmation as two given-when-then lines', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(zIndexTab.confirmationIn(tutorial)).toEqual([
+      'Given a page with the news raised, when a card with a z-index of its own scrolls past, then the note stays on top.',
+      'Given a reader with a screen reader, when news is raised, then it is announced without a move.'
+    ]);
+  });
+
+  test('should say every card below is told that way, then how to use the cards, the dials and the links', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(explanation.saying(tutorial, /^Every card below is told that way/)).toHaveTextContent('Every card below is told that way. Open a card and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step. The links go to MDN, if you want more.');
+  });
+
+  test('should walk the ask, the user story, its card, conversation and confirmation, and how every card is told, before the dials and the first card', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(outOfReadingOrder([
+      explanation.saying(tutorial, /^When something breaks/),
+      paragraphOpening(definition),
+      paragraphOpening(/^As a reader who missed the news/),
+      explanation.saying(tutorial, conversation),
+      explanation.saying(tutorial, /^Given a page with the news raised/),
+      explanation.saying(tutorial, /^Every card below is told that way/),
+      await zIndexTab.findBannerControls(),
+      recipeFolds.story(tutorial, 'The user sees the news above everything')
+    ])).toEqual([]);
   });
 });
 

@@ -11,6 +11,8 @@ export const zIndexTab = {
   labelOnSample: (holder: HTMLElement, sample: string, label: string): HTMLElement =>
     within(within(holder).getByRole('figure', {name: sample})).getByText(label),
   followLink: async (holder: HTMLElement, name: string): Promise<void> => userEvent.click(within(holder).getByRole('link', {name})),
+  confirmationIn: (tutorial: HTMLElement): string[] =>
+    within(within(tutorial).getByRole('list', {name: 'the confirmation'})).getAllByRole('listitem').map(line => line.textContent),
   findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'banner controls'}),
   choose: async (controls: HTMLElement, dial: string, option: string): Promise<void> =>
     userEvent.click(within(within(controls).getByRole('group', {name: dial})).getByRole('radio', {name: option})),
