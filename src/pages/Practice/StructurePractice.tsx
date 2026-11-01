@@ -1,8 +1,29 @@
 import {FC} from 'react';
 import {MomentLink} from '@pages/Record/MomentLink';
 
+const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
+
 export const StructurePractice: FC = () =>
   <>
+    <p className="paragraph">Markup is read by more than the browser. A screen reader reads it for roles, names and
+      states, and for a way to move: on a long page most screen reader users go to the headings first, 71.6% in{' '}
+    <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">WebAIM’s tenth survey</a>, and
+      a few to the landmarks. Reader view and a search engine read it for the content in order, with its meaning. The
+      next developer reads it to see what the page is. The browser reads it for the behavior each element brings.
+      Organizing markup has to give all five the same answer from the same elements.</p>
+    <p className="paragraph">So five things have to be true of the markup, and WCAG names four of them. Meaning: what
+      each thing is, carried by the markup and not by the look
+      (<a className="signpost" href={understanding('info-and-relationships')}>1.3.1, Info and Relationships</a>).
+      Order: what comes before what, so a reading sequence can be worked out from the markup
+      (<a className="signpost" href={understanding('meaningful-sequence')}>1.3.2, Meaningful Sequence</a>).
+      Names: what each region and control is called
+      (<a className="signpost" href={understanding('headings-and-labels')}>2.4.6, Headings and Labels</a>), with a
+      way past what repeats on every page
+      (<a className="signpost" href={understanding('bypass-blocks')}>2.4.1, Bypass Blocks</a>).
+      Behavior: what presses, opens and submits, with its name, role and state known to the tools
+      (<a className="signpost" href={understanding('name-role-value')}>4.1.2, Name, Role, Value</a>).
+      Identity: how one thing is found, by the next developer and by the script, which no criterion covers.</p>
+    <p className="paragraph">The rest of this tab is where each of the five lives.</p>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
     <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,

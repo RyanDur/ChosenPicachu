@@ -829,6 +829,17 @@ describe('the record', () => {
     expect(recordPage.shelfHolding(work)).toBe('Presentation');
   });
 
+  test.each([
+    ['Understanding Success Criterion 1.3.1: Info and Relationships'],
+    ['Understanding Success Criterion 1.3.2: Meaningful Sequence'],
+    ['Understanding Success Criterion 2.4.1: Bypass Blocks'],
+    ['Understanding Success Criterion 2.4.6: Headings and Labels'],
+    ['Understanding Success Criterion 4.1.2: Name, Role, Value']
+  ])('should shelve %s on the Structure shelf, as WCAG 2.2 from the W3C WAI', work => {
+    expect(recordPage.shelvedAs(work)).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding(work)).toBe('Structure');
+  });
+
   test('should shelve the Application Continuum on the Behavior shelf, undated, as its page gives no date', () => {
     expect(recordPage.shelvedAs('The Application Continuum')).toHaveTextContent('appcontinuum.io, undated');
     expect(recordPage.shelfHolding('The Application Continuum')).toBe('Behavior');

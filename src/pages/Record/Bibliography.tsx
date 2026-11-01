@@ -145,6 +145,26 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security"><cite>Website security</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html"><cite>Understanding Success Criterion 1.3.1: Info and Relationships</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html"><cite>Understanding Success Criterion 1.3.2: Meaningful Sequence</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html"><cite>Understanding Success Criterion 2.4.1: Bypass Blocks</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html"><cite>Understanding Success Criterion 2.4.6: Headings and Labels</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html"><cite>Understanding Success Criterion 4.1.2: Name, Role, Value</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="presentation research">
