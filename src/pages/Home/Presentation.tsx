@@ -23,7 +23,7 @@ export const Presentation: FC = () =>
       Garden restyled one document hundreds of times that way. Call it <code className="monospaced">text-red</code>, and it works on any
       element with no new CSS, but turning the warnings orange means changing the HTML; that is Tailwind’s side. Adam
       Wathan, who created Tailwind, describes the choice as which way the dependency runs, and BEM and Bootstrap each
-      take a position of their own. I name a class for what the element is, what it needs or what it is doing, and keep
+      take a position of their own. I name a class for what the element is, what it needs or what is true right now, and keep
       the value in the sheet; <Link className="signpost" to={Paths.practice}>Practice</Link> says why. Either way, the
       work goes somewhere.</p>
     <p className="paragraph">Motion belongs in the sheet too. A transition is the sheet’s way of moving from one look
