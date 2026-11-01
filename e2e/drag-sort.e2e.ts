@@ -22,16 +22,25 @@ test('a lazy list holds its order while an item is carried, and takes the new or
   await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
 });
 
-for (const pace of ['eager', 'lazy']) {
-  test(`a dragged item says where it landed, ${pace}`, async ({page}) => {
-    await page.goto(`demos/drag-and-drop/?pace=${pace}`);
-    const list = sortableList(page);
+test('a dragged item in an eager list says where it landed', async ({page}) => {
+  await page.goto('demos/drag-and-drop/?pace=eager');
+  const list = sortableList(page);
 
-    await (await list.carry('A', 'C')).drop();
+  await (await list.carry('A', 'C')).drop();
 
-    await expect(list.moveReport).toHaveText('A moved to 3 of 3');
-  });
-}
+  await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
+  await expect(list.moveReport).toHaveText('A moved to 3 of 3');
+});
+
+test('a dragged item in a lazy list says where it landed', async ({page}) => {
+  await page.goto('demos/drag-and-drop/?pace=lazy');
+  const list = sortableList(page);
+
+  await (await list.carry('A', 'C')).drop();
+
+  await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
+  await expect(list.moveReport).toHaveText('A moved to 3 of 3');
+});
 
 test.describe('a finger on a phone', () => {
   test.use(iPhone);

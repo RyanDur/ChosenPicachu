@@ -22,6 +22,17 @@ export const sortableList = (page: Page) => {
     if (box === null) throw new Error('the list never stood');
     return {x: box.x + box.width / 2, y: box.y + box.height / 2};
   };
+  // the middle of a seat is where the list decides whether a carried item has passed it, and engines round it either way
+  const pastTheMiddleOf = async (target: Locator, from: {x: number; y: number}): Promise<{x: number; y: number}> => {
+    const middle = await middleOf(target);
+    const box = await target.boundingBox();
+    if (box === null) throw new Error('the list never stood');
+    const along = (start: number, size: number, coming: number, centre: number): number =>
+      start + size * (coming < centre ? 0.8 : 0.2);
+    return Math.abs(middle.x - from.x) > Math.abs(middle.y - from.y)
+      ? {x: along(box.x, box.width, from.x, middle.x), y: middle.y}
+      : {x: middle.x, y: along(box.y, box.height, from.y, middle.y)};
+  };
   return {
     items,
     seats: (): Promise<string[]> => items.allInnerTexts(),
@@ -36,7 +47,7 @@ export const sortableList = (page: Page) => {
     carry: async (item: string, onto: string): Promise<Carried> => {
       await siteFrame(page).hydrated();
       const from = await middleOf(gripFor(item));
-      const to = await middleOf(seatOf(onto));
+      const to = await pastTheMiddleOf(seatOf(onto), from);
       await page.mouse.move(from.x, from.y);
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
