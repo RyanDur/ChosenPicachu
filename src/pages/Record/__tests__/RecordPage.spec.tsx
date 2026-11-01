@@ -820,13 +820,19 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });
 
-  test.each([
-    ['CSS Utility Classes and ‘Separation of Concerns’', 'Adam Wathan, 2017'],
-    ['BEM', 'Yandex, undated'],
-    ['Utility-First Fundamentals', 'Tailwind CSS documentation, version 3, undated']
-  ])('should shelve %s on the Presentation shelf, as %s', (work, provenance) => {
-    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
-    expect(recordPage.shelfHolding(work)).toBe('Presentation');
+  test('should shelve CSS Utility Classes and ‘Separation of Concerns’ on the Presentation shelf, as Adam Wathan, 2017', () => {
+    expect(recordPage.shelvedAs('CSS Utility Classes and ‘Separation of Concerns’')).toHaveTextContent('Adam Wathan, 2017');
+    expect(recordPage.shelfHolding('CSS Utility Classes and ‘Separation of Concerns’')).toBe('Presentation');
+  });
+
+  test('should shelve BEM on the Presentation shelf, as Yandex, undated', () => {
+    expect(recordPage.shelvedAs('BEM')).toHaveTextContent('Yandex, undated');
+    expect(recordPage.shelfHolding('BEM')).toBe('Presentation');
+  });
+
+  test('should shelve Utility-First Fundamentals on the Presentation shelf, as Tailwind CSS documentation, version 3, undated', () => {
+    expect(recordPage.shelvedAs('Utility-First Fundamentals')).toHaveTextContent('Tailwind CSS documentation, version 3, undated');
+    expect(recordPage.shelfHolding('Utility-First Fundamentals')).toBe('Presentation');
   });
 
   test('should shelve Understanding Success Criterion 1.3.1: Info and Relationships on the Structure shelf, as W3C WAI, WCAG 2.2, updated 9 March 2026', () => {
