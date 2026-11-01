@@ -159,23 +159,19 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html"><cite>Understanding Success Criterion 1.3.1: Info and Relationships</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
-          </li>
-          <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html"><cite>Understanding Success Criterion 1.3.2: Meaningful Sequence</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html"><cite>Understanding Success Criterion 2.4.1: Bypass Blocks</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 February 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html"><cite>Understanding Success Criterion 2.4.6: Headings and Labels</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html"><cite>Understanding Success Criterion 4.1.2: Name, Role, Value</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2</span>
+            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 12 July 2026</span>
           </li>
         </ul>
       </section>
@@ -311,8 +307,8 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html"><cite>Understanding Meaningful Sequence</cite></a>{' '}
-            <span className="provenance caption">W3C WAI</span>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html"><cite>Understanding Success Criterion 1.3.2: Meaningful Sequence</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 16 September 2025</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select"><cite>Customizable select elements</cite></a>{' '}

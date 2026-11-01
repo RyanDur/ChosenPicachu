@@ -34,6 +34,12 @@ export const practicePage = {
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
   paragraphs,
   paragraphAfter: (opening: RegExp): string | undefined => paragraphs()[paragraphs().findIndex(paragraph => opening.test(paragraph)) + 1],
+  terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
+  definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
+  linksInDefinitionOf: (term: string): (string | null)[][] => {
+    const definition = within(practice()).getAllByRole('term').find(found => found.textContent === term)?.nextElementSibling;
+    return definition ? within(definition as HTMLElement).queryAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]) : [];
+  },
   sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),

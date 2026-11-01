@@ -124,7 +124,7 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a>{' '}
       before it animates. Grid and flex can change the order the eye sees without changing the order a keyboard moves
       through, so the HTML keeps{' '}
-    <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html">the meaningful sequence</a>{' '}
+    <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html">the meaningful sequence</a>{' '}
       and the sheet only changes the picture.</p>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state

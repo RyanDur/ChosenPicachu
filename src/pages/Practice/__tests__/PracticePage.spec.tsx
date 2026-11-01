@@ -133,25 +133,47 @@ describe('the practice page', () => {
 
     expect(practicePage.paragraphs().slice(0, 4)).toEqual([
       expect.stringMatching(/^Markup is read by more than the browser/),
-      expect.stringMatching(/^So five things have to be true of the markup, and WCAG names four of them/),
-      expect.stringMatching(/^The rest of this tab is where each of the five lives/),
+      expect.stringMatching(/^So five things have to be true of the markup/),
+      expect.stringMatching(/^The rest of this tab takes the first four in turn/),
       expect.stringMatching(/^I start from what the content is and pick the element for it/)
     ]);
   });
 
-  test('should send each of the four needs WCAG names to its Understanding page, and the survey figure to WebAIM’s tenth survey', async () => {
+  test('should list the five needs as terms, meaning, order, names, behavior and identity, each with what has to be true of the markup', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^So five things have to be true of the markup/)).toEqual([
-      ['1.3.1, Info and Relationships', 'https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html'],
-      ['1.3.2, Meaningful Sequence', 'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html'],
-      ['2.4.6, Headings and Labels', 'https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html'],
-      ['2.4.1, Bypass Blocks', 'https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html'],
-      ['4.1.2, Name, Role, Value', 'https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html']
+    expect(practicePage.terms()).toEqual(['Meaning', 'Order', 'Names', 'Behavior', 'Identity']);
+    expect(practicePage.definitions()).toEqual([
+      expect.stringMatching(/^What each thing is/),
+      expect.stringMatching(/^What comes before what/),
+      expect.stringMatching(/^What each region and control is called/),
+      expect.stringMatching(/^What presses, opens and submits/),
+      expect.stringMatching(/^How one thing is found/)
     ]);
+  });
+
+  test('should send each of the four needs WCAG names to its Understanding page, and identity to none', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksInDefinitionOf('Meaning')).toEqual([['1.3.1, Info and Relationships', 'https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html']]);
+    expect(practicePage.linksInDefinitionOf('Order')).toEqual([['1.3.2, Meaningful Sequence', 'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html']]);
+    expect(practicePage.linksInDefinitionOf('Names')).toEqual([
+      ['2.4.6, Headings and Labels', 'https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html'],
+      ['2.4.1, Bypass Blocks', 'https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html']
+    ]);
+    expect(practicePage.linksInDefinitionOf('Behavior')).toEqual([['4.1.2, Name, Role, Value', 'https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html']]);
+    expect(practicePage.linksInDefinitionOf('Identity')).toEqual([]);
+  });
+
+  test('should send the survey figure and the survey’s own words to WebAIM’s tenth survey', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
     expect(practicePage.linksIn(/^Markup is read by more than the browser/)).toEqual([
-      ['WebAIM’s tenth survey', 'https://webaim.org/projects/screenreadersurvey10/']
+      ['WebAIM’s tenth survey', 'https://webaim.org/projects/screenreadersurvey10/'],
+      ['“navigate through the headings on the page”', 'https://webaim.org/projects/screenreadersurvey10/']
     ]);
   });
 
@@ -192,8 +214,8 @@ describe('the practice page', () => {
       .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
     expect(practicePage.paragraph(/^The elements mean something beyond how they look/))
       .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
-    expect(practicePage.paragraph(/^A div is for when I want an element that says nothing/))
-      .toHaveTextContent(/“of last resort, for when no other element is suitable”\. WebAIM’s survey found 71\.6 percent of screen reader users move through a long page by its headings, and a page built of divs gives them nothing to move by\./);
+    expect(practicePage.link(/of last resort, for when no other element is suitable/))
+      .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
     expect(practicePage.paragraph(/^A div is for when I want an element that says nothing/))
       .toHaveTextContent(/The standard that calls a div a last resort is the one the browser makers wrote themselves, from the 2004 moment on\./);
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
@@ -285,7 +307,7 @@ describe('the practice page', () => {
       .map(name => practicePage.link(name).getAttribute('href'))).toEqual([
       'https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes',
       'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion',
-      'https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html',
+      'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html',
       'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
       'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
       'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'

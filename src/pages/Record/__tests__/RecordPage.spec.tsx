@@ -829,28 +829,28 @@ describe('the record', () => {
     expect(recordPage.shelfHolding(work)).toBe('Presentation');
   });
 
-  test('should shelve Understanding Success Criterion 1.3.1: Info and Relationships on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
-    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.1: Info and Relationships')).toHaveTextContent('W3C WAI, WCAG 2.2');
+  test('should shelve Understanding Success Criterion 1.3.1: Info and Relationships on the Structure shelf, as W3C WAI, WCAG 2.2, updated 9 March 2026', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.1: Info and Relationships')).toHaveTextContent('W3C WAI, WCAG 2.2, updated 9 March 2026');
     expect(recordPage.shelfHolding('Understanding Success Criterion 1.3.1: Info and Relationships')).toBe('Structure');
   });
 
-  test('should shelve Understanding Success Criterion 1.3.2: Meaningful Sequence on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
-    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toHaveTextContent('W3C WAI, WCAG 2.2');
-    expect(recordPage.shelfHolding('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toBe('Structure');
+  test('should shelve Understanding Success Criterion 1.3.2: Meaningful Sequence on the Presentation shelf, as W3C WAI, WCAG 2.2, updated 16 September 2025', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toHaveTextContent('W3C WAI, WCAG 2.2, updated 16 September 2025');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toBe('Presentation');
   });
 
-  test('should shelve Understanding Success Criterion 2.4.1: Bypass Blocks on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
-    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.1: Bypass Blocks')).toHaveTextContent('W3C WAI, WCAG 2.2');
+  test('should shelve Understanding Success Criterion 2.4.1: Bypass Blocks on the Structure shelf, as W3C WAI, WCAG 2.2, updated 9 February 2026', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.1: Bypass Blocks')).toHaveTextContent('W3C WAI, WCAG 2.2, updated 9 February 2026');
     expect(recordPage.shelfHolding('Understanding Success Criterion 2.4.1: Bypass Blocks')).toBe('Structure');
   });
 
-  test('should shelve Understanding Success Criterion 2.4.6: Headings and Labels on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
-    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.6: Headings and Labels')).toHaveTextContent('W3C WAI, WCAG 2.2');
+  test('should shelve Understanding Success Criterion 2.4.6: Headings and Labels on the Structure shelf, as W3C WAI, WCAG 2.2, updated 9 March 2026', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.6: Headings and Labels')).toHaveTextContent('W3C WAI, WCAG 2.2, updated 9 March 2026');
     expect(recordPage.shelfHolding('Understanding Success Criterion 2.4.6: Headings and Labels')).toBe('Structure');
   });
 
-  test('should shelve Understanding Success Criterion 4.1.2: Name, Role, Value on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
-    expect(recordPage.shelvedAs('Understanding Success Criterion 4.1.2: Name, Role, Value')).toHaveTextContent('W3C WAI, WCAG 2.2');
+  test('should shelve Understanding Success Criterion 4.1.2: Name, Role, Value on the Structure shelf, as W3C WAI, WCAG 2.2, updated 12 July 2026', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 4.1.2: Name, Role, Value')).toHaveTextContent('W3C WAI, WCAG 2.2, updated 12 July 2026');
     expect(recordPage.shelfHolding('Understanding Success Criterion 4.1.2: Name, Role, Value')).toBe('Structure');
   });
 
