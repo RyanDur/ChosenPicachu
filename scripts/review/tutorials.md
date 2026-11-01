@@ -12,6 +12,8 @@ The tabs run from simple to expert. Accordions come first, and the page begins w
 
 ## Eight questions, in order
 
+Before them, one question of place: does the tab say, in one sentence after its opening, what it assumes from the tabs before it, with a link to each, or that it assumes nothing? A tab that leans on a term, an element or a mechanism an earlier tab teaches without saying so is a finding; a tab that leans on a later tab is a finding against the order.
+
 1. **Is it true?** Every claim a run makes about CSS, HTML, the browser or the code holds, in every engine the site supports. A claim the platform or the code contradicts is a violation. Trace it to what the reader would believe and go on to get wrong. A run that teaches the mistake its tab exists to fix is the worst case.
 2. **Is every term defined where it first appears?** A term the tab has not defined, used before its definition or never defined, is a finding. Name the term and the line. Basics count when a run leans on them: selector, positioned, event, attribute, viewport. A mechanism a build leans on (an element, an attribute, a selector, a combinator) is explained before the first build on the tab that uses it, in plain view; an explanation that sits in a fold after two builds have used it is a finding. A name from a framework (hook, effect, reducer, store) is defined by what it does here, in plain words. "MDN" is named once per tab as Mozilla's web reference.
 3. **Does the answer lead?** A heading or caption says what happens, so a reader who reads only those learns the point. A heading that is a slogan, a figure of speech or a coined word ("a third's stray", "aloft", "the road") is a finding. The run beneath can explain at length; the heading cannot hide the answer.
