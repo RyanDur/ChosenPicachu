@@ -16,6 +16,8 @@ import stylelintConfig from '/stylelint.config.js?raw';
 
 const appContinuum = 'https://www.appcontinuum.io/';
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
+const whereARuleLives = 'Where a rule lives. Shared words at the root, by concern; a component’s structure beside the component.';
+const sheetsImported = (): string[] => [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
 
 describe('the practice page', () => {
   test('should spell the Structure tab\'s prose the American way', async () => {
@@ -539,7 +541,7 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const imported = [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
+    const imported = sheetsImported();
     const walked = [
       ...practicePage.linksIn(/^Here is how this site’s CSS is laid out/),
       ...practicePage.linksIn(/^Then two token files/),
@@ -562,6 +564,36 @@ describe('the practice page', () => {
       ['“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”', `${Paths.repo}/blob/main/stylelint.config.js`]
     ]);
     quoted.forEach(([message]) => expect(stylelintConfig).toContain((message ?? '').slice(1, -1)));
+  });
+
+  test('should show where a rule lives between the gates and what the repository does not use', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^Two gates hold those lines, and they are the method/),
+      practicePage.figure(whereARuleLives),
+      practicePage.paragraph(/^What this repository does not use is the platform’s newer scoping/)
+    ])).toEqual([]);
+  });
+
+  test('should keep the drawing of where a rule lives from a screen reader, which hears its title and caption', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.drawingsSeenIn(whereARuleLives)).toEqual([]);
+  });
+
+  test('should draw src/styles’ nine sheets in import order in two groups, one component’s parts with its sheets beside them, and the word it wears, wide and stacked', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const [reset, colors, spacing, ...vocabulary] = sheetsImported();
+    const tree = ['src/styles', 'the reset and the tokens', reset, colors, spacing, 'the vocabulary, by concern', ...vocabulary.flatMap(file => file === 'surface' ? [file, 'lifted'] : [file])];
+    const component = ['DragSortableTable', 'DraggableColumn.tsx', 'RowGrip.tsx', 'SortMenu.tsx', 'ResizeHandle.tsx', 'Table.css', 'Header.css', 'RowGrip.css'];
+    const frame = [...tree, ...component, 'wears'];
+
+    expect(practicePage.drawnIn(whereARuleLives)).toEqual([...frame, ...frame]);
   });
 
   test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {

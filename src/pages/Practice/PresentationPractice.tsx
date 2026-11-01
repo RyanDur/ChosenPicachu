@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Paths} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {ColumnHeaderClassList} from './ClassList';
+import {WhereARuleLives} from './WhereARuleLives';
 
 const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/';
 const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
@@ -152,6 +153,7 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
       A third refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
       lines by convention; this repository holds them by a lint that fails the commit.</p>
+    <WhereARuleLives/>
     <p className="paragraph">What this repository does not use is the platform’s newer scoping: no{' '}
       <code className="monospaced">@layer</code> and no <code className="monospaced">@scope</code>, because the import
       order above gives the cascade its order and the component boundary gives a rule its reach. Nesting it does use,
