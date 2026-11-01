@@ -1,8 +1,12 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
 import {MomentLink} from '@pages/Record/MomentLink';
+import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {LandmarkMap} from './LandmarkMap';
 
 const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
 const survey = 'https://webaim.org/projects/screenreadersurvey10/';
+const landmarkRegions = 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/';
 
 export const StructurePractice: FC = () =>
   <>
@@ -55,12 +59,22 @@ export const StructurePractice: FC = () =>
       Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">2014 moment</MomentLink>.</p>
     <p className="paragraph">The element is the name. It tells the browser, a screen reader and the next developer at once
       what the thing is, so I choose it first and make a new one only for a behavior that has no element.</p>
-    <p className="paragraph">The skeleton comes first: one header, one main, one footer, and a nav for the
-      links that move you around the site. Landmarks are the page’s table of contents, so every landmark gets a name
-      and no two are the same. A section is named by its heading; if there is nothing to name it by, it is not a
-      section.
-      The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing
-      themselves in the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
+    <p className="paragraph">The skeleton comes first, and this site’s is the same on every page: one header, one main
+      and one footer; a nav named site, for the links that move you around the site; a section named pages and
+      feedback, the rail that holds that nav and the feedback button; and, where a page has tabs, a nav named by the
+      tabs’ own label. Landmarks are the page’s table of contents: a screen reader lists them and jumps to any, so each
+      kind that appears more than once gets a name that tells them apart. The{' '}
+    <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly:{' '}
+    <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
+      provide each instance of that landmark with a unique label.”</a> A section is named by its heading; if there is
+      nothing to name it by, it is not a section. The landmark elements, header, main, footer and nav, come from the
+      standard the browser makers began writing themselves in the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
+    <LandmarkMap/>
+    <p className="paragraph">One landmark on every page is a role and not an element. The banners are a section with the
+      role alert, held in the top layer, because there is no alert element to reach for; the{' '}
+    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
+      buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes,
+      and the part on ARIA below says which and why.</p>
     <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
       these links are for getting around; a button tells it a press will do something. The right element gives you
       that for free, with{' '}

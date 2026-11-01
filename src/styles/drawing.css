@@ -16,6 +16,13 @@
 
 .hollow { fill: none; }
 
+.thin-drawn {
+  stroke-width: var(--hairline);
+  vector-effect: non-scaling-stroke;
+}
+
+.dashed-drawn { stroke-dasharray: 4 3; }
+
 .buy-side {
   --side-face: var(--mint-shade);
   --side-wall: var(--mint-ink);

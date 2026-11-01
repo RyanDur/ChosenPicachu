@@ -950,6 +950,11 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('The Application Continuum')).toBe('Behavior');
   });
 
+  test('should shelve the Authoring Practices’ Landmark Regions on the Structure shelf, undated, as its page gives no date', () => {
+    expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, APG, undated');
+    expect(recordPage.shelfHolding('Landmark Regions')).toBe('Structure');
+  });
+
   test('should head the research shelves The web, Structure, Presentation, Behavior, then The concert', () => {
     expect(recordPage.shelfHeadings()).toEqual(['The web', 'Structure', 'Presentation', 'Behavior', 'The concert']);
   });

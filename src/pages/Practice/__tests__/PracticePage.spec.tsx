@@ -1,13 +1,17 @@
 import {render} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
+import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const appContinuum = 'https://www.appcontinuum.io/';
+const tableOfContents = 'The page’s table of contents. Every landmark named; a screen reader lists them and jumps to any.';
 
 describe('the practice page', () => {
   test('should spell the Structure tab\'s prose the American way', async () => {
@@ -221,6 +225,69 @@ describe('the practice page', () => {
     ]);
   });
 
+  test('should show the page’s table of contents between the skeleton and the one landmark that is a role', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^The skeleton comes first/),
+      practicePage.figure(tableOfContents),
+      practicePage.paragraph(/^One landmark on every page is a role and not an element/)
+    ])).toEqual([]);
+  });
+
+  test('should send the skeleton’s rule for names to the Authoring Practices, and its landmark elements to the 2004 moment', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^The skeleton comes first/)).toEqual([
+      ['Authoring Practices', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
+      ['“If a specific landmark role is used more than once on a page, provide each instance of that landmark with a unique label.”', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
+      ['2004 moment', momentAddress('browsersTakePen')]
+    ]);
+  });
+
+  test('should send the banners’ role to the z-index tab that builds it', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^One landmark on every page is a role and not an element/)).toEqual([
+      ['z-index tab', demoAddress(DemoTopics.zIndex)]
+    ]);
+  });
+
+  test('should keep the table of contents’ drawing from a screen reader, which hears its title and caption', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.drawingsSeenIn(tableOfContents)).toEqual([]);
+  });
+
+  test('should draw the frame’s landmarks wide and stacked, each box labelled with its element and, where it has one, its name', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const frame = [
+      'header',
+      'section · pages and feedback', 'nav · site', 'feedback',
+      'main', 'nav · tabs', 'only where a page has tabs',
+      'footer',
+      'section · role alert · top layer'
+    ];
+
+    expect(practicePage.drawnIn(tableOfContents)).toEqual([...frame, ...frame]);
+  });
+
+  test('should label the drawn rail and site nav with the names the frame gives them', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const rail = computeAccessibleName(await site.rail());
+    const siteNav = computeAccessibleName(await site.nav());
+
+    expect(practicePage.drawnIn(tableOfContents)).toEqual(expect.arrayContaining([`section · ${rail}`, `nav · ${siteNav}`]));
+  });
+
   test('should open the Structure tab from its address, reading how I organize it from its first rule to its test', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
 
@@ -286,8 +353,6 @@ describe('the practice page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(practicePage.paragraph(/^I start from what the content is and pick the element for it/))
       .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
-    expect(practicePage.paragraph(/^The skeleton comes first/))
-      .toHaveTextContent(/The landmark elements, header, main, footer and nav, come from the standard the browser makers began writing themselves in the 2004 moment\./);
     expect(practicePage.paragraph(/^The elements mean something beyond how they look/))
       .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
     expect(practicePage.link(/of last resort, for when no other element is suitable/))

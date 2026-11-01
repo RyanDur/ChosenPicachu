@@ -12,7 +12,7 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
 const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
 
 const drawnTexts = (figure: string): HTMLElement[] =>
-  within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption'});
+  within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption, figcaption *'});
 
 export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
 

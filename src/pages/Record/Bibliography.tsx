@@ -173,6 +173,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html"><cite>Understanding Success Criterion 4.1.2: Name, Role, Value</cite></a>{' '}
             <span className="provenance caption">W3C WAI, WCAG 2.2, updated 12 July 2026</span>
           </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"><cite>Landmark Regions</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, APG, undated</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="presentation research">
