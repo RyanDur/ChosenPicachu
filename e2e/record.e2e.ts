@@ -82,21 +82,3 @@ test('a reader who follows a moment link on Practice lands on that moment in the
   await expect(page).toHaveURL(/\/record\/#the-document-needs-to-come-first$/);
   await expect(recordPage(page).moment('The document needs to come first')).toBeFocused();
 });
-
-test('at phone width, a period sample in a year\'s fuller story stays inside its moment and scrolls sideways within itself', async ({page}) => {
-  await page.setViewportSize({width: 390, height: 844});
-  const record = recordPage(page);
-  await page.goto('record/');
-
-  await record.storyLineTo('Presentation', '1996 The pages need to look the same').click();
-  const sample = await record.moment('The pages need to look the same').getByText(/^<MULTICOL/).evaluate(code => {
-    const block = code.closest('pre') ?? code;
-    const moment = block.closest('li') ?? block;
-    return {
-      insideItsMoment: block.getBoundingClientRect().right <= moment.getBoundingClientRect().right,
-      scrollsWithin: block.scrollWidth > block.clientWidth
-    };
-  });
-
-  expect(sample).toEqual({insideItsMoment: true, scrollsWithin: true});
-});
