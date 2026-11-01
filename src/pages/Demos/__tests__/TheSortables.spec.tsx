@@ -1,7 +1,9 @@
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {TestApp} from '@__test_support/TestApp';
+import {paragraphReading} from '@__test_support/paragraph';
+import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
@@ -539,8 +541,8 @@ describe('the names the code uses', () => {
     {name: 'field', choices: '', run: /^The li, the list item that is the card/},
     {name: 'hairline-outline', choices: '', run: /^The li, the list item that is the card/},
     {name: 'handle-raised', choices: '', run: /^The li, the list item that is the card/},
-    {name: '--toward', choices: '', run: /keyframe turned/},
-    {name: 'var()', choices: '', run: /keyframe turned/}
+    {name: '--toward', choices: '', run: /^The direction is data/},
+    {name: 'var()', choices: '', run: /^The direction is data/}
   ])('should set $name as code where its run names it', async ({name, choices, run}) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
@@ -555,6 +557,7 @@ describe('the names the code uses', () => {
 describe('the drag sort tab’s introduction', () => {
   const paragraphs = [
     'A sortable list is a list the reader reorders by picking an item up and putting it down somewhere else.',
+    'This tab assumes the details element and a class from the accordions tab, and React, which the z-index tab names. The rest is new here.',
     'The browser has shipped its own drag and drop for twenty years, and most of us have reached for a library anyway, because the native drag looked wrong, dropped in the wrong place, or could not be done with a keyboard.',
     'The order belongs to the user, and the list is the element built for it. So I use the browser’s own drag, and write script only for what the platform does not yet do: making room as you hover, or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbors, or not.',
     'Each of those is a dial in the last part of the tutorial below, and the exhibit above the dials changes to match.',
@@ -566,7 +569,16 @@ describe('the drag sort tab’s introduction', () => {
 
     const tab = await screen.findByRole('region', {name: 'Drag sort'});
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => within(tab).getByText(paragraph)), within(tab).getByRole('button', {name: 'grip for A'})])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), within(tab).getByRole('button', {name: 'grip for A'})])).toEqual([]);
+  });
+
+  test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    expect(await demoTabs.assumedLinks('Drag sort')).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['z-index tab', `${Paths.demos}z-index/`]
+    ]);
   });
 });
 
@@ -619,16 +631,15 @@ describe('the drag sort tab’s audited words', () => {
     expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them.');
   });
 
-  test('should say, in two runs after the want, what a keyframe’s from is, then what --toward is, linking the charts demo whose keyframe the slide turns horizontal', async () => {
+  test('should teach the keyframe animation at the slide, then say what --toward is', async () => {
     const recipe = await nativeRecipe();
 
     const sliding = explanation.runTelling(recipe, /^The swap happens at once/);
-    const [, swap, sign] = within(sliding).getAllByRole('paragraph');
 
-    expect(within(sliding).getAllByRole('paragraph')).toHaveLength(3);
-    expect(swap).toHaveTextContent(/its keyframe’s from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place\.$/);
-    expect(sign).toHaveTextContent('It is the charts demo’s keyframe turned horizontal, with the direction as data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.');
-    expect(within(sign).getByRole('link', {name: 'charts demo'})).toHaveAttribute('href', '/demos/charts/');
+    expect(explanation.paragraphsIn(sliding).slice(1)).toEqual([
+      'The swap happens at once. The crossed item gets the class pushed. Its slide is a keyframe animation, one whose start is written in an @keyframes rule, and its from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place.',
+      'The direction is data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.'
+    ]);
   });
 
   test('should say, beside the fade step’s CSS, why the card fades and is not hidden', async () => {

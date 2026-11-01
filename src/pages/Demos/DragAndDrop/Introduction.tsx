@@ -1,8 +1,13 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 
 export const DragSortIntroduction: FC = () =>
   <header className="tab-introduction">
     <p className="paragraph">A sortable list is a list the reader reorders by picking an item up and putting it down somewhere else.</p>
+    <p className="paragraph">This tab assumes the details element and a class from the{' '}
+      <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link>, and React, which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> names. The rest is new
+      here.</p>
     <p className="paragraph">The browser has shipped its own drag and drop for twenty years, and most of us have reached for a library
       anyway, because the native drag looked wrong, dropped in the wrong place, or could not be done with a keyboard.</p>
     <p className="paragraph">The order belongs to the user, and the list is the element built for it. So I use the

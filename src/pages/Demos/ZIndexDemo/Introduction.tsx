@@ -1,9 +1,13 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 
 export const ZIndexIntroduction: FC = () =>
   <header className="tab-introduction">
     <p className="paragraph">Where two boxes on a page overlap, the browser draws one over the other. z-index is the CSS
       property for changing which.</p>
+    <p className="paragraph">This tab assumes what the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> gives: an element, an
+      attribute and a custom property. The rest is new here.</p>
     <p className="paragraph">It reads like one ranking for the whole page, where the biggest number wins. So when a menu
       opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number. Then 9999
       loses too.</p>

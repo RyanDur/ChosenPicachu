@@ -1,6 +1,4 @@
 import {FC} from 'react';
-import {Link} from 'react-router';
-import {DemoTopics, demoAddress} from '../../../types';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
@@ -10,14 +8,13 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
   <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
-      <Says>The swap happens at once. The crossed item gets the class <code className="monospaced">pushed</code>, and its{' '}
-        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from, the keyframe’s starting state, is one place over: the
-        browser draws the item where it used to be and slides it to its new place.</Says>
-      <Says>It is the{' '}
-        <Link className="signpost" to={demoAddress(DemoTopics.charts)}>charts demo</Link>’s keyframe turned
-        horizontal, with the direction as data: <code className="monospaced">--toward</code>, a custom property, a value given a name once and read
-        back with <code className="monospaced">var()</code>,
-        flips the sign of one keyframe instead of naming two.</Says>
+      <Says>The swap happens at once. The crossed item gets the class <code className="monospaced">pushed</code>. Its
+        slide is a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> animation, one whose start is written in an @keyframes
+        rule, and its from, the keyframe’s starting state, is one place over: the browser draws the item where it used
+        to be and slides it to its new place.</Says>
+      <Says>The direction is data: <code className="monospaced">--toward</code>, a custom property, a value given a name
+        once and read back with <code className="monospaced">var()</code>, flips the sign of one keyframe instead of
+        naming two.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

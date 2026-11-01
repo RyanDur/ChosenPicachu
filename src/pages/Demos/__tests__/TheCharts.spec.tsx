@@ -1,4 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
+import {paragraphReading} from '@__test_support/paragraph';
+import {Paths} from '@pages/Paths';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
@@ -888,6 +890,7 @@ describe('the charts’ headings', () => {
 describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
+    'This tab assumes a popover, which the z-index tab builds, and the state React holds, which the drag sort tab keeps. The rest is new here.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
     'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.',
     'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
@@ -901,7 +904,16 @@ describe('the charts tab’s introduction', () => {
     const tab = await chartsDesk.findChartsTab();
     const headline = chartsDesk.titleIn(tab, /^Bitcoin, live/, 2);
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => chartsDesk.saysIn(tab, paragraph)), headline])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), headline])).toEqual([]);
+  });
+
+  test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
+    render(<TestApp at={demosAt('charts')}/>);
+
+    expect(await demoTabs.assumedLinks('Charts')).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['drag sort tab', `${Paths.demos}drag-and-drop/`]
+    ]);
   });
 });
 
@@ -917,7 +929,7 @@ describe('the workspace story', () => {
     const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
     const [measures, keyframes] = explanation.samplesIn(step);
 
-    expect(outOfReadingOrder([explanation.saying(step, /^The neighbor’s slide is a keyframe animation/), measures, explanation.drawingsIn(step)[0], keyframes])).toEqual([]);
+    expect(outOfReadingOrder([explanation.saying(step, /^The neighbor’s slide is the/), measures, explanation.drawingsIn(step)[0], keyframes])).toEqual([]);
   });
 
   test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
@@ -948,7 +960,7 @@ describe('the workspace story', () => {
     ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
     ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the pointer with that mark.'],
     ['where the drag starts', 'A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.'],
-    ['a keyframe animation', 'The neighbor’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
+    ['the keyframe animation the drag sort tab teaches', 'The neighbor’s slide is the drag sort tab’s keyframe animation turned vertical. It starts its own height away and runs to its new place in 150 milliseconds.'],
     ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
     ['the last chart', 'With one chart left there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.']
   ])('should say %s in plain words', async (_term, sentence) => {

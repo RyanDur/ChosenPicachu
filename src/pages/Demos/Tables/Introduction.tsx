@@ -1,9 +1,14 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 
 export const TablesIntroduction: FC = () =>
   <header className="tab-introduction">
     <p className="paragraph">A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also
       lets you drag a column or a row to a new place, resize a column, and sort by one.</p>
+    <p className="paragraph">This tab assumes the <Link className="signpost" to={demoAddress(DemoTopics.charts)}>charts tab</Link>’s live feed and its trades, the{' '}
+      <Link className="signpost" to={demoAddress(DemoTopics.dragAndDrop)}>drag sort tab</Link>’s dials and drag, and the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link>’s popover and top
+      layer; it is the deep end, and it says so.</p>
     <p className="paragraph">The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row
       updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move
       that undoes a sort.</p>

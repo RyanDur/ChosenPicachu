@@ -7,3 +7,11 @@ export const paragraphOpening = (opening: RegExp): HTMLElement => {
   }
   throw new Error(`no paragraph opening ${opening}`);
 };
+
+export const paragraphReading = (text: string): HTMLElement => {
+  const found = screen.getAllByRole('paragraph').find(paragraph => paragraph.textContent === text);
+  if (found) {
+    return found;
+  }
+  throw new Error(`no paragraph reading ${text}`);
+};

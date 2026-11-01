@@ -29,6 +29,7 @@ describe('the accordions tab', () => {
     const tab = await explanation.part('Accordions');
     const openings = [
       /^A web page is written in three languages\./,
+      /^Nothing here leans on another tab\.$/,
       /^You don’t always need all three\./,
       /^The thing is an accordion:/,
       /^Sliding it open is the hard part\./,

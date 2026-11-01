@@ -140,6 +140,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <header className="tab-introduction">
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
         looks and moves, and script says what happens when you act.</p>
+      <p className="paragraph">Nothing here leans on another tab.</p>
       <p className="paragraph">You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more,
         before you need script. If you know how each one works, you can choose the one the job needs. This page shows
         that with one small thing, built several ways.</p>

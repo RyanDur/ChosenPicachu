@@ -1,7 +1,9 @@
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {TestApp} from '@__test_support/TestApp';
+import {paragraphReading} from '@__test_support/paragraph';
+import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
@@ -1456,6 +1458,7 @@ describe('the tables tutorials’ vocabulary', () => {
 describe('the tables tab’s introduction', () => {
   const paragraphs = [
     'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
+    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer; it is the deep end, and it says so.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
     'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the JavaScript library this site is built with, and the same state sits under both.',
@@ -1467,7 +1470,17 @@ describe('the tables tab’s introduction', () => {
 
     const tab = await tablesTab.region();
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraph => tablesTab.wordsIn(tab, paragraph)), (await tablesTab.tablesIn(tab))[0]])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), (await tablesTab.tablesIn(tab))[0]])).toEqual([]);
+  });
+
+  test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await demoTabs.assumedLinks('Tables')).toEqual([
+      ['charts tab', `${Paths.demos}charts/`],
+      ['drag sort tab', `${Paths.demos}drag-and-drop/`],
+      ['z-index tab', `${Paths.demos}z-index/`]
+    ]);
   });
 });
 

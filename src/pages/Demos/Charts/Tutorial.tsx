@@ -1,4 +1,6 @@
 import {FC, ReactNode, useId} from 'react';
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 import {ChartKind} from './kinds';
 import {Codes, Mdn, plain, Says, Snippet, Step, Steps, Stories, Story, Tell, Words} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
@@ -462,8 +464,9 @@ const WorkspaceStory: FC = () =>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
-          <Says>The neighbor’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
-            starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
+          <Says>The neighbor’s slide is the{' '}
+            <Link className="signpost" to={demoAddress(DemoTopics.dragAndDrop)}>drag sort tab</Link>’s keyframe animation
+            turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
             with one that is still sliding.</Says>
         </Words>
         <Codes>
