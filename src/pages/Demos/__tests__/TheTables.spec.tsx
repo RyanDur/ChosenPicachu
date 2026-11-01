@@ -1458,14 +1458,14 @@ describe('the tables tutorials’ vocabulary', () => {
 describe('the tables tab’s introduction', () => {
   const paragraphs = [
     'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
-    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer; it is the deep end, and it says so.',
+    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer. The rest is new here.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
     'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, which the z-index tab explains, and the same state sits under both.',
     'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.'
   ];
 
-  test('should tell what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
+  test('should tell, after what it assumes from earlier tabs, what the table is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
     const tab = await tablesTab.region();

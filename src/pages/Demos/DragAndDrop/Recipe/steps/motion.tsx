@@ -10,7 +10,7 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
       <Says>The swap happens at once. The crossed item gets the class <code className="monospaced">pushed</code>. Its
         slide is a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> animation, one whose start is written in an @keyframes
-        rule, and its from, the keyframe’s starting state, is one place over: the browser draws the item where it used
+        rule. Its from, the keyframe’s starting state, is one place over. So the browser draws the item where it used
         to be and slides it to its new place.</Says>
       <Says>The direction is data: <code className="monospaced">--toward</code>, a custom property, a value given a name
         once and read back with <code className="monospaced">var()</code>, flips the sign of one keyframe instead of

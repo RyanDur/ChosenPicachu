@@ -55,6 +55,7 @@ export const explanation = {
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   paragraphsIn: (holder: HTMLElement): string[] => within(holder).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
   codeShown: (holder: HTMLElement): string[] => within(holder).getAllByRole('code').map(code => code.textContent),
+  linkNamed: (part: HTMLElement, name: string): HTMLElement => within(part).getByRole('link', {name}),
   drawingNamed: (part: HTMLElement, name: RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   samplesIn,
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),

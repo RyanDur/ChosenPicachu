@@ -564,12 +564,12 @@ describe('the drag sort tab’s introduction', () => {
     'By the end you can build a sortable list on the browser’s own drag and drop, choose each of those three behaviors and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves as the pointer. The exhibit below is three items; drag one by its grip, or focus the grip and use the left and right arrows.'
   ];
 
-  test('should tell what the list is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
+  test('should tell, after what it assumes from earlier tabs, what the list is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 
-    const tab = await screen.findByRole('region', {name: 'Drag sort'});
+    const tab = await demoTabs.arrivedOn('Drag sort');
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), within(tab).getByRole('button', {name: 'grip for A'})])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), demoTabs.gripIn(tab, 'A')])).toEqual([]);
   });
 
   test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
@@ -637,7 +637,7 @@ describe('the drag sort tab’s audited words', () => {
     const sliding = explanation.runTelling(recipe, /^The swap happens at once/);
 
     expect(explanation.paragraphsIn(sliding).slice(1)).toEqual([
-      'The swap happens at once. The crossed item gets the class pushed. Its slide is a keyframe animation, one whose start is written in an @keyframes rule, and its from, the keyframe’s starting state, is one place over: the browser draws the item where it used to be and slides it to its new place.',
+      'The swap happens at once. The crossed item gets the class pushed. Its slide is a keyframe animation, one whose start is written in an @keyframes rule. Its from, the keyframe’s starting state, is one place over. So the browser draws the item where it used to be and slides it to its new place.',
       'The direction is data: --toward, a custom property, a value given a name once and read back with var(), flips the sign of one keyframe instead of naming two.'
     ]);
   });

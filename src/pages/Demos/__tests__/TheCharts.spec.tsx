@@ -890,13 +890,13 @@ describe('the charts’ headings', () => {
 describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
-    'This tab assumes a popover, which the z-index tab builds, and the state React holds, which the drag sort tab keeps. The rest is new here.',
+    'This tab assumes a popover, which the z-index tab builds, and the state React holds and the keyframe animation, which the drag sort tab defines. The rest is new here.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
     'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.',
     'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
   ];
 
-  test('should tell the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
+  test('should tell, after what it assumes from earlier tabs, the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -924,6 +924,12 @@ describe('the workspace story', () => {
     await feedIsSubscribed(feed);
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
+
+  test('should link the drag sort tab where the slide names its keyframe animation', async () => {
+    const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
+
+    expect(explanation.linkNamed(step, 'drag sort tab')).toHaveAttribute('href', `${Paths.demos}drag-and-drop/`);
+  });
 
   test('should put the drawing of a third from the pointer after the code that measures it, before the keyframes', async () => {
     const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');

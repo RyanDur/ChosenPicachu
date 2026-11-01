@@ -23,14 +23,14 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should open on the three languages and the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
+  test('should open on the three languages, say it assumes nothing from other tabs, then the choice between them, and bring the accordion in as the example, before the first accordion', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
     const openings = [
       /^A web page is written in three languages\./,
       /^Nothing here leans on another tab\.$/,
-      /^You don’t always need all three\./,
+      /^You don’t always need all three languages\./,
       /^The thing is an accordion:/,
       /^Sliding it open is the hard part\./,
       /^By the end you can build an accordion.* say which language each job needed and why\./
@@ -91,7 +91,7 @@ describe('the accordions tab’s own words', () => {
     'The script makes the moves in two layout effects, code React runs after it has updated the elements and before the browser paints them. The first answers a press by pinning where the motion starts. The second, once that start is on the page, sets where it ends. So the script measures the panel and pins its start with no frame showing in between.',
     'Whether a tall fold’s last line is cut off depends on where its lines fall, so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.',
     'The third sets view transitions, the browser’s moves from one page state to the next, to no animation at all.',
-    'You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can choose the one the job needs.',
+    'You don’t always need all three languages. HTML does some jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can choose the one the job needs.',
     'The sections below are about making it slide, starting with how we did it before the browser could.',
     'The cost was the timing. The transition spent its whole time crossing the guess, so a short fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text. The bigger the guess, the worse the rush and the wait. A guess too small cut the text off.',
     'A ref is a handle on the element itself. The script uses the panel’s one ref only to measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a transition at all.',
