@@ -1,16 +1,17 @@
-import {render, screen, within} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the menu built the new way', () => {
   test('should sit in card one, beside Sort by', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    const trap = await screen.findByRole('figure', {name: /^The trap\./});
+    const trap = await theTrap.find();
 
-    const cardOne = within(trap).getAllByRole('listitem').filter(card => within(card).queryByRole('button', {name: 'Sort by, the old way'}) !== null)[0];
+    const cardOne = theTrap.cardOne(trap);
 
-    expect(within(cardOne).getByRole('button', {name: 'Sort by, in the top layer'})).toBeInTheDocument();
+    expect(theTrap.buttonIn(cardOne, 'Sort by, in the top layer')).toBeInTheDocument();
   });
 });
 
@@ -18,16 +19,16 @@ describe('why the popover wins', () => {
   test('should say the list opens over everything around it, wherever it opens', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
     expect(part).toHaveTextContent('The top-layer Sort by in Why 9999 still loses opens over everything around it every time, with the box checked or not.');
-    expect(within(part).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
+    expect(explanation.linkNamed(part, 'Why 9999 still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why 9999 still loses'));
   });
 
   test('should show the menu’s markup beside the run that says what popover gives for free', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/popoverTarget=[^]*popover="auto"[^]*popoverTargetAction="hide"/);
   });
@@ -35,18 +36,18 @@ describe('why the popover wins', () => {
   test('should say the placement is only for a menu that is also a popover, and why', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
-    const run = within(part).getByText(/The menu’s own sheet places it/);
+    const part = await explanation.part('Why the popover wins');
+    const run = explanation.saying(part, /The menu’s own sheet places it/);
 
     expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
     expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out\. Card one’s list in What else forms a stacking context names its own anchor\./);
-    expect(within(run).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
+    expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 
   test('should show the buttons’ tabIndex beside the run that says what it asks, and why Safari needs it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
     const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/);
     const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/).join();
 
@@ -60,9 +61,9 @@ describe('why the popover wins', () => {
   test('should show a choice carrying tabIndex={0} in the menu sample the tabIndex run points to', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
-    const runs = within(part).getAllByRole('listitem');
+    const runs = explanation.runsIn(part);
     const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
 
     expect(menuSample).toMatch(/<Item tabIndex=\{0\}[^\n]*popoverTargetAction="hide"/);
@@ -99,15 +100,15 @@ describe('why the popover wins', () => {
   test('should say the page passes Menu the menu’s look', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
-    expect(within(part).getByText(/gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample above shows.');
+    expect(explanation.saying(part, /gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample above shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/<Menu [^>]*className="/);
   });
@@ -115,7 +116,7 @@ describe('why the popover wins', () => {
   test('should show that each choice in the menu sample is a button', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
     const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
 
     expect(menuSample).toMatch(/export const Item[^]*<button \{\.\.\.button\} type="button"/);
@@ -124,8 +125,8 @@ describe('why the popover wins', () => {
   test('should name the toggle in a run after the markup that holds it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
-    const runs = within(part).getAllByRole('listitem');
+    const part = await explanation.part('Why the popover wins');
+    const runs = explanation.runsIn(part);
     const scriptsAt = runs.indexOf(explanation.runTelling(part, /A toggle on the menu/));
 
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/onToggle=/);
@@ -135,7 +136,7 @@ describe('why the popover wins', () => {
   test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
     expect(explanation.everyCodeBeside(part, /The menu’s own sheet places it/).join()).toMatch(/\.menu \{[^]*position-area: block-end span-inline-start[^]*@supports not \(position-area: block-end\)/);
   });
@@ -143,9 +144,9 @@ describe('why the popover wins', () => {
   test('should draw the top layer above the page beside the run that says why nothing covers it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
-    expect(explanation.runTelling(part, /The top layer is not inside any stacking context/)).toContainElement(within(part).getByRole('figure', {name: /^Above the page\./}));
+    expect(explanation.runTelling(part, /The top layer is not inside any stacking context/)).toContainElement(explanation.drawingNamed(part, /^Above the page\./));
     expect(explanation.runTelling(part, /The top layer is not inside any stacking context/)).toHaveTextContent('The top layer is not inside any stacking context, not even the page’s own, the one every other sits inside, so no z-index on the page is ever compared with it.');
   });
 });
