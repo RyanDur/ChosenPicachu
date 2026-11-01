@@ -1,5 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
@@ -39,7 +40,7 @@ describe('why the popover wins', () => {
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /The menu’s own sheet places it/);
 
-    expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover\], which reads as a menu that is also a popover\./);
+    expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover], which reads as a menu that is also a popover\./);
     expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out\. Card one’s list in What else forms a stacking context names its own anchor\./);
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
@@ -51,7 +52,7 @@ describe('why the popover wins', () => {
     const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, as its sample shows, and so does each choice in the menu/);
     const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, as its sample shows, and so does each choice in the menu/).join();
 
-    expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
+    expect(sample).toMatch(/<button type="button" tabIndex=\{0} className="button primary/);
     expect(sample).not.toMatch(/<Menu/);
     expect(run).toHaveTextContent(/That is the HTML attribute tabindex, spelled the way React spells it\. A tabindex of 0/);
     expect(run).toHaveTextContent(/A tabindex of 0 asks the browser to stop on the element when Tab moves focus/);
@@ -63,12 +64,9 @@ describe('why the popover wins', () => {
 
     const part = await explanation.part('Why the popover wins');
 
-    const runs = explanation.runsIn(part);
     const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
 
-    expect(menuSample).toMatch(/<Item tabIndex=\{0\}[^\n]*popoverTargetAction="hide"/);
-    expect(runs.indexOf(explanation.runTelling(part, /The button names its menu with popovertarget/)))
-      .toBeLessThan(runs.indexOf(explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0/)));
+    expect(menuSample).toMatch(/<Item tabIndex=\{0}[^\n]*popoverTargetAction="hide"/);
   });
 
   test('should say what React is, then what a component and its state are', async () => {
@@ -117,22 +115,20 @@ describe('why the popover wins', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await explanation.part('Why the popover wins');
 
-    expect(explanation.everyCodeBeside(part, /^Menu, Entry and Item are this site’s components for a menu/).join()).toMatch(/export const Item[^]*<button \{\.\.\.button\} type="button"/);
+    expect(explanation.everyCodeBeside(part, /^Menu, Entry and Item are this site’s components for a menu/).join()).toMatch(/export const Item[^]*<button \{\.\.\.button} type="button"/);
   });
 
   test('should say what React and a component are before the first sample, then show the menu, then Item, then the tabIndex', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await explanation.part('Why the popover wins');
-    const runs = explanation.runsIn(part);
-    const at = (words: RegExp): number => runs.indexOf(explanation.runTelling(part, words));
 
-    expect([
-      at(/^React is the library this site’s script is written in/),
-      at(/^What a component writes is still an element/),
-      at(/The button names its menu with popovertarget/),
-      at(/^Menu, Entry and Item are this site’s components for a menu/),
-      at(/The button that opens the menu carries a tabIndex of 0/)
-    ]).toEqual([...Array(5).keys()].map(step => at(/^React is the library this site’s script is written in/) + step));
+    expect(outOfReadingOrder([
+      explanation.runTelling(part, /^React is the library this site’s script is written in/),
+      explanation.runTelling(part, /^What a component writes is still an element/),
+      explanation.runTelling(part, /The button names its menu with popovertarget/),
+      explanation.runTelling(part, /^Menu, Entry and Item are this site’s components for a menu/),
+      explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0/)
+    ])).toEqual([]);
   });
 
   test('should name the toggle in a run after the markup that holds it', async () => {

@@ -1032,7 +1032,7 @@ describe('the tables demo', () => {
       await feedIsSubscribed(feed);
 
       expect((await tablesTab.findRadios('Eager')).length).toBeGreaterThan(0);
-      expect(demoPage.unsaid('The trader can read the market in windows')).not.toBeInTheDocument();
+      expect(demoPage.saying('The trader can read the market in windows')).not.toBeInTheDocument();
     });
 
     test('the menu story stands in the html world', async () => {
