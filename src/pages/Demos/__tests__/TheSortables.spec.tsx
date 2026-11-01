@@ -393,7 +393,7 @@ describe('the native drag sort tutorial’s words', () => {
     const arm = recipeFolds.steps(story)[0];
 
     expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
-      'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the grip sets a flag, and the card renders draggable for that gesture only.',
+      'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened, as the z-index tab says. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the grip sets a flag, and the card renders draggable for that gesture only.',
       'Then the browser fires dragstart, the event for a drag beginning, and its handler sets effectAllowed to move: this drag moves the card, it does not copy or link it.'
     ]));
   });
@@ -427,11 +427,11 @@ describe('the native drag sort tutorial’s words', () => {
   });
 
   test.each([
-    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
+    ['an attribute and an event', 'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened, as the z-index tab says. On pointerdown, the event for a mouse button, a pen or a finger pressing down,'],
     ['dragstart', 'dragstart, the event for a drag beginning, and its handler sets effectAllowed to move: this drag moves the card, it does not copy or link it'],
     ['dataTransfer and dragover', 'dataTransfer is the object a drag event carries its data in, the payload. It exists to carry data between windows, and mid-drag it is locked: a handler for dragover, the event the browser fires again and again on whatever the pointer is over,'],
     ['what the browser keeps drawing', 'You cannot change how the browser draws its drag image, its cursor or its cancel.'],
-    ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next. The lift records which item is held, which the code calls aloft;'],
+    ['state', 'Keep it in state instead, the values React holds between one drawing of the page and the next, as the z-index tab says. The lift records which item is held, which the code calls aloft;'],
     ['preventDefault', 'One call accepts the drop: the dragover handler calls preventDefault, the method that tells the browser not to do what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else stops the cancel.'],
     ['dropEffect and effectAllowed', 'The item’s dragover handler also sets dropEffect, a property of dataTransfer. It is optional and only picks the cursor, and its value has to be one of the effects effectAllowed permits, which dragstart sets to say what effects a drag allows, here move.'],
     ['drop', 'The drop handler, for the event of a release over a target, calls preventDefault too. The browser’s default for a dropped link, file or address is to open it as a page; this list drags none of those, so the call changes nothing today and keeps the list safe the day a payload is added.'],
@@ -560,7 +560,7 @@ describe('the drag sort tab’s introduction', () => {
     'This tab assumes the details element and a class from the accordions tab, and React, which the z-index tab names. The rest is new here.',
     'The browser has shipped its own drag and drop for twenty years, and most of us have reached for a library anyway, because the native drag looked wrong, dropped in the wrong place, or could not be done with a keyboard.',
     'The order belongs to the user, and the list is the element built for it. So I use the browser’s own drag, and write script only for what the platform does not yet do: making room as you hover, or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbors, or not.',
-    'Each of those is a dial in the last part of the tutorial below, and the exhibit above the dials changes to match.',
+    'Each of those is a dial, as the accordions tab has them, in the last part of the tutorial below, and the exhibit above the dials changes to match.',
     'By the end you can build a sortable list on the browser’s own drag and drop, choose each of those three behaviors and say what it costs, and give a keyboard user the same list, since the keyboard has the same moves as the pointer. The exhibit below is three items; drag one by its grip, or focus the grip and use the left and right arrows.'
   ];
 

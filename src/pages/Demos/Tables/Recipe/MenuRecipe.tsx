@@ -1,3 +1,5 @@
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../../types';
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {paceParam} from '../../Controls';
@@ -102,9 +104,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
-          <Says>In the React world the sample is built from the site’s Menu, Entry and Item components. A component
-            is a function that writes a piece of the page from what it is given; here a menu, an li, one item of a
-            list, and a button.</Says>
+          <Says>In the React world the sample is built from Menu, Entry and Item, the site’s menu components the{' '}
+            <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains; they write one element each.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
               that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>

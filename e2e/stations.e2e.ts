@@ -9,5 +9,5 @@ test('a keyboard reader who follows a story\'s station link carries on inside th
 
   await pressTab(page);
 
-  await expect(demoSettings(page).summary).toBeFocused();
+  await expect(demoSettings(page).dialsLink).toBeFocused();
 });

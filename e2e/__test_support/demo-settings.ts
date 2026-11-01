@@ -6,6 +6,7 @@ export const demoSettings = (page: Page) => {
   return {
     fold,
     summary,
+    dialsLink: page.getByRole('link', {name: 'dials', exact: true}).first(),
     press: (): Promise<void> => summary.click()
   };
 };

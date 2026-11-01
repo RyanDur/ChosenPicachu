@@ -1,3 +1,5 @@
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners/params';
@@ -29,7 +31,7 @@ export const TopLayerTutorial: FC = () => {
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature
       and the steps that build it, with the real code from this site, so what you read is
-      what runs. The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial,
+      what runs. The <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>dials</Link> below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial,
       that dial sits on the step. The links go to MDN, if you want more.
     </p>
     <figure className="feedback">

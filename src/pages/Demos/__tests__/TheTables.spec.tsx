@@ -1100,8 +1100,8 @@ describe('the living table’s terms', () => {
   });
 
   test.each([
-    ['react', 'A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared once, each with a name and a class; how wide they open is CSS.'],
-    ['vanilla', 'A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
+    ['react', 'A class, as the accordions tab says, is a name a rule picks out. The columns are declared once, each with a name and a class; how wide they open is CSS.'],
+    ['vanilla', 'A class, as the accordions tab says, is a name a rule picks out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
   ])('should define class in plain words where the still table first uses it, in the %s world', async (world, sentence) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
@@ -1219,7 +1219,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
-    expect(recipe).toHaveTextContent('In the React world the sample is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; here a menu, an li, one item of a list, and a button.');
+    expect(recipe).toHaveTextContent('In the React world the sample is built from Menu, Entry and Item, the site’s menu components the z-index tab explains; they write one element each.');
   });
 
   test.each([
@@ -1461,7 +1461,7 @@ describe('the tables tab’s introduction', () => {
     'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer; it is the deep end, and it says so.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
-    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the JavaScript library this site is built with, and the same state sits under both.',
+    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, which the z-index tab explains, and the same state sits under both.',
     'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.'
   ];
 

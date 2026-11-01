@@ -52,7 +52,7 @@ describe('why the popover wins', () => {
 
     expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
     expect(sample).not.toMatch(/<Menu/);
-    expect(run).toHaveTextContent(/That is the HTML attribute tabindex, spelled the way React spells it, and React is the JavaScript library/);
+    expect(run).toHaveTextContent(/That is the HTML attribute tabindex, spelled the way React spells it\. A tabindex of 0/);
     expect(run).toHaveTextContent(/A tabindex of 0 asks the browser to stop on the element when Tab moves focus/);
     expect(run).toHaveTextContent(/by default Safari moves Tab only to text fields and to elements that ask for it/);
   });
@@ -75,7 +75,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(within(part).getByText(/^Menu, Entry and Item are this site’s components/)).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu. A component is a function that writes a piece of the page from what it is given. These three write one element each: a menu, an li, which is one item of a list, and a button.');
+    expect(within(part).getByText(/^React is the library this site’s script is written in/)).toHaveTextContent('React is the library this site’s script is written in. A component is a function that writes a piece of the page from what it is given, and writes it again when what it holds changes; what it holds and renders from is its state. What a component writes is still an element: a button it renders is a button, with the keys and the role that come with it, and its look still comes from the stylesheet. Menu, Entry and Item are this site’s components for a menu, and they write one element each: a menu, an li, which is one item of a list, and a button.');
   });
 
   test('should say the page passes Menu the menu’s look', async () => {

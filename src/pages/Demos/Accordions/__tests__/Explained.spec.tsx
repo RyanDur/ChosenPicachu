@@ -131,7 +131,7 @@ describe('the measured build’s Close bar', () => {
     expect(outOfReadingOrder([
       accordionsTab.buildTitled(folded, 'Accordion using a radio group and a measured height'),
       closeBar,
-      explanation.saying(folded, /The script keeps what it knows in React state/)
+      explanation.saying(folded, /^React, the library this site’s script is written in, keeps what it knows in state/)
     ])).toEqual([]);
   });
 });
@@ -267,15 +267,14 @@ describe('the measured build', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
-    const state = explanation.runTelling(explained, /The script keeps what it knows in React state/);
+    const state = explanation.runTelling(explained, /^React, the library this site’s script is written in, keeps what it knows in state/);
     const ref = explanation.runTelling(explained, /The script uses the panel’s one ref only to/);
     const effects = explanation.runTelling(explained, /The script makes the moves in two layout effects/);
 
-    expect(state).toHaveTextContent('React is the library this site’s script is written in, and a component is a function that returns the elements it draws');
-    expect(state).toHaveTextContent('React state, a value a component holds and renders from');
+    expect(state).toHaveTextContent('React, the library this site’s script is written in, keeps what it knows in state, which the z-index tab says more about: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it ends at, and whether it has started.');
     expect(ref).toHaveTextContent('A ref is a handle on the element itself');
     expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
-    expect(explanation.everyCodeBeside(explained, /The script keeps what it knows in React state/).join()).toContain('useState');
+    expect(explanation.everyCodeBeside(explained, /^React, the library this site’s script is written in, keeps what it knows in state/).join()).toContain('useState');
     expect(explanation.everyCodeBeside(explained, /The script uses the panel’s one ref only to/).join()).toContain('useRef');
     expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join().match(/useLayoutEffect\(/g)).toHaveLength(2);
     expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The React build hands each height to the stylesheet/)])).toEqual([]);
@@ -330,7 +329,7 @@ describe('the measured build', () => {
     const built = accordionsTab.buildTitled(folded, /and a measured height$/);
 
     expect(why).toHaveTextContent('This site builds the same fold in React, and the runs below say what React and state are as they come. What changes is the shape. The plain script listens for the press; the React build redraws the panel from what it holds, so the measuring runs in two steps React takes before the browser paints: the first pins where the motion starts, and the second sets where it ends.');
-    expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /The script keeps what it knows in React state/)])).toEqual([]);
+    expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /^React, the library this site’s script is written in, keeps what it knows in state/)])).toEqual([]);
   });
 
   const handsTheHeight = /^The script hands the height to the stylesheet as a custom property/;
@@ -467,7 +466,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await accordionsTab.choice('fold type');
-    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others.');
+    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others.');
 
     expect(outOfReadingOrder([await explanation.part(htmlAlone), line, types])).toEqual([]);
   });
@@ -1036,7 +1035,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const together = await explanation.part(togetherHeading('exclusive'));
 
-    expect(explanation.saying(together, /^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, a message the browser sends when something happens. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
+    expect(explanation.saying(together, /^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, the browser telling the page that something happened; the z-index tab says more. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
     expect(explanation.saying(together, /^The script keeps the open radio’s value/)).toHaveTextContent('The script keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute on the list element. In the script it is dataset.open: dataset is the browser’s name for an element’s data- attributes, with the prefix dropped. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
   });
 

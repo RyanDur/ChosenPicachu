@@ -19,7 +19,7 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
     const tutorial = await chartsDesk.findFeatureStories();
 
-    expect(chartsDesk.saysIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, one item of a list, and a button.');
+    expect(chartsDesk.saysIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from the site’s Menu, Entry and Item components, as the z-index tab explains.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s own, on the charts tab', async () => {
@@ -28,7 +28,7 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
     const tutorial = await chartsDesk.findFeatureStories();
 
-    expect(chartsDesk.saysIn(tutorial, /^A class is a name on an element/)).toHaveTextContent('A class is a name on an element that a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
+    expect(chartsDesk.saysIn(tutorial, /^Item gives its button the shared classes/)).toHaveTextContent('Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
@@ -36,7 +36,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     const story = recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
-    expect(explanation.everyCodeBeside(story, /^A class is a name on an element/).join()).toMatch(/<Menu [^>]*className="/);
+    expect(explanation.everyCodeBeside(story, /^Item gives its button the shared classes/).join()).toMatch(/<Menu [^>]*className="/);
   });
 
   test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
@@ -44,7 +44,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findSays(/^The period menu is built from/)).toHaveTextContent('The period menu is built from the site’s Menu, Entry and Item components. A component is a function that writes a piece of the page from what it is given; these write a menu, an li, which is one item of a list, and a button.');
+    expect(await chartsDesk.findSays(/^Menu, Entry and Item are the site’s components for a menu/)).toHaveTextContent('Menu, Entry and Item are the site’s components for a menu, which the z-index tab explains; they write a menu, an li and a button.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
@@ -52,7 +52,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findSays(/^A class is a name written on an element that a stylesheet’s rules pick out\. Item/)).toHaveTextContent('A class is a name written on an element that a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(await chartsDesk.findSays(/^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a rule picks out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
@@ -60,7 +60,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await chartsDesk.findTitle('price line tutorial', 2);
     const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
-    expect(explanation.everyCodeBeside(story, /^A class is a name written on an element that a stylesheet’s rules pick out\. Item/).join()).toMatch(/<Menu [^>]*className="/);
+    expect(explanation.everyCodeBeside(story, /^A class, as the/).join()).toMatch(/<Menu [^>]*className="/);
   });
 });
 
@@ -402,7 +402,7 @@ describe('a list of charts', () => {
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
       ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
-      ['the classes up and down', 'A class is a name written on an element that a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
+      ['the classes up and down', 'A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
       ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
       ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
       ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']

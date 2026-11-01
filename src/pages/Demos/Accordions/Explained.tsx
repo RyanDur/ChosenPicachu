@@ -1,4 +1,6 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../types';
 import {DialGroup, DialRow} from '../Controls/DialRow';
 import {
   AccordionProps,
@@ -185,7 +187,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
       <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
-        script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with
+        script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
+        build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
       <p className="paragraph">The fold motion does not reach the accordion above. The reset is the stylesheet that sets every element’s
         defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
@@ -316,10 +319,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
                 </li>}
                 <li className="run">
-                  <p className="paragraph">React is the library this site’s script is written in, and a component is a function
-                    that returns the elements it draws. The script keeps what it knows in React state, a value a component
-                    holds and renders from: whether a fold is open, and, while it moves, first the height the motion starts
-                    from, then the height it ends at, and whether it has started.</p>
+                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in state,
+                    which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more about: whether a fold is open, and, while it moves, first
+                    the height the motion starts from, then the height it ends at, and whether it has started.</p>
                   <Snippet label="TS" lines={[
                     ...unit(panelSource, 'type Motion ='), gap,
                     ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
@@ -419,7 +421,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The fold is the three parts from “A box remembers the fold, and a rule reads
-                  it”: the {input}, its label and the text. The sample beside this run is the same fold in React, the library
+                  it”: the {input}, its label and the text. The sample beside this run is the same fold in{' '}
+                <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>React</Link>, the library
                   this site’s script is written in, which writes class as <code className="monospaced">className</code> and for
                   as <code className="monospaced">htmlFor</code>.</p>
                 <Snippet label="TS" lines={knownHeight.sample}/>
@@ -681,8 +684,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <p className="paragraph">Radios that share a name keep one fold open on their own, which checkboxes cannot do
             without script. What a radio cannot do is close itself: pressed again, it stays checked. So I add that with a little script on the list. The
             radios stay plain.</p>
-          <p className="paragraph">A press on a radio is an event, a message the browser sends when something happens. The
-            event then bubbles up through the elements around the radio, and the list runs a function for it on the
+          <p className="paragraph">A press on a radio is an event, the browser telling the page that something happened;
+            the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more. The event then bubbles up through the elements around the radio, and the list runs a function for it on the
             way, which is called a handler.</p>
           <p className="paragraph">The script keeps the open radio’s value, the string each radio carries to tell it
             apart, in a <code className="monospaced">data-open</code> attribute on the list element. In the script it

@@ -1,3 +1,5 @@
+import {Link} from 'react-router';
+import {DemoTopics, demoAddress} from '../../types';
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
@@ -24,7 +26,7 @@ const gap = plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
-    <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are declared
+    <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. The columns are declared
       once, each with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content, but a live table
       would never hold still: a column sized by its content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout, the work of deciding every box’s size and place. And you could carry widths in
       the data, but they are layout, not data. So I deal the opening widths from the page’s stylesheet.
@@ -35,7 +37,7 @@ const dealPlans: Record<World, ReactNode> = {
     <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
       runtime is state, and until then nothing has changed.</Says>
   </>,
-  vanilla: <Says>A class is a name written on an element that a stylesheet’s rules pick out. The columns are
+  vanilla: <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. The columns are
     declared once, each a header cell with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content,
     but a live table would never hold still: a column sized by its content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout, the work of deciding every box’s size and place. And you
     could carry widths in the markup, but they are layout, not content. So I deal the opening widths from the page’s
