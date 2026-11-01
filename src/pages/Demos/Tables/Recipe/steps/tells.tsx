@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {Paths} from '@pages/Paths';
+import {directoryInRepository, fileInRepository} from '@pages/Paths';
 import {DemoTopics} from '../../../types';
 import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
 import {withoutImports} from '../../../Recipe/carve';
@@ -9,7 +9,7 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 import {whatTheDomIs} from '../definitions';
 
 const sourceOf = (world: World, path: string): string =>
-  `${Paths.repo}/${world === 'react' ? 'tree' : 'blob'}/main/src/pages/Demos/Tables/${path}`;
+  (world === 'react' ? directoryInRepository : fileInRepository)(`src/pages/Demos/Tables/${path}`);
 
 export const TheImplementation: FC<{world: World; react: string; vanilla: string}> = ({world, react, vanilla}) =>
   <Tell>Every block below is carved from the source as it stands, so it cannot drift from the

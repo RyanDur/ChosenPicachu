@@ -1,20 +1,20 @@
 import {FC} from 'react';
-import {Paths} from '@pages/Paths';
+import {fileInRepository} from '@pages/Paths';
+import {presentation} from '@pages/Record/sources/presentation';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {ColumnHeaderClassList} from './ClassList';
 import {WhereARuleLives} from './WhereARuleLives';
 
-const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/';
-const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
-const bem = 'https://yandex.com/dev/bem/index';
-const bemHistory = 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/';
-const stylingWithUtilities = 'https://tailwindcss.com/docs/styling-with-utility-classes';
-const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
-const smacss = 'https://smacss.com/';
-const mdn = (page: string): string => `https://developer.mozilla.org/en-US/docs/Web/CSS/${page}`;
-const inTheRepository = (path: string): string => `${Paths.repo}/blob/main/${path}`;
-const sheet = (file: string): string => inTheRepository(`src/styles/${file}.css`);
-const stylelintConfig = inTheRepository('stylelint.config.js');
+const {
+  cssUtilityClassesSeparation: wathan, utilityFirstFundamentals: utilityFirst, bem, history: bemHistory,
+  stylingUtilityClasses: stylingWithUtilities, customizableSelectElements: customizableSelect, smacss,
+  resetReloaded, resetCss, normalizeCss, aboutNormalizeCss, sass, aboutLess, aboutBootstrap, objectOrientedCss,
+  cssModules, celebratingDecadeStyledComponents: styledComponents, customProperties, layer, container, has,
+  nestingSelector, scope, pseudoClasses, prefersReducedMotion, understandingSuccessCriterion1: meaningfulSequence,
+  usingCssCustomProperties
+} = presentation;
+const sheet = (file: string): string => fileInRepository(`src/styles/${file}.css`);
+const stylelintConfig = fileInRepository('stylelint.config.js');
 
 export const PresentationPractice: FC = () =>
   <>
@@ -47,59 +47,59 @@ export const PresentationPractice: FC = () =>
     </dl>
     <p className="paragraph">The field answered them in turn, and each answer had a cost.</p>
     <p className="paragraph">A reset answered defaults. Eric Meyer’s{' '}
-      <a className="signpost" href="https://meyerweb.com/eric/tools/css/reset/">reset</a> zeroed the browser’s margins,
+      <a className="signpost" href={resetCss.address}>reset</a> zeroed the browser’s margins,
       line heights and heading sizes so every site started from nothing; he called it{' '}
-      <a className="signpost" href="https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/">“a starting point for creating your own defaults”</a>{' '}
+      <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a>{' '}
       in 2007. The cost of a reset is that the author styles everything again, including what the browser did well.
-      Nicolas Gallagher’s <a className="signpost" href="https://necolas.github.io/normalize.css/">normalize.css</a> kept
+      Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept
       the defaults worth keeping instead, to{' '}
-      <a className="signpost" href="https://nicolasgallagher.com/about-normalize-css/">“preserve useful browser defaults rather than erasing them”</a>,
+      <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing them”</a>,
       as he wrote in 2012.</p>
     <p className="paragraph">A preprocessor answered constants and reuse.{' '}
-      <a className="signpost" href="https://sass-lang.com/">Sass</a>, supported since 2006, and{' '}
-      <a className="signpost" href="https://lesscss.org/about/">Less</a>, which Alexis Sellier made in 2009, added
+      <a className="signpost" href={sass.address}>Sass</a>, supported since 2006, and{' '}
+      <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009, added
       variables, nesting and mixins to a language the browser never sees and compiled it to CSS. The cost is a build
       step between the author and the sheet.</p>
     <p className="paragraph">A framework answered reuse for teams without a designer.{' '}
-      <a className="signpost" href="https://getbootstrap.com/docs/5.3/about/overview/">Bootstrap</a>, made at Twitter
+      <a className="signpost" href={aboutBootstrap.address}>Bootstrap</a>, made at Twitter
       and released in 2011, is a vocabulary of components with their look included. The cost is that the look is the
       framework’s.</p>
     <p className="paragraph">A methodology answered isolation and order by convention. Nicole Sullivan’s{' '}
-      <a className="signpost" href="https://github.com/stubbornella/oocss/wiki">OOCSS</a> separates structure from skin
-      and container from content. Jonathan Snook’s <a className="signpost" href={smacss}>SMACSS</a>, written in 2011,
-      is <a className="signpost" href={smacss}>“more style guide than rigid framework”</a>: rules for naming and
+      <a className="signpost" href={objectOrientedCss.address}>OOCSS</a> separates structure from skin
+      and container from content. Jonathan Snook’s <a className="signpost" href={smacss.address}>SMACSS</a>, written in 2011,
+      is <a className="signpost" href={smacss.address}>“more style guide than rigid framework”</a>: rules for naming and
       nesting so the cascade cannot reach where it should not. BEM, Yandex’s method, is the one I keep most from, and
       it has its own paragraph below. The cost of a convention is that it holds only as long as every author follows
       it.</p>
     <p className="paragraph">CSS in script answered isolation by build. The component owns its styles, and a build
       scopes the class names so no two components collide:{' '}
-    <a className="signpost" href="https://github.com/css-modules/css-modules">CSS Modules</a>, from 2015, and{' '}
-    <a className="signpost" href="https://styled-components.com/blog/celebrating-a-decade-of-styled-components">styled-components</a>,
+    <a className="signpost" href={cssModules.address}>CSS Modules</a>, from 2015, and{' '}
+    <a className="signpost" href={styledComponents.address}>styled-components</a>,
       from 2016. The Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began,
       so this tab does not. The cost is that the look leaves the sheet.</p>
     <p className="paragraph">Utilities answered constants and reuse with no new CSS. Adam Wathan’s essay of 2017,{' '}
-      <a className="signpost" href={wathan}>CSS Utility Classes and “Separation of Concerns”</a>, argued for a fixed set
+      <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, argued for a fixed set
       of single-purpose classes drawn from a theme, and Tailwind built it. It has its own paragraph below too.</p>
     <p className="paragraph">Since 2017 the platform has answered four of the five needs itself.{' '}
-      <a className="signpost" href={mdn('--*')}>Custom properties</a>, in every engine since April 2017, are constants.{' '}
-      <a className="signpost" href={mdn('@layer')}>@layer</a>, since March 2022, is order.{' '}
-      <a className="signpost" href={mdn('@container')}>Container queries</a> since February 2023,{' '}
-      <a className="signpost" href={mdn(':has')}>:has()</a> and{' '}
-      <a className="signpost" href={mdn('Nesting_selector')}>nesting</a> since December 2023, and{' '}
-      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available, are isolation. With
+      <a className="signpost" href={customProperties.address}>Custom properties</a>, in every engine since April 2017, are constants.{' '}
+      <a className="signpost" href={layer.address}>@layer</a>, since March 2022, is order.{' '}
+      <a className="signpost" href={container.address}>Container queries</a> since February 2023,{' '}
+      <a className="signpost" href={has.address}>:has()</a> and{' '}
+      <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023, and{' '}
+      <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available, are isolation. With
       constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
       a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
       order and isolation, and reuse through the cascade, the rest of this tab shows what remains: where a rule lives,
       what a class is named for, and the test a class list has to pass.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
-    <p className="paragraph"><a className="signpost" href={bem}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
-      <a className="signpost" href={bemHistory}>history</a> says that by 2006{' '}
-      <a className="signpost" href={bemHistory}>“any changes to the code of one page affected the code of other pages”</a>,
+    <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
+      <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
+      <a className="signpost" href={bemHistory.address}>“any changes to the code of one page affected the code of other pages”</a>,
       with more than a hundred services sharing one style library. The answer was the independent block, which{' '}
-      <a className="signpost" href={bemHistory}>“can be used anywhere on the page”</a> any number of times. From Lego
+      <a className="signpost" href={bemHistory.address}>“can be used anywhere on the page”</a> any number of times. From Lego
       2.0 in 2009, the second version of that shared block library, came a rule for where a block lives:{' '}
-      <a className="signpost" href={bemHistory}>“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”</a>.
+      <a className="signpost" href={bemHistory.address}>“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”</a>.
       Every part and every variant is named through its block: <code className="monospaced">card__title</code> and{' '}
       <code className="monospaced">card_lifted</code> in Yandex’s own spelling,{' '}
       <code className="monospaced">card--lifted</code> in the two-dash style many teams use. Every selector is one
@@ -116,15 +116,15 @@ export const PresentationPractice: FC = () =>
       two modifiers and two rules, so nothing is shared by accident and the same look is written twice. Mine is one
       word any block can wear, because a look is the sheet’s job. BEM also has no separate idea of a state, since a
       modifier{' '}
-      <a className="signpost" href={bemHistory}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
+      <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
       I split them, and the class list below says why.</p>
     <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
-      <a className="signpost" href={stylingWithUtilities}>styling with utility classes</a> says to start with
+      <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
       utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
       multi-cursor edit earns nothing, since{' '}
-      <a className="signpost" href={stylingWithUtilities}>“there’s no benefit to introducing any additional abstraction”</a>.
+      <a className="signpost" href={stylingWithUtilities.address}>“there’s no benefit to introducing any additional abstraction”</a>.
       When styles do repeat across files,{' '}
-      <a className="signpost" href={stylingWithUtilities}>“the best strategy is to create a component”</a> in the
+      <a className="signpost" href={stylingWithUtilities.address}>“the best strategy is to create a component”</a> in the
       framework, or a template partial, rather than a CSS class. I keep two things from that: no shared look before
       its second use, and every value from a constrained set. I give up two: the value in the class name, and reuse in
       the component rather than the sheet.</p>
@@ -174,10 +174,10 @@ export const PresentationPractice: FC = () =>
       and no new rule is written. Element selectors appear only in the reset. The{' '}
     <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued that the look should leave the markup for
       a style sheet.</p>
-    <p className="paragraph"><a className="signpost" href={wathan}>Compose a look from a shared set of pieces rather than write it again</a>:
+    <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces rather than write it again</a>:
       that is Wathan’s rule, and mine. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
-    <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. Its case is
+    <a className="signpost" href={utilityFirst.address}>“You aren’t wasting energy inventing class names”</a>. Its case is
       that a name is a cost, so stop paying it, and the CSS stops growing. I think the energy is not wasted; it is the
       writer paying once what every reader would otherwise pay each time. Tailwind’s{' '}
     <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
@@ -203,7 +203,7 @@ export const PresentationPractice: FC = () =>
       already names most of them, such as <code className="monospaced">:hover</code>,{' '}
       <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and{' '}
       <code className="monospaced">:checked</code>, so the sheet uses those{' '}
-      <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a>{' '}
+      <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>{' '}
       and no class is written. I add a state name only where the platform has no word:{' '}
       <code className="monospaced">carried</code> for the column or row being dragged,{' '}
       <code className="monospaced">settling</code> for the one sliding back into place,{' '}
@@ -212,21 +212,21 @@ export const PresentationPractice: FC = () =>
       has a rule per direction: two across for columns, two down for rows.</p>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can set, so the
       sheet checks{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a>{' '}
+    <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a>{' '}
       before it animates. Grid and flex can change the order the eye sees without changing the order a keyboard moves
       through, so the HTML keeps{' '}
-    <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html">the meaningful sequence</a>{' '}
+    <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a>{' '}
       and the sheet only changes the picture.</p>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state
       changes it. Select options had no such way round, and now they need none: they can be styled with{' '}
-    <a className="signpost" href={customizableSelect}>appearance: base-select</a> in Chromium, and a browser without
-      it will <a className="signpost" href={customizableSelect}>“fall back to a classic select experience”</a>. That
+    <a className="signpost" href={customizableSelect.address}>appearance: base-select</a> in Chromium, and a browser without
+      it will <a className="signpost" href={customizableSelect.address}>“fall back to a classic select experience”</a>. That
       is the record’s pattern since the <MomentLink to="needOutrunsStandards">1996 moment</MomentLink>: a workaround,
       and then the platform.</p>
     <p className="paragraph">Constants live in the sheet, as tokens. Only values the code works out at runtime are
       written inline, mostly as{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">custom properties</a>{' '}
+    <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
       the sheet already reads: a measured height, a position after a drag, the direction of a slide. Every size is a
       multiple of one base, and every color is a named token on the root. Custom properties are the{' '}
     <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in script and

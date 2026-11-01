@@ -12,3 +12,6 @@ export enum Paths {
   development = '/development/',
   repo = 'https://github.com/RyanDur/ChosenPicachu'
 }
+
+export const fileInRepository = (path: string): string => `${Paths.repo}/blob/main/${path}`;
+export const directoryInRepository = (path: string): string => `${Paths.repo}/tree/main/${path}`;
