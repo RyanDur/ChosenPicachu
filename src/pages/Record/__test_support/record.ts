@@ -33,9 +33,14 @@ export const recordPage = {
   concert: (): HTMLElement => screen.getByRole('region', {name: 'The concert'}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedAs,
-  shelfHolding: (work: string): string | null => within(shelvedAs(work).closest('section') ?? research())
-    .getByRole('heading', {level: 3, hidden: true}).textContent,
-  shelvedAddress: (work: string): string | null => within(shelvedAs(work)).getByRole('link', {hidden: true}).getAttribute('href'),
+  shelfHolding: (work: string): string | null => {
+    const shelf = within(research()).getAllByRole('region', {hidden: true})
+      .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
+    if (shelf) {
+      return within(shelf).getByRole('heading', {level: 3, hidden: true}).textContent;
+    }
+    throw new Error(`no shelf holds ${work}`);
+  },
   shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
   sourcesLinked: (): string[] => {
     const shelf = research();

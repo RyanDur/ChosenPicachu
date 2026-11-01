@@ -6,6 +6,9 @@ import {paragraphOpening} from '@__test_support/paragraph';
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});
 
+const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
+  .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
+
 export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
 
 export const practicePage = {
@@ -17,10 +20,11 @@ export const practicePage = {
   openingParagraph: paragraphOpening,
   linksIn: (opening: RegExp): (string | null)[][] => within(paragraphOpening(opening)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
-  beforeTheTabs: (): string[] => within(screen.getByRole('main')).getAllByRole('paragraph')
-    .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING))
-    .map(paragraph => paragraph.textContent),
-  comesBeforeTheTabs: (element: HTMLElement): boolean => Boolean(element.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING),
+  beforeTheTabs: (): string[] => openingParagraphs().map(paragraph => paragraph.textContent),
+  openingSources: (): string[] => openingParagraphs()
+    .flatMap(paragraph => within(paragraph).queryAllByRole('link'))
+    .map(link => link.getAttribute('href') ?? '')
+    .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),

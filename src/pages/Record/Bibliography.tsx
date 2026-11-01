@@ -441,7 +441,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a>{' '}
-            <span className="provenance caption">appcontinuum.io</span>
+            <span className="provenance caption">appcontinuum.io, undated</span>
           </li>
         </ul>
       </section>
