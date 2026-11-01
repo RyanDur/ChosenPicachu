@@ -6,6 +6,7 @@ export const recordPage = (page: Page) => ({
   timelineStories: page.getByRole('list', {name: 'the timeline'}).getByRole('group').filter({has: page.getByText('the fuller story')}),
   moment: (title: string): Locator => page.getByRole('list', {name: 'the timeline'}).getByRole('listitem').filter({has: page.getByRole('heading', {name: title, exact: true}), hasNot: page.getByRole('list')}),
   year: (year: string): Locator => page.getByRole('list', {name: 'the timeline'}).getByRole('listitem').filter({has: page.getByRole('list', {name: year})}),
+  customElementsParagraph: page.getByText(/^Script covered for structure too/),
   concertLinkTo: (moment: string): Locator => page.getByRole('region', {name: 'The concert'}).getByRole('link', {name: moment}),
   story: (concern: string): Locator => page.getByRole('region', {name: concern, exact: true}),
   storyLineTo: (concern: string, line: string): Locator => page.getByRole('list', {name: `${concern}, the moments it rests on`}).getByRole('link', {name: line, exact: true}),

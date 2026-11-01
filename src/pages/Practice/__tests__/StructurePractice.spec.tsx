@@ -13,20 +13,14 @@ const distinct = (words: string[]): string[] => [...new Set(words)].sort();
 const rolesWritten = (): string[] => distinct(Object.values(siteSources).flatMap(source => [...source.matchAll(/role="([a-z]+)"/g)].map(([, role]) => role)));
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
 
+const statesWrittenByHand = (): string[] => distinct(Object.values(siteSources).flatMap(source => [...source.matchAll(/(?:\s|setAttribute\(['"])(aria-(?:sort|current|expanded|hidden|pressed|selected|checked|disabled|invalid|busy))(?=[\s=:>/'"])/g)].map(([, state]) => state)));
+
 describe('the Structure practice tab', () => {
   test('should spell the Structure tab\'s prose the American way', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(britishSpellingsOnThePage()).toEqual([]);
-  });
-
-  test('should follow the Structure tab’s first rule with the principle applied to it: the element is the name', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(practicePage.paragraphAfter(/^I start from what the content is and pick the element for it/))
-      .toEqual(expect.stringMatching(/^The element is the name\./));
   });
 
   test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before the skeleton', async () => {
@@ -47,11 +41,11 @@ describe('the Structure practice tab', () => {
 
     expect(practicePage.partHeadings()).toEqual([
       'What organizing markup has to solve',
-      'The skeleton comes first',
-      'The element is the name',
-      'A component is an element that does not exist yet',
+      'The skeleton, and a name where a landmark repeats',
+      'From the content to the element',
+      'Components, one behavior each',
       'ARIA last',
-      'The test'
+      'The styles-off test'
     ]);
   });
 
@@ -62,15 +56,15 @@ describe('the Structure practice tab', () => {
     expect(outOfReadingOrder([
       practicePage.partHeading('What organizing markup has to solve'),
       practicePage.paragraph(/^Markup is read by more than the browser/),
-      practicePage.partHeading('The skeleton comes first'),
+      practicePage.partHeading('The skeleton, and a name where a landmark repeats'),
       practicePage.paragraph(/^The skeleton comes first/),
-      practicePage.partHeading('The element is the name'),
+      practicePage.partHeading('From the content to the element'),
       practicePage.paragraph(/^I start from what the content is/),
-      practicePage.partHeading('A component is an element that does not exist yet'),
+      practicePage.partHeading('Components, one behavior each'),
       practicePage.paragraph(/^A component is an element that does not exist yet/),
       practicePage.partHeading('ARIA last'),
       practicePage.paragraph(/^The elements mean something beyond how they look/),
-      practicePage.partHeading('The test'),
+      practicePage.partHeading('The styles-off test'),
       practicePage.paragraph(/^The test is to read the page with the styles turned off/)
     ])).toEqual([]);
   });
@@ -187,7 +181,8 @@ describe('the Structure practice tab', () => {
       practicePage.paragraph(/^One region on every page is a role and not an element/),
       practicePage.paragraph(/^The elements mean something beyond how they look/),
       practicePage.paragraph(/^Here is what ARIA last looks like on this site/),
-      practicePage.paragraph(/^Names are everywhere a reader would need one/),
+      practicePage.paragraph(/^Names are on the places that need them/),
+      practicePage.paragraph(/^States come from the platform wherever it has one/),
       practicePage.paragraph(/^The test is to read the page with the styles turned off/)
     ])).toEqual([]);
   });
@@ -197,6 +192,13 @@ describe('the Structure practice tab', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(distinct(practicePage.codesIn(/^Here is what ARIA last looks like on this site/))).toEqual(rolesWritten());
+  });
+
+  test('should name every state the site writes by hand, and no other', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(distinct(practicePage.codesIn(/^States come from the platform wherever it has one/).filter(code => code.startsWith('aria-')))).toEqual(statesWrittenByHand());
   });
 
   test('should send the old-style banner to the z-index tab that raises it', async () => {

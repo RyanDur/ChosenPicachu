@@ -19,7 +19,6 @@ const shelvedAs = (work: string): HTMLElement => {
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
   paragraphOpening,
-  paragraphAt: (address: string): HTMLElement | null => document.getElementById(address),
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),

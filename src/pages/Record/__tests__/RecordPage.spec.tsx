@@ -1005,10 +1005,6 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('Using ARIA')).toBe('Structure');
   });
 
-  test('should hold the concert’s custom-elements paragraph at its own address, for the Structure tab to send readers to', () => {
-    expect(recordPage.paragraphAt('custom-elements')).toHaveTextContent(/^Script covered for structure too/);
-  });
-
   test('should shelve the Authoring Practices’ Landmark Regions on the Structure shelf, undated, as its page gives no date', () => {
     expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, ARIA Authoring Practices Guide, undated');
     expect(recordPage.shelfHolding('Landmark Regions')).toBe('Structure');

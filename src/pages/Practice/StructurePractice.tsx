@@ -1,7 +1,8 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {fileInRepository, Paths} from '@pages/Paths';
+import {fileInRepository} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
+import {customElementsAddress} from '@pages/Record/concertAddress';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
@@ -54,7 +55,7 @@ export const StructurePractice: FC = () =>
       </div>
     </dl>
     <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
-    <h3 className="paragraph bold">The skeleton comes first</h3>
+    <h3 className="paragraph bold">The skeleton, and a name where a landmark repeats</h3>
     <p className="paragraph">The skeleton comes first, and this site’s is the same on every page. One header and one
       main; a footer where a page has one, as the gallery does. A nav named site, for the links that move you around
       the site. A section named pages and feedback, the rail that holds that nav and the feedback button. Where a page
@@ -73,7 +74,7 @@ export const StructurePractice: FC = () =>
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
-    <h3 className="paragraph bold">The element is the name</h3>
+    <h3 className="paragraph bold">From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
     <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
@@ -126,20 +127,23 @@ export const StructurePractice: FC = () =>
       can be dragged by hand or by key. ResizeHandle writes the resize button, and SortMenu the popover menu. Each
       renders a real element with its role and its keys and adds the one behavior the platform lacks, and both builds
       share the state under them, so the line between the platform and the framework is the line between the markup
-      and the components. The plain build comes first here and the component that is its equivalent beside it.</p>
-    <h3 className="paragraph bold">A component is an element that does not exist yet</h3>
+      and the components.</p>
+    <h3 className="paragraph bold">Components, one behavior each</h3>
     <p className="paragraph">A component is an element that does not exist yet. I write one to add a behavior the
       platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
-      a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular: a
-      function that writes a real element with its role and its keys, and attaches the behavior that is new. What a
-      component is not for is wrapping an element the platform already has.{' '}
-    <a className="signpost" href={fileInRepository('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a> is the counter-case on
-      this site: it is a details with a name and a class, a convenience, not a new element. I say so here so no one
-      mistakes it for one. The test for a component is to name the behavior the platform lacks. If there is none, it
+      a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular.
+      A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
+      new. What a component is not for is wrapping an element the platform already has. I keep a few wrappers anyway,
+      where the trade is worth it:{' '}
+    <a className="signpost" href={fileInRepository('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a>, a
+      details with a name and a class, and the menu’s Menu, Entry and Item, which write one element each and carry the
+      site’s classes for it. Each saves a line every time it is used, and each costs the reader the doubt of whether it
+      is a new element, which is why I say here that they are not. The test for a component is to name the behavior the platform lacks. If there is none, it
       is a wrapper, and the element should be used bare.</p>
-    <p className="paragraph">And one behavior each. I am not a fan of swiss army elements, elements that do everything:
-      a component that takes twenty props and does whatever they say is a div with extra steps, since nothing about it
-      says what it is and every caller has to know all of it. One component, one new behavior, named for it, the way
+    <p className="paragraph">And one behavior each. When no element exists for what I need, I make one, for one
+      behavior. I never make an element that does everything, what I call a swiss army element. A component that takes twenty
+      props and does whatever they say is a div under a longer name: nothing about it says what it is, and every caller
+      has to know all of it. One component, one new behavior, named for it, the way
       one class is one look. The drag-sortable table is not one component but parts that each do one thing:{' '}
     <a className="signpost" href={fileInRepository('src/components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be dragged by
       hand or by key, <a className="signpost" href={fileInRepository('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
@@ -150,8 +154,8 @@ export const StructurePractice: FC = () =>
       that no part has gets a new part, not a prop on an old one. The platform is built the same way, one element per
       meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
-      standard’s custom elements give a new tag a name, but not a role or keys; a component that renders a button has
-      both. The Record’s <Link className="signpost" to={`${Paths.record}#custom-elements`}>concert</Link> tells how the
+      standard’s custom elements give a new tag a name, and leave its role and its keys to the author; a component
+      that renders a button has both from the element. The Record’s <Link className="signpost" to={customElementsAddress}>concert</Link> tells how the
       platform took back what script had built. The rule underneath is the first rule of ARIA, from the W3C’s Using
       ARIA:{' '}
     <a className="signpost" href="https://www.w3.org/TR/using-aria/">“If you can use a native HTML element or attribute
@@ -180,19 +184,28 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
       minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
-      same role, because there is no alert element. The z-index demo’s sort menu is a popover list of buttons with
-      role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item, because no element says menu and the list
-      item’s own role would get in the way. A term’s definition, the small card that opens from a word in a tutorial,
-      has role <code className="monospaced">definition</code>. The Record’s period samples are a pre with role <code className="monospaced">group</code> and a name, so a screen
-      reader can land on a sample as one thing. That is the whole list, and each one is there because no element
-      carries that meaning.</p>
-    <p className="paragraph">Names are everywhere a reader would need one: every landmark that appears more than once,
-      the feedback dialog, the rail, and every button whose text is a glyph, the dismiss on a banner, the grip on a
-      row, the resize handle on a column. States come from the platform wherever it has one, <code className="monospaced">open</code> on a details,{' '}
-    <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button; the one state written by hand is <code className="monospaced">aria-sort</code> on the
-      table’s headers, because a th has no sort state of its own. So the rule, in one line: a name always, a role only
-      when no element carries it, a state only when the platform has none.</p>
-    <h3 className="paragraph bold">The test</h3>
+      same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
+      the platform now does for free, is a menu element holding a list of buttons, with role{' '}
+    <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role{' '}
+    <code className="monospaced">none</code> on each list item. A menu element is read as a list, not as a menu, and the list item’s own
+      role would get in the way; the popover menu beside it carries no role at all. A term’s definition, the small card
+      that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period samples are a pre with
+      role <code className="monospaced">group</code> and a name, so a screen reader can land on a sample as one thing. That is the whole list. Each
+      role is there because no element carries that meaning, and role <code className="monospaced">none</code> because an element’s own meaning
+      would get in the way.</p>
+    <p className="paragraph">Names are on the places that need them: every landmark that appears more than once, the
+      feedback dialog, the rail, and every button whose text is a glyph, the dismiss on a banner, the grip on a row,
+      the resize handle on a column.</p>
+    <p className="paragraph">States come from the platform wherever it has one, <code className="monospaced">open</code> on a details,{' '}
+      <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button. Four are written by hand, where the platform has none.{' '}
+      <code className="monospaced">aria-sort</code> on the table’s headers, because a th has no sort state of its own. <code className="monospaced">aria-current</code> where
+      one of several is the current one: the rail’s page, a tab, a menu’s chosen item. <code className="monospaced">aria-expanded</code> on a
+      button that opens something the platform does not know is open: the old-way menu’s and the z-index pile’s. And{' '}
+      <code className="monospaced">aria-hidden</code> on lettering a screen reader should not read as prose, every drawing’s, a glyph’s, a dial’s axis label and
+      a code sample’s language label, where
+      the caption or the name says it instead. So the rule, in one line: a name always, a role only when no element carries it, a state only when the platform
+      has none.</p>
+    <h3 className="paragraph bold">The styles-off test</h3>
     <p className="paragraph">The test is to read the page with the styles turned off. It should still say
       everything it means, in order, because that is what search engines, reader modes and assistive technology
       read. If the meaning only appears once the CSS loads, it is in the wrong language.
