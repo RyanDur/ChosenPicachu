@@ -475,7 +475,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
-    const why = explanation.saying(tab, 'The motion does not reach it. The reset is the stylesheet that sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.');
+    const why = explanation.saying(tab, 'The fold motion does not reach the accordion above. The reset is the stylesheet that sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.');
 
     expect(outOfReadingOrder([explanation.saying(tab, /^Two choices set the accordions/), why, await accordionsTab.choice('fold type')])).toEqual([]);
   });

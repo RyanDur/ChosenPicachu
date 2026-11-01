@@ -1090,18 +1090,20 @@ describe('the record\'s three stories', () => {
 
 describe('the period samples', () => {
   test.each([
-    'Netscape’s markup of 1996: columns and a font as tags',
-    'Lie’s 1994 draft: a heading’s size with its influence',
-    'Lie’s 1994 draft: sliders between user and author',
-    'Lie’s 1994 draft: two sheets weighed against each other',
-    'Lie’s 1994 draft: a property computed from another',
-    'Lie’s 1994 draft: rules that read the reader’s world',
-    'Lie’s 1994 draft: weights for speech'
-  ])('should let a keyboard reach the sample "%s" by its name, so it can scroll it sideways', async name => {
+    ['Netscape’s markup of 1996: columns and a font as tags', 'The pages need to look the same, and the style sheet needs a standard'],
+    ['Lie’s 1994 draft: a heading’s size with its influence', 'Authors need control of the look'],
+    ['Lie’s 1994 draft: sliders between user and author', 'Authors need control of the look'],
+    ['Lie’s 1994 draft: two sheets weighed against each other', 'Authors need control of the look'],
+    ['Lie’s 1994 draft: a property computed from another', 'Authors need control of the look'],
+    ['Lie’s 1994 draft: rules that read the world outside the document', 'Authors need control of the look'],
+    ['Lie’s 1994 draft: weights for speech', 'Authors need control of the look']
+  ])('should reach the sample "%s" by Tab once the fuller story of "%s" is open', async (name, story) => {
     render(<TestApp at={Paths.record}/>);
     await recordPage.arrived();
 
-    expect(recordPage.focusSample(name)).toHaveFocus();
+    await recordPage.openFullerStory(story);
+
+    expect(await recordPage.tabsToSampleIn(story, name)).toBe(true);
   });
 });
 

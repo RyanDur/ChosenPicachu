@@ -186,7 +186,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
         script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
-      <p className="paragraph">The motion does not reach it. The reset is the stylesheet that sets every element’s
+      <p className="paragraph">The fold motion does not reach the accordion above. The reset is the stylesheet that sets every element’s
         defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
         slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>

@@ -59,10 +59,14 @@ export const recordPage = {
   ]),
   fullerStories: (): HTMLElement[] => within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
     .filter(fold => within(fold).queryByText('the fuller story') !== null),
-  focusSample: (name: string): HTMLElement => {
-    const sample = screen.getByRole('group', {name, hidden: true});
-    sample.focus();
-    return sample;
+  tabsToSampleIn: async (story: string, name: string): Promise<boolean> => {
+    const told = itemHeadedBy('the timeline', story);
+    const sample = screen.getByRole('group', {name});
+    within(told).getAllByRole('link')[0].focus();
+    while (document.activeElement !== sample && told.contains(document.activeElement)) {
+      await userEvent.tab();
+    }
+    return document.activeElement === sample;
   },
   shelfHeadings: (): (string | null)[] => within(research()).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent)
 };
