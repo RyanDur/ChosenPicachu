@@ -154,7 +154,9 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
       order and the split above gives a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
-      a rule that says so. I do nest a rule inside another where it belongs, as most sheets here do.</p>
+      a rule that says so. I do nest a rule inside another where it belongs, as most sheets here do. A rule nests
+      under its component’s class when it belongs to that component alone; a look any element can wear stays a single
+      flat class in the vocabulary.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
       <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>,{' '}
