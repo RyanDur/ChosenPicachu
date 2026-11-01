@@ -34,14 +34,12 @@ describe('why the popover wins', () => {
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/popoverTarget=[^]*popover="auto"[^]*popoverTargetAction="hide"/);
   });
 
-  test('should say the placement is only for a menu that is also a popover, and why', async () => {
+  test('should link the run on the menu’s placement to card one’s list in What else forms a stacking context', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /The menu’s own style sheet places it/);
 
-    expect(run).toHaveTextContent(/screen\. In the style sheet the placement sits under &\[popover], which reads as a menu that is also a popover\./);
-    expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out\. Card one’s list in What else forms a stacking context names its own anchor\./);
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 

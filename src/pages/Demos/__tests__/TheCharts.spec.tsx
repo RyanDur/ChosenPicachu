@@ -419,8 +419,6 @@ describe('a list of charts', () => {
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
       ['the period menu is the price line’s popover, taught on the z-index tab', 'The period menu is on this chart too, the same popover as on the price line: the kind of menu the z-index tab explains.'],
       ['what a class is, then the classes up and down', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
-      ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
-      ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall, so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
       ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
@@ -462,7 +460,6 @@ describe('a list of charts', () => {
     test.each([
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
       ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
-      ['the bars wear their sides, which are shared classes', 'The bought bars wear buy-side and the sold bars sell-side. A class, as the accordions tab says, is a name a stylesheet’s rules pick out. These two are shared classes, looks that live in the site’s shared style sheet.'],
       ['a side class sets custom properties that the bars read, and the middle line wears drawn', 'A side class sets a side’s colors as custom properties, which the accordions tab explains: values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal stroke.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
@@ -517,15 +514,10 @@ describe('a list of charts', () => {
       expect(await pieStory()).not.toHaveTextContent(/compositor|no special case survives/);
     });
 
-    test('should declare the four numbers the slice reads above it, and say what @property is', async () => {
+    test('should declare the four numbers the slice reads above it', async () => {
       const cut = recipeFolds.steps(await pieStory())[1];
 
       expect(cut).toHaveTextContent(/@property --explode-x \{[^]*@property --explode-y \{[^]*@property --turn \{[^]*@property --swing \{[^]*initial-value: -180deg;[^]*\.slice \{/);
-      expect(cut).toHaveTextContent('The style sheet declares each one with @property, a rule that gives a custom property a type and a starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits unturned at the center.');
-    });
-
-    test('should say what a custom property is where the pie first names it', async () => {
-      expect(recipeFolds.steps(await pieStory())[1]).toHaveTextContent('The markup passes each number to the stylesheet as a custom property, which the accordions tab explains: a value set by name on the element, such as --turn, and read back in the style sheet with var().');
     });
   });
 

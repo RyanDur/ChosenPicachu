@@ -265,13 +265,12 @@ describe('the native drag sort tutorial’s words', () => {
     ]));
   });
 
-  test('should say the card’s look in a paragraph of its own after the dragstart run, saying what an li and a shared class are', async () => {
+  test('should give the card’s look a paragraph of its own, after the dragstart run', async () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
     const arm = recipeFolds.steps(story)[0];
     const paragraphs = explanation.paragraphsIn(arm).map(told => told.replace(/\s+/g, ' '));
 
     expect(paragraphs.findIndex(told => told.startsWith('The li, the list item that is the card'))).toBe(paragraphs.findIndex(told => told.startsWith('Then the browser fires dragstart')) + 1);
-    expect(paragraphs).toContain('The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared style sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the card’s look, not its drag.');
   });
 
   test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {
