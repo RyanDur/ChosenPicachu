@@ -51,8 +51,8 @@ export const PresentationPractice: FC = () =>
       <div className="need">
         <dt className="paragraph bold">Name</dt>
         <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
-          <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no style sheet reads and an
-          a component’s own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+          <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no style sheet reads and a
+          component’s own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
           where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
           where I part.</dd>
       </div>
