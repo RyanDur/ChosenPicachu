@@ -49,7 +49,15 @@ const fingerOn = (chart: string): Finger => {
 const captionOf = (chart: string): string =>
   within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
 
-const priceCard = (): HTMLElement => screen.getByRole('region', {name: 'live trades'});
+const chart = (name: string): HTMLElement => screen.getByRole('region', {name});
+
+const findChart = (name: string): Promise<HTMLElement> => screen.findByRole('region', {name});
+
+const onChart = (name: string, told: string): HTMLElement => within(chart(name)).getByText(told);
+
+const findOnChart = async (name: string, told: string): Promise<HTMLElement> => within(await findChart(name)).findByText(told);
+
+const priceCard = (): HTMLElement => chart('live trades');
 
 const alert = (): HTMLElement => screen.getByRole('alert', {hidden: true});
 
@@ -74,8 +82,16 @@ export const chartsDesk = {
   choosePeriod: async (chart: string, period: string): Promise<void> =>
     userEvent.click(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {name: period, hidden: true})),
   findPeriodShown: (chart: string, period: string): Promise<HTMLElement> => screen.findByRole('button', {name: `${chart} period ${period}`}),
-  chart: (name: string): HTMLElement => screen.getByRole('region', {name}),
-  findChart: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
+  currentPeriod: (chart: string): string =>
+    within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {current: true, hidden: true}).textContent ?? '',
+  chart,
+  findChart,
+  onChart,
+  findOnChart,
+  foundOnChart: (name: string, told: string | RegExp): HTMLElement | null => within(chart(name)).queryByText(told),
+  findLoadingOn: async (name: string): Promise<HTMLElement> => within(chart(name)).findByRole('progressbar'),
+  loadingOn: (name: string): HTMLElement | null => within(chart(name)).queryByRole('progressbar'),
+  ticksOn: (name: string): string[] => within(chart(name)).getAllByRole('time').map(tick => tick.textContent ?? ''),
   missingChart: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
   chartsNamed: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
   recipe: (subject: string): HTMLElement => screen.getByRole('region', {name: `build the ${subject} yourself`}),
@@ -98,8 +114,8 @@ export const chartsDesk = {
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
   findTrouble: (told: string): Promise<HTMLElement> => within(alert()).findByText(told),
   priceCard,
-  onPriceCard: (told: string): HTMLElement => within(priceCard()).getByText(told),
-  findOnPriceCard: (told: string): Promise<HTMLElement> => within(priceCard()).findByText(told),
+  onPriceCard: (told: string): HTMLElement => onChart('live trades', told),
+  findOnPriceCard: (told: string): Promise<HTMLElement> => findOnChart('live trades', told),
   priceTicks: (): HTMLElement[] => within(priceCard()).getAllByRole('time'),
   drawnCandles: (): number => parseInt(captionOf('candles'), 10),
   drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
