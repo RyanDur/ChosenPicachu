@@ -37,8 +37,8 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph">Menu, Entry and Item are this site’s components for a menu. A component is a
           function that writes a piece of the page from what it is given. These three write one element each: a menu,
           an li, which is one item of a list, and a button.</p>
-        <p className="paragraph"><code>Item</code> gives its button the site’s shared classes that set its look. I leave a
-          menu’s look to the page that uses it, so the page passes <code>Menu</code> those classes, as the sample shows.</p>
+        <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes that set its look. I leave a
+          menu’s look to the page that uses it, so the page passes <code className="monospaced">Menu</code> those classes, as the sample shows.</p>
         <Snippet label="HTML" lines={[
           ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
           ...unit(menuSource, 'export const Item')
@@ -67,7 +67,7 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph">The menu’s own sheet places it
           with <Mdn path="Web/CSS/position-area">position-area</Mdn>, below the button that opened it or above it when there is no room below, and where a
           browser has no position-area, it centers the menu on the screen.
-          In the sheet the placement sits under <code>&amp;[popover]</code>, which reads as a menu that is also a popover.
+          In the sheet the placement sits under <code className="monospaced">&amp;[popover]</code>, which reads as a menu that is also a popover.
           The placement is measured from an anchor, and a popover’s anchor is the button that opened it. A menu that is not a popover gets no anchor from the button
           that opens it, so the rule leaves that menu out. Card one’s list
           in <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> names

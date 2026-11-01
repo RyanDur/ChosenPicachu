@@ -29,7 +29,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
         : <Says>The grip does the traveling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.</Says>}
-      {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes, marked <code>data-row-grip</code>. When boot calls <code>dragSortable</code> it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.</Says>}
+      {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes, marked <code className="monospaced">data-row-grip</code>. When boot calls <code className="monospaced">dragSortable</code> it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[

@@ -81,20 +81,20 @@ const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable from the start and announced by name, and once the ledger
     exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
-    own: it is a grid container whose only item is the 8px line its <code>::after</code> paints, so the
+    own: it is a grid container whose only item is the 8px line its <code className="monospaced">::after</code> paints, so the
     painted line is the hit area. The{' '}
-  <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-    and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
+  <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer drag it
     on a touchscreen.</Says>,
   vanilla: <>
     <Says>The handle is focusable from the start, announced by the name the markup gives it, and
-      once the ledger exists <code>dressColumn</code> rewrites that label to state
+      once the ledger exists <code className="monospaced">dressColumn</code> rewrites that label to state
       the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
       to the cell’s height, and the button carries no width of its own: it is a grid container
-      whose only item is the 8px line its <code>::after</code> paints, so the painted line is the hit area. The <code>col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-      and <Mdn path="Web/CSS/touch-action"><code>touch-action: none</code></Mdn> lets the pointer drag it
+      whose only item is the 8px line its <code className="monospaced">::after</code> paints, so the painted line is the hit area. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+      and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer drag it
       on a touchscreen.</Says>
-    <Says>In the vanilla build the handle is the button the page writes, marked <code>data-resize-handle</code>. When boot calls <code>dragSortable</code> it attaches the resize to that button, once; when its column moves, the header moves with its listeners.</Says>
+    <Says>In the vanilla build the handle is the button the page writes, marked <code className="monospaced">data-resize-handle</code>. When boot calls <code className="monospaced">dragSortable</code> it attaches the resize to that button, once; when its column moves, the header moves with its listeners.</Says>
   </>
 };
 
@@ -182,19 +182,19 @@ const WidenStory: FC<{world: World}> = ({world}) =>
         <Reveal>
           <Says>Pixel widths are the first record you reach for, and every entry in it is wrong as soon as the window
             changes size: nothing keeps the sum equal to the width.</Says>
-          <Says>After a trade the header wears <code>shared</code>. A shared class, on this site, is a look that lives
-            in the site’s shared sheet and that an element wears by name; <code>shared</code> is not one of those. It
+          <Says>After a trade the header wears <code className="monospaced">shared</code>. A shared class, on this site, is a look that lives
+            in the site’s shared sheet and that an element wears by name; <code className="monospaced">shared</code> is not one of those. It
             is a class of the table’s own sheet.</Says>
-          <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code>apportioned</code>, a class it has from
-            the start; under it a cell clips its text to its column, and a header that wears <code>shared</code> takes its
-            width from its share. The header’s share is written as a custom property, <code>--share</code>, one of
+          <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code className="monospaced">apportioned</code>, a class it has from
+            the start; under it a cell clips its text to its column, and a header that wears <code className="monospaced">shared</code> takes its
+            width from its share. The header’s share is written as a custom property, <code className="monospaced">--share</code>, one of
             the {whatACustomPropertyIs}.</Says>
-          <Says>In <code>Aggregations.css</code>, beside the opening widths, three declarations in the table’s rule size it: a
-            width, a minimum width and a table layout. <code>width: 100%</code> fills its container.
+          <Says>In <code className="monospaced">Aggregations.css</code>, beside the opening widths, three declarations in the table’s rule size it: a
+            width, a minimum width and a table layout. <code className="monospaced">width: 100%</code> fills its container.
             Fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> holds each column at its declared share of whatever width the table
             has.</Says>
           <Says>The minimum width is in rem. A rem is the text size of the root element, html, which this site sets to 62.5% of the browser’s default,
-            10px when that default is the usual 16px. So <code>min-width: 75.3rem</code> is 753px, and that minimum keeps the
+            10px when that default is the usual 16px. So <code className="monospaced">min-width: 75.3rem</code> is 753px, and that minimum keeps the
             width on a narrower page, so the container scrolls sideways.</Says>
           <Says>When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a
             fingertip-wide resize handle and sort toggle, and they need room. So the minimum is 86rem at every width, and
@@ -206,7 +206,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
       <Step title="Let each control find the cell’s edge">
         <Words want="A header cell holds a title, sometimes a menu, sometimes a handle; the controls must sit at the cell’s end edge, and a table cell cannot become a grid without ceasing to be a table cell.">
           <Says>No box arranges them. The cell holds its title as text and each control places
-            itself: <code><Mdn path="Web/CSS/position">position</Mdn>: absolute</code> against the cell’s end
+            itself: <code className="monospaced"><Mdn path="Web/CSS/position">position</Mdn>: absolute</code> against the cell’s end
             edge, with the cell reserving the room in its own padding.</Says>
         </Words>
         <Reveal>
@@ -215,11 +215,11 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             to arrange three children, plus an id to hang the column’s name on, because the title
             text is no longer the cell’s own.</Says>
           <Says>So the cell holds a title, a menu where the page writes one, a handle, and
-            nothing else. Each control pins itself to the end edge, and a <Mdn path="Web/CSS/:has"><code>:has()</code></Mdn> rule on the
+            nothing else. Each control pins itself to the end edge, and a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the
             cell pads for what it holds: more room when a menu is present, less when only the
             handle is. It has a cost: the padding and the controls’ offsets are
             two numbers that must agree, so both live in the one header sheet and nowhere else.
-            The column names itself with <code>aria-label</code>, since the title is bare text with no element
+            The column names itself with <code className="monospaced">aria-label</code>, since the title is bare text with no element
             to point at.</Says>
           {edgeMarkup[world]}
         </Reveal>
@@ -233,9 +233,9 @@ const WidenStory: FC<{world: World}> = ({world}) =>
         </Words>
         <Reveal>
           {handleSays[world]}
-          <Says>The handle’s look is shared classes. <code>borderless</code> and <code>unfilled</code> take off the
-            browser’s button chrome. <code>held-bar-after</code> paints the line: faded leather, a tan, while a pointer
-            hovers it, and faded mint, a pale green, while it holds focus. <code>focus-ringed</code> draws the site’s
+          <Says>The handle’s look is shared classes. <code className="monospaced">borderless</code> and <code className="monospaced">unfilled</code> take off the
+            browser’s button chrome. <code className="monospaced">held-bar-after</code> paints the line: faded leather, a tan, while a pointer
+            hovers it, and faded mint, a pale green, while it holds focus. <code className="monospaced">focus-ringed</code> draws the site’s
             ring when the keyboard reaches it.</Says>
           <Codes>
             {handleMarkup[world]}

@@ -46,12 +46,12 @@ const dealPlans: Record<World, ReactNode> = {
 
 const suppliedBy: Record<World, ReactNode> = {
   react: <>
-    <Says>The page writes the whole table itself: the <code>table</code>, its caption, the head and the body, and after
-      it an <code>output</code>, the move report that tells a screen reader what moved, whose <code>for</code> names the
-      table it reports on. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
-      column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
+    <Says>The page writes the whole table itself: the <code className="monospaced">table</code>, its caption, the head and the body, and after
+      it an <code className="monospaced">output</code>, the move report that tells a screen reader what moved, whose <code className="monospaced">for</code> names the
+      table it reports on. The two choices the later steps explain, <code className="monospaced">origin</code>, whether a carried row’s or
+      column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
       table.</Says>
-    <Says>The behavior arrives through <code>useDragSortable</code>, a hook: a function a component calls while it
+    <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook: a function a component calls while it
       renders, to keep something across renders or to read something kept outside React. The page calls it with its
       columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
@@ -67,21 +67,21 @@ const suppliedBy: Record<World, ReactNode> = {
       the grip inside it.</Says>
   </>,
   vanilla: <>
-    <Says>The page writes the whole table as it would for any table: the <code>table</code>, its caption, the head and
-      the body, and after it an <code>output</code>, the move report that tells a screen reader what moved,
-      whose <code>for</code> names the table it reports on. One attribute, <code>data-drag-sortable</code>, marks the table as
-      one that drag-sorts. The two choices the later steps explain, <code>origin</code>, whether a carried row’s or
-      column’s cells stay visible in their place, and <code>motion</code>, whether moves animate, are classes on the
+    <Says>The page writes the whole table as it would for any table: the <code className="monospaced">table</code>, its caption, the head and
+      the body, and after it an <code className="monospaced">output</code>, the move report that tells a screen reader what moved,
+      whose <code className="monospaced">for</code> names the table it reports on. One attribute, <code className="monospaced">data-drag-sortable</code>, marks the table as
+      one that drag-sorts. The two choices the later steps explain, <code className="monospaced">origin</code>, whether a carried row’s or
+      column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
       table.</Says>
-    <Says>At boot a script finds every table so marked and calls <code>dragSortable</code> on it. There are two builds
-      of <code>dragSortable</code>, eager and lazy, one file each, and the pace is which one boot calls.</Says>
+    <Says>At boot a script finds every table so marked and calls <code className="monospaced">dragSortable</code> on it. There are two builds
+      of <code className="monospaced">dragSortable</code>, eager and lazy, one file each, and the pace is which one boot calls.</Says>
     <Says>The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
       when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
       subscribers, the functions that asked to hear of changes. The hand holds what is held and the
       widths. The call also wires the table’s listeners at once.</Says>
-    <Says>The call returns <code>reconcile</code>, the function the page calls whenever its own store changes. Reconcile
+    <Says>The call returns <code className="monospaced">reconcile</code>, the function the page calls whenever its own store changes. Reconcile
       moves the cells to the new order and writes the text that changed.</Says>
-    <Says>The table keeps no copy of the order: the page gives <code>dragSortable</code> two functions that read its
+    <Says>The table keeps no copy of the order: the page gives <code className="monospaced">dragSortable</code> two functions that read its
       columns and rows, and the table asks them when it needs an answer.</Says>
     <Says>The table itself is the browser’s, so it shows with its rows before the script runs and without it.</Says>
     <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
@@ -127,7 +127,7 @@ const foldSays: Record<World, ReactNode> = {
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows always match the trades the page holds.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
-    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and calls <code>reconcile</code>, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
+    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {

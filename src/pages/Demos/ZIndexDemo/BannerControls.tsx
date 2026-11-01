@@ -96,6 +96,6 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         reading={copy.stack[stack]}/>
     </DialGroup>
     <p className="caption">
-      <code>{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
+      <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
   </section>;

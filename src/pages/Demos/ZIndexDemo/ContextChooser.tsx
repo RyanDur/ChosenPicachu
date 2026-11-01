@@ -61,7 +61,7 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
               updateOpened(nothing());
               onWornChosen(choice);
             }}/>
-          {choice === 'nothing' ? property[choice] : <code>{property[choice]}</code>}
+          {choice === 'nothing' ? property[choice] : <code className="monospaced">{property[choice]}</code>}
         </label>)}
     </fieldset>
     <ol className="old-way-cards">

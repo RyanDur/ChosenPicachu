@@ -10,7 +10,7 @@ import {Line} from '@pages/Demos/Recipe/Snippet';
 import {whatACustomPropertyIs} from '../definitions';
 
 const theSheetDeclaresSeatAndDrift = <>
-  The sheet declares the seat and the drift with <code>@property</code>, a rule that gives a custom property a type
+  The sheet declares the seat and the drift with <code className="monospaced">@property</code>, a rule that gives a custom property a type
   and a starting value: each is a length that starts at 0px
 </>;
 
@@ -50,29 +50,29 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
             column or its row is carried, and where its seat and its drift are, and sets the class
             and the properties from the answer. The table wears the word hide, and the sheet reads
             it.</Says>
-          <Says>A cell wears <code>paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
             element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a
             cell in motion is opaque.</Says>
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
-            given a <code>position</code> other than static, so the sheet gives the carried
-            cell <code>position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
+            given a <code className="monospaced">position</code> other than static, so the sheet gives the carried
+            cell <code className="monospaced">position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
         </>
         : <>
           <Says>There is no flag anywhere in the build: when the drag in the store changes, the
             reconcile adds the class and the properties to the carried cells, and removes
             them when the drag is gone. The table wears the word hide, and the sheet reads it.</Says>
-          <Says>A cell wears <code>paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
             element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a
             cell in motion is opaque.</Says>
           <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
-            given a <code>position</code> other than static, so the sheet gives the carried
-            cell <code>position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
+            given a <code className="monospaced">position</code> other than static, so the sheet gives the carried
+            cell <code className="monospaced">position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
-          <Says>Every motion class changes through <code>changeMotion</code>, which adds or removes the class and
-            keeps <code>paper-in-motion</code> on while any motion class is present.</Says>
+          <Says>Every motion class changes through <code className="monospaced">changeMotion</code>, which adds or removes the class and
+            keeps <code className="monospaced">paper-in-motion</code> on while any motion class is present.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -122,13 +122,13 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
             at the drop. The table dispatches the same drift and the cells wear the same numbers;
             the table wears the word keep, and no rule in the sheet translates a carried cell
             under it.</Says>
-          <Says>A cell wears <code>paper-in-motion</code>, a shared class, a look from the site’s shared
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared
             sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
           <Says>Under keep the carried cells stay put, and the sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
-            which is why the carried cell is also <code>position: relative</code>. So the
+            and a table cell takes one only once it is positioned, given a <code className="monospaced">position</code> other than static,
+            which is why the carried cell is also <code className="monospaced">position: relative</code>. So the
             neighbors slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>
@@ -137,13 +137,13 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
             What follows the hand is the order: the neighbors move around it as it is struck, or
             at the drop. The build dispatches the same drift and marks the same cells; the table
             wears the word keep, and no rule in the sheet translates a carried cell under it.</Says>
-          <Says>A cell wears <code>paper-in-motion</code>, a shared class, a look from the site’s shared
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared
             sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
           <Says>Under keep the carried cells stay put, and the sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and a table cell takes one only once it is positioned, given a <code>position</code> other than static,
-            which is why the carried cell is also <code>position: relative</code>. So the
+            and a table cell takes one only once it is positioned, given a <code className="monospaced">position</code> other than static,
+            which is why the carried cell is also <code className="monospaced">position: relative</code>. So the
             neighbors slide beneath the carried cells, and the paper keeps either from showing through the
             other.</Says>
         </>}

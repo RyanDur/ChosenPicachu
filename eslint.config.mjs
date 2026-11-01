@@ -31,12 +31,19 @@ const shape = {
   '@stylistic/jsx-tag-spacing': ['error', {beforeSelfClosing: 'never', beforeClosing: 'never'}]
 };
 
-const presence = {
-  'no-restricted-syntax': ['error', {
-    selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"])',
-    message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
-  }]
+const comparedToUndefined = {
+  selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"])',
+  message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
 };
+
+const bareInlineCode = {
+  selector: 'JSXOpeningElement[name.name="code"]:not(JSXElement[openingElement.name.name="pre"] > JSXElement > JSXOpeningElement):not(:has(JSXAttribute[name.name="className"][value.value=/(^|\\s)monospaced(\\s|$)/]))',
+  message: 'Code in a sentence wears monospaced, so it reads as code; a code element inside pre is a sample and is styled by it.'
+};
+
+const presence = {'no-restricted-syntax': ['error', comparedToUndefined]};
+
+const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode]};
 
 const specs = Object.fromEntries([
   'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
@@ -81,7 +88,7 @@ export default [
       sourceType: 'module'
     },
     plugins: {'@stylistic': stylistic},
-    rules: {...shape, ...presence}
+    rules: {...shape, ...markup}
   },
   {
     files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],

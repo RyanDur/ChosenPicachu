@@ -20,13 +20,13 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
     <Reveal>
       {world === 'react'
         ? <Says>Rows and columns arrive in whatever order the fold produced. The page holds the
-          columns and the <Term word="seats">seats</Term>, each in the order it stands, and passes both to <code>useDragSortable</code>, the rows already in their standing. The page writes its header cells once,
+          columns and the <Term word="seats">seats</Term>, each in the order it stands, and passes both to <code className="monospaced">useDragSortable</code>, the rows already in their standing. The page writes its header cells once,
           in any order it likes, and the header row places them by the columns as they stand;
           each row places its cells the same way. A moved column or row is an event the page
           dispatches into its own order. A reorder never touches the data, and nothing reads the
           markup back: the same key finds its new seat and React moves the real nodes.</Says>
-        : <Says>Rows and columns stand in the order the page holds: <code>dragSortable</code> reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes, the page calls <code>reconcile</code>, so a reorder never touches the data: the
-          same lane finds its new seat, and <code>insertBefore</code> moves the real node only when its seat
+        : <Says>Rows and columns stand in the order the page holds: <code className="monospaced">dragSortable</code> reads the columns and rows through the two functions boot gave it, so the order and the standing are always the page’s as they stand. The structure is still the markup’s: the build names every row element (a lane, in the code) after its row header. Every time the page’s store changes, the page calls <code className="monospaced">reconcile</code>, so a reorder never touches the data: the
+          same lane finds its new seat, and <code className="monospaced">insertBefore</code> moves the real node only when its seat
           changed.</Says>}
       {world === 'react'
         ? <Codes>

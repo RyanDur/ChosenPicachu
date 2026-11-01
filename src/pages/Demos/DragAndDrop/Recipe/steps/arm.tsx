@@ -6,15 +6,15 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Arm the drag from its grip">
     <Words want="The browser will drag anything marked draggable, but marking the whole card turns every press into a lift and stops text selection inside it.">
-      <Says><code>draggable</code> is an attribute, a setting written on the element, and the grip turns it on. An event is the
+      <Says><code className="monospaced">draggable</code> is an attribute, a setting written on the element, and the grip turns it on. An event is the
         browser telling the page that something happened. On pointerdown, the event for a mouse button, a pen or a
-        finger pressing down, the grip sets a flag, and the card renders <code>draggable</code> for that
+        finger pressing down, the grip sets a flag, and the card renders <code className="monospaced">draggable</code> for that
         gesture only.</Says>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag
-        beginning, and its handler sets <code>effectAllowed</code> to move: this drag moves the card, it does not copy or link it.</Says>
+        beginning, and its handler sets <code className="monospaced">effectAllowed</code> to move: this drag moves the card, it does not copy or link it.</Says>
       <Says>The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared
-        sheet and that an element wears by name: <code>soft-cornered</code>, <code>field</code>, <code>hairline-outline</code> and{' '}
-      <code>handle-raised</code>. They are the
+        sheet and that an element wears by name: <code className="monospaced">soft-cornered</code>, <code className="monospaced">field</code>, <code className="monospaced">hairline-outline</code> and{' '}
+      <code className="monospaced">handle-raised</code>. They are the
         card’s look, not its drag.</Says>
     </Words>
     <Codes>

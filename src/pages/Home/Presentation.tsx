@@ -19,8 +19,8 @@ export const Presentation: FC = () =>
       in the HTML or by a script, belongs to that element alone. It has to be written again for the next one, and changed
       everywhere it was written.</p>
     <p className="paragraph">The name is where HTML and the sheet meet, and every approach to CSS picks a side. Call a
-      class <code>warning</code>, and the sheet can turn every warning orange without touching the HTML; the CSS Zen
-      Garden restyled one document hundreds of times that way. Call it <code>text-red</code>, and it works on any
+      class <code className="monospaced">warning</code>, and the sheet can turn every warning orange without touching the HTML; the CSS Zen
+      Garden restyled one document hundreds of times that way. Call it <code className="monospaced">text-red</code>, and it works on any
       element with no new CSS, but turning the warnings orange means changing the HTML; that is Tailwind’s side. Adam
       Wathan, who created Tailwind, describes the choice as which way the dependency runs, and BEM and Bootstrap each
       take a position of their own. I name a class for what the element is, what it needs or what it is doing, and keep

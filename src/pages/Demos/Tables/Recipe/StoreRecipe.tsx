@@ -46,10 +46,10 @@ const OneState: FC<{world: World}> = ({world}) =>
           <Says>The page creates its store once, with the exchange as its middleware, and passes it to
             a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades and the
             same arrangement.</Says>
-          <Says><code>useDragSortable</code> creates the table’s own store once, empty, and every part inside <code>DragSortable</code>,
+          <Says><code className="monospaced">useDragSortable</code> creates the table’s own store once, empty, and every part inside <code className="monospaced">DragSortable</code>,
             the provider, reads and writes through that one.</Says>
         </>
-        : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code>dragSortable</code> two functions that read its columns and rows. <code>dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
+        : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code className="monospaced">dragSortable</code> two functions that read its columns and rows. <code className="monospaced">dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
@@ -183,7 +183,7 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
           one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <>
-          <Says>The page builds the store with the same layer and dispatches the request last, once it has called <code>dragSortable</code> on the table and is listening for what the trader does.</Says>
+          <Says>The page builds the store with the same layer and dispatches the request last, once it has called <code className="monospaced">dragSortable</code> on the table and is listening for what the trader does.</Says>
           <Says>The frame’s socket lives as long as the frame does.</Says>
         </>}
       <Codes>
@@ -210,13 +210,13 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
       <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <Term word="reconcile">reconcile</Term>, the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.</Says>
-      {world === 'vanilla' && <Says><code>dragSortable</code> subscribes once itself, to its own hand.</Says>}
+      {world === 'vanilla' && <Says><code className="monospaced">dragSortable</code> subscribes once itself, to its own hand.</Says>}
       <Says>A listener that mirrored the state to a backend would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <>
-          <Says>The page’s provider and <code>useDragSortable</code> each subscribe through useSyncExternalStore, React’s hook
+          <Says>The page’s provider and <code className="monospaced">useDragSortable</code> each subscribe through useSyncExternalStore, React’s hook
             for reading a store kept outside React.</Says>
           <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the carried cells’ marks. The markup
             renders through the new state, and React reconciles the page’s elements, moving only the ones whose
@@ -227,10 +227,10 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
         </>
         : <>
           <Says>The page listens three times and subscribes once.</Says>
-          <Says>The three listeners take the events the table raises, <code>column-moved</code>, <code>row-moved</code> and <code>sorted</code>, each dispatched into the arrangement; the one subscription calls <code>reconcile</code> whenever the store changes, and <code>reconcile</code> moves the real cells, touching only the ones whose place changed.</Says>
+          <Says>The three listeners take the events the table raises, <code className="monospaced">column-moved</code>, <code className="monospaced">row-moved</code> and <code className="monospaced">sorted</code>, each dispatched into the arrangement; the one subscription calls <code className="monospaced">reconcile</code> whenever the store changes, and <code className="monospaced">reconcile</code> moves the real cells, touching only the ones whose place changed.</Says>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
-          <Says><code>reconcile</code> writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
+          <Says><code className="monospaced">reconcile</code> writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
           <Says>The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.</Says>
         </>}
       <Codes>
