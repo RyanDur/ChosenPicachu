@@ -3,10 +3,9 @@ import {TestApp} from '@__test_support/TestApp';
 import {paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
-import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {dragSortTab, listControls, sortableList} from '@pages/Demos/DragAndDrop/__test_support';
 
@@ -82,7 +81,7 @@ describe('the sortable list demo', () => {
     expect(listControls.option('Eager')).toBeChecked();
     expect(listControls.option('Hide')).toBeChecked();
     expect(listControls.option('Animate')).toBeChecked();
-    expect(demoPage.words('<EagerHideAnimatedList/>')).toBeVisible();
+    expect(demoPage.says('<EagerHideAnimatedList/>')).toBeVisible();
   });
 
   test('the dials travel in the url', async () => {
@@ -95,7 +94,7 @@ describe('the sortable list demo', () => {
     expect(listControls.option('Lazy')).toBeChecked();
     expect(listControls.option('Keep')).toBeChecked();
     expect(listControls.option('Static')).toBeChecked();
-    expect(demoPage.words('<LazyKeepStaticList/>')).toBeVisible();
+    expect(demoPage.says('<LazyKeepStaticList/>')).toBeVisible();
   });
 
   test('an arrow key walks an item past its neighbor, and back', async () => {
@@ -129,8 +128,8 @@ describe('the sortable list demo', () => {
     const recipe = await nativeRecipe();
 
     expect(recipe).toBeVisible();
-    expect(demoPage.heading('let’s build this feature')).toBeVisible();
-    expect(demoPage.everyWords(/the order is mine/).length).toBeGreaterThan(0);
+    expect(demoPage.title('let’s build this feature')).toBeVisible();
+    expect(demoPage.everySaying(/the order is mine/).length).toBeGreaterThan(0);
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
     expect(recipe).toHaveTextContent(/The order changes as you drag/);
@@ -139,7 +138,7 @@ describe('the sortable list demo', () => {
   test('the recipe’s clues name their rows and columns', async () => {
     await nativeRecipe();
 
-    const clues = dragSortTab.tableIn(demoPage.part('Start with the need, and let it pick the element'), 'the clues');
+    const clues = dragSortTab.cluesIn(demoPage.part('Start with the need, and let it pick the element'));
     expect(clues.columns).toHaveLength(2);
     expect(clues.rows).toHaveLength(4);
   });
@@ -154,15 +153,15 @@ describe('the sortable list demo', () => {
   test('the recipe walks the stations from need to design to slices', async () => {
     const recipe = await nativeRecipe();
 
-    expect(demoPage.heading('Start with the need, and let it pick the element')).toBeVisible();
-    expect(demoPage.rowHeader(/pick it up and put it there/)).toBeVisible();
-    expect(demoPage.heading('Sketch a design from the need')).toBeVisible();
-    expect(demoPage.aside('what a design cannot tell you')).toBeVisible();
-    expect(demoPage.heading('The user can keep the list in the order they mean')).toBeVisible();
-    expect(demoPage.link('user story'))
+    expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
+    expect(demoPage.row(/pick it up and put it there/)).toBeVisible();
+    expect(demoPage.title('Sketch a design from the need')).toBeVisible();
+    expect(demoPage.unanswered('what a design cannot tell you')).toBeVisible();
+    expect(demoPage.title('The user can keep the list in the order they mean')).toBeVisible();
+    expect(demoPage.signpost('user story'))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
-    expect(demoPage.heading('Layer on functionality, in the order it was asked for')).toBeVisible();
-    expect(demoPage.words(/What you see above is my interpretation of that/)).toBeVisible();
+    expect(demoPage.title('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(demoPage.says(/What you see above is my interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/Arm the drag from its grip/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
@@ -176,7 +175,7 @@ describe('the sortable list demo', () => {
   test('the slices point at their station', async () => {
     await nativeRecipe();
 
-    expect(demoPage.heading('Slice the design into stories')).toBeVisible();
+    expect(demoPage.title('Slice the design into stories')).toBeVisible();
     ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
       .forEach(slice => expect(demoPage.slice(slice)).toHaveTextContent('station 4'));
     expect(demoPage.sliceLinks())
@@ -187,7 +186,7 @@ describe('the sortable list demo', () => {
   test('opening the by-hand story points at the tables demo', async () => {
     const recipe = await nativeRecipe();
 
-    await dragSortTab.pressWords(recipe, /The user can arrange the list by hand/);
+    await dragSortTab.press(recipe, /The user can arrange the list by hand/);
 
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     const steps = recipeFolds.steps(recipeFolds.story(recipe, 'The user can arrange the list by hand'));
@@ -197,7 +196,7 @@ describe('the sortable list demo', () => {
 
   const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
     const recipe = await nativeRecipe();
-    await dragSortTab.pressWords(recipe, /The user can arrange the list by hand/);
+    await dragSortTab.press(recipe, /The user can arrange the list by hand/);
     await dragSortTab.chooseIn(recipe, 'Lazy');
     await dragSortTab.chooseIn(recipe, 'Keep');
     return recipe;
@@ -226,7 +225,7 @@ describe('arriving at a station', () => {
     render(<TestApp at={`${demosAt('drag-and-drop')}#station-4`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    await demoPage.findHeading('Layer on functionality, in the order it was asked for');
+    await demoPage.findTitle('Layer on functionality, in the order it was asked for');
 
     await waitFor(() => expect(itemHeadedBy('the stations', 'Layer on functionality, in the order it was asked for')).toHaveFocus());
   });
@@ -363,7 +362,7 @@ describe('the native drag sort tutorial’s words', () => {
   test('should name MDN as Mozilla’s web reference', async () => {
     await nativeRecipe();
 
-    expect(demoPage.words(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
+    expect(demoPage.says(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
   });
 });
 
@@ -461,13 +460,13 @@ describe('the drag sort tab’s audited words', () => {
   test('should caption the sketch with why the grip’s arrows are left and right', async () => {
     await tabAt('');
 
-    expect(await demoPage.findWords(/^The design answers shape/)).toHaveTextContent('The exhibit lays the list across the page, so the grip’s arrows are left and right.');
+    expect(await demoPage.findSays(/^The design answers shape/)).toHaveTextContent('The exhibit lays the list across the page, so the grip’s arrows are left and right.');
   });
 
   test('should read the clue for a direct pick-up as working by pointer or by key, on the drag the platform ships', async () => {
     await tabAt('');
 
-    expect(await demoPage.findWords(/^Direct manipulation/)).toHaveTextContent('Direct manipulation, by pointer or by key. The platform ships the drag.');
+    expect(await demoPage.findSays(/^Direct manipulation/)).toHaveTextContent('Direct manipulation, by pointer or by key. The platform ships the drag.');
   });
 
   test.each([
@@ -476,7 +475,7 @@ describe('the drag sort tab’s audited words', () => {
   ])('should read the motion dial, with %s, in plain words', async (choice, reading) => {
     await tabAt(choice);
 
-    expect(await demoPage.findWords(reading)).toBeInTheDocument();
+    expect(await demoPage.findSays(reading)).toBeInTheDocument();
   });
 
   test.each([

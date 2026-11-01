@@ -1,10 +1,16 @@
 import {TestApp} from '@__test_support/TestApp';
 import {paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
-import {chartPageAt, demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
-import {broadcast, hangUp, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
-import {feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
+import {
+  broadcast,
+  hangUp,
+  listeningFeed,
+  nonTradeFrame,
+  tradeFrame,
+  tradeFrameWith
+} from '@pages/Demos/__test_support/feed';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
@@ -1068,6 +1074,6 @@ describe('the links to other tabs', () => {
     render(<TestApp at={chartPageAt(kind)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(demoPage.linksToTabsIn(demoPage.main())).toEqual(pins);
+    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual(pins);
   });
 });

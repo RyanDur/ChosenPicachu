@@ -3,10 +3,9 @@ import {TestApp} from '@__test_support/TestApp';
 import {paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
-import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
@@ -507,17 +506,17 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
-    expect(demoPage.heading('let’s build this feature')).toBeVisible();
-    expect(demoPage.words(/I watch the market all day/)).toBeVisible();
-    expect(demoPage.heading('Start with the need, and let it pick the element')).toBeVisible();
-    expect(demoPage.heading('The trader can watch the live market in windows they arrange')).toBeVisible();
-    expect(demoPage.words(/so that what they compare sits side by side/)).toBeVisible();
+    expect(demoPage.title('let’s build this feature')).toBeVisible();
+    expect(demoPage.says(/I watch the market all day/)).toBeVisible();
+    expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
+    expect(demoPage.title('The trader can watch the live market in windows they arrange')).toBeVisible();
+    expect(demoPage.says(/so that what they compare sits side by side/)).toBeVisible();
     expect(tablesTab.columnHeader('what it tells you')).toBeVisible();
-    expect(demoPage.rowHeader(/keep themselves current/)).toBeVisible();
-    expect(demoPage.heading('Sketch a design from the need')).toBeVisible();
-    expect(demoPage.aside('what a design cannot tell you')).toBeVisible();
-    expect(demoPage.words(/keep building on your best interpretation/)).toBeVisible();
-    expect(demoPage.words(/What you see above is my interpretation of that/)).toBeVisible();
+    expect(demoPage.row(/keep themselves current/)).toBeVisible();
+    expect(demoPage.title('Sketch a design from the need')).toBeVisible();
+    expect(demoPage.unanswered('what a design cannot tell you')).toBeVisible();
+    expect(demoPage.says(/keep building on your best interpretation/)).toBeVisible();
+    expect(demoPage.says(/What you see above is my interpretation of that/)).toBeVisible();
   });
 
   test('the recipe’s tables name their rows and columns', async () => {
@@ -554,7 +553,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
-    expect(demoPage.heading('Slice the design into stories')).toBeVisible();
+    expect(demoPage.title('Slice the design into stories')).toBeVisible();
     [['The trader can read the market in a table', 'station 4'],
       ['The trader can watch the market live, in windows', 'station 5'],
       ['The trader can sort by column, and by row', 'station 6'],
@@ -576,7 +575,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
-    expect(demoPage.link('user story')).toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
+    expect(demoPage.signpost('user story')).toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
   });
 
   test('the still table and the living table each tell their part', async () => {
@@ -611,10 +610,10 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     await tablesTab.recipe('drag sort');
 
-    expect(demoPage.heading('Layer on functionality, in the order it was asked for')).toBeVisible();
-    expect(demoPage.words(/Both axes, every layer, or the layer is not done/)).toBeVisible();
+    expect(demoPage.title('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(demoPage.says(/Both axes, every layer, or the layer is not done/)).toBeVisible();
     expect(tablesTab.columnHeader('by keyboard')).toBeVisible();
-    expect(demoPage.rowHeader('Widen a column')).toBeVisible();
+    expect(demoPage.row('Widen a column')).toBeVisible();
   });
 
   test('each layer’s facts say their heading in their own words, so they pair without the table', async () => {
@@ -721,7 +720,7 @@ describe('the tables demo', () => {
     render(<TestApp at={`${demosAt('tables')}#station-5`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    await demoPage.findHeading('The trader can watch the market live, in windows');
+    await demoPage.findTitle('The trader can watch the market live, in windows');
 
     await waitFor(() => expect(itemHeadedBy('the stations', 'The trader can watch the market live, in windows')).toHaveFocus());
   });
@@ -1022,8 +1021,8 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await demoPage.findHeading('The trader can watch the market live, in windows')).toBeInTheDocument();
-      expect(demoPage.words('Drag resize')).toBeInTheDocument();
+      expect(await demoPage.findTitle('The trader can watch the market live, in windows')).toBeInTheDocument();
+      expect(demoPage.says('Drag resize')).toBeInTheDocument();
     });
 
     test('only the build under the tutorial swaps', async () => {
@@ -1033,7 +1032,7 @@ describe('the tables demo', () => {
       await feedIsSubscribed(feed);
 
       expect((await tablesTab.findRadios('Eager')).length).toBeGreaterThan(0);
-      expect(demoPage.missingWords('The trader can read the market in windows')).not.toBeInTheDocument();
+      expect(demoPage.unsaid('The trader can read the market in windows')).not.toBeInTheDocument();
     });
 
     test('the menu story stands in the html world', async () => {
@@ -1042,7 +1041,7 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt('tables', '?world=vanilla&tut=menu')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await demoPage.findHeading('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
+      expect(await demoPage.findTitle('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     });
 
     test('the resize story stands in the html world', async () => {
@@ -1051,7 +1050,7 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt('tables', '?world=vanilla&tut=resize')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await demoPage.findHeading('The trader can widen a column')).toBeInTheDocument();
+      expect(await demoPage.findTitle('The trader can widen a column')).toBeInTheDocument();
     });
 
     test.each(['react', 'vanilla'])('the sort tutorial stands on both tracks in the %s world', async world => {
@@ -1059,9 +1058,9 @@ describe('the tables demo', () => {
 
       render(<TestApp at={demosAt('tables', `?tut=sort&world=${world}`)} feed={feed}/>);
 
-      expect(await demoPage.findWords('The trader can sort by column')).toBeInTheDocument();
+      expect(await demoPage.findSays('The trader can sort by column')).toBeInTheDocument();
       await tablesTab.pick('By keyboard');
-      expect(await demoPage.findWords('Give focus a place to land')).toBeInTheDocument();
+      expect(await demoPage.findSays('Give focus a place to land')).toBeInTheDocument();
     });
 
     test('the explainer stands in the html world too', async () => {
@@ -1070,7 +1069,7 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      expect(await demoPage.findWords('what am I looking at?')).toBeInTheDocument();
+      expect(await demoPage.findSays('what am I looking at?')).toBeInTheDocument();
       expect(tablesTab.frame()).toBeInTheDocument();
     });
 

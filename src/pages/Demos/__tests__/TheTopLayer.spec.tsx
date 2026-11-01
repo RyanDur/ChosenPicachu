@@ -26,9 +26,9 @@ describe('the top layer', () => {
     await demoTabs.open('Z-index');
 
     expect(outOfReadingOrder([
-      await demoPage.findWords(/^We are going to build this site’s banner/),
-      demoPage.words('The parts above show what a z-index does and where it stops counting; the banner sets none.'),
-      demoPage.words(/^Every card below is told that way/)
+      await demoPage.findSays(/^We are going to build this site’s banner/),
+      demoPage.says('The parts above show what a z-index does and where it stops counting; the banner sets none.'),
+      demoPage.says(/^Every card below is told that way/)
     ])).toEqual([]);
   });
 
@@ -60,11 +60,11 @@ describe('the top layer', () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
-    expect(await demoPage.findWords('let’s build this feature')).toBeVisible();
-    expect(demoPage.words('The user sees the news above everything')).toBeVisible();
-    expect(demoPage.heading('The user can have multiple banners')).toBeVisible();
-    expect(demoPage.missingWords('Any component can raise a banner')).not.toBeInTheDocument();
-    expect(demoPage.missingWords('The news travels, and the pile makes room')).not.toBeInTheDocument();
+    expect(await demoPage.findSays('let’s build this feature')).toBeVisible();
+    expect(demoPage.says('The user sees the news above everything')).toBeVisible();
+    expect(demoPage.title('The user can have multiple banners')).toBeVisible();
+    expect(demoPage.unsaid('Any component can raise a banner')).not.toBeInTheDocument();
+    expect(demoPage.unsaid('The news travels, and the pile makes room')).not.toBeInTheDocument();
   });
 
   test('the dials explain themselves and say their url', async () => {
@@ -86,18 +86,18 @@ describe('the top layer', () => {
     await demoTabs.open('Z-index');
     const controls = await zIndexTab.findBannerControls();
 
-    expect(demoPage.words(/the stack grows downward, so the track is a row\./)).toBeInTheDocument();
+    expect(demoPage.says(/the stack grows downward, so the track is a row\./)).toBeInTheDocument();
 
     await zIndexTab.choose(controls, 'stack', 'Left');
 
-    expect(demoPage.words(/the stack grows leftward, so the track is a column\./)).toBeInTheDocument();
+    expect(demoPage.says(/the stack grows leftward, so the track is a column\./)).toBeInTheDocument();
   });
 
   test('the cards start stacked', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
-    expect(await zIndexTab.findExpandButton()).toBeInTheDocument();
+    expect(await zIndexTab.findExpand()).toBeInTheDocument();
   });
 
   test('the button spreads the cards and offers to collapse them', async () => {
@@ -106,8 +106,8 @@ describe('the top layer', () => {
 
     await zIndexTab.expandCards();
 
-    expect(zIndexTab.collapseButton()).toBeInTheDocument();
-    expect(zIndexTab.expandButtonIfAny()).not.toBeInTheDocument();
+    expect(zIndexTab.collapseOnOffer()).toBeInTheDocument();
+    expect(zIndexTab.expandOnOffer()).not.toBeInTheDocument();
   });
 });
 
@@ -321,9 +321,9 @@ describe('the banner tutorial’s first story', () => {
     const tutorial = await zIndexTab.findFeatureStories();
     const placing = recipeFolds.steps(recipeFolds.story(tutorial, story))[2];
 
-    await zIndexTab.followLink(placing, 'Slide in from off screen');
+    await zIndexTab.follow(placing, 'Slide in from off screen');
 
-    expect(demoPage.heading('Slide in from off screen')).toBeVisible();
+    expect(demoPage.title('Slide in from off screen')).toBeVisible();
     expect(demoPage.urlSearch()).toHaveTextContent(/side=bottom&align=right/);
   });
 
@@ -343,14 +343,14 @@ describe('the banner tutorial’s first story', () => {
 
     expect(explanation.saying(styling, /^Each message sits in a paragraph/)).toHaveTextContent(/^Each message sits in a paragraph with the class news\. Its look comes from classes shared across this site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color, and hairline-outline for a thin border in that color\./);
     expect(explanation.saying(styling, /^Each message sits in a paragraph/)).toHaveTextContent(/The dismiss button is a square of fixed size that does not shrink when the message is long\. Its look is shared classes too: borderless and unfilled take off the browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and muted-ink grays it\.$/);
-    expect(zIndexTab.codeIn(styling)).toHaveTextContent(/\.floating \{[^]*\.alarm-ink \{[^]*\.hairline-outline \{[^]*\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
+    expect(zIndexTab.codeShownIn(styling)).toHaveTextContent(/\.floating \{[^]*\.alarm-ink \{[^]*\.hairline-outline \{[^]*\.dismiss \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.glyph-icon \{[^]*\.muted-ink \{/);
   });
 
   test('should send the reader to MDN, which the tab names earlier as Mozilla’s web reference', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
-    expect(await demoPage.findWords(/The links go to MDN, if you want more\./)).toBeInTheDocument();
+    expect(await demoPage.findSays(/The links go to MDN, if you want more\./)).toBeInTheDocument();
     expect(explanation.saying(demoPage.part('What else forms a stacking context'), /MDN, Mozilla’s web reference, keeps/)).toBeInTheDocument();
   });
 });
@@ -545,7 +545,7 @@ describe('the z-index tab’s introduction', () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
     const tab = await demoTabs.arrivedOn('Z-index');
-    const firstExhibit = zIndexTab.headingIn(tab, 'Why Third is on top');
+    const firstExhibit = zIndexTab.titleIn(tab, 'Why Third is on top');
 
     expect(outOfReadingOrder([...paragraphs.map(paragraphReading), firstExhibit])).toEqual([]);
   });
@@ -618,7 +618,7 @@ describe('the banner dials’ readings', () => {
   ])('should read, with %s chosen, “%s”', async (choice, reading) => {
     render(<TestApp at={demosAt('z-index', `?${choice}`)}/>);
 
-    expect(await demoPage.findWords(reading)).toBeInTheDocument();
+    expect(await demoPage.findSays(reading)).toBeInTheDocument();
   });
 });
 

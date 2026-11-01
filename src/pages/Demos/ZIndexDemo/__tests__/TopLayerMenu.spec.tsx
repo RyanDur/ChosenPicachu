@@ -11,7 +11,7 @@ describe('the menu built the new way', () => {
 
     const cardOne = theTrap.cardOne(trap);
 
-    expect(theTrap.buttonIn(cardOne, 'Sort by, in the top layer')).toBeInTheDocument();
+    expect(theTrap.controlIn(cardOne, 'Sort by, in the top layer')).toBeInTheDocument();
   });
 });
 

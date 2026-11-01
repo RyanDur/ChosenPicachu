@@ -1,5 +1,5 @@
 import {screen, within} from '@testing-library/react';
-import {DemoTopics, demoAddress} from '@pages/Demos/types';
+import {demoAddress, DemoTopics} from '@pages/Demos/types';
 
 const untilTheTabMounts = {timeout: 5000};
 
@@ -9,16 +9,16 @@ const slices = (): HTMLElement => screen.getByRole('list', {name: 'the slices'})
 
 export const demoPage = {
   part: (name: string): HTMLElement => screen.getByRole('region', {name}),
-  heading: (name: string): HTMLElement => screen.getByRole('heading', {name}),
-  findHeading: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
-  words: (told: string | RegExp): HTMLElement => screen.getByText(told),
-  everyWords: (told: RegExp): HTMLElement[] => screen.getAllByText(told),
-  findWords: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
-  missingWords: (told: string): HTMLElement | null => screen.queryByText(told),
-  link: (name: string): HTMLElement => screen.getByRole('link', {name}),
-  rowHeader: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
-  aside: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
-  main: (): HTMLElement => screen.getByRole('main'),
+  title: (name: string): HTMLElement => screen.getByRole('heading', {name}),
+  findTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
+  says: (told: string | RegExp): HTMLElement => screen.getByText(told),
+  everySaying: (told: RegExp): HTMLElement[] => screen.getAllByText(told),
+  findSays: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
+  unsaid: (told: string): HTMLElement | null => screen.queryByText(told),
+  signpost: (name: string): HTMLElement => screen.getByRole('link', {name}),
+  row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
+  unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
+  wholePage: (): HTMLElement => screen.getByRole('main'),
   linksToTabsIn: (holder: HTMLElement): string[][] => within(holder).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href') ?? ''])
     .filter(([, address]) => tabAddresses.includes(address)),
