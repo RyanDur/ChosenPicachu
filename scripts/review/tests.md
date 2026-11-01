@@ -40,6 +40,7 @@ Kent C. Dodds, Common mistakes with React Testing Library: https://kentcdodds.co
 - `find*` for what arrives later. `waitFor` holds one assertion and no side effects, never an empty callback.
 - `query*` only to assert absence.
 - Assert with the matcher that says it: `toBeInTheDocument`, `toBeVisible`, `toHaveTextContent`, never `toBeDefined` on a query.
+- A spec asserts text only where the text is the behavior: a name a reader uses, an announcement, a count or report computed from data. A paragraph's wording is the reviewer's to read, never the spec's. A spec that pins a paragraph is reduced whenever a card touches it, as part of that card. Why: Ryan, 2026-11-01, "The reader gains nothing from a spec that stops asserting paragraphs; that's how the developer keeps their own house."
 - No manual `act`, no manual `cleanup`. An act warning names an update the test never waited for.
 - The spec renders the page or component the way the app does, through TestApp, and finds what a person finds.
 
