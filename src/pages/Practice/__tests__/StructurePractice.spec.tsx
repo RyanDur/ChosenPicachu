@@ -1,11 +1,14 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@pages/Paths';
+import {fileInRepository, Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import a11yJourney from '/e2e/a11y.e2e.ts?raw';
+import agents from '/AGENTS.md?raw';
+import stylelintConfig from '/stylelint.config.js?raw';
 
 const siteSources: Record<string, string> = import.meta.glob(['/src/**/*.{ts,tsx,html}', '!/src/**/__tests__/**', '!/src/**/__test_support/**', '!/src/**/__test_support__/**'], {query: '?raw', import: 'default', eager: true});
 
@@ -47,26 +50,6 @@ describe('the Structure practice tab', () => {
       'ARIA last',
       'The styles-off test'
     ]);
-  });
-
-  test('should set each of the Structure tab’s part titles over the paragraph that opens its part', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(outOfReadingOrder([
-      practicePage.partHeading('What organizing markup has to solve'),
-      practicePage.paragraph(/^Markup is read by more than the browser/),
-      practicePage.partHeading('The skeleton, and a name where a landmark repeats'),
-      practicePage.paragraph(/^The skeleton comes first/),
-      practicePage.partHeading('From the content to the element'),
-      practicePage.paragraph(/^I start from what the content is/),
-      practicePage.partHeading('Components, one behavior each'),
-      practicePage.paragraph(/^A component is an element that does not exist yet/),
-      practicePage.partHeading('ARIA last'),
-      practicePage.paragraph(/^The elements mean something beyond how they look/),
-      practicePage.partHeading('The styles-off test'),
-      practicePage.paragraph(/^The test is to read the page with the styles turned off/)
-    ])).toEqual([]);
   });
 
   test('should walk down from the skeleton to one element, through the three attributes and the tables demo’s two builds, before what the elements mean', async () => {
@@ -173,18 +156,53 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
-  test('should say what ARIA last looks like after what the elements mean, before the test', async () => {
+  test('should list the four gates that hold the markup: axe, html-validate, outOfReadingOrder and stylelint', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(outOfReadingOrder([
-      practicePage.paragraph(/^One region on every page is a role and not an element/),
-      practicePage.paragraph(/^The elements mean something beyond how they look/),
-      practicePage.paragraph(/^Here is what ARIA last looks like on this site/),
-      practicePage.paragraph(/^Names are on the places that need them/),
-      practicePage.paragraph(/^States come from the platform wherever it has one/),
-      practicePage.paragraph(/^The test is to read the page with the styles turned off/)
-    ])).toEqual([]);
+    expect(practicePage.itemsListedAfter(/^The styles-off test is not read by eye/)).toEqual([
+      expect.stringMatching(/^axe, the accessibility checker, runs on every page/),
+      expect.stringMatching(/^html-validate checks every page as the browser has rendered it/),
+      expect.stringMatching(/^outOfReadingOrder takes a list of elements/),
+      expect.stringMatching(/^stylelint refuses a selector on an obsolete element/)
+    ]);
+  });
+
+  test('should quote html-validate’s loosened id rule from the accessibility journey, word for word', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const [[quote, address]] = practicePage.linksInItem(/^html-validate checks/);
+
+    expect(a11yJourney).toContain((quote ?? '').slice(1, -1));
+    expect(address).toBe(fileInRepository('e2e/a11y.e2e.ts'));
+  });
+
+  test('should quote AGENTS.md on how a test finds things, word for word', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const [[quote, address]] = practicePage.linksIn(/^The rule the review holds is that every test finds what a reader finds/);
+
+    expect(agents).toContain((quote ?? '').slice(1, -1));
+    expect(address).toBe(fileInRepository('AGENTS.md'));
+  });
+
+  test('should send outOfReadingOrder to its file', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksInItem(/^outOfReadingOrder takes/)).toEqual([['outOfReadingOrder', fileInRepository('src/__test_support/reading-order.ts')]]);
+  });
+
+  test('should quote stylelint’s message on an obsolete element, word for word', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const [[quote, address]] = practicePage.linksInItem(/^stylelint refuses a selector/);
+
+    expect(stylelintConfig).toContain((quote ?? '').slice(1, -1));
+    expect(address).toBe(fileInRepository('stylelint.config.js'));
   });
 
   test('should name every role the site writes, and no other', async () => {
@@ -206,19 +224,6 @@ describe('the Structure practice tab', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksIn(/^Here is what ARIA last looks like on this site/)).toEqual([['z-index tab', demoAddress(DemoTopics.zIndex)]]);
-  });
-
-  test('should say what a component is for after the two builds, before what the elements mean', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(outOfReadingOrder([
-      practicePage.paragraph(/^DraggableColumn writes the th/),
-      practicePage.paragraph(/^A component is an element that does not exist yet/),
-      practicePage.paragraph(/^And one behavior each/),
-      practicePage.paragraph(/^This is also why the site’s new elements are React components/),
-      practicePage.paragraph(/^The elements mean something beyond how they look/)
-    ])).toEqual([]);
   });
 
   test('should send Disclosure, the counter-case, to its source', async () => {
@@ -352,16 +357,14 @@ describe('the Structure practice tab', () => {
     expect(practicePage.paragraph(/^The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
-  test('the structure tab tells how I organize structure', async () => {
+  test('should send the div’s “last resort” to the HTML standard and “No ARIA is better than bad ARIA” to MDN', async () => {
     render(<TestApp at={Paths.practice}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.heading()).toBeVisible();
     expect(practicePage.link(/of last resort, for when no other element is suitable/))
       .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(practicePage.paragraph(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
   test('should rest Structure’s practice on its own moments, each citation naming the year of the moment it opens', async () => {

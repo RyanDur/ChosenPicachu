@@ -133,8 +133,8 @@ export const StructurePractice: FC = () =>
       platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
       a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular.
       A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
-      new. What a component is not for is wrapping an element the platform already has. I keep a few wrappers anyway,
-      where the trade is worth it:{' '}
+      new. A component is not for wrapping an element the platform already has: that is the
+      default. A few wrappers here trade against it, where the trade is worth it:{' '}
     <a className="signpost" href={fileInRepository('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a>, a
       details with a name and a class, and the menu’s Menu, Entry and Item, which write one element each and carry the
       site’s classes for it. Each saves a line every time it is used, and each costs the reader the doubt of whether it
@@ -149,9 +149,9 @@ export const StructurePractice: FC = () =>
       hand or by key, <a className="signpost" href={fileInRepository('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
       resizes, <a className="signpost" href={fileInRepository('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts,{' '}
     <a className="signpost" href={fileInRepository('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
-      carries a column. The menu is three components that write one element each, Menu, Entry and Item, as the{' '}
+      carries a column. The menu is three components that write one element each, as the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
-      that no part has gets a new part, not a prop on an old one. The platform is built the same way, one element per
+      that no part has gets a new part with that one job, not a prop on an old one. The platform is built the same way, one element per
       meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
       standard’s custom elements give a new tag a name, and leave its role and its keys to the author; a component
@@ -188,24 +188,47 @@ export const StructurePractice: FC = () =>
       the platform now does for free, is a menu element holding a list of buttons, with role{' '}
     <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role{' '}
     <code className="monospaced">none</code> on each list item. A menu element is read as a list, not as a menu, and the list item’s own
-      role would get in the way; the popover menu beside it carries no role at all. A term’s definition, the small card
+      role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
       that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period samples are a pre with
       role <code className="monospaced">group</code> and a name, so a screen reader can land on a sample as one thing. That is the whole list. Each
-      role is there because no element carries that meaning, and role <code className="monospaced">none</code> because an element’s own meaning
-      would get in the way.</p>
+      role is there because no element carries that meaning.</p>
     <p className="paragraph">Names are on the places that need them: every landmark that appears more than once, the
       feedback dialog, the rail, and every button whose text is a glyph, the dismiss on a banner, the grip on a row,
       the resize handle on a column.</p>
     <p className="paragraph">States come from the platform wherever it has one, <code className="monospaced">open</code> on a details,{' '}
       <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button. Four are written by hand, where the platform has none.{' '}
-      <code className="monospaced">aria-sort</code> on the table’s headers, because a th has no sort state of its own. <code className="monospaced">aria-current</code> where
-      one of several is the current one: the rail’s page, a tab, a menu’s chosen item. <code className="monospaced">aria-expanded</code> on a
-      button that opens something the platform does not know is open: the old-way menu’s and the z-index pile’s. And{' '}
-      <code className="monospaced">aria-hidden</code> on lettering a screen reader should not read as prose, every drawing’s, a glyph’s, a dial’s axis label and
-      a code sample’s language label, where
-      the caption or the name says it instead. So the rule, in one line: a name always, a role only when no element carries it, a state only when the platform
-      has none.</p>
+      <code className="monospaced">aria-sort</code> marks which way a table’s header is sorted, because a th has no sort state of its own.{' '}
+      <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab, a menu’s chosen item.{' '}
+      <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not know is open: the old-way
+      menu’s, and the Expand button on the z-index tab’s pile of cards. <code className="monospaced">aria-hidden</code> hides lettering a screen
+      reader should not read as prose: every drawing, a glyph, a dial’s axis label and a code sample’s language label,
+      where the caption or the name says it instead.</p>
+    <p className="paragraph">So the rule, in one line: a name always, a role only when no element carries it or to
+      take one away that gets in the way, a state only when the platform has none.</p>
     <h3 className="paragraph bold">The styles-off test</h3>
+    <p className="paragraph">The styles-off test is not read by eye. Four gates run it on every push, each a few
+      lines in the repository, and one rule the review holds.</p>
+    <ul className="practice-list">
+      <li className="paragraph"><code className="monospaced">axe</code>, the accessibility checker, runs on every page at WCAG 2 A and AA, and runs
+        the Record a second time with every fold open, since a fold’s story is not on the page until it opens.</li>
+      <li className="paragraph"><code className="monospaced">html-validate</code> checks every page as the browser has rendered it, scripts run,
+        against its recommended rules, with four style rules switched off and two changed on purpose: a group of
+        checkboxes may share a name, as radios already may, and buttons may not; and an id may hold what React’s server
+        render writes, since{' '}
+      <a className="signpost" href={fileInRepository('e2e/a11y.e2e.ts')}>“React's server render names its own
+        script _R_, and HTML asks only that an id hold no space”</a>.</li>
+      <li className="paragraph"><a className="signpost" href={fileInRepository('src/__test_support/reading-order.ts')}><code
+        className="monospaced">outOfReadingOrder</code></a> takes a list of elements in the order a reader should meet
+        them and returns any that come earlier in the document than the one before; the Home, Record, Practice and
+        Demos specs call it wherever an order is a claim.</li>
+      <li className="paragraph"><code className="monospaced">stylelint</code> refuses a selector on an obsolete element and prints{' '}
+        <a className="signpost" href={fileInRepository('stylelint.config.js')}>“obsolete element — this is a strict
+          html5 site”</a>.</li>
+    </ul>
+    <p className="paragraph">The rule the review holds is that every test finds what a reader finds, by role, label
+      and text, never by a class: a test that could not find the thing is the first reader who could not.{' '}
+    <a className="signpost" href={fileInRepository('AGENTS.md')}>“Tests find what a reader finds: by role, label
+      and text, never by class.”</a></p>
     <p className="paragraph">The test is to read the page with the styles turned off. It should still say
       everything it means, in order, because that is what search engines, reader modes and assistive technology
       read. If the meaning only appears once the CSS loads, it is in the wrong language.

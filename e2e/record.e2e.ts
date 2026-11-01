@@ -53,8 +53,9 @@ test('a reader following the Structure tab\'s link to the concert lands on its p
   await practicePage(page).practice.getByRole('link', {name: 'concert', exact: true}).click();
 
   await expect(page).toHaveURL(/\/record\/#custom-elements$/);
-  await expect(recordPage(page).customElementsParagraph).toBeInViewport();
-  await expect(page.getByRole('region', {name: 'The concert'})).toBeFocused();
+  await expect(recordPage(page).customElementsParagraph).toBeFocused();
+  await pressTab(page);
+  await expect(recordPage(page).customElementsParagraph.getByRole('link').first()).toBeFocused();
 });
 
 test('the concert\'s link to a moment inside a year of two lands on it again after the reader closes the year\'s fold', async ({page}) => {

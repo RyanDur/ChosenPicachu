@@ -104,7 +104,7 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">card--lifted</code> in the two-dash style many teams use. Every selector is one
       class, so nothing depends on where a block sits.</p>
     <p className="paragraph">I keep three things from BEM:</p>
-    <ul className="kept">
+    <ul className="practice-list">
       <li className="paragraph">the block as the unit</li>
       <li className="paragraph">the folder per block, which is how the site’s shared components and its tables are laid
         out, with their sheets beside their parts</li>

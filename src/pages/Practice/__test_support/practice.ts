@@ -35,6 +35,13 @@ export const practicePage = {
   pickTab: (concern: string): Promise<void> => userEvent.click(within(tabs()).getByRole('link', {name: concern})),
   opener: (): Promise<HTMLElement> => screen.findByText(/^Each tab below is one of the three concerns/),
   openingParagraph: paragraphOpening,
+  linksInItem: (opening: RegExp): (string | null)[][] => {
+    const items = within(practice()).getAllByRole('listitem').filter(item => opening.test(item.textContent));
+    if (items.length !== 1) {
+      throw new Error(`${items.length} items opening ${opening}, not one`);
+    }
+    return within(items[0]).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
+  },
   codesIn: (opening: RegExp): string[] => within(paragraphOpening(opening)).getAllByRole('code').map(code => code.textContent),
   linksIn: (opening: RegExp): (string | null)[][] => within(paragraphOpening(opening)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),

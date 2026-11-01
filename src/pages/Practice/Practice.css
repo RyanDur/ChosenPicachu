@@ -15,7 +15,7 @@
   margin: 0;
 }
 
-.kept {
+.practice-list {
   display: grid;
   gap: var(--base-x-0_5);
   padding-inline-start: var(--base-x-3);
