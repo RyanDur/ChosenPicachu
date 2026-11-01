@@ -66,7 +66,7 @@ const SettleStep: FC = () => (
       <Says>A <code className="monospaced">ResizeObserver</code>, a browser object that calls back when an element changes size, sets each message’s
         height to a measured number of pixels. The number travels in a custom property
         named <code className="monospaced">--news-block-size</code>.</Says>
-      <Says>The stylesheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that starts with @ and sets
+      <Says>The style sheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that starts with @ and sets
         something up for the style sheet without picking out elements. This one gives a custom property a type and a starting
         value: a length or auto, starting as auto, so a message that has not been measured keeps its own height. A
         rewrap then changes one number to another, and the transition on <code className="monospaced">block-size</code>, the CSS name for
@@ -148,13 +148,13 @@ export const MultipleRecipe: FC = () => {
             rule reads it again to send the banner back.</Says>
           <Says>The slide can be seen only because the panel sets overflow to visible. The panel is a popover,
             as <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains,
-            and the browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s
+            and the browser’s own style sheet gives a popover overflow: auto. That would clip the slide to the panel’s
             own box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
             ...unit(bannersCss, `&.from-${enter} {`), gap,
-            ...span(bannersCss, "/* the browser's own stylesheet", 'overflow: visible;')
+            ...span(bannersCss, "/* the browser's own style sheet", 'overflow: visible;')
           ]}/>
         </Codes>
       </Step>

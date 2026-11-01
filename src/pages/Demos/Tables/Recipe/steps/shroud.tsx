@@ -40,9 +40,9 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         subtraction is why a settle mid-drag never makes the carried column jump: the order
         changes, the gap moves by the crossed neighbor’s width, and the seat number changes by that width the
         other way, so the carried
-        cells stay under the pointer. The stylesheet adds the two and does
-        the moving, and only under hide: the same cells wear the same numbers
-        under keep and never leave their place. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
+        cells stay under the pointer. The style sheet adds the two and does
+        the moving, but only when the table wears hide. Under keep the same cells wear the same numbers
+        and never leave their place. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
         yet stays in its place.</Says>
       {world === 'react'
         ? <>
@@ -87,7 +87,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
             ...unit(frameCarry, 'export const dressCarried'), gap,
             ...span(frameSettle, 'type Toward', 'const motions'), gap,
             ...unit(frameSettle, 'export const changeMotion'),
-            aside('// the reconcile sets the carried cells’ classes; the stylesheet moves them')
+            aside('// the reconcile sets the carried cells’ classes; the style sheet moves them')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(stateSource, 'export const drift'), gap,
@@ -110,9 +110,9 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
 export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
   <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
-      <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
-        carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and under keep
-        the style sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
+      <Says>Keeping the origin should be the style sheet’s decision, not a second table: the
+        carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and when the
+        table wears keep the style sheet never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
     </Words>
     <Reveal>
       {world === 'react'

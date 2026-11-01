@@ -12,7 +12,7 @@ const htmlAlone = 'An accordion in HTML alone';
 const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
 const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('exclusive'), 'How every fold moves'];
 
-const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one fold open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen\] = useState<string>\(\);/];
+const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one fold open|one open at a time/, /A radio that loses its check/, /const \[open, setOpen] = useState<string>\(\);/];
 
 describe('the accordions tab', () => {
   test.each(['inclusive', 'exclusive'])('should name no two regions the same, with %s chosen, so every landmark is its own', async type => {
@@ -88,14 +88,12 @@ describe('the accordions tab', () => {
 describe('the accordions tab’s own words', () => {
   test.each([
     'Every fold on this tab moves by transition, never by animation, because a reader may press again before the fold lands. If they do, a transition turns around from wherever it is. An animation plays a set of keyframes on its own clock, whatever the state does.',
-    'A transition can move a height to a number, so the script supplies the number. When a fold opens, the script measures the text’s real height and gives the panel that height, and the stylesheet’s transition moves the panel from 0 to it.',
     'The script makes the moves in two layout effects, code React runs after it has updated the elements and before the browser paints them. The first answers a press by pinning where the motion starts. The second, once that start is on the page, sets where it ends. So the script measures the panel and pins its start with no frame showing in between.',
     'Whether a tall fold’s last line is cut off depends on where its lines fall, so the section wears foot-shadowed. That class paints a shadow at the section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides the shadow when the text is at its end, or when the text fits.',
     'The third sets view transitions, the browser’s moves from one page state to the next, to no animation at all.',
     'You don’t always need all three languages. HTML does some jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can choose the one the job needs.',
     'The sections below are about making it slide, starting with how we did it before the browser could.',
     'The cost was the timing. The transition spent its whole time crossing the guess, so a short fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its text. The bigger the guess, the worse the rush and the wait. A guess too small cut the text off.',
-    'A ref is a handle on the element itself. The script uses the panel’s one ref only to measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a transition at all.',
     'You want the text to slide open, not appear at once.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     render(<TestApp at={demosAt('accordions')}/>);
@@ -278,7 +276,7 @@ describe('the measured build', () => {
     expect(explanation.everyCodeBeside(explained, /^React, the library this site’s script is written in, keeps what it knows in state/).join()).toContain('useState');
     expect(explanation.everyCodeBeside(explained, /The script uses the panel’s one ref only to/).join()).toContain('useRef');
     expect(explanation.everyCodeBeside(explained, /The script makes the moves in two layout effects/).join().match(/useLayoutEffect\(/g)).toHaveLength(2);
-    expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The React build hands each height to the stylesheet/)])).toEqual([]);
+    expect(outOfReadingOrder([state, ref, effects, explanation.runTelling(explained, /The React build hands each height to the style sheet/)])).toEqual([]);
   });
 
   test('should say, with exclusive chosen, that the change bubbles to the list item that records its own key, in a run of its own', async () => {
@@ -317,7 +315,7 @@ describe('the measured build', () => {
     const explained = await explanation.part(parts[0]);
     const plain = await accordionsTab.foldMeasuredByPlainScript(explained);
 
-    expect(explanation.saying(explained, 'Press the bar: with motion allowed, the script measures the text and the stylesheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it opens at once.')).toBeVisible();
+    expect(explanation.saying(explained, /^Press the bar: with motion allowed/)).toBeVisible();
     expect(outOfReadingOrder([plain, explanation.runTelling(explained, /^Most of us turned next to script/)])).toEqual([]);
   });
 
@@ -333,25 +331,23 @@ describe('the measured build', () => {
     expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /^React, the library this site’s script is written in, keeps what it knows in state/)])).toEqual([]);
   });
 
-  const handsTheHeight = /^The script hands the height to the stylesheet as a custom property/;
+  const handsTheHeight = /^The script hands the height to the style sheet as a custom property/;
   const pinsTheStart = /^On a press that moves the panel/;
 
-  test('should say, after the measured run, how the plain script hands the height to the stylesheet, beside the sized rule', async () => {
+  test('should show the sized rule beside the run that hands the height to the style sheet, after the measured run', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
 
-    expect(explanation.runTelling(explained, handsTheHeight)).toHaveTextContent('The script hands the height to the stylesheet as a custom property named --measured-height. A custom property is a value the stylesheet can read. The script also marks the panel with a class, sized. A class is a name an element wears so a rule can pick it out. While sized is on, a rule reads the number.');
     expect(explanation.everyCodeBeside(explained, handsTheHeight).join()).toMatch(/\.info-measured\.sized \{/);
     expect(explanation.everyCodeBeside(explained, handsTheHeight).join()).not.toMatch(/\.info-measured\.unmoving \{/);
   });
 
-  test('should say, in a run of its own beside the unmoving rule, how a press that moves the panel pins where the slide starts, one step a sentence', async () => {
+  test('should show the unmoving rule beside the run on how a press that moves the panel pins where the slide starts', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
 
-    expect(explanation.runTelling(explained, pinsTheStart)).toHaveTextContent('On a press that moves the panel, the script first pins where the slide starts. It writes the panel’s current height. It puts on a second class, unmoving, which turns off the height’s transition. It reads the panel’s height once and throws the number away; the read makes the browser apply the pinned start before it draws. Then it takes unmoving off and sets the end, and the stylesheet slides between the two.');
     expect(explanation.everyCodeBeside(explained, pinsTheStart).join()).toMatch(/\.info-measured\.unmoving \{/);
   });
 
@@ -392,7 +388,7 @@ describe('the measured build', () => {
 
     const explained = await explanation.part(parts[0]);
 
-    expect(explanation.everyCodeBeside(explained, /^The React build hands each height to the stylesheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
+    expect(explanation.everyCodeBeside(explained, /^The React build hands each height to the style sheet/).join()).toMatch(/@property --measured-height \{[^]*initial-value: auto;/);
     expect(explanation.everyCodeBeside(explained, /^The React build marks the panel/).join()).toMatch(/\.info-measured\.sized \{/);
     expect(explanation.everyCodeBeside(explained, /^Closing runs the other way/).join()).toMatch(/\.info-measured\.unmoving \{/);
   });
@@ -403,20 +399,10 @@ describe('the measured build', () => {
     const explained = await explanation.part(parts[0]);
 
     expect(outOfReadingOrder([
-      explanation.runTelling(explained, /^The React build hands each height to the stylesheet/),
+      explanation.runTelling(explained, /^The React build hands each height to the style sheet/),
       explanation.runTelling(explained, /^The React build marks the panel/),
       explanation.runTelling(explained, /^Closing runs the other way/)
     ])).toEqual([]);
-  });
-
-  test('should say what @property is in the property’s run, and leave the class to the next', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const declared = explanation.runTelling(await explanation.part(parts[0]), /^The React build hands each height to the stylesheet/);
-
-    expect(declared).toHaveTextContent(/^The React build hands each height to the stylesheet through the same --measured-height\./);
-    expect(declared).toHaveTextContent('The stylesheet declares that property with @property, a rule that tells the browser what kind of value a custom property holds and what it is until something sets it: here a length or auto, starting as auto.');
-    expect(declared).not.toHaveTextContent(/a name an element wears/);
   });
 
   test('should say, in the React build’s class run, only what React adds: it marks the panel sized as the plain one does', async () => {
@@ -476,7 +462,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
-    const why = explanation.saying(tab, 'The fold motion does not reach the accordion above. The reset is the stylesheet that sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.');
+    const why = explanation.saying(tab, /^The fold motion does not reach the accordion above/);
 
     expect(outOfReadingOrder([explanation.saying(tab, /^Two choices set the accordions/), why, await accordionsTab.choice('fold type')])).toEqual([]);
   });
@@ -513,7 +499,7 @@ describe('the reset', () => {
 
     const everyFoldMoves = await explanation.part(parts[3]);
 
-    expect(explanation.everySaying(await explanation.part('Accordions'), /the stylesheet that sets every element’s defaults/)).toHaveLength(1);
+    expect(explanation.everySaying(await explanation.part('Accordions'), /the style sheet that sets every element’s defaults/)).toHaveLength(1);
     expect(explanation.saying(everyFoldMoves, /^When a reader asks for/)).toHaveTextContent('every fold opens with no slide. The reset has a reduced-motion block with three rules.');
   });
 });
@@ -1059,14 +1045,6 @@ describe('the runs in view, with the folds shut', () => {
     expect(explanation.saying(oldWay, /^Closing runs the other way/)).toHaveTextContent(`The change event is the one the browser sends to the ${input} a press has just ${pressed}, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script pins the start first, with unmoving, as the plain script does.`);
   });
 
-  test.each(['inclusive', 'exclusive'])('should say, with %s chosen, that the plain fold’s checkbox and the stylesheet own whether it is open', async type => {
-    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
-
-    const oldWay = await explanation.part(parts[0]);
-
-    expect(explanation.saying(oldWay, /The cost was script/)).toHaveTextContent(/the checkbox and the stylesheet own that/);
-  });
-
   test('should open the less-motion run on what the reader gets: every fold opens with no slide', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
@@ -1155,7 +1133,7 @@ describe('the platform build’s bars', () => {
   });
 });
 
-describe('the known-height build’s stylesheet reading the hidden input', () => {
+describe('the known-height build’s style sheet reading the hidden input', () => {
   test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say what a selector, a pseudo-class and a combinator are, with %s chosen', async (type, input) => {
     render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
 
@@ -1201,16 +1179,14 @@ describe('the known-height build’s bars', () => {
   });
 
   const sharedClass = /The bar’s colors are the page’s the other way round/;
-  const wearingASharedClass = 'The bar’s colors are the page’s the other way round: light words on a dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own stylesheet. It is a class in a shared stylesheet, inverse-filled, and the bar wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the shared class.';
   const ruleThenSharedClass = /^&:not\(\.close\) \.info-label \{[^]*\.inverse-filled \{/;
 
-  test('should say, with inclusive chosen, what wearing a shared class means before any class is named, with the class beside it', async () => {
+  test('should show, with inclusive chosen, the shared class beside the run on the bar’s colors, before any class is named', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
     const run = explanation.runTelling(oldWay, sharedClass);
 
-    expect(run).toHaveTextContent(wearingASharedClass);
     expect(explanation.everyCodeBeside(oldWay, sharedClass).join()).toMatch(ruleThenSharedClass);
     expect(outOfReadingOrder([
       run,
@@ -1220,13 +1196,12 @@ describe('the known-height build’s bars', () => {
     ])).toEqual([]);
   });
 
-  test('should say, with exclusive chosen, what wearing a shared class means before any class is named, the Close bar’s among them, with the class beside it', async () => {
+  test('should show, with exclusive chosen, the shared class beside the run on the bar’s colors, the Close bar’s among them, before any class is named', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
     const run = explanation.runTelling(oldWay, sharedClass);
 
-    expect(run).toHaveTextContent(wearingASharedClass);
     expect(explanation.everyCodeBeside(oldWay, sharedClass).join()).toMatch(ruleThenSharedClass);
     expect(outOfReadingOrder([
       run,

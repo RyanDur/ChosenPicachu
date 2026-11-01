@@ -20,15 +20,17 @@ export const PresentationPractice: FC = () =>
   <>
     <h3 className="paragraph bold">What organizing CSS has to solve</h3>
     <p className="paragraph">I keep any CSS that is structurally part of a component, its grid and placement, in a
-      style sheet beside it. Everything else is sharable and lives in the shared style sheets: the reset, the tokens, the
-      vocabulary. A class names what the element is, what it needs, or what is true right now. Those are the rules,
+      style sheet beside it. Everything else is sharable and lives in the shared style sheets: the reset, the tokens,
+      which name each value once, and the vocabulary, the looks any element can wear. A class names what the element
+      is, what it needs, or what is true right now. Those are the rules,
       and the rest of this tab says how they hold.</p>
     <p className="paragraph">They hold because a style sheet is read by more than the browser, and I write it for all of its
       readers. The browser reads it to match each selector against the page, and takes the rule the cascade says
       wins. The designer reads it to change the look, and a look is changed in one place or in forty. The next
       developer reads a class list to learn what an element is and needs, before opening any style sheet. A lint reads it
       on every commit, so a rule that strays fails there and not in front of a reader.</p>
-    <p className="paragraph">So five things have to be true of the style sheets, and a gate holds each one.</p>
+    <p className="paragraph">So five things have to be true of the style sheets, and each is held by a few lines in the
+      repository.</p>
     <dl className="needs">
       <div className="need">
         <dt className="paragraph bold">Place</dt>
@@ -37,7 +39,7 @@ export const PresentationPractice: FC = () =>
           style sheet, and the <a className="signpost" href={classLint}>class lint</a> holds its other side, reading a class
           only from a style sheet in the element’s own directory or one above it, or from the shared style sheets. BEM’s{' '}
           <a className="signpost" href={bemHistory.address}>folder per block</a>, from Yandex in 2009, is where the
-          rule comes from.</dd>
+          first half comes from.</dd>
       </div>
       <div className="need">
         <dt className="paragraph bold">Value</dt>
@@ -50,7 +52,7 @@ export const PresentationPractice: FC = () =>
         <dt className="paragraph bold">Name</dt>
         <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
           <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no style sheet reads and an
-          own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+          a component’s own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
           where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
           where I part.</dd>
       </div>
@@ -74,7 +76,7 @@ export const PresentationPractice: FC = () =>
           the platform’s own way to say that order in a rule.</dd>
       </div>
     </dl>
-    <p className="paragraph">The rest of this tab says how each of the five holds here. The field put the look in other
+    <p className="paragraph">The field put the look in other
       places first, before the platform could hold it. A reset put the defaults in the author’s hands: Eric
       Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
       the browser’s margins, line heights and heading sizes,{' '}
@@ -82,7 +84,7 @@ export const PresentationPractice: FC = () =>
       2007, and Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
       defaults worth keeping instead, to{' '}
     <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing them”</a>,
-      in 2012. A preprocessor put the constants in a build step, in a language the browser never sees:{' '}
+      in 2012. A preprocessor put the values in a build step, in a language the browser never sees:{' '}
     <a className="signpost" href={libSass.address}>Sass</a>, which Hampton Catlin created and which has been supported
       since 2006, and{' '}
     <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009. A framework put
@@ -98,7 +100,7 @@ export const PresentationPractice: FC = () =>
       in the class name: Adam Wathan’s essay of 2017,{' '}
     <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, and
       Tailwind after it.</p>
-    <p className="paragraph">The platform has since put the constants, the order and the isolation in the style sheet itself,
+    <p className="paragraph">The platform has since put the values, the order and the scoping in the style sheet itself,
       each native since its date: <a className="signpost" href={customProperties.address}>custom properties</a> since
       April 2017, <a className="signpost" href={layer.address}>@layer</a> since March 2022,{' '}
     <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and{' '}
@@ -130,8 +132,7 @@ export const PresentationPractice: FC = () =>
       word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a state, since a
       modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
-      I split them, and the class list below says why. I also give up the one-class selector: a rule here nests under
-      its component’s class when it belongs to that component alone.</p>
+      I split them, and the class list below says why. I also give up the one-class selector.</p>
     <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
       <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
       utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
@@ -155,17 +156,18 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
       <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-      <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Three kinds of size it names
+      <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Four kinds of size it names
       outside that scale:</p>
     <ul className="practice-list">
       <li className="paragraph">the hairlines, in pixels, so they do not scale with the type;</li>
       <li className="paragraph">the corner radii: a pixel value for the small one, rems for the soft one and the pill;</li>
+      <li className="paragraph">a text measure, in ch, since it follows a line of text;</li>
       <li className="paragraph">the breakpoints, in pixels, since they follow the window.</li>
     </ul>
     <p className="paragraph">A few sizes belong to one component and sit in its own style sheet:</p>
     <ul className="practice-list">
-      <li className="paragraph">its container queries, in rems and one measure in ch, since they follow a container or a
-        line of text;</li>
+      <li className="paragraph">its own breakpoints, in pixels, and its container queries, in rems and one measure in ch,
+        since they follow the window, a container or a line of text;</li>
       <li className="paragraph">a table’s or a page’s width, in rems, measured to what it holds: a table’s columns at
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
@@ -189,7 +191,7 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of those gates are stylelint rules, and each prints its reason. One refuses a tag
+    <p className="paragraph">Three of the five are stylelint rules, and each prints its reason. One refuses a tag
       selector outside the reset and prints{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       Another refuses a look in a component style sheet and prints that the property{' '}

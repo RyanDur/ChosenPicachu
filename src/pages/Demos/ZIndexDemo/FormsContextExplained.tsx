@@ -69,7 +69,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}opacity`}><code className="monospaced">opacity: 0.9</code></a>, like any
           opacity below 1, forms a context because the card is drawn as one layer and then faded. A card that fades in
-          traps its menu, and nothing in the stylesheet says z-index.</p>
+          traps its menu, and nothing in the style sheet says z-index.</p>
         <Snippet label="CSS" lines={unit(zIndexCss, '.faded {')}/>
       </li>
       <li className="run">

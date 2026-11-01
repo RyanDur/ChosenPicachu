@@ -112,7 +112,7 @@ const PriceStory: FC = () =>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
             of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li, which is one item of a list, and a
             button.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. Item gives its button the
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. Item gives its button the
             site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
             those classes, as the sample shows.</Says>
         </Words>
@@ -194,7 +194,7 @@ const CandlesStory: FC = () =>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. A candle
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. A candle
             that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
             in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps what is not a look:
@@ -227,7 +227,7 @@ const CandlesStory: FC = () =>
             busiest span on the chart, and every other bar is in proportion to it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
           <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
-            properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side
+            properties, values a style sheet names once and other rules read, and a side class sets them. volume-side
             sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.</Says>
         </Words>
         <Codes>
@@ -307,10 +307,10 @@ const PressureStory: FC = () =>
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
             below. The bought bars wear buy-side and the sold bars sell-side. A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
-            says, is a name a stylesheet’s rules pick out. These two are shared classes, looks that live in the site’s
+            says, is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
             shared style sheet.</Says>
           <Says>A side class sets a side’s colors as custom properties, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
-            values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
+            values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
             stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
@@ -364,7 +364,7 @@ const PieStory: FC = () =>
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
           <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
             painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class,
-            which is a name a stylesheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says.</Says>
+            which is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
@@ -382,7 +382,7 @@ const PieStory: FC = () =>
             a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
-          <Says>The markup passes each number to the stylesheet as a custom property, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
+          <Says>The markup passes each number to the style sheet as a custom property, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             explains: a value set by name on the element,
             such as <code className="monospaced">--turn</code>, and read back in the style sheet with <code className="monospaced">var()</code>. The style sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
@@ -444,7 +444,7 @@ const WorkspaceStory: FC = () =>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
             page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. Item gives its
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. Item gives its
             button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
         </Words>
         <Codes>

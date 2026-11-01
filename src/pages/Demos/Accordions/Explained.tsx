@@ -190,7 +190,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
         build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
-      <p className="paragraph">The fold motion does not reach the accordion above. The reset is the stylesheet that sets every element’s
+      <p className="paragraph">The fold motion does not reach the accordion above. The reset is the style sheet that sets every element’s
         defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
         slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
@@ -234,7 +234,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               by its state: here, a checked {input}. The ~ is
               a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
               that says how their elements relate; it picks the siblings that come after the element on its left, the
-              elements with the same parent. That is why the order is fixed: the stylesheet can only look forward from the {input}.
+              elements with the same parent. That is why the order is fixed: the style sheet can only look forward from the {input}.
               While it is not checked, this rule collapses the text. No script is involved.</p>
             <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
             <TheRuleMatchesTheBox/>
@@ -268,14 +268,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <figure className={exhibit}>
           <PlainFold/>
           <figcaption className="caption">Press the bar: with motion allowed, the script measures the text and the
-            stylesheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it
+            style sheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it
             opens at once.</figcaption>
         </figure>
         <ol className={runs}>
           <li className="run">
             <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
               so the script supplies the number. When a fold opens, the script measures the text’s real height and gives
-              the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every fold
+              the panel that height, and the style sheet’s transition moves the panel from 0 to it. Every fold
               moves the same way, short or tall, because the target is the text’s own height. When the motion
               ends, the script takes the number away, and the panel is auto again. A number left in place goes
               stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
@@ -283,8 +283,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <Snippet label="TS" lines={withoutImports(foldSource)}/>
           </li>
           <li className="run">
-            <p className="paragraph">The script hands the height to the stylesheet as a custom property
-              named <code className="monospaced unbroken">--measured-height</code>. A custom property is a value the stylesheet can
+            <p className="paragraph">The script hands the height to the style sheet as a custom property
+              named <code className="monospaced unbroken">--measured-height</code>. A custom property is a value the style sheet can
               read. The script also marks the panel with a class, <code className="monospaced">sized</code>. A class is a name an element wears so
               a rule can pick it out. While <code className="monospaced">sized</code> is on, a rule reads the number.</p>
             <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
@@ -294,12 +294,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               writes the panel’s current height. It puts on a second class, <code className="monospaced">unmoving</code>, which turns off the
               height’s transition. It reads the panel’s height once and throws the number away; the read makes the browser
               apply the pinned start before it draws. Then it takes <code className="monospaced">unmoving</code> off and sets the end, and the
-              stylesheet slides between the two.</p>
+              style sheet slides between the two.</p>
             <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
           </li>
           <li className="run">
             <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
-              the checkbox and the stylesheet own that, so if the script fails, a fold still opens and closes, at
+              the checkbox and the style sheet own that, so if the script fails, a fold still opens and closes, at
               once.</p>
             <Snippet label="CSS" lines={[
               ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
@@ -329,7 +329,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 </li>
                 <li className="run">
                   <p className="paragraph">A ref is a handle on the element itself. The script uses the panel’s one ref only to
-                    measure: the text’s height, the height the panel stands at, and whether the stylesheet gives the height a
+                    measure: the text’s height, the height the panel stands at, and whether the style sheet gives the height a
                     transition at all.</p>
                   <Snippet label="TS" lines={[
                     ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
@@ -350,8 +350,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ]}/>
                 </li>
                 <li className="run">
-                  <p className="paragraph">The React build hands each height to the stylesheet through the
-                    same <code className="monospaced unbroken">--measured-height</code>. The stylesheet declares that
+                  <p className="paragraph">The React build hands each height to the style sheet through the
+                    same <code className="monospaced unbroken">--measured-height</code>. The style sheet declares that
                     property with <code className="monospaced">@property</code>, a rule that tells the browser what kind of value a custom
                     property holds and what it is until something sets it: here a length or auto, starting as auto.</p>
                   <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
@@ -443,10 +443,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               <li className="run">
                 <p className="paragraph">The bar’s colors are the page’s the other way round: light words on a
                   dark ground, where the page sets dark words on a light one. The rest of the site uses that look too, so I keep it out of the bar’s own
-                  stylesheet.
-                  It is a class in a shared stylesheet, <code className="monospaced">inverse-filled</code>, and the bar wears it: the class sits in
-                  the element’s class attribute, so its rules apply. The bar’s own stylesheet keeps the structure, the
-                  row, the padding and the height. The samples that follow show both, the stylesheet’s rule and then the
+                  style sheet.
+                  It is a class in a shared style sheet, <code className="monospaced">inverse-filled</code>, and the bar wears it: the class sits in
+                  the element’s class attribute, so its rules apply. The bar’s own style sheet keeps the structure, the
+                  row, the padding and the height. The samples that follow show both, the style sheet’s rule and then the
                   shared class.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
@@ -457,7 +457,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">Each bar shows an arrow that points right while its fold is closed and down
                   while it is open. The label is a flex row, which lays its children side by side: the name at one
                   end, the arrow at the other. The arrow is an empty box drawn after the label’s words, with only its
-                  top and right borders, from the shared class <code className="monospaced">corner-after</code>; the stylesheet sizes it and turns
+                  top and right borders, from the shared class <code className="monospaced">corner-after</code>; the style sheet sizes it and turns
                   it 45 degrees so the corner points right. The borders are drawn in currentcolor, the element’s own
                   text color, so the arrow changes color with the words. When the {input} is checked, the ~
                   combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn

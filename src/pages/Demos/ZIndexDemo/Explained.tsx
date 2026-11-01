@@ -41,8 +41,8 @@ export const StackingExplained: FC<Props> = ({raised, onRaised}) =>
       </li>
       <li className="run">
         <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
-          it. A class is a name a stylesheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says. A rule is a selector, which
-          names the elements it applies to, and the properties it sets on them. The stylesheet gives raised a z-index
+          it. A class is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says. A rule is a selector, which
+          names the elements it applies to, and the properties it sets on them. The style sheet gives raised a z-index
           of 1. A positioned card with a z-index of 1 is painted after every
           card left at auto, so the raised card lands on top. The others keep their order under it: they are
           still at auto, and still painted in the order the code lists them. A z-index only shows where cards

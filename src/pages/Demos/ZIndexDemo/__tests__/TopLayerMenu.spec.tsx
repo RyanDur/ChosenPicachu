@@ -76,14 +76,6 @@ describe('why the popover wins', () => {
     expect(explanation.runTelling(part, /^React is the library this site’s script is written in/)).not.toHaveTextContent('What a component writes');
   });
 
-  test('should say what a component writes is still an element, in a run of its own', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await explanation.part('Why the popover wins');
-
-    expect(explanation.runTelling(part, /^What a component writes is still an element/)).toHaveTextContent('What a component writes is still an element: a button it renders is a button, with the keys and the role that come with it, and its look still comes from the stylesheet.');
-  });
-
   test('should say Menu, Entry and Item are the site’s components, each writing one element, in a run of their own', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 

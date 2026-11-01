@@ -94,7 +94,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^The rest of this tab says how each of the five holds here/)).toEqual([
+    expect(practicePage.linksIn(/^The field put the look in other places first/)).toEqual([
       ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
       ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
       ['normalize.css', 'https://necolas.github.io/normalize.css/'],
@@ -116,7 +116,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^The platform has since put the constants, the order and the isolation in the style sheet itself/)).toEqual([
+    expect(practicePage.linksIn(/^The platform has since put the values, the order and the scoping in the style sheet itself/)).toEqual([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
@@ -158,7 +158,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [[message, address]] = practicePage.linksIn(/^Three of those gates are stylelint rules, and each prints its reason/);
+    const [[message, address]] = practicePage.linksIn(/^Three of the five are stylelint rules, and each prints its reason/);
 
     expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -169,7 +169,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [, [message, address]] = practicePage.linksIn(/^Three of those gates are stylelint rules, and each prints its reason/);
+    const [, [message, address]] = practicePage.linksIn(/^Three of the five are stylelint rules, and each prints its reason/);
 
     expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -258,13 +258,14 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should list the three kinds of size spacing.css names outside its scale', async () => {
+  test('should list the four kinds of size spacing.css names outside its scale', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.itemsListedAfter(/^Then two token files/)).toEqual([
       expect.stringMatching(/^the hairlines, in pixels/),
       expect.stringMatching(/^the corner radii/),
+      expect.stringMatching(/^a text measure, in ch/),
       expect.stringMatching(/^the breakpoints, in pixels/)
     ]);
   });
@@ -274,7 +275,7 @@ describe('the Presentation practice tab', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.itemsListedAfter(/^A few sizes belong to one component and sit in its own style sheet/)).toEqual([
-      expect.stringMatching(/^its container queries, in rems/),
+      expect.stringMatching(/^its own breakpoints, in pixels, and its container queries, in rems/),
       expect.stringMatching(/^a table’s or a page’s width, in rems, measured to what it holds/),
       expect.stringMatching(/^a drawing’s width, in pixels/)
     ]);

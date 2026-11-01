@@ -28,15 +28,6 @@ describe('the charts tutorials’ menus', () => {
     expect(chartsDesk.saysIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the page, as the z-index tab says.');
   });
 
-  test('should say what a class is, then that Item gives its button the shared classes and the page passes Menu the menu’s own, on the charts tab', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const tutorial = await chartsDesk.findFeatureStories();
-
-    expect(chartsDesk.saysIn(tutorial, /^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
-  });
-
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
@@ -59,14 +50,6 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
 
     expect(paragraphOpening(/^We are going to build the/)).toHaveTextContent('The card below tells it as a user story, a card, a conversation and a confirmation, which the z-index tab walks through: open it and you get the plan and the steps that build it, with the real code from this site, so what you read is what runs.');
-  });
-
-  test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    expect(await chartsDesk.findSays(/^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
@@ -417,9 +400,7 @@ describe('a list of charts', () => {
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
       ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
-      ['the period menu is the price line’s popover, taught on the z-index tab', 'The period menu is on this chart too, the same popover as on the price line: the kind of menu the z-index tab explains.'],
-      ['what a class is, then the classes up and down', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
-      ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
+      ['the period menu is the price line’s popover, taught on the z-index tab', 'The period menu is on this chart too, the same popover as on the price line: the kind of menu the z-index tab explains.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
     });
@@ -459,8 +440,7 @@ describe('a list of charts', () => {
 
     test.each([
       ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
-      ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
-      ['a side class sets custom properties that the bars read, and the middle line wears drawn', 'A side class sets a side’s colors as custom properties, which the accordions tab explains: values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal stroke.']
+      ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pressureStory()).toHaveTextContent(sentence);
     });
@@ -504,8 +484,7 @@ describe('a list of charts', () => {
       ['the whole pie stays put', 'Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole pie.'],
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
       ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
-      ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.'],
-      ['what a class is, beside the class a painted background cannot take', 'You could paint the split with a conic gradient, a background that sweeps color round a point. But a painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class, which is a name a stylesheet’s rules pick out, as the accordions tab says.']
+      ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);
     });

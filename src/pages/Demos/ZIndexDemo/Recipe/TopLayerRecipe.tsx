@@ -83,10 +83,10 @@ export const TopLayerRecipe: FC = () => {
       <Step title="Place the panel with two class names"
         dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine places, and no arithmetic: the browser already centers a popover.">
-          <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
+          <Says>The browser’s own style sheet, the styles every page starts with, gives a popover a fixed position, a
             size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
             It takes only the room its content needs, and the auto margins share the rest, which centers it in the
-            window. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless
+            window. That style sheet also gives a popover a border, a background and padding; the panel wears borderless
             and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
           <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
             that <cite>The user can have multiple banners</cite> explains in its

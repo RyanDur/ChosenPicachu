@@ -23,7 +23,7 @@ export {tutorialParam} from './params';
 
 const worldCopy: Record<World, string> = {
   react: 'React builds and rebuilds this table; the page you read is its render.',
-  vanilla: 'The table stands in its own document: markup, stylesheet, and script, no framework.'
+  vanilla: 'The table stands in its own document: markup, style sheet, and script, no framework.'
 };
 
 type Props = {

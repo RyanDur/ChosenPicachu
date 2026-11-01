@@ -16,7 +16,7 @@ const copy: Copy = {
   },
   motion: {
     animated: 'The swap itself is instant; displaced cells slide to their new places.',
-    static: 'The same marks land, and the stylesheet gives them no time: cells cut to their new places.'
+    static: 'The same marks land, and the style sheet gives them no time: cells cut to their new places.'
   }
 };
 

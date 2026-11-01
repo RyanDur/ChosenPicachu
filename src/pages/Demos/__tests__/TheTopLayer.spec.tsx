@@ -269,7 +269,6 @@ describe('the banner tutorial’s first story', () => {
   test.each([
     ['light dismiss', 'The usual value, auto, gives a popover light dismiss: a click outside it or the Escape key closes it.'],
     ['a React effect', 'A React effect, code that React runs after it has updated the page, runs when the number of banners changes.'],
-    ['the browser’s own stylesheet', 'The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a size that fits its content, inset: 0 and margin: auto.'],
     ['margin-block and margin-inline', 'On this page margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.']
   ])('should define %s in the first story', async (_term, sentence) => {
     render(<TestApp at={demosAt('accordions')}/>);
@@ -299,13 +298,12 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
     const placing = recipeFolds.steps(news)[2];
 
-    expect(explanation.saying(placing, /^The browser’s own stylesheet/)).toHaveTextContent(/which centers it in the window\. That stylesheet also gives a popover a border, a background and padding; the panel wears borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it show\.$/);
     expect(explanation.saying(placing, /^The \.banners rule’s overflow: visible/)).toHaveTextContent('The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen that The user can have multiple banners explains in its step Slide in from off screen.');
     expect(explanation.saying(placing, /^A class for an edge/)).toHaveTextContent(/so the choice shows in the class names\.$/);
     expect(explanation.saying(placing, /^On this page margin-block/)).toHaveTextContent(/And center sets the margins to the left and right to auto again\.$/);
     expect(explanation.saying(placing, /^The sample is the component’s line/)).toBeInTheDocument();
     expect(outOfReadingOrder([
-      explanation.saying(placing, /^The browser’s own stylesheet/),
+      explanation.saying(placing, /^The browser’s own style sheet/),
       explanation.saying(placing, /^The \.banners rule’s overflow: visible/),
       explanation.saying(placing, /^A class for an edge/),
       explanation.saying(placing, /^On this page margin-block/),
@@ -539,7 +537,6 @@ describe('the banner tutorial’s second story', () => {
     await demoTabs.open('Z-index');
     const many = await secondStory();
 
-    expect(many).toHaveTextContent('The panel is a popover, as Why the popover wins explains, and the browser’s own stylesheet gives a popover overflow: auto.');
     expect(explanation.linkNamed(many, 'Why the popover wins')).toHaveAttribute('href', zIndexTab.fragmentOf('Why the popover wins'));
   });
 

@@ -17,7 +17,7 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
       <Says>The arrow measures the header row at the keypress, the way the lift takes its
         survey, and passes the widths to the walk. The walk dispatches the reorder with two
         marks: the neighbor is shoved by the walked column’s width, and the walked column
-        settles from across the neighbor’s. The stylesheet slides both, and each clears its
+        settles from across the neighbor’s. The style sheet slides both, and each clears its
         own mark when its keyframe ends, so a held key walks the column step by step, sliding
         every step.</Says>
       <Codes>
@@ -26,13 +26,13 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...unit(headerSource, 'const walkedTo = '), gap,
             ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
-            aside('// the walk marks both parties; the stylesheet slides them; the keyframe’s end clears the mark')
+            aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...unit(frameSettle, 'const untilSettled = '),
-            aside('// the walk marks both parties; the stylesheet slides them; the keyframe’s end clears the mark')
+            aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
           ]}/>}
       </Codes>
     </Reveal>

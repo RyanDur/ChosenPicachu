@@ -5,7 +5,7 @@
 }
 
 .banners {
-  /* the browser's own stylesheet gives a popover overflow: auto, which would clip the slide */
+  /* the browser's own style sheet gives a popover overflow: auto, which would clip the slide */
   overflow: visible;
   padding: 0;
   max-inline-size: min(60ch, calc(100vw - var(--base-x-4)));

@@ -177,7 +177,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the guarantee that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
           <Says>Widths should be <Term word="share">shares</Term> of a hundred, created by
-            measuring the rendered headers when a handle is first pressed or focused; until then, the stylesheet owns the widths and no ledger exists.</Says>
+            measuring the rendered headers when a handle is first pressed or focused; until then, the style sheet owns the widths and no ledger exists.</Says>
         </Words>
         <Reveal>
           <Says>Pixel widths are the first record you reach for, and every entry in it is wrong as soon as the window

@@ -143,12 +143,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
             that is this rule’s business: your site reset already zeroes <code className="monospaced">menu</code>, and a page’s own
-            styles, the author’s, beat the browser’s default styles, its user-agent stylesheet, however narrowly the
+            styles, the author’s, beat the browser’s default styles, its user-agent style sheet, however narrowly the
             browser’s rules are aimed, because the <Mdn path="Web/CSS/Cascade">cascade</Mdn>, the order CSS uses to choose
             between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers
             are the reset’s job too; this site’s reset drops them for <code className="monospaced">menu</code> alongside <code className="monospaced">ol</code> and <code className="monospaced">ul</code>.</Says>
           <Says>One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code className="monospaced">inset: auto</code></Mdn>. The
-            browser’s default stylesheet centers every popover with <code className="monospaced">inset: 0</code>, and centered versus anchored is this menu’s own
+            browser’s default style sheet centers every popover with <code className="monospaced">inset: 0</code>, and centered versus anchored is this menu’s own
             decision, which is why the fallback below deliberately puts <code className="monospaced">inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
             your <Mdn path="Web/CSS/@supports"><code className="monospaced">@supports</code></Mdn> fallback: a centered popover.</Says>

@@ -46,11 +46,11 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
         </>}
       {world === 'react'
         ? <Says>The strike, the walk and the drop are dispatches, the slides are keyframes in
-          the stylesheet, and settling is a dispatch the element makes when its keyframe ends.
-          The static table wears the same marks and classes; the stylesheet gives them an animation
+          the style sheet, and settling is a dispatch the element makes when its keyframe ends.
+          The static table wears the same marks and classes; the style sheet gives them an animation
           of zero length, so the marks clear on the same animationend and nothing visibly moves.</Says>
         : <Says>The strike, the walk and the drop set the cells’ classes, and the slides are keyframes in
-          the stylesheet. The static build sets the same classes; the stylesheet gives them an
+          the style sheet. The static build sets the same classes; the style sheet gives them an
           animation of zero length, so they clear on the same animationend and nothing visibly moves.</Says>}
       <Says>Rows are the same motion turned vertical: a shoved row slides up or down by the
         carried row’s height, and the dropped row settles from the drop height.</Says>
@@ -61,14 +61,14 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
             ...span(reducerSource, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
             ...unit(stateSource, 'export const shoveColumns'), gap,
             ...unit(stateSource, 'export const settle'),
-            aside('// the marks are state; the strike and the drop set them, the cells wear them, the stylesheet moves them')
+            aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'const columnShoving = '), gap,
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...unit(buildSrc, 'const drop = '), gap,
             ...unit(frameSettle, 'const untilSettled = '),
-            aside('// the marks set the cells’ classes; the stylesheet moves them; the first cell’s animationend clears the column')
+            aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const displacedBetween'), gap,
@@ -92,8 +92,8 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
 export const StaticMotion: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
   <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
-      <Says>No motion should be the stylesheet’s decision, not a second table: the same marks
-        are dispatched and worn, and under static the style sheet gives them no time to play.</Says>
+      <Says>No motion should be the style sheet’s decision, not a second table: the same marks
+        are dispatched and worn, and when the table wears static the style sheet gives them no time to play.</Says>
     </Words>
     <Reveal>
       {world === 'react'

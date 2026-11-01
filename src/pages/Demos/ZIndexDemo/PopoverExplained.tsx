@@ -34,7 +34,7 @@ export const PopoverExplained: FC = () =>
       </li>
       <li className="run">
         <p className="paragraph">What a component writes is still an element: a button it renders is a button, with the
-          keys and the role that come with it, and its look still comes from the stylesheet.</p>
+          keys and the role that come with it, and its look still comes from the style sheet.</p>
       </li>
       <li className="run">
         <p className="paragraph">The button names its menu with popovertarget, and the menu is marked{' '}
