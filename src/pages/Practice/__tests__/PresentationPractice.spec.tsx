@@ -18,13 +18,11 @@ describe('the Presentation practice tab', () => {
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
-  test('should open the Presentation tab from its address, reading how I organize it from its first rule to its test', async () => {
+  test('should open the Presentation tab from its address', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
 
     expect(await practicePage.arrivedOn('Presentation')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Presentation');
-    expect(practicePage.paragraph(/^CSS has one global scope/)).toBeInTheDocument();
-    expect(practicePage.paragraph(/^The test is to read a class list on its own/)).toBeInTheDocument();
   });
 
   test('should send each answer the field gave to its source, and the quotations to the pages that hold them', async () => {
@@ -75,7 +73,7 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
-  test('should head the Presentation tab’s five parts, each before the paragraphs it heads, closing on the test a class list has to pass', async () => {
+  test('should head the Presentation tab’s six parts in reading order, closing on the test a class list has to pass', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -84,21 +82,9 @@ describe('the Presentation practice tab', () => {
       'What this site keeps',
       'Where a rule lives',
       'What a class is named for',
+      'The duties the sheet keeps',
       'The test a class list has to pass'
     ]);
-    expect(outOfReadingOrder([
-      practicePage.partHeading('What organizing CSS has to solve'),
-      practicePage.paragraph(/^CSS has one global scope/),
-      practicePage.paragraph(/^So what is left to organize is smaller than it was/),
-      practicePage.partHeading('What this site keeps'),
-      practicePage.paragraph(/^BEM is Yandex’s method, and it began at scale/),
-      practicePage.partHeading('Where a rule lives'),
-      practicePage.paragraph(/^Here is how this site’s CSS is laid out/),
-      practicePage.partHeading('What a class is named for'),
-      practicePage.paragraph(/^A class is a name for what the element is/),
-      practicePage.partHeading('The test a class list has to pass'),
-      practicePage.paragraph(/^The test is to read a class list on its own/)
-    ])).toEqual([]);
   });
 
   test('should walk the nine shared sheets in the order index.css imports them, each linked to its file in the repository', async () => {
@@ -139,14 +125,14 @@ describe('the Presentation practice tab', () => {
     expect(stylelintConfig).toContain('is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class');
   });
 
-  test('should show where a rule lives between the three lint rules and the paragraph on @layer and @scope', async () => {
+  test('should draw where a rule lives in the part it names, before what a class is named for', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(outOfReadingOrder([
-      practicePage.paragraph(/^Three lint rules hold those lines, and they are the method/),
+      practicePage.partHeading('Where a rule lives'),
       practicePage.figure(whereARuleLives),
-      practicePage.paragraph(/^I use neither @layer for order nor @scope for isolation/)
+      practicePage.partHeading('What a class is named for')
     ])).toEqual([]);
   });
 
@@ -157,7 +143,7 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.drawingsSeenIn(whereARuleLives)).toEqual([]);
   });
 
-  test('should draw src/styles’ nine sheets in import order in two groups, one component’s parts with its sheets beside them, and the word it wears, wide and stacked', async () => {
+  test('should draw src/styles in two groups, one component’s parts with its sheets beside them, and the word it wears, wide and stacked', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 

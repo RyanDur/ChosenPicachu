@@ -19,7 +19,7 @@
 
   .drawing-stacked {
     --drawn-width: 300px;
-    --widest-drawing: var(--base-x-40);
+    --widest-drawing: var(--drawn-width);
 
     display: none;
   }

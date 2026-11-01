@@ -138,7 +138,7 @@ describe('the practice page', () => {
     await practicePage.pickTab('Presentation');
 
     expect(await practicePage.arrivedOn('Presentation')).toBeInTheDocument();
-    expect(practicePage.paragraph(/^CSS has one global scope/)).toBeInTheDocument();
+    expect(practicePage.partHeading('What organizing CSS has to solve')).toBeInTheDocument();
   });
 
   test('should read Behavior’s practice when the reader picks its tab from Presentation', async () => {

@@ -160,20 +160,22 @@ export const PresentationPractice: FC = () =>
       Another refuses a look in a component sheet and prints that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
       The third refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
-      lines by convention; this repository holds them by a lint that fails the commit.</p>
+      lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
     <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
-      order and the component boundary gives a rule its reach. The cost is that the order lives in a list a reader has
-      to know to open, <code className="monospaced">index.css</code>, rather than in a rule that says so. Nesting I do
+      order and the component boundary gives a rule its reach. The cost is that the order lives in{' '}
+      <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in a rule that
+      says so. Nesting I do
       use, in most sheets, where a rule belongs inside another.</p>
-    <p className="paragraph">The site’s shared sheets hold the looks every component draws on, as a vocabulary of
-      small classes: <code className="monospaced">lifted</code>,{' '}
-    <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
-    <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the
+    <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
+      <code className="monospaced">lifted</code>,{' '}
+      <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
+      <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the
       vocabulary is what Tailwind calls a utility. An element is dressed by naming its needs, and no new rule is
-      written. That is the separation the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for:
+      written. The markup names the need and the sheet holds the value. That is the separation the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for:
       the look leaves the markup for a style sheet.</p>
+    <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces rather than write it again</a>:
       that is Wathan’s rule, and mine. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
@@ -188,7 +190,6 @@ export const PresentationPractice: FC = () =>
       separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
-    <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
       value it stands for lives in the sheet, so the name still fits when the value changes. A class list reads left
       to right: nouns, then needs, then states.</p>
@@ -209,6 +210,7 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">shoved</code> for a neighbor pushed aside. One sheet, the table’s, says what each
       does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved
       has a rule per direction: two across for columns, two down for rows.</p>
+    <h3 className="paragraph bold">The duties the sheet keeps</h3>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can set, so the
       sheet checks{' '}
     <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a>{' '}
