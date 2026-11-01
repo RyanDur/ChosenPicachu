@@ -52,8 +52,8 @@ const wide: Box[] = [...tree(6, 6), ...component(246, 6, false)];
 const stacked: Box[] = [...tree(6, 6), ...component(6, 306, true)];
 
 const wears: Record<'wide' | 'stacked', Line> = {
-  wide: {from: [198, 237], to: [258, 93], labelAt: [214, 150]},
-  stacked: {from: [198, 246], to: [150, 378], labelAt: [162, 300]}
+  wide: {from: [198, 201], to: [258, 87], labelAt: [214, 150]},
+  stacked: {from: [198, 201], to: [144, 387], labelAt: [176, 290]}
 };
 
 const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
