@@ -59,6 +59,7 @@ export const explanation = {
   samplesIn,
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
   saidIn: (part: HTMLElement, words: RegExp): HTMLElement | null => within(part).queryByText(words),
+  everySaying: (part: HTMLElement, words: RegExp): HTMLElement[] => within(part).queryAllByText(words),
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
   linksBeside: (part: HTMLElement, words: RegExp): (string | null)[][] => within(runTelling(part, words)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),

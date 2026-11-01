@@ -185,9 +185,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
       <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
         script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with
-        exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets
-        every element’s defaults, gives every details a slide that only Chromium shows today; the first accordion turns that
-        off, so a fold opens at once in every browser and you see what HTML alone does.</p>
+        exclusive, its details share a name and opening one closes the others.</p>
+      <p className="paragraph">The motion does not reach it. The reset is the stylesheet that sets every element’s
+        defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
+        slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>

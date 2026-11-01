@@ -462,13 +462,22 @@ describe('the fold choices', () => {
     expect(accordionsTab.readingIn(row).textContent).toBe('The text slides down from under its bar. If your system asks for less motion, every fold here opens at once, whichever you choose.');
   });
 
-  test('should say, just before the rows, which accordions they set', async () => {
+  test('should say, before the rows, which accordions they set', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await accordionsTab.choice('fold type');
-    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets every element’s defaults, gives every details a slide that only Chromium shows today; the first accordion turns that off, so a fold opens at once in every browser and you see what HTML alone does.');
+    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others.');
 
     expect(outOfReadingOrder([await explanation.part(htmlAlone), line, types])).toEqual([]);
+  });
+
+  test('should say, after which accordions the rows set and before the rows, why the motion does not reach the first', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const tab = await explanation.part('Accordions');
+    const why = explanation.saying(tab, 'The motion does not reach it. The reset is the stylesheet that sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.');
+
+    expect(outOfReadingOrder([explanation.saying(tab, /^Two choices set the accordions/), why, await accordionsTab.choice('fold type')])).toEqual([]);
   });
 
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
@@ -503,9 +512,8 @@ describe('the reset', () => {
 
     const everyFoldMoves = await explanation.part(parts[3]);
 
-    expect(explanation.saying(await explanation.part('Accordions'), /the stylesheet that sets every element’s defaults/)).toBeInTheDocument();
+    expect(explanation.everySaying(await explanation.part('Accordions'), /the stylesheet that sets every element’s defaults/)).toHaveLength(1);
     expect(explanation.saying(everyFoldMoves, /^When a reader asks for/)).toHaveTextContent('every fold opens with no slide. The reset has a reduced-motion block with three rules.');
-    expect(explanation.saidIn(everyFoldMoves, /the stylesheet that sets every element’s defaults/)).not.toBeInTheDocument();
   });
 });
 
