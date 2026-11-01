@@ -11,6 +11,8 @@ export const StructurePractice: FC = () =>
       an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
       a computed result. The answer to "what is this?" is usually an element’s name.
       Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">2014 moment</MomentLink>.</p>
+    <p className="paragraph">The element is the name: it says what the thing is to the browser, to a screen reader and to the next
+      developer at once, which is why I choose it first and make a new one only for a behavior that has no element.</p>
     <p className="paragraph">The skeleton comes first: one header, one main, one footer, and a nav for the
       links that move you around the site. Landmarks are the page’s table of contents, so every landmark gets a name
       and no two are the same. A section is named by its heading; if there is nothing to name it by, it is not a

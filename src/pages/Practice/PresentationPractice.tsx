@@ -10,6 +10,8 @@ export const PresentationPractice: FC = () =>
       There is no utility scale: lifted says why a style is there, and mt-4 says only what it does. Markup full of
       utilities is the look written back into the structure.
       The separation is the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s, and the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> shows what it is for.</p>
+    <p className="paragraph">A class is a name for what the element is, needs or is doing; the value it stands for lives in the
+      sheet, so the name stays true when the value changes.</p>
     <p className="paragraph">A class list reads like a sentence: the element’s own name first, then what
       it needs, then what is true right now. The platform already names most states, such as invalid, checked and
       hover, so the sheet uses those{' '}

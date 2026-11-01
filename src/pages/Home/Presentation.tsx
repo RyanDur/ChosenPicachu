@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {Quotation} from '@components/Quotation';
 import {DemoTopics, demoAddress} from '@pages/Demos/types';
+import {Paths} from '@pages/Paths';
 import {ConcernSection} from './ConcernSection';
 
 export const Presentation: FC = () =>
@@ -22,8 +23,9 @@ export const Presentation: FC = () =>
       Garden restyled one document hundreds of times that way. Call it <code>text-red</code>, and it works on any
       element with no new CSS, but turning the warnings orange means changing the HTML; that is Tailwind’s side. Adam
       Wathan, who created Tailwind, describes the choice as which way the dependency runs, and BEM and Bootstrap each
-      take a position of their own. I name classes for what things are and keep each language in its own file, but
-      either way, the work goes somewhere.</p>
+      take a position of their own. I name a class for what the element is, what it needs or what it is doing, and keep
+      the value in the sheet; <Link className="signpost" to={Paths.practice}>Practice</Link> says why. Either way, the
+      work goes somewhere.</p>
     <p className="paragraph">Motion belongs in the sheet too. A transition is the sheet’s way of moving from one look
       to the next: it says how long the change takes, and the browser draws the frames in between.{' '}
     <a className="signpost" href="https://web.dev/articles/animations-overview">A browser can animate transform and

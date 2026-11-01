@@ -27,6 +27,7 @@ export const practicePage = {
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
+  paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
     .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))

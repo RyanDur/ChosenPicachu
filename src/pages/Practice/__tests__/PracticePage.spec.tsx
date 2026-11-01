@@ -110,6 +110,17 @@ describe('the practice page', () => {
     ]);
   });
 
+  test.each([
+    ['Structure', 'structure', 'The element is the name: it says what the thing is to the browser, to a screen reader and to the next developer at once, which is why I choose it first and make a new one only for a behavior that has no element.'],
+    ['Presentation', 'presentation', 'A class is a name for what the element is, needs or is doing; the value it stands for lives in the sheet, so the name stays true when the value changes.'],
+    ['Behavior', 'behavior', 'An event is a name for what happened and a type is a name for what is true; the code reads as sentences because the next reader will read it as one.']
+  ] as const)('should follow the %s tab’s first paragraph with the principle applied to it, in one sentence', async (concern, param, applied) => {
+    render(<TestApp at={practiceAt(param)}/>);
+    await practicePage.arrivedOn(concern);
+
+    expect(practicePage.paragraphs()[1]).toBe(applied);
+  });
+
   test.each(practices)('should open the %s tab from its address, reading how I organize it from its first rule to its test', async (concern, param, firstRule, theTest) => {
     render(<TestApp at={practiceAt(param)}/>);
 
