@@ -6,7 +6,7 @@ import type {Plugin} from 'vite';
 import {loadEnv} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
-import {usersServerScript} from './src/components/Users/resource/usersServer';
+import {usersServerScript} from './src/components/Users/resource/usersServer.ts';
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
