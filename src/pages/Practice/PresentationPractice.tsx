@@ -4,7 +4,8 @@ import {ColumnHeaderClassList} from './ClassList';
 
 const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/';
 const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
-const bem = 'https://yandex.com/dev/bem/index';
+const bemHistory = 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/';
+const stylingWithUtilities = 'https://tailwindcss.com/docs/styling-with-utility-classes';
 const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
 const smacss = 'https://smacss.com/';
 const mdn = (page: string): string => `https://developer.mozilla.org/en-US/docs/Web/CSS/${page}`;
@@ -63,6 +64,34 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
       order and isolation, the rest of this tab shows what remains: where a rule lives, what a class is named for, and
       the test a class list has to pass.</p>
+    <p className="paragraph">BEM is Yandex’s method, and it began at scale. Its{' '}
+      <a className="signpost" href={bemHistory}>history</a> says that by 2006{' '}
+      <a className="signpost" href={bemHistory}>“any changes to the code of one page affected the code of other pages”</a>,
+      with more than a hundred services sharing one style library. The answer was the independent block, which{' '}
+      <a className="signpost" href={bemHistory}>“can be used anywhere on the page”</a> any number of times, and from
+      Lego 2.0 in 2009 a rule for where it lives:{' '}
+      <a className="signpost" href={bemHistory}>“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”</a>.
+      Every part and every variant is named through its block, <code className="monospaced">card__title</code> and{' '}
+      <code className="monospaced">card_lifted</code> in Yandex’s own spelling,{' '}
+      <code className="monospaced">card--lifted</code> in the two-dash style many teams use, and every selector is one
+      class, so nothing depends on where a block sits.</p>
+    <p className="paragraph">I keep three things from BEM: the block as the unit, the folder per block, which is how
+      every component and every table here is laid out, with its sheets beside its parts, and the flat selectors. I
+      leave the scoping of every look to its block. In BEM, lifted on a card and lifted on a menu are two modifiers and
+      two rules, so nothing is shared by accident and the same look is written twice; mine is one word any block can
+      wear, because a look is the sheet’s job. BEM also has no separate idea of a state, since a modifier{' '}
+    <a className="signpost" href={bemHistory}>“defines the appearance, state, and sometimes the behavior of the block”</a>;
+      I split them, and the class list below says why.</p>
+    <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
+      <a className="signpost" href={stylingWithUtilities}>styling with utility classes</a> says to start with
+      utilities and not to abstract until the duplication is real: a repeat you can fix with one loop or one
+      multi-cursor edit earns nothing, since{' '}
+      <a className="signpost" href={stylingWithUtilities}>“there’s no benefit to introducing any additional abstraction”</a>,
+      and when styles do repeat across files{' '}
+      <a className="signpost" href={stylingWithUtilities}>“the best strategy is to create a component”</a> in the
+      framework, or a template partial, rather than a CSS class. I keep two things from that: no shared look before
+      its second use, and every value from a constrained set. I leave two: the value in the class name, and reuse in
+      the component rather than the sheet.</p>
     <p className="paragraph">I write CSS in two kinds of sheet. A component’s sheet holds its structure, the grid and
       placement of that one component, named for it and kept beside it. The site’s shared sheets hold the looks every
       component draws on, as a vocabulary of small classes: <code className="monospaced">lifted</code>,{' '}
@@ -87,18 +116,8 @@ export const PresentationPractice: FC = () =>
       Change the token and every lifted element follows; the markup never knew the number. That keeps the sheet
       restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed the
       separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>
-    <p className="paragraph">BEM, Yandex’s method, sits between the two. It{' '}
-      <a className="signpost" href={bem}>divides a user interface into independent blocks</a>, each with its own
-      sheet, and names every part and every variant through its block:{' '}
-      <code className="monospaced">card__title</code>, <code className="monospaced">card_lifted</code> in Yandex’s own
-      spelling, <code className="monospaced">card--lifted</code> in the two-dash style many teams use. I keep the
-      block and its sheet, and the flat specificity that comes with one class per rule. What I give up is the scoping
-      of looks. In BEM, lifted on a card and lifted on a menu are two modifiers and two rules, so nothing is shared by
-      accident and the same look is written twice. Mine is one word any block can wear. BEM also has no separate idea
-      of a state: <code className="monospaced">--open</code> and <code className="monospaced">--large</code> are both
-      modifiers. I split them; the class list below says why. BEM takes the independent block and gives up sharing.
-      Tailwind takes sharing and gives up restyling. I take both, and pay with a vocabulary that has to be kept, and a
-      lint rule that holds it.</p>
+    <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
+      restyling. I take both, and pay with a vocabulary that has to be kept, and a lint rule that holds it.</p>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
       value it stands for lives in the sheet, so the name still fits when the value changes. A class list reads left
       to right: nouns, then needs, then states.</p>

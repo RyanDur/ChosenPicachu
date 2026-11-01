@@ -825,6 +825,16 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('CSS Utility Classes and “Separation of Concerns”')).toBe('Presentation');
   });
 
+  test('should shelve BEM’s history on the Presentation shelf, as Yandex’s page that survives only in the archive', () => {
+    expect(recordPage.shelvedAs('History')).toHaveTextContent('Yandex, bem.info; the page survives only in the archive');
+    expect(recordPage.shelfHolding('History')).toBe('Presentation');
+  });
+
+  test('should shelve Styling with utility classes on the Presentation shelf, as Tailwind CSS documentation, version 4, undated', () => {
+    expect(recordPage.shelvedAs('Styling with utility classes')).toHaveTextContent('Tailwind CSS documentation, version 4, undated');
+    expect(recordPage.shelfHolding('Styling with utility classes')).toBe('Presentation');
+  });
+
   test('should shelve BEM on the Presentation shelf, as Yandex, undated', () => {
     expect(recordPage.shelvedAs('BEM')).toHaveTextContent('Yandex, undated');
     expect(recordPage.shelfHolding('BEM')).toBe('Presentation');

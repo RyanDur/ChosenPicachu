@@ -378,9 +378,12 @@ describe('the practice page', () => {
       expect.stringMatching(/^Utilities answered constants and reuse with no new CSS/),
       expect.stringMatching(/^Since 2017 the platform has answered the needs itself/),
       expect.stringMatching(/^So what is left to organize is smaller than it was/),
+      expect.stringMatching(/^BEM is Yandex’s method, and it began at scale/),
+      expect.stringMatching(/^I keep three things from BEM/),
+      expect.stringMatching(/^Tailwind’s own advice on reuse is the part I agree with most/),
       expect.stringMatching(/^I write CSS in two kinds of sheet/),
       expect.stringMatching(/^Utilities are where I agree with Adam Wathan, who made Tailwind/),
-      expect.stringMatching(/^BEM, Yandex’s method, sits between the two/),
+      expect.stringMatching(/^BEM takes the independent block and gives up sharing/),
       expect.stringMatching(/^A class is a name for what the element is, what it needs or what is true right now/),
       expect.stringMatching(/^The nouns say what the element is/),
       expect.stringMatching(/^Presentation has duties of its own/),
@@ -431,13 +434,44 @@ describe('the practice page', () => {
     ]);
   });
 
-  test('should send Wathan’s case, Tailwind’s own words and Yandex’s method to their sources', async () => {
+  test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.link('compose a look from a shared set of pieces rather than write it again')).toHaveAttribute('href', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/');
     expect(practicePage.link('“You aren’t wasting energy inventing class names”')).toHaveAttribute('href', 'https://v3.tailwindcss.com/docs/utility-first');
-    expect(practicePage.link('divides a user interface into independent blocks')).toHaveAttribute('href', 'https://yandex.com/dev/bem/index');
+  });
+
+  test('should send BEM’s beginnings, the independent block and the folder per block to the history page’s archived copy', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^BEM is Yandex’s method, and it began at scale/)).toEqual([
+      ['history', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
+      ['“any changes to the code of one page affected the code of other pages”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
+      ['“can be used anywhere on the page”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
+      ['“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/']
+    ]);
+  });
+
+  test('should send what a BEM modifier defines to the history page’s archived copy', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^I keep three things from BEM/)).toEqual([
+      ['“defines the appearance, state, and sometimes the behavior of the block”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/']
+    ]);
+  });
+
+  test('should send Tailwind’s advice on reuse, and its two quoted lines, to its page on styling with utility classes', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^Tailwind’s own advice on reuse is the part I agree with most/)).toEqual([
+      ['styling with utility classes', 'https://tailwindcss.com/docs/styling-with-utility-classes'],
+      ['“there’s no benefit to introducing any additional abstraction”', 'https://tailwindcss.com/docs/styling-with-utility-classes'],
+      ['“the best strategy is to create a component”', 'https://tailwindcss.com/docs/styling-with-utility-classes']
+    ]);
   });
 
   test('should keep its links to the platform’s own references', async () => {
