@@ -536,12 +536,12 @@ describe('the record\'s frame and its concert', () => {
     await recordPage.arrived();
   });
 
-  test('should close the timeline by pointing at the concert', () => {
+  test('should place the timeline’s last paragraph, which points at the concert, before the concert', () => {
     expect(outOfReadingOrder([recordPage.paragraphOpening(/^Read the titles again/), recordPage.concert()])).toEqual([]);
   });
 
   test('should send each of the concert’s quotations to its source, and its one link inside the record to the 1996 moment', () => {
-    expect(within(recordPage.concert()).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')])).toEqual([
+    expect(recordPage.concertLinks()).toEqual([
       ['“start isolated and then merge”', 'https://www.w3.org/History/1989/proposal.html'],
       ['“research into fancy multimedia facilities such as sound and video”', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html'],
       ['“formed the basis for CSS”', 'https://www.wiumlie.no/2006/phd/#ch-postweb'],

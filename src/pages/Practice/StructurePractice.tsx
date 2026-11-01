@@ -18,11 +18,11 @@ export const StructurePractice: FC = () =>
     <h3 className="paragraph bold">What organizing markup has to solve</h3>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
       for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are the
-      rules I hold the markup to, and the rest of this tab says how they hold. They do not hold everywhere yet: in the
-      banners, the tables, the charts and the dials a script still finds an element by its class, and each of those is
-      a place the second rule has not reached.</p>
-    <p className="paragraph">They hold because the markup is read by more than the browser, and I write it for all of
-      its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On a long page
+      rules I hold the markup to, and the rest of this tab says how each is kept. They are not kept everywhere yet: in
+      the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
+      accordion’s script does too, on purpose, since it shows the old way.</p>
+    <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
+      it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On a long page
       most of its users go to the headings first: 71.6% in{' '}
     <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said they{' '}
     <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
@@ -67,7 +67,7 @@ export const StructurePractice: FC = () =>
     </dl>
     <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
     <h3 className="paragraph bold">The skeleton, and a name where a landmark repeats</h3>
-    <p className="paragraph">The skeleton comes first, and I keep this site’s the same on every page. One header and one
+    <p className="paragraph">The skeleton comes first, and I keep this site’s skeleton the same on every page. One header and one
       main; a footer where a page has one, as the gallery does. A nav named site, for the links that move you around
       the site. A section named pages and feedback, the rail that holds that nav and the feedback button. Where a page
       has tabs, a nav named by the tabs’ own label.</p>
@@ -252,10 +252,9 @@ export const StructurePractice: FC = () =>
     <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
       know is open: the old-way
       menu’s, and the Expand button on the z-index tab’s pile of cards. <code
-      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose: each drawing
-      whole, where the
-      caption says what it shows; and the lettering of a glyph, a dial’s axis label and a code sample’s language
-      label, where the name says it.</p>
+      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. Each drawing is
+      hidden whole, since its caption says what it shows. The lettering of a glyph, a dial’s axis label and a code
+      sample’s language label is hidden, since the element’s name already says it.</p>
     <p className="paragraph">So the rule, in one line: a name, always; a role, only where no element carries the
       meaning or one must be taken away; a state, only where the platform has none.</p>
     <h3 className="paragraph bold">The styles-off test</h3>
@@ -264,9 +263,8 @@ export const StructurePractice: FC = () =>
       read. If the meaning only appears once the CSS loads, it is in the wrong language.
       That is the <MomentLink to="documentComesBack">2016 moment</MomentLink>’s test: the document first, the program
       only where the page needs one.</p>
-    <p className="paragraph">The styles-off test is not read by eye. Four gates run it on every push, each a few
-      lines in the repository, and one rule the review holds, the reader this site runs on every push over the words
-      as well as the code.</p>
+    <p className="paragraph">The styles-off test is not read by eye. Four gates run on every push, each a few lines in
+      the repository. The review, which reads the words and the code of every push, holds one more rule.</p>
     <ul className="practice-list">
       <li className="paragraph"><code className="monospaced">axe</code>, the accessibility checker, runs on every page
         at WCAG 2 A and AA, and runs
@@ -292,7 +290,7 @@ export const StructurePractice: FC = () =>
         html5 site”</a>.
       </li>
     </ul>
-    <p className="paragraph">The rule the review holds is AGENTS.md’s:{' '}
+    <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
       <a className="signpost" href={fileInRepository('AGENTS.md')}>“Tests find what a reader finds: by role, label
         and text, never by class.”</a> A test that found a thing by its class would pass where a reader could not find
       it.</p>

@@ -33,7 +33,7 @@ describe('the Structure practice tab', () => {
     expect(outOfReadingOrder([
       practicePage.partHeading('What organizing markup has to solve'),
       practicePage.paragraph(/^I choose the element for what the thing is/),
-      practicePage.paragraph(/^They hold because the markup is read by more than the browser/),
+      practicePage.paragraph(/^The rules come from the readers/),
       practicePage.paragraph(/^So five things have to be true of the markup/),
       practicePage.paragraph(/^The rest of this tab takes each of the five in turn/),
       practicePage.partHeading('The skeleton, and a name where a landmark repeats')
@@ -166,7 +166,7 @@ describe('the Structure practice tab', () => {
       practicePage.partHeading('The styles-off test'),
       practicePage.paragraph(/^The test is to read the page with the styles turned off/),
       practicePage.paragraph(/^The styles-off test is not read by eye/),
-      practicePage.paragraph(/^The rule the review holds is AGENTS.md’s/)
+      practicePage.paragraph(/^The rule the review holds is one line in AGENTS.md/)
     ])).toEqual([]);
   });
 
@@ -191,7 +191,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const {words, address} = practicePage.quotedIn(/^The rule the review holds is AGENTS.md’s/);
+    const {words, address} = practicePage.quotedIn(/^The rule the review holds is one line in AGENTS.md/);
 
     expect(agents).toContain(words);
     expect(address).toBe(fileInRepository('AGENTS.md'));
@@ -299,7 +299,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^They hold because the markup is read by more than the browser/)).toEqual([
+    expect(practicePage.linksIn(/^The rules come from the readers/)).toEqual([
       ['WebAIM’s tenth survey', 'https://webaim.org/projects/screenreadersurvey10/'],
       ['“navigate through the headings on the page”', 'https://webaim.org/projects/screenreadersurvey10/']
     ]);
@@ -362,7 +362,7 @@ describe('the Structure practice tab', () => {
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
-    expect(practicePage.paragraph(/^I start from what the content is and pick the element for it/)).toBeInTheDocument();
+    expect(practicePage.paragraph(/^I choose the element for what the thing is/)).toBeInTheDocument();
     expect(practicePage.paragraph(/^The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 

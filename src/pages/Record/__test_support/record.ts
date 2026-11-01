@@ -31,6 +31,8 @@ export const recordPage = {
   storyMomentLine: (name: string, line: string): HTMLElement => within(storyMoments(name)).getByRole('link', {name: line}),
   timeline: (): HTMLElement => screen.getByRole('region', {name: 'How the web got its languages'}),
   concert: (): HTMLElement => screen.getByRole('region', {name: 'The concert'}),
+  concertLinks: (): (string | null)[][] => within(screen.getByRole('region', {name: 'The concert'})).getAllByRole('link')
+    .map(link => [link.textContent, link.getAttribute('href')]),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedAs,
   shelfHolding: (work: string): string | null => {
