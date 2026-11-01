@@ -93,7 +93,7 @@ export const StaticMotion: FC<{world: World; cssSource: Sample}> = ({world, cssS
   <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       <Says>No motion should be the stylesheet’s decision, not a second table: the same marks
-        are dispatched and worn, and the static style sheet gives them no time to play.</Says>
+        are dispatched and worn, and under static the style sheet gives them no time to play.</Says>
     </Words>
     <Reveal>
       {world === 'react'

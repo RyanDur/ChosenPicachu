@@ -696,7 +696,7 @@ describe('the tables demo', () => {
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
-    expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep style sheet simply never adds them up.');
+    expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and under keep the style sheet simply never adds them up.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('The style sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
     expect(recipe).not.toHaveTextContent(/stays in its seat/);
