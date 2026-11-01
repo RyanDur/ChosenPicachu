@@ -147,7 +147,7 @@ describe('the practice page', () => {
     await practicePage.pickTab('Behavior');
 
     expect(await practicePage.arrivedOn('Behavior')).toBeInTheDocument();
-    expect(practicePage.paragraph(/^Behavior splits into what is true and what happened/)).toBeInTheDocument();
+    expect(practicePage.currentTab()).toBe('Behavior');
   });
 
   test('should read Structure’s practice when the reader picks its tab from Behavior', async () => {
@@ -156,6 +156,6 @@ describe('the practice page', () => {
     await practicePage.pickTab('Structure');
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
-    expect(practicePage.paragraph(/^I start from what the content is and pick the element for it/)).toBeInTheDocument();
+    expect(practicePage.partHeading('What organizing markup has to solve')).toBeInTheDocument();
   });
 });

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {not} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {moments} from '@pages/Record/moments/moments';
-import {paragraphOpening} from '@__test_support/paragraph';
+import {paragraphOpening, paragraphOpeningIn} from '@__test_support/paragraph';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});
@@ -13,13 +13,7 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
 
 const practiceParagraphs = (): HTMLElement[] => within(practice()).getAllByRole('paragraph');
 
-const onlyParagraph = (opening: RegExp): HTMLElement => {
-  const found = practiceParagraphs().filter(paragraph => opening.test(paragraph.textContent ?? ''));
-  if (found.length === 1) {
-    return found[0];
-  }
-  throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
-};
+const onlyParagraph = (opening: RegExp): HTMLElement => paragraphOpeningIn(practice())(opening);
 
 const paragraphs = (): string[] => practiceParagraphs().map(paragraph => paragraph.textContent ?? '');
 

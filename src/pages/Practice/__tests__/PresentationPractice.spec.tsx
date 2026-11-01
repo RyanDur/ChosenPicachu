@@ -73,7 +73,7 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
-  test('should head the Presentation tab’s six parts in reading order, closing on the test a class list has to pass', async () => {
+  test('should head the Presentation tab’s seven parts in reading order, closing on the test a class list has to pass', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -83,6 +83,7 @@ describe('the Presentation practice tab', () => {
       'Where a rule lives',
       'What a class is named for',
       'The duties the sheet keeps',
+      'Workarounds the platform has retired',
       'The test a class list has to pass'
     ]);
   });
@@ -96,7 +97,7 @@ describe('the Presentation practice tab', () => {
       ...practicePage.linksIn(/^Here is how this site’s CSS is laid out/),
       ...practicePage.linksIn(/^Then two token files/),
       ...practicePage.linksIn(/^Then the vocabulary, six files by concern/)
-    ];
+    ].filter(([, href]) => (href ?? '').startsWith(Paths.repo));
 
     expect(imported).toHaveLength(9);
     expect(walked.map(([name]) => name)).toEqual(['reset', 'colors.css', 'spacing.css', 'button', 'typography', 'surface', 'drawing', 'placement', 'glide']);
@@ -234,16 +235,16 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should show the trades column’s header after the paragraph that reads a class list, before the nouns are told', async () => {
+  test('should show the trades column’s header in the part on what a class is named for', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     const figure = practicePage.figure('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.');
 
     expect(outOfReadingOrder([
-      practicePage.paragraph(/A class list reads left to right/),
+      practicePage.partHeading('What a class is named for'),
       figure,
-      practicePage.paragraph(/^The nouns say what the element is/)
+      practicePage.partHeading('The duties the sheet keeps')
     ])).toEqual([]);
   });
 
@@ -283,6 +284,6 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.citations()).toEqual([['2013', `${Paths.record}#someone-needs-components`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]);
+    expect(practicePage.citations()).toEqual([['2013', `${Paths.record}#someone-needs-components`], ['2013', `${Paths.record}#someone-needs-components`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`]]);
   });
 });

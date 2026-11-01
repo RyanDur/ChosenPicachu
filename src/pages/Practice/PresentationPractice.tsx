@@ -88,8 +88,9 @@ export const PresentationPractice: FC = () =>
       constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
       a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
-      order and isolation, and reuse through the cascade, the rest of this tab shows what remains: where a rule lives,
-      what a class is named for, and the test a class list has to pass.</p>
+      order and isolation, and reuse through the cascade, the rest of this tab shows what remains: what this site keeps from
+      BEM and Tailwind, where a rule lives, what a class is named for, the duties the sheet keeps, the workarounds the
+      platform has retired, and the test a class list has to pass.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -139,7 +140,13 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
       <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-      <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice.</p>
+      <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice; the
+      one exception is a drawing’s width, written in pixels to match its view box. Only values the code works out at
+      runtime are written inline, mostly as{' '}
+      <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
+      the sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom properties
+      are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in
+      script and now live in CSS.</p>
     <p className="paragraph">Then the vocabulary, six files by concern:{' '}
       <a className="signpost" href={sheet('button')}>button</a>,{' '}
       <a className="signpost" href={sheet('typography')}>typography</a>,{' '}
@@ -164,18 +171,15 @@ export const PresentationPractice: FC = () =>
     <WhereARuleLives/>
     <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
-      order and the component boundary gives a rule its reach. The cost is that the order lives in{' '}
-      <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in a rule that
-      says so. Nesting I do
-      use, in most sheets, where a rule belongs inside another.</p>
-    <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
-      <code className="monospaced">lifted</code>,{' '}
-      <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
-      <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the
-      vocabulary is what Tailwind calls a utility. An element is dressed by naming its needs, and no new rule is
-      written. The markup names the need and the sheet holds the value. That is the separation the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for:
-      the look leaves the markup for a style sheet.</p>
+      order and a component’s own class, with its rules keyed on it, gives a rule its reach. The cost is that the
+      order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
+      a rule that says so. I do nest a rule inside another where it belongs there, as most sheets here do.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
+    <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
+      <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>,{' '}
+      <code className="monospaced">rounded-corners</code>, <code className="monospaced">muted-ink</code>,{' '}
+      <code className="monospaced">attentive</code>. A word in the vocabulary is what Tailwind calls a utility. An
+      element wears the words for its needs, and no new rule is written.</p>
     <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces rather than write it again</a>:
       that is Wathan’s rule, and mine. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
@@ -185,9 +189,11 @@ export const PresentationPractice: FC = () =>
     <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
       reader who knows the system sees what the element looks like, and a change of design is a change to every
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
-      sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That keeps the sheet
-      restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed the
-      separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>
+      sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That is the separation
+      the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for, the look leaving the markup for a
+      style sheet, and it keeps the sheet restyleable, which is what the Zen Garden in the{' '}
+    <MomentLink to="zenGarden">2003 moment</MomentLink> showed the separation is for. It also keeps the constraint
+      where Wathan wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
@@ -218,6 +224,7 @@ export const PresentationPractice: FC = () =>
       through, so the HTML keeps{' '}
     <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a>{' '}
       and the sheet only changes the picture.</p>
+    <h3 className="paragraph bold">Workarounds the platform has retired</h3>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state
       changes it. Select options had no such way round, and now they need none: they can be styled with{' '}
@@ -225,13 +232,6 @@ export const PresentationPractice: FC = () =>
       it will <a className="signpost" href={customizableSelect.address}>“fall back to a classic select experience”</a>. That
       is the record’s pattern since the <MomentLink to="needOutrunsStandards">1996 moment</MomentLink>: a workaround,
       and then the platform.</p>
-    <p className="paragraph">Constants live in the sheet, as tokens. Only values the code works out at runtime are
-      written inline, mostly as{' '}
-    <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
-      the sheet already reads: a measured height, a position after a drag, the direction of a slide. Every size is a
-      multiple of one base, and every color is a named token on the root. Custom properties are the{' '}
-    <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in script and
-      now live in CSS.</p>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the sheet has become a pile of overrides. This test guards
