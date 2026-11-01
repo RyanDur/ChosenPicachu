@@ -89,7 +89,7 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">A div is for when I want an element that says nothing. Sometimes that is
       right, but the standard still calls it an element{' '}
     <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of last resort, for when no other element is suitable”</a>.{' '}
-      The survey above says how screen reader users move through a long page, by its headings, and a page built of
+      The survey above says most screen reader users move through a long page by its headings, and a page built of
       divs gives them nothing to move by. Everywhere else the element says what it is: a figure has its caption, a list is a list, a
       button is a button even when it looks like a link.
       The standard that calls a div a last resort is the one the browser makers wrote themselves, from the{' '}

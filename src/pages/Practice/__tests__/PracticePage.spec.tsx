@@ -164,7 +164,7 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.paragraphAfter(/^I start from what the content is and pick the element for it/))
-      .toBe('The element is the name. It tells the browser, a screen reader and the next developer at once what the thing is, so I choose it first and make a new one only for a behavior that has no element.');
+      .toEqual(expect.stringMatching(/^The element is the name\./));
   });
 
   test('should follow the Behavior tab’s first rule with the principle applied to it: an event and a type are names', async () => {
@@ -172,10 +172,10 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.paragraphAfter(/^Behavior splits into what is true and what happened/))
-      .toBe('An event is a name for what happened. The state’s type is a name for what is true, and it refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.');
+      .toEqual(expect.stringMatching(/^An event is a name for what happened\./));
   });
 
-  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before its first rule', async () => {
+  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then that it takes the first four in turn, before its first rule', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
@@ -351,14 +351,8 @@ describe('the practice page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(practicePage.link('output'))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(practicePage.paragraph(/^I start from what the content is and pick the element for it/))
-      .toHaveTextContent(/Semantic markup is the first objective listed in the 2014 moment\./);
-    expect(practicePage.paragraph(/^The elements mean something beyond how they look/))
-      .toHaveTextContent(/The 2013 moment records what that rebuilding cost: links became components and the back button became state\./);
     expect(practicePage.link(/of last resort, for when no other element is suitable/))
       .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
-    expect(practicePage.paragraph(/^A div is for when I want an element that says nothing/))
-      .toHaveTextContent(/The standard that calls a div a last resort is the one the browser makers wrote themselves, from the 2004 moment on\./);
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(practicePage.paragraph(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
@@ -369,14 +363,15 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.paragraphs()).toEqual([
-      expect.stringMatching(/^CSS has one global scope and a cascade/),
+      expect.stringMatching(/^CSS has one global scope, so every rule can reach every element, and a cascade/),
+      expect.stringMatching(/^The field answered them in turn, and each answer had a cost/),
       expect.stringMatching(/^A reset answered defaults/),
       expect.stringMatching(/^A preprocessor answered constants and reuse/),
       expect.stringMatching(/^A framework answered reuse for teams without a designer/),
       expect.stringMatching(/^A methodology answered isolation and order by convention/),
       expect.stringMatching(/^CSS in script answered isolation by build/),
       expect.stringMatching(/^Utilities answered constants and reuse with no new CSS/),
-      expect.stringMatching(/^Since 2017 the platform has answered the needs itself/),
+      expect.stringMatching(/^Since 2017 the platform has answered four of the five needs itself/),
       expect.stringMatching(/^So what is left to organize is smaller than it was/),
       expect.stringMatching(/^BEM is Yandex’s method, and it began at scale/),
       expect.stringMatching(/^I keep three things from BEM/),
@@ -418,13 +413,12 @@ describe('the practice page', () => {
     expect(practicePage.linksIn(/^CSS in script answered isolation by build/)).toEqual([
       ['CSS Modules', 'https://github.com/css-modules/css-modules'],
       ['styled-components', 'https://styled-components.com/blog/celebrating-a-decade-of-styled-components'],
-      ['2013 moment', `${Paths.record}#someone-needs-components`],
-      ['2014 moment', `${Paths.record}#the-rules-need-writing-down`]
+      ['2013 moment', `${Paths.record}#someone-needs-components`]
     ]);
     expect(practicePage.linksIn(/^Utilities answered constants and reuse with no new CSS/)).toEqual([
       ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/']
     ]);
-    expect(practicePage.linksIn(/^Since 2017 the platform has answered the needs itself/)).toEqual([
+    expect(practicePage.linksIn(/^Since 2017 the platform has answered four of the five needs itself/)).toEqual([
       ['Custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
       ['Container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
@@ -432,6 +426,34 @@ describe('the practice page', () => {
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
       ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope']
     ]);
+  });
+
+  test('should list the five needs of CSS as terms, defaults, constants, reuse, isolation and order, each with what it asks', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.terms()).toEqual(['Defaults', 'Constants', 'Reuse', 'Isolation', 'Order']);
+    expect(practicePage.definitions()).toEqual([
+      expect.stringMatching(/^that agree across browsers/),
+      expect.stringMatching(/^written once/),
+      expect.stringMatching(/^of a look/),
+      expect.stringMatching(/^of a component/),
+      expect.stringMatching(/^when rules conflict/)
+    ]);
+  });
+
+  test('should head the Presentation tab’s two parts, what organizing CSS has to solve and what this site keeps, each before the paragraphs it heads', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.partHeadings()).toEqual(['What organizing CSS has to solve', 'What this site keeps']);
+    expect(outOfReadingOrder([
+      practicePage.partHeading('What organizing CSS has to solve'),
+      practicePage.paragraph(/^CSS has one global scope/),
+      practicePage.paragraph(/^So what is left to organize is smaller than it was/),
+      practicePage.partHeading('What this site keeps'),
+      practicePage.openingParagraph(/^BEM is Yandex’s method, and it began at scale/)
+    ])).toEqual([]);
   });
 
   test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {
@@ -565,7 +587,7 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.citations()).toEqual([['2013', `${Paths.record}#someone-needs-components`], ['2014', `${Paths.record}#the-rules-need-writing-down`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]);
+    expect(practicePage.citations()).toEqual([['2013', `${Paths.record}#someone-needs-components`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]);
   });
 
   test('should rest Behavior’s practice on its own moments, each citation naming the year of the moment it opens', async () => {

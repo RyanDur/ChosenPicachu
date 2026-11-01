@@ -40,6 +40,8 @@ export const practicePage = {
     }
     return paragraphs()[found + 1];
   },
+  partHeadings: (): string[] => within(practice()).getAllByRole('heading', {level: 3}).map(heading => heading.textContent ?? ''),
+  partHeading: (name: string): HTMLElement => within(practice()).getByRole('heading', {level: 3, name}),
   terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
   definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
   linksInDefinitionOf: (term: string): (string | null)[][] => {

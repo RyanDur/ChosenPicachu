@@ -13,21 +13,43 @@ const mdn = (page: string): string => `https://developer.mozilla.org/en-US/docs/
 
 export const PresentationPractice: FC = () =>
   <>
-    <p className="paragraph">CSS has one global scope and a cascade. That is what makes it small to write and hard to
+    <h3 className="part-title paragraph bold">What organizing CSS has to solve</h3>
+    <p className="paragraph">CSS has one global scope, so every rule can reach every element, and a cascade, the rule
+      that decides which of several matching declarations wins. That is what makes it small to write and hard to
       organize: as a site grows, a rule written for one place reaches another, a value is written in forty places, and
-      nobody knows which rule wins. Every way of organizing CSS answers one or more of five needs. Defaults that agree
-      across browsers. Constants written once. Reuse of a look. Isolation of a component. Order when rules conflict.
-      The field answered them in turn, and each answer had a cost.</p>
+      the author cannot easily tell which rule wins. Every way of organizing CSS answers one or more of five needs.</p>
+    <dl className="needs">
+      <div className="need">
+        <dt className="paragraph bold">Defaults</dt>
+        <dd className="paragraph">that agree across browsers.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Constants</dt>
+        <dd className="paragraph">written once.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Reuse</dt>
+        <dd className="paragraph">of a look.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Isolation</dt>
+        <dd className="paragraph">of a component.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Order</dt>
+        <dd className="paragraph">when rules conflict.</dd>
+      </div>
+    </dl>
+    <p className="paragraph">The field answered them in turn, and each answer had a cost.</p>
     <p className="paragraph">A reset answered defaults. Eric Meyer’s{' '}
       <a className="signpost" href="https://meyerweb.com/eric/tools/css/reset/">reset</a> zeroed the browser’s margins,
       line heights and heading sizes so every site started from nothing; he called it{' '}
       <a className="signpost" href="https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/">“a starting point for creating your own defaults”</a>{' '}
-      in 2007. Nicolas Gallagher’s{' '}
-      <a className="signpost" href="https://necolas.github.io/normalize.css/">normalize.css</a> kept the defaults worth
-      keeping instead, to{' '}
+      in 2007. The cost of a reset is that the author styles everything again, including what the browser did well.
+      Nicolas Gallagher’s <a className="signpost" href="https://necolas.github.io/normalize.css/">normalize.css</a> kept
+      the defaults worth keeping instead, to{' '}
       <a className="signpost" href="https://nicolasgallagher.com/about-normalize-css/">“preserve useful browser defaults rather than erasing them”</a>,
-      as he wrote in 2012. The cost of a reset is that the author styles everything again, including what the browser
-      did well.</p>
+      as he wrote in 2012.</p>
     <p className="paragraph">A preprocessor answered constants and reuse.{' '}
       <a className="signpost" href="https://sass-lang.com/">Sass</a>, supported since 2006, and{' '}
       <a className="signpost" href="https://lesscss.org/about/">Less</a>, which Alexis Sellier made in 2009, added
@@ -48,23 +70,24 @@ export const PresentationPractice: FC = () =>
       scopes the class names so no two components collide:{' '}
     <a className="signpost" href="https://github.com/css-modules/css-modules">CSS Modules</a>, from 2015, and{' '}
     <a className="signpost" href="https://styled-components.com/blog/celebrating-a-decade-of-styled-components">styled-components</a>,
-      from 2016. The Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> and{' '}
-    <MomentLink to="html5SaysIt">2014 moment</MomentLink> tell how that began, so this tab does not. The cost is that
-      the look leaves the sheet.</p>
+      from 2016. The Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began,
+      so this tab does not. The cost is that the look leaves the sheet.</p>
     <p className="paragraph">Utilities answered constants and reuse with no new CSS. Adam Wathan’s essay of 2017,{' '}
       <a className="signpost" href={wathan}>CSS Utility Classes and “Separation of Concerns”</a>, argued for a fixed set
       of single-purpose classes drawn from a theme, and Tailwind built it. It has its own paragraph below too.</p>
-    <p className="paragraph">Since 2017 the platform has answered the needs itself.{' '}
-      <a className="signpost" href={mdn('--*')}>Custom properties</a> have been in every engine since April 2017:
-      constants. <a className="signpost" href={mdn('@layer')}>@layer</a> since March 2022: order.{' '}
+    <p className="paragraph">Since 2017 the platform has answered four of the five needs itself.{' '}
+      <a className="signpost" href={mdn('--*')}>Custom properties</a>, in every engine since April 2017, are constants.{' '}
+      <a className="signpost" href={mdn('@layer')}>@layer</a>, since March 2022, is order.{' '}
       <a className="signpost" href={mdn('@container')}>Container queries</a> since February 2023,{' '}
       <a className="signpost" href={mdn(':has')}>:has()</a> and{' '}
       <a className="signpost" href={mdn('Nesting_selector')}>nesting</a> since December 2023, and{' '}
-      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available: isolation, and reuse
-      through the cascade itself now that constants and order are native.</p>
+      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available, are isolation; and
+      with constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
+      a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
       order and isolation, the rest of this tab shows what remains: where a rule lives, what a class is named for, and
       the test a class list has to pass.</p>
+    <h3 className="part-title paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory}>history</a> says that by 2006{' '}
       <a className="signpost" href={bemHistory}>“any changes to the code of one page affected the code of other pages”</a>,

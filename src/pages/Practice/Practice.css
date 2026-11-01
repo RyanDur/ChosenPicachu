@@ -11,7 +11,8 @@
   }
 }
 
-.practice-title {
+.practice-title,
+.part-title {
   margin: 0;
 }
 
