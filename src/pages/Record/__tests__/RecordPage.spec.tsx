@@ -829,42 +829,114 @@ describe('the record', () => {
     expect(recordPage.shelfHolding(work)).toBe('Presentation');
   });
 
-  test('should shelve the five WCAG 2.2 Understanding pages the Structure tab cites on the Structure shelf, from the W3C WAI', () => {
-    const works = [
-      'Understanding Success Criterion 1.3.1: Info and Relationships',
-      'Understanding Success Criterion 1.3.2: Meaningful Sequence',
-      'Understanding Success Criterion 2.4.1: Bypass Blocks',
-      'Understanding Success Criterion 2.4.6: Headings and Labels',
-      'Understanding Success Criterion 4.1.2: Name, Role, Value'
-    ];
-
-    expect(works.map(work => recordPage.shelfHolding(work))).toEqual(works.map(() => 'Structure'));
-    works.forEach(work => expect(recordPage.shelvedAs(work)).toHaveTextContent('W3C WAI, WCAG 2.2'));
+  test('should shelve Understanding Success Criterion 1.3.1: Info and Relationships on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.1: Info and Relationships')).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 1.3.1: Info and Relationships')).toBe('Structure');
   });
 
-  test('should shelve each answer the field gave to organizing CSS, and the platform pages, on the Presentation shelf with its author and date', () => {
-    const works: [string, string][] = [
-      ['Reset Reloaded', 'Eric Meyer, meyerweb.com, 1 May 2007'],
-      ['Reset CSS', 'Eric Meyer, meyerweb.com, version 2.0, 2011'],
-      ['normalize.css', 'Nicolas Gallagher, undated'],
-      ['About normalize.css', 'Nicolas Gallagher, 28 February 2012'],
-      ['Sass', 'sass-lang.com, undated'],
-      ['About Less', 'lesscss.org, undated'],
-      ['About Bootstrap', 'Bootstrap documentation, version 5.3, undated'],
-      ['Object Oriented CSS', 'Nicole Sullivan, the OOCSS wiki on GitHub, undated'],
-      ['SMACSS', 'Jonathan Snook, smacss.com, 2011'],
-      ['CSS Modules', 'the css-modules repository on GitHub, 2015'],
-      ['Celebrating a Decade of styled-components', 'styled-components.com, 10 April 2026'],
-      ['Custom properties (--*)', 'MDN'],
-      ['@layer', 'MDN'],
-      ['@container', 'MDN'],
-      [':has()', 'MDN'],
-      ['Nesting selector (&)', 'MDN'],
-      ['@scope', 'MDN']
-    ];
+  test('should shelve Understanding Success Criterion 1.3.2: Meaningful Sequence on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 1.3.2: Meaningful Sequence')).toBe('Structure');
+  });
 
-    expect(works.map(([work]) => recordPage.shelfHolding(work))).toEqual(works.map(() => 'Presentation'));
-    works.forEach(([work, provenance]) => expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance));
+  test('should shelve Understanding Success Criterion 2.4.1: Bypass Blocks on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.1: Bypass Blocks')).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 2.4.1: Bypass Blocks')).toBe('Structure');
+  });
+
+  test('should shelve Understanding Success Criterion 2.4.6: Headings and Labels on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 2.4.6: Headings and Labels')).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 2.4.6: Headings and Labels')).toBe('Structure');
+  });
+
+  test('should shelve Understanding Success Criterion 4.1.2: Name, Role, Value on the Structure shelf, as W3C WAI, WCAG 2.2', () => {
+    expect(recordPage.shelvedAs('Understanding Success Criterion 4.1.2: Name, Role, Value')).toHaveTextContent('W3C WAI, WCAG 2.2');
+    expect(recordPage.shelfHolding('Understanding Success Criterion 4.1.2: Name, Role, Value')).toBe('Structure');
+  });
+
+  test('should shelve Reset Reloaded on the Presentation shelf, as Eric Meyer, meyerweb.com, 1 May 2007', () => {
+    expect(recordPage.shelvedAs('Reset Reloaded')).toHaveTextContent('Eric Meyer, meyerweb.com, 1 May 2007');
+    expect(recordPage.shelfHolding('Reset Reloaded')).toBe('Presentation');
+  });
+
+  test('should shelve Reset CSS on the Presentation shelf, as Eric Meyer, meyerweb.com, version 2.0, 2011', () => {
+    expect(recordPage.shelvedAs('Reset CSS')).toHaveTextContent('Eric Meyer, meyerweb.com, version 2.0, 2011');
+    expect(recordPage.shelfHolding('Reset CSS')).toBe('Presentation');
+  });
+
+  test('should shelve normalize.css on the Presentation shelf, as Nicolas Gallagher, undated', () => {
+    expect(recordPage.shelvedAs('normalize.css')).toHaveTextContent('Nicolas Gallagher, undated');
+    expect(recordPage.shelfHolding('normalize.css')).toBe('Presentation');
+  });
+
+  test('should shelve About normalize.css on the Presentation shelf, as Nicolas Gallagher, 28 February 2012', () => {
+    expect(recordPage.shelvedAs('About normalize.css')).toHaveTextContent('Nicolas Gallagher, 28 February 2012');
+    expect(recordPage.shelfHolding('About normalize.css')).toBe('Presentation');
+  });
+
+  test('should shelve Sass on the Presentation shelf, as sass-lang.com, undated', () => {
+    expect(recordPage.shelvedAs('Sass')).toHaveTextContent('sass-lang.com, undated');
+    expect(recordPage.shelfHolding('Sass')).toBe('Presentation');
+  });
+
+  test('should shelve About Less on the Presentation shelf, as lesscss.org, undated', () => {
+    expect(recordPage.shelvedAs('About Less')).toHaveTextContent('lesscss.org, undated');
+    expect(recordPage.shelfHolding('About Less')).toBe('Presentation');
+  });
+
+  test('should shelve About Bootstrap on the Presentation shelf, as Bootstrap documentation, version 5.3, undated', () => {
+    expect(recordPage.shelvedAs('About Bootstrap')).toHaveTextContent('Bootstrap documentation, version 5.3, undated');
+    expect(recordPage.shelfHolding('About Bootstrap')).toBe('Presentation');
+  });
+
+  test('should shelve Object Oriented CSS on the Presentation shelf, as Nicole Sullivan, the OOCSS wiki on GitHub, undated', () => {
+    expect(recordPage.shelvedAs('Object Oriented CSS')).toHaveTextContent('Nicole Sullivan, the OOCSS wiki on GitHub, undated');
+    expect(recordPage.shelfHolding('Object Oriented CSS')).toBe('Presentation');
+  });
+
+  test('should shelve SMACSS on the Presentation shelf, as Jonathan Snook, smacss.com, 2011', () => {
+    expect(recordPage.shelvedAs('SMACSS')).toHaveTextContent('Jonathan Snook, smacss.com, 2011');
+    expect(recordPage.shelfHolding('SMACSS')).toBe('Presentation');
+  });
+
+  test('should shelve CSS Modules on the Presentation shelf, as the css-modules repository on GitHub, 2015', () => {
+    expect(recordPage.shelvedAs('CSS Modules')).toHaveTextContent('the css-modules repository on GitHub, 2015');
+    expect(recordPage.shelfHolding('CSS Modules')).toBe('Presentation');
+  });
+
+  test('should shelve Celebrating a Decade of styled-components on the Presentation shelf, as styled-components.com, 10 April 2026', () => {
+    expect(recordPage.shelvedAs('Celebrating a Decade of styled-components')).toHaveTextContent('styled-components.com, 10 April 2026');
+    expect(recordPage.shelfHolding('Celebrating a Decade of styled-components')).toBe('Presentation');
+  });
+
+  test('should shelve Custom properties (--*) on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('Custom properties (--*)')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('Custom properties (--*)')).toBe('Presentation');
+  });
+
+  test('should shelve @layer on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('@layer')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('@layer')).toBe('Presentation');
+  });
+
+  test('should shelve @container on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('@container')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('@container')).toBe('Presentation');
+  });
+
+  test('should shelve :has() on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs(':has()')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding(':has()')).toBe('Presentation');
+  });
+
+  test('should shelve Nesting selector (&) on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('Nesting selector (&)')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('Nesting selector (&)')).toBe('Presentation');
+  });
+
+  test('should shelve @scope on the Presentation shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('@scope')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('@scope')).toBe('Presentation');
   });
 
   test('should shelve the Application Continuum on the Behavior shelf, undated, as its page gives no date', () => {
