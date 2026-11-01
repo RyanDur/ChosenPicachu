@@ -510,7 +510,7 @@ describe('the practice page', () => {
 
     expect(await practicePage.arrivedOn('Presentation')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Presentation');
-    expect(practicePage.paragraph(/^I write CSS in two kinds of sheet/)).toBeInTheDocument();
+    expect(practicePage.paragraph(/^CSS has one global scope/)).toBeInTheDocument();
     expect(practicePage.paragraph(/^The test is to read a class list on its own/)).toBeInTheDocument();
   });
 
@@ -529,7 +529,7 @@ describe('the practice page', () => {
     await practicePage.pickTab('Presentation');
 
     expect(await practicePage.arrivedOn('Presentation')).toBeInTheDocument();
-    expect(practicePage.paragraph(/^I write CSS in two kinds of sheet/)).toBeInTheDocument();
+    expect(practicePage.paragraph(/^CSS has one global scope/)).toBeInTheDocument();
   });
 
   test('should read Behavior’s practice when the reader picks its tab from Presentation', async () => {
@@ -562,41 +562,15 @@ describe('the practice page', () => {
     expect(practicePage.paragraph(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
-  test('should tell presentation in its paragraphs, in order, from CSS’s one global scope, through what this site keeps, to the test', async () => {
+  test('should tell presentation from CSS’s one global scope, through what this site keeps, to the test', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.paragraphs()).toEqual([
-      expect.stringMatching(/^CSS has one global scope, so every rule can reach every element, and a cascade/),
-      expect.stringMatching(/^The field answered them in turn, and each answer had a cost/),
-      expect.stringMatching(/^A reset answered defaults/),
-      expect.stringMatching(/^A preprocessor answered constants and reuse/),
-      expect.stringMatching(/^A framework answered reuse for teams without a designer/),
-      expect.stringMatching(/^A methodology answered isolation and order by convention/),
-      expect.stringMatching(/^CSS in script answered isolation by build/),
-      expect.stringMatching(/^Utilities answered constants and reuse with no new CSS/),
-      expect.stringMatching(/^Since 2017 the platform has answered four of the five needs itself/),
-      expect.stringMatching(/^So what is left to organize is smaller than it was/),
-      expect.stringMatching(/^BEM is Yandex’s method, and it began at scale/),
-      expect.stringMatching(/^I keep three things from BEM/),
-      expect.stringMatching(/^I give up the scoping of every look to its block/),
-      expect.stringMatching(/^Tailwind’s own advice on reuse is the part I agree with most/),
-      expect.stringMatching(/^Here is how this site’s CSS is laid out, in the order index\.css imports it/),
-      expect.stringMatching(/^Then two token files/),
-      expect.stringMatching(/^Then the vocabulary, six files by concern/),
-      expect.stringMatching(/^Then the component sheets/),
-      expect.stringMatching(/^Two gates hold those lines, and they are the method/),
-      expect.stringMatching(/^What this repository does not use is the platform’s newer scoping/),
-      expect.stringMatching(/^I write CSS in two kinds of sheet/),
-      expect.stringMatching(/^Compose a look from a shared set of pieces rather than write it again: that is Wathan’s rule, and mine/),
-      expect.stringMatching(/^BEM takes the independent block and gives up sharing/),
-      expect.stringMatching(/^A class is a name for what the element is, what it needs or what is true right now/),
-      expect.stringMatching(/^The nouns say what the element is/),
-      expect.stringMatching(/^Presentation has duties of its own/),
-      expect.stringMatching(/^Workarounds go away as the platform catches up/),
-      expect.stringMatching(/^Constants live in the sheet, as tokens/),
-      expect.stringMatching(/^The test is to read a class list on its own/)
-    ]);
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^CSS has one global scope/),
+      practicePage.partHeading('What this site keeps'),
+      practicePage.paragraph(/^The test is to read a class list on its own/)
+    ])).toEqual([]);
   });
 
   test('should send each answer the field gave to its source, and the quotations to the pages that hold them', async () => {
@@ -647,17 +621,19 @@ describe('the practice page', () => {
     expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
-  test('should head the Presentation tab’s two parts, what organizing CSS has to solve and what this site keeps, each before the paragraphs it heads', async () => {
+  test('should head the Presentation tab’s three parts, what organizing CSS has to solve, what this site keeps and where a rule lives, each before the paragraphs it heads', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.partHeadings()).toEqual(['What organizing CSS has to solve', 'What this site keeps']);
+    expect(practicePage.partHeadings()).toEqual(['What organizing CSS has to solve', 'What this site keeps', 'Where a rule lives']);
     expect(outOfReadingOrder([
       practicePage.partHeading('What organizing CSS has to solve'),
       practicePage.paragraph(/^CSS has one global scope/),
       practicePage.paragraph(/^So what is left to organize is smaller than it was/),
       practicePage.partHeading('What this site keeps'),
-      practicePage.paragraph(/^BEM is Yandex’s method, and it began at scale/)
+      practicePage.paragraph(/^BEM is Yandex’s method, and it began at scale/),
+      practicePage.partHeading('Where a rule lives'),
+      practicePage.paragraph(/^Here is how this site’s CSS is laid out/)
     ])).toEqual([]);
   });
 
@@ -677,17 +653,26 @@ describe('the practice page', () => {
     expect(walked.map(([, href]) => href)).toEqual(imported.map(file => `${Paths.repo}/blob/main/src/styles/${file}.css`));
   });
 
-  test('should quote the two gates’ messages as stylelint.config.js prints them, each signposted to the config', async () => {
+  test('should quote the tag rule’s message as stylelint.config.js prints it, signposted to the config', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const quoted = practicePage.linksIn(/^Two gates hold those lines, and they are the method/);
+    const [[message, address]] = practicePage.linksIn(/^Three lint rules hold those lines, and they are the method/);
 
-    expect(quoted).toEqual([
-      ['“a tag is styled only in src/styles/reset.css; give the element a class”', `${Paths.repo}/blob/main/stylelint.config.js`],
-      ['“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”', `${Paths.repo}/blob/main/stylelint.config.js`]
-    ]);
-    quoted.forEach(([message]) => expect(stylelintConfig).toContain((message ?? '').slice(1, -1)));
+    expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
+    expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
+    expect(stylelintConfig).toContain('a tag is styled only in src/styles/reset.css; give the element a class');
+  });
+
+  test('should quote the look rule’s message as stylelint.config.js prints it, signposted to the config', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const [, [message, address]] = practicePage.linksIn(/^Three lint rules hold those lines, and they are the method/);
+
+    expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
+    expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
+    expect(stylelintConfig).toContain('is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class');
   });
 
   test('should show where a rule lives between the gates and what the repository does not use', async () => {
@@ -695,9 +680,9 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(outOfReadingOrder([
-      practicePage.paragraph(/^Two gates hold those lines, and they are the method/),
+      practicePage.paragraph(/^Three lint rules hold those lines, and they are the method/),
       practicePage.figure(whereARuleLives),
-      practicePage.paragraph(/^What this repository does not use is the platform’s newer scoping/)
+      practicePage.paragraph(/^This repository uses neither @layer for order nor @scope for isolation/)
     ])).toEqual([]);
   });
 
@@ -712,8 +697,11 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [reset, colors, spacing, ...vocabulary] = sheetsImported();
-    const tree = ['src/styles', 'the reset and the tokens', reset, colors, spacing, 'the vocabulary, by concern', ...vocabulary.flatMap(file => file === 'surface' ? [file, 'lifted'] : [file])];
+    const tree = [
+      'src/styles',
+      'the reset and the tokens', 'reset', 'colors', 'spacing',
+      'the vocabulary, by concern', 'button', 'typography', 'surface', 'lifted', 'drawing', 'placement', 'glide'
+    ];
     const component = ['DragSortableTable', 'DraggableColumn.tsx', 'RowGrip.tsx', 'SortMenu.tsx', 'ResizeHandle.tsx', 'Table.css', 'Header.css', 'RowGrip.css'];
     const frame = [...tree, ...component, 'wears'];
 

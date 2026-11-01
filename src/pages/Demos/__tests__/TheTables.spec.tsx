@@ -640,6 +640,15 @@ describe('the tables demo', () => {
     expect(recipeFolds.opened(recipeFolds.reveals(recipe))).toHaveLength(0);
   });
 
+  test('the drag build in plain HTML links its implementation to its file on GitHub', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await tablesTab.recipe('drag sort');
+
+    expect((await tablesTab.linksIn('drag sort', 'the implementation'))[0]).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/pages/Demos/Tables/Frame/builds/Eager.ts');
+  });
+
   test('the drag build shows the code and links out to it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables')} feed={feed}/>);

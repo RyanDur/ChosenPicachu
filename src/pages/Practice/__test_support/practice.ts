@@ -48,7 +48,11 @@ export const practicePage = {
     throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
   },
   itemsListedAfter: (opening: RegExp): string[] => {
-    const list = within(practice()).getAllByRole('paragraph').find(paragraph => opening.test(paragraph.textContent ?? ''))?.nextElementSibling;
+    const found = within(practice()).getAllByRole('paragraph').filter(paragraph => opening.test(paragraph.textContent ?? ''));
+    if (found.length !== 1) {
+      throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
+    }
+    const list = found[0].nextElementSibling;
     if (list instanceof HTMLElement) {
       return within(list).getAllByRole('listitem').map(item => item.textContent ?? '');
     }
