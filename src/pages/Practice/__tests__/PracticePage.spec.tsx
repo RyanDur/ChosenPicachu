@@ -11,6 +11,8 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import tableSource from '@pages/Demos/Tables/Frame/table.html?sample';
 import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import columnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import indexCss from '/src/index.css?raw';
+import stylelintConfig from '/stylelint.config.js?raw';
 
 const appContinuum = 'https://www.appcontinuum.io/';
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
@@ -447,6 +449,12 @@ describe('the practice page', () => {
       expect.stringMatching(/^BEM is Yandex’s method, and it began at scale/),
       expect.stringMatching(/^I keep three things from BEM/),
       expect.stringMatching(/^Tailwind’s own advice on reuse is the part I agree with most/),
+      expect.stringMatching(/^Here is how this site’s CSS is laid out, in the order index\.css imports it/),
+      expect.stringMatching(/^Then two token files/),
+      expect.stringMatching(/^Then the vocabulary, six files by concern/),
+      expect.stringMatching(/^Then the component sheets/),
+      expect.stringMatching(/^Two gates hold those lines, and they are the method/),
+      expect.stringMatching(/^What this repository does not use is the platform’s newer scoping/),
       expect.stringMatching(/^I write CSS in two kinds of sheet/),
       expect.stringMatching(/^Utilities are where I agree with Adam Wathan, who made Tailwind/),
       expect.stringMatching(/^BEM takes the independent block and gives up sharing/),
@@ -525,6 +533,35 @@ describe('the practice page', () => {
       practicePage.partHeading('What this site keeps'),
       practicePage.openingParagraph(/^BEM is Yandex’s method, and it began at scale/)
     ])).toEqual([]);
+  });
+
+  test('should walk the nine shared sheets in the order index.css imports them, each linked to its file in the repository', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const imported = [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
+    const walked = [
+      ...practicePage.linksIn(/^Here is how this site’s CSS is laid out/),
+      ...practicePage.linksIn(/^Then two token files/),
+      ...practicePage.linksIn(/^Then the vocabulary, six files by concern/)
+    ];
+
+    expect(imported).toHaveLength(9);
+    expect(walked.map(([name]) => name)).toEqual(['reset', 'colors.css', 'spacing.css', 'button', 'typography', 'surface', 'drawing', 'placement', 'glide']);
+    expect(walked.map(([, href]) => href)).toEqual(imported.map(file => `${Paths.repo}/blob/main/src/styles/${file}.css`));
+  });
+
+  test('should quote the two gates’ messages as stylelint.config.js prints them, each signposted to the config', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const quoted = practicePage.linksIn(/^Two gates hold those lines, and they are the method/);
+
+    expect(quoted).toEqual([
+      ['“a tag is styled only in src/styles/reset.css; give the element a class”', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”', `${Paths.repo}/blob/main/stylelint.config.js`]
+    ]);
+    quoted.forEach(([message]) => expect(stylelintConfig).toContain((message ?? '').slice(1, -1)));
   });
 
   test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {

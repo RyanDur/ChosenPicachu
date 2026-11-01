@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {Paths} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {ColumnHeaderClassList} from './ClassList';
 
@@ -10,6 +11,9 @@ const stylingWithUtilities = 'https://tailwindcss.com/docs/styling-with-utility-
 const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
 const smacss = 'https://smacss.com/';
 const mdn = (page: string): string => `https://developer.mozilla.org/en-US/docs/Web/CSS/${page}`;
+const inTheRepository = (path: string): string => `${Paths.repo}/blob/main/${path}`;
+const sheet = (file: string): string => inTheRepository(`src/styles/${file}.css`);
+const stylelintConfig = inTheRepository('stylelint.config.js');
 
 export const PresentationPractice: FC = () =>
   <>
@@ -116,6 +120,42 @@ export const PresentationPractice: FC = () =>
       framework, or a template partial, rather than a CSS class. I keep two things from that: no shared look before
       its second use, and every value from a constrained set. I leave two: the value in the class name, and reuse in
       the component rather than the sheet.</p>
+    <p className="paragraph">Here is how this site’s CSS is laid out, in the order{' '}
+      <code className="monospaced">index.css</code> imports it. First the{' '}
+      <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
+      elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
+      datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
+    <p className="paragraph">Then two token files. <a className="signpost" href={sheet('colors')}>colors.css</a> names
+      the raw values first, a palette of named colors, and then the roles a component reads:{' '}
+    <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
+    <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
+      to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
+    <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice.</p>
+    <p className="paragraph">Then the vocabulary, six files by concern:{' '}
+      <a className="signpost" href={sheet('button')}>button</a>,{' '}
+      <a className="signpost" href={sheet('typography')}>typography</a>,{' '}
+      <a className="signpost" href={sheet('surface')}>surface</a>,{' '}
+      <a className="signpost" href={sheet('drawing')}>drawing</a>,{' '}
+      <a className="signpost" href={sheet('placement')}>placement</a> and{' '}
+      <a className="signpost" href={sheet('glide')}>glide</a>. A word in it is one look under one name that any
+      element can wear, resolved through a token. There are about a hundred and fifty. A word is added when a look is
+      needed by its second element, not its first: before that it is structure in the one component’s sheet.</p>
+    <p className="paragraph">Then the component sheets, which the vocabulary files do not import because each is
+      imported by its component. A component’s sheet holds its structure only, the grid and placement of that one
+      component, named for it and kept beside it. A family of components shares a sheet at the family’s root, as the
+      tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
+      sit at the top of the tables.</p>
+    <p className="paragraph">Two gates hold those lines, and they are the method. A lint rule refuses a tag selector
+      outside the reset and prints{' '}
+    <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
+      Another refuses a look in a component sheet and prints that the property{' '}
+    <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
+      A third refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
+      lines by convention; this repository holds them by a lint that fails the commit.</p>
+    <p className="paragraph">What this repository does not use is the platform’s newer scoping: no{' '}
+      <code className="monospaced">@layer</code> and no <code className="monospaced">@scope</code>, because the import
+      order above gives the cascade its order and the component boundary gives a rule its reach. Nesting it does use,
+      in most sheets, where a rule belongs inside another.</p>
     <p className="paragraph">I write CSS in two kinds of sheet. A component’s sheet holds its structure, the grid and
       placement of that one component, named for it and kept beside it. The site’s shared sheets hold the looks every
       component draws on, as a vocabulary of small classes: <code className="monospaced">lifted</code>,{' '}
