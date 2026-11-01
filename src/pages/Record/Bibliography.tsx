@@ -296,7 +296,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://v3.tailwindcss.com/docs/utility-first"><cite>Utility-First Fundamentals</cite></a>{' '}
-            <span className="provenance caption">Tailwind CSS documentation, version 3</span>
+            <span className="provenance caption">Tailwind CSS documentation, version 3, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://yandex.com/dev/bem/index"><cite>BEM</cite></a>{' '}

@@ -823,7 +823,7 @@ describe('the record', () => {
   test.each([
     ['CSS Utility Classes and ‘Separation of Concerns’', 'Adam Wathan, 2017'],
     ['BEM', 'Yandex, undated'],
-    ['Utility-First Fundamentals', 'Tailwind CSS documentation, version 3']
+    ['Utility-First Fundamentals', 'Tailwind CSS documentation, version 3, undated']
   ])('should shelve %s on the Presentation shelf, as %s', (work, provenance) => {
     expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
     expect(recordPage.shelfHolding(work)).toBe('Presentation');

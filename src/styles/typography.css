@@ -42,6 +42,10 @@
   font-size: calc(var(--text-caption) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
 }
 
+.drawn-to-scale {
+  font-size: var(--base);
+}
+
 .page-title {
   font-size: var(--base-x-4);
 }

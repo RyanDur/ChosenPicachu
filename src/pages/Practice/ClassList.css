@@ -2,23 +2,14 @@
   display: grid;
   gap: var(--base);
   margin: 0;
-  container-type: inline-size;
 
   .class-list-wide,
   .class-list-narrow {
-    --drawing-column: 100cqi;
-
     inline-size: 100%;
     block-size: auto;
   }
 
-  .class-list-wide {
-    --drawn-width: 520px;
-  }
-
   .class-list-narrow {
-    --drawn-width: 320px;
-
     display: none;
     max-inline-size: var(--base-x-60);
   }

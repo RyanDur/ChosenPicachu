@@ -8,8 +8,6 @@
 
 .drawn-filled { fill: var(--charcoal); }
 
-.drawn-to-scale { font-size: var(--base); }
-
 .approach-filled { fill: var(--approach); }
 
 .ring-drawn { stroke: var(--ring); }

@@ -15,38 +15,37 @@ export const PresentationPractice: FC = () =>
     <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
     <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A class like that
       is a utility: one look, under one name, that any element can wear. An element is dressed by naming its needs,
-      and no new rule is written. Element selectors appear only in the reset. The separation is the{' '}
-    <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s.</p>
-    <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
-      value it stands for lives in the sheet, so the name still fits when the value changes.</p>
+      and no new rule is written. Element selectors appear only in the reset. The separation of the look from the
+      markup is the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s.</p>
     <p className="paragraph">Utilities are where I agree with Adam Wathan, who made Tailwind:{' '}
       <a className="signpost" href={wathan}>compose a look from a shared set of pieces rather than write it again</a>,
       and choose every value from a constrained set, so the design stays consistent as the site grows. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
-      <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. A name is a
-      cost, so stop paying it, and the CSS stops growing. I think the energy is not wasted; it is the writer paying
-      once what every reader would otherwise pay each time. Tailwind’s <code className="monospaced">shadow-md</code>{' '}
-      and <code className="monospaced">p-4</code> name the value, so a reader who knows the system sees what the
-      element looks like, and a change of design is a change to every element. Mine name the need:{' '}
-      <code className="monospaced">lifted</code> says why the style is there, and the sheet says what lifted means
-      today, through a token, a named value such as <code className="monospaced">--light-box-shadow</code> that every
-      rule reads instead of writing the number. Change the token and every lifted element follows; the markup never
-      knew the number. That keeps the sheet restyleable, which is what the Zen Garden in the{' '}
-      <MomentLink to="zenGarden">2003 moment</MomentLink> showed the separation is for, and it keeps the constraint
-      where Wathan wants it, in one place.</p>
+      <a className="signpost" href={utilityFirst}>“You aren’t wasting energy inventing class names”</a>. Its case is
+      that a name is a cost, so stop paying it, and the CSS stops growing. I think the energy is not wasted; it is the
+      writer paying once what every reader would otherwise pay each time. Tailwind’s{' '}
+      <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
+      reader who knows the system sees what the element looks like, and a change of design is a change to every
+      element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
+      sheet says what lifted means today, through a token. A token is a named value, such as{' '}
+      <code className="monospaced">--light-box-shadow</code>, that every rule reads instead of writing the number.
+      Change the token and every lifted element follows; the markup never knew the number. That keeps the sheet
+      restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed the
+      separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>
     <p className="paragraph">BEM, Yandex’s method, sits between the two. It{' '}
       <a className="signpost" href={bem}>divides a user interface into independent blocks</a>, each with its own
       sheet, and names every part and every variant through its block:{' '}
       <code className="monospaced">card__title</code>, <code className="monospaced">card_lifted</code> in Yandex’s own
-      spelling, <code className="monospaced">card--lifted</code> as most teams write it. I keep the block and its
-      sheet, and the flat specificity that comes with one class per rule. What I give up is the scoping of looks. In
-      BEM, lifted on a card and lifted on a menu are two modifiers and two rules, so nothing is shared by accident and
-      the same look is written twice. Mine is one word any block can wear. BEM also has no separate idea of a state:{' '}
-      <code className="monospaced">--open</code> and <code className="monospaced">--large</code> are both modifiers. I
-      split them, because the platform already names most states, so <code className="monospaced">:hover</code> needs
-      no class where <code className="monospaced">card--hovered</code> does. BEM takes the independent block and gives
-      up sharing. Tailwind takes sharing and gives up restyling. I take both, and pay with a vocabulary that has to be
-      kept, and a lint rule that holds it.</p>
+      spelling, <code className="monospaced">card--lifted</code> in the two-dash style many teams use. I keep the
+      block and its sheet, and the flat specificity that comes with one class per rule. What I give up is the scoping
+      of looks. In BEM, lifted on a card and lifted on a menu are two modifiers and two rules, so nothing is shared by
+      accident and the same look is written twice. Mine is one word any block can wear. BEM also has no separate idea
+      of a state: <code className="monospaced">--open</code> and <code className="monospaced">--large</code> are both
+      modifiers. I split them; the class list below says why. BEM takes the independent block and gives up sharing.
+      Tailwind takes sharing and gives up restyling. I take both, and pay with a vocabulary that has to be kept, and a
+      lint rule that holds it.</p>
+    <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
+      value it stands for lives in the sheet, so the name still fits when the value changes.</p>
     <p className="paragraph">A class list reads left to right: nouns, then needs, then states.</p>
     <ColumnHeaderClassList/>
     <p className="paragraph">The nouns say what the element is: <code className="monospaced">cell</code> and{' '}
@@ -56,11 +55,11 @@ export const PresentationPractice: FC = () =>
       words from the shared sheets, each resolved through a token, so the sheet decides what a muted bar or a focus
       ring is today and every element that asks for one follows. The states say what is true right now. The platform
       already names most of them, such as <code className="monospaced">:hover</code>,{' '}
-      <code className="monospaced">:focus</code>, <code className="monospaced">invalid</code> and{' '}
-      <code className="monospaced">checked</code>, so the sheet uses those{' '}
+      <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and{' '}
+      <code className="monospaced">:checked</code>, so the sheet uses those{' '}
       <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a>{' '}
       and no class is written. I add a state name only where the platform has no word:{' '}
-      <code className="monospaced">carried</code> for the column being dragged,{' '}
+      <code className="monospaced">carried</code> for the column or row being dragged,{' '}
       <code className="monospaced">settling</code> for the one sliding back into place,{' '}
       <code className="monospaced">shoved</code> for a neighbor pushed aside. One sheet, the table’s, says what each
       does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved
