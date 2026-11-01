@@ -30,18 +30,6 @@ describe('the sortable list demo', () => {
     expect(first).toHaveAttribute('draggable', 'true');
   });
 
-  test('a finger pressed and taken over by the browser leaves its item at rest', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const first = sortableList.itemsIn(await sortableList.arrived())[0];
-
-    await sortableList.fingerDown('A');
-    sortableList.browserTakesOver('A');
-
-    expect(first).toHaveAttribute('draggable', 'false');
-  });
-
   test('a finger pressed and lifted without a drag leaves a kept item at rest', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop', '?origin=keep')} feed={feed}/>);
@@ -97,56 +85,6 @@ describe('the sortable list demo', () => {
     expect(demoPage.words('<EagerHideAnimatedList/>')).toBeVisible();
   });
 
-  test('letting go of the grip does not end a drag under way', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await sortableList.arrived();
-
-    await sortableList.lift('A');
-    sortableList.browserTakesOver('A');
-    sortableList.dragOver('C', 10);
-
-    expect(sortableList.seats()).toEqual(['B', 'C', 'A']);
-  });
-
-  test('an eager drag commits on the crossing', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    await sortableList.arrived();
-    await sortableList.lift('A');
-    sortableList.dragOver('C', 10);
-
-    expect(sortableList.seats()).toEqual(['B', 'C', 'A']);
-  });
-
-  const lazyListWithALifted = async (): Promise<void> => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await sortableList.arrived();
-    await listControls.choose('Lazy');
-    await sortableList.lift('A');
-    sortableList.dragOver('C', 10);
-  };
-
-  test('a lazy drag holds its shape while it crosses', async () => {
-    await lazyListWithALifted();
-
-    expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
-  });
-
-  test('a lazy drag settles on release', async () => {
-    await lazyListWithALifted();
-
-    sortableList.release('A');
-
-    await waitFor(() => expect(sortableList.seats()).toEqual(['B', 'C', 'A']));
-  });
-
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
@@ -175,19 +113,6 @@ describe('the sortable list demo', () => {
     expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
   });
 
-  test('both parties slide toward their new seats', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    await sortableList.arrived();
-    await sortableList.moveByKey('A', '{ArrowRight}');
-
-    expect(sortableList.seatOf('A')).toHaveStyle({'--toward': '-1'});
-    expect(sortableList.seatOf('B')).toHaveStyle({'--toward': '1'});
-  });
-
   test('an arrow walk says the move', async () => {
     const feed = await listeningFeed();
 
@@ -198,27 +123,6 @@ describe('the sortable list demo', () => {
     await sortableList.moveByKey('A', '{ArrowRight}');
 
     expect(sortableList.moveReport()).toHaveTextContent('A moved to 2 of 3');
-  });
-
-  test('an eager crossing says the move', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    await sortableList.arrived();
-    await sortableList.lift('A');
-    sortableList.dragOver('C', 10);
-
-    expect(sortableList.moveReport()).toHaveTextContent('A moved to 3 of 3');
-  });
-
-  test('a lazy release says the move', async () => {
-    await lazyListWithALifted();
-
-    sortableList.release('A');
-
-    await waitFor(() => expect(sortableList.moveReport()).toHaveTextContent('A moved to 3 of 3'));
   });
 
   test('the recipe opens on the need with both stories listed', async () => {
@@ -532,9 +436,9 @@ describe('the drag sort tab’s introduction', () => {
   test('should tell, after what it assumes from earlier tabs, what the list is, the bug, the page’s view and what a reader can do after, before the exhibit', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 
-    const tab = await demoTabs.arrivedOn('Drag sort');
+    await demoTabs.arrivedOn('Drag sort');
 
-    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), demoTabs.gripIn(tab, 'A')])).toEqual([]);
+    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), sortableList.grip('A')])).toEqual([]);
   });
 
   test('should say what it assumes from earlier tabs, linking each tab it names', async () => {

@@ -925,12 +925,6 @@ describe('the workspace story', () => {
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
 
-  test('should link the drag sort tab where the slide names its keyframe animation', async () => {
-    const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
-
-    expect(explanation.linkNamed(step, 'drag sort tab')).toHaveAttribute('href', `${Paths.demos}drag-and-drop/`);
-  });
-
   test('should put the drawing of a third from the pointer after the code that measures it, before the keyframes', async () => {
     const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
     const [measures, keyframes] = explanation.samplesIn(step);

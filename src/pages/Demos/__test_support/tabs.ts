@@ -8,7 +8,6 @@ export const demoTabs = {
   assumedLinks: async (name: string): Promise<(string | null)[][]> =>
     within(within(await screen.findByRole('region', {name})).getByText(/^This tab assumes/)).getAllByRole('link')
       .map(link => [link.textContent, link.getAttribute('href')]),
-  gripIn: (tab: HTMLElement, item: string): HTMLElement => within(tab).getByRole('button', {name: `grip for ${item}`}),
   addresses: async (): Promise<(string | null)[]> =>
     within(await screen.findByRole('navigation', {name: 'demos'})).getAllByRole('link').map(tab => tab.getAttribute('href'))
 };

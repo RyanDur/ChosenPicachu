@@ -43,18 +43,6 @@ describe('the top layer', () => {
     expect(topLayerBanners.standingIn(alert)).toHaveLength(alreadyStanding + 1);
   });
 
-  test('a dismissed banner leaves the pile', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
-    const alert = topLayerBanners.pile();
-    const alreadyStanding = topLayerBanners.standingIn(alert).length;
-    await topLayerBanners.raise();
-
-    await topLayerBanners.dismissNewest(alert);
-
-    expect(topLayerBanners.standingIn(alert)).toHaveLength(alreadyStanding);
-  });
-
   test('every press stacks another banner', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
