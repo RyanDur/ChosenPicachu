@@ -132,13 +132,14 @@ export const PresentationPractice: FC = () =>
       <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
       elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
       datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
-    <p className="paragraph">Then two token files. A token is a named value the sheet reads instead of writing the
-      number. <a className="signpost" href={sheet('colors')}>colors.css</a> names
+    <p className="paragraph">Then two token files. A token is a named value, such as{' '}
+      <code className="monospaced">--light-box-shadow</code>, that the sheet reads instead of writing the number.{' '}
+      <a className="signpost" href={sheet('colors')}>colors.css</a> names
       the raw values first, a palette of named colors, and then the roles a component reads:{' '}
-    <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
-    <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
+      <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
+      <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-    <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice.</p>
+      <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice.</p>
     <p className="paragraph">Then the vocabulary, six files by concern:{' '}
       <a className="signpost" href={sheet('button')}>button</a>,{' '}
       <a className="signpost" href={sheet('typography')}>typography</a>,{' '}
@@ -156,23 +157,23 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">Three lint rules hold those lines, and they are the method. One refuses a tag selector
       outside the reset and prints{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
-      One refuses a look in a component sheet and prints that the property{' '}
+      Another refuses a look in a component sheet and prints that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
-      One refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
+      The third refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
       lines by convention; this repository holds them by a lint that fails the commit.</p>
     <WhereARuleLives/>
-    <p className="paragraph">This repository uses neither <code className="monospaced">@layer</code> for order nor{' '}
+    <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
-      order and the component boundary gives a rule its reach. Nesting it does use, in most sheets, where a rule
-      belongs inside another.</p>
+      order and the component boundary gives a rule its reach. The cost is that the order lives in a list a reader has
+      to know to open, <code className="monospaced">index.css</code>, rather than in a rule that says so. Nesting I do
+      use, in most sheets, where a rule belongs inside another.</p>
     <p className="paragraph">The site’s shared sheets hold the looks every component draws on, as a vocabulary of
       small classes: <code className="monospaced">lifted</code>,{' '}
     <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
-    <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A class like that
-      is a utility: one look, under one name, that any element can wear. An element is dressed by naming its needs,
-      and no new rule is written. The{' '}
-    <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued that the look should leave the markup for
-      a style sheet.</p>
+    <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the
+      vocabulary is what Tailwind calls a utility. An element is dressed by naming its needs, and no new rule is
+      written. That is the separation the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for:
+      the look leaves the markup for a style sheet.</p>
     <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces rather than write it again</a>:
       that is Wathan’s rule, and mine. Where I part
       from Tailwind is what a utility is named for, and Tailwind states its side plainly:{' '}
@@ -182,11 +183,12 @@ export const PresentationPractice: FC = () =>
     <code className="monospaced">shadow-md</code> and <code className="monospaced">p-4</code> name the value, so a
       reader who knows the system sees what the element looks like, and a change of design is a change to every
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
-      sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never knew the number. That keeps the sheet
+      sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That keeps the sheet
       restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed the
       separation is for. It also keeps the constraint where Wathan wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
-      restyling. I take both, and pay with a vocabulary that has to be kept, and a lint rule that holds it.</p>
+      restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
+    <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
       value it stands for lives in the sheet, so the name still fits when the value changes. A class list reads left
       to right: nouns, then needs, then states.</p>
@@ -228,6 +230,7 @@ export const PresentationPractice: FC = () =>
       multiple of one base, and every color is a named token on the root. Custom properties are the{' '}
     <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in script and
       now live in CSS.</p>
+    <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the sheet has become a pile of overrides. This test guards
       isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list.</p>

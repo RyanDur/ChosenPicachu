@@ -13,6 +13,8 @@ type Box = {
 
 type Point = {readonly x: number; readonly y: number};
 
+type Wears = {readonly from: Point; readonly to: Point};
+
 const inset = 6;
 
 const folder = 'folder-box hollow drawn';
@@ -65,11 +67,14 @@ const viewBoxAround = (boxes: Box[]): string =>
 const wide: Box[] = [...tree(6, 6), ...component(252, 6, false)];
 const stacked: Box[] = [...tree(6, 6), ...component(6, 306, true)];
 
-const wearsBeside = (boxes: Box[]): {from: Point; to: Point} =>
+const wearsBeside = (boxes: Box[]): Wears =>
   ({from: rightMiddle(boxLabelled(boxes, 'surface')), to: leftMiddle(boxLabelled(boxes, 'SortMenu.tsx'))});
 
-const wearsBelow = (boxes: Box[]): {from: Point; to: Point} =>
+const wearsBelow = (boxes: Box[]): Wears =>
   ({from: rightMiddle(boxLabelled(boxes, 'surface')), to: topMiddle(boxLabelled(boxes, 'SortMenu.tsx'))});
+
+const wideWears = wearsBeside(wide);
+const stackedWears = wearsBelow(stacked);
 
 const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
   <rect className={box.look} x={box.x} y={box.y} width={box.width} height={box.height}/>
@@ -77,7 +82,7 @@ const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
   {lifted && <text className="drawn-caption" x={liftedIn(box).x} y={liftedIn(box).y} dominantBaseline="hanging">lifted</text>}
 </>;
 
-const Frame: FC<{boxes: Box[]; wears: {from: Point; to: Point}; className: string}> = ({boxes, wears: {from, to}, className}) =>
+const Frame: FC<{boxes: Box[]; wears: Wears; className: string}> = ({boxes, wears: {from, to}, className}) =>
   <svg className={`${className} ink-filled`} viewBox={viewBoxAround(boxes)} aria-hidden="true">
     {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === 'surface'}/>)}
     <line className="wears-line drawn dashed-drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
@@ -86,9 +91,9 @@ const Frame: FC<{boxes: Box[]; wears: {from: Point; to: Point}; className: strin
 
 export const WhereARuleLives: FC = () =>
   <figure className="where-a-rule-lives practice-drawing">
-    <Frame boxes={wide} wears={wearsBeside(wide)} className="drawing-wide center"/>
-    <Frame boxes={stacked} wears={wearsBelow(stacked)} className="drawing-stacked center"/>
-    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live at the root,
-      by concern. A component’s structure lives beside the component.
+    <Frame boxes={wide} wears={wideWears} className="drawing-wide center"/>
+    <Frame boxes={stacked} wears={stackedWears} className="drawing-stacked center"/>
+    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in{' '}
+      <code className="monospaced">src/styles</code>, by concern. A component’s structure lives beside the component.
     </figcaption>
   </figure>;

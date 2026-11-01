@@ -11,7 +11,17 @@ const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'
 const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
 
-const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
+const practiceParagraphs = (): HTMLElement[] => within(practice()).getAllByRole('paragraph');
+
+const onlyParagraph = (opening: RegExp): HTMLElement => {
+  const found = practiceParagraphs().filter(paragraph => opening.test(paragraph.textContent ?? ''));
+  if (found.length === 1) {
+    return found[0];
+  }
+  throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
+};
+
+const paragraphs = (): string[] => practiceParagraphs().map(paragraph => paragraph.textContent ?? '');
 
 const momentAddresses = Object.values(moments).map(({id}) => `${Paths.record}#${id}`);
 
@@ -40,19 +50,9 @@ export const practicePage = {
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
-  paragraph: (opening: RegExp): HTMLElement => {
-    const found = within(practice()).getAllByRole('paragraph').filter(paragraph => opening.test(paragraph.textContent ?? ''));
-    if (found.length === 1) {
-      return found[0];
-    }
-    throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
-  },
+  paragraph: onlyParagraph,
   itemsListedAfter: (opening: RegExp): string[] => {
-    const found = within(practice()).getAllByRole('paragraph').filter(paragraph => opening.test(paragraph.textContent ?? ''));
-    if (found.length !== 1) {
-      throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
-    }
-    const list = found[0].nextElementSibling;
+    const list = onlyParagraph(opening).nextElementSibling;
     if (list instanceof HTMLElement) {
       return within(list).getAllByRole('listitem').map(item => item.textContent ?? '');
     }
@@ -60,10 +60,7 @@ export const practicePage = {
   },
   paragraphs,
   paragraphAfter: (opening: RegExp): string | undefined => {
-    const found = paragraphs().findIndex(paragraph => opening.test(paragraph));
-    if (found === -1) {
-      throw new Error(`no paragraph opening ${opening}`);
-    }
+    const found = practiceParagraphs().indexOf(onlyParagraph(opening));
     return paragraphs()[found + 1];
   },
   partHeadings: (): string[] => within(practice()).getAllByRole('heading', {level: 3}).map(heading => heading.textContent ?? ''),

@@ -7,7 +7,7 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import indexCss from '/src/index.css?raw';
 import stylelintConfig from '/stylelint.config.js?raw';
 
-const whereARuleLives = 'Where a rule lives. The shared words live at the root, by concern. A component’s structure lives beside the component.';
+const whereARuleLives = 'Where a rule lives. The shared words live in src/styles, by concern. A component’s structure lives beside the component.';
 const sheetsImported = (): string[] => [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
 
 describe('the Presentation practice tab', () => {
@@ -25,17 +25,6 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.currentTab()).toBe('Presentation');
     expect(practicePage.paragraph(/^CSS has one global scope/)).toBeInTheDocument();
     expect(practicePage.paragraph(/^The test is to read a class list on its own/)).toBeInTheDocument();
-  });
-
-  test('should tell presentation from CSS’s one global scope, through what this site keeps, to the test', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(outOfReadingOrder([
-      practicePage.paragraph(/^CSS has one global scope/),
-      practicePage.partHeading('What this site keeps'),
-      practicePage.paragraph(/^The test is to read a class list on its own/)
-    ])).toEqual([]);
   });
 
   test('should send each answer the field gave to its source, and the quotations to the pages that hold them', async () => {
@@ -86,11 +75,17 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
-  test('should head the Presentation tab’s three parts, what organizing CSS has to solve, what this site keeps and where a rule lives, each before the paragraphs it heads', async () => {
+  test('should head the Presentation tab’s five parts, each before the paragraphs it heads, closing on the test a class list has to pass', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.partHeadings()).toEqual(['What organizing CSS has to solve', 'What this site keeps', 'Where a rule lives']);
+    expect(practicePage.partHeadings()).toEqual([
+      'What organizing CSS has to solve',
+      'What this site keeps',
+      'Where a rule lives',
+      'What a class is named for',
+      'The test a class list has to pass'
+    ]);
     expect(outOfReadingOrder([
       practicePage.partHeading('What organizing CSS has to solve'),
       practicePage.paragraph(/^CSS has one global scope/),
@@ -98,7 +93,11 @@ describe('the Presentation practice tab', () => {
       practicePage.partHeading('What this site keeps'),
       practicePage.paragraph(/^BEM is Yandex’s method, and it began at scale/),
       practicePage.partHeading('Where a rule lives'),
-      practicePage.paragraph(/^Here is how this site’s CSS is laid out/)
+      practicePage.paragraph(/^Here is how this site’s CSS is laid out/),
+      practicePage.partHeading('What a class is named for'),
+      practicePage.paragraph(/^A class is a name for what the element is/),
+      practicePage.partHeading('The test a class list has to pass'),
+      practicePage.paragraph(/^The test is to read a class list on its own/)
     ])).toEqual([]);
   });
 
@@ -140,14 +139,14 @@ describe('the Presentation practice tab', () => {
     expect(stylelintConfig).toContain('is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class');
   });
 
-  test('should show where a rule lives between the gates and what the repository does not use', async () => {
+  test('should show where a rule lives between the three lint rules and the paragraph on @layer and @scope', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(outOfReadingOrder([
       practicePage.paragraph(/^Three lint rules hold those lines, and they are the method/),
       practicePage.figure(whereARuleLives),
-      practicePage.paragraph(/^This repository uses neither @layer for order nor @scope for isolation/)
+      practicePage.paragraph(/^I use neither @layer for order nor @scope for isolation/)
     ])).toEqual([]);
   });
 
@@ -171,6 +170,15 @@ describe('the Presentation practice tab', () => {
     const frame = [...tree, ...component, 'wears'];
 
     expect(practicePage.drawnIn(whereARuleLives)).toEqual([...frame, ...frame]);
+  });
+
+  test('should draw src/styles’ sheets in the order index.css imports them, wide and stacked', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const imported = sheetsImported();
+
+    expect(practicePage.drawnIn(whereARuleLives).filter(label => imported.includes(label))).toEqual([...imported, ...imported]);
   });
 
   test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {
