@@ -43,7 +43,7 @@ describe('the accordions tab', () => {
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.headingsIn(tab, 2)).toEqual([htmlAlone, 'fold choices', ...parts]);
+    expect(explanation.partTitles(tab)).toEqual([htmlAlone, 'fold choices', ...parts]);
   });
 
   test('should name the fold choices’ section by its heading, with the line and both rows inside it', async () => {
@@ -128,7 +128,7 @@ describe('the measured build’s Close bar', () => {
     const closeBar = explanation.saying(folded, 'Opening one fold closes the others, and the short Close bar at the top closes whichever is open.');
 
     expect(outOfReadingOrder([
-      explanation.foldedHeading(folded, 'Accordion using a radio group and a measured height'),
+      accordionsTab.buildTitled(folded, 'Accordion using a radio group and a measured height'),
       closeBar,
       explanation.saying(folded, /The script keeps what it knows in React state/)
     ])).toEqual([]);
@@ -314,7 +314,7 @@ describe('the measured build', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
-    const plain = await accordionsTab.frameIn(explained, 'A fold measured by plain script');
+    const plain = await accordionsTab.foldMeasuredByPlainScript(explained);
 
     expect(explanation.saying(explained, 'Press the bar: with motion allowed, the script measures the text and the stylesheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it opens at once.')).toBeVisible();
     expect(outOfReadingOrder([plain, explanation.runTelling(explained, /^Most of us turned next to script/)])).toEqual([]);
@@ -326,22 +326,43 @@ describe('the measured build', () => {
     const explained = await explanation.part(parts[0]);
     const folded = recipeFolds.story(explained, 'How this site does it');
     const why = explanation.saying(folded, /^This site builds the same fold in React/);
-    const built = explanation.foldedHeading(folded, /and a measured height$/);
+    const built = accordionsTab.buildTitled(folded, /and a measured height$/);
 
     expect(why).toHaveTextContent('This site builds the same fold in React, and the runs below say what React and state are as they come. What changes is the shape. The plain script listens for the press; the React build redraws the panel from what it holds, so the measuring runs in two steps React takes before the browser paints: the first pins where the motion starts, and the second sets where it ends.');
     expect(outOfReadingOrder([why, built, explanation.runTelling(explained, /The script keeps what it knows in React state/)])).toEqual([]);
   });
 
-  test('should say, after the measured run, how the plain script hands the height to the stylesheet, beside the two rules that read it', async () => {
+  const handsTheHeight = /^The script hands the height to the stylesheet as a custom property/;
+  const pinsTheStart = /^On a press that moves the panel/;
+
+  test('should say, after the measured run, how the plain script hands the height to the stylesheet, beside the sized rule', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
 
-    expect(explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/)).toHaveTextContent('The script hands the height to the stylesheet as a custom property named --measured-height. A custom property is a value the stylesheet can read. The script also marks the panel with a class, sized. A class is a name an element wears so a rule can pick it out. While sized is on, a rule reads the number. On every press the script first pins where the slide starts: it writes the panel’s current height, puts on a second class, unmoving, which turns off the height’s transition, and reads the panel’s height once, throwing the number away, so the browser applies the pinned start before it draws. Then it takes unmoving off and sets the end, and the stylesheet slides between the two.');
-    expect(explanation.everyCodeBeside(explained, /^The script hands the height to the stylesheet as a custom property/).join()).toMatch(/\.info-measured\.sized \{[^]*\.info-measured\.unmoving \{/);
+    expect(explanation.runTelling(explained, handsTheHeight)).toHaveTextContent('The script hands the height to the stylesheet as a custom property named --measured-height. A custom property is a value the stylesheet can read. The script also marks the panel with a class, sized. A class is a name an element wears so a rule can pick it out. While sized is on, a rule reads the number.');
+    expect(explanation.everyCodeBeside(explained, handsTheHeight).join()).toMatch(/\.info-measured\.sized \{/);
+    expect(explanation.everyCodeBeside(explained, handsTheHeight).join()).not.toMatch(/\.info-measured\.unmoving \{/);
+  });
+
+  test('should say, in a run of its own beside the unmoving rule, how a press that moves the panel pins where the slide starts, one step a sentence', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const explained = await explanation.part(parts[0]);
+
+    expect(explanation.runTelling(explained, pinsTheStart)).toHaveTextContent('On a press that moves the panel, the script first pins where the slide starts. It writes the panel’s current height. It puts on a second class, unmoving, which turns off the height’s transition. It reads the panel’s height once and throws the number away; the read makes the browser apply the pinned start before it draws. Then it takes unmoving off and sets the end, and the stylesheet slides between the two.');
+    expect(explanation.everyCodeBeside(explained, pinsTheStart).join()).toMatch(/\.info-measured\.unmoving \{/);
+  });
+
+  test('should tell the plain script in order: the measuring, the handing over, the pin, then the cost', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const explained = await explanation.part(parts[0]);
+
     expect(outOfReadingOrder([
       explanation.runTelling(explained, /^Most of us turned next to script/),
-      explanation.runTelling(explained, /^The script hands the height to the stylesheet as a custom property/),
+      explanation.runTelling(explained, handsTheHeight),
+      explanation.runTelling(explained, pinsTheStart),
       explanation.runTelling(explained, /^The cost was script/)
     ])).toEqual([]);
   });
@@ -351,7 +372,7 @@ describe('the measured build', () => {
 
     const measured = await explanation.part('The measured height');
 
-    expect(explanation.drawingNamed(measured, /^Press the bar: with motion allowed/)).toContainElement(await accordionsTab.frameIn(measured, 'A fold measured by plain script'));
+    expect(explanation.drawingNamed(measured, /^Press the bar: with motion allowed/)).toContainElement(await accordionsTab.foldMeasuredByPlainScript(measured));
   });
 
   test('should show the React build’s own two layout effects and its hand-off at the motion’s end beside the run that tells the two layout effects', async () => {
@@ -419,7 +440,7 @@ describe('the measured build', () => {
 
     const closing = explanation.runTelling(await explanation.part(parts[0]), /^Closing runs the other way/);
 
-    expect(closing).toHaveTextContent('Closing runs the other way, the pin at the open height and the end at 0, and the transition moves between them.');
+    expect(closing).toHaveTextContent('Closing runs the other way: the script pins the open height and sets the end at 0, and the transition moves between them.');
   });
 
   test('should show the script that turns a fold around beside the run that tells it', async () => {
@@ -445,10 +466,9 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await accordionsTab.choice('fold type');
-    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not, since that accordion has no stylesheet.');
+    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it: the first accordion is shown with the reset’s slide turned off, so a fold opens at once and the reader sees what HTML alone does.');
 
-    expect(line.compareDocumentPosition(types) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(line.compareDocumentPosition(await explanation.part('An accordion in HTML alone')) & Node.DOCUMENT_POSITION_PRECEDING).toBe(Node.DOCUMENT_POSITION_PRECEDING);
+    expect(outOfReadingOrder([await explanation.part(htmlAlone), line, types])).toEqual([]);
   });
 
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
@@ -487,9 +507,7 @@ describe('the fold motion', () => {
     const foldType = accordionsTab.choiceIn(tab, 'fold type');
     const foldMotion = accordionsTab.choiceIn(tab, 'fold motion');
 
-    expect(start.compareDocumentPosition(foldType)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(foldType.compareDocumentPosition(foldMotion)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(foldMotion.compareDocumentPosition(oldWay)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(outOfReadingOrder([start, foldType, foldMotion, oldWay])).toEqual([]);
     for (const part of parts) {
       expect(await explanation.part(part)).not.toContainElement(foldMotion);
     }
@@ -724,7 +742,7 @@ describe('how every fold moves', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[3]);
-    const shown = explanation.codesIn(explained).join('\n');
+    const shown = explanation.codeShown(explained).join('\n');
 
     expect(shown).toContain('@media (prefers-reduced-motion: reduce)');
     expect(shown).toContain('::details-content');
@@ -751,11 +769,7 @@ describe('the accordions diagrams', () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const explained = await explanation.part(togetherHeading('exclusive'));
-    const promises = accordionsTab.tableIn(explained, 'What each element promises');
-
-    expect(accordionsTab.rowIn(promises, 'checkbox yes no')).toBeInTheDocument();
-    expect(accordionsTab.rowIn(promises, 'radio no yes')).toBeInTheDocument();
-    expect(accordionsTab.rowIn(promises, 'details with a name yes yes')).toBeInTheDocument();
+    expect(accordionsTab.promises(explained)).toEqual(expect.arrayContaining(['checkbox yes no', 'radio no yes', 'details with a name yes yes']));
   });
 });
 
@@ -773,8 +787,8 @@ describe('the max-height guess', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.codeIn(explanation.partIn(oldWay, 'The max-height guess')))
-      .toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
+    expect(explanation.codeShown(explanation.partIn(oldWay, 'The max-height guess')).join())
+      .toMatch(/max-height: 0;[^]*transition: max-height .3s ease-in-out;[^]*max-height: 1000px;/);
   });
 
   test.each([
@@ -785,7 +799,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.headingsIn(oldWay, 3)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', measured, known]);
+    expect(explanation.sectionTitles(oldWay)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', measured, known]);
   });
 });
 
@@ -873,7 +887,7 @@ describe('the name that makes the first accordion exclusive', () => {
 
     const first = await explanation.part(htmlAlone);
 
-    expect(explanation.runTelling(first, carriesAName)).toHaveTextContent('Each of these details carries a name attribute, a setting written inside the element’s opening tag, and details that share a name close one another: open one and the browser shuts the rest. That is the whole of an exclusive accordion in HTML alone.');
+    expect(explanation.runTelling(first, carriesAName)).toHaveTextContent('Each of these details carries a name attribute, a setting written inside the element’s opening tag, and details that share a name close one another: open one and the browser shuts the rest. It needs no CSS and no script.');
     expect(explanation.linksBeside(first, carriesAName)).toEqual([['name', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details#name']]);
     expect(outOfReadingOrder([explanation.runTelling(first, /The summary is the bar\./), explanation.runTelling(first, carriesAName)])).toEqual([]);
   });
@@ -939,7 +953,16 @@ describe('the runs in view, with the folds shut', () => {
     const platform = await explanation.part(parts[1]);
 
     expect(explanation.saying(platform, /This build uses details and summary/))
-      .toHaveTextContent(/Give every details the same name, as the first accordion does when exclusive is chosen, and the browser closes the others when one opens\. Pressing the open one closes it, so the list needs no Close bar\. That is the exclusive build\. This replaces the three old ways/);
+      .toHaveTextContent(/Every details here shares a name, as the first accordion’s do above\. Pressing the open one closes it, so the list needs no Close bar\. This replaces the three old ways/);
+  });
+
+  test('should, with inclusive chosen, say in view that each fold opens on its own, and go on to what the build replaces', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
+
+    const platform = await explanation.part(parts[1]);
+
+    expect(explanation.saying(platform, /This build uses details and summary/))
+      .toHaveTextContent(/With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do\. This replaces the three old ways/);
   });
 
   test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
@@ -1041,12 +1064,22 @@ describe('the runs in view, with the folds shut', () => {
 });
 
 describe('the word attribute', () => {
-  test.each(['inclusive', 'exclusive'])('should be said, with %s chosen, and then what an id is, before the label’s for attribute', async type => {
-    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+  test('should be said, with inclusive chosen, and then what an id is, before the label’s for attribute', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
 
     expect(explanation.saying(oldWay, /To open and close a fold/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute that gives an element a name no other element on the page shares\. The label’s for attribute names the/);
+  });
+
+  test('should, with exclusive chosen, be said once, beside the first accordion, so the box run points back to the name above', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+    const box = explanation.saying(oldWay, /To open and close a fold/);
+
+    expect(box).toHaveTextContent(/An id is another attribute, like the name above, and it gives an element a name no other element on the page shares\. The label’s for attribute names the/);
+    expect(box).not.toHaveTextContent('An attribute is a name');
   });
 });
 
@@ -1253,10 +1286,10 @@ describe('what a fold remembers, before the first build that leans on it', () =>
     expect(rule).toHaveTextContent('The ~ is a combinator');
     expect(explanation.everyCodeBeside(oldWay, /^Now a rule has to match on whether the/).join()).toMatch(/\.info-toggle:not\(:checked\) ~ \.info \{/);
     expect(outOfReadingOrder([
-      explanation.headingIn(oldWay, remembers, 3),
+      explanation.sectionTitle(oldWay, remembers),
       box,
       rule,
-      explanation.headingIn(oldWay, 'The max-height guess', 3)
+      explanation.sectionTitle(oldWay, 'The max-height guess')
     ])).toEqual([]);
   });
 

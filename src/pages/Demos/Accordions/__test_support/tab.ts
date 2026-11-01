@@ -1,5 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {computeAccessibleName} from 'dom-accessibility-api';
 
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
 const option = (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('radio', {name});
@@ -23,9 +24,10 @@ export const accordionsTab = {
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
-  frameIn: (holder: HTMLElement, title: string): Promise<HTMLElement> => within(holder).findByTitle(title),
-  tableIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('table', {name}),
-  rowIn: (table: HTMLElement, name: string): HTMLElement => within(table).getByRole('row', {name}),
+  buildTitled: (holder: HTMLElement, name: string | RegExp): HTMLElement => within(holder).getByRole('heading', {name, hidden: true}),
+  foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script'),
+  promises: (part: HTMLElement): string[] => within(within(part).getByRole('table', {name: 'What each element promises'}))
+    .getAllByRole('row').map(row => computeAccessibleName(row)),
   htmlAloneMarkup: async (): Promise<string> => {
     const htmlAlone = await screen.findByRole('region', {name: 'An accordion in HTML alone'});
     return within(within(htmlAlone).getAllByRole('listitem')[0]).getAllByRole('code').map(code => code.textContent).join();
