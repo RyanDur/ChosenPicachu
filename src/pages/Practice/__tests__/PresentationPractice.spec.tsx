@@ -18,6 +18,13 @@ describe('the Presentation practice tab', () => {
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
+  test('should say style sheet, never a bare sheet, outside a quotation', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.bareSheets()).toEqual([]);
+  });
+
   test('should open the Presentation tab from its address', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
 
@@ -25,19 +32,19 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.currentTab()).toBe('Presentation');
   });
 
-  test('should name the five things the sheets hold to, in order: place, value, name, selector and order', async () => {
+  test('should name the five things the style sheets hold to, in order: place, value, name, selector and order', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.terms()).toEqual(['Place', 'Value', 'Name', 'Selector', 'Order']);
   });
 
-  test('should send place’s gates to the sheet lint and the class lint, and its rule to BEM’s folder per block', async () => {
+  test('should send place’s gates to the style sheet lint and the class lint, and its rule to BEM’s folder per block', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linksInDefinitionOf('Place')).toEqual([
-      ['sheet lint', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['style sheet lint', `${Paths.repo}/blob/main/stylelint.config.js`],
       ['class lint', `${Paths.repo}/blob/main/scripts/lint/classes.mjs`],
       ['folder per block', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
     ]);
@@ -105,11 +112,11 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should send each thing the platform has since put in the sheet to MDN, with its date', async () => {
+  test('should send each thing the platform has since put in the style sheet to MDN, with its date', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^The platform has since put the constants, the order and the isolation in the sheet itself/)).toEqual([
+    expect(practicePage.linksIn(/^The platform has since put the constants, the order and the isolation in the style sheet itself/)).toEqual([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
@@ -128,13 +135,13 @@ describe('the Presentation practice tab', () => {
       'What this site keeps',
       'Where a rule lives',
       'What a class is named for',
-      'What the sheet owes the reader',
+      'What the style sheet owes the reader',
       'Where the platform catches up',
       'The test a class list has to pass'
     ]);
   });
 
-  test('should walk the nine shared sheets in the order index.css imports them, each linked to its file in the repository', async () => {
+  test('should walk the nine shared style sheets in the order index.css imports them, each linked to its file in the repository', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -187,7 +194,7 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.drawingsSeenIn(whereARuleLives)).toEqual([]);
   });
 
-  test('should draw src/styles in two groups, one component’s parts with its sheets beside them, and the word it wears, wide and stacked', async () => {
+  test('should draw src/styles in two groups, one component’s parts with its style sheets beside them, and the word it wears, wide and stacked', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -202,7 +209,7 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.drawnIn(whereARuleLives)).toEqual([...frame, ...frame]);
   });
 
-  test('should draw src/styles’ sheets in the order index.css imports them, wide and stacked', async () => {
+  test('should draw src/styles’ style sheets in the order index.css imports them, wide and stacked', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -262,11 +269,11 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should list the sizes that belong to one component and sit in its own sheet', async () => {
+  test('should list the sizes that belong to one component and sit in its own style sheet', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.itemsListedAfter(/^A few sizes belong to one component and sit in its own sheet/)).toEqual([
+    expect(practicePage.itemsListedAfter(/^A few sizes belong to one component and sit in its own style sheet/)).toEqual([
       expect.stringMatching(/^its container queries, in rems/),
       expect.stringMatching(/^a table’s or a page’s width, in rems, measured to what it holds/),
       expect.stringMatching(/^a drawing’s width, in pixels/)
@@ -335,7 +342,7 @@ describe('the Presentation practice tab', () => {
     expect(outOfReadingOrder([
       practicePage.partHeading('What a class is named for'),
       figure,
-      practicePage.partHeading('What the sheet owes the reader')
+      practicePage.partHeading('What the style sheet owes the reader')
     ])).toEqual([]);
   });
 

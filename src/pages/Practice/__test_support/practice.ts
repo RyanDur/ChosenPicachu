@@ -51,6 +51,8 @@ export const practicePage = {
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
+  bareSheets: (): string[] => [...(practice().textContent ?? '').replace(/“[^”]*”/g, '').matchAll(/(?<!style )\bsheets?\b/gi)]
+    .map(([found]) => found),
   paragraph: onlyParagraph,
   itemsListedAfter: (opening: RegExp): string[] => {
     const list = onlyParagraph(opening).nextElementSibling;
