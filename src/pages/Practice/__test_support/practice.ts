@@ -78,7 +78,7 @@ export const practicePage = {
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   carvedFrom: (source: string): HTMLElement[] => within(practice()).getAllByRole('figure', {name: `${source} on GitHub`}),
-  sourceOf: (carve: HTMLElement): string | null => within(carve).getByRole('link').getAttribute('href'),
+  codeOf: (carve: HTMLElement): string => within(carve).getByRole('code').textContent,
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))

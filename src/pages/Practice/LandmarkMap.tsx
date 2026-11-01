@@ -25,7 +25,7 @@ const wide: Box[] = [
   {label: 'feedback', look: secondary, x: 18, y: 216, width: 156, height: 54},
   {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
   {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
-  {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39},
+  {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39, note: 'only where a page has one'},
   {label: 'section · role alert · live region · top layer', look: topLayer, x: 186, y: 34, width: 282, height: 26}
 ];
 
@@ -36,7 +36,7 @@ const stacked: Box[] = [
   {label: 'feedback', look: secondary, x: 204, y: 90, width: 81, height: 39},
   {label: 'main', look: landmark, x: 6, y: 147, width: 288, height: 165},
   {label: 'nav · tabs', look: secondary, x: 15, y: 186, width: 270, height: 30, note: 'only where a page has tabs'},
-  {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39},
+  {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39, note: 'only where a page has one'},
   {label: 'section · role alert · live region · top layer', look: topLayer, x: 12, y: 129, width: 282, height: 24}
 ];
 
@@ -53,8 +53,8 @@ const Frame: FC<{boxes: Box[]; className: string; viewBox: string}> = ({boxes, c
 
 export const LandmarkMap: FC = () =>
   <figure className="landmark-map">
-    <Frame boxes={wide} className="landmark-map-wide center" viewBox="0 0 480 336"/>
-    <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 300 366"/>
+    <Frame boxes={wide} className="landmark-map-wide center" viewBox="0 0 480 356"/>
+    <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 300 388"/>
     <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Each landmark, with its
       element and, where it has one, its name.
     </figcaption>

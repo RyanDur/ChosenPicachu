@@ -8,9 +8,6 @@ import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import tableSource from '@pages/Demos/Tables/Frame/table.html?sample';
-import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
-import columnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import indexCss from '/src/index.css?raw';
 import stylelintConfig from '/stylelint.config.js?raw';
 
@@ -193,6 +190,40 @@ describe('the practice page', () => {
     ]);
   });
 
+  test('should head the Structure tab’s parts, each title stating the part’s answer', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.partHeadings()).toEqual([
+      'What organizing markup has to solve',
+      'The skeleton comes first',
+      'The element is the name',
+      'A component is an element that does not exist yet',
+      'ARIA last',
+      'The test'
+    ]);
+  });
+
+  test('should set each of the Structure tab’s part titles over the paragraph that opens its part', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(outOfReadingOrder([
+      practicePage.partHeading('What organizing markup has to solve'),
+      practicePage.paragraph(/^Markup is read by more than the browser/),
+      practicePage.partHeading('The skeleton comes first'),
+      practicePage.paragraph(/^The skeleton comes first/),
+      practicePage.partHeading('The element is the name'),
+      practicePage.paragraph(/^I start from what the content is/),
+      practicePage.partHeading('A component is an element that does not exist yet'),
+      practicePage.paragraph(/^A component is an element that does not exist yet/),
+      practicePage.partHeading('ARIA last'),
+      practicePage.paragraph(/^The elements mean something beyond how they look/),
+      practicePage.partHeading('The test'),
+      practicePage.paragraph(/^The test is to read the page with the styles turned off/)
+    ])).toEqual([]);
+  });
+
   test('should walk down from the skeleton to one element, through the three attributes and the tables demo’s two builds, before what the elements mean', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
@@ -210,7 +241,7 @@ describe('the practice page', () => {
       practicePage.paragraph(/^The class list is the look/),
       practicePage.paragraph(/^The script attaches itself by the same attribute/),
       practicePage.carvedFrom('Frame/boot.ts')[0],
-      practicePage.paragraph(/^boot finds its tables/),
+      practicePage.paragraph(/^boot\.ts, in its feed function, finds its tables/),
       practicePage.paragraph(/^In React the same markup is written by components/),
       vanillaHeader,
       practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0],
@@ -219,32 +250,58 @@ describe('the practice page', () => {
     ])).toEqual([]);
   });
 
-  test('should carve the vanilla table’s tag and its trades header from Frame/table.html, lines 2 to 41', async () => {
+  test('should show the vanilla table’s tag and trades header with all three attributes: the class lists, the id, and data-drag-sortable, data-sort-toggle and data-resize-handle, with popovertarget naming the menu', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/table.html')[0])).toBe(`${tableSource.url}#L2-L41`);
+    const carve = practicePage.codeOf(practicePage.carvedFrom('Frame/table.html')[0]);
+
+    expect(carve).toContain('<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable>');
+    expect(carve).toContain('data-sort-toggle');
+    expect(carve).toContain('data-resize-handle');
+    expect(carve).toContain('popovertarget="sort-trades"');
+    expect(carve).toContain('<menu id="sort-trades"');
   });
 
-  test('should carve where the script finds its tables and hears what they report from Frame/boot.ts, lines 20 to 29', async () => {
+  test('should show boot.ts finding its tables by data-drag-sortable and hearing column-moved, row-moved and sorted', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/boot.ts')[0])).toBe(`${bootSource.url}#L20-L29`);
+    const carve = practicePage.codeOf(practicePage.carvedFrom('Frame/boot.ts')[0]);
+
+    expect(carve).toContain("querySelectorAll('table[data-drag-sortable]')");
+    expect(carve).toContain("addEventListener('column-moved'");
+    expect(carve).toContain("addEventListener('row-moved'");
+    expect(carve).toContain("addEventListener('sorted'");
   });
 
-  test('should carve the vanilla trades header from Frame/table.html, lines 12 to 41, beside the component', async () => {
+  test('should show the vanilla trades header cell beside the component that writes it', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/table.html')[1])).toBe(`${tableSource.url}#L12-L41`);
+    expect(practicePage.codeOf(practicePage.carvedFrom('Frame/table.html')[1])).toMatch(/^<th scope="col" class="cell trades/);
   });
 
-  test('should carve DraggableColumn’s render from DragSortableTable/DraggableColumn.tsx, lines 54 to 76, beside the vanilla header', async () => {
+  test('should show DraggableColumn writing the th, with its scope, beside the vanilla header', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.sourceOf(practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0])).toBe(`${columnSource.url}#L54-L76`);
+    const carve = practicePage.codeOf(practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0]);
+
+    expect(carve).toMatch(/^return <th/);
+    expect(carve).toContain('scope="col"');
+  });
+
+  test('should send the elements the content asks for to their MDN pages, and semantic markup to the 2014 moment', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^I start from what the content is and pick the element for it/)).toEqual([
+      ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
+      ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
+      ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
+      ['2014 moment', momentAddress('html5SaysIt')]
+    ]);
   });
 
   test('should send each platform element the walk names to its MDN page', async () => {
@@ -268,7 +325,7 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^boot finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
+    expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
   test('should say what a component is for after the two builds, before what the elements mean', async () => {
@@ -401,7 +458,7 @@ describe('the practice page', () => {
       'header',
       'section · pages and feedback', 'nav · site', 'feedback',
       'main', 'nav · tabs', 'only where a page has tabs',
-      'footer',
+      'footer', 'only where a page has one',
       'section · role alert · live region · top layer'
     ]));
   });
@@ -465,12 +522,6 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.heading()).toBeVisible();
-    expect(practicePage.linksIn(/^I start from what the content is and pick the element for it/)).toEqual([
-      ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
-      ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
-      ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
-      ['2014 moment', momentAddress('html5SaysIt')]
-    ]);
     expect(practicePage.link(/of last resort, for when no other element is suitable/))
       .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
