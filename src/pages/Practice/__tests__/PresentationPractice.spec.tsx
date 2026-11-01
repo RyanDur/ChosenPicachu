@@ -112,7 +112,7 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should send each thing the platform has since put in the style sheet to MDN, with its date', async () => {
+  test('should send each thing the platform has since put in the style sheet to MDN', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -258,7 +258,7 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should list the three kinds of size spacing.css names outside its scale, after saying there are three', async () => {
+  test('should list the three kinds of size spacing.css names outside its scale', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
