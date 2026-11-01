@@ -52,7 +52,7 @@ export const PresentationPractice: FC = () =>
         <dt className="paragraph bold">Name</dt>
         <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
           <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no style sheet reads and a
-          component’s own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+          class list that does not put the component’s own class first. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
           where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
           where I part.</dd>
       </div>
@@ -77,7 +77,7 @@ export const PresentationPractice: FC = () =>
       </div>
     </dl>
     <p className="paragraph">The field put the look in other
-      places first, before the platform could hold it. A reset put the defaults in the author’s hands: Eric
+      places first, before the platform had a token, an order or a scope of its own. A reset put the defaults in the author’s hands: Eric
       Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
       the browser’s margins, line heights and heading sizes,{' '}
     <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a> in
@@ -191,17 +191,16 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five are stylelint rules, and each prints its reason. One refuses a tag
-      selector outside the reset and prints{' '}
+    <p className="paragraph">Three of the five are stylelint rules, and each prints its reason. For a tag selector
+      outside the reset:{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
-      Another refuses a look in a component style sheet and prints that the property{' '}
+      For a look in a component style sheet, that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
-      The third refuses a number where a token belongs, in color, font size, padding, margin, gap, fill, stroke,
-      background and border. BEM and SMACSS held their
+      The third, for a number where a token belongs, names the property. BEM and SMACSS held their
       lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
-    <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
-      <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
+    <p className="paragraph">I use neither <code className="monospaced">@layer</code> for the order nor{' '}
+      <code className="monospaced">@scope</code> for a rule’s reach, because the import order above gives the cascade its
       order and a component’s own classes, with its rules keyed on them, give a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
       a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. A rule nests

@@ -50,7 +50,7 @@
     },
     "presentation": {
       "title": "Presentation · Practice · Chosen Picachu",
-      "description": "How I organize presentation: two kinds of style sheet, a class list that reads like a sentence, and constants kept in the style sheet."
+      "description": "How I organize presentation: a component’s structure in a style sheet beside it, everything else shared, and a class list that reads like a sentence."
     },
     "behavior": {
       "title": "Behavior · Practice · Chosen Picachu",

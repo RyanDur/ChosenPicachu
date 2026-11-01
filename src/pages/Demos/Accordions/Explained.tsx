@@ -190,7 +190,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
         build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
-      <p className="paragraph">The fold motion does not reach the accordion above. The reset is the style sheet that sets every element’s
+      <p className="paragraph">The fold motion does not reach the accordion above. A style sheet is a file of rules that
+        say how the page looks. The reset is the one that sets every element’s
         defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
         slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>

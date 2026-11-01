@@ -499,7 +499,7 @@ describe('the reset', () => {
 
     const everyFoldMoves = await explanation.part(parts[3]);
 
-    expect(explanation.everySaying(await explanation.part('Accordions'), /the style sheet that sets every element’s defaults/)).toHaveLength(1);
+    expect(explanation.everySaying(await explanation.part('Accordions'), /The reset is the one that sets every element’s defaults/)).toHaveLength(1);
     expect(explanation.saying(everyFoldMoves, /^When a reader asks for/)).toHaveTextContent('every fold opens with no slide. The reset has a reduced-motion block with three rules.');
   });
 });
