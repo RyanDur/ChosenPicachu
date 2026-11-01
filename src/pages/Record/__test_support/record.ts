@@ -4,6 +4,7 @@ import {itemHeadedBy} from '@__test_support/headed-item';
 import {paragraphOpening} from '@__test_support/paragraph';
 
 const research = (): HTMLElement => screen.getByRole('region', {name: 'The research'});
+const concert = (): HTMLElement => screen.getByRole('region', {name: 'The concert'});
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
 const storyMoments = (name: string): HTMLElement => within(story(name)).getByRole('list', {name: `${name}, the moments it rests on`});
 
@@ -30,8 +31,8 @@ export const recordPage = {
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),
   storyMomentLine: (name: string, line: string): HTMLElement => within(storyMoments(name)).getByRole('link', {name: line}),
   timeline: (): HTMLElement => screen.getByRole('region', {name: 'How the web got its languages'}),
-  concert: (): HTMLElement => screen.getByRole('region', {name: 'The concert'}),
-  concertLinks: (): (string | null)[][] => within(screen.getByRole('region', {name: 'The concert'})).getAllByRole('link')
+  concert,
+  concertLinks: (): (string | null)[][] => within(concert()).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedAs,

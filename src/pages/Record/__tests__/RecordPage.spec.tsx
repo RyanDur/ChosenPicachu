@@ -536,10 +536,6 @@ describe('the record\'s frame and its concert', () => {
     await recordPage.arrived();
   });
 
-  test('should place the timeline’s last paragraph, which points at the concert, before the concert', () => {
-    expect(outOfReadingOrder([recordPage.paragraphOpening(/^Read the titles again/), recordPage.concert()])).toEqual([]);
-  });
-
   test('should send each of the concert’s quotations to its source, and its one link inside the record to the 1996 moment', () => {
     expect(recordPage.concertLinks()).toEqual([
       ['“start isolated and then merge”', 'https://www.w3.org/History/1989/proposal.html'],
@@ -777,12 +773,11 @@ describe('the record', () => {
   });
 
   test('should tell the concert after the timeline closes and before the tee-up', () => {
-    const closing = screen.getByText(/^Read the titles again, top to bottom/);
-    const concert = recordPage.concert();
-    const teeUp = screen.getByText(/^The Record ends here, and the practice begins/);
-
-    expect(closing.compareDocumentPosition(concert) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(concert.compareDocumentPosition(teeUp) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(outOfReadingOrder([
+      recordPage.paragraphOpening(/^Read the titles again/),
+      recordPage.concert(),
+      recordPage.paragraphOpening(/^The Record ends here, and the practice begins/)
+    ])).toEqual([]);
   });
 
   test('should land the concert’s reader on the 1996 moment, with focus there', async () => {

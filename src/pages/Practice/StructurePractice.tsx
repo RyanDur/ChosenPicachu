@@ -254,7 +254,7 @@ export const StructurePractice: FC = () =>
       menu’s, and the Expand button on the z-index tab’s pile of cards. <code
       className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. Each drawing is
       hidden whole, since its caption says what it shows. The lettering of a glyph, a dial’s axis label and a code
-      sample’s language label is hidden, since the element’s name already says it.</p>
+      sample’s language label is hidden, since the button’s, the dial’s or the sample’s name already says it.</p>
     <p className="paragraph">So the rule, in one line: a name, always; a role, only where no element carries the
       meaning or one must be taken away; a state, only where the platform has none.</p>
     <h3 className="paragraph bold">The styles-off test</h3>
@@ -263,7 +263,7 @@ export const StructurePractice: FC = () =>
       read. If the meaning only appears once the CSS loads, it is in the wrong language.
       That is the <MomentLink to="documentComesBack">2016 moment</MomentLink>’s test: the document first, the program
       only where the page needs one.</p>
-    <p className="paragraph">The styles-off test is not read by eye. Four gates run on every push, each a few lines in
+    <p className="paragraph">The styles-off test is not read by eye. Four gates run it on every push, each a few lines in
       the repository. The review, which reads the words and the code of every push, holds one more rule.</p>
     <ul className="practice-list">
       <li className="paragraph"><code className="monospaced">axe</code>, the accessibility checker, runs on every page
