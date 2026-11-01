@@ -1,29 +1,4 @@
 .landmark-map {
-  display: grid;
-  gap: var(--base);
-  container-type: inline-size;
-
-  .landmark-map-wide,
-  .landmark-map-stacked {
-    --drawing-column: 100cqi;
-
-    inline-size: 100%;
-    block-size: auto;
-    max-inline-size: var(--widest-drawing);
-  }
-
-  .landmark-map-wide {
-    --drawn-width: 480px;
-    --widest-drawing: var(--base-x-60);
-  }
-
-  .landmark-map-stacked {
-    --drawn-width: 300px;
-    --widest-drawing: var(--base-x-40);
-
-    display: none;
-  }
-
   .landmark-box {
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
@@ -32,15 +7,5 @@
   .secondary-box {
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
-  }
-
-  @media (width <= 600px) {
-    .landmark-map-wide {
-      display: none;
-    }
-
-    .landmark-map-stacked {
-      display: block;
-    }
   }
 }

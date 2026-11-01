@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {has} from '@ryandur/sand';
+import './PracticeDrawing.css';
 import './LandmarkMap.css';
 
 type Box = {
@@ -52,9 +53,9 @@ const Frame: FC<{boxes: Box[]; className: string; viewBox: string}> = ({boxes, c
   </svg>;
 
 export const LandmarkMap: FC = () =>
-  <figure className="landmark-map">
-    <Frame boxes={wide} className="landmark-map-wide center" viewBox="0 0 480 356"/>
-    <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 300 388"/>
+  <figure className="landmark-map practice-drawing">
+    <Frame boxes={wide} className="drawing-wide center" viewBox="0 0 480 356"/>
+    <Frame boxes={stacked} className="drawing-stacked center" viewBox="0 0 300 388"/>
     <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Each landmark, with its
       element and, where it has one, its name.
     </figcaption>

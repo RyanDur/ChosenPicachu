@@ -1,0 +1,36 @@
+.practice-drawing {
+  display: grid;
+  gap: var(--base);
+  container-type: inline-size;
+
+  .drawing-wide,
+  .drawing-stacked {
+    --drawing-column: 100cqi;
+
+    inline-size: 100%;
+    block-size: auto;
+    max-inline-size: var(--widest-drawing);
+  }
+
+  .drawing-wide {
+    --drawn-width: 480px;
+    --widest-drawing: var(--base-x-60);
+  }
+
+  .drawing-stacked {
+    --drawn-width: 300px;
+    --widest-drawing: var(--base-x-40);
+
+    display: none;
+  }
+
+  @media (width <= 600px) {
+    .drawing-wide {
+      display: none;
+    }
+
+    .drawing-stacked {
+      display: block;
+    }
+  }
+}

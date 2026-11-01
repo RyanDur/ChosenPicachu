@@ -7,7 +7,7 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import indexCss from '/src/index.css?raw';
 import stylelintConfig from '/stylelint.config.js?raw';
 
-const whereARuleLives = 'Where a rule lives. Shared words at the root, by concern; a component’s structure beside the component.';
+const whereARuleLives = 'Where a rule lives. The shared words live at the root, by concern. A component’s structure lives beside the component.';
 const sheetsImported = (): string[] => [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
 
 describe('the Presentation practice tab', () => {

@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import './PracticeDrawing.css';
 import './WhereARuleLives.css';
 
 type Box = {
@@ -84,10 +85,10 @@ const Frame: FC<{boxes: Box[]; wears: {from: Point; to: Point}; className: strin
   </svg>;
 
 export const WhereARuleLives: FC = () =>
-  <figure className="where-a-rule-lives">
-    <Frame boxes={wide} wears={wearsBeside(wide)} className="where-a-rule-lives-wide center"/>
-    <Frame boxes={stacked} wears={wearsBelow(stacked)} className="where-a-rule-lives-stacked center"/>
-    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> Shared words at the root, by
-      concern; a component’s structure beside the component.
+  <figure className="where-a-rule-lives practice-drawing">
+    <Frame boxes={wide} wears={wearsBeside(wide)} className="drawing-wide center"/>
+    <Frame boxes={stacked} wears={wearsBelow(stacked)} className="drawing-stacked center"/>
+    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live at the root,
+      by concern. A component’s structure lives beside the component.
     </figcaption>
   </figure>;

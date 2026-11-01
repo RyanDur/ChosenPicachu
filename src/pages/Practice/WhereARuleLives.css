@@ -1,29 +1,4 @@
 .where-a-rule-lives {
-  display: grid;
-  gap: var(--base);
-  container-type: inline-size;
-
-  .where-a-rule-lives-wide,
-  .where-a-rule-lives-stacked {
-    --drawing-column: 100cqi;
-
-    inline-size: 100%;
-    block-size: auto;
-    max-inline-size: var(--widest-drawing);
-  }
-
-  .where-a-rule-lives-wide {
-    --drawn-width: 480px;
-    --widest-drawing: var(--base-x-60);
-  }
-
-  .where-a-rule-lives-stacked {
-    --drawn-width: 300px;
-    --widest-drawing: var(--base-x-40);
-
-    display: none;
-  }
-
   .folder-box,
   .group-box,
   .file-box,
@@ -35,15 +10,5 @@
   .sheet-box {
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
-  }
-
-  @media (width <= 600px) {
-    .where-a-rule-lives-wide {
-      display: none;
-    }
-
-    .where-a-rule-lives-stacked {
-      display: block;
-    }
   }
 }
