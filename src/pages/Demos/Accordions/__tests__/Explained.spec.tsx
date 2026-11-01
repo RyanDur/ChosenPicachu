@@ -264,7 +264,7 @@ describe('the two together', () => {
 });
 
 describe('the measured build', () => {
-  test('should say what React, a component, React state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
+  test('should say what React, its state, a ref and a layout effect are, each beside its own lines, before the runs that use them', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
@@ -272,7 +272,7 @@ describe('the measured build', () => {
     const ref = explanation.runTelling(explained, /The script uses the panel’s one ref only to/);
     const effects = explanation.runTelling(explained, /The script makes the moves in two layout effects/);
 
-    expect(state).toHaveTextContent('React, the library this site’s script is written in, keeps what it knows in state: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it ends at, and whether it has started. The z-index tab says more about state.');
+    expect(state).toHaveTextContent('React, the library this site’s script is written in, keeps what it knows in state, a value a component holds and draws from: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it ends at, and whether it has started. The z-index tab says more about state.');
     expect(ref).toHaveTextContent('A ref is a handle on the element itself');
     expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
     expect(explanation.everyCodeBeside(explained, /^React, the library this site’s script is written in, keeps what it knows in state/).join()).toContain('useState');

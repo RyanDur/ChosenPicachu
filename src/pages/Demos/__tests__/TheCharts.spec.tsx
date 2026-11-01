@@ -28,7 +28,7 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
     const tutorial = await chartsDesk.findFeatureStories();
 
-    expect(chartsDesk.saysIn(tutorial, /^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a rule picks out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
+    expect(chartsDesk.saysIn(tutorial, /^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a stylesheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
@@ -52,7 +52,7 @@ describe('the charts tutorials’ menus', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findSays(/^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a rule picks out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
+    expect(await chartsDesk.findSays(/^A class, as the/)).toHaveTextContent('A class, as the accordions tab says, is a name a stylesheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
@@ -402,7 +402,7 @@ describe('a list of charts', () => {
       ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
       ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
       ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
-      ['what a class is, then the classes up and down', 'A class, as the accordions tab says, is a name a rule picks out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
+      ['what a class is, then the classes up and down', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed lower gets down.'],
       ['what a shared class is', 'Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.'],
       ['each candle wears its side, and the wick drawn', 'Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall, so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.'],
       ['the volume bars read volume-side’s custom properties', 'The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom properties, values a stylesheet names once and other rules read, and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.']
@@ -492,7 +492,7 @@ describe('a list of charts', () => {
       ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
       ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
       ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.'],
-      ['what a class is, before the painted background with no parts', 'A class, as the accordions tab says, is a name a rule picks out. You could paint the split with a conic gradient, a background that sweeps color round a point. But a painted background has no parts: nothing to give a class, nothing to label, and nothing for a test to find.']
+      ['what a class is, before the painted background with no parts', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. You could paint the split with a conic gradient, a background that sweeps color round a point. But a painted background has no parts: nothing to give a class, nothing to label, and nothing for a test to find.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await pieStory()).toHaveTextContent(sentence);
     });

@@ -1100,8 +1100,8 @@ describe('the living table’s terms', () => {
   });
 
   test.each([
-    ['react', 'A class, as the accordions tab says, is a name a rule picks out. The columns are declared once, each with a name and a class; how wide they open is CSS.'],
-    ['vanilla', 'A class, as the accordions tab says, is a name a rule picks out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
+    ['react', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. The columns are declared once, each with a name and a class; how wide they open is CSS.'],
+    ['vanilla', 'A class, as the accordions tab says, is a name a stylesheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they open is CSS.']
   ])('should define class in plain words where the still table first uses it, in the %s world', async (world, sentence) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables', `?world=${world}`)} feed={feed}/>);
@@ -1458,9 +1458,9 @@ describe('the tables tutorials’ vocabulary', () => {
 describe('the tables tab’s introduction', () => {
   const paragraphs = [
     'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
-    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer. The rest is new here.',
+    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, the z-index tab’s popover, top layer and React, and a class from the accordions tab. The rest is new here.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
-    'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
+    'This page’s view is that the columns and the rows’ order are the state, the values the page holds and draws from, as the z-index tab says, and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
     'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, and the same state sits under both. The z-index tab explains React.',
     'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.'
   ];
@@ -1479,7 +1479,8 @@ describe('the tables tab’s introduction', () => {
     expect(await demoTabs.assumedLinks('Tables')).toEqual([
       ['charts tab', `${Paths.demos}charts/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
-      ['z-index tab', `${Paths.demos}z-index/`]
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
 });
@@ -1621,6 +1622,8 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(tab)).toEqual([
       ['charts tab', `${Paths.demos}charts/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['events', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],

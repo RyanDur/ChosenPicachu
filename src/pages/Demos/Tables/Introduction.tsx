@@ -7,12 +7,13 @@ export const TablesIntroduction: FC = () =>
     <p className="paragraph">A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also
       lets you drag a column or a row to a new place, resize a column, and sort by one.</p>
     <p className="paragraph">This tab assumes the <TabLink to={DemoTopics.charts}>charts tab</TabLink>’s live feed and its trades, the{' '}
-      <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s dials and drag, and the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink>’s popover and top
-      layer. The rest is new here.</p>
+      <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s dials and drag, the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink>’s popover, top layer and React,
+      and a class from the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>. The rest is new here.</p>
     <p className="paragraph">The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row
       updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move
       that undoes a sort.</p>
-    <p className="paragraph">This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade
+    <p className="paragraph">This page’s view is that the columns and the rows’ order are the state, the values the page holds and draws from, as
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and the data never moves: a trade
       rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and
       everything a drag needs is measured once, at the grab.</p>
     <p className="paragraph">Every pixel of the drag is drawn from pointer events, the browser’s <TabLink to={DemoTopics.zIndex}>events</TabLink> for a mouse, a finger and a pen
