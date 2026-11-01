@@ -29,7 +29,7 @@ jobs:
   soak:
     runs-on: ubuntu-24.04
     container:
-      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
       options: --user 1001
     name: feedback soak (${{ inputs.ref }} webkit ${{ matrix.shard }})
     strategy:
