@@ -4,6 +4,7 @@ import {ColumnHeaderClassList} from './ClassList';
 
 const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/';
 const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
+const bem = 'https://yandex.com/dev/bem/index';
 const bemHistory = 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/';
 const stylingWithUtilities = 'https://tailwindcss.com/docs/styling-with-utility-classes';
 const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
@@ -64,7 +65,7 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
       order and isolation, the rest of this tab shows what remains: where a rule lives, what a class is named for, and
       the test a class list has to pass.</p>
-    <p className="paragraph">BEM is Yandex’s method, and it began at scale. Its{' '}
+    <p className="paragraph"><a className="signpost" href={bem}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory}>history</a> says that by 2006{' '}
       <a className="signpost" href={bemHistory}>“any changes to the code of one page affected the code of other pages”</a>,
       with more than a hundred services sharing one style library. The answer was the independent block, which{' '}

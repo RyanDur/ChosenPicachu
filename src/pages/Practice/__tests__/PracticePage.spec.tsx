@@ -442,11 +442,12 @@ describe('the practice page', () => {
     expect(practicePage.link('“You aren’t wasting energy inventing class names”')).toHaveAttribute('href', 'https://v3.tailwindcss.com/docs/utility-first');
   });
 
-  test('should send BEM’s beginnings, the independent block and the folder per block to the history page’s archived copy', async () => {
+  test('should send BEM to Yandex’s page, and its beginnings, the independent block and the folder per block to the history page’s archived copy', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linksIn(/^BEM is Yandex’s method, and it began at scale/)).toEqual([
+      ['BEM', 'https://yandex.com/dev/bem/index'],
       ['history', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
       ['“any changes to the code of one page affected the code of other pages”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
       ['“can be used anywhere on the page”', 'https://web.archive.org/web/2024/https://en.bem.info/methodology/history/'],
