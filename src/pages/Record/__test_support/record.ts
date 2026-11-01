@@ -59,14 +59,16 @@ export const recordPage = {
   ]),
   fullerStories: (): HTMLElement[] => within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
     .filter(fold => within(fold).queryByText('the fuller story') !== null),
-  tabsToSampleIn: async (story: string, name: string): Promise<boolean> => {
+  periodSample: (name: string): HTMLElement => screen.getByRole('group', {name}),
+  tabStopsIn: async (story: string): Promise<Element[]> => {
     const told = itemHeadedBy('the timeline', story);
-    const sample = screen.getByRole('group', {name});
+    const reached: Element[] = [];
     within(told).getAllByRole('link')[0].focus();
-    while (document.activeElement !== sample && told.contains(document.activeElement)) {
+    while (document.activeElement && told.contains(document.activeElement)) {
+      reached.push(document.activeElement);
       await userEvent.tab();
     }
-    return document.activeElement === sample;
+    return reached;
   },
   shelfHeadings: (): (string | null)[] => within(research()).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent)
 };

@@ -1103,7 +1103,7 @@ describe('the period samples', () => {
 
     await recordPage.openFullerStory(story);
 
-    expect(await recordPage.tabsToSampleIn(story, name)).toBe(true);
+    expect(await recordPage.tabStopsIn(story)).toContain(recordPage.periodSample(name));
   });
 });
 
