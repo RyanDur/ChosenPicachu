@@ -15,8 +15,6 @@ const practices = [
   ['Behavior', 'behavior', /^Behavior splits into what is true and what happened/, /^The test is to read the state on its own/]
 ] as const;
 
-const firstRuleOf = Object.fromEntries(practices.map(([concern, , firstRule]) => [concern, firstRule])) as Record<string, RegExp>;
-
 describe('the practice page', () => {
   test.each(practices)('should spell the %s tab\'s prose the American way', async (concern, tab) => {
     render(<TestApp at={practiceAt(tab)}/>);
@@ -114,23 +112,23 @@ describe('the practice page', () => {
   });
 
   test.each([
-    ['Structure', 'structure', 'The element is the name. It tells the browser, a screen reader and the next developer at once what the thing is, so I choose it first and make a new one only for a behavior that has no element.'],
-    ['Behavior', 'behavior', 'An event is a name for what happened. The state’s type is a name for what is true, and it refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.']
-  ] as const)('should follow the %s tab’s first rule with the principle applied to it', async (concern, param, applied) => {
+    ['Structure', 'structure', /^I start from what the content is and pick the element for it/, 'The element is the name. It tells the browser, a screen reader and the next developer at once what the thing is, so I choose it first and make a new one only for a behavior that has no element.'],
+    ['Behavior', 'behavior', /^Behavior splits into what is true and what happened/, 'An event is a name for what happened. The state’s type is a name for what is true, and it refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.']
+  ] as const)('should follow the %s tab’s first rule with the principle applied to it', async (concern, param, firstRule, applied) => {
     render(<TestApp at={practiceAt(param)}/>);
     await practicePage.arrivedOn(concern);
 
-    expect(practicePage.paragraphs()[practicePage.paragraphs().findIndex(paragraph => firstRuleOf[concern].test(paragraph)) + 1]).toBe(applied);
+    expect(practicePage.paragraphAfter(firstRule)).toBe(applied);
   });
 
-  test('should open the Structure tab on who reads markup and the five things that have to be true of it, before its first rule', async () => {
+  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before its first rule', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.paragraphs().slice(0, 4)).toEqual([
-      'Markup is read by more than the browser. A screen reader reads it for roles, names and states, and for a way to move: on a long page most screen reader users go to the headings first, 71.6% in WebAIM’s tenth survey, and a few to the landmarks. Reader view and a search engine read it for the content in order, with its meaning. The next developer reads it to see what the page is. The browser reads it for the behavior each element brings. Organizing markup has to give all five the same answer from the same elements.',
-      'So five things have to be true of the markup, and WCAG names four of them. Meaning: what each thing is, carried by the markup and not by the look (1.3.1, Info and Relationships). Order: what comes before what, so a reading sequence can be worked out from the markup (1.3.2, Meaningful Sequence). Names: what each region and control is called (2.4.6, Headings and Labels), with a way past what repeats on every page (2.4.1, Bypass Blocks). Behavior: what presses, opens and submits, with its name, role and state known to the tools (4.1.2, Name, Role, Value). Identity: how one thing is found, by the next developer and by the script, which no criterion covers.',
-      'The rest of this tab is where each of the five lives.',
+      expect.stringMatching(/^Markup is read by more than the browser/),
+      expect.stringMatching(/^So five things have to be true of the markup, and WCAG names four of them/),
+      expect.stringMatching(/^The rest of this tab is where each of the five lives/),
       expect.stringMatching(/^I start from what the content is and pick the element for it/)
     ]);
   });

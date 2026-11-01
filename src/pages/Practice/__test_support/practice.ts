@@ -31,6 +31,7 @@ export const practicePage = {
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
   paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
+  paragraphAfter: (opening: RegExp): string | null | undefined => within(practice()).getByText(opening).nextElementSibling?.textContent,
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
