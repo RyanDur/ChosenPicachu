@@ -3,7 +3,7 @@ import type {Locator, Page} from '@playwright/test';
 export const recordPage = (page: Page) => ({
   title: page.getByRole('heading', {name: 'The record', level: 1}),
   linkToTheDemos: page.getByRole('link', {name: 'the accordions', exact: true}),
-  timelineStories: page.getByRole('list', {name: 'the timeline'}).getByRole('group'),
+  timelineStories: page.getByRole('list', {name: 'the timeline'}).getByRole('group').filter({has: page.getByText('the fuller story')}),
   moment: (title: string): Locator => page.getByRole('list', {name: 'the timeline'}).getByRole('listitem').filter({has: page.getByRole('heading', {name: title, exact: true}), hasNot: page.getByRole('list')}),
   year: (year: string): Locator => page.getByRole('list', {name: 'the timeline'}).getByRole('listitem').filter({has: page.getByRole('list', {name: year})}),
   concertLinkTo: (moment: string): Locator => page.getByRole('region', {name: 'The concert'}).getByRole('link', {name: moment}),

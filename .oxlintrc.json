@@ -81,7 +81,7 @@
     "jsx-a11y/no-noninteractive-tabindex": [
       "error",
       {
-        "tags": ["section"],
+        "tags": ["section", "pre"],
         "roles": ["tabpanel"]
       }
     ]

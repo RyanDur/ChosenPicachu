@@ -57,5 +57,12 @@ export const recordPage = {
     within(moment).getByText(/^(Structure|Presentation|Behavior)/).textContent,
     within(moment).getByRole('heading', {level: 4}).textContent
   ]),
+  fullerStories: (): HTMLElement[] => within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
+    .filter(fold => within(fold).queryByText('the fuller story') !== null),
+  focusSample: (name: string): HTMLElement => {
+    const sample = screen.getByRole('group', {name, hidden: true});
+    sample.focus();
+    return sample;
+  },
   shelfHeadings: (): (string | null)[] => within(research()).getAllByRole('heading', {level: 3, hidden: true}).map(heading => heading.textContent)
 };

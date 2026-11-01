@@ -675,7 +675,7 @@ describe('the record', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
-    const folds = timeline.getAllByRole('group');
+    const folds = recordPage.fullerStories();
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/, /skin disease/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
@@ -1076,6 +1076,23 @@ describe('the record\'s three stories', () => {
     ['“It’s fine to mostly ship HTML with minimal JavaScript to get an experience interactive.”', 'https://web.dev/rendering-on-the-web/']
   ])('should link Behavior\'s quotation %s to the page it was taken from', (quoted, page) => {
     recordPage.storyQuotations('Behavior', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
+  });
+});
+
+describe('the period samples', () => {
+  test.each([
+    'Netscape’s markup of 1996: columns and a font as tags',
+    'Lie’s 1994 draft: a heading’s size with its influence',
+    'Lie’s 1994 draft: sliders between user and author',
+    'Lie’s 1994 draft: two sheets weighed against each other',
+    'Lie’s 1994 draft: a property computed from another',
+    'Lie’s 1994 draft: rules that read the reader’s world',
+    'Lie’s 1994 draft: weights for speech'
+  ])('should let a keyboard reach the sample "%s" by its name, so it can scroll it sideways', async name => {
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+
+    expect(recordPage.focusSample(name)).toHaveFocus();
   });
 });
 
