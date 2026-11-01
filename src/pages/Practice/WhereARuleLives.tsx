@@ -10,11 +10,7 @@ type Box = {
   readonly height: number;
 };
 
-type Line = {
-  readonly from: readonly [number, number];
-  readonly to: readonly [number, number];
-  readonly labelAt: readonly [number, number];
-};
+type Point = {readonly x: number; readonly y: number};
 
 const inset = 6;
 
@@ -46,15 +42,33 @@ const component = (x: number, y: number, besideEachOther: boolean): Box[] => [
   ...column(ownSheets, sheet, besideEachOther ? {x: x + 150, y: y + 24, width: 126} : {x: x + 12, y: y + 138, width: 126})
 ];
 
-const liftedIn = (surface: Box): {x: number; y: number} => ({x: surface.x + surface.width - 48, y: surface.y + inset});
+const liftedIn = (surface: Box): Point => ({x: surface.x + surface.width - 48, y: surface.y + inset});
+
+const boxLabelled = (boxes: Box[], label: string): Box => {
+  const found = boxes.find(box => box.label === label);
+  if (found) {
+    return found;
+  }
+  throw new Error(`no box labelled ${label}`);
+};
+
+const rightMiddle = ({x, y, width, height}: Box): Point => ({x: x + width, y: y + height / 2});
+const leftMiddle = ({x, y, height}: Box): Point => ({x, y: y + height / 2});
+const topMiddle = ({x, y, width}: Box): Point => ({x: x + width / 2, y});
+
+const margin = 6;
+
+const viewBoxAround = (boxes: Box[]): string =>
+  `0 0 ${Math.max(...boxes.map(({x, width}) => x + width)) + margin} ${Math.max(...boxes.map(({y, height}) => y + height)) + margin}`;
 
 const wide: Box[] = [...tree(6, 6), ...component(246, 6, false)];
 const stacked: Box[] = [...tree(6, 6), ...component(6, 306, true)];
 
-const wears: Record<'wide' | 'stacked', Line> = {
-  wide: {from: [198, 201], to: [258, 87], labelAt: [214, 150]},
-  stacked: {from: [198, 201], to: [144, 387], labelAt: [176, 290]}
-};
+const wearsBeside = (boxes: Box[]): {from: Point; to: Point} =>
+  ({from: rightMiddle(boxLabelled(boxes, 'surface')), to: leftMiddle(boxLabelled(boxes, 'SortMenu.tsx'))});
+
+const wearsBelow = (boxes: Box[]): {from: Point; to: Point} =>
+  ({from: rightMiddle(boxLabelled(boxes, 'surface')), to: topMiddle(boxLabelled(boxes, 'SortMenu.tsx'))});
 
 const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
   <rect className={box.look} x={box.x} y={box.y} width={box.width} height={box.height}/>
@@ -62,17 +76,17 @@ const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
   {lifted && <text className="drawn-caption" x={liftedIn(box).x} y={liftedIn(box).y} dominantBaseline="hanging">lifted</text>}
 </>;
 
-const Frame: FC<{boxes: Box[]; line: Line; className: string; viewBox: string}> = ({boxes, line, className, viewBox}) =>
-  <svg className={`${className} ink-filled`} viewBox={viewBox} aria-hidden="true">
+const Frame: FC<{boxes: Box[]; wears: {from: Point; to: Point}; className: string}> = ({boxes, wears: {from, to}, className}) =>
+  <svg className={`${className} ink-filled`} viewBox={viewBoxAround(boxes)} aria-hidden="true">
     {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === 'surface'}/>)}
-    <line className="wears-line drawn dashed-drawn" x1={line.from[0]} y1={line.from[1]} x2={line.to[0]} y2={line.to[1]}/>
-    <text className="drawn-caption" x={line.labelAt[0]} y={line.labelAt[1]} dominantBaseline="hanging">wears</text>
+    <line className="wears-line drawn dashed-drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
+    <text className="drawn-caption" x={(from.x + to.x) / 2 + inset} y={(from.y + to.y) / 2} dominantBaseline="hanging">wears</text>
   </svg>;
 
 export const WhereARuleLives: FC = () =>
   <figure className="where-a-rule-lives">
-    <Frame boxes={wide} line={wears.wide} className="where-a-rule-lives-wide center" viewBox="0 0 480 300"/>
-    <Frame boxes={stacked} line={wears.stacked} className="where-a-rule-lives-stacked center" viewBox="0 0 300 450"/>
+    <Frame boxes={wide} wears={wearsBeside(wide)} className="where-a-rule-lives-wide center"/>
+    <Frame boxes={stacked} wears={wearsBelow(stacked)} className="where-a-rule-lives-stacked center"/>
     <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> Shared words at the root, by
       concern; a component’s structure beside the component.
     </figcaption>
