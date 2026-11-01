@@ -9,26 +9,26 @@
     margin: 0;
     text-wrap: pretty;
   }
-}
 
-.practice-title {
-  margin: 0;
-}
+  .practice-title {
+    margin: 0;
+  }
 
-.practice-list {
-  display: grid;
-  gap: var(--base-x-0_5);
-  padding-inline-start: var(--base-x-3);
-}
+  .practice-list {
+    display: grid;
+    gap: var(--base-x-0_5);
+    padding-inline-start: var(--base-x-3);
+  }
 
-.needs {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: var(--base-x-0_5) var(--base);
-}
+  .needs {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--base-x-0_5) var(--base);
+  }
 
-.need {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
+  .need {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
 }
