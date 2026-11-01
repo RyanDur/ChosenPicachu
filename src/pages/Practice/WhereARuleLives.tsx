@@ -62,7 +62,7 @@ const margin = 6;
 const viewBoxAround = (boxes: Box[]): string =>
   `0 0 ${Math.max(...boxes.map(({x, width}) => x + width)) + margin} ${Math.max(...boxes.map(({y, height}) => y + height)) + margin}`;
 
-const wide: Box[] = [...tree(6, 6), ...component(246, 6, false)];
+const wide: Box[] = [...tree(6, 6), ...component(252, 6, false)];
 const stacked: Box[] = [...tree(6, 6), ...component(6, 306, true)];
 
 const wearsBeside = (boxes: Box[]): {from: Point; to: Point} =>
