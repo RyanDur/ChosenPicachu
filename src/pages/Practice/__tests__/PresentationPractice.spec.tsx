@@ -25,52 +25,34 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.currentTab()).toBe('Presentation');
   });
 
-  test('should send each answer the field gave to its source, and the quotations to the pages that hold them', async () => {
+  test('should send every source of what organizing CSS has to solve to the page that holds it, Hyatt’s words to the archived copy of his', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^A reset answered defaults/)).toEqual([
+    expect(practicePage.linksUnder('What organizing CSS has to solve')).toEqual([
+      ['“the part that matches the element being matched, rather than its ancestors”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS'],
+      ['“the style system matches rules by starting with the key selector, then moving to the left”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS'],
       ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
       ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
       ['normalize.css', 'https://necolas.github.io/normalize.css/'],
-      ['“preserve useful browser defaults rather than erasing them”', 'https://nicolasgallagher.com/about-normalize-css/']
-    ]);
-    expect(practicePage.linksIn(/^A preprocessor answered constants and reuse/)).toEqual([
-      ['Sass', 'https://sass-lang.com/'],
-      ['Less', 'https://lesscss.org/about/']
-    ]);
-    expect(practicePage.linksIn(/^A framework answered reuse for teams without a designer/)).toEqual([
-      ['Bootstrap', 'https://getbootstrap.com/docs/5.3/about/overview/']
-    ]);
-    expect(practicePage.linksIn(/^A methodology answered isolation and order by convention/)).toEqual([
+      ['“preserve useful browser defaults rather than erasing them”', 'https://nicolasgallagher.com/about-normalize-css/'],
+      ['Sass', 'https://sass-lang.com/libsass/'],
+      ['Less', 'https://lesscss.org/about/'],
+      ['Bootstrap', 'https://getbootstrap.com/docs/5.3/about/overview/'],
       ['OOCSS', 'https://github.com/stubbornella/oocss/wiki'],
       ['SMACSS', 'https://smacss.com/'],
-      ['“more style guide than rigid framework”', 'https://smacss.com/']
-    ]);
-    expect(practicePage.linksIn(/^CSS in script answered isolation by build/)).toEqual([
+      ['“more style guide than rigid framework”', 'https://smacss.com/'],
       ['CSS Modules', 'https://github.com/css-modules/css-modules'],
       ['styled-components', 'https://styled-components.com/blog/celebrating-a-decade-of-styled-components'],
-      ['2013 moment', `${Paths.record}#someone-needs-components`]
-    ]);
-    expect(practicePage.linksIn(/^Utilities answered constants and reuse with no new CSS/)).toEqual([
-      ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/']
-    ]);
-    expect(practicePage.linksIn(/^Since 2017 the platform has answered four of the five needs itself/)).toEqual([
-      ['Custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
+      ['2013 moment', `${Paths.record}#someone-needs-components`],
+      ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/'],
+      ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
-      ['Container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
+      ['container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
       [':has()', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has'],
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
       ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope']
     ]);
-  });
-
-  test('should list the five needs of CSS as terms, defaults, constants, reuse, isolation and order, each with a definition beside it', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.terms()).toEqual(['Defaults', 'Constants', 'Reuse', 'Isolation', 'Order']);
-    expect(practicePage.definitions().map(definition => definition.length > 0)).toEqual([true, true, true, true, true]);
   });
 
   test('should head the Presentation tab’s seven parts in reading order, closing on the test a class list has to pass', async () => {
@@ -206,6 +188,19 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
+  test('should list the sizes spacing.css writes outside its base, after saying not every size is a multiple of it', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.itemsListedAfter(/^Then two token files/)).toEqual([
+      expect.stringMatching(/^the hairlines, in pixels/),
+      expect.stringMatching(/^the corner radii/),
+      expect.stringMatching(/^the breakpoints, in pixels.*the container queries, in rems/),
+      expect.stringMatching(/^a few table and page widths, in rems, measured to what they hold/),
+      expect.stringMatching(/^a drawing’s width, in pixels/)
+    ]);
+  });
+
   test('should send Tailwind’s advice on reuse, and its two quoted lines, to its page on styling with utility classes', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
@@ -217,46 +212,46 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should send pseudo-classes to MDN’s page on them', async () => {
+  test('should send the runtime values’ custom properties to MDN’s guide to using them, and their lesson to the 2013 moment', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^Only values the code works out at runtime/)).toEqual([
+      ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'],
+      ['2013 moment', `${Paths.record}#someone-needs-components`]
+    ]);
+  });
+
+  test('should send the states the platform already names to MDN’s pseudo-classes', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.link('pseudo-classes')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes');
   });
 
-  test('should send prefers-reduced-motion to MDN’s page on the media feature', async () => {
+  test('should send the reader’s motion preference to MDN’s prefers-reduced-motion', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.link('prefers-reduced-motion')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion');
   });
 
-  test('should send the meaningful sequence to its WCAG understanding page', async () => {
+  test('should send the order a keyboard moves through to WCAG’s meaningful sequence', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.link('the meaningful sequence')).toHaveAttribute('href', 'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html');
   });
 
-  test('should send appearance: base-select to MDN’s guide to the customizable select', async () => {
+  test('should send the customizable select, and its fallback, to MDN’s page on it, and the record’s pattern to the 1996 moment', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.link('appearance: base-select')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select');
-  });
-
-  test('should send the quotation on the classic select to the MDN guide that holds it', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.link('“fall back to a classic select experience”')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select');
-  });
-
-  test('should send the inline values’ custom properties to MDN’s page on using them', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.link('custom properties')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties');
+    expect(practicePage.linksUnder('Where the platform catches up')).toEqual([
+      ['appearance: base-select', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select'],
+      ['“fall back to a classic select experience”', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select'],
+      ['1996 moment', `${Paths.record}#the-pages-need-to-look-the-same`]
+    ]);
   });
 
   test('should show the trades column’s header in the part on what a class is named for', async () => {

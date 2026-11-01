@@ -7,9 +7,9 @@ import {WhereARuleLives} from './WhereARuleLives';
 
 const {
   wathan, utilityFirst, bem, bemHistory, stylingWithUtilities, customizableSelect, smacss, resetReloaded, resetCss,
-  normalizeCss, aboutNormalizeCss, sass, aboutLess, aboutBootstrap, objectOrientedCss, cssModules, styledComponents,
+  normalizeCss, aboutNormalizeCss, libSass, aboutLess, aboutBootstrap, objectOrientedCss, cssModules, styledComponents,
   customProperties, layer, container, has, nestingSelector, scope, pseudoClasses, prefersReducedMotion,
-  meaningfulSequence, usingCssCustomProperties
+  meaningfulSequence, usingCssCustomProperties, hyatt
 } = presentation;
 const sheet = (file: string): string => fileInRepository(`src/styles/${file}.css`);
 const stylelintConfig = fileInRepository('stylelint.config.js');
@@ -17,80 +17,52 @@ const stylelintConfig = fileInRepository('stylelint.config.js');
 export const PresentationPractice: FC = () =>
   <>
     <h3 className="paragraph bold">What organizing CSS has to solve</h3>
-    <p className="paragraph">CSS has one global scope, so every rule can reach every element, and a cascade, the rule
-      that decides which of several matching declarations wins. That is what makes it small to write and hard to
-      organize: as a site grows, a rule written for one place reaches another, a value is written in forty places, and
-      the author cannot easily tell which rule wins. Every way of organizing CSS answers one or more of five needs.</p>
-    <dl className="needs">
-      <div className="need">
-        <dt className="paragraph bold">Defaults</dt>
-        <dd className="paragraph">that agree across browsers.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Constants</dt>
-        <dd className="paragraph">written once.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Reuse</dt>
-        <dd className="paragraph">of a look.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Isolation</dt>
-        <dd className="paragraph">of a component.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Order</dt>
-        <dd className="paragraph">when rules conflict.</dd>
-      </div>
-    </dl>
-    <p className="paragraph">The field answered them in turn, and each answer had a cost.</p>
-    <p className="paragraph">A reset answered defaults. Eric Meyer’s{' '}
-      <a className="signpost" href={resetCss.address}>reset</a> zeroed the browser’s margins,
-      line heights and heading sizes so every site started from nothing; he called it{' '}
-      <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a>{' '}
-      in 2007. The cost of a reset is that the author styles everything again, including what the browser did well.
-      Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept
-      the defaults worth keeping instead, to{' '}
-      <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing them”</a>,
-      as he wrote in 2012.</p>
-    <p className="paragraph">A preprocessor answered constants and reuse.{' '}
-      <a className="signpost" href={sass.address}>Sass</a>, supported since 2006, and{' '}
-      <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009, added
-      variables, nesting and mixins to a language the browser never sees and compiled it to CSS. The cost is a build
-      step between the author and the sheet.</p>
-    <p className="paragraph">A framework answered reuse for teams without a designer.{' '}
-      <a className="signpost" href={aboutBootstrap.address}>Bootstrap</a>, made at Twitter
-      and released in 2011, is a vocabulary of components with their look included. The cost is that the look is the
-      framework’s.</p>
-    <p className="paragraph">A methodology answered isolation and order by convention. Nicole Sullivan’s{' '}
-      <a className="signpost" href={objectOrientedCss.address}>OOCSS</a> separates structure from skin
-      and container from content. Jonathan Snook’s <a className="signpost" href={smacss.address}>SMACSS</a>, written in 2011,
-      is <a className="signpost" href={smacss.address}>“more style guide than rigid framework”</a>: rules for naming and
-      nesting so the cascade cannot reach where it should not. BEM, Yandex’s method, is the one I keep most from, and
-      it has its own paragraph below. The cost of a convention is that it holds only as long as every author follows
-      it.</p>
-    <p className="paragraph">CSS in script answered isolation by build. The component owns its styles, and a build
-      scopes the class names so no two components collide:{' '}
-    <a className="signpost" href={cssModules.address}>CSS Modules</a>, from 2015, and{' '}
-    <a className="signpost" href={styledComponents.address}>styled-components</a>,
-      from 2016. The Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began,
-      so this tab does not. The cost is that the look leaves the sheet.</p>
-    <p className="paragraph">Utilities answered constants and reuse with no new CSS. Adam Wathan’s essay of 2017,{' '}
-      <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, argued for a fixed set
-      of single-purpose classes drawn from a theme, and Tailwind built it. It has its own paragraph below too.</p>
-    <p className="paragraph">Since 2017 the platform has answered four of the five needs itself.{' '}
-      <a className="signpost" href={customProperties.address}>Custom properties</a>, in every engine since April 2017, are constants.{' '}
-      <a className="signpost" href={layer.address}>@layer</a>, since March 2022, is order.{' '}
-      <a className="signpost" href={container.address}>Container queries</a> since February 2023,{' '}
-      <a className="signpost" href={has.address}>:has()</a> and{' '}
-      <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023, and{' '}
-      <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available, are isolation. With
-      constants and order native, the cascade itself does reuse. Defaults are still the reset’s. The cost is time:
-      a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
-    <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
-      order and isolation, and reuse through the cascade, the rest of this tab shows what remains: what this site keeps from
-      BEM and Tailwind, where a rule lives, what a class is named for, what the sheet owes the reader, where the
-      platform catches up, and the test a class list has to pass.</p>
+    <p className="paragraph">CSS has one global scope and a cascade, so a rule written for one place can reach another,
+      and as a site grows the author cannot always tell which rule wins. I organize it with one split. Any CSS that is
+      structurally part of a component, the grid and placement of that one component, lives in its own sheet beside
+      it. Everything else is sharable and lives in the shared sheets, imported in order: first the reset, which is the
+      only place a tag is styled, and only to reset it; then the tokens, where every value is written once; then the
+      vocabulary, where every look is one word any element can wear.</p>
+    <p className="paragraph">A selector names classes, never a tag. A browser matches a selector from right to left:
+      David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the key selector,{' '}
+    <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its ancestors”</a>,
+      and wrote that{' '}
+    <a className="signpost" href={hyatt.address}>“the style system matches rules by starting with the key selector, then moving to the left”</a>.
+      So <code className="monospaced">nav a</code> starts from every link on the page and checks each one’s
+      ancestors, while <code className="monospaced">.home .opening</code> starts from the few elements that carry that
+      class. A class also says more. <code className="monospaced">nav a</code> says where a link is;{' '}
+    <code className="monospaced">rail-path</code> says what it is for, which is what the next reader needs. A
+      component’s sheet keys its rules on the component’s own classes, and a lint refuses a class name no sheet near
+      the element defines, so its rules stay its own without a build to scope them.</p>
+    <p className="paragraph">The field put the look in other places before the platform could hold it. A reset put the
+      defaults in the author’s hands: Eric Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
+      the browser’s margins, line heights and heading sizes,{' '}
+    <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a> in
+      2007, and Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
+      defaults worth keeping instead, to{' '}
+    <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing them”</a>,
+      in 2012. A preprocessor put the constants in a build step, in a language the browser never sees:{' '}
+    <a className="signpost" href={libSass.address}>Sass</a>, which Hampton Catlin created and which has been supported
+      since 2006, and{' '}
+    <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009. A framework put
+      the look in the library, taken whole: <a className="signpost" href={aboutBootstrap.address}>Bootstrap</a>, made
+      at Twitter and released in 2011. A methodology put it in a convention, held as long as every author keeps it:
+      Nicole Sullivan’s <a className="signpost" href={objectOrientedCss.address}>OOCSS</a>, Jonathan Snook’s{' '}
+    <a className="signpost" href={smacss.address}>SMACSS</a> of 2011,{' '}
+    <a className="signpost" href={smacss.address}>“more style guide than rigid framework”</a>, and BEM, which has
+      its own paragraph below. CSS in script put it in the component, with a build that scopes the names:{' '}
+    <a className="signpost" href={cssModules.address}>CSS Modules</a> from 2015 and{' '}
+    <a className="signpost" href={styledComponents.address}>styled-components</a> from 2016; the Record’s{' '}
+    <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began. Utilities put the theme
+      in the class name: Adam Wathan’s essay of 2017,{' '}
+    <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, and
+      Tailwind after it. And the platform put each of those in the sheet, native since its date:{' '}
+    <a className="signpost" href={customProperties.address}>custom properties</a> since April 2017,{' '}
+    <a className="signpost" href={layer.address}>@layer</a> since March 2022,{' '}
+    <a className="signpost" href={container.address}>container queries</a> since February 2023,{' '}
+    <a className="signpost" href={has.address}>:has()</a> and{' '}
+    <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023, and{' '}
+    <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -128,9 +100,9 @@ export const PresentationPractice: FC = () =>
       its second use, and every value from a constrained set. I give up two: the value in the class name, and reuse in
       the component rather than the sheet.</p>
     <h3 className="paragraph bold">Where a rule lives</h3>
-    <p className="paragraph">Here is how this site’s CSS is laid out, in the order{' '}
-      <code className="monospaced">index.css</code> imports it. First the{' '}
-      <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
+    <p className="paragraph">Here is each in turn, in the order <code className="monospaced">index.css</code> imports
+      them. First the{' '}
+    <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
       elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
       datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
     <p className="paragraph">Then two token files. A token is a named value, such as{' '}
@@ -140,10 +112,16 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
       <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-      <code className="monospaced">0.8rem</code>, and the sizes most rules read as multiples of it. Three kinds of size
-      are written outside it on purpose: the hairlines, the corner radius and the breakpoints, in pixels, because they
-      are not to scale with the type; a drawing’s width, in pixels, to match its view box; and a few widths of a table
-      or a page, which are their own numbers.</p>
+      <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Not every size is:</p>
+    <ul className="practice-list">
+      <li className="paragraph">the hairlines, in pixels, so they do not scale with the type;</li>
+      <li className="paragraph">the corner radii: a pixel value for the small one, rems for the soft one and the pill;</li>
+      <li className="paragraph">the breakpoints, in pixels, since they follow the window; the container queries, in rems
+        and one measure in ch, since they follow a container or a line of text;</li>
+      <li className="paragraph">a few table and page widths, in rems, measured to what they hold: a table’s columns at
+        their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
+      <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
+    </ul>
     <p className="paragraph">Only values the code works out at runtime are written inline, mostly as{' '}
       <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
       the sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom properties
@@ -168,13 +146,13 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       Another refuses a look in a component sheet and prints that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
-      The third refuses a color, a font size, a padding, a margin, a gap, a fill, a
-      stroke, a background or a border written as a number instead of a token. BEM and SMACSS held their
+      The third refuses a number where a token belongs, in color, font size, padding, margin, gap, fill, stroke,
+      background and border. BEM and SMACSS held their
       lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
     <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
-      order and a component’s own class, with its rules keyed on it, gives a rule its reach. The cost is that the
+      order and the split above gives a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
       a rule that says so. I do nest a rule inside another where it belongs, as most sheets here do.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
@@ -194,9 +172,9 @@ export const PresentationPractice: FC = () =>
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
       sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That is the separation
       the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for, the look leaving the markup for a
-      style sheet. It keeps the sheet restyleable, which is what the Zen Garden in the{' '}
-    <MomentLink to="zenGarden">2003 moment</MomentLink> showed it is for. It also keeps the constraint
-      where Wathan wants it, in one place.</p>
+      style sheet. That split keeps the sheet restyleable, which is what the Zen Garden in the{' '}
+    <MomentLink to="zenGarden">2003 moment</MomentLink> showed that split is for, and it keeps the constraint where
+      Wathan wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the

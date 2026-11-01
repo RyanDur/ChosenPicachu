@@ -90,17 +90,17 @@ const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
   {lifted && <text className="drawn-caption" x={liftedIn(box).x} y={liftedIn(box).y} dominantBaseline="hanging">lifted</text>}
 </>;
 
-const Frame: FC<{boxes: Box[]; wears: Wears; className: string}> = ({boxes, wears: {from, to}, className}) =>
+const Frame: FC<{boxes: Box[]; liftedLabel: string; wears: Wears; className: string}> = ({boxes, liftedLabel, wears: {from, to}, className}) =>
   <svg className={`${className} ink-filled`} viewBox={viewBoxAround(boxes)} aria-hidden="true">
-    {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === styles.surface.label}/>)}
+    {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === liftedLabel}/>)}
     <line className="wears-line drawn dashed-drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
     <text className="drawn-caption" x={(from.x + to.x) / 2 + inset} y={(from.y + to.y) / 2} dominantBaseline="hanging">wears</text>
   </svg>;
 
 export const WhereARuleLives: FC = () =>
   <figure className="where-a-rule-lives practice-drawing">
-    <Frame boxes={wide} wears={wideWears} className="drawing-wide center"/>
-    <Frame boxes={stacked} wears={stackedWears} className="drawing-stacked center"/>
+    <Frame boxes={wide} liftedLabel={styles.surface.label} wears={wideWears} className="drawing-wide center"/>
+    <Frame boxes={stacked} liftedLabel={styles.surface.label} wears={stackedWears} className="drawing-stacked center"/>
     <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in{' '}
       <code className="monospaced">src/styles</code>, by concern. A component’s structure lives beside the component.
     </figcaption>

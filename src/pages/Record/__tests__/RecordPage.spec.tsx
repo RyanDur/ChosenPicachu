@@ -827,6 +827,11 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('CSS Utility Classes and “Separation of Concerns”')).toBe('Presentation');
   });
 
+  test('should shelve Writing Efficient CSS on the Presentation shelf, as David Hyatt’s for Mozilla in 2000, in its archived copy of 5 May 2012', () => {
+    expect(recordPage.shelvedAs('Writing Efficient CSS')).toHaveTextContent('David Hyatt, Mozilla, 2000; archived copy, 5 May 2012');
+    expect(recordPage.shelfHolding('Writing Efficient CSS')).toBe('Presentation');
+  });
+
   test('should shelve BEM’s history on the Presentation shelf, as Yandex’s page in its archived copy of 24 December 2024', () => {
     expect(recordPage.shelvedAs('History')).toHaveTextContent('Yandex, bem.info; archived copy, 24 December 2024');
     expect(recordPage.shelfHolding('History')).toBe('Presentation');
@@ -890,6 +895,11 @@ describe('the record', () => {
   test('should shelve About normalize.css on the Presentation shelf, as Nicolas Gallagher, 28 February 2012', () => {
     expect(recordPage.shelvedAs('About normalize.css')).toHaveTextContent('Nicolas Gallagher, 28 February 2012');
     expect(recordPage.shelfHolding('About normalize.css')).toBe('Presentation');
+  });
+
+  test('should shelve LibSass on the Presentation shelf, as Sass’s page on sass-lang.com, undated', () => {
+    expect(recordPage.shelvedAs('LibSass')).toHaveTextContent('Sass, sass-lang.com, undated');
+    expect(recordPage.shelfHolding('LibSass')).toBe('Presentation');
   });
 
   test('should shelve Sass on the Presentation shelf, as sass-lang.com, undated', () => {
