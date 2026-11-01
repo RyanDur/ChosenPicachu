@@ -2,6 +2,7 @@ import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {not} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
+import {moments} from '@pages/Record/moments/moments';
 import {paragraphOpening} from '@__test_support/paragraph';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
@@ -11,6 +12,10 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
 
 const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
+
+const momentAddresses = Object.values(moments).map(({id}) => `${Paths.record}#${id}`);
+
+const opensAMoment = (link: HTMLElement): boolean => momentAddresses.includes(link.getAttribute('href') ?? '');
 
 const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
@@ -81,7 +86,7 @@ export const practicePage = {
   drawnIn: (figure: string): string[] => drawnTexts(figure).map(text => text.textContent),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
-    .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
+    .filter(opensAMoment)
     .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]),
   followMoment: async (name: string): Promise<void> => {
     await screen.findByRole('region', {name: 'how I organize it'});

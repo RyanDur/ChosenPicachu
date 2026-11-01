@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
+import {Paths} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {Mdn} from '@pages/Demos/Recipe';
@@ -9,6 +10,7 @@ import {practiceAddress} from './types';
 
 const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
 const survey = 'https://webaim.org/projects/screenreadersurvey10/';
+const source = (path: string): string => `${Paths.repo}/blob/main/src/${path}`;
 const landmarkRegions = 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/';
 
 export const StructurePractice: FC = () =>
@@ -122,6 +124,35 @@ export const StructurePractice: FC = () =>
       share the state under them, so the line between the platform and the framework is the line between the markup
       and the components. The plain build comes first here and the component that is its equivalent beside it; the
       next part says what a component is for.</p>
+    <p className="paragraph">A component is an element that does not exist yet. I write one to add a behavior the
+      platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
+      a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular: a
+      function that writes a real element with its role and its keys, and attaches the behavior that is new. What a
+      component is not for is wrapping an element the platform already has.{' '}
+    <a className="signpost" href={source('components/Disclosure/Disclosure.tsx')}>Disclosure</a> is the counter-case on
+      this site: it is a details with a name and a class, a convenience, not a new element, and I say so here so no one
+      mistakes it for one. The test for a component is to name the behavior the platform lacks. If there is none, it
+      is a wrapper, and the element should be used bare.</p>
+    <p className="paragraph">And one behavior each. I am not a fan of swiss army elements, elements that do everything:
+      a component that takes twenty props and does whatever they say is a div with extra steps, since nothing about it
+      says what it is and every caller has to know all of it. One component, one new behavior, named for it, the way
+      one class is one look. The drag-sortable table is not one component but parts that each do one thing:{' '}
+    <a className="signpost" href={source('components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be dragged by
+      hand or by key, <a className="signpost" href={source('components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
+      resizes, <a className="signpost" href={source('components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts,{' '}
+    <a className="signpost" href={source('components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
+      carries a column. The menu is three components that write one element each, Menu, Entry and Item, as the{' '}
+    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
+      that no part has gets a new part, not a prop on an old one. The platform is built the same way, one element per
+      meaning: a details opens, a dialog holds focus, an output announces.</p>
+    <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
+      standard’s custom elements give a new tag a name, but not a role or keys; a component that renders a button has
+      both. The Record’s <Link className="signpost" to={`${Paths.record}#custom-elements`}>concert</Link> tells how the
+      platform took back what script had built. The rule underneath is the first rule of ARIA, from the W3C’s Using
+      ARIA:{' '}
+    <a className="signpost" href="https://www.w3.org/TR/using-aria/">“If you can use a native HTML element or attribute
+      with the semantics and behavior you require already built in, instead of re-purposing an element and adding an
+      ARIA role, state or property to make it accessible, then do so.”</a></p>
     <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
       these links are for getting around; a button tells it a press will do something. The right element gives you
       that for free, with{' '}

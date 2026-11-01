@@ -179,6 +179,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C WAI, ARIA Authoring Practices Guide, undated</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/TR/using-aria/"><cite>Using ARIA</cite></a>{' '}
+            <span className="provenance caption">W3C, discontinued draft, 24 February 2026</span>
+          </li>
+          <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"><cite>The details element</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>

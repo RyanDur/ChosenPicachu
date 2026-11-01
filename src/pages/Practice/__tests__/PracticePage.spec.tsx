@@ -271,6 +271,51 @@ describe('the practice page', () => {
     expect(practicePage.linksIn(/^boot finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
+  test('should say what a component is for after the two builds, before what the elements mean', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^DraggableColumn writes the th/),
+      practicePage.paragraph(/^A component is an element that does not exist yet/),
+      practicePage.paragraph(/^And one behavior each/),
+      practicePage.paragraph(/^This is also why the site’s new elements are React components/),
+      practicePage.paragraph(/^The elements mean something beyond how they look/)
+    ])).toEqual([]);
+  });
+
+  test('should send Disclosure, the counter-case, to its source', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^A component is an element that does not exist yet/)).toEqual([
+      ['Disclosure', `${Paths.repo}/blob/main/src/components/Disclosure/Disclosure.tsx`]
+    ]);
+  });
+
+  test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index tab', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^And one behavior each/)).toEqual([
+      ['RowGrip', `${Paths.repo}/blob/main/src/components/DragSortableTable/RowGrip.tsx`],
+      ['ResizeHandle', `${Paths.repo}/blob/main/src/components/DragSortableTable/ResizeHandle.tsx`],
+      ['SortMenu', `${Paths.repo}/blob/main/src/components/DragSortableTable/SortMenu.tsx`],
+      ['DraggableColumn', `${Paths.repo}/blob/main/src/components/DragSortableTable/DraggableColumn.tsx`],
+      ['z-index tab', demoAddress(DemoTopics.zIndex)]
+    ]);
+  });
+
+  test('should send custom elements to the concert’s paragraph on them, and the first rule of ARIA to Using ARIA', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^This is also why the site’s new elements are React components/)).toEqual([
+      ['concert', `${Paths.record}#custom-elements`],
+      ['“If you can use a native HTML element or attribute with the semantics and behavior you require already built in, instead of re-purposing an element and adding an ARIA role, state or property to make it accessible, then do so.”', 'https://www.w3.org/TR/using-aria/']
+    ]);
+  });
+
   test('should list the five needs as terms, meaning, order, names, behavior and identity, each with what has to be true of the markup', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');

@@ -1000,6 +1000,15 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('Invoker Commands API')).toBe('Structure');
   });
 
+  test('should shelve Using ARIA on the Structure shelf, as the W3C’s discontinued draft of 24 February 2026', () => {
+    expect(recordPage.shelvedAs('Using ARIA')).toHaveTextContent('W3C, discontinued draft, 24 February 2026');
+    expect(recordPage.shelfHolding('Using ARIA')).toBe('Structure');
+  });
+
+  test('should hold the concert’s custom-elements paragraph at its own address, for the Structure tab to send readers to', () => {
+    expect(recordPage.paragraphAt('custom-elements')).toHaveTextContent(/^Script covered for structure too/);
+  });
+
   test('should shelve the Authoring Practices’ Landmark Regions on the Structure shelf, undated, as its page gives no date', () => {
     expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, ARIA Authoring Practices Guide, undated');
     expect(recordPage.shelfHolding('Landmark Regions')).toBe('Structure');
