@@ -820,9 +820,9 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });
 
-  test('should shelve CSS Utility Classes and ‘Separation of Concerns’ on the Presentation shelf, as Adam Wathan, 2017', () => {
-    expect(recordPage.shelvedAs('CSS Utility Classes and ‘Separation of Concerns’')).toHaveTextContent('Adam Wathan, 2017');
-    expect(recordPage.shelfHolding('CSS Utility Classes and ‘Separation of Concerns’')).toBe('Presentation');
+  test('should shelve CSS Utility Classes and “Separation of Concerns” on the Presentation shelf, as Adam Wathan, 2017', () => {
+    expect(recordPage.shelvedAs('CSS Utility Classes and “Separation of Concerns”')).toHaveTextContent('Adam Wathan, 2017');
+    expect(recordPage.shelfHolding('CSS Utility Classes and “Separation of Concerns”')).toBe('Presentation');
   });
 
   test('should shelve BEM on the Presentation shelf, as Yandex, undated', () => {

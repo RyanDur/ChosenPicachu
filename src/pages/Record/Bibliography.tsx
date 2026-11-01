@@ -323,7 +323,7 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Rachel Andrew, web.dev, 2020</span>
           </li>
           <li>
-            <a className="signpost" href="https://adamwathan.me/css-utility-classes-and-separation-of-concerns/"><cite>CSS Utility Classes and ‘Separation of Concerns’</cite></a>{' '}
+            <a className="signpost" href="https://adamwathan.me/css-utility-classes-and-separation-of-concerns/"><cite>CSS Utility Classes and “Separation of Concerns”</cite></a>{' '}
             <span className="provenance caption">Adam Wathan, 2017</span>
           </li>
           <li>
