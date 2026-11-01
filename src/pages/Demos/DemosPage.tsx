@@ -45,14 +45,10 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
     const draws = seeded('the accordion exhibits');
     const dealt = draws.wordDeck();
     return {
-      measuredCheckbox: paragraphs(5, dealt, draws),
-      measuredRadio: paragraphs(5, dealt, draws),
-      knownCheckbox: paragraphs(5, dealt, draws),
-      knownRadio: paragraphs(5, dealt, draws),
-      inclusiveDetails: paragraphs(5, dealt, draws),
-      exclusiveDetails: paragraphs(5, dealt, draws),
-      inclusiveCheckboxes: paragraphs(5, dealt, draws),
-      exclusiveRadios: paragraphs(5, dealt, draws)
+      measured: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+      known: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+      platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+      gridRow: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
     };
   });
   const {tradeProduct} = useEnv();

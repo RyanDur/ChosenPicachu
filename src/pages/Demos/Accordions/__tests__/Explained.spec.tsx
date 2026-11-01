@@ -104,7 +104,7 @@ describe('the accordions tab’s own words', () => {
   test.each([
     {choice: 'style=drawer', sentence: 'One transition moves it all, so no part can fall behind another. The drawer works around no browser limit. I built it to show what grid alignment does on its own.'},
     {choice: 'type=exclusive', sentence: 'Radios that share a name keep one fold open on their own, which checkboxes cannot do without script. What a radio cannot do is close itself: pressed again, it stays checked. So I add that with a little script on the list. The radios stay plain.'},
-    {choice: 'type=exclusive', sentence: 'The change event is the one the browser sends to the radio a press has just checked, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where the motion starts, with a second class, unmoving, that switches the height’s transition off for that moment.'},
+    {choice: 'type=exclusive', sentence: 'The change event is the one the browser sends to the radio a press has just checked, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script pins the start first, with unmoving, as the plain script does.'},
     {choice: 'type=inclusive', sentence: 'The change event is the one the browser sends to the checkbox a press has just checked or unchecked, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style.'},
     {choice: 'style=drawer', sentence: 'With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.'},
     {choice: 'style=reveal', sentence: 'With reveal, the size moves over 300 milliseconds with ease-in-out, and the text shows from its top down.'},
@@ -440,7 +440,7 @@ describe('the measured build', () => {
 
     const closing = explanation.runTelling(await explanation.part(parts[0]), /^Closing runs the other way/);
 
-    expect(closing).toHaveTextContent('Closing runs the other way: the script pins the open height and sets the end at 0, and the transition moves between them.');
+    expect(closing).toHaveTextContent('Closing runs the other way: the script sets the open height as the start and 0 as the end, and the transition moves between them.');
   });
 
   test('should show the script that turns a fold around beside the run that tells it', async () => {
@@ -466,7 +466,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await accordionsTab.choice('fold type');
-    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it: the first accordion is shown with the reset’s slide turned off, so a fold opens at once and the reader sees what HTML alone does.');
+    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets every element’s defaults, slides every details open; the first accordion turns that off, so a fold opens at once and you see what HTML alone does.');
 
     expect(outOfReadingOrder([await explanation.part(htmlAlone), line, types])).toEqual([]);
   });
@@ -494,6 +494,17 @@ describe('the fold choices', () => {
     await accordionsTab.choose('fold motion', motion);
 
     expect(accordionsTab.readingIn(row)).toHaveTextContent(reading);
+  });
+});
+
+describe('the reset', () => {
+  test('should be said once, where the fold choices first name it, so the reduced-motion run reads it as known', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const everyFoldMoves = await explanation.part(parts[3]);
+
+    expect(explanation.saying(everyFoldMoves, /^When a reader asks for/)).toHaveTextContent('every fold opens with no slide. The reset has a reduced-motion block with three rules.');
+    expect(explanation.saidIn(everyFoldMoves, /the stylesheet that sets every element’s defaults/)).not.toBeInTheDocument();
   });
 });
 
@@ -811,7 +822,7 @@ describe('what the newer builds end', () => {
 
     const platform = await explanation.part(parts[1]);
 
-    expect(explanation.runTelling(platform, /This replaces the three old ways/)).toHaveTextContent(/the max-height guess, the height measured by script, and the known height/);
+    expect(explanation.runTelling(platform, /This build replaces the three old ways/)).toHaveTextContent(/the max-height guess, the height measured by script, and the known height/);
   });
 
   test('should say the grid row guesses, measures and fixes nothing, and scrolls no text', async () => {
@@ -903,7 +914,7 @@ describe('the depth of each part', () => {
   test.each([
     {type: 'exclusive', part: parts[0], fold: 'How this site does it', point: /Most of us turned next to script/, depth: /Closing runs the other way/},
     {type: 'exclusive', part: parts[0], fold: 'How the known height works', point: /Here every panel is the same height/, depth: /You want the reader to see a bar/},
-    {type: 'exclusive', part: parts[1], fold: 'How details works', point: /This replaces the three old ways/, depth: /A pseudo-element is a part of an element/},
+    {type: 'exclusive', part: parts[1], fold: 'How details works', point: /This build replaces the three old ways/, depth: /A pseudo-element is a part of an element/},
     {type: 'exclusive', part: parts[2], fold: 'How the radio and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/},
     {type: 'inclusive', part: togetherHeading('inclusive'), fold: 'How the checkbox and the grid row work together', point: /A grid row can slide open to its content’s height/, depth: /A row closes only as far as its item can/}
   ])('should keep, with $type chosen, under "$part", a closed fold named "$fold" with the depth inside it and the point outside it', async ({type, part, fold, point, depth}) => {
@@ -953,7 +964,7 @@ describe('the runs in view, with the folds shut', () => {
     const platform = await explanation.part(parts[1]);
 
     expect(explanation.saying(platform, /This build uses details and summary/))
-      .toHaveTextContent(/Every details here shares a name, as the first accordion’s do above\. Pressing the open one closes it, so the list needs no Close bar\. This replaces the three old ways/);
+      .toHaveTextContent(/Every details here shares a name, as the first accordion’s details do above\. Pressing the open one closes it, so the list needs no Close bar\. This build replaces the three old ways/);
   });
 
   test('should, with inclusive chosen, say in view that each fold opens on its own, and go on to what the build replaces', async () => {
@@ -962,7 +973,7 @@ describe('the runs in view, with the folds shut', () => {
     const platform = await explanation.part(parts[1]);
 
     expect(explanation.saying(platform, /This build uses details and summary/))
-      .toHaveTextContent(/With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do\. This replaces the three old ways/);
+      .toHaveTextContent(/With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do\. This build replaces the three old ways/);
   });
 
   test.each(['reveal', 'drawer'])('should, with %s chosen, say in view that only Chromium slides the fold, and only there', async motion => {
@@ -1035,7 +1046,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.saying(oldWay, /^Closing runs the other way/)).toHaveTextContent(`The change event is the one the browser sends to the ${input} a press has just ${pressed}, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script first pins where the motion starts`);
+    expect(explanation.saying(oldWay, /^Closing runs the other way/)).toHaveTextContent(`The change event is the one the browser sends to the ${input} a press has just ${pressed}, and to no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style. So the script pins the start first, with unmoving, as the plain script does.`);
   });
 
   test.each(['inclusive', 'exclusive'])('should say, with %s chosen, that the plain fold’s checkbox and the stylesheet own whether it is open', async type => {
@@ -1078,7 +1089,7 @@ describe('the word attribute', () => {
     const oldWay = await explanation.part(parts[0]);
     const box = explanation.saying(oldWay, /To open and close a fold/);
 
-    expect(box).toHaveTextContent(/An id is another attribute, like the name above, and it gives an element a name no other element on the page shares\. The label’s for attribute names the/);
+    expect(box).toHaveTextContent(/An id is another attribute, like name above, and its value is one no other element on the page shares\. The label’s for attribute names the/);
     expect(box).not.toHaveTextContent('An attribute is a name');
   });
 });

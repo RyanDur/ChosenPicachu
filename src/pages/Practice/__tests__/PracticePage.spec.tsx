@@ -87,7 +87,7 @@ describe('the practice page', () => {
     const principle = practicePage.openingParagraph(/^Code is read more often than it is written/);
 
     expect(principle).toHaveTextContent(
-      'Code is read more often than it is written, and the reader is usually someone who was not there, including me when I come back to it. So I organize for the reader: the code says what it means. An element says what the thing is. When no element does, I make one and name it for the one behavior it adds. A class says what the element is, what it needs, or what is true right now, and the sheet says what that means today. An event says what happened, in the past tense. A type says what is true and refuses what cannot be. A condition reads as a sentence, has, not, empty, the same words the sheet uses in :has(), :not() and :empty. Files sit by feature too, so a change to the gallery is in the gallery. That is how the Application Continuum, a guide to organizing an application as it grows, lays them out, and it ranks the work plainly: “Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”.');
+      'Code is read more often than it is written, and the reader is usually someone who was not there, including me when I come back to it. So I organize for the reader: the code says what it means. An element says what the thing is. When no element does, I make one and name it for the one behavior it adds. A class says what the element is, what it needs, or what is true right now, and the sheet says what that means today. An event says what happened, in the past tense. A type says what is true and refuses what cannot be. A condition reads as a sentence, has, not, empty, the same words the sheet uses in :has(), :not() and :empty. Files sit by feature too, so a change to the gallery is in the gallery. The Application Continuum, a guide to organizing an application as it grows, lays files out that way. It ranks the work plainly: “Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”.');
   });
 
   test('should open on two paragraphs, what the tabs hold and the principle, and nothing more before the tabs', async () => {
@@ -105,7 +105,7 @@ describe('the practice page', () => {
     await practicePage.opener();
 
     expect(practicePage.linksIn(/^Code is read more often than it is written/)).toEqual([
-      ['the Application Continuum', appContinuum],
+      ['The Application Continuum', appContinuum],
       ['“Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”', appContinuum]
     ]);
   });

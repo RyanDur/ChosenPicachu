@@ -34,7 +34,8 @@ const spacePressed = (event: KeyboardEvent<HTMLUListElement>): void => {
 
 export type Fold = {value: ReactNode; key: string};
 type ContentProps = {content: Fold[]};
-export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export type AccordionProps = PropsWithClassName & ContentProps & {motion: FoldMotion};
+export const InclusiveAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -60,7 +61,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   </fieldset>
 </article>;
 
-export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -90,7 +91,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   </fieldset>
 </article>;
 
-export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const InclusiveToggleAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -109,7 +110,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
   </ul>
 </article>;
 
-export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const ExclusiveToggleAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -128,7 +129,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
   </ul>
 </article>;
 
-export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const InclusiveCheckboxToggleAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -156,7 +157,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   </fieldset>
 </article>;
 
-export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const ExclusiveRadioToggleAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -189,7 +190,7 @@ const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean => target inst
 const withPart = (open: readonly string[], key: string, opened: boolean): readonly string[] =>
   opened ? [...open, key] : open.filter(part => part !== key);
 
-export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion
@@ -217,7 +218,7 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   </article>;
 };
 
-export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,
   content,
   motion

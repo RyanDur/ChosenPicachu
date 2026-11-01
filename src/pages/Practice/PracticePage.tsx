@@ -30,8 +30,8 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
         says what happened, in the past tense. A type says what is true and refuses what cannot be. A condition reads as a
         sentence, <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">empty</code>, the same words the sheet uses
         in <code className="monospaced">:has()</code>, <code className="monospaced">:not()</code> and <code className="monospaced">:empty</code>. Files sit by feature too, so a change to the
-        gallery is in the gallery. That is how <a className="signpost" href={appContinuum}>the Application Continuum</a>,
-        a guide to organizing an application as it grows, lays them out, and it ranks the work
+        gallery is in the gallery. <a className="signpost" href={appContinuum}>The Application Continuum</a>, a guide
+        to organizing an application as it grows, lays files out that way. It ranks the work
         plainly: <a className="signpost" href={appContinuum}>“Naming, organizing, and reducing circular dependencies are
           the three most important things you’ll ever do as a programmer”</a>.</p>
     </div>
