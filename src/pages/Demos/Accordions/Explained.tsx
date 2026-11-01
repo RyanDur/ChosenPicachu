@@ -319,9 +319,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
                 </li>}
                 <li className="run">
-                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in state,
-                    which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more about: whether a fold is open, and, while it moves, first
-                    the height the motion starts from, then the height it ends at, and whether it has started.</p>
+                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in state:
+                    whether a fold is open, and, while it moves, first the height the motion starts from, then the height it
+                    ends at, and whether it has started. The <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more about state.</p>
                   <Snippet label="TS" lines={[
                     ...unit(panelSource, 'type Motion ='), gap,
                     ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
@@ -684,8 +684,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <p className="paragraph">Radios that share a name keep one fold open on their own, which checkboxes cannot do
             without script. What a radio cannot do is close itself: pressed again, it stays checked. So I add that with a little script on the list. The
             radios stay plain.</p>
-          <p className="paragraph">A press on a radio is an event, the browser telling the page that something happened;
-            the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more. The event then bubbles up through the elements around the radio, and the list runs a function for it on the
+          <p className="paragraph">A press on a radio is an event, the browser telling the page that something happened.
+            The event then bubbles up through the elements around the radio, and the list runs a function for it on the
             way, which is called a handler.</p>
           <p className="paragraph">The script keeps the open radio’s value, the string each radio carries to tell it
             apart, in a <code className="monospaced">data-open</code> attribute on the list element. In the script it

@@ -14,8 +14,8 @@ export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read
         comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
         passes over cannot read data that was never dropped on it.</Says>
-      <Says>Keep it in state instead, the values React holds between one drawing of the page and the next, as the{' '}
-        <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. The lift
+      <Says>Keep it in state instead, the values React holds between one drawing of the page and the next. The{' '}
+        <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says what state is. The lift
         records which item is held, which the code calls aloft; the release clears it; and every handler in between
         reads the same value the render does. The payload is still there for the case where another window needs the
         data.</Says>

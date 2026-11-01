@@ -80,7 +80,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code className="monospaced">isolation: isolate</code></a> forms
-          a context and does nothing more. Use it to keep a component’s z-indexes inside it on purpose, instead of as a
+          a context and does nothing more. Use it to keep a part of the page’s z-indexes inside it on purpose, instead of as a
           side effect of opacity or a transform. I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a
           tab is ever compared with one outside it.</p>
         <Snippet label="CSS" lines={[

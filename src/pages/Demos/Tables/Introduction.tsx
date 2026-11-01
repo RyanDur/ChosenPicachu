@@ -17,7 +17,7 @@ export const TablesIntroduction: FC = () =>
       everything a drag needs is measured once, at the grab.</p>
     <p className="paragraph">Every pixel of the drag is drawn from pointer events, the browser’s <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>events</Link> for a mouse, a finger and a pen
       alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the
-      library this site’s script is written in, which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains, and the same state sits under both.</p>
+      library this site’s script is written in, and the same state sits under both. The <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains React.</p>
     <p className="paragraph">By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a
       column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data.
       The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.</p>

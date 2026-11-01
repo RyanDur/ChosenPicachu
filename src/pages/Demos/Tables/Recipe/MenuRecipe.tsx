@@ -104,8 +104,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
-          <Says>In the React world the sample is built from Menu, Entry and Item, the site’s menu components the{' '}
-            <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains; they write one element each.</Says>
+          <Says>In the React world the sample is built from Menu, Entry and Item, the site’s menu components; they write one
+            element each. A component is a function that writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
               that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>

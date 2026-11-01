@@ -560,3 +560,17 @@ describe('the banner dials’ readings', () => {
     expect(await demoPage.findWords(reading)).toBeInTheDocument();
   });
 });
+
+describe('the links to other tabs', () => {
+  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const tab = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToTabsIn(tab)).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['dials', `${Paths.demos}accordions/`]
+    ]);
+  });
+});

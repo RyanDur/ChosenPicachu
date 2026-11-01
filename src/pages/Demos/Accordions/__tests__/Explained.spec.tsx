@@ -1,8 +1,8 @@
-import {demoPage} from '@pages/Demos/__test_support';
 import {maybe} from '@ryandur/sand';
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {Paths} from '@pages/Paths';
+import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
@@ -272,7 +272,7 @@ describe('the measured build', () => {
     const ref = explanation.runTelling(explained, /The script uses the panel’s one ref only to/);
     const effects = explanation.runTelling(explained, /The script makes the moves in two layout effects/);
 
-    expect(state).toHaveTextContent('React, the library this site’s script is written in, keeps what it knows in state, which the z-index tab says more about: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it ends at, and whether it has started.');
+    expect(state).toHaveTextContent('React, the library this site’s script is written in, keeps what it knows in state: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it ends at, and whether it has started. The z-index tab says more about state.');
     expect(ref).toHaveTextContent('A ref is a handle on the element itself');
     expect(effects).toHaveTextContent('layout effects, code React runs after it has updated the elements and before the browser paints them');
     expect(explanation.everyCodeBeside(explained, /^React, the library this site’s script is written in, keeps what it knows in state/).join()).toContain('useState');
@@ -1036,7 +1036,7 @@ describe('the runs in view, with the folds shut', () => {
 
     const together = await explanation.part(togetherHeading('exclusive'));
 
-    expect(explanation.saying(together, /^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, the browser telling the page that something happened; the z-index tab says more. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
+    expect(explanation.saying(together, /^A press on a radio is an event/)).toHaveTextContent('A press on a radio is an event, the browser telling the page that something happened. The event then bubbles up through the elements around the radio, and the list runs a function for it on the way, which is called a handler.');
     expect(explanation.saying(together, /^The script keeps the open radio’s value/)).toHaveTextContent('The script keeps the open radio’s value, the string each radio carries to tell it apart, in a data-open attribute on the list element. In the script it is dataset.open: dataset is the browser’s name for an element’s data- attributes, with the prefix dropped. A press on that radio unchecks it and clears the attribute, and a press on any other writes the new one.');
   });
 
@@ -1346,5 +1346,18 @@ describe('what a fold remembers, before the first build that leans on it', () =>
 
     expect(explanation.saidIn(folded, /^To open and close a fold/)).not.toBeInTheDocument();
     expect(explanation.saidIn(folded, /^Now a rule has to match on whether the/)).not.toBeInTheDocument();
+  });
+});
+
+describe('the links to other tabs', () => {
+  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const tab = await demoTabs.arrivedOn('Accordions');
+
+    expect(demoPage.linksToTabsIn(tab)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['React', `${Paths.demos}z-index/`]
+    ]);
   });
 });

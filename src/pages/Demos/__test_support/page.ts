@@ -1,6 +1,9 @@
 import {screen, within} from '@testing-library/react';
+import {DemoTopics, demoAddress} from '@pages/Demos/types';
 
 const untilTheTabMounts = {timeout: 5000};
+
+const tabAddresses = Object.values(DemoTopics).map(demoAddress);
 
 const slices = (): HTMLElement => screen.getByRole('list', {name: 'the slices'});
 
@@ -15,6 +18,10 @@ export const demoPage = {
   link: (name: string): HTMLElement => screen.getByRole('link', {name}),
   rowHeader: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   aside: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
+  main: (): HTMLElement => screen.getByRole('main'),
+  linksToTabsIn: (holder: HTMLElement): string[][] => within(holder).getAllByRole('link')
+    .map(link => [link.textContent, link.getAttribute('href') ?? ''])
+    .filter(([, address]) => tabAddresses.includes(address)),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   slice: (title: string): HTMLElement | undefined =>
     within(slices()).getAllByRole('listitem').find(item => within(item).queryByText(title) !== null),

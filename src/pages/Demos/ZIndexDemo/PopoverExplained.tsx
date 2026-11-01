@@ -34,18 +34,25 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide.</p>
-        <p className="paragraph">React is the library this site’s script is written in. A component is a function that
-          writes a piece of the page from what it is given, and writes it again when what it holds changes; what it holds
-          and renders from is its state. What a component writes is still an element: a button it renders is a button,
-          with the keys and the role that come with it, and its look still comes from the stylesheet. Menu, Entry and
-          Item are this site’s components for a menu, and they write one element each: a menu, an li, which is one item
-          of a list, and a button.</p>
-        <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes that set its look. I leave a
-          menu’s look to the page that uses it, so the page passes <code className="monospaced">Menu</code> those classes, as the sample shows.</p>
         <Snippet label="HTML" lines={[
           ...span(topLayerSource, '<button type="button"', '</Menu>'), gap,
           ...unit(menuSource, 'export const Item')
         ]}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">React is the library this site’s script is written in. A component is a function that
+          writes a piece of the page from what it is given, and writes it again when what it holds changes; what it holds
+          and renders from is its state.</p>
+      </li>
+      <li className="run">
+        <p className="paragraph">What a component writes is still an element: a button it renders is a button, with the
+          keys and the role that come with it, and its look still comes from the stylesheet.</p>
+      </li>
+      <li className="run">
+        <p className="paragraph">Menu, Entry and Item are this site’s components for a menu, and they write one element
+          each: a menu, an li, which is one item of a list, and a button.</p>
+        <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes that set its look. I leave a
+          menu’s look to the page that uses it, so the page passes <code className="monospaced">Menu</code> those classes, as the sample above shows.</p>
       </li>
       <li className="run">
         <p className="paragraph">The button that opens the menu carries a tabIndex of 0, and so does each choice in the

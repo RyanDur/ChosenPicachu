@@ -47,7 +47,7 @@ const PriceStory: FC = () =>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
       in time order.</Tell>
     <Tell>The page stores the trades and the fetched candles. The candles made from live trades, the joined series and the
-      points are not stored: every time <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>React</Link> redraws the chart, they are worked out again.</Tell>
+      points are not stored: every time <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>React</Link>, the library this site’s script is written in, redraws the chart, they are worked out again.</Tell>
     <Steps>
       <Step title="Open a socket, and keep only what decodes">
         <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
@@ -107,8 +107,8 @@ const PriceStory: FC = () =>
             The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them,
             marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
-          <Says>Menu, Entry and Item are the site’s components for a menu, which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link>{' '}
-            explains; they write a menu, an li and a button.</Says>
+          <Says>Menu, Entry and Item are the site’s components for a menu; they write a menu, an li and a button. A
+            component is a function that writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
           <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. Item gives its button the
             site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
             those classes, as the sample shows.</Says>
@@ -191,7 +191,8 @@ const CandlesStory: FC = () =>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A candle that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
+          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. A candle
+            that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
             in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
             the chart’s size, the wick’s hairline width and how the shapes move.</Says>
@@ -357,9 +358,9 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Cut the circle with rotations only">
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
-          <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
-            painted background has no parts: nothing to give a class, which is a name a stylesheet’s rules pick an
-            element out by, nothing to label, and nothing for a test to find.</Says>
+          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. You could paint
+            the split with a conic gradient, a background that sweeps color round a point. But a painted background has
+            no parts: nothing to give a class, nothing to label, and nothing for a test to find.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
@@ -436,10 +437,10 @@ const WorkspaceStory: FC = () =>
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
-          <Says>That menu is built from the site’s Menu, Entry and Item components, as the{' '}
-            <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains.</Says>
-          <Says>Item gives its button the shared
-            classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
+          <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
+            writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
+          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. Item gives its
+            button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

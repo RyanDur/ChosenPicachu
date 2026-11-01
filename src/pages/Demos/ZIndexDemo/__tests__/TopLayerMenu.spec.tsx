@@ -70,12 +70,30 @@ describe('why the popover wins', () => {
       .toBeLessThan(runs.indexOf(explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0/)));
   });
 
-  test('should say Menu, Entry and Item are the site’s components, each writing one element', async () => {
+  test('should say what React is, then what a component and its state are', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const part = await explanation.part('Why the popover wins');
 
-    expect(within(part).getByText(/^React is the library this site’s script is written in/)).toHaveTextContent('React is the library this site’s script is written in. A component is a function that writes a piece of the page from what it is given, and writes it again when what it holds changes; what it holds and renders from is its state. What a component writes is still an element: a button it renders is a button, with the keys and the role that come with it, and its look still comes from the stylesheet. Menu, Entry and Item are this site’s components for a menu, and they write one element each: a menu, an li, which is one item of a list, and a button.');
+    expect(explanation.runTelling(part, /^React is the library this site’s script is written in/)).toHaveTextContent('React is the library this site’s script is written in. A component is a function that writes a piece of the page from what it is given, and writes it again when what it holds changes; what it holds and renders from is its state.');
+    expect(explanation.runTelling(part, /^React is the library this site’s script is written in/)).not.toHaveTextContent('What a component writes');
+  });
+
+  test('should say what a component writes is still an element, in a run of its own', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part('Why the popover wins');
+
+    expect(explanation.runTelling(part, /^What a component writes is still an element/)).toHaveTextContent('What a component writes is still an element: a button it renders is a button, with the keys and the role that come with it, and its look still comes from the stylesheet.');
+  });
+
+  test('should say Menu, Entry and Item are the site’s components, each writing one element, in a run of their own', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part('Why the popover wins');
+
+    expect(explanation.saying(part, /^Menu, Entry and Item are this site’s components for a menu/)).toHaveTextContent('Menu, Entry and Item are this site’s components for a menu, and they write one element each: a menu, an li, which is one item of a list, and a button.');
+    expect(explanation.runTelling(part, /^Menu, Entry and Item are this site’s components for a menu/)).not.toHaveTextContent('What a component writes');
   });
 
   test('should say the page passes Menu the menu’s look', async () => {
@@ -83,7 +101,7 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
 
-    expect(within(part).getByText(/gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.');
+    expect(within(part).getByText(/gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample above shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {

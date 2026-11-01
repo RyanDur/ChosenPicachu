@@ -9,7 +9,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Arm the drag from its grip">
     <Words want="The browser will drag anything marked draggable, but marking the whole card turns every press into a lift and stops text selection inside it.">
       <Says><code className="monospaced">draggable</code> is an attribute, a setting written on the element, and the grip turns it on. An event is the
-        browser telling the page that something happened, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. On pointerdown, the event for a mouse button, a pen or a
+        browser telling the page that something happened. The <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says more. On pointerdown, the event for a mouse button, a pen or a
         finger pressing down, the grip sets a flag, and the card renders <code className="monospaced">draggable</code> for that
         gesture only.</Says>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag

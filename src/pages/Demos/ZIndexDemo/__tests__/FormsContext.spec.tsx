@@ -102,6 +102,14 @@ describe('the part on what else forms a stacking context', () => {
     expect(explanation.everyCodeBeside(part, words).join()).toMatch(/\.isolated \{[^]*\.tabs ~ \* \{\s*isolation: isolate;/);
   });
 
+  test('should say isolation keeps a part of the page’s z-indexes inside it, before the tab says what a component is', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.runTelling(part, /^forms a context and does nothing more/)).toHaveTextContent('Use it to keep a part of the page’s z-indexes inside it on purpose, instead of as a side effect of opacity or a transform.');
+  });
+
   test('should caption the chooser with where the 9999 counts: in the tab’s panel, against card two, or only inside the card', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await screen.findByRole('region', {name: heading});

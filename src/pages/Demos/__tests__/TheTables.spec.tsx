@@ -133,7 +133,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
-    {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook: a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls it with its columns, its rows and the two choices.'},
+    {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook. A component is a function that writes a piece of the page, as the z-index tab says, and a hook is a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls the hook with its columns, its rows and the two choices.'},
     {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.'},
     {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behavior’s own sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
@@ -1219,7 +1219,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
-    expect(recipe).toHaveTextContent('In the React world the sample is built from Menu, Entry and Item, the site’s menu components the z-index tab explains; they write one element each.');
+    expect(recipe).toHaveTextContent('In the React world the sample is built from Menu, Entry and Item, the site’s menu components; they write one element each. A component is a function that writes a piece of the page, as the z-index tab says.');
   });
 
   test.each([
@@ -1461,7 +1461,7 @@ describe('the tables tab’s introduction', () => {
     'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, and the z-index tab’s popover and top layer. The rest is new here.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
-    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, which the z-index tab explains, and the same state sits under both.',
+    'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, and the same state sits under both. The z-index tab explains React.',
     'By the end you can drag a column or a row with the pointer or the arrow keys while trades keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip, and move it.'
   ];
 
@@ -1607,5 +1607,27 @@ describe('the tables tab’s audited words', () => {
     expect(tab).toHaveTextContent('There are two ways to drag something across a page, and I built both. The Drag sort list demo uses the native API, where the platform brings most of the behavior for very little code; its edges (the snapshot that cannot be animated, the cursor that belongs to the platform, the macOS cancel) are that demo’s own story. This table uses pointer events, which leave every pixel of the drag to the code, and no drag-and-drop library is anywhere in the build.');
     expect(tab).toHaveTextContent('the rest are cards in the last station, and each opens into its build. Station 5 ends with a story told from the code’s side, the store the two worlds share.');
     expect(tab).toHaveTextContent('So the lift measures everything the drag needs at the grab, as the lift step shows');
+  });
+});
+
+describe('the links to other tabs', () => {
+  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const tab = await demoTabs.arrivedOn('Tables');
+
+    expect(demoPage.linksToTabsIn(tab)).toEqual([
+      ['charts tab', `${Paths.demos}charts/`],
+      ['drag sort tab', `${Paths.demos}drag-and-drop/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['events', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['dials', `${Paths.demos}accordions/`],
+      ['Drag sort list demo', `${Paths.demos}drag-and-drop/`]
+    ]);
   });
 });
