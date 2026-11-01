@@ -9,8 +9,8 @@ export const BehaviorPractice: FC = () =>
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
       I keep the state in one place, and replacing it is the only way anything on screen changes.
       AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one direction.</p>
-    <p className="paragraph">An event is a name for what happened, and the state’s type is a name for what is true and
-      refuses what cannot be, so the code reads as sentences to the next reader, who was not there when it was written.</p>
+    <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
+      refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
       decides what is true when it arrives.

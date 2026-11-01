@@ -466,7 +466,7 @@ describe('the fold choices', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const types = await accordionsTab.choice('fold type');
-    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets every element’s defaults, slides every details open; the first accordion turns that off, so a fold opens at once and you see what HTML alone does.');
+    const line = explanation.saying(await explanation.part('Accordions'), 'Two choices set the accordions in the sections below, except the fold measured by plain script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets every element’s defaults, gives every details a slide that only Chromium shows today; the first accordion turns that off, so a fold opens at once in every browser and you see what HTML alone does.');
 
     expect(outOfReadingOrder([await explanation.part(htmlAlone), line, types])).toEqual([]);
   });
@@ -503,6 +503,7 @@ describe('the reset', () => {
 
     const everyFoldMoves = await explanation.part(parts[3]);
 
+    expect(explanation.saying(await explanation.part('Accordions'), /the stylesheet that sets every element’s defaults/)).toBeInTheDocument();
     expect(explanation.saying(everyFoldMoves, /^When a reader asks for/)).toHaveTextContent('every fold opens with no slide. The reset has a reduced-motion block with three rules.');
     expect(explanation.saidIn(everyFoldMoves, /the stylesheet that sets every element’s defaults/)).not.toBeInTheDocument();
   });
@@ -1080,7 +1081,7 @@ describe('the word attribute', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.saying(oldWay, /To open and close a fold/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute that gives an element a name no other element on the page shares\. The label’s for attribute names the/);
+    expect(explanation.saying(oldWay, /To open and close a fold/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute whose value is one no other element on the page shares\. The label’s for attribute names the/);
   });
 
   test('should, with exclusive chosen, be said once, beside the first accordion, so the box run points back to the name above', async () => {

@@ -186,8 +186,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
         script, which is one checkbox fold and always reveals. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others. The motion does not reach it. The reset, the stylesheet that sets
-        every element’s defaults, slides every details open; the first accordion turns that off, so a fold opens at once and
-        you see what HTML alone does.</p>
+        every element’s defaults, gives every details a slide that only Chromium shows today; the first accordion turns that
+        off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
@@ -208,7 +208,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 checked or not, and pressing it switches between the two. So each fold is a list item
                 holding three things, in this order: the checkbox, its label, and the text. An attribute is a
                 name, often with a value, written inside an element’s opening tag. An id is an attribute
-                that gives an element a name no other element on the page shares. The
+                whose value is one no other element on the page shares. The
                 label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
                 id. That link makes a press anywhere on the label press the checkbox. Each id includes
                 the fold’s place in the list, so no two checkboxes share one.</p>
