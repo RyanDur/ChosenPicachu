@@ -3,53 +3,29 @@ import {TestApp} from '@__test_support/TestApp';
 import {paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {demosAt, demoTabs} from '@pages/Demos/__test_support';
-import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {render, waitFor} from '@testing-library/react';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-
-const seatOf = (item: string): HTMLElement => {
-  const seat = screen.getAllByRole('listitem').find(candidate => within(candidate).queryByText(item) !== null);
-  if (!seat) throw new Error(`no seat for ${item}`);
-  return seat;
-};
-
-const seats = (): string[] =>
-  within(screen.getByRole('list', {name: 'sortable list'}))
-    .getAllByRole('listitem').map(({textContent}) => textContent ?? '');
-
-const lifted = async (item: string) => {
-  await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: `grip for ${item}`})});
-  fireEvent.dragStart(screen.getByText(item), {dataTransfer: {effectAllowed: ''}});
-};
-
-const draggedOver = (item: string, clientX: number) => {
-  const over = createEvent.dragOver(screen.getByText(item));
-  Object.defineProperty(over, 'clientX', {value: clientX});
-  Object.defineProperty(over, 'dataTransfer', {value: {dropEffect: ''}});
-  fireEvent(screen.getByText(item), over);
-};
+import {dragSortTab, listControls, sortableList} from '@pages/Demos/DragAndDrop/__test_support';
 
 const nativeRecipe = async (): Promise<HTMLElement> => {
   const feed = await listeningFeed();
   render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
   await feedIsSubscribed(feed);
-  return await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+  return await dragSortTab.recipe();
 };
-
-const theListArrives = (): Promise<HTMLElement> => screen.findByRole('list', {name: 'sortable list'}, {timeout: 5000});
 
 describe('the sortable list demo', () => {
   test('a finger pressed on a grip readies its item to be dragged', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(await theListArrives()).getAllByRole('listitem')[0];
+    const first = sortableList.itemsIn(await sortableList.arrived())[0];
     expect(first).toHaveAttribute('draggable', 'false');
 
-    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
+    await sortableList.fingerDown('A');
 
     expect(first).toHaveAttribute('draggable', 'true');
   });
@@ -58,10 +34,10 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(await theListArrives()).getAllByRole('listitem')[0];
+    const first = sortableList.itemsIn(await sortableList.arrived())[0];
 
-    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
-    fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
+    await sortableList.fingerDown('A');
+    sortableList.browserTakesOver('A');
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
@@ -70,9 +46,9 @@ describe('the sortable list demo', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop', '?origin=keep')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(await theListArrives()).getAllByRole('listitem')[0];
+    const first = sortableList.itemsIn(await sortableList.arrived())[0];
 
-    await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
+    await sortableList.fingerTap('A');
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
@@ -82,16 +58,16 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('heading', {name: 'list controls', level: 4})).toBeInTheDocument();
+    expect(await listControls.heading()).toBeInTheDocument();
   });
 
   test('a finger pressed and lifted without a drag leaves its item at rest', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const first = within(await theListArrives()).getAllByRole('listitem')[0];
+    const first = sortableList.itemsIn(await sortableList.arrived())[0];
 
-    await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
+    await sortableList.fingerTap('A');
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
@@ -102,7 +78,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop', '?native=sort')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+    const recipe = await dragSortTab.recipe();
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
   });
@@ -113,26 +89,25 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    expect(seats()).toEqual(['A', 'B', 'C']);
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
-    expect(screen.getByText('<EagerHideAnimatedList/>')).toBeVisible();
+    await sortableList.arrived();
+    expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
+    expect(listControls.option('Eager')).toBeChecked();
+    expect(listControls.option('Hide')).toBeChecked();
+    expect(listControls.option('Animate')).toBeChecked();
+    expect(demoPage.words('<EagerHideAnimatedList/>')).toBeVisible();
   });
 
   test('letting go of the grip does not end a drag under way', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await theListArrives();
+    await sortableList.arrived();
 
-    await lifted('A');
-    fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
-    draggedOver('C', 10);
+    await sortableList.lift('A');
+    sortableList.browserTakesOver('A');
+    sortableList.dragOver('C', 10);
 
-    expect(seats()).toEqual(['B', 'C', 'A']);
+    expect(sortableList.seats()).toEqual(['B', 'C', 'A']);
   });
 
   test('an eager drag commits on the crossing', async () => {
@@ -141,36 +116,35 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    await lifted('A');
-    draggedOver('C', 10);
+    await sortableList.arrived();
+    await sortableList.lift('A');
+    sortableList.dragOver('C', 10);
 
-    expect(seats()).toEqual(['B', 'C', 'A']);
+    expect(sortableList.seats()).toEqual(['B', 'C', 'A']);
   });
 
   const lazyListWithALifted = async (): Promise<void> => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await theListArrives();
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-    await lifted('A');
-    draggedOver('C', 10);
+    await sortableList.arrived();
+    await listControls.choose('Lazy');
+    await sortableList.lift('A');
+    sortableList.dragOver('C', 10);
   };
 
   test('a lazy drag holds its shape while it crosses', async () => {
     await lazyListWithALifted();
 
-    expect(seats()).toEqual(['A', 'B', 'C']);
+    expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
   });
 
   test('a lazy drag settles on release', async () => {
     await lazyListWithALifted();
 
-    fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
+    sortableList.release('A');
 
-    await waitFor(() => expect(seats()).toEqual(['B', 'C', 'A']));
+    await waitFor(() => expect(sortableList.seats()).toEqual(['B', 'C', 'A']));
   });
 
   test('the dials travel in the url', async () => {
@@ -179,12 +153,11 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(screen.getByText('<LazyKeepStaticList/>')).toBeVisible();
+    await sortableList.arrived();
+    expect(listControls.option('Lazy')).toBeChecked();
+    expect(listControls.option('Keep')).toBeChecked();
+    expect(listControls.option('Static')).toBeChecked();
+    expect(demoPage.words('<LazyKeepStaticList/>')).toBeVisible();
   });
 
   test('an arrow key walks an item past its neighbor, and back', async () => {
@@ -193,16 +166,13 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    const grip = screen.getByRole('button', {name: 'grip for A'});
-    grip.focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await sortableList.arrived();
+    await sortableList.moveByKey('A', '{ArrowRight}');
 
-    expect(seats()).toEqual(['B', 'A', 'C']);
+    expect(sortableList.seats()).toEqual(['B', 'A', 'C']);
 
-    screen.getByRole('button', {name: 'grip for A'}).focus();
-    await userEvent.keyboard('{ArrowLeft}');
-    expect(seats()).toEqual(['A', 'B', 'C']);
+    await sortableList.moveByKey('A', '{ArrowLeft}');
+    expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
   });
 
   test('both parties slide toward their new seats', async () => {
@@ -211,12 +181,11 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    screen.getByRole('button', {name: 'grip for A'}).focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await sortableList.arrived();
+    await sortableList.moveByKey('A', '{ArrowRight}');
 
-    expect(seatOf('A')).toHaveStyle({'--toward': '-1'});
-    expect(seatOf('B')).toHaveStyle({'--toward': '1'});
+    expect(sortableList.seatOf('A')).toHaveStyle({'--toward': '-1'});
+    expect(sortableList.seatOf('B')).toHaveStyle({'--toward': '1'});
   });
 
   test('an arrow walk says the move', async () => {
@@ -225,12 +194,10 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    const grip = screen.getByRole('button', {name: 'grip for A'});
-    grip.focus();
-    await userEvent.keyboard('{ArrowRight}');
+    await sortableList.arrived();
+    await sortableList.moveByKey('A', '{ArrowRight}');
 
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 2 of 3');
+    expect(sortableList.moveReport()).toHaveTextContent('A moved to 2 of 3');
   });
 
   test('an eager crossing says the move', async () => {
@@ -239,27 +206,27 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    await theListArrives();
-    await lifted('A');
-    draggedOver('C', 10);
+    await sortableList.arrived();
+    await sortableList.lift('A');
+    sortableList.dragOver('C', 10);
 
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3');
+    expect(sortableList.moveReport()).toHaveTextContent('A moved to 3 of 3');
   });
 
   test('a lazy release says the move', async () => {
     await lazyListWithALifted();
 
-    fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
+    sortableList.release('A');
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3'));
+    await waitFor(() => expect(sortableList.moveReport()).toHaveTextContent('A moved to 3 of 3'));
   });
 
   test('the recipe opens on the need with both stories listed', async () => {
     const recipe = await nativeRecipe();
 
     expect(recipe).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
-    expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
+    expect(demoPage.heading('let’s build this feature')).toBeVisible();
+    expect(demoPage.everyWords(/the order is mine/).length).toBeGreaterThan(0);
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
     expect(recipe).toHaveTextContent(/The order changes as you drag/);
@@ -268,69 +235,67 @@ describe('the sortable list demo', () => {
   test('the recipe’s clues name their rows and columns', async () => {
     await nativeRecipe();
 
-    const clues = within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByRole('table', {name: 'the clues'});
-    expect(within(clues).getAllByRole('columnheader')).toHaveLength(2);
-    expect(within(clues).getAllByRole('rowheader')).toHaveLength(4);
+    const clues = dragSortTab.tableIn(demoPage.part('Start with the need, and let it pick the element'), 'the clues');
+    expect(clues.columns).toHaveLength(2);
+    expect(clues.rows).toHaveLength(4);
   });
 
   test('should open the first step on the need, and say the clues point at the element', async () => {
     await nativeRecipe();
 
-    expect(within(screen.getByRole('region', {name: 'Start with the need, and let it pick the element'})).getByText(/^Before any code/))
+    expect(explanation.saying(demoPage.part('Start with the need, and let it pick the element'), /^Before any code/))
       .toHaveTextContent('Before any code, and before any story, someone needs something. Listen for what they say, name each clue, and the clues point at the element to build it with.');
   });
 
   test('the recipe walks the stations from need to design to slices', async () => {
     const recipe = await nativeRecipe();
 
-    expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
-    expect(screen.getByRole('rowheader', {name: /pick it up and put it there/})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
-    expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'The user can keep the list in the order they mean'})).toBeVisible();
-    expect(screen.getByRole('link', {name: 'user story'}))
+    expect(demoPage.heading('Start with the need, and let it pick the element')).toBeVisible();
+    expect(demoPage.rowHeader(/pick it up and put it there/)).toBeVisible();
+    expect(demoPage.heading('Sketch a design from the need')).toBeVisible();
+    expect(demoPage.aside('what a design cannot tell you')).toBeVisible();
+    expect(demoPage.heading('The user can keep the list in the order they mean')).toBeVisible();
+    expect(demoPage.link('user story'))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
-    expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
-    expect(screen.getByText(/What you see above is my interpretation of that/)).toBeVisible();
+    expect(demoPage.heading('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(demoPage.words(/What you see above is my interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/Arm the drag from its grip/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
     expect(recipe).toHaveTextContent(/Fade the lifted card almost away/);
     expect(recipe).toHaveTextContent(/Slide the crossed item into place/);
     expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
-    expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
+    expect(explanation.linkNamed(recipe, 'dataTransfer'))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
   });
 
   test('the slices point at their station', async () => {
     await nativeRecipe();
 
-    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
-    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
+    expect(demoPage.heading('Slice the design into stories')).toBeVisible();
     ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
-      .forEach(slice => expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent('station 4'));
-    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
+      .forEach(slice => expect(demoPage.slice(slice)).toHaveTextContent('station 4'));
+    expect(demoPage.sliceLinks())
       .toEqual(['#station-4', '#station-4']);
-    expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
-      .filter(station => within(station).queryAllByText('Layer on functionality, in the order it was asked for').length > 0).map(station => station.id)).toContain('station-4');
+    expect(demoPage.stationsHolding('Layer on functionality, in the order it was asked for')).toContain('station-4');
   });
 
   test('opening the by-hand story points at the tables demo', async () => {
     const recipe = await nativeRecipe();
 
-    await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
+    await dragSortTab.pressWords(recipe, /The user can arrange the list by hand/);
 
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     const steps = recipeFolds.steps(recipeFolds.story(recipe, 'The user can arrange the list by hand'));
-    expect(within(steps[steps.length - 1]).getByRole('link', {name: /Tables demo/}))
+    expect(explanation.linkNamed(steps[steps.length - 1], /Tables demo/))
       .toHaveAttribute('href', '/demos/tables/');
   });
 
   const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
     const recipe = await nativeRecipe();
-    await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    await dragSortTab.pressWords(recipe, /The user can arrange the list by hand/);
+    await dragSortTab.chooseIn(recipe, 'Lazy');
+    await dragSortTab.chooseIn(recipe, 'Keep');
     return recipe;
   };
 
@@ -346,9 +311,8 @@ describe('the sortable list demo', () => {
   test("turning a dial in the recipe turns the list's own controls", async () => {
     await byHandStoryDialledLazyKeep();
 
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
+    expect(listControls.option('Lazy')).toBeChecked();
+    expect(listControls.option('Keep')).toBeChecked();
   });
 });
 
@@ -358,7 +322,7 @@ describe('arriving at a station', () => {
     render(<TestApp at={`${demosAt('drag-and-drop')}#station-4`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    await screen.findByRole('heading', {name: 'Layer on functionality, in the order it was asked for'}, {timeout: 5000});
+    await demoPage.findHeading('Layer on functionality, in the order it was asked for');
 
     await waitFor(() => expect(itemHeadedBy('the stations', 'Layer on functionality, in the order it was asked for')).toHaveFocus());
   });
@@ -392,7 +356,7 @@ describe('the native drag sort tutorial’s words', () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
     const arm = recipeFolds.steps(story)[0];
 
-    expect(within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
+    expect(explanation.paragraphsIn(arm).map(told => told.replace(/\s+/g, ' '))).toEqual(expect.arrayContaining([
       'draggable is an attribute, a setting written on the element, and the grip turns it on. An event is the browser telling the page that something happened, as the z-index tab says. On pointerdown, the event for a mouse button, a pen or a finger pressing down, the grip sets a flag, and the card renders draggable for that gesture only.',
       'Then the browser fires dragstart, the event for a drag beginning, and its handler sets effectAllowed to move: this drag moves the card, it does not copy or link it.'
     ]));
@@ -401,7 +365,7 @@ describe('the native drag sort tutorial’s words', () => {
   test('should say the card’s look in a paragraph of its own after the dragstart run, saying what an li and a shared class are', async () => {
     const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
     const arm = recipeFolds.steps(story)[0];
-    const paragraphs = within(arm).getAllByRole('paragraph').map(({textContent}) => textContent.replace(/\s+/g, ' '));
+    const paragraphs = explanation.paragraphsIn(arm).map(told => told.replace(/\s+/g, ' '));
 
     expect(paragraphs.findIndex(told => told.startsWith('The li, the list item that is the card'))).toBe(paragraphs.findIndex(told => told.startsWith('Then the browser fires dragstart')) + 1);
     expect(paragraphs).toContain('The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the card’s look, not its drag.');
@@ -410,7 +374,7 @@ describe('the native drag sort tutorial’s words', () => {
   test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {
     const recipe = await nativeRecipe();
     await recipeFolds.press(recipe, 'The user can arrange the list by hand');
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
+    await dragSortTab.chooseIn(recipe, 'Lazy');
     const story = recipeFolds.story(recipe, 'The user can arrange the list by hand');
 
     expect(recipeFolds.stepTitles(story)).toEqual([
@@ -422,7 +386,7 @@ describe('the native drag sort tutorial’s words', () => {
       'Glide the settle one tick after the release',
       'What drag and drop cannot give you'
     ]);
-    expect(within(story).queryByRole('figure', {name: /^Where a swap counts\./})).not.toBeInTheDocument();
+    expect(explanation.drawnIn(story, /^Where a swap counts\./)).not.toBeInTheDocument();
     expect(story).toHaveTextContent('Nothing moves until the release.');
   });
 
@@ -453,7 +417,7 @@ describe('the native drag sort tutorial’s words', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
-    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+    const recipe = await dragSortTab.recipe();
 
     expect(explanation.everyCodeBeside(recipe, /The item’s dragover handler also sets/).join()).toMatch(/onDragOver=\{event => \{[^]*event\.dataTransfer\.dropEffect = 'move';/);
   });
@@ -463,8 +427,9 @@ describe('the native drag sort tutorial’s words', () => {
     render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it.');
-    expect(explanation.everyCodeBeside(screen.getByRole('region', {name: 'build the native drag sort yourself'}), /^Each dragover stores/).join()).toMatch(/onDragLeave=\{\(\) => setLanding\(nothing\(\)\)\}/);
+    const recipe = await dragSortTab.recipe();
+    expect(recipe).toHaveTextContent('and the list’s dragleave handler, which runs when the pointer leaves an item or the list, clears it.');
+    expect(explanation.everyCodeBeside(recipe, /^Each dragover stores/).join()).toMatch(/onDragLeave=\{\(\) => setLanding\(nothing\(\)\)}/);
   });
 
   test('should say what a tick is where the lazy glide meets it', async () => {
@@ -472,7 +437,7 @@ describe('the native drag sort tutorial’s words', () => {
     render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('run the settle a tick after the release, a setTimeout with no delay, which runs once the drag has ended.');
+    expect(await dragSortTab.recipe()).toHaveTextContent('run the settle a tick after the release, a setTimeout with no delay, which runs once the drag has ended.');
   });
 
   test('should say what a view transition is where the lazy glide meets it', async () => {
@@ -480,7 +445,7 @@ describe('the native drag sort tutorial’s words', () => {
     render(<TestApp at={demosAt('drag-and-drop', '?pace=lazy')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'build the native drag sort yourself'})).toHaveTextContent('which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running,');
+    expect(await dragSortTab.recipe()).toHaveTextContent('which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running,');
   });
 
   test('should drop the tables tab’s survey and inner half', async () => {
@@ -488,13 +453,13 @@ describe('the native drag sort tutorial’s words', () => {
   });
 
   test('should draw where a swap counts', async () => {
-    expect(within(await nativeRecipe()).getByRole('figure', {name: /^Where a swap counts\./})).toBeInTheDocument();
+    expect(explanation.drawingNamed(await nativeRecipe(), /^Where a swap counts\./)).toBeInTheDocument();
   });
 
   test('should name MDN as Mozilla’s web reference', async () => {
     await nativeRecipe();
 
-    expect(screen.getByText(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
+    expect(demoPage.words(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
   });
 });
 
@@ -508,7 +473,7 @@ describe('the drag sort tab’s own words', () => {
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
+    expect(await demoTabs.arrivedOn('Drag sort')).toHaveTextContent(sentence);
   });
 
   test.each([
@@ -526,7 +491,7 @@ describe('the drag sort tab’s own words', () => {
     render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await screen.findByRole('region', {name: 'Drag sort'})).toHaveTextContent(sentence);
+    expect(await demoTabs.arrivedOn('Drag sort')).toHaveTextContent(sentence);
   });
 });
 
@@ -548,9 +513,9 @@ describe('the names the code uses', () => {
     render(<TestApp at={demosAt('drag-and-drop', `?${choices}`)} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const told = within(await screen.findByRole('region', {name: 'Drag sort'})).getByText(run);
+    const told = explanation.saying(await demoTabs.arrivedOn('Drag sort'), run);
 
-    expect(within(told).getAllByRole('code').map(code => code.textContent)).toContain(name);
+    expect(explanation.codeShown(told)).toContain(name);
   });
 });
 
@@ -592,13 +557,13 @@ describe('the drag sort tab’s audited words', () => {
   test('should caption the sketch with why the grip’s arrows are left and right', async () => {
     await tabAt('');
 
-    expect(await screen.findByText(/^The design answers shape/)).toHaveTextContent('The exhibit lays the list across the page, so the grip’s arrows are left and right.');
+    expect(await demoPage.findWords(/^The design answers shape/)).toHaveTextContent('The exhibit lays the list across the page, so the grip’s arrows are left and right.');
   });
 
   test('should read the clue for a direct pick-up as working by pointer or by key, on the drag the platform ships', async () => {
     await tabAt('');
 
-    expect(await screen.findByText(/^Direct manipulation/)).toHaveTextContent('Direct manipulation, by pointer or by key. The platform ships the drag.');
+    expect(await demoPage.findWords(/^Direct manipulation/)).toHaveTextContent('Direct manipulation, by pointer or by key. The platform ships the drag.');
   });
 
   test.each([
@@ -607,7 +572,7 @@ describe('the drag sort tab’s audited words', () => {
   ])('should read the motion dial, with %s, in plain words', async (choice, reading) => {
     await tabAt(choice);
 
-    expect(await screen.findByText(reading)).toBeInTheDocument();
+    expect(await demoPage.findWords(reading)).toBeInTheDocument();
   });
 
   test.each([
@@ -617,7 +582,7 @@ describe('the drag sort tab’s audited words', () => {
     ['pace=eager&motion=static', 'The order changes as you drag, so the item’s old place stays reachable until you let go.', 'And the reorder lands instantly, so nothing competes with the browser’s drag.']
   ])('should promise, with %s, what the order does', async (choices, pace, motion) => {
     await tabAt(choices);
-    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+    const recipe = await dragSortTab.recipe();
 
     expect(recipe).toHaveTextContent(pace);
     expect(recipe).toHaveTextContent(motion);
@@ -626,7 +591,7 @@ describe('the drag sort tab’s audited words', () => {
   test('should say, once, that drag and drop has no keyboard events, and that a keyboard user needs the same reorders', async () => {
     const recipe = await nativeRecipe();
 
-    expect(within(recipe).getAllByText(/Drag and drop has no keyboard events/)).toHaveLength(1);
+    expect(explanation.everySaying(recipe, /Drag and drop has no keyboard events/)).toHaveLength(1);
     expect(recipe).toHaveTextContent('Drag and drop has no keyboard events, and it does not matter: dragging was never the goal, the order changing is.');
     expect(recipe).toHaveTextContent('A keyboard user needs the same reorders, and drag and drop cannot give them.');
   });

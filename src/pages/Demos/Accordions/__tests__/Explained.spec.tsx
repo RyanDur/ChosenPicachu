@@ -1,3 +1,4 @@
+import {demoPage} from '@pages/Demos/__test_support';
 import {maybe} from '@ryandur/sand';
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
@@ -64,7 +65,7 @@ describe('the accordions tab', () => {
 
     await accordionsTab.choose('fold type', 'Inclusive');
 
-    expect(accordionsTab.urlSearch()).toHaveTextContent('type=inclusive');
+    expect(demoPage.urlSearch()).toHaveTextContent('type=inclusive');
     expect(accordionsTab.option(types, 'Inclusive')).toBeChecked();
   });
 
@@ -547,7 +548,7 @@ describe('the fold motion', () => {
 
     await accordionsTab.choose('fold motion', 'Drawer');
 
-    expect(accordionsTab.urlSearch()).toHaveTextContent('style=drawer');
+    expect(demoPage.urlSearch()).toHaveTextContent('style=drawer');
     expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
   });
 

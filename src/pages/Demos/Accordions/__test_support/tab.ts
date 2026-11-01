@@ -21,7 +21,6 @@ export const accordionsTab = {
     await userEvent.click(control);
     return control;
   },
-  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   buildTitled: (holder: HTMLElement, name: string | RegExp): HTMLElement => within(holder).getByRole('heading', {name, hidden: true}),

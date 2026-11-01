@@ -1,3 +1,4 @@
+import {demoPage} from '@pages/Demos/__test_support';
 import {TestApp} from '@__test_support/TestApp';
 import {paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
@@ -156,7 +157,7 @@ describe('a list of charts', () => {
     await chartsDesk.keys('Price line', 'ArrowDown');
 
     expect(await chartsDesk.findPeriodShown('price', 'day')).toBeInTheDocument();
-    expect(chartsDesk.urlSearch()).toHaveTextContent('charts=candles%2Cprice%3Aday');
+    expect(demoPage.urlSearch()).toHaveTextContent('charts=candles%2Cprice%3Aday');
   });
 
   test('a chart walked by keyboard says where it landed', async () => {
@@ -316,7 +317,7 @@ describe('a list of charts', () => {
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
     expect(story).not.toHaveAttribute('open');
-    expect(chartsDesk.urlSearch()).not.toHaveTextContent('graph=candles');
+    expect(demoPage.urlSearch()).not.toHaveTextContent('graph=candles');
   });
 
   test('the trader can add the pressure chart', async () => {

@@ -94,7 +94,6 @@ export const chartsDesk = {
   findSays: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
   saysIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
-  urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   feedStatus,
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
   findTrouble: (told: string): Promise<HTMLElement> => within(alert()).findByText(told),
