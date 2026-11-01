@@ -1,7 +1,7 @@
 .record-page {
   display: grid;
   gap: var(--base-x-3);
-  padding: var(--base-x-3);
+  padding: var(--base-x-3) var(--page-inset);
 
   .record {
     display: grid;

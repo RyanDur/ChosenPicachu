@@ -89,7 +89,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: var(--base-x-5);
+    padding: var(--base-x-5) var(--page-inset);
 
     > * {
       flex-shrink: 0;
@@ -143,13 +143,13 @@
       'feedback footer filter';
 
     .app-header {
-      padding-left: var(--base-x-5);
-      grid-template-columns: var(--base-x-16_5) 1fr 1fr;
-      grid-template-areas: '. title search';
+      grid-template-columns: calc(var(--base-x-5) + var(--base-x-16_5)) 1fr 1fr;
+      grid-template-areas: 'title title search';
 
       .app-title {
         grid-area: title;
         align-self: center;
+        padding-inline-start: var(--page-inset);
       }
     }
 
@@ -197,10 +197,14 @@
       'footer footer';
 
     .app-header {
-      padding: 0 var(--base-x-2_5);
+      padding-inline: var(--page-inset);
       grid-template-columns: 1fr 1fr;
       grid-auto-rows: minmax(var(--base-x-10), auto);
       grid-template-areas: 'title search';
+
+      .app-title {
+        padding-inline-start: 0;
+      }
 
       .header-settings {
         width: 100%;
@@ -209,7 +213,7 @@
     }
 
     .app-main {
-      padding: var(--base);
+      padding: var(--base) var(--page-inset);
     }
 
     .filter {

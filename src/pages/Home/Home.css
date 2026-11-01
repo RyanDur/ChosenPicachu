@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--base-x-3);
-  padding: var(--base-x-3);
+  padding: var(--base-x-3) var(--page-inset);
 
   .opening {
     grid-column: 1 / -1;
