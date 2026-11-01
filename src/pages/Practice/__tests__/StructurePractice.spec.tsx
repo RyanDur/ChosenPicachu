@@ -158,7 +158,7 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
-  test('should open the styles-off test on what the test is, then the four gates that run it, then the rule the review holds', async () => {
+  test('should open the styles-off test on what the test is, then the four gates that hold the markup to it, then the rule the review holds', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 

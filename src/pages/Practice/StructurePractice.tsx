@@ -263,8 +263,9 @@ export const StructurePractice: FC = () =>
       read. If the meaning only appears once the CSS loads, it is in the wrong language.
       That is the <MomentLink to="documentComesBack">2016 moment</MomentLink>’s test: the document first, the program
       only where the page needs one.</p>
-    <p className="paragraph">The styles-off test is not read by eye. Four gates run it on every push, each a few lines in
-      the repository. The review, which reads the words and the code of every push, holds one more rule.</p>
+    <p className="paragraph">The styles-off test is not read by eye. Four gates hold the markup to it on every push,
+      each a few lines in the repository. The review, which reads the words and the code of every push, holds one more
+      rule.</p>
     <ul className="practice-list">
       <li className="paragraph"><code className="monospaced">axe</code>, the accessibility checker, runs on every page
         at WCAG 2 A and AA, and runs

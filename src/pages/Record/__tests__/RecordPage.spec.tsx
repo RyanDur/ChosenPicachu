@@ -781,7 +781,7 @@ describe('the record', () => {
   });
 
   test('should land the concert’s reader on the 1996 moment, with focus there', async () => {
-    await userEvent.click(within(recordPage.concert()).getByRole('link', {name: 'the 1996 moment'}));
+    await recordPage.followConcertLink('the 1996 moment');
 
     await waitFor(() => expect(itemHeadedBy('1996', 'The pages need to look the same')).toHaveFocus());
   });

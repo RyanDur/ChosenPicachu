@@ -34,6 +34,8 @@ export const recordPage = {
   concert,
   concertLinks: (): (string | null)[][] => within(concert()).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
+  followConcertLink: async (name: string): Promise<void> =>
+    userEvent.click(within(concert()).getByRole('link', {name})),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedAs,
   shelfHolding: (work: string): string | null => {
