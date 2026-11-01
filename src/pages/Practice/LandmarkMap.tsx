@@ -12,41 +12,38 @@ type Box = {
   readonly note?: string;
 };
 
-const labelSize = 7;
-const noteSize = 6;
-const inset = 6;
+const inset = 9;
 
-const landmark = 'paper-filled drawn';
-const rail = 'faded-mint-filled drawn';
-const notALandmark = 'paper-filled drawn thin-drawn';
-const topLayer = 'paper-filled drawn dashed-drawn';
+const landmark = 'hollow drawn landmark-box';
+const secondary = 'hollow drawn secondary-box';
+const topLayer = 'paper-filled drawn landmark-box dashed-drawn';
 
 const wide: Box[] = [
-  {label: 'header', look: landmark, x: 4, y: 4, width: 312, height: 28},
-  {label: 'section · pages and feedback', look: rail, x: 4, y: 38, width: 120, height: 150},
-  {label: 'nav · site', look: landmark, x: 12, y: 56, width: 104, height: 80},
-  {label: 'feedback', look: notALandmark, x: 12, y: 144, width: 104, height: 36},
-  {label: 'main', look: landmark, x: 130, y: 38, width: 186, height: 150},
-  {label: 'nav · tabs', look: notALandmark, x: 138, y: 64, width: 170, height: 20, note: 'only where a page has tabs'},
-  {label: 'footer', look: landmark, x: 4, y: 194, width: 312, height: 26},
-  {label: 'section · role alert · top layer', look: topLayer, x: 180, y: 28, width: 132, height: 20}
+  {label: 'header', look: landmark, x: 6, y: 6, width: 468, height: 42},
+  {label: 'section · pages and feedback', look: landmark, x: 6, y: 57, width: 180, height: 225},
+  {label: 'nav · site', look: landmark, x: 18, y: 84, width: 156, height: 120},
+  {label: 'feedback', look: secondary, x: 18, y: 216, width: 156, height: 54},
+  {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
+  {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
+  {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39},
+  {label: 'section · role alert · top layer', look: topLayer, x: 270, y: 42, width: 198, height: 30}
 ];
 
 const stacked: Box[] = [
-  {label: 'header', look: landmark, x: 4, y: 4, width: 192, height: 28},
-  {label: 'section · pages and feedback', look: rail, x: 4, y: 38, width: 192, height: 54},
-  {label: 'nav · site', look: landmark, x: 10, y: 60, width: 120, height: 26},
-  {label: 'feedback', look: notALandmark, x: 136, y: 60, width: 54, height: 26},
-  {label: 'main', look: landmark, x: 4, y: 98, width: 192, height: 110},
-  {label: 'nav · tabs', look: notALandmark, x: 10, y: 124, width: 180, height: 20, note: 'only where a page has tabs'},
-  {label: 'footer', look: landmark, x: 4, y: 214, width: 192, height: 26},
-  {label: 'section · role alert · top layer', look: topLayer, x: 60, y: 88, width: 132, height: 20}
+  {label: 'header', look: landmark, x: 6, y: 6, width: 288, height: 42},
+  {label: 'section · pages and feedback', look: landmark, x: 6, y: 57, width: 288, height: 81},
+  {label: 'nav · site', look: landmark, x: 15, y: 90, width: 180, height: 39},
+  {label: 'feedback', look: secondary, x: 204, y: 90, width: 81, height: 39},
+  {label: 'main', look: landmark, x: 6, y: 147, width: 288, height: 165},
+  {label: 'nav · tabs', look: secondary, x: 15, y: 186, width: 270, height: 30, note: 'only where a page has tabs'},
+  {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39},
+  {label: 'section · role alert · top layer', look: topLayer, x: 90, y: 132, width: 198, height: 30}
 ];
 
 const DrawnBox: FC<{box: Box}> = ({box: {label, look, x, y, width, height, note}}) => <>
   <rect className={look} x={x} y={y} width={width} height={height}/>
-  <text x={x + inset} y={y + inset + labelSize} fontSize={labelSize}>{label}</text>
-  {has(note) && <text x={x} y={y + height + inset + noteSize} fontSize={noteSize}>{note}</text>}
+  <text className="drawn-caption" x={x + inset} y={y + inset} dominantBaseline="hanging">{label}</text>
+  {has(note) && <text className="drawn-caption" x={x} y={y + height + inset} dominantBaseline="hanging">{note}</text>}
 </>;
 
 const Frame: FC<{boxes: Box[]; className: string; viewBox: string}> = ({boxes, className, viewBox}) =>
@@ -56,8 +53,8 @@ const Frame: FC<{boxes: Box[]; className: string; viewBox: string}> = ({boxes, c
 
 export const LandmarkMap: FC = () =>
   <figure className="landmark-map">
-    <Frame boxes={wide} className="landmark-map-wide" viewBox="0 0 320 224"/>
-    <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 200 244"/>
+    <Frame boxes={wide} className="landmark-map-wide center" viewBox="0 0 480 336"/>
+    <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 300 366"/>
     <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Every landmark named;
       a screen reader lists them and jumps to any.
     </figcaption>
