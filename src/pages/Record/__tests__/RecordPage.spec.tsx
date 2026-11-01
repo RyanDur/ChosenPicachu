@@ -1001,7 +1001,7 @@ describe('the record', () => {
   });
 
   test('should shelve the Authoring Practices’ Landmark Regions on the Structure shelf, undated, as its page gives no date', () => {
-    expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, APG, undated');
+    expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, ARIA Authoring Practices Guide, undated');
     expect(recordPage.shelfHolding('Landmark Regions')).toBe('Structure');
   });
 

@@ -14,9 +14,9 @@ type Box = {
 
 const inset = 9;
 
-const landmark = 'hollow drawn landmark-box';
-const secondary = 'hollow drawn secondary-box';
-const topLayer = 'paper-filled drawn landmark-box dashed-drawn';
+const landmark = 'landmark-box hollow drawn';
+const secondary = 'secondary-box hollow drawn';
+const topLayer = 'landmark-box paper-filled drawn dashed-drawn';
 
 const wide: Box[] = [
   {label: 'header', look: landmark, x: 6, y: 6, width: 468, height: 42},
@@ -26,7 +26,7 @@ const wide: Box[] = [
   {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
   {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
   {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39},
-  {label: 'section · role alert · top layer', look: topLayer, x: 270, y: 42, width: 198, height: 30}
+  {label: 'section · role alert · live region · top layer', look: topLayer, x: 186, y: 34, width: 282, height: 26}
 ];
 
 const stacked: Box[] = [
@@ -37,7 +37,7 @@ const stacked: Box[] = [
   {label: 'main', look: landmark, x: 6, y: 147, width: 288, height: 165},
   {label: 'nav · tabs', look: secondary, x: 15, y: 186, width: 270, height: 30, note: 'only where a page has tabs'},
   {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39},
-  {label: 'section · role alert · top layer', look: topLayer, x: 90, y: 132, width: 198, height: 30}
+  {label: 'section · role alert · live region · top layer', look: topLayer, x: 12, y: 129, width: 282, height: 24}
 ];
 
 const DrawnBox: FC<{box: Box}> = ({box: {label, look, x, y, width, height, note}}) => <>
@@ -55,7 +55,7 @@ export const LandmarkMap: FC = () =>
   <figure className="landmark-map">
     <Frame boxes={wide} className="landmark-map-wide center" viewBox="0 0 480 336"/>
     <Frame boxes={stacked} className="landmark-map-stacked center" viewBox="0 0 300 366"/>
-    <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Every landmark named;
-      a screen reader lists them and jumps to any.
+    <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Each landmark, with its
+      element and, where it has one, its name.
     </figcaption>
   </figure>;

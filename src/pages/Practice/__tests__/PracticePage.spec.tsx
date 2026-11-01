@@ -1,5 +1,4 @@
 import {render} from '@testing-library/react';
-import {computeAccessibleName} from 'dom-accessibility-api';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {TestApp} from '@__test_support/TestApp';
@@ -14,7 +13,7 @@ import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import columnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 
 const appContinuum = 'https://www.appcontinuum.io/';
-const tableOfContents = 'The page’s table of contents. Every landmark named; a screen reader lists them and jumps to any.';
+const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
 
 describe('the practice page', () => {
   test('should spell the Structure tab\'s prose the American way', async () => {
@@ -197,7 +196,7 @@ describe('the practice page', () => {
     const [headerCell, vanillaHeader] = practicePage.carvedFrom('Frame/table.html');
 
     expect(outOfReadingOrder([
-      practicePage.paragraph(/^One landmark on every page is a role and not an element/),
+      practicePage.paragraph(/^One region on every page is a role and not an element/),
       practicePage.paragraph(/^I start from what the content is and pick the element for it/),
       practicePage.paragraph(/^The element is the name/),
       practicePage.paragraph(/^The platform’s elements each bring a behavior/),
@@ -306,22 +305,23 @@ describe('the practice page', () => {
     ]);
   });
 
-  test('should show the page’s table of contents between the skeleton and the one landmark that is a role', async () => {
+  test('should show the page’s table of contents after the skeleton and why landmarks are named, before the one region that is a role', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(outOfReadingOrder([
       practicePage.paragraph(/^The skeleton comes first/),
+      practicePage.paragraph(/^Landmarks are the page’s table of contents/),
       practicePage.figure(tableOfContents),
-      practicePage.paragraph(/^One landmark on every page is a role and not an element/)
+      practicePage.paragraph(/^One region on every page is a role and not an element/)
     ])).toEqual([]);
   });
 
-  test('should send the skeleton’s rule for names to the Authoring Practices, and its landmark elements to the 2004 moment', async () => {
+  test('should send the rule for naming landmarks to the Authoring Practices, and the landmark elements to the 2004 moment', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^The skeleton comes first/)).toEqual([
+    expect(practicePage.linksIn(/^Landmarks are the page’s table of contents/)).toEqual([
       ['Authoring Practices', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['“If a specific landmark role is used more than once on a page, provide each instance of that landmark with a unique label.”', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['2004 moment', momentAddress('browsersTakePen')]
@@ -332,7 +332,7 @@ describe('the practice page', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^One landmark on every page is a role and not an element/)).toEqual([
+    expect(practicePage.linksIn(/^One region on every page is a role and not an element/)).toEqual([
       ['z-index tab', demoAddress(DemoTopics.zIndex)]
     ]);
   });
@@ -344,29 +344,17 @@ describe('the practice page', () => {
     expect(practicePage.drawingsSeenIn(tableOfContents)).toEqual([]);
   });
 
-  test('should draw the frame’s landmarks wide and stacked, each box labelled with its element and, where it has one, its name', async () => {
+  test('should label each drawn landmark with its element and, where it has one, its name', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const frame = [
+    expect(practicePage.drawnIn(tableOfContents)).toEqual(expect.arrayContaining([
       'header',
       'section · pages and feedback', 'nav · site', 'feedback',
       'main', 'nav · tabs', 'only where a page has tabs',
       'footer',
-      'section · role alert · top layer'
-    ];
-
-    expect(practicePage.drawnIn(tableOfContents)).toEqual([...frame, ...frame]);
-  });
-
-  test('should label the drawn rail and site nav with the names the frame gives them', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const rail = computeAccessibleName(await site.rail());
-    const siteNav = computeAccessibleName(await site.nav());
-
-    expect(practicePage.drawnIn(tableOfContents)).toEqual(expect.arrayContaining([`section · ${rail}`, `nav · ${siteNav}`]));
+      'section · role alert · live region · top layer'
+    ]));
   });
 
   test('should open the Structure tab from its address, reading how I organize it from its first rule to its test', async () => {

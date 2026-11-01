@@ -175,7 +175,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"><cite>Landmark Regions</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, APG, undated</span>
+            <span className="provenance caption">W3C WAI, ARIA Authoring Practices Guide, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"><cite>The details element</cite></a>{' '}

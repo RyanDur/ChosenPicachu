@@ -12,7 +12,7 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
 
 const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
 
-const leadsToACarvesCode = (link: HTMLElement): boolean => link.textContent.endsWith(' on GitHub');
+const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
 const drawnTexts = (figure: string): HTMLElement[] =>
   within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption, figcaption *'});
@@ -55,7 +55,7 @@ export const practicePage = {
     throw new Error(`no definition of ${term}`);
   },
   sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
-    .filter(link => not(leadsToACarvesCode(link)))
+    .filter(link => not(leadsToThisSitesCode(link)))
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),

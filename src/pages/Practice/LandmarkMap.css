@@ -9,15 +9,17 @@
 
     inline-size: 100%;
     block-size: auto;
-    max-inline-size: var(--drawn-width);
+    max-inline-size: var(--widest-drawing);
   }
 
   .landmark-map-wide {
     --drawn-width: 480px;
+    --widest-drawing: var(--base-x-60);
   }
 
   .landmark-map-stacked {
     --drawn-width: 300px;
+    --widest-drawing: var(--base-x-40);
 
     display: none;
   }
