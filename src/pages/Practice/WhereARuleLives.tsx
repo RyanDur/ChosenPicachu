@@ -33,15 +33,15 @@ const column = (labels: string[], look: string, {x, y, width}: Column): Box[] =>
   labels.map((label, at) => ({label, look, x, y: y + at * 24, width, height: 18}));
 
 const tree = (x: number, y: number): Box[] => [
-  {label: 'src/styles', look: folder, x, y, width: 210, height: 282},
+  {label: 'src/styles', look: folder, x, y, width: 210, height: 288},
   {label: 'the reset and the tokens', look: group, x: x + 9, y: y + 24, width: 192, height: 90},
   ...column(sharedSheets.slice(0, 3), file, {x: x + 18, y: y + 42, width: 174}),
-  {label: 'the vocabulary, by concern', look: group, x: x + 9, y: y + 120, width: 192, height: 156},
+  {label: 'the vocabulary, by concern', look: group, x: x + 9, y: y + 120, width: 192, height: 162},
   ...column(sharedSheets.slice(3), file, {x: x + 18, y: y + 138, width: 174})
 ];
 
 const component = (x: number, y: number, besideEachOther: boolean): Box[] => [
-  {label: 'DragSortableTable', look: folder, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 282},
+  {label: 'DragSortableTable', look: folder, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 288},
   ...column(parts, file, {x: x + 12, y: y + 24, width: 126}),
   ...column(ownSheets, sheet, besideEachOther ? {x: x + 150, y: y + 24, width: 126} : {x: x + 12, y: y + 138, width: 126})
 ];
@@ -71,7 +71,7 @@ const Frame: FC<{boxes: Box[]; line: Line; className: string; viewBox: string}> 
 
 export const WhereARuleLives: FC = () =>
   <figure className="where-a-rule-lives">
-    <Frame boxes={wide} line={wears.wide} className="where-a-rule-lives-wide center" viewBox="0 0 480 294"/>
+    <Frame boxes={wide} line={wears.wide} className="where-a-rule-lives-wide center" viewBox="0 0 480 300"/>
     <Frame boxes={stacked} line={wears.stacked} className="where-a-rule-lives-stacked center" viewBox="0 0 300 450"/>
     <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> Shared words at the root, by
       concern; a component’s structure beside the component.
