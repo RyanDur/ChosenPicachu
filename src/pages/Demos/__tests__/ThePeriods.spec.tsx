@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {delay, http, HttpResponse} from 'msw';
+import {http, HttpResponse} from 'msw';
 import {HISTORY, server} from '@__test_support/server';
 import {format} from 'date-fns';
 
@@ -121,11 +121,20 @@ describe('the chart periods', () => {
       .getByText('the candle history could not be reached')).toBeInTheDocument();
   });
 
-  test('switching the window shows the loading view until history arrives', async () => {
+  const heldHistory = (): (() => void) => {
+    let release = (): void => undefined;
+    const arrived = new Promise<void>(resolve => {
+      release = resolve;
+    });
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async () => {
-      await delay(150);
+      await arrived;
       return HttpResponse.json(rowsSpaced(3600));
     }));
+    return release;
+  };
+
+  test('switching the window shows the loading view until history arrives', async () => {
+    const releaseHistory = heldHistory();
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
@@ -133,18 +142,13 @@ describe('the chart periods', () => {
     await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'day', hidden: true}));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByRole('progressbar')).toBeVisible();
+    releaseHistory();
     await waitFor(() => expect(drawnCandles()).toBe(5));
     expect(within(candleCard).queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
-  const slowHistory = () =>
-    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async () => {
-      await delay(150);
-      return HttpResponse.json(rowsSpaced(3600));
-    }));
-
   test('while history loads the captions say so', async () => {
-    slowHistory();
+    const releaseHistory = heldHistory();
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     const candleCard = await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
@@ -154,12 +158,13 @@ describe('the chart periods', () => {
 
     expect(await within(candleCard).findByText('loading history')).toBeInTheDocument();
     expect(await within(priceCard).findByText('loading history')).toBeInTheDocument();
+    releaseHistory();
     await waitFor(() => expect(drawnCandles()).toBe(5));
     await waitFor(() => expect(drawnPoints()).toBe(5));
   });
 
   test('while history loads the price shows no number', async () => {
-    slowHistory();
+    const releaseHistory = heldHistory();
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
@@ -168,17 +173,19 @@ describe('the chart periods', () => {
 
     await within(priceCard).findByText('loading history');
     expect(within(priceCard).queryByText(/^\$/)).not.toBeInTheDocument();
+    releaseHistory();
     await waitFor(() => expect(drawnPoints()).toBe(5));
   });
 
   test('while history loads the candles draw no scale', async () => {
-    slowHistory();
+    const releaseHistory = heldHistory();
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
     const candlesCard = await screen.findByRole('region', {name: 'candles'});
 
     await within(candlesCard).findByText('loading history');
 
     expect(within(candlesCard).queryByText(/^\$/)).not.toBeInTheDocument();
+    releaseHistory();
   });
 
   test('with history in hand and no trade yet, the captions wait', async () => {
