@@ -177,6 +177,38 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"><cite>Landmark Regions</cite></a>{' '}
             <span className="provenance caption">W3C WAI, APG, undated</span>
           </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"><cite>The details element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog"><cite>The dialog element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover"><cite>The popover attribute</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form"><cite>The form element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset"><cite>The fieldset element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend"><cite>The legend element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th#scope"><cite>The th element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API"><cite>Invoker Commands API</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="presentation research">

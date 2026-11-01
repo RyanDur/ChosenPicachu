@@ -1,5 +1,6 @@
 import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {not} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {paragraphOpening} from '@__test_support/paragraph';
 
@@ -10,6 +11,8 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
 
 const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
+
+const leadsToACarvesCode = (link: HTMLElement): boolean => link.textContent.endsWith(' on GitHub');
 
 const drawnTexts = (figure: string): HTMLElement[] =>
   within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption, figcaption *'});
@@ -52,9 +55,12 @@ export const practicePage = {
     throw new Error(`no definition of ${term}`);
   },
   sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
+    .filter(link => not(leadsToACarvesCode(link)))
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
+  carvedFrom: (source: string): HTMLElement[] => within(practice()).getAllByRole('figure', {name: `${source} on GitHub`}),
+  sourceOf: (carve: HTMLElement): string | null => within(carve).getByRole('link').getAttribute('href'),
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))

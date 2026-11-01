@@ -9,6 +9,9 @@ import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import tableSource from '@pages/Demos/Tables/Frame/table.html?sample';
+import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
+import columnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 
 const appContinuum = 'https://www.appcontinuum.io/';
 const tableOfContents = 'The page’s table of contents. Every landmark named; a screen reader lists them and jumps to any.';
@@ -175,16 +178,94 @@ describe('the practice page', () => {
       .toEqual(expect.stringMatching(/^An event is a name for what happened\./));
   });
 
-  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then that it takes the first four in turn, before its first rule', async () => {
+  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before the skeleton', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.paragraphs().slice(0, 4)).toEqual([
       expect.stringMatching(/^Markup is read by more than the browser/),
       expect.stringMatching(/^So five things have to be true of the markup/),
-      expect.stringMatching(/^The rest of this tab takes the first four in turn/),
-      expect.stringMatching(/^I start from what the content is and pick the element for it/)
+      expect.stringMatching(/^The rest of this tab takes each of the five in turn/),
+      expect.stringMatching(/^The skeleton comes first/)
     ]);
+  });
+
+  test('should walk down from the skeleton to one element, through the three attributes and the tables demo’s two builds, before what the elements mean', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    const [headerCell, vanillaHeader] = practicePage.carvedFrom('Frame/table.html');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^One landmark on every page is a role and not an element/),
+      practicePage.paragraph(/^I start from what the content is and pick the element for it/),
+      practicePage.paragraph(/^The element is the name/),
+      practicePage.paragraph(/^The platform’s elements each bring a behavior/),
+      practicePage.paragraph(/^Three attributes carry three jobs/),
+      practicePage.paragraph(/^The tables demo builds the same table twice/),
+      headerCell,
+      practicePage.paragraph(/^The class list is the look/),
+      practicePage.paragraph(/^The script attaches itself by the same attribute/),
+      practicePage.carvedFrom('Frame/boot.ts')[0],
+      practicePage.paragraph(/^boot finds its tables/),
+      practicePage.paragraph(/^In React the same markup is written by components/),
+      vanillaHeader,
+      practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0],
+      practicePage.paragraph(/^DraggableColumn writes the th/),
+      practicePage.paragraph(/^The elements mean something beyond how they look/)
+    ])).toEqual([]);
+  });
+
+  test('should carve the vanilla table’s tag and its trades header from Frame/table.html, lines 2 to 41', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/table.html')[0])).toBe(`${tableSource.url}#L2-L41`);
+  });
+
+  test('should carve where the script finds its tables and hears what they report from Frame/boot.ts, lines 20 to 29', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/boot.ts')[0])).toBe(`${bootSource.url}#L20-L29`);
+  });
+
+  test('should carve the vanilla trades header from Frame/table.html, lines 12 to 41, beside the component', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sourceOf(practicePage.carvedFrom('Frame/table.html')[1])).toBe(`${tableSource.url}#L12-L41`);
+  });
+
+  test('should carve DraggableColumn’s render from DragSortableTable/DraggableColumn.tsx, lines 54 to 76, beside the vanilla header', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sourceOf(practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0])).toBe(`${columnSource.url}#L54-L76`);
+  });
+
+  test('should send each platform element the walk names to its MDN page', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^The platform’s elements each bring a behavior/)).toEqual([
+      ['details', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details'],
+      ['dialog', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog'],
+      ['popover', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover'],
+      ['form', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form'],
+      ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
+      ['fieldset', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset'],
+      ['legend', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend'],
+      ['scope', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th#scope'],
+      ['Invoker commands', 'https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API']
+    ]);
+  });
+
+  test('should send the split between what happened and what is true to the Behavior tab', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^boot finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
   test('should list the five needs as terms, meaning, order, names, behavior and identity, each with what has to be true of the markup', async () => {
@@ -347,10 +428,12 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.heading()).toBeVisible();
-    expect(practicePage.link('search'))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(practicePage.link('output'))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(practicePage.linksIn(/^I start from what the content is and pick the element for it/)).toEqual([
+      ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
+      ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
+      ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
+      ['2014 moment', momentAddress('html5SaysIt')]
+    ]);
     expect(practicePage.link(/of last resort, for when no other element is suitable/))
       .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
@@ -580,7 +663,7 @@ describe('the practice page', () => {
     render(<TestApp at={Paths.practice}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.citations()).toEqual([['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]);
+    expect(practicePage.citations()).toEqual([['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2014', `${Paths.record}#the-rules-need-writing-down`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]);
   });
 
   test('should rest Presentation’s practice on its own moments, each citation naming the year of the moment it opens', async () => {

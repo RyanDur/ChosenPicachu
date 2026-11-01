@@ -960,6 +960,46 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('The Application Continuum')).toBe('Behavior');
   });
 
+  test('should shelve The details element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The details element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The details element')).toBe('Structure');
+  });
+
+  test('should shelve The dialog element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The dialog element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The dialog element')).toBe('Structure');
+  });
+
+  test('should shelve The popover attribute on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The popover attribute')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The popover attribute')).toBe('Structure');
+  });
+
+  test('should shelve The form element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The form element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The form element')).toBe('Structure');
+  });
+
+  test('should shelve The fieldset element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The fieldset element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The fieldset element')).toBe('Structure');
+  });
+
+  test('should shelve The legend element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The legend element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The legend element')).toBe('Structure');
+  });
+
+  test('should shelve The th element on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('The th element')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('The th element')).toBe('Structure');
+  });
+
+  test('should shelve Invoker Commands API on the Structure shelf, as MDN', () => {
+    expect(recordPage.shelvedAs('Invoker Commands API')).toHaveTextContent('MDN');
+    expect(recordPage.shelfHolding('Invoker Commands API')).toBe('Structure');
+  });
+
   test('should shelve the Authoring Practices’ Landmark Regions on the Structure shelf, undated, as its page gives no date', () => {
     expect(recordPage.shelvedAs('Landmark Regions')).toHaveTextContent('W3C WAI, APG, undated');
     expect(recordPage.shelfHolding('Landmark Regions')).toBe('Structure');

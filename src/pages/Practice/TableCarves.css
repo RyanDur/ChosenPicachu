@@ -1,0 +1,11 @@
+.carves-beside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--base-x-2);
+
+  > * {
+    flex: 1 1 40ch;
+    min-width: 0;
+  }
+}

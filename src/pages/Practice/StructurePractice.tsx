@@ -2,7 +2,10 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
+import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
+import {practiceAddress} from './types';
 
 const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
 const survey = 'https://webaim.org/projects/screenreadersurvey10/';
@@ -48,17 +51,7 @@ export const StructurePractice: FC = () =>
           covers it.</dd>
       </div>
     </dl>
-    <p className="paragraph">The rest of this tab takes the first four in turn.</p>
-    <p className="paragraph">I start from what the content is and pick the element for it. The platform
-      has more elements than most pages use: a{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
-      a{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
-      an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
-      a computed result. The answer to "what is this?" is usually an element’s name.
-      Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">2014 moment</MomentLink>.</p>
-    <p className="paragraph">The element is the name. It tells the browser, a screen reader and the next developer at once
-      what the thing is, so I choose it first and make a new one only for a behavior that has no element.</p>
+    <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
     <p className="paragraph">The skeleton comes first, and this site’s is the same on every page: one header, one main
       and one footer; a nav named site, for the links that move you around the site; a section named pages and
       feedback, the rail that holds that nav and the feedback button; and, where a page has tabs, a nav named by the
@@ -75,6 +68,58 @@ export const StructurePractice: FC = () =>
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes,
       and the part on ARIA below says which and why.</p>
+    <p className="paragraph">I start from what the content is and pick the element for it. The platform
+      has more elements than most pages use: a{' '}
+    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
+      a{' '}
+    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
+      an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
+      a computed result. The answer to "what is this?" is usually an element’s name.
+      Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">2014 moment</MomentLink>.</p>
+    <p className="paragraph">The element is the name. It tells the browser, a screen reader and the next developer at once
+      what the thing is, so I choose it first and make a new one only for a behavior that has no element.</p>
+    <p className="paragraph">The platform’s elements each bring a behavior the page then does not have to write.
+      A <Mdn path="Web/HTML/Element/details">details</Mdn> opens and shuts and reports its state with a toggle
+      event. A modal <Mdn path="Web/HTML/Element/dialog">dialog</Mdn> holds focus, makes the rest of the page inert
+      behind its backdrop, and closes on Escape. A <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn> lives
+      in the top layer and closes on Escape or a click outside it. A <Mdn path="Web/HTML/Element/form">form</Mdn>{' '}
+      refuses an empty required field in the browser’s own words. An{' '}
+    <Mdn path="Web/HTML/Element/output">output</Mdn> is announced when its contents change. A{' '}
+    <Mdn path="Web/HTML/Element/fieldset">fieldset</Mdn> groups controls under its{' '}
+    <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope">scope</Mdn>{' '}
+      tells a screen reader which header a cell belongs to.{' '}
+    <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, and
+      where a browser lacks them a click handler is the fallback, as the feedback dialog does. I reach for one of
+      these before any script.</p>
+    <p className="paragraph">Three attributes carry three jobs. A data attribute attaches a behavior: data-row-grip
+      says a grip can be dragged, and the script finds grips by it. A class says how the element looks, in the
+      vocabulary the Presentation tab describes. An id locates one thing: a label’s for, a section’s aria-labelledby,
+      a fragment link. Three jobs on three attributes, so none is overloaded: no behavior hung on a class, no look
+      hung on an id.</p>
+    <p className="paragraph">The tables demo builds the same table twice, and its header cell shows all three at
+      once.</p>
+    <HeaderCellCarve/>
+    <p className="paragraph">The class list is the look. The id locates the one live table. data-drag-sortable says
+      the table can be sorted by dragging, and inside the cell data-resize-handle and data-sort-toggle sit on the
+      buttons that do those things. popovertarget names the sort menu by its id, and the menu is a menu element, a
+      popover, whose buttons close it with popovertargetaction set to hide. Every element is a real one with its
+      role, th with scope col, button, menu, li, and nothing here needs ARIA beyond a name.</p>
+    <p className="paragraph">The script attaches itself by the same attribute.</p>
+    <AttachmentCarve/>
+    <p className="paragraph">boot finds its tables with table[data-drag-sortable], builds the behavior onto each, and
+      listens for what the table reports: column-moved, row-moved and sorted, custom events on the table itself, the
+      way a platform element reports change or toggle. The page dispatches what happened to its store, and the state
+      decides what is true. That is the <Link className="signpost" to={practiceAddress('Behavior')}>Behavior
+        tab</Link>’s split, and the structure makes it possible: the element says what happened and does not decide
+      what to do about it.</p>
+    <p className="paragraph">In React the same markup is written by components, each one new element.</p>
+    <ColumnBesideCarve/>
+    <p className="paragraph">DraggableColumn writes the th and carries a column. RowGrip writes the grip button and
+      can be dragged by hand or by key. ResizeHandle writes the resize button, and SortMenu the popover menu. Each
+      renders a real element with its role and its keys and adds the one behavior the platform lacks, and both builds
+      share the state under them, so the line between the platform and the framework is the line between the markup
+      and the components. The plain build comes first here and the component that is its equivalent beside it; the
+      next part says what a component is for.</p>
     <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
       these links are for getting around; a button tells it a press will do something. The right element gives you
       that for free, with{' '}
