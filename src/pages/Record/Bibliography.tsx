@@ -126,6 +126,18 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">MDN</span>
           </li>
           <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search"><cite>The search element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress"><cite>The progress element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output"><cite>The output element</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element"><cite>The div element</cite></a>{' '}
             <span className="provenance caption">the HTML Standard, WHATWG</span>
           </li>
@@ -288,6 +300,10 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes"><cite>Pseudo-classes</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties"><cite>Using CSS custom properties</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>
           <li>

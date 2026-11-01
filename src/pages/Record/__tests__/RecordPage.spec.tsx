@@ -6,7 +6,7 @@ import {Paths} from '@pages/Paths';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {homePage} from '@pages/Home/__test_support/home';
-import {practicePage} from '@pages/Practice/__test_support/practice';
+import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 describe('the 1989 moment', () => {
@@ -1222,6 +1222,47 @@ describe('the research shelf and the Practice page', () => {
     const {unmount} = render(<TestApp at={Paths.practice}/>);
     await practicePage.opener();
     const linked = practicePage.openingSources();
+    unmount();
+
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+
+    expect(linked).not.toEqual([]);
+    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+  });
+});
+
+describe('the research shelf and the Practice tabs', () => {
+  test('should shelve every source the Structure tab links to', async () => {
+    const {unmount} = render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+    const linked = practicePage.sourcesLinked();
+    unmount();
+
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+
+    expect(linked).not.toEqual([]);
+    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+  });
+
+  test('should shelve every source the Presentation tab links to', async () => {
+    const {unmount} = render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+    const linked = practicePage.sourcesLinked();
+    unmount();
+
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+
+    expect(linked).not.toEqual([]);
+    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+  });
+
+  test('should shelve every source the Behavior tab links to', async () => {
+    const {unmount} = render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+    const linked = practicePage.sourcesLinked();
     unmount();
 
     render(<TestApp at={Paths.record}/>);
