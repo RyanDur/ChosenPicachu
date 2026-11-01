@@ -38,7 +38,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
     <Tabs label="practice" current={concernId(concern)}
       values={concernsInOrder.map(shown => ({display: shown, param: concernId(shown), to: practiceAddress(shown)}))}/>
     <section className="practice" aria-labelledby="practice-title">
-      <h2 className="practice-title sub-title" id="practice-title">how I organize it</h2>
+      <h2 className="sub-title" id="practice-title">how I organize it</h2>
       <Practice/>
     </section>
   </>;

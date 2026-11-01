@@ -59,7 +59,35 @@ export const practicePage = {
     }
     throw new Error(`no list after the paragraph opening ${opening}`);
   },
+  linksInDefinitionOf: (term: string): (string | null)[][] => {
+    const definition = within(practice()).getAllByRole('term').find(found => found.textContent === term)?.nextElementSibling;
+    if (definition instanceof HTMLElement) {
+      return within(definition).queryAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
+    }
+    throw new Error(`no definition of ${term}`);
+  },
+  quotedIn: (opening: RegExp): {words: string; address: string | null} => {
+    const holders = within(practice()).getAllByRole('listitem').concat(within(practice()).getAllByRole('paragraph'))
+      .filter(holder => opening.test(holder.textContent));
+    if (holders.length !== 1) {
+      throw new Error(`${holders.length} places opening ${opening}, not one`);
+    }
+    const quotation = within(holders[0]).getAllByRole('link').find(link => link.textContent.startsWith('“'));
+    if (!quotation) {
+      throw new Error(`no quotation in the place opening ${opening}`);
+    }
+    return {words: quotation.textContent.slice(1, -1), address: quotation.getAttribute('href')};
+  },
+  codesListedAfter: (opening: RegExp): string[] => {
+    const list = onlyParagraph(opening).nextElementSibling;
+    if (list instanceof HTMLElement) {
+      return within(list).getAllByRole('code').map(code => code.textContent);
+    }
+    throw new Error(`no list after the paragraph opening ${opening}`);
+  },
   paragraphs,
+  terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
+  definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
   paragraphAfter: (opening: RegExp): string | undefined => {
     const found = practiceParagraphs().indexOf(onlyParagraph(opening));
     return paragraphs()[found + 1];
@@ -74,15 +102,6 @@ export const practicePage = {
       .filter(link => Boolean(heading.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING))
       .filter(link => next.map(after => Boolean(after.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING)).orElse(true))
       .map(link => [link.textContent, link.getAttribute('href')]);
-  },
-  terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
-  definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
-  linksInDefinitionOf: (term: string): (string | null)[][] => {
-    const definition = within(practice()).getAllByRole('term').find(found => found.textContent === term)?.nextElementSibling;
-    if (definition instanceof HTMLElement) {
-      return within(definition).queryAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
-    }
-    throw new Error(`no definition of ${term}`);
   },
   sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
     .filter(link => not(leadsToThisSitesCode(link)))

@@ -112,7 +112,6 @@ export const Concert: FC = () =>
       case closes. Where the HTML is made is still a choice, and each answer has its costs. The principles say in what
       order the people involved count when that choice is hard: <a className="signpost"
       href="https://www.w3.org/TR/html-design-principles/">“consider
-        users over authors over implementors over specifiers over theoretical purity.”</a> The record covers
-      thirty-seven years, and the method is young; its newest answers, @scope and server components, are less than six
-      years old.</p>
+        users over authors over implementors over specifiers over theoretical purity.”</a> The record runs from
+      1989, and the method is young: its newest answers, server components and @scope, date from 2020 and 2026.</p>
   </section>;

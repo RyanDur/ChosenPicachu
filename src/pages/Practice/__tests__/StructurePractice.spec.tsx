@@ -26,16 +26,18 @@ describe('the Structure practice tab', () => {
     expect(britishSpellingsOnThePage()).toEqual([]);
   });
 
-  test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before the skeleton', async () => {
+  test('should open the Structure tab on the three rules, then who reads markup, then the five things that have to be true of it, before the skeleton', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.paragraphs().slice(0, 4)).toEqual([
-      expect.stringMatching(/^Markup is read by more than the browser/),
-      expect.stringMatching(/^So five things have to be true of the markup/),
-      expect.stringMatching(/^The rest of this tab takes each of the five in turn/),
-      expect.stringMatching(/^The skeleton comes first/)
-    ]);
+    expect(outOfReadingOrder([
+      practicePage.partHeading('What organizing markup has to solve'),
+      practicePage.paragraph(/^I choose the element for what the thing is/),
+      practicePage.paragraph(/^They hold because the markup is read by more than the browser/),
+      practicePage.paragraph(/^So five things have to be true of the markup/),
+      practicePage.paragraph(/^The rest of this tab takes each of the five in turn/),
+      practicePage.partHeading('The skeleton, and a name where a landmark repeats')
+    ])).toEqual([]);
   });
 
   test('should head the Structure tab’s parts, each title stating the part’s answer', async () => {
@@ -156,25 +158,32 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
+  test('should open the styles-off test on what the test is, then the four gates that run it, then the rule the review holds', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(outOfReadingOrder([
+      practicePage.partHeading('The styles-off test'),
+      practicePage.paragraph(/^The test is to read the page with the styles turned off/),
+      practicePage.paragraph(/^The styles-off test is not read by eye/),
+      practicePage.paragraph(/^The rule the review holds is AGENTS.md’s/)
+    ])).toEqual([]);
+  });
+
   test('should list the four gates that hold the markup: axe, html-validate, outOfReadingOrder and stylelint', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.itemsListedAfter(/^The styles-off test is not read by eye/)).toEqual([
-      expect.stringMatching(/^axe, the accessibility checker, runs on every page/),
-      expect.stringMatching(/^html-validate checks every page as the browser has rendered it/),
-      expect.stringMatching(/^outOfReadingOrder takes a list of elements/),
-      expect.stringMatching(/^stylelint refuses a selector on an obsolete element/)
-    ]);
+    expect(practicePage.codesListedAfter(/^The styles-off test is not read by eye/)).toEqual(['axe', 'html-validate', 'outOfReadingOrder', 'stylelint']);
   });
 
   test('should quote html-validate’s loosened id rule from the accessibility journey, word for word', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const [[quote, address]] = practicePage.linksInItem(/^html-validate checks/);
+    const {words, address} = practicePage.quotedIn(/^html-validate checks/);
 
-    expect(a11yJourney).toContain((quote ?? '').slice(1, -1));
+    expect(a11yJourney).toContain(words);
     expect(address).toBe(fileInRepository('e2e/a11y.e2e.ts'));
   });
 
@@ -182,9 +191,9 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const [[quote, address]] = practicePage.linksIn(/^The rule the review holds is that every test finds what a reader finds/);
+    const {words, address} = practicePage.quotedIn(/^The rule the review holds is AGENTS.md’s/);
 
-    expect(agents).toContain((quote ?? '').slice(1, -1));
+    expect(agents).toContain(words);
     expect(address).toBe(fileInRepository('AGENTS.md'));
   });
 
@@ -199,9 +208,9 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const [[quote, address]] = practicePage.linksInItem(/^stylelint refuses a selector/);
+    const {words, address} = practicePage.quotedIn(/^stylelint refuses a selector/);
 
-    expect(stylelintConfig).toContain((quote ?? '').slice(1, -1));
+    expect(stylelintConfig).toContain(words);
     expect(address).toBe(fileInRepository('stylelint.config.js'));
   });
 
@@ -290,7 +299,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^Markup is read by more than the browser/)).toEqual([
+    expect(practicePage.linksIn(/^They hold because the markup is read by more than the browser/)).toEqual([
       ['WebAIM’s tenth survey', 'https://webaim.org/projects/screenreadersurvey10/'],
       ['“navigate through the headings on the page”', 'https://webaim.org/projects/screenreadersurvey10/']
     ]);
@@ -302,7 +311,7 @@ describe('the Structure practice tab', () => {
 
     expect(outOfReadingOrder([
       practicePage.paragraph(/^The skeleton comes first/),
-      practicePage.paragraph(/^Landmarks are the page’s table of contents/),
+      practicePage.paragraph(/^Landmarks are what a screen reader lists and jumps to/),
       practicePage.figure(tableOfContents),
       practicePage.paragraph(/^One region on every page is a role and not an element/)
     ])).toEqual([]);
@@ -312,7 +321,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^Landmarks are the page’s table of contents/)).toEqual([
+    expect(practicePage.linksIn(/^Landmarks are what a screen reader lists and jumps to/)).toEqual([
       ['Authoring Practices', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['“If a specific landmark role is used more than once on a page, provide each instance of that landmark with a unique label.”', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['2004 moment', momentAddress('browsersTakePen')]

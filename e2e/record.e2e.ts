@@ -47,7 +47,7 @@ test('a keyboard reader who follows a line in Structure\'s story to a moment ins
   await expect(moment).toBeFocused();
 });
 
-test('a reader following the Structure tab\'s link to the concert lands on its paragraph about custom elements', async ({page}) => {
+test('a reader following the Structure tab\'s link to the concert lands on its paragraph about custom elements, and one Tab carries on to that paragraph\'s first link', async ({page}) => {
   await page.goto('practice/structure/');
 
   await practicePage(page).practice.getByRole('link', {name: 'concert', exact: true}).click();

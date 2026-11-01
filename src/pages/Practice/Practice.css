@@ -6,14 +6,11 @@
   padding: var(--base-x-5) var(--page-inset);
 
   .paragraph {
-    margin: 0;
     text-wrap: pretty;
   }
+}
 
-  .practice-title {
-    margin: 0;
-  }
-
+.practice {
   .practice-list {
     display: grid;
     gap: var(--base-x-0_5);
