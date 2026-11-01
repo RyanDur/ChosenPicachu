@@ -26,9 +26,9 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
       <p className="paragraph">Code is read more often than it is written, and the reader is usually someone who was not
         there, including me when I come back to it. So I organize for the reader: the code says what it means. An element
         says what the thing is. When no element does, I make one and name it for the one behavior it adds. A class says
-        what the element is, what it needs, or what is true right now, and the sheet says what that means today. An event
+        what the element is, what it needs, or what is true right now, and the style sheet says what that means today. An event
         says what happened, in the past tense. A type says what is true and refuses what cannot be. A condition reads as a
-        sentence, <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">empty</code>, the same words the sheet uses
+        sentence, <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">empty</code>, the same words the style sheet uses
         in <code className="monospaced">:has()</code>, <code className="monospaced">:not()</code> and <code className="monospaced">:empty</code>. Files sit by feature too, so a change to the
         gallery is in the gallery. <a className="signpost" href={appContinuum}>The Application Continuum</a>, a guide
         to organizing an application as it grows, lays files out that way. It ranks the work

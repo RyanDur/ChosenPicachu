@@ -38,9 +38,9 @@ describe('why the popover wins', () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await explanation.part('Why the popover wins');
-    const run = explanation.saying(part, /The menu’s own sheet places it/);
+    const run = explanation.saying(part, /The menu’s own style sheet places it/);
 
-    expect(run).toHaveTextContent(/screen\. In the sheet the placement sits under &\[popover], which reads as a menu that is also a popover\./);
+    expect(run).toHaveTextContent(/screen\. In the style sheet the placement sits under &\[popover], which reads as a menu that is also a popover\./);
     expect(run).toHaveTextContent(/A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves that menu out\. Card one’s list in What else forms a stacking context names its own anchor\./);
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
@@ -142,12 +142,12 @@ describe('why the popover wins', () => {
     expect(runs.indexOf(explanation.runTelling(part, /The button names its menu with popovertarget/))).toBeLessThan(scriptsAt);
   });
 
-  test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {
+  test('should show the site’s menu placement and its fallback beside the run that says how the style sheet places it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await explanation.part('Why the popover wins');
 
-    expect(explanation.everyCodeBeside(part, /The menu’s own sheet places it/).join()).toMatch(/\.menu \{[^]*position-area: block-end span-inline-start[^]*@supports not \(position-area: block-end\)/);
+    expect(explanation.everyCodeBeside(part, /The menu’s own style sheet places it/).join()).toMatch(/\.menu \{[^]*position-area: block-end span-inline-start[^]*@supports not \(position-area: block-end\)/);
   });
 
   test('should draw the top layer above the page beside the run that says why nothing covers it', async () => {

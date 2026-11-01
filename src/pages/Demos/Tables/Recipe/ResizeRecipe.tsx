@@ -183,8 +183,8 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           <Says>Pixel widths are the first record you reach for, and every entry in it is wrong as soon as the window
             changes size: nothing keeps the sum equal to the width.</Says>
           <Says>After a trade the header wears <code className="monospaced">shared</code>. A shared class, on this site, is a look that lives
-            in the site’s shared sheet and that an element wears by name; <code className="monospaced">shared</code> is not one of those. It
-            is a class of the table’s own sheet.</Says>
+            in the site’s shared style sheet and that an element wears by name; <code className="monospaced">shared</code> is not one of those. It
+            is a class of the table’s own style sheet.</Says>
           <Says>It makes the rule that reads the header’s share match that header. The table itself wears <code className="monospaced">apportioned</code>, a class it has from
             the start; under it a cell clips its text to its column, and a header that wears <code className="monospaced">shared</code> takes its
             width from its share. The header’s share is written as a custom property, <code className="monospaced">--share</code>, one of
@@ -218,7 +218,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             nothing else. Each control pins itself to the end edge, and a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the
             cell pads for what it holds: more room when a menu is present, less when only the
             handle is. It has a cost: the padding and the controls’ offsets are
-            two numbers that must agree, so both live in the one header sheet and nowhere else.
+            two numbers that must agree, so both live in the one header style sheet and nowhere else.
             The column names itself with <code className="monospaced">aria-label</code>, since the title is bare text with no element
             to point at.</Says>
           {edgeMarkup[world]}

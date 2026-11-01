@@ -271,7 +271,7 @@ describe('the native drag sort tutorial’s words', () => {
     const paragraphs = explanation.paragraphsIn(arm).map(told => told.replace(/\s+/g, ' '));
 
     expect(paragraphs.findIndex(told => told.startsWith('The li, the list item that is the card'))).toBe(paragraphs.findIndex(told => told.startsWith('Then the browser fires dragstart')) + 1);
-    expect(paragraphs).toContain('The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the card’s look, not its drag.');
+    expect(paragraphs).toContain('The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared style sheet and that an element wears by name: soft-cornered, field, hairline-outline and handle-raised. They are the card’s look, not its drag.');
   });
 
   test('should leave the quarter out of the lazy pace, where nothing moves until the release', async () => {

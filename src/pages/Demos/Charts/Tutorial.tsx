@@ -197,11 +197,11 @@ const CandlesStory: FC = () =>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. A candle
             that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
-            in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
+            in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps what is not a look:
             the chart’s size, the wick’s hairline width and how the shapes move.</Says>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
-            so the shared sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
+            so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -308,7 +308,7 @@ const PressureStory: FC = () =>
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
             below. The bought bars wear buy-side and the sold bars sell-side. A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             says, is a name a stylesheet’s rules pick out. These two are shared classes, looks that live in the site’s
-            shared sheet.</Says>
+            shared style sheet.</Says>
           <Says>A side class sets a side’s colors as custom properties, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
             values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
@@ -384,7 +384,7 @@ const PieStory: FC = () =>
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
           <Says>The markup passes each number to the stylesheet as a custom property, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             explains: a value set by name on the element,
-            such as <code className="monospaced">--turn</code>, and read back in the sheet with <code className="monospaced">var()</code>. The sheet declares each one
+            such as <code className="monospaced">--turn</code>, and read back in the style sheet with <code className="monospaced">var()</code>. The style sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
             swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits
             unturned at the center.</Says>

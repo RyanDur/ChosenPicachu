@@ -67,7 +67,7 @@ const SettleStep: FC = () => (
         height to a measured number of pixels. The number travels in a custom property
         named <code className="monospaced">--news-block-size</code>.</Says>
       <Says>The stylesheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that starts with @ and sets
-        something up for the sheet without picking out elements. This one gives a custom property a type and a starting
+        something up for the style sheet without picking out elements. This one gives a custom property a type and a starting
         value: a length or auto, starting as auto, so a message that has not been measured keeps its own height. A
         rewrap then changes one number to another, and the transition on <code className="monospaced">block-size</code>, the CSS name for
         height on this page, runs between them.</Says>

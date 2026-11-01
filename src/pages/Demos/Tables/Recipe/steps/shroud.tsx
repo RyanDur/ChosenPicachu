@@ -10,7 +10,7 @@ import {Line} from '@pages/Demos/Recipe/Snippet';
 import {whatACustomPropertyIs} from '../definitions';
 
 const theSheetDeclaresSeatAndDrift = <>
-  The sheet declares the seat and the drift with <code className="monospaced">@property</code>, a rule that gives a custom property a type
+  The style sheet declares the seat and the drift with <code className="monospaced">@property</code>, a rule that gives a custom property a type
   and a starting value: each is a length that starts at 0px
 </>;
 
@@ -41,34 +41,34 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         changes, the gap moves by the crossed neighbor’s width, and the seat number changes by that width the
         other way, so the carried
         cells stay under the pointer. The stylesheet adds the two and does
-        the moving, and only the hide sheet adds them: the same cells wear the same numbers
+        the moving, and only the hide style sheet adds them: the same cells wear the same numbers
         under keep and never leave their place. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
         yet stays in its place.</Says>
       {world === 'react'
         ? <>
           <Says>There is no flag anywhere in the table: each cell asks the selectors whether its
             column or its row is carried, and where its seat and its drift are, and sets the class
-            and the properties from the answer. The table wears the word hide, and the sheet reads
+            and the properties from the answer. The table wears the word hide, and the style sheet reads
             it.</Says>
-          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared style sheet that an
             element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a
             cell in motion is opaque.</Says>
-          <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
+          <Says>The style sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
-            given a <code className="monospaced">position</code> other than static, so the sheet gives the carried
+            given a <code className="monospaced">position</code> other than static, so the style sheet gives the carried
             cell <code className="monospaced">position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
         </>
         : <>
           <Says>There is no flag anywhere in the build: when the drag in the store changes, the
             reconcile adds the class and the properties to the carried cells, and removes
-            them when the drag is gone. The table wears the word hide, and the sheet reads it.</Says>
-          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared sheet that an
+            them when the drag is gone. The table wears the word hide, and the style sheet reads it.</Says>
+          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared style sheet that an
             element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a
             cell in motion is opaque.</Says>
-          <Says>The sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
+          <Says>The style sheet also raises the carried cells with a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1.
             z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned,
-            given a <code className="monospaced">position</code> other than static, so the sheet gives the carried
+            given a <code className="monospaced">position</code> other than static, so the style sheet gives the carried
             cell <code className="monospaced">position: relative</code> as well. Raised, the carried cells pass over whatever they cross,
             and the paper keeps what is beneath from showing through.</Says>
           <Says>Every motion class changes through <code className="monospaced">changeMotion</code>, which adds or removes the class and
@@ -101,7 +101,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
           ...unit(cssSource, '.sortable .carried {'), gap,
           ...unit(cssSource, '.sortable.hide .carried {'), gap,
           ...unit(surfaceCss, '.paper-in-motion {'),
-          aside('/* the real cells move with the pointer; their layout box stays as the gap; the sheet adds seat and drift */')
+          aside('/* the real cells move with the pointer; their layout box stays as the gap; the style sheet adds seat and drift */')
         ]}/>
       </Codes>
     </Reveal>
@@ -112,7 +112,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the stylesheet’s decision, not a second table: the
         carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and the keep
-        sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
+        style sheet simply never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
     </Words>
     <Reveal>
       {world === 'react'
@@ -120,12 +120,12 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
           <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
             What follows the hand is the order: the neighbors move around it as it is struck, or
             at the drop. The table dispatches the same drift and the cells wear the same numbers;
-            the table wears the word keep, and no rule in the sheet translates a carried cell
+            the table wears the word keep, and no rule in the style sheet translates a carried cell
             under it.</Says>
           <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared
-            sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
+            style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
-          <Says>Under keep the carried cells stay put, and the sheet raises them with
+          <Says>Under keep the carried cells stay put, and the style sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
             and a table cell takes one only once it is positioned, given a <code className="monospaced">position</code> other than static,
             which is why the carried cell is also <code className="monospaced">position: relative</code>. So the
@@ -136,11 +136,11 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
           <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
             What follows the hand is the order: the neighbors move around it as it is struck, or
             at the drop. The build dispatches the same drift and marks the same cells; the table
-            wears the word keep, and no rule in the sheet translates a carried cell under it.</Says>
+            wears the word keep, and no rule in the style sheet translates a carried cell under it.</Says>
           <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s shared
-            sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
+            style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in
             the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
-          <Says>Under keep the carried cells stay put, and the sheet raises them with
+          <Says>Under keep the carried cells stay put, and the style sheet raises them with
             a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
             and a table cell takes one only once it is positioned, given a <code className="monospaced">position</code> other than static,
             which is why the carried cell is also <code className="monospaced">position: relative</code>. So the

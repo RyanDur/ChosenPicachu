@@ -86,7 +86,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize', sentence: 'When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a fingertip-wide resize handle and sort toggle, and they need room. So the minimum is 86rem at every width, and the columns take shares cut for that wider table, which give vwap and change more of it.'},
     {choice: 'tut=resize', sentence: 'In a browser window 600px wide or less the minimum drops to 64rem, unless the pointer is coarse.'},
     {choice: 'tut=resize', sentence: 'So the cell holds a title, a menu where the page writes one, a handle, and nothing else.'},
-    {choice: 'tut=resize', sentence: 'It has a cost: the padding and the controls’ offsets are two numbers that must agree, so both live in the one header sheet and nowhere else.'},
+    {choice: 'tut=resize', sentence: 'It has a cost: the padding and the controls’ offsets are two numbers that must agree, so both live in the one header style sheet and nowhere else.'},
     {choice: 'tut=resize', sentence: 'The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.'},
     {choice: 'tut=resize', sentence: 'and a :has() rule on the cell pads for what it holds: more room when a menu is present, less when only the handle is.'},
     {choice: 'tut=resize', sentence: 'of a hundred, created by measuring the rendered headers when a handle is first pressed or focused; until then, the stylesheet owns the widths and no ledger exists.'},
@@ -134,7 +134,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
     {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook. A component is a function that writes a piece of the page, as the z-index tab says. A hook is a function a component calls while it renders. It calls one to keep something across renders, or to read something kept outside React. The page calls the hook with its columns, its rows and the two choices.'},
     {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.'},
-    {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behavior’s own sheets read them.'},
+    {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behavior’s own style sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
     {choice: 'world=react', sentence: ', and the headers, rows, grips, handles and menus read the hook’s answer from it.'},
     {choice: 'world=react', sentence: 'useDragSortable creates the table’s own store once, empty, and every part inside DragSortable, the provider, reads and writes through that one.'},
@@ -684,7 +684,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Carry the real thing[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
     expect(recipe).toHaveTextContent('Every move dispatches the pointer. Two selectors turn the drag into two numbers, and every carried cell wears them as custom properties: values set by name on the cell and read back in the stylesheet with var(). The first is the seat, where the grab box sits against where the column rests in the order as it stands now.');
-    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its place.');
+    expect(recipe).toHaveTextContent('The style sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px, so a carried cell with no numbers on it yet stays in its place.');
   });
 
   test('the keep step declares the same four numbers, and says what @property is, for a reader who keeps the origin', async () => {
@@ -696,9 +696,9 @@ describe('the tables demo', () => {
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
-    expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep sheet simply never adds them up.');
+    expect(recipe).toHaveTextContent('the carried cells still wear their seat and their drift as custom properties, values set by name on the cell and read back in the stylesheet with var(), and the keep style sheet simply never adds them up.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*@property --seat-x \{[^]*@property --seat-y \{[^]*@property --drift-x \{[^]*@property --drift-y \{[^]*\.sortable\.hide \.carried \{/);
-    expect(recipe).toHaveTextContent('The sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
+    expect(recipe).toHaveTextContent('The style sheet declares the seat and the drift with @property, a rule that gives a custom property a type and a starting value: each is a length that starts at 0px.');
     expect(recipe).not.toHaveTextContent(/stays in its seat/);
   });
 
@@ -1231,8 +1231,8 @@ describe('the classes the table wears, as its recipes tell them', () => {
   });
 
   test.each([
-    ['react', /^Item gives its button/, 'Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
-    ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, looks that live in the site’s shared sheet and that an element wears by name, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
+    ['react', /^Item gives its button/, 'Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet and that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.', /<Menu [^>]*className="/],
+    ['vanilla', /^In the vanilla world the buttons/, 'In the vanilla world the buttons carry the same shared classes Item gives them in React, looks that live in the site’s shared style sheet and that an element wears by name, and the menu’s own classes are written on it by hand, as the sample shows.', /<menu [^>]*class="/]
   ])('should say who gives the menu its classes, beside a sample that shows them, in the %s world', async (world, opening, sentence, classedMenu) => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables', `?tut=menu&world=${world}`)} feed={feed}/>);
@@ -1269,7 +1269,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
 
-    expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own sheet.');
+    expect(recipe).toHaveTextContent('After a trade the header wears shared. A shared class, on this site, is a look that lives in the site’s shared style sheet and that an element wears by name; shared is not one of those. It is a class of the table’s own style sheet.');
     expect(recipe).toHaveTextContent('It makes the rule that reads the header’s share match that header. The table itself wears apportioned, a class it has from the start; under it a cell clips its text to its column, and a header that wears shared takes its width from its share.');
   });
 
@@ -1318,7 +1318,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque.');
     expect(recipe).toHaveTextContent(/\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1328,13 +1328,13 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
-    expect(recipe).toHaveTextContent('The sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the sheet gives the carried cell position: relative as well. Raised, the carried cells pass over whatever they cross, and the paper keeps what is beneath from showing through.');
+    expect(recipe).toHaveTextContent('The style sheet also raises the carried cells with a z-index of 1. z-index orders boxes that overlap, the higher on top. A table cell takes one only once it is positioned, given a position other than static, so the style sheet gives the carried cell position: relative as well. Raised, the carried cells pass over whatever they cross, and the paper keeps what is beneath from showing through.');
     expect(recipe).toHaveTextContent(/\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
-    expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbors slide beneath the carried cells, and the paper keeps either from showing through the other.');
+    expect(recipe).toHaveTextContent('Under keep the carried cells stay put, and the style sheet raises them with a z-index of 1: z-index orders boxes that overlap, the higher on top, and a table cell takes one only once it is positioned, given a position other than static, which is why the carried cell is also position: relative. So the neighbors slide beneath the carried cells, and the paper keeps either from showing through the other.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable \.carried \{\s*position: relative;\s*z-index: 1;\s*\}/);
   });
 
@@ -1347,7 +1347,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await tablesTab.chooseInRecipe('drag sort', 'Keep');
 
-    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
+    expect(recipe).toHaveTextContent('A cell wears paper-in-motion, a shared class, a look from the site’s shared style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.');
     expect(recipe).toHaveTextContent(/Keep the origin in place and let only the order move[^]*\.sortable\.hide \.carried \{[^]*\.paper-in-motion \{/);
   });
 
@@ -1357,7 +1357,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
-    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only. A shared class is a look that lives in the site’s shared sheet and that an element wears by name. focus-ringed is one: the site’s ring, which every movable column header and every grip wears.');
+    expect(recipe).toHaveTextContent('The focus-visible ring draws for the keyboard only. A shared class is a look that lives in the site’s shared style sheet and that an element wears by name. focus-ringed is one: the site’s ring, which every movable column header and every grip wears.');
     expect(recipe).toHaveTextContent(/\.sortable \.header-cell \{[^]*\.focus-ringed \{/);
   });
 });

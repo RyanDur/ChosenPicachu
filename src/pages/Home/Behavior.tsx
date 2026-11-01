@@ -12,15 +12,15 @@ export const Behavior: FC = () =>
       consisting of pages that acted more like applications.
     </Quotation>
     <p className="paragraph">JavaScript says how things respond, the job Brendan Eich built it for. It does what no element and no rule
-      in the sheet can do on its own: sort a table by the column a reader picks, let a reader drag rows into a new
+      in the style sheet can do on its own: sort a table by the column a reader picks, let a reader drag rows into a new
       order, draw a chart from prices that arrive while the page is open. It can also fetch new information and
       put it into the page without loading a new one, the way suggestions appear under a search box as someone
       types. Some of what script once had to do, the other two now do: a details element opens and shuts a fold, a
-      popover closes itself when the reader presses Escape, and the sheet slides a menu into view.</p>
+      popover closes itself when the reader presses Escape, and the style sheet slides a menu into view.</p>
     <p className="paragraph">JavaScript handles anything that changes while the page is open, and that includes the other two languages.
       It can create and remove HTML elements, and add, change and remove CSS. What it makes still does the same
       jobs. A button a script renders is still a button element, with the keys and the role that come with it, and
-      its look still comes from the sheet. When script writes the page, each job stays where it belongs. What
+      its look still comes from the style sheet. When script writes the page, each job stays where it belongs. What
       changes is where and when the HTML is made.</p>
     <p className="paragraph">The popular frameworks are built to keep that in view. Vue calls its components <a className="signpost"
       href="https://vuejs.org/guide/scaling-up/sfc">“a natural extension of the classic trio of HTML, CSS and

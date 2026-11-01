@@ -107,10 +107,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Says>In the React world the sample is built from Menu, Entry and Item. Each is a component, a function that
             writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and each writes one element.</Says>
           {world === 'react'
-            ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
+            ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet and
               that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>
             : <Says>In the vanilla world the buttons carry the same shared classes Item gives them in React, looks
-              that live in the site’s shared sheet and that an element wears by name, and the menu’s own classes are
+              that live in the site’s shared style sheet and that an element wears by name, and the menu’s own classes are
               written on it by hand, as the sample shows.</Says>}
           <Codes>
             {world === 'react'

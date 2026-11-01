@@ -62,7 +62,7 @@ const suppliedBy: Record<World, ReactNode> = {
       subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a
       move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.</Says>
     <Says>The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the
-      classes the table wears, since the behavior’s own sheets read them.</Says>
+      classes the table wears, since the behavior’s own style sheets read them.</Says>
     <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
       inside it one value without adding an element to the page, and the headers, rows, grips, handles and menus read
       the hook’s answer from it.</Says>

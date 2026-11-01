@@ -480,7 +480,7 @@ describe('the banner tutorial’s second story', () => {
 
     expect(steps[4]).toHaveTextContent(/@property --news-block-size \{[^]*initial-value: auto;[^]*block-size: var\(--news-block-size\)/);
     expect(explanation.saying(steps[4], /a browser object that calls back when an element changes size/)).toHaveTextContent(/The number travels in a custom property named --news-block-size\.$/);
-    expect(explanation.saying(steps[4], /^The stylesheet declares it with/)).toHaveTextContent('The stylesheet declares it with @property, an at-rule: a rule that starts with @ and sets something up for the sheet without picking out elements. This one gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
+    expect(explanation.saying(steps[4], /^The stylesheet declares it with/)).toHaveTextContent('The stylesheet declares it with @property, an at-rule: a rule that starts with @ and sets something up for the style sheet without picking out elements. This one gives a custom property a type and a starting value: a length or auto, starting as auto, so a message that has not been measured keeps its own height.');
     expect(explanation.saying(steps[4], /^Before it measures/)).toHaveTextContent(/so a message measured with the old height still on it could only grow\.$/);
   });
 
@@ -603,7 +603,7 @@ describe('the z-index tab’s own words', () => {
     'To build this banner yourself, go to the tutorial below. It opens at the step where the panel becomes a popover and so is shown in the top layer.',
     'The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step.',
     'A banner is read at a glance, by someone busy with something else.',
-    'The menu’s own sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centers the menu on the screen.'
+    'The menu’s own style sheet places it with position-area, below the button that opened it or above it when there is no room below, and where a browser has no position-area, it centers the menu on the screen.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
     render(<TestApp at={demosAt('z-index')}/>);
 

@@ -15,7 +15,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag
         beginning, and its handler sets <code className="monospaced">effectAllowed</code> to move: this drag moves the card, it does not copy or link it.</Says>
       <Says>The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared
-        sheet and that an element wears by name: <code className="monospaced">soft-cornered</code>, <code className="monospaced">field</code>, <code className="monospaced">hairline-outline</code> and{' '}
+        style sheet and that an element wears by name: <code className="monospaced">soft-cornered</code>, <code className="monospaced">field</code>, <code className="monospaced">hairline-outline</code> and{' '}
       <code className="monospaced">handle-raised</code>. They are the
         card’s look, not its drag.</Says>
     </Words>

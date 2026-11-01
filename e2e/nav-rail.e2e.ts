@@ -12,7 +12,7 @@ test.describe('a 13-inch iPad held upright', () => {
 });
 
 for (const {size, device} of [{size: 'a phone', device: iPhone}, {size: 'a tablet', device: iPadUpright}, {size: 'a desktop', device: desktop}]) {
-  test(`on ${size}, the site nav and Feedback show inside the pages and feedback rail under the real sheet`, async ({browser}) => {
+  test(`on ${size}, the site nav and Feedback show inside the pages and feedback rail under the real style sheet`, async ({browser}) => {
     const context = await browser.newContext(device);
     const page = await context.newPage();
     await page.goto('');

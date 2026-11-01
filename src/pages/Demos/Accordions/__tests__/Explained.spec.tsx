@@ -1237,7 +1237,7 @@ describe('the known-height build’s bars', () => {
     ])).toEqual([]);
   });
 
-  test('should show the arrow’s classes in the order its run names them: the sheet’s rules, the corner, then the turns', async () => {
+  test('should show the arrow’s classes in the order its run names them: the style sheet’s rules, the corner, then the turns', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const oldWay = await explanation.part(parts[0]);
