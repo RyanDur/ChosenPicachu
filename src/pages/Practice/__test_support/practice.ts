@@ -1,4 +1,4 @@
-import {screen, within} from '@testing-library/react';
+import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {paragraphOpening} from '@__test_support/paragraph';
@@ -8,6 +8,9 @@ const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'
 
 const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
+
+const drawnTexts = (figure: string): HTMLElement[] =>
+  within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption'});
 
 export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
 
@@ -30,11 +33,10 @@ export const practicePage = {
   paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
-  drawingsSeenIn: (figure: string): HTMLElement[] =>
-    within(within(practice()).getByRole('figure', {name: figure})).queryAllByRole('img'),
-  drawnIn: (figure: string): string[] =>
-    within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption'})
-      .map(text => text.textContent),
+  drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
+    .filter(text => !isInaccessible(text))
+    .map(text => text.textContent),
+  drawnIn: (figure: string): string[] => drawnTexts(figure).map(text => text.textContent),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
     .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))
