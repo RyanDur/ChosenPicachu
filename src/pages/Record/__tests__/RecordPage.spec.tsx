@@ -820,6 +820,15 @@ describe('the record', () => {
     expect(recordPage.shelvedAs('Resilient Web Design')).toHaveTextContent('Jeremy Keith, 2016');
   });
 
+  test.each([
+    ['CSS Utility Classes and ‘Separation of Concerns’', 'Adam Wathan, 2017'],
+    ['BEM', 'Yandex, undated'],
+    ['Utility-First Fundamentals', 'Tailwind CSS documentation, version 3']
+  ])('should shelve %s on the Presentation shelf, as %s', (work, provenance) => {
+    expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance);
+    expect(recordPage.shelfHolding(work)).toBe('Presentation');
+  });
+
   test('should shelve the Application Continuum on the Behavior shelf, undated, as its page gives no date', () => {
     expect(recordPage.shelvedAs('The Application Continuum')).toHaveTextContent('appcontinuum.io, undated');
     expect(recordPage.shelfHolding('The Application Continuum')).toBe('Behavior');

@@ -10,6 +10,7 @@ const ownLines: Record<string, string[]> = {
   '/src/pages/Users/UserInformation/Address/Address.css': ['456px'],
   '/src/components/PillGlider/PillGlider.css': ['390px'],
   '/src/pages/Demos/Charts/Workspace.css': ['870px'],
+  '/src/pages/Practice/ClassList.css': ['860px'],
   '/src/pages/Demos/Runs.css': ['92ch']
 };
 

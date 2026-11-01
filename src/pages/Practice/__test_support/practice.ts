@@ -28,6 +28,12 @@ export const practicePage = {
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
   paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
+  figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
+  drawingsIn: (figure: string, title: string): {classes: string[]; words: string[]}[] =>
+    within(within(practice()).getByRole('figure', {name: figure})).getAllByRole('img', {name: title}).map(drawing => ({
+      classes: within(drawing).getAllByText(/^(cell header-cell|muted-rule-after muted-bar-below focus-ringed|carried)$/).map(run => run.textContent),
+      words: within(drawing).getAllByText(/^(nouns|needs|states)$/).map(word => word.textContent)
+    })),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
     .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))

@@ -5,6 +5,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {britishSpellingsOnThePage} from '@__test_support/spelling';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const appContinuum = 'https://www.appcontinuum.io/';
 
@@ -167,30 +168,69 @@ describe('the practice page', () => {
     expect(practicePage.paragraph(/The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
-  test('the presentation tab tells how I organize presentation', async () => {
+  test('should tell presentation in its paragraphs, in order, from the two kinds of sheet to the test', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.heading()).toBeVisible();
-    expect(practicePage.link('custom properties'))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(practicePage.paragraph(/Element selectors appear only in the reset\. There is no utility scale: lifted says why a style is there, and mt-4 says only what it does\. Markup full of utilities is the look written back into the structure\./)).toBeInTheDocument();
-    expect(practicePage.paragraph(/Carried and settling use the same rules for a column and a row; only the lengths handed in differ\. Shoved has a rule per direction: two across for columns, two down for rows\./)).toBeInTheDocument();
-    expect(practicePage.paragraph(/^Constants live in the stylesheet/))
-      .toHaveTextContent(/Only values the code works out at runtime are written inline, mostly as custom properties the sheet already reads: a measured height, a position after a drag, the direction of a slide\./);
-    expect(practicePage.paragraph(/^Constants live in the stylesheet/))
-      .toHaveTextContent(/Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS\./);
-    expect(practicePage.paragraph(/^The test is to read a class list on its own/))
-      .toHaveTextContent(/This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list\.$/);
-    expect(practicePage.paragraph(/Element selectors appear only in the reset/))
-      .toHaveTextContent(/The separation is the 1994 draft’s, and the Zen Garden in the 2003 moment shows what it is for\./);
-    expect(practicePage.paragraph(/reads like a sentence/)).toBeInTheDocument();
-    expect(practicePage.paragraph(/a pile of overrides/)).toBeInTheDocument();
-    expect(practicePage.paragraph(/I can move a checkbox off screen, where a screen reader still reads it and no one sees it\. Its label then carries the design, and the checked state changes it\./)).toBeInTheDocument();
-    expect(practicePage.link('prefers-reduced-motion'))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(practicePage.link('appearance: base-select'))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(practicePage.paragraphs()).toEqual([
+      'I write CSS in two kinds of sheet. A component’s sheet holds its structure, the grid and placement of that one component, named for it and kept beside it. The site’s shared sheets hold the looks every component draws on, as a vocabulary of small classes: lifted, padded, rounded-corners, muted-ink, attentive. A class like that is a utility: one look, under one name, that any element can wear. An element is dressed by naming its needs, and no new rule is written. Element selectors appear only in the reset. The separation is the 1994 draft’s.',
+      'A class is a name for what the element is, what it needs or what is true right now; the value it stands for lives in the sheet, so the name still fits when the value changes.',
+      'Utilities are where I agree with Adam Wathan, who made Tailwind: compose a look from a shared set of pieces rather than write it again, and choose every value from a constrained set, so the design stays consistent as the site grows. Where I part from Tailwind is what a utility is named for, and Tailwind states its side plainly: “You aren’t wasting energy inventing class names”. A name is a cost, so stop paying it, and the CSS stops growing. I think the energy is not wasted; it is the writer paying once what every reader would otherwise pay each time. Tailwind’s shadow-md and p-4 name the value, so a reader who knows the system sees what the element looks like, and a change of design is a change to every element. Mine name the need: lifted says why the style is there, and the sheet says what lifted means today, through a token, a named value such as --light-box-shadow that every rule reads instead of writing the number. Change the token and every lifted element follows; the markup never knew the number. That keeps the sheet restyleable, which is what the Zen Garden in the 2003 moment showed the separation is for, and it keeps the constraint where Wathan wants it, in one place.',
+      'BEM, Yandex’s method, sits between the two. It divides a user interface into independent blocks, each with its own sheet, and names every part and every variant through its block: card__title, card_lifted in Yandex’s own spelling, card--lifted as most teams write it. I keep the block and its sheet, and the flat specificity that comes with one class per rule. What I give up is the scoping of looks. In BEM, lifted on a card and lifted on a menu are two modifiers and two rules, so nothing is shared by accident and the same look is written twice. Mine is one word any block can wear. BEM also has no separate idea of a state: --open and --large are both modifiers. I split them, because the platform already names most states, so :hover needs no class where card--hovered does. BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up restyling. I take both, and pay with a vocabulary that has to be kept, and a lint rule that holds it.',
+      'A class list reads left to right: nouns, then needs, then states.',
+      'The nouns say what the element is: cell and header-cell name a part of the table, and the table’s own sheet, kept beside it, says how that part is laid out. The needs say what the element asks of the design: muted-bar-below and focus-ringed are words from the shared sheets, each resolved through a token, so the sheet decides what a muted bar or a focus ring is today and every element that asks for one follows. The states say what is true right now. The platform already names most of them, such as :hover, :focus, invalid and checked, so the sheet uses those pseudo-classes and no class is written. I add a state name only where the platform has no word: carried for the column being dragged, settling for the one sliding back into place, shoved for a neighbor pushed aside. One sheet, the table’s, says what each does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved has a rule per direction: two across for columns, two down for rows.',
+      'Presentation has duties of its own. Motion is a preference the reader can set, so the sheet checks prefers-reduced-motion before it animates. Grid and flex can change the order the eye sees without changing the order a keyboard moves through, so the HTML keeps the meaningful sequence and the sheet only changes the picture.',
+      'Workarounds go away as the platform catches up. I can move a checkbox off screen, where a screen reader still reads it and no one sees it. Its label then carries the design, and the checked state changes it. Select options had no such way round, and now they need none: they can be styled with appearance: base-select in Chromium, and a browser without it will “fall back to a classic select experience”. That is the record’s pattern since the 1996 moment: a workaround, and then the platform.',
+      'Constants live in the sheet, as tokens. Only values the code works out at runtime are written inline, mostly as custom properties the sheet already reads: a measured height, a position after a drag, the direction of a slide. Every size is a multiple of one base, and every color is a named token on the root. Custom properties are the 2013 moment’s lesson: theme variables started in script and now live in CSS.',
+      'The test is to read a class list on its own. If it does not say what the element is and what it needs, in the names the design uses, the sheet has become a pile of overrides. This test guards isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list.'
+    ]);
+  });
+
+  test('should send Wathan’s case, Tailwind’s own words and Yandex’s method to their sources', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('compose a look from a shared set of pieces rather than write it again')).toHaveAttribute('href', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/');
+    expect(practicePage.link('“You aren’t wasting energy inventing class names”')).toHaveAttribute('href', 'https://v3.tailwindcss.com/docs/utility-first');
+    expect(practicePage.link('divides a user interface into independent blocks')).toHaveAttribute('href', 'https://yandex.com/dev/bem/index');
+  });
+
+  test('should keep its links to the platform’s own references', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(['pseudo-classes', 'prefers-reduced-motion', 'the meaningful sequence', 'appearance: base-select', '“fall back to a classic select experience”', 'custom properties']
+      .map(name => practicePage.link(name).getAttribute('href'))).toEqual([
+      'https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes',
+      'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion',
+      'https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html',
+      'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
+      'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
+      'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'
+    ]);
+  });
+
+  test('should show the column header’s markup after the sentence that reads a class list, before the bands are told', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const figure = practicePage.figure('The table’s column header, with its class attribute read left to right: nouns, then needs, then states.');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^A class list reads left to right/),
+      figure,
+      practicePage.paragraph(/^The nouns say what the element is/)
+    ])).toEqual([]);
+  });
+
+  test('should draw the column header’s whole class list, titled as read left to right, with nouns, needs and states under its runs', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    const drawings = practicePage.drawingsIn('The table’s column header, with its class attribute read left to right: nouns, then needs, then states.', 'A class list read left to right');
+
+    expect(drawings.map(drawing => drawing.classes)).toEqual([['cell header-cell', 'muted-rule-after muted-bar-below focus-ringed', 'carried'], ['cell header-cell', 'muted-rule-after muted-bar-below focus-ringed', 'carried']]);
+    expect(drawings.map(drawing => drawing.words)).toEqual([['nouns', 'needs', 'states'], ['nouns', 'needs', 'states']]);
   });
 
   test('should tell how I organize behavior on the Behavior tab', async () => {
