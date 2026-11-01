@@ -334,7 +334,7 @@ describe('the measured build', () => {
   const handsTheHeight = /^The script hands the height to the style sheet as a custom property/;
   const pinsTheStart = /^On a press that moves the panel/;
 
-  test('should show the sized rule beside the run that hands the height to the style sheet, after the measured run', async () => {
+  test('should show the sized rule, and not the unmoving one, beside the run that hands the height to the style sheet', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const explained = await explanation.part(parts[0]);
