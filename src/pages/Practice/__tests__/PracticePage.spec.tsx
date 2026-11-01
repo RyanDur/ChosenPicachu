@@ -111,14 +111,20 @@ describe('the practice page', () => {
     ]);
   });
 
-  test.each([
-    ['Structure', 'structure', /^I start from what the content is and pick the element for it/, 'The element is the name. It tells the browser, a screen reader and the next developer at once what the thing is, so I choose it first and make a new one only for a behavior that has no element.'],
-    ['Behavior', 'behavior', /^Behavior splits into what is true and what happened/, 'An event is a name for what happened. The state’s type is a name for what is true, and it refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.']
-  ] as const)('should follow the %s tab’s first rule with the principle applied to it', async (concern, param, firstRule, applied) => {
-    render(<TestApp at={practiceAt(param)}/>);
-    await practicePage.arrivedOn(concern);
+  test('should follow the Structure tab’s first rule with the principle applied to it: the element is the name', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.paragraphAfter(firstRule)).toBe(applied);
+    expect(practicePage.paragraphAfter(/^I start from what the content is and pick the element for it/))
+      .toBe('The element is the name. It tells the browser, a screen reader and the next developer at once what the thing is, so I choose it first and make a new one only for a behavior that has no element.');
+  });
+
+  test('should follow the Behavior tab’s first rule with the principle applied to it: an event and a type are names', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.paragraphAfter(/^Behavior splits into what is true and what happened/))
+      .toBe('An event is a name for what happened. The state’s type is a name for what is true, and it refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.');
   });
 
   test('should open the Structure tab on who reads markup, then the five things that have to be true of it, then where each lives, before its first rule', async () => {
@@ -200,6 +206,15 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.paragraphs()).toEqual([
+      expect.stringMatching(/^CSS has one global scope and a cascade/),
+      expect.stringMatching(/^A reset answered defaults/),
+      expect.stringMatching(/^A preprocessor answered constants and reuse/),
+      expect.stringMatching(/^A framework answered reuse for teams without a designer/),
+      expect.stringMatching(/^A methodology answered isolation and order by convention/),
+      expect.stringMatching(/^CSS in script answered isolation by build/),
+      expect.stringMatching(/^Utilities answered constants and reuse with no new CSS/),
+      expect.stringMatching(/^Since 2017 the platform has answered the needs itself/),
+      expect.stringMatching(/^So what is left to organize is smaller than it was/),
       expect.stringMatching(/^I write CSS in two kinds of sheet/),
       expect.stringMatching(/^Utilities are where I agree with Adam Wathan, who made Tailwind/),
       expect.stringMatching(/^BEM, Yandex’s method, sits between the two/),
@@ -209,6 +224,47 @@ describe('the practice page', () => {
       expect.stringMatching(/^Workarounds go away as the platform catches up/),
       expect.stringMatching(/^Constants live in the sheet, as tokens/),
       expect.stringMatching(/^The test is to read a class list on its own/)
+    ]);
+  });
+
+  test('should send each answer the field gave to its source, and the quotations to the pages that hold them', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^A reset answered defaults/)).toEqual([
+      ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
+      ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
+      ['normalize.css', 'https://necolas.github.io/normalize.css/'],
+      ['“preserve useful browser defaults rather than erasing them”', 'https://nicolasgallagher.com/about-normalize-css/']
+    ]);
+    expect(practicePage.linksIn(/^A preprocessor answered constants and reuse/)).toEqual([
+      ['Sass', 'https://sass-lang.com/'],
+      ['Less', 'https://lesscss.org/about/']
+    ]);
+    expect(practicePage.linksIn(/^A framework answered reuse for teams without a designer/)).toEqual([
+      ['Bootstrap', 'https://getbootstrap.com/docs/5.3/about/overview/']
+    ]);
+    expect(practicePage.linksIn(/^A methodology answered isolation and order by convention/)).toEqual([
+      ['OOCSS', 'https://github.com/stubbornella/oocss/wiki'],
+      ['SMACSS', 'https://smacss.com/'],
+      ['“more style guide than rigid framework”', 'https://smacss.com/']
+    ]);
+    expect(practicePage.linksIn(/^CSS in script answered isolation by build/)).toEqual([
+      ['CSS Modules', 'https://github.com/css-modules/css-modules'],
+      ['styled-components', 'https://styled-components.com/blog/celebrating-a-decade-of-styled-components'],
+      ['2013 moment', `${Paths.record}#someone-needs-components`],
+      ['2014 moment', `${Paths.record}#the-rules-need-writing-down`]
+    ]);
+    expect(practicePage.linksIn(/^Utilities answered constants and reuse with no new CSS/)).toEqual([
+      ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/']
+    ]);
+    expect(practicePage.linksIn(/^Since 2017 the platform has answered the needs itself/)).toEqual([
+      ['Custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
+      ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
+      ['Container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
+      [':has()', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has'],
+      ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
+      ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope']
     ]);
   });
 
@@ -302,7 +358,7 @@ describe('the practice page', () => {
 
   test.each([
     ['Structure', Paths.practice, [['2014', `${Paths.record}#the-rules-need-writing-down`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]],
-    ['Presentation', practiceAt('presentation'), [['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
+    ['Presentation', practiceAt('presentation'), [['2013', `${Paths.record}#someone-needs-components`], ['2014', `${Paths.record}#the-rules-need-writing-down`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`], ['2013', `${Paths.record}#someone-needs-components`]]],
     ['Behavior', practiceAt('behavior'), [['2010', `${Paths.record}#the-application-needs-a-frame`], ['2005', `${Paths.record}#the-page-needs-to-update-in-place`], ['2010', `${Paths.record}#the-application-needs-a-frame`], ['2013', `${Paths.record}#someone-needs-components`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]]
   ] as const)('should rest %s’s practice on its own moments, each citation naming the year of the moment it opens', async (concern, at, meant) => {
     render(<TestApp at={at}/>);

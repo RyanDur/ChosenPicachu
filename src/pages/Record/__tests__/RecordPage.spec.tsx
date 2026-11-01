@@ -829,15 +829,42 @@ describe('the record', () => {
     expect(recordPage.shelfHolding(work)).toBe('Presentation');
   });
 
-  test.each([
-    ['Understanding Success Criterion 1.3.1: Info and Relationships'],
-    ['Understanding Success Criterion 1.3.2: Meaningful Sequence'],
-    ['Understanding Success Criterion 2.4.1: Bypass Blocks'],
-    ['Understanding Success Criterion 2.4.6: Headings and Labels'],
-    ['Understanding Success Criterion 4.1.2: Name, Role, Value']
-  ])('should shelve %s on the Structure shelf, as WCAG 2.2 from the W3C WAI', work => {
-    expect(recordPage.shelvedAs(work)).toHaveTextContent('W3C WAI, WCAG 2.2');
-    expect(recordPage.shelfHolding(work)).toBe('Structure');
+  test('should shelve the five WCAG 2.2 Understanding pages the Structure tab cites on the Structure shelf, from the W3C WAI', () => {
+    const works = [
+      'Understanding Success Criterion 1.3.1: Info and Relationships',
+      'Understanding Success Criterion 1.3.2: Meaningful Sequence',
+      'Understanding Success Criterion 2.4.1: Bypass Blocks',
+      'Understanding Success Criterion 2.4.6: Headings and Labels',
+      'Understanding Success Criterion 4.1.2: Name, Role, Value'
+    ];
+
+    expect(works.map(work => recordPage.shelfHolding(work))).toEqual(works.map(() => 'Structure'));
+    works.forEach(work => expect(recordPage.shelvedAs(work)).toHaveTextContent('W3C WAI, WCAG 2.2'));
+  });
+
+  test('should shelve each answer the field gave to organizing CSS, and the platform pages, on the Presentation shelf with its author and date', () => {
+    const works: [string, string][] = [
+      ['Reset Reloaded', 'Eric Meyer, meyerweb.com, 1 May 2007'],
+      ['Reset CSS', 'Eric Meyer, meyerweb.com, version 2.0, 2011'],
+      ['normalize.css', 'Nicolas Gallagher, undated'],
+      ['About normalize.css', 'Nicolas Gallagher, 28 February 2012'],
+      ['Sass', 'sass-lang.com, undated'],
+      ['About Less', 'lesscss.org, undated'],
+      ['About Bootstrap', 'Bootstrap documentation, version 5.3, undated'],
+      ['Object Oriented CSS', 'Nicole Sullivan, the OOCSS wiki on GitHub, undated'],
+      ['SMACSS', 'Jonathan Snook, smacss.com, 2011'],
+      ['CSS Modules', 'the css-modules repository on GitHub, 2015'],
+      ['Celebrating a Decade of styled-components', 'styled-components.com, 10 April 2026'],
+      ['Custom properties (--*)', 'MDN'],
+      ['@layer', 'MDN'],
+      ['@container', 'MDN'],
+      [':has()', 'MDN'],
+      ['Nesting selector (&)', 'MDN'],
+      ['@scope', 'MDN']
+    ];
+
+    expect(works.map(([work]) => recordPage.shelfHolding(work))).toEqual(works.map(() => 'Presentation'));
+    works.forEach(([work, provenance]) => expect(recordPage.shelvedAs(work)).toHaveTextContent(provenance));
   });
 
   test('should shelve the Application Continuum on the Behavior shelf, undated, as its page gives no date', () => {

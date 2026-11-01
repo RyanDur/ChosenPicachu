@@ -6,9 +6,63 @@ const wathan = 'https://adamwathan.me/css-utility-classes-and-separation-of-conc
 const utilityFirst = 'https://v3.tailwindcss.com/docs/utility-first';
 const bem = 'https://yandex.com/dev/bem/index';
 const customizableSelect = 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select';
+const smacss = 'https://smacss.com/';
+const mdn = (page: string): string => `https://developer.mozilla.org/en-US/docs/Web/CSS/${page}`;
 
 export const PresentationPractice: FC = () =>
   <>
+    <p className="paragraph">CSS has one global scope and a cascade. That is what makes it small to write and hard to
+      organize: as a site grows, a rule written for one place reaches another, a value is written in forty places, and
+      nobody knows which rule wins. Every way of organizing CSS answers one or more of five needs. Defaults that agree
+      across browsers. Constants written once. Reuse of a look. Isolation of a component. Order when rules conflict.
+      The field answered them in turn, and each answer had a cost.</p>
+    <p className="paragraph">A reset answered defaults. Eric Meyer’s{' '}
+      <a className="signpost" href="https://meyerweb.com/eric/tools/css/reset/">reset</a> zeroed the browser’s margins,
+      line heights and heading sizes so every site started from nothing; he called it{' '}
+      <a className="signpost" href="https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/">“a starting point for creating your own defaults”</a>{' '}
+      in 2007. Nicolas Gallagher’s{' '}
+      <a className="signpost" href="https://necolas.github.io/normalize.css/">normalize.css</a> kept the defaults worth
+      keeping instead, to{' '}
+      <a className="signpost" href="https://nicolasgallagher.com/about-normalize-css/">“preserve useful browser defaults rather than erasing them”</a>,
+      as he wrote in 2012. The cost of a reset is that the author styles everything again, including what the browser
+      did well.</p>
+    <p className="paragraph">A preprocessor answered constants and reuse.{' '}
+      <a className="signpost" href="https://sass-lang.com/">Sass</a>, supported since 2006, and{' '}
+      <a className="signpost" href="https://lesscss.org/about/">Less</a>, which Alexis Sellier made in 2009, added
+      variables, nesting and mixins to a language the browser never sees and compiled it to CSS. The cost is a build
+      step between the author and the sheet.</p>
+    <p className="paragraph">A framework answered reuse for teams without a designer.{' '}
+      <a className="signpost" href="https://getbootstrap.com/docs/5.3/about/overview/">Bootstrap</a>, made at Twitter
+      and released in 2011, is a vocabulary of components with their look included. The cost is that the look is the
+      framework’s.</p>
+    <p className="paragraph">A methodology answered isolation and order by convention. Nicole Sullivan’s{' '}
+      <a className="signpost" href="https://github.com/stubbornella/oocss/wiki">OOCSS</a> separates structure from skin
+      and container from content. Jonathan Snook’s <a className="signpost" href={smacss}>SMACSS</a>, written in 2011,
+      is <a className="signpost" href={smacss}>“more style guide than rigid framework”</a>: rules for naming and
+      nesting so the cascade cannot reach where it should not. BEM, Yandex’s method, is the one I keep most from, and
+      it has its own paragraph below. The cost of a convention is that it holds only as long as every author follows
+      it.</p>
+    <p className="paragraph">CSS in script answered isolation by build. The component owns its styles, and a build
+      scopes the class names so no two components collide:{' '}
+    <a className="signpost" href="https://github.com/css-modules/css-modules">CSS Modules</a>, from 2015, and{' '}
+    <a className="signpost" href="https://styled-components.com/blog/celebrating-a-decade-of-styled-components">styled-components</a>,
+      from 2016. The Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> and{' '}
+    <MomentLink to="html5SaysIt">2014 moment</MomentLink> tell how that began, so this tab does not. The cost is that
+      the look leaves the sheet.</p>
+    <p className="paragraph">Utilities answered constants and reuse with no new CSS. Adam Wathan’s essay of 2017,{' '}
+      <a className="signpost" href={wathan}>CSS Utility Classes and “Separation of Concerns”</a>, argued for a fixed set
+      of single-purpose classes drawn from a theme, and Tailwind built it. It has its own paragraph below too.</p>
+    <p className="paragraph">Since 2017 the platform has answered the needs itself.{' '}
+      <a className="signpost" href={mdn('--*')}>Custom properties</a> have been in every engine since April 2017:
+      constants. <a className="signpost" href={mdn('@layer')}>@layer</a> since March 2022: order.{' '}
+      <a className="signpost" href={mdn('@container')}>Container queries</a> since February 2023,{' '}
+      <a className="signpost" href={mdn(':has')}>:has()</a> and{' '}
+      <a className="signpost" href={mdn('Nesting_selector')}>nesting</a> since December 2023, and{' '}
+      <a className="signpost" href={mdn('@scope')}>@scope</a> since March 2026, newly available: isolation, and reuse
+      through the cascade itself now that constants and order are native.</p>
+    <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
+      order and isolation, the rest of this tab shows what remains: where a rule lives, what a class is named for, and
+      the test a class list has to pass.</p>
     <p className="paragraph">I write CSS in two kinds of sheet. A component’s sheet holds its structure, the grid and
       placement of that one component, named for it and kept beside it. The site’s shared sheets hold the looks every
       component draws on, as a vocabulary of small classes: <code className="monospaced">lifted</code>,{' '}

@@ -322,6 +322,74 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://yandex.com/dev/bem/index"><cite>BEM</cite></a>{' '}
             <span className="provenance caption">Yandex, undated</span>
           </li>
+          <li>
+            <a className="signpost" href="https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/"><cite>Reset Reloaded</cite></a>{' '}
+            <span className="provenance caption">Eric Meyer, meyerweb.com, 1 May 2007</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://meyerweb.com/eric/tools/css/reset/"><cite>Reset CSS</cite></a>{' '}
+            <span className="provenance caption">Eric Meyer, meyerweb.com, version 2.0, 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://necolas.github.io/normalize.css/"><cite>normalize.css</cite></a>{' '}
+            <span className="provenance caption">Nicolas Gallagher, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://nicolasgallagher.com/about-normalize-css/"><cite>About normalize.css</cite></a>{' '}
+            <span className="provenance caption">Nicolas Gallagher, 28 February 2012</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://sass-lang.com/"><cite>Sass</cite></a>{' '}
+            <span className="provenance caption">sass-lang.com, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://lesscss.org/about/"><cite>About Less</cite></a>{' '}
+            <span className="provenance caption">lesscss.org, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://getbootstrap.com/docs/5.3/about/overview/"><cite>About Bootstrap</cite></a>{' '}
+            <span className="provenance caption">Bootstrap documentation, version 5.3, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://github.com/stubbornella/oocss/wiki"><cite>Object Oriented CSS</cite></a>{' '}
+            <span className="provenance caption">Nicole Sullivan, the OOCSS wiki on GitHub, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://smacss.com/"><cite>SMACSS</cite></a>{' '}
+            <span className="provenance caption">Jonathan Snook, smacss.com, 2011</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://github.com/css-modules/css-modules"><cite>CSS Modules</cite></a>{' '}
+            <span className="provenance caption">the css-modules repository on GitHub, 2015</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://styled-components.com/blog/celebrating-a-decade-of-styled-components"><cite>Celebrating a Decade of styled-components</cite></a>{' '}
+            <span className="provenance caption">styled-components.com, 10 April 2026</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/--*"><cite>Custom properties (--*)</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@layer"><cite>@layer</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@container"><cite>@container</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/:has"><cite>:has()</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector"><cite>Nesting selector (&amp;)</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope"><cite>@scope</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="behavior research">
