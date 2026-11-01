@@ -9,6 +9,8 @@ const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'
 const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
 
+const paragraphs = (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? '');
+
 const drawnTexts = (figure: string): HTMLElement[] =>
   within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption'});
 
@@ -30,8 +32,11 @@ export const practicePage = {
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => within(practice()).getByText(opening),
-  paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
-  paragraphAfter: (opening: RegExp): string | null | undefined => within(practice()).getByText(opening).nextElementSibling?.textContent,
+  paragraphs,
+  paragraphAfter: (opening: RegExp): string | undefined => paragraphs()[paragraphs().findIndex(paragraph => opening.test(paragraph)) + 1],
+  sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
+    .map(link => link.getAttribute('href') ?? '')
+    .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
