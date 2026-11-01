@@ -1,6 +1,6 @@
+import {TabLink} from '@pages/Demos/TabLink';
 import {FC, ReactNode, useId} from 'react';
-import {Link} from 'react-router';
-import {DemoTopics, demoAddress} from '../types';
+import {DemoTopics} from '../types';
 import {ChartKind} from './kinds';
 import {Codes, Mdn, plain, Says, Snippet, Step, Steps, Stories, Story, Tell, Words} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
@@ -47,7 +47,7 @@ const PriceStory: FC = () =>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
       in time order.</Tell>
     <Tell>The page stores the trades and the fetched candles. The candles made from live trades, the joined series and the
-      points are not stored: every time <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>React</Link>, the library this site’s script is written in, redraws the chart, they are worked out again.</Tell>
+      points are not stored: every time <TabLink to={DemoTopics.zIndex}>React</TabLink>, the library this site’s script is written in, redraws the chart, they are worked out again.</Tell>
     <Steps>
       <Step title="Open a socket, and keep only what decodes">
         <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
@@ -108,8 +108,8 @@ const PriceStory: FC = () =>
             marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>Menu, Entry and Item are the site’s components for a menu; they write a menu, an li and a button. A
-            component is a function that writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
-          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. Item gives its button the
+            component is a function that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a rule picks out. Item gives its button the
             site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
             those classes, as the sample shows.</Says>
         </Words>
@@ -191,7 +191,7 @@ const CandlesStory: FC = () =>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
             of the slot wide, so two candles never touch.</Says>
-          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. A candle
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a rule picks out. A candle
             that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
             in the site’s shared sheet and that an element wears by name; the chart’s own sheet keeps what is not a look:
@@ -358,7 +358,7 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Cut the circle with rotations only">
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
-          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. You could paint
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a rule picks out. You could paint
             the split with a conic gradient, a background that sweeps color round a point. But a painted background has
             no parts: nothing to give a class, nothing to label, and nothing for a test to find.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
@@ -438,8 +438,8 @@ const WorkspaceStory: FC = () =>
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
-            writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
-          <Says>A class, as the <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>accordions tab</Link> says, is a name a rule picks out. Item gives its
+            writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a rule picks out. Item gives its
             button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
         </Words>
         <Codes>
@@ -455,7 +455,7 @@ const WorkspaceStory: FC = () =>
       </Step>
       <Step title="A chart swaps once the pointer has moved a third of its height">
         <Words want="A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.">
-          <Says>On dragstart, the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>event</Link> the browser sends when a drag begins, the code marks where the pointer is on
+          <Says>On dragstart, the <TabLink to={DemoTopics.zIndex}>event</TabLink> the browser sends when a drag begins, the code marks where the pointer is on
             the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the
             pointer with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under
             it; a third above, with the one over it. Then the mark is set again to where the pointer is.</Says>
@@ -463,7 +463,7 @@ const WorkspaceStory: FC = () =>
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
           <Says>The neighbor’s slide is the{' '}
-            <Link className="signpost" to={demoAddress(DemoTopics.dragAndDrop)}>drag sort tab</Link>’s keyframe animation
+            <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
             with one that is still sliding.</Says>
         </Words>

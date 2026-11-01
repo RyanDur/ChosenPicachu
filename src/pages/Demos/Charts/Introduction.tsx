@@ -1,13 +1,13 @@
+import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {Link} from 'react-router';
-import {DemoTopics, demoAddress} from '../types';
+import {DemoTopics} from '../types';
 
 export const ChartsIntroduction: FC = () =>
   <header className="tab-introduction">
     <p className="paragraph">A live chart draws numbers that are still arriving. The charts on this page follow every
       trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.</p>
-    <p className="paragraph">This tab assumes a popover and the state React holds, which the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> explains, and
-      the keyframe animation, which the <Link className="signpost" to={demoAddress(DemoTopics.dragAndDrop)}>drag sort tab</Link> defines. The rest is new here.</p>
+    <p className="paragraph">This tab assumes a popover and the state React holds, which the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains, and
+      the keyframe animation, which the <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink> defines. The rest is new here.</p>
     <p className="paragraph">Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can
       read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must
       not disagree.</p>

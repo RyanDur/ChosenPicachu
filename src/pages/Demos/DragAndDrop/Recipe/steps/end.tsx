@@ -1,6 +1,6 @@
+import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {Link} from 'react-router';
-import {DemoTopics, demoAddress} from '../../../types';
+import {DemoTopics} from '../../../types';
 import {Codes, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 
 export const RoadEnd: FC = () =>
@@ -10,7 +10,7 @@ export const RoadEnd: FC = () =>
         made opaque. The cursor is the browser’s. The cancel is the browser’s animation; on macOS it is the system’s, and
         nothing in the page can shorten it. When those pixels matter, build the drag from
         pointer events instead, which is what the{' '}
-      <Link className="signpost" to={demoAddress(DemoTopics.tables)}>Tables demo</Link> does.</Says>
+      <TabLink to={DemoTopics.tables}>Tables demo</TabLink> does.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

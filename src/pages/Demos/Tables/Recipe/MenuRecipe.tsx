@@ -1,5 +1,5 @@
-import {Link} from 'react-router';
-import {DemoTopics, demoAddress} from '../../types';
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '../../types';
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {paceParam} from '../../Controls';
@@ -105,7 +105,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
           <Says>In the React world the sample is built from Menu, Entry and Item, the site’s menu components; they write one
-            element each. A component is a function that writes a piece of the page, as the <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says.</Says>
+            element each. A component is a function that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared sheet and
               that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>
