@@ -1,7 +1,7 @@
 import {defineConfig} from '@playwright/test';
 import {empty, has} from '@ryandur/sand';
 
-const stage = 'http://localhost:4517/ChosenPicachu/';
+const stage = `http://localhost:${process.env.STAGE_PORT ?? 4517}/ChosenPicachu/`;
 const smoke = '**/smoke.e2e.ts';
 // it reads served HTML through the request fixture and opens no browser, so one engine's run covers it
 const browserless = '**/names.e2e.ts';
