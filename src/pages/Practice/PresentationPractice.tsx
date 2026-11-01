@@ -13,29 +13,70 @@ const {
 } = presentation;
 const sheet = (file: string): string => fileInRepository(`src/styles/${file}.css`);
 const stylelintConfig = fileInRepository('stylelint.config.js');
+const classLint = fileInRepository('scripts/lint/classes.mjs');
+const importList = fileInRepository('src/index.css');
 
 export const PresentationPractice: FC = () =>
   <>
     <h3 className="paragraph bold">What organizing CSS has to solve</h3>
-    <p className="paragraph">CSS has one global scope and a cascade, so a rule written for one place can reach another,
-      and as a site grows the author cannot always tell which rule wins. I organize it with one split. Any CSS that is
-      structurally part of a component, the grid and placement of that one component, lives in its own sheet beside
-      it. Everything else is sharable and lives in the shared sheets, imported in order: first the reset, which is the
-      only place a tag is styled, and only to reset it; then the tokens, where every value is written once; then the
-      vocabulary, where every look is one word any element can wear.</p>
-    <p className="paragraph">A selector names classes, never a tag. A browser matches a selector from right to left:
-      David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the key selector,{' '}
-    <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its ancestors”</a>,
-      and wrote that{' '}
-    <a className="signpost" href={hyatt.address}>“the style system matches rules by starting with the key selector, then moving to the left”</a>.
-      So <code className="monospaced">nav a</code> starts from every link on the page and checks each one’s
-      ancestors, while <code className="monospaced">.home .opening</code> starts from the few elements that carry that
-      class. A class also says more. <code className="monospaced">nav a</code> says where a link is;{' '}
-    <code className="monospaced">rail-path</code> says what it is for, which is what the next reader needs. A
-      component’s sheet keys its rules on the component’s own classes, and a lint refuses a class name no sheet near
-      the element defines, so its rules stay its own without a build to scope them.</p>
-    <p className="paragraph">The field put the look in other places before the platform could hold it. A reset put the
-      defaults in the author’s hands: Eric Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
+    <p className="paragraph">I keep any CSS that is structurally part of a component, its grid and placement, in a
+      sheet beside it. Everything else is sharable and lives in the shared sheets: the reset, the tokens, the
+      vocabulary. A class names what the element is, what it needs, or what is true right now. Those are the rules,
+      and the rest of this tab says how they hold.</p>
+    <p className="paragraph">They hold because a sheet is read by more than the browser, and I write it for all of its
+      readers. The browser reads it to match each selector against the page, and takes the rule the cascade says
+      wins. The designer reads it to change the look, and a look is changed in one place or in forty. The next
+      developer reads a class list to learn what an element is and needs, before opening any sheet. A lint reads it
+      on every commit, so a rule that strays fails there and not in front of a reader.</p>
+    <p className="paragraph">So five things have to be true of the sheets, and a gate holds each one.</p>
+    <dl className="needs">
+      <div className="need">
+        <dt className="paragraph bold">Place</dt>
+        <dd className="paragraph">Structure beside the component, looks in the shared sheets. The{' '}
+          <a className="signpost" href={stylelintConfig}>sheet lint</a> holds it, refusing a look in a component
+          sheet, and the <a className="signpost" href={classLint}>class lint</a> holds its other side, reading a class
+          only from a sheet in the element’s own directory or one above it, or from the shared sheets. BEM’s{' '}
+          <a className="signpost" href={bemHistory.address}>folder per block</a>, from Yandex in 2009, is where the
+          rule comes from.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Value</dt>
+        <dd className="paragraph">Every value written once, as a token. The{' '}
+          <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: a number where a
+          token belongs is refused, and so is a token nothing declares. Custom properties are the platform’s
+          token.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Name</dt>
+        <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
+          <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no sheet reads and an
+          own class put behind a shared word. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+          where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
+          where I part.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Selector</dt>
+        <dd className="paragraph">Classes, never a tag, outside the reset. The{' '}
+          <a className="signpost" href={stylelintConfig}>selector lint</a> holds it. A browser matches a selector
+          from right to left: David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the
+          key selector,{' '}
+          <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its ancestors”</a>.
+          So <code className="monospaced">nav a</code> starts from every link on the page, while{' '}
+          <code className="monospaced">.home .opening</code> starts from the few elements that carry the class. A
+          class also says more: <code className="monospaced">rail-path</code> says what a link is for, where{' '}
+          <code className="monospaced">nav a</code> says only where it is.</dd>
+      </div>
+      <div className="need">
+        <dt className="paragraph bold">Order</dt>
+        <dd className="paragraph">The sheets imported in one order, reset first. The{' '}
+          <a className="signpost" href={importList}>import list</a> itself holds it: when two rules tie, the cascade
+          takes the later one, so the list’s order decides. <a className="signpost" href={layer.address}>@layer</a> is
+          the platform’s own way to say that order in a rule.</dd>
+      </div>
+    </dl>
+    <p className="paragraph">The rest of this tab says how each of the five holds here. The field put the look in other
+      places first, before the platform could hold it. A reset put the defaults in the author’s hands: Eric
+      Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
       the browser’s margins, line heights and heading sizes,{' '}
     <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a> in
       2007, and Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
@@ -56,13 +97,15 @@ export const PresentationPractice: FC = () =>
     <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began. Utilities put the theme
       in the class name: Adam Wathan’s essay of 2017,{' '}
     <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, and
-      Tailwind after it. And the platform put each of those in the sheet, native since its date:{' '}
-    <a className="signpost" href={customProperties.address}>custom properties</a> since April 2017,{' '}
-    <a className="signpost" href={layer.address}>@layer</a> since March 2022,{' '}
-    <a className="signpost" href={container.address}>container queries</a> since February 2023,{' '}
-    <a className="signpost" href={has.address}>:has()</a> and{' '}
-    <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023, and{' '}
-    <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.</p>
+      Tailwind after it.</p>
+    <p className="paragraph">The platform has since put the constants, the order and the isolation in the sheet itself,
+      each native since its date: <a className="signpost" href={customProperties.address}>custom properties</a> since
+      April 2017, <a className="signpost" href={layer.address}>@layer</a> since March 2022,{' '}
+    <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and{' '}
+    <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.{' '}
+    <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and{' '}
+    <a className="signpost" href={has.address}>:has()</a>, since December 2023, give a rule reach that no method
+      had.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -75,12 +118,11 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">card_lifted</code> in Yandex’s own spelling,{' '}
       <code className="monospaced">card--lifted</code> in the two-dash style many teams use. Every selector is one
       class, so nothing depends on where a block sits.</p>
-    <p className="paragraph">I keep three things from BEM:</p>
+    <p className="paragraph">I keep two things from BEM:</p>
     <ul className="practice-list">
       <li className="paragraph">the block as the unit</li>
       <li className="paragraph">the folder per block, which is how the site’s shared components and its tables are laid
         out, with their sheets beside their parts</li>
-      <li className="paragraph">flat selectors, one class each</li>
     </ul>
     <p className="paragraph">I give up the scoping of every look to its block. In BEM,{' '}
       <code className="monospaced">lifted</code> on a card and <code className="monospaced">lifted</code> on a menu are
@@ -88,7 +130,8 @@ export const PresentationPractice: FC = () =>
       word any block can wear, because a look is the sheet’s job. BEM also has no separate idea of a state, since a
       modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
-      I split them, and the class list below says why.</p>
+      I split them, and the class list below says why. I also give up the one-class selector: a rule here nests under
+      its component’s class when it belongs to that component alone.</p>
     <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
       <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
       utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
@@ -100,9 +143,9 @@ export const PresentationPractice: FC = () =>
       its second use, and every value from a constrained set. I give up two: the value in the class name, and reuse in
       the component rather than the sheet.</p>
     <h3 className="paragraph bold">Where a rule lives</h3>
-    <p className="paragraph">Here is each in turn, in the order <code className="monospaced">index.css</code> imports
-      them. First the{' '}
-    <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
+    <p className="paragraph">Here is each sheet in turn, in the order <code className="monospaced">index.css</code>{' '}
+      imports them. First the{' '}
+      <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
       elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
       datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
     <p className="paragraph">Then two token files. A token is a named value, such as{' '}
@@ -112,13 +155,18 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
       <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-      <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Not every size is:</p>
+      <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Three kinds of size it names
+      outside that scale:</p>
     <ul className="practice-list">
       <li className="paragraph">the hairlines, in pixels, so they do not scale with the type;</li>
       <li className="paragraph">the corner radii: a pixel value for the small one, rems for the soft one and the pill;</li>
-      <li className="paragraph">the breakpoints, in pixels, since they follow the window; the container queries, in rems
-        and one measure in ch, since they follow a container or a line of text;</li>
-      <li className="paragraph">a few table and page widths, in rems, measured to what they hold: a table’s columns at
+      <li className="paragraph">the breakpoints, in pixels, since they follow the window.</li>
+    </ul>
+    <p className="paragraph">A few sizes belong to one component and sit in its own sheet:</p>
+    <ul className="practice-list">
+      <li className="paragraph">its container queries, in rems and one measure in ch, since they follow a container or a
+        line of text;</li>
+      <li className="paragraph">a table’s or a page’s width, in rems, measured to what it holds: a table’s columns at
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
     </ul>
@@ -141,8 +189,8 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three lint rules hold those lines, and they are the method. One refuses a tag selector
-      outside the reset and prints{' '}
+    <p className="paragraph">Three of those gates are stylelint rules, and each prints its reason. One refuses a tag
+      selector outside the reset and prints{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       Another refuses a look in a component sheet and prints that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
@@ -152,7 +200,7 @@ export const PresentationPractice: FC = () =>
     <WhereARuleLives/>
     <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
-      order and the split above gives a rule its reach. The cost is that the
+      order and a component’s own classes, with its rules keyed on them, give a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
       a rule that says so. I do nest a rule inside another where it belongs, as most sheets here do. A rule nests
       under its component’s class when it belongs to that component alone; a look any element can wear stays a single
@@ -174,14 +222,13 @@ export const PresentationPractice: FC = () =>
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
       sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That is the separation
       the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for, the look leaving the markup for a
-      style sheet. That split keeps the sheet restyleable, which is what the Zen Garden in the{' '}
-    <MomentLink to="zenGarden">2003 moment</MomentLink> showed that split is for, and it keeps the constraint where
-      Wathan wants it, in one place.</p>
+      style sheet. That separation keeps the sheet restyleable, which is what the Zen Garden in the{' '}
+    <MomentLink to="zenGarden">2003 moment</MomentLink> showed it is for, and it keeps the constraint where Wathan
+      wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
-    <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
-      value it stands for lives in the sheet, so the name still fits when the value changes. A class list reads left
-      to right: nouns, then needs, then states.</p>
+    <p className="paragraph">The value a class stands for lives in the sheet, so the name still fits when the value
+      changes. A class list reads left to right: nouns, then needs, then states.</p>
     <ColumnHeaderClassList/>
     <p className="paragraph">The nouns say what the element is: <code className="monospaced">cell</code> and{' '}
       <code className="monospaced">header-cell</code> name a part of the table, and the table’s own sheet, kept beside

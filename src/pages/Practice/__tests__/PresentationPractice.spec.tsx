@@ -25,13 +25,69 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.currentTab()).toBe('Presentation');
   });
 
-  test('should send every source of what organizing CSS has to solve to the page that holds it, Hyatt’s words to the archived copy of his', async () => {
+  test('should name the five things the sheets hold to, in order: place, value, name, selector and order', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksUnder('What organizing CSS has to solve')).toEqual([
-      ['“the part that matches the element being matched, rather than its ancestors”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS'],
-      ['“the style system matches rules by starting with the key selector, then moving to the left”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS'],
+    expect(practicePage.terms()).toEqual(['Place', 'Value', 'Name', 'Selector', 'Order']);
+  });
+
+  test('should send place’s gates to the sheet lint and the class lint, and its rule to BEM’s folder per block', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksInDefinitionOf('Place')).toEqual([
+      ['sheet lint', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['class lint', `${Paths.repo}/blob/main/scripts/lint/classes.mjs`],
+      ['folder per block', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
+    ]);
+  });
+
+  test('should send value’s gate to the value lint', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksInDefinitionOf('Value')).toEqual([
+      ['value lint', `${Paths.repo}/blob/main/stylelint.config.js`]
+    ]);
+  });
+
+  test('should send name’s gate to the class lint, and where I agree and part to Wathan’s essay and Tailwind’s utility-first page', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksInDefinitionOf('Name')).toEqual([
+      ['class lint', `${Paths.repo}/blob/main/scripts/lint/classes.mjs`],
+      ['essay', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/'],
+      ['utility-first page', 'https://v3.tailwindcss.com/docs/utility-first']
+    ]);
+  });
+
+  test('should send selector’s gate to the selector lint, and Hyatt’s key selector to the archived copy of his', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksInDefinitionOf('Selector')).toEqual([
+      ['selector lint', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['“the part that matches the element being matched, rather than its ancestors”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS']
+    ]);
+  });
+
+  test('should send order’s gate to the import list itself, and the platform’s way to say it to MDN’s @layer', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksInDefinitionOf('Order')).toEqual([
+      ['import list', `${Paths.repo}/blob/main/src/index.css`],
+      ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer']
+    ]);
+  });
+
+  test('should send every method the field put the look in to the page that holds it', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^The rest of this tab says how each of the five holds here/)).toEqual([
       ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
       ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
       ['normalize.css', 'https://necolas.github.io/normalize.css/'],
@@ -45,13 +101,21 @@ describe('the Presentation practice tab', () => {
       ['CSS Modules', 'https://github.com/css-modules/css-modules'],
       ['styled-components', 'https://styled-components.com/blog/celebrating-a-decade-of-styled-components'],
       ['2013 moment', `${Paths.record}#someone-needs-components`],
-      ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/'],
+      ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/']
+    ]);
+  });
+
+  test('should send each thing the platform has since put in the sheet to MDN, with its date', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.linksIn(/^The platform has since put the constants, the order and the isolation in the sheet itself/)).toEqual([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
-      ['container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
-      [':has()', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has'],
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
-      ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope']
+      ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope'],
+      ['Container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
+      [':has()', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has']
     ]);
   });
 
@@ -87,7 +151,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [[message, address]] = practicePage.linksIn(/^Three lint rules hold those lines, and they are the method/);
+    const [[message, address]] = practicePage.linksIn(/^Three of those gates are stylelint rules, and each prints its reason/);
 
     expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -98,7 +162,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [, [message, address]] = practicePage.linksIn(/^Three lint rules hold those lines, and they are the method/);
+    const [, [message, address]] = practicePage.linksIn(/^Three of those gates are stylelint rules, and each prints its reason/);
 
     expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -177,26 +241,34 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should list the three things kept from BEM, the block, the folder per block and flat selectors, after saying there are three', async () => {
+  test('should list the two things kept from BEM, the block and the folder per block, after saying there are two', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.itemsListedAfter(/^I keep three things from BEM/)).toEqual([
+    expect(practicePage.itemsListedAfter(/^I keep two things from BEM/)).toEqual([
       expect.stringMatching(/^the block as the unit/),
-      expect.stringMatching(/^the folder per block/),
-      expect.stringMatching(/^flat selectors/)
+      expect.stringMatching(/^the folder per block/)
     ]);
   });
 
-  test('should list the sizes spacing.css writes outside its base, after saying not every size is a multiple of it', async () => {
+  test('should list the three kinds of size spacing.css names outside its scale, after saying there are three', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.itemsListedAfter(/^Then two token files/)).toEqual([
       expect.stringMatching(/^the hairlines, in pixels/),
       expect.stringMatching(/^the corner radii/),
-      expect.stringMatching(/^the breakpoints, in pixels.*the container queries, in rems/),
-      expect.stringMatching(/^a few table and page widths, in rems, measured to what they hold/),
+      expect.stringMatching(/^the breakpoints, in pixels/)
+    ]);
+  });
+
+  test('should list the sizes that belong to one component and sit in its own sheet', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.itemsListedAfter(/^A few sizes belong to one component and sit in its own sheet/)).toEqual([
+      expect.stringMatching(/^its container queries, in rems/),
+      expect.stringMatching(/^a table’s or a page’s width, in rems, measured to what it holds/),
       expect.stringMatching(/^a drawing’s width, in pixels/)
     ]);
   });
