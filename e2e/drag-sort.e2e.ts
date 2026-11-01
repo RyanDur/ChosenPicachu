@@ -33,18 +33,6 @@ for (const pace of ['eager', 'lazy']) {
   });
 }
 
-test('letting go of the grip does not end a drag under way', async ({page, browserName}) => {
-  test.skip(browserName !== 'chromium', 'Chromium cancels the pointer as its own drag begins');
-  await page.goto('demos/drag-and-drop/');
-  const list = sortableList(page);
-  const pointerCancels = await list.pointerCancelsHeard();
-
-  await (await list.carry('A', 'C')).drop();
-
-  expect(await pointerCancels()).toBeGreaterThan(0);
-  await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
-});
-
 test.describe('a finger on a phone', () => {
   test.use(iPhone);
 

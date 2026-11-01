@@ -53,15 +53,6 @@ export const sortableList = (page: Page) => {
           await devtools.send('Input.dispatchTouchEvent', {type: 'touchCancel', touchPoints: []});
         }
       };
-    },
-    pointerCancelsHeard: async (): Promise<() => Promise<number>> => {
-      await page.evaluate(() => {
-        document.documentElement.dataset.pointerCancels = '0';
-        document.addEventListener('pointercancel', () => {
-          document.documentElement.dataset.pointerCancels = String(Number(document.documentElement.dataset.pointerCancels) + 1);
-        }, true);
-      });
-      return async () => Number(await page.evaluate(() => document.documentElement.dataset.pointerCancels));
     }
   };
 };

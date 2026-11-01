@@ -118,7 +118,7 @@ test('the entrance reads the chosen side, and reads that a new banner appears in
   await expect(reading).toHaveText(lessMotionEntrance, {useInnerText: true});
 });
 
-test('a raised note is announced: it sits in the page’s alert', async ({page}) => {
+test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {
   await page.goto('demos/z-index/');
   const banners = bannerTrap(page);
   const standing = await banners.topLayerNotes.count();

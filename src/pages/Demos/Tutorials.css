@@ -112,8 +112,10 @@
     text-wrap: balance;
   }
 
-  .phase .story.arriving {
+  .phase .story.arriving,
+  .story.walked-through {
     justify-self: stretch;
+    margin: 0;
     padding: var(--base-x-2);
     display: grid;
     gap: var(--base);
@@ -250,14 +252,6 @@
     .design-window {
       white-space: normal;
     }
-  }
-
-  .story.walked-through {
-    justify-self: stretch;
-    margin: 0;
-    padding: var(--base-x-2);
-    display: grid;
-    gap: var(--base);
   }
 
   .sliced,
