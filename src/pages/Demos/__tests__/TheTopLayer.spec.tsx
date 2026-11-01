@@ -63,8 +63,8 @@ describe('the top layer', () => {
     expect(await demoPage.findSays('let’s build this feature')).toBeVisible();
     expect(demoPage.says('The user sees the news above everything')).toBeVisible();
     expect(demoPage.title('The user can have multiple banners')).toBeVisible();
-    expect(demoPage.saying('Any component can raise a banner')).not.toBeInTheDocument();
-    expect(demoPage.saying('The news travels, and the pile makes room')).not.toBeInTheDocument();
+    expect(demoPage.saidIn('Any component can raise a banner')).not.toBeInTheDocument();
+    expect(demoPage.saidIn('The news travels, and the pile makes room')).not.toBeInTheDocument();
   });
 
   test('the dials explain themselves and say their url', async () => {
