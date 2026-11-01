@@ -172,6 +172,7 @@
   }
 
   .period-markup {
+    max-inline-size: 100%;
     margin: 0;
     margin-block-start: var(--base-x-1_5);
     padding: var(--base-x-1_5);

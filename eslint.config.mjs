@@ -3,6 +3,7 @@ import parser from '@babel/eslint-parser';
 import testingLibrary from 'eslint-plugin-testing-library';
 import playwright from 'eslint-plugin-playwright';
 import classes from './scripts/lint/classes.mjs';
+import {bareInlineCode} from './scripts/lint/inline-code.mjs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -34,11 +35,6 @@ const shape = {
 const comparedToUndefined = {
   selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"])',
   message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
-};
-
-const bareInlineCode = {
-  selector: 'JSXOpeningElement[name.name="code"]:not(JSXElement[openingElement.name.name="pre"] > JSXElement > JSXOpeningElement):not(:has(JSXAttribute[name.name="className"][value.value=/(^|\\s)monospaced(\\s|$)/]))',
-  message: 'Code in a sentence wears monospaced, so it reads as code; a code element inside pre is a sample and is styled by it.'
 };
 
 const presence = {'no-restricted-syntax': ['error', comparedToUndefined]};

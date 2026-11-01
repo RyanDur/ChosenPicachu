@@ -47,7 +47,7 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   return <figure className="sample">
-    <pre className={classNames('snippet', 'code-paper-filled', 'code-ink', 'listing', 'rounded-corners')}>
+    <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({text, dim = false}, at) =>
         <span className={classNames('line', dim && inkOf.comment)} key={at}>
