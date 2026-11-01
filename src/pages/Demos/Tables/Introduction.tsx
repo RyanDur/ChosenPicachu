@@ -7,8 +7,8 @@ export const TablesIntroduction: FC = () =>
     <p className="paragraph">A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also
       lets you drag a column or a row to a new place, resize a column, and sort by one.</p>
     <p className="paragraph">This tab assumes the <TabLink to={DemoTopics.charts}>charts tab</TabLink>’s live feed and its trades, the{' '}
-      <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s dials and drag, the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink>’s popover, top layer and React,
-      and a class from the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>. The rest is new here.</p>
+      <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s drag, the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink>’s popover, top layer and React, and a
+      class and a dial from the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>. The rest is new here.</p>
     <p className="paragraph">The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row
       updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move
       that undoes a sort.</p>

@@ -48,8 +48,8 @@ describe('why the popover wins', () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await explanation.part('Why the popover wins');
-    const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/);
-    const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, and so does each choice in the sample above/).join();
+    const run = explanation.runTelling(part, /The button that opens the menu carries a tabIndex of 0, as its sample shows, and so does each choice in the menu/);
+    const sample = explanation.everyCodeBeside(part, /The button that opens the menu carries a tabIndex of 0, as its sample shows, and so does each choice in the menu/).join();
 
     expect(sample).toMatch(/<button type="button" tabIndex=\{0\} className="button primary/);
     expect(sample).not.toMatch(/<Menu/);
@@ -102,7 +102,7 @@ describe('why the popover wins', () => {
 
     const part = await explanation.part('Why the popover wins');
 
-    expect(explanation.saying(part, /gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample above shows.');
+    expect(explanation.saying(part, /gives its button the site’s shared classes/)).toHaveTextContent('Item gives its button the site’s shared classes that set its look. I leave a menu’s look to the page that uses it, so the page passes Menu those classes, as the sample shows.');
   });
 
   test('should show the page passing Menu its classes in the menu sample the run points to', async () => {
@@ -113,13 +113,26 @@ describe('why the popover wins', () => {
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/<Menu [^>]*className="/);
   });
 
-  test('should show that each choice in the menu sample is a button', async () => {
+  test('should show Item’s source, a button, beside the run that says Menu, Entry and Item each write one element', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-
     const part = await explanation.part('Why the popover wins');
-    const menuSample = explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join();
 
-    expect(menuSample).toMatch(/export const Item[^]*<button \{\.\.\.button\} type="button"/);
+    expect(explanation.everyCodeBeside(part, /^Menu, Entry and Item are this site’s components for a menu/).join()).toMatch(/export const Item[^]*<button \{\.\.\.button\} type="button"/);
+  });
+
+  test('should say what React and a component are before the first sample, then show the menu, then Item, then the tabIndex', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+    const part = await explanation.part('Why the popover wins');
+    const runs = explanation.runsIn(part);
+    const at = (words: RegExp): number => runs.indexOf(explanation.runTelling(part, words));
+
+    expect([
+      at(/^React is the library this site’s script is written in/),
+      at(/^What a component writes is still an element/),
+      at(/The button names its menu with popovertarget/),
+      at(/^Menu, Entry and Item are this site’s components for a menu/),
+      at(/The button that opens the menu carries a tabIndex of 0/)
+    ]).toEqual([...Array(5).keys()].map(step => at(/^React is the library this site’s script is written in/) + step));
   });
 
   test('should name the toggle in a run after the markup that holds it', async () => {

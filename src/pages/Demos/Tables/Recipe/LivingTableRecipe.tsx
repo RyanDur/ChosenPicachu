@@ -53,10 +53,10 @@ const suppliedBy: Record<World, ReactNode> = {
       table it reports on. The two choices the later steps explain, <code className="monospaced">origin</code>, whether a carried row’s or
       column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
       table.</Says>
-    <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook. A component is a function that writes
-      a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and a hook is a function a component calls while it renders, to keep
-      something across renders or to read something kept outside React. The page calls the hook with its columns, its
-      rows and the two choices.</Says>
+    <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook. A component is a function
+      that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. A hook is a function a component calls while it
+      renders. It calls one to keep something across renders, or to read something kept outside React. The page calls
+      the hook with its columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
       when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
       subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a

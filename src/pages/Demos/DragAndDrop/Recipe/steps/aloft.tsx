@@ -15,7 +15,7 @@ export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
         comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
         passes over cannot read data that was never dropped on it.</Says>
       <Says>Keep it in state instead, the values React holds between one drawing of the page and the next. The{' '}
-        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says what state is. The lift
+        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state. The lift
         records which item is held, which the code calls aloft; the release clears it; and every handler in between
         reads the same value the render does. The payload is still there for the case where another window needs the
         data.</Says>

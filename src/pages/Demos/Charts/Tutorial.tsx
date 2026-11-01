@@ -46,8 +46,9 @@ const PriceStory: FC = () =>
       candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
       in time order.</Tell>
-    <Tell>The page stores the trades and the fetched candles. The candles made from live trades, the joined series and the
-      points are not stored: every time <TabLink to={DemoTopics.zIndex}>React</TabLink>, the library this site’s script is written in, redraws the chart, they are worked out again.</Tell>
+    <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. Every time it redraws the chart, the candles made from live trades, the joined series and the
+      points are worked out again. None of them is stored.</Tell>
     <Steps>
       <Step title="Open a socket, and keep only what decodes">
         <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
@@ -55,7 +56,8 @@ const PriceStory: FC = () =>
             on, and asks the exchange for one product’s matches. A match is one trade.</Says>
           <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields a
             match has, each of the right kind. And its price, its size and its time have to turn into real numbers. What
-            passes is a Trade. What fails never reaches the page’s state.</Says>
+            passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from, as the{' '}
+          <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
             it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
         </Words>
@@ -101,14 +103,15 @@ const PriceStory: FC = () =>
       <Step title="Let the trader choose the period">
         <Words want="A trader watching the last few minutes and one reading the whole week are asking different questions. The trader picks the period, and everything on the chart follows it.">
           <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of menu
-            the z-index tab explains.</Says>
+            the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
           <Says>Each period has its own span for a candle, its own limit on how many candles the chart holds, and its own
             spacing for the marks on the time axis. The hour has candles of a minute, 60 of them, marked every ten minutes.
             The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them,
             marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
-          <Says>Menu, Entry and Item are the site’s components for a menu; they write a menu, an li and a button. A
-            component is a function that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+          <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
+            of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li, which is one item of a list, and a
+            button.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. Item gives its button the
             site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
             those classes, as the sample shows.</Says>
@@ -173,7 +176,7 @@ const CandlesStory: FC = () =>
             bucketTrades and joins the fetched past with mergeLive, the same two functions the price line uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
           <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the price
-            line.</Says>
+            line: the kind of menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -303,10 +306,11 @@ const PressureStory: FC = () =>
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
-            below. The bought bars wear buy-side and the sold bars sell-side. Those are shared classes, looks that live in
-            the site’s shared sheet and that an element wears by name.</Says>
-          <Says>A side class sets a side’s colors as custom properties, values a stylesheet names once and other rules
-            read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
+            below. The bought bars wear buy-side and the sold bars sell-side. A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
+            says, is a name a stylesheet’s rules pick out. These two are shared classes, looks that live in the site’s
+            shared sheet.</Says>
+          <Says>A side class sets a side’s colors as custom properties, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
+            values a stylesheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
             set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
             stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
@@ -358,9 +362,9 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Cut the circle with rotations only">
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. You could paint
-            the split with a conic gradient, a background that sweeps color round a point. But a painted background has
-            no parts: nothing to give a class, nothing to label, and nothing for a test to find.</Says>
+          <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
+            painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class,
+            which is a name a stylesheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
@@ -378,7 +382,8 @@ const PieStory: FC = () =>
             a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
-          <Says>The markup passes each number to the stylesheet as a custom property: a value set by name on the element,
+          <Says>The markup passes each number to the stylesheet as a custom property, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
+            explains: a value set by name on the element,
             such as <code className="monospaced">--turn</code>, and read back in the sheet with <code className="monospaced">var()</code>. The sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
             swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits
@@ -437,8 +442,8 @@ const WorkspaceStory: FC = () =>
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
-          <Says>That menu is built from the site’s Menu, Entry and Item components. A component is a function that
-            writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+          <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
+            page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a stylesheet’s rules pick out. Item gives its
             button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
         </Words>

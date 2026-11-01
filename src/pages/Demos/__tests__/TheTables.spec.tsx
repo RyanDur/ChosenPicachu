@@ -133,7 +133,7 @@ describe('the tables tab’s own words', () => {
     {choice: 'world=vanilla', sentence: 'The table keeps no copy of the order: the page gives dragSortable two functions that read its columns and rows, and the table asks them when it needs an answer.'},
     {choice: 'world=vanilla', sentence: 'The table itself is the browser’s, so it shows with its rows before the script runs and without it.'},
     {choice: 'world=react', sentence: 'The page writes the whole table itself: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
-    {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook. A component is a function that writes a piece of the page, as the z-index tab says, and a hook is a function a component calls while it renders, to keep something across renders or to read something kept outside React. The page calls the hook with its columns, its rows and the two choices.'},
+    {choice: 'world=react', sentence: 'The behavior arrives through useDragSortable, a hook. A component is a function that writes a piece of the page, as the z-index tab says. A hook is a function a component calls while it renders. It calls one to keep something across renders, or to read something kept outside React. The page calls the hook with its columns, its rows and the two choices.'},
     {choice: 'world=react', sentence: 'The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a move leaves on the columns or rows it shoves and on the one it drops, which last as long as their slide.'},
     {choice: 'world=react', sentence: 'The hook returns what the parts need to know: the hand’s state, the columns and rows, the dispatch, and the classes the table wears, since the behavior’s own sheets read them.'},
     {choice: 'world=react', sentence: 'The page wraps the table in a'},
@@ -1219,7 +1219,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('sort menu');
 
-    expect(recipe).toHaveTextContent('In the React world the sample is built from Menu, Entry and Item, the site’s menu components; they write one element each. A component is a function that writes a piece of the page, as the z-index tab says.');
+    expect(recipe).toHaveTextContent('In the React world the sample is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the page, as the z-index tab says, and each writes one element.');
   });
 
   test.each([
@@ -1458,7 +1458,7 @@ describe('the tables tutorials’ vocabulary', () => {
 describe('the tables tab’s introduction', () => {
   const paragraphs = [
     'A table of live trades is the hardest thing on this site: its rows change while you read them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.',
-    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s dials and drag, the z-index tab’s popover, top layer and React, and a class from the accordions tab. The rest is new here.',
+    'This tab assumes the charts tab’s live feed and its trades, the drag sort tab’s drag, the z-index tab’s popover, top layer and React, and a class and a dial from the accordions tab. The rest is new here.',
     'The bug most of us have met is the fight between the drag and the data: a column that jumps back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a move or a move that undoes a sort.',
     'This page’s view is that the columns and the rows’ order are the state, the values the page holds and draws from, as the z-index tab says, and the data never moves: a trade rewrites a row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a drag needs is measured once, at the grab.',
     'Every pixel of the drag is drawn from pointer events, the browser’s events for a mouse, a finger and a pen alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in React, the library this site’s script is written in, and the same state sits under both. The z-index tab explains React.',
