@@ -12,6 +12,12 @@ import indexCss from '/src/index.css?raw';
 import stylelintConfig from '/stylelint.config.js?raw';
 
 const appContinuum = 'https://www.appcontinuum.io/';
+const siteSources: Record<string, string> = import.meta.glob(['/src/**/*.{ts,tsx,html}', '!/src/**/__tests__/**', '!/src/**/__test_support/**', '!/src/**/__test_support__/**'], {query: '?raw', import: 'default', eager: true});
+
+const distinct = (words: string[]): string[] => [...new Set(words)].sort();
+
+const rolesWritten = (): string[] => distinct(Object.values(siteSources).flatMap(source => [...source.matchAll(/role="([a-z]+)"/g)].map(([, role]) => role)));
+
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
 const whereARuleLives = 'Where a rule lives. Shared words at the root, by concern; a component’s structure beside the component.';
 const sheetsImported = (): string[] => [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
@@ -326,6 +332,33 @@ describe('the practice page', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
+  });
+
+  test('should say what ARIA last looks like after what the elements mean, before the test', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(outOfReadingOrder([
+      practicePage.paragraph(/^One region on every page is a role and not an element/),
+      practicePage.paragraph(/^The elements mean something beyond how they look/),
+      practicePage.paragraph(/^Here is what ARIA last looks like on this site/),
+      practicePage.paragraph(/^Names are everywhere a reader would need one/),
+      practicePage.paragraph(/^The test is to read the page with the styles turned off/)
+    ])).toEqual([]);
+  });
+
+  test('should name every role the site writes, and no other', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(distinct(practicePage.codesIn(/^Here is what ARIA last looks like on this site/))).toEqual(rolesWritten());
+  });
+
+  test('should send the old-style banner to the z-index tab that raises it', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linksIn(/^Here is what ARIA last looks like on this site/)).toEqual([['z-index tab', demoAddress(DemoTopics.zIndex)]]);
   });
 
   test('should say what a component is for after the two builds, before what the elements mean', async () => {

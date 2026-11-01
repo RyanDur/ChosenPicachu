@@ -71,7 +71,8 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">One region on every page is a role and not an element. The banners are a section with the
       role alert, a live region, held in the top layer, because there is no alert element to reach for; the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
-      buys, a screen reader announcing a new note without being asked.</p>
+      buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
+      part on ARIA below lists them all.</p>
     <h3 className="paragraph bold">The element is the name</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
@@ -176,6 +177,21 @@ export const StructurePractice: FC = () =>
       button is a button even when it looks like a link.
       The standard that calls a div a last resort is the one the browser makers wrote themselves, from the{' '}
     <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
+    <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
+      minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner the{' '}
+    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
+      same role, because there is no alert element. The z-index demo’s sort menu is a popover list of buttons with
+      role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item, because no element says menu and the list
+      item’s own role would get in the way. A term’s definition, the small card that opens from a word in a tutorial,
+      has role <code className="monospaced">definition</code>. The Record’s period samples are a pre with role <code className="monospaced">group</code> and a name, so a screen
+      reader can land on a sample as one thing. That is the whole list, and each one is there because no element
+      carries that meaning.</p>
+    <p className="paragraph">Names are everywhere a reader would need one: every landmark that appears more than once,
+      the feedback dialog, the rail, and every button whose text is a glyph, the dismiss on a banner, the grip on a
+      row, the resize handle on a column. States come from the platform wherever it has one, <code className="monospaced">open</code> on a details,{' '}
+    <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button; the one state written by hand is <code className="monospaced">aria-sort</code> on the
+      table’s headers, because a th has no sort state of its own. So the rule, in one line: a name always, a role only
+      when no element carries it, a state only when the platform has none.</p>
     <h3 className="paragraph bold">The test</h3>
     <p className="paragraph">The test is to read the page with the styles turned off. It should still say
       everything it means, in order, because that is what search engines, reader modes and assistive technology

@@ -31,6 +31,7 @@ export const practicePage = {
   pickTab: (concern: string): Promise<void> => userEvent.click(within(tabs()).getByRole('link', {name: concern})),
   opener: (): Promise<HTMLElement> => screen.findByText(/^Each tab below is one of the three concerns/),
   openingParagraph: paragraphOpening,
+  codesIn: (opening: RegExp): string[] => within(paragraphOpening(opening)).getAllByRole('code').map(code => code.textContent),
   linksIn: (opening: RegExp): (string | null)[][] => within(paragraphOpening(opening)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
   beforeTheTabs: (): string[] => openingParagraphs().map(paragraph => paragraph.textContent),
