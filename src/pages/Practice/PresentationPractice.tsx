@@ -89,8 +89,8 @@ export const PresentationPractice: FC = () =>
       a reader on a browser from before a feature’s date gets whatever the sheet does without it.</p>
     <p className="paragraph">So what is left to organize is smaller than it was. With the platform supplying constants,
       order and isolation, and reuse through the cascade, the rest of this tab shows what remains: what this site keeps from
-      BEM and Tailwind, where a rule lives, what a class is named for, the duties the sheet keeps, the workarounds the
-      platform has retired, and the test a class list has to pass.</p>
+      BEM and Tailwind, where a rule lives, what a class is named for, what the sheet owes the reader, where the
+      platform catches up, and the test a class list has to pass.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -140,13 +140,15 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>,{' '}
       <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base,{' '}
-      <code className="monospaced">0.8rem</code>, and every size as a multiple of it, so no number is written twice; the
-      one exception is a drawing’s width, written in pixels to match its view box. Only values the code works out at
-      runtime are written inline, mostly as{' '}
+      <code className="monospaced">0.8rem</code>, and the sizes most rules read as multiples of it. Three kinds of size
+      are written outside it on purpose: the hairlines, the corner radius and the breakpoints, in pixels, because they
+      are not to scale with the type; a drawing’s width, in pixels, to match its view box; and a few widths of a table
+      or a page, which are their own numbers.</p>
+    <p className="paragraph">Only values the code works out at runtime are written inline, mostly as{' '}
       <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
       the sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom properties
-      are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: theme variables started in
-      script and now live in CSS.</p>
+      are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: they took over the theme
+      variables that script had held.</p>
     <p className="paragraph">Then the vocabulary, six files by concern:{' '}
       <a className="signpost" href={sheet('button')}>button</a>,{' '}
       <a className="signpost" href={sheet('typography')}>typography</a>,{' '}
@@ -166,14 +168,15 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       Another refuses a look in a component sheet and prints that the property{' '}
     <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
-      The third refuses a color, a size or a border written as a number instead of a token. BEM and SMACSS held their
+      The third refuses a color, a font size, a padding, a margin, a gap, a fill, a
+      stroke, a background or a border written as a number instead of a token. BEM and SMACSS held their
       lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
     <p className="paragraph">I use neither <code className="monospaced">@layer</code> for order nor{' '}
       <code className="monospaced">@scope</code> for isolation, because the import order above gives the cascade its
       order and a component’s own class, with its rules keyed on it, gives a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
-      a rule that says so. I do nest a rule inside another where it belongs there, as most sheets here do.</p>
+      a rule that says so. I do nest a rule inside another where it belongs, as most sheets here do.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
       <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>,{' '}
@@ -191,8 +194,8 @@ export const PresentationPractice: FC = () =>
       element. Mine name the need: <code className="monospaced">lifted</code> says why the style is there, and the
       sheet says what lifted means today, through a token. Change the token and every lifted element follows; the markup never held the value. That is the separation
       the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued for, the look leaving the markup for a
-      style sheet, and it keeps the sheet restyleable, which is what the Zen Garden in the{' '}
-    <MomentLink to="zenGarden">2003 moment</MomentLink> showed the separation is for. It also keeps the constraint
+      style sheet. It keeps the sheet restyleable, which is what the Zen Garden in the{' '}
+    <MomentLink to="zenGarden">2003 moment</MomentLink> showed it is for. It also keeps the constraint
       where Wathan wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
@@ -216,7 +219,7 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">shoved</code> for a neighbor pushed aside. One sheet, the table’s, says what each
       does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved
       has a rule per direction: two across for columns, two down for rows.</p>
-    <h3 className="paragraph bold">The duties the sheet keeps</h3>
+    <h3 className="paragraph bold">What the sheet owes the reader</h3>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can set, so the
       sheet checks{' '}
     <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a>{' '}
@@ -224,7 +227,7 @@ export const PresentationPractice: FC = () =>
       through, so the HTML keeps{' '}
     <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a>{' '}
       and the sheet only changes the picture.</p>
-    <h3 className="paragraph bold">Workarounds the platform has retired</h3>
+    <h3 className="paragraph bold">Where the platform catches up</h3>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state
       changes it. Select options had no such way round, and now they need none: they can be styled with{' '}

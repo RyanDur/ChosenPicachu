@@ -1,6 +1,6 @@
 import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {moments} from '@pages/Record/moments/moments';
 import {paragraphOpening, paragraphOpeningIn} from '@__test_support/paragraph';
@@ -59,6 +59,15 @@ export const practicePage = {
   },
   partHeadings: (): string[] => within(practice()).getAllByRole('heading', {level: 3}).map(heading => heading.textContent ?? ''),
   partHeading: (name: string): HTMLElement => within(practice()).getByRole('heading', {level: 3, name}),
+  linksUnder: (part: string): (string | null)[][] => {
+    const heading = within(practice()).getByRole('heading', {level: 3, name: part});
+    const parts = within(practice()).getAllByRole('heading', {level: 3});
+    const next = maybe(parts[parts.indexOf(heading) + 1]);
+    return within(practice()).getAllByRole('link')
+      .filter(link => Boolean(heading.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING))
+      .filter(link => next.map(after => Boolean(after.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING)).orElse(true))
+      .map(link => [link.textContent, link.getAttribute('href')]);
+  },
   terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
   definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
   linksInDefinitionOf: (term: string): (string | null)[][] => {

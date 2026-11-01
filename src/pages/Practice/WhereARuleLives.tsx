@@ -92,7 +92,7 @@ const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
 
 const Frame: FC<{boxes: Box[]; wears: Wears; className: string}> = ({boxes, wears: {from, to}, className}) =>
   <svg className={`${className} ink-filled`} viewBox={viewBoxAround(boxes)} aria-hidden="true">
-    {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === 'surface'}/>)}
+    {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === styles.surface.label}/>)}
     <line className="wears-line drawn dashed-drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
     <text className="drawn-caption" x={(from.x + to.x) / 2 + inset} y={(from.y + to.y) / 2} dominantBaseline="hanging">wears</text>
   </svg>;

@@ -141,7 +141,7 @@ describe('the practice page', () => {
     expect(practicePage.partHeading('What organizing CSS has to solve')).toBeInTheDocument();
   });
 
-  test('should read Behavior’s practice when the reader picks its tab from Presentation', async () => {
+  test('should mark Behavior as the current tab when the reader picks it from Presentation', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
 
     await practicePage.pickTab('Behavior');

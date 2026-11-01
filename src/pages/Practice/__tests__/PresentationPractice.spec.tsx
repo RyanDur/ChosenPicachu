@@ -82,8 +82,8 @@ describe('the Presentation practice tab', () => {
       'What this site keeps',
       'Where a rule lives',
       'What a class is named for',
-      'The duties the sheet keeps',
-      'Workarounds the platform has retired',
+      'What the sheet owes the reader',
+      'Where the platform catches up',
       'The test a class list has to pass'
     ]);
   });
@@ -93,11 +93,8 @@ describe('the Presentation practice tab', () => {
     await practicePage.arrivedOn('Presentation');
 
     const imported = sheetsImported();
-    const walked = [
-      ...practicePage.linksIn(/^Here is how this site’s CSS is laid out/),
-      ...practicePage.linksIn(/^Then two token files/),
-      ...practicePage.linksIn(/^Then the vocabulary, six files by concern/)
-    ].filter(([, href]) => (href ?? '').startsWith(Paths.repo));
+    const walked = practicePage.linksUnder('Where a rule lives')
+      .filter(([, href]) => (href ?? '').startsWith(`${Paths.repo}/blob/main/src/styles/`));
 
     expect(imported).toHaveLength(9);
     expect(walked.map(([name]) => name)).toEqual(['reset', 'colors.css', 'spacing.css', 'button', 'typography', 'surface', 'drawing', 'placement', 'glide']);
@@ -220,19 +217,46 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should keep its links to the platform’s own references', async () => {
+  test('should send pseudo-classes to MDN’s page on them', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(['pseudo-classes', 'prefers-reduced-motion', 'the meaningful sequence', 'appearance: base-select', '“fall back to a classic select experience”', 'custom properties']
-      .map(name => practicePage.link(name).getAttribute('href'))).toEqual([
-      'https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes',
-      'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion',
-      'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html',
-      'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
-      'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select',
-      'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'
-    ]);
+    expect(practicePage.link('pseudo-classes')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes');
+  });
+
+  test('should send prefers-reduced-motion to MDN’s page on the media feature', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('prefers-reduced-motion')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion');
+  });
+
+  test('should send the meaningful sequence to its WCAG understanding page', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('the meaningful sequence')).toHaveAttribute('href', 'https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html');
+  });
+
+  test('should send appearance: base-select to MDN’s guide to the customizable select', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('appearance: base-select')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select');
+  });
+
+  test('should send the quotation on the classic select to the MDN guide that holds it', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('“fall back to a classic select experience”')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select');
+  });
+
+  test('should send the inline values’ custom properties to MDN’s page on using them', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+    await practicePage.arrivedOn('Presentation');
+
+    expect(practicePage.link('custom properties')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties');
   });
 
   test('should show the trades column’s header in the part on what a class is named for', async () => {
@@ -244,7 +268,7 @@ describe('the Presentation practice tab', () => {
     expect(outOfReadingOrder([
       practicePage.partHeading('What a class is named for'),
       figure,
-      practicePage.partHeading('The duties the sheet keeps')
+      practicePage.partHeading('What the sheet owes the reader')
     ])).toEqual([]);
   });
 
