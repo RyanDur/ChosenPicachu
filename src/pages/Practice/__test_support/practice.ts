@@ -30,9 +30,11 @@ export const practicePage = {
   paragraphs: (): string[] => within(practice()).getAllByRole('paragraph').map(paragraph => paragraph.textContent),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
-  drawnIn: (figure: string, title: string): string[] =>
-    within(within(within(practice()).getByRole('figure', {name: figure})).getByRole('img', {name: title}))
-      .getAllByText(/./, {ignore: 'title'}).map(text => text.textContent),
+  drawingsSeenIn: (figure: string): HTMLElement[] =>
+    within(within(practice()).getByRole('figure', {name: figure})).queryAllByRole('img'),
+  drawnIn: (figure: string): string[] =>
+    within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption'})
+      .map(text => text.textContent),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
     .filter(link => (link.getAttribute('href') ?? '').startsWith(Paths.record))

@@ -14,13 +14,12 @@ type Placed = {
   readonly x: number;
 };
 
-// drawn-to-scale sets the code at var(--base), 8 units of the drawing, and a monospace face advances 0.6em a character.
+// A monospace face advances 0.6em a character, so a run's width follows from the one size its text is set at.
 const codeSize = 8;
 const advance = codeSize * 0.6;
 const gap = 5;
 const margin = 4;
 
-const title = 'A class list read left to right';
 const opening = '<th scope="col" class="';
 const closing = '">trades</th>';
 
@@ -33,19 +32,19 @@ const tag = `${opening}${[nouns, needs, states].map(run => run.classes).join(' '
 const textOf = (segment: Segment): string => typeof segment === 'string' ? segment : segment.classes;
 const widthOf = (text: string): number => text.length * advance;
 const lengthOf = (segments: Segment[]): number =>
-  segments.reduce((length, segment) => length + widthOf(textOf(segment)) + gap, -gap);
+  segments.reduce((length, segment, at) => length + (at > 0 ? gap : 0) + widthOf(textOf(segment)), 0);
 
 const placedAlong = (segments: Segment[]): Placed[] =>
-  segments.map((segment, at) => ({segment, x: margin + lengthOf(segments.slice(0, at)) + (at > 0 ? gap : 0)}));
+  segments.map((segment, at) => ({segment, x: margin + (at > 0 ? lengthOf(segments.slice(0, at)) + gap : 0)}));
 
 const Code: FC<{x: number; y: number; children: string}> = ({x, y, children}) =>
-  <text className="drawn-to-scale monospaced" x={x} y={y}>{children}</text>;
+  <text className="monospaced" x={x} y={y} fontSize={codeSize}>{children}</text>;
 
 const DrawnRun: FC<{run: Run; x: number; y: number}> = ({run: {classes, word, look}, x, y}) => <>
   <rect className={`${look} drawn`} x={x - 2} y={y - 8.5} width={widthOf(classes) + 4} height={12}/>
   <Code x={x} y={y}>{classes}</Code>
   <path className="hollow drawn" d={`M${x} ${y + 8} v4 h${widthOf(classes)} v-4`}/>
-  <text className="drawn-to-scale" x={x + widthOf(classes) / 2} y={y + 22} textAnchor="middle">{word}</text>
+  <text x={x + widthOf(classes) / 2} y={y + 22} fontSize={codeSize} textAnchor="middle">{word}</text>
 </>;
 
 const Line: FC<{segments: Segment[]; y: number}> = ({segments, y}) => <>
@@ -58,9 +57,7 @@ const oneLine: Segment[] = [opening, nouns, needs, states, closing];
 const wideWidth = margin * 2 + lengthOf(oneLine);
 
 const WideClassList: FC = () =>
-  <svg className="class-list-wide ink-filled" viewBox={`0 0 ${wideWidth} 44`} role="img"
-    aria-labelledby="class-list-wide-title">
-    <title id="class-list-wide-title">{title}</title>
+  <svg className="class-list-wide ink-filled" viewBox={`0 0 ${wideWidth} 44`} aria-hidden="true">
     <Line segments={oneLine} y={14}/>
   </svg>;
 
@@ -76,7 +73,7 @@ export const ColumnHeaderClassList: FC = () =>
     <code className="off-screen monospaced">{tag}</code>
     <WideClassList/>
     <NarrowClassList/>
-    <figcaption className="caption">The table’s trades header, its class list trimmed to a few of each kind, read left
+    <figcaption className="caption">The trades column’s header from the Tables demo, its class list trimmed, read left
       to right: nouns, then needs, then states.
     </figcaption>
   </figure>;

@@ -15,8 +15,9 @@ export const PresentationPractice: FC = () =>
     <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>,{' '}
     <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A class like that
       is a utility: one look, under one name, that any element can wear. An element is dressed by naming its needs,
-      and no new rule is written. Element selectors appear only in the reset. The separation of the look from the
-      markup is the <MomentLink to="presentationLeavesHome">1994 draft</MomentLink>’s.</p>
+      and no new rule is written. Element selectors appear only in the reset. The{' '}
+    <MomentLink to="presentationLeavesHome">1994 draft</MomentLink> argued that the look should leave the markup for
+      a style sheet.</p>
     <p className="paragraph">Utilities are where I agree with Adam Wathan, who made Tailwind:{' '}
       <a className="signpost" href={wathan}>compose a look from a shared set of pieces rather than write it again</a>,
       and choose every value from a constrained set, so the design stays consistent as the site grows. Where I part
@@ -45,8 +46,8 @@ export const PresentationPractice: FC = () =>
       Tailwind takes sharing and gives up restyling. I take both, and pay with a vocabulary that has to be kept, and a
       lint rule that holds it.</p>
     <p className="paragraph">A class is a name for what the element is, what it needs or what is true right now; the
-      value it stands for lives in the sheet, so the name still fits when the value changes.</p>
-    <p className="paragraph">A class list reads left to right: nouns, then needs, then states.</p>
+      value it stands for lives in the sheet, so the name still fits when the value changes. A class list reads left
+      to right: nouns, then needs, then states.</p>
     <ColumnHeaderClassList/>
     <p className="paragraph">The nouns say what the element is: <code className="monospaced">cell</code> and{' '}
       <code className="monospaced">header-cell</code> name a part of the table, and the table’s own sheet, kept beside
