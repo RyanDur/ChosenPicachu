@@ -51,8 +51,7 @@ export const ListTutorials: FC = () => {
           unanswered={unanswered}/>
       </Station>
       <Station at={3}>
-        <Slices who="user"
-          can="The user can keep the list in the order they mean"
+        <Slices can="The user can keep the list in the order they mean"
           soThat="so that what belongs above sits above"
           slices="I cut it into two thin stories, the same reorder each time. One moves the order by pointer, on the platform’s own drag and drop. The other moves the order directly, from the keyboard. Both are cards in the last station, and each opens into its build."
           sliced={[

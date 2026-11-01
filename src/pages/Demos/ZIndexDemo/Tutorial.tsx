@@ -44,24 +44,31 @@ export const TopLayerTutorial: FC = () => {
       <span className="so-that paragraph italic muted-ink">so that I do not go looking.</span>
     </p>
     <p className="overview paragraph">
-      The ask above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a screen
-      reader announces a new note without the reader going to look. ‘Do not hide the note under the thing that broke’
-      means the banner sits in the top layer, where nothing on the page is drawn over it. Each phrase read that way is a
-      clue: a line of the ask, and what it commits the build to. The ask left open where on the window the note sits,
-      how it arrives, and how several stand at once; the dials below are those answers, and the cards below settle them
-      one at a time.
+      The user’s words above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a
+      screen reader, the program that reads a page aloud, announces a new note without the reader going to look. ‘Do not
+      hide the note under the thing that broke’ means the banner sits in the top layer, where nothing on the page is
+      drawn over it.
     </p>
+    <p className="overview paragraph">
+      Each phrase read that way is a clue: a line of what the user said, and what it commits the build to.
+    </p>
+    <p className="overview paragraph">
+      The user’s words left open where on the window the note sits, how it arrives, and how several stand at once. The
+      dials below are those answers, and the cards below settle them one at a time.
+    </p>
+    <p className="overview paragraph">The confirmation is two lines a reader can check against the page.</p>
     <ul className="confirmation" aria-label="the confirmation">
       <li className="paragraph">Given a page with the news raised, when a card with a z-index of its own scrolls past,
         then the note stays on top.
       </li>
-      <li className="paragraph">Given a reader with a screen reader, when news is raised, then it is announced without a
-        move.
+      <li className="paragraph">Given a reader with a screen reader, when news is raised, then it is read out without the
+        reader going to look.
       </li>
     </ul>
     <p className="overview paragraph">
-      Every card below is told that way. Open a card and you get the plan for that feature and the steps that build it,
-      with the real code from this site, so what you read is what runs. The <TabLink to={DemoTopics.accordions}>dials</TabLink> below
+      Every card below is one of those stories, shortened. Its headline says who gets what and its second line says why;
+      the steps inside say what each conversation settled, with the real code from this site, so what you read is what
+      runs. Its confirmation is a journey this site runs. The <TabLink to={DemoTopics.accordions}>dials</TabLink> below
       place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the
       step. The links go to MDN, if you want more.
     </p>

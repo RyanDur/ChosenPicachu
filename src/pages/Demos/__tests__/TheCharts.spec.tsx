@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {paragraphReading} from '@__test_support/paragraph';
+import {paragraphOpening, paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
@@ -51,6 +51,14 @@ describe('the charts tutorials’ menus', () => {
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findSays(/^The period menu is built from Menu, Entry and Item/)).toHaveTextContent('The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the page, as the z-index tab says. They write a menu, an li, which is one item of a list, and a button.');
+  });
+
+  test('should say the card below is a user story, glossed, and that the z-index tab walks one through, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(paragraphOpening(/^We are going to build the/)).toHaveTextContent('The card below tells it as a user story, a card, a conversation and a confirmation, which the z-index tab walks through: open it and you get the plan and the steps that build it, with the real code from this site, so what you read is what runs.');
   });
 
   test('should say what a class is, and that the page passes Menu the menu’s look, on the price chart’s page', async () => {
@@ -898,7 +906,7 @@ describe('the charts’ headings', () => {
 describe('the charts tab’s introduction', () => {
   const paragraphs = [
     'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
-    'This tab assumes a popover and the state React holds, which the z-index tab explains, and the keyframe animation, which the drag sort tab defines. The rest is new here.',
+    'This tab assumes a class from the accordions tab; a popover, and a component, its state and an event, which the z-index tab explains; and the keyframe animation, which the drag sort tab defines. The rest is new here.',
     'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
     'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.',
     'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
@@ -919,6 +927,7 @@ describe('the charts tab’s introduction', () => {
     render(<TestApp at={demosAt('charts')}/>);
 
     expect(await demoTabs.assumedLinks('Charts')).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
     ]);
@@ -1040,6 +1049,7 @@ describe('the links to other tabs', () => {
     const tab = await demoTabs.arrivedOn('Charts');
 
     expect(demoPage.linksToTabsIn(tab)).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
       ['z-index tab', `${Paths.demos}z-index/`],
@@ -1055,17 +1065,21 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]],
     ['candles', [
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]],
     ['pressure', [
+      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]],
     ['pie', [
+      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]]

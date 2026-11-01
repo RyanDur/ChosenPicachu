@@ -1,3 +1,5 @@
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '@pages/Demos/types';
 import {FC, ReactNode} from 'react';
 import {stationId} from './Station';
 
@@ -12,8 +14,9 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
   <section className="phase card rounded-corners lifted" aria-labelledby="phase-need">
     <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>
     <p className="overview paragraph muted-ink">
-      Before any code, and before any story, someone needs something. Listen for what they say,
-      name each clue, and the clues point at the element to build it with.
+      Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a
+      line of it and what it commits the build to, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> shows; the clues point at the element to
+      build it with.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
@@ -71,14 +74,13 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
   </section>;
 
 type SlicesProps = {
-  who: string;
   can: string;
   soThat: string;
   slices: ReactNode;
   sliced: [string, number][];
 };
 
-export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
+export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
   <section className="phase card rounded-corners lifted" aria-labelledby="phase-stories">
     <h3 id="phase-stories" className="phase-title title">Slice the design into stories</h3>
     <p className="overview paragraph muted-ink">
@@ -86,9 +88,8 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
       <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>, a discrete piece of value from the {who}’s side of
-      the screen, and a promise of a conversation rather than a specification. The whole of it
-      reads as one:
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks
+      through. The whole of it reads as one:
     </p>
     <hgroup className="story arriving card rounded-corners lifted">
       <h4 className="can paragraph bold">{can}</h4>

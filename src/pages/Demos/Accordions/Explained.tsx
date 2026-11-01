@@ -319,9 +319,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes whichever is open.</p>
                 </li>}
                 <li className="run">
-                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in state,
-                    a value a component holds and draws from: whether a fold is open, and, while it moves, first the height the motion starts from, then the height it
-                    ends at, and whether it has started. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
+                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in state.
+                    State is a value a component holds and draws from. Here it is whether a fold is open, and, while it moves,
+                    first the height the motion starts from, then the height it ends at, and whether it has started. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
                   <Snippet label="TS" lines={[
                     ...unit(panelSource, 'type Motion ='), gap,
                     ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')

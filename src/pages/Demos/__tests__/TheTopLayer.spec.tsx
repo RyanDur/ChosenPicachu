@@ -28,7 +28,7 @@ describe('the top layer', () => {
     expect(outOfReadingOrder([
       await demoPage.findSays(/^We are going to build this site’s banner/),
       demoPage.says('The parts above show what a z-index does and where it stops counting; the banner sets none.'),
-      demoPage.says(/^Every card below is told that way/)
+      paragraphOpening(/^Every card below is one of those stories, shortened/)
     ])).toEqual([]);
   });
 
@@ -113,7 +113,11 @@ describe('the top layer', () => {
 
 describe('the banner tutorial’s walked-through story', () => {
   const definition = /^A user story is a card, a conversation and a confirmation/;
-  const conversation = /^The ask above settled two things/;
+  const settled = /^The user’s words above settled two things/;
+  const clue = /^Each phrase read that way is a clue/;
+  const leftOpen = /^The user’s words left open/;
+  const leadIn = /^The confirmation is two lines a reader can check/;
+  const shortened = /^Every card below is one of those stories, shortened/;
 
   const arriveAtTheTutorial = async (): Promise<HTMLElement> => {
     render(<TestApp at={demosAt('accordions')}/>);
@@ -139,10 +143,28 @@ describe('the banner tutorial’s walked-through story', () => {
     expect(paragraphOpening(/^As a reader who missed the news/)).toHaveTextContent('As a reader who missed the news, I want the banner to raise it, so that I do not go looking.');
   });
 
-  test('should read the two settled lines from the ask, say what a clue is, and say what the ask left open', async () => {
+  test('should read the two settled lines from the user’s words, and say what a screen reader is where it first names one', async () => {
     const tutorial = await arriveAtTheTutorial();
 
-    expect(explanation.saying(tutorial, conversation)).toHaveTextContent('The ask above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a screen reader announces a new note without the reader going to look. ‘Do not hide the note under the thing that broke’ means the banner sits in the top layer, where nothing on the page is drawn over it. Each phrase read that way is a clue: a line of the ask, and what it commits the build to. The ask left open where on the window the note sits, how it arrives, and how several stand at once; the dials below are those answers, and the cards below settle them one at a time.');
+    expect(explanation.saying(tutorial, settled)).toHaveTextContent('The user’s words above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a screen reader, the program that reads a page aloud, announces a new note without the reader going to look. ‘Do not hide the note under the thing that broke’ means the banner sits in the top layer, where nothing on the page is drawn over it.');
+  });
+
+  test('should say what a clue is in a run of its own', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(explanation.saying(tutorial, clue)).toHaveTextContent('Each phrase read that way is a clue: a line of what the user said, and what it commits the build to.');
+  });
+
+  test('should say what the user’s words left open, and that the dials and the cards answer it', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(explanation.saying(tutorial, leftOpen)).toHaveTextContent('The user’s words left open where on the window the note sits, how it arrives, and how several stand at once. The dials below are those answers, and the cards below settle them one at a time.');
+  });
+
+  test('should say what the confirmation is before its lines', async () => {
+    const tutorial = await arriveAtTheTutorial();
+
+    expect(explanation.saying(tutorial, leadIn)).toHaveTextContent('The confirmation is two lines a reader can check against the page.');
   });
 
   test('should quote each settled phrase from the ask on the page', async () => {
@@ -158,14 +180,14 @@ describe('the banner tutorial’s walked-through story', () => {
 
     expect(zIndexTab.confirmationIn(tutorial)).toEqual([
       'Given a page with the news raised, when a card with a z-index of its own scrolls past, then the note stays on top.',
-      'Given a reader with a screen reader, when news is raised, then it is announced without a move.'
+      'Given a reader with a screen reader, when news is raised, then it is read out without the reader going to look.'
     ]);
   });
 
-  test('should say every card below is told that way, then how to use the cards, the dials and the links', async () => {
-    const tutorial = await arriveAtTheTutorial();
+  test('should say what the cards below keep of a story, then how to use the dials and the links', async () => {
+    await arriveAtTheTutorial();
 
-    expect(explanation.saying(tutorial, /^Every card below is told that way/)).toHaveTextContent('Every card below is told that way. Open a card and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step. The links go to MDN, if you want more.');
+    expect(paragraphOpening(shortened)).toHaveTextContent('Every card below is one of those stories, shortened. Its headline says who gets what and its second line says why; the steps inside say what each conversation settled, with the real code from this site, so what you read is what runs. Its confirmation is a journey this site runs. The dials below place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the step. The links go to MDN, if you want more.');
   });
 
   test('should walk the ask, the user story, its card, conversation and confirmation, and how every card is told, before the dials and the first card', async () => {
@@ -175,9 +197,12 @@ describe('the banner tutorial’s walked-through story', () => {
       explanation.saying(tutorial, /^When something breaks/),
       paragraphOpening(definition),
       paragraphOpening(/^As a reader who missed the news/),
-      explanation.saying(tutorial, conversation),
+      explanation.saying(tutorial, settled),
+      explanation.saying(tutorial, clue),
+      explanation.saying(tutorial, leftOpen),
+      explanation.saying(tutorial, leadIn),
       explanation.saying(tutorial, /^Given a page with the news raised/),
-      explanation.saying(tutorial, /^Every card below is told that way/),
+      paragraphOpening(shortened),
       await zIndexTab.findBannerControls(),
       recipeFolds.story(tutorial, 'The user sees the news above everything')
     ])).toEqual([]);
@@ -232,9 +257,17 @@ describe('the banner tutorial’s first story', () => {
       .toEqual(['Make the panel a popover', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
   });
 
+  test('should name a screen reader in the first story without defining it again', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+    await demoTabs.open('Z-index');
+    const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
+
+    expect(news).toHaveTextContent('so a screen reader announces what arrives without being asked.');
+    expect(news).not.toHaveTextContent('the program that reads a page aloud');
+  });
+
   test.each([
     ['light dismiss', 'The usual value, auto, gives a popover light dismiss: a click outside it or the Escape key closes it.'],
-    ['a screen reader', 'a screen reader, the program that reads a page aloud, announces what arrives without being asked.'],
     ['a React effect', 'A React effect, code that React runs after it has updated the page, runs when the number of banners changes.'],
     ['the browser’s own stylesheet', 'The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a size that fits its content, inset: 0 and margin: auto.'],
     ['margin-block and margin-inline', 'On this page margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.']

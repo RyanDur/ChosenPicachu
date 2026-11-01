@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {DemoTopics, demoAddress} from '../types';
+import {TabLink} from '@pages/Demos/TabLink';
 import {useDemosSelector} from '../Provider';
 import {selectLiveTrades} from '../store';
 import {PriceChart} from './PriceChart';
@@ -85,7 +86,8 @@ export const ChartPage: FC = () => {
           className="signpost"
           href="https://initialcapacity.io/insights/user-story"
           target="_blank"
-          rel="noreferrer">user story</a>: open it and you get the plan and the steps that
+          rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
+        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps that
         build it, with the real code from this site, so what you read is what runs. The
         links go to MDN
         if you want more.

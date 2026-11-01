@@ -59,8 +59,8 @@ export const TopLayerRecipe: FC = () => {
           <Says>The panel is a section with the popover attribute set to manual. The usual value, auto, gives a
             popover light dismiss: a click outside it or the Escape key closes it. A manual popover has no light
             dismiss, so the news stays through a stray click and goes when the code hides it. Its role
-            is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader, the
-            program that reads a page aloud, announces what arrives without being asked.</Says>
+            is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
+            announces what arrives without being asked.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

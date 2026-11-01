@@ -147,7 +147,7 @@ describe('the sortable list demo', () => {
     await nativeRecipe();
 
     expect(explanation.saying(demoPage.part('Start with the need, and let it pick the element'), /^Before any code/))
-      .toHaveTextContent('Before any code, and before any story, someone needs something. Listen for what they say, name each clue, and the clues point at the element to build it with.');
+      .toHaveTextContent('Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a line of it and what it commits the build to, as the z-index tab shows; the clues point at the element to build it with.');
   });
 
   test('the recipe walks the stations from need to design to slices', async () => {
@@ -368,7 +368,7 @@ describe('the native drag sort tutorial’s words', () => {
 
 describe('the drag sort tab’s own words', () => {
   test.each([
-    'Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a discrete piece of value from the user’s side of the screen, and a promise of a conversation rather than a specification. The whole of it reads as one:',
+    'Once the need is heard and the design has answered shape, I split the work into stories. Each is a user story, a card, a conversation and a confirmation, as the z-index tab walks through. The whole of it reads as one:',
     'I cut it into two thin stories, the same reorder each time. One moves the order by pointer, on the platform’s own drag and drop. The other moves the order directly, from the keyboard. Both are cards in the last station, and each opens into its build.',
     'The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or right arrow into a move of one place and reports the new order up to the list, with no drag involved. While the item is still sliding, the handler ignores the keys.'
   ])('should say, whatever the dials, words and links together: %s', async sentence => {
@@ -535,6 +535,8 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
       ['dials', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
