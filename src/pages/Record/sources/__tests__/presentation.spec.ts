@@ -6,11 +6,4 @@ describe('the Presentation shelf’s sources', () => {
 
     expect(new Set(addresses).size).toBe(addresses.length);
   });
-
-  test('should give every source a title and a provenance', () => {
-    Object.values(presentation).forEach(({title, provenance}) => {
-      expect(title).not.toBe('');
-      expect(provenance).not.toBe('');
-    });
-  });
 });

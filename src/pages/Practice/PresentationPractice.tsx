@@ -6,12 +6,10 @@ import {ColumnHeaderClassList} from './ClassList';
 import {WhereARuleLives} from './WhereARuleLives';
 
 const {
-  cssUtilityClassesSeparation: wathan, utilityFirstFundamentals: utilityFirst, bem, history: bemHistory,
-  stylingUtilityClasses: stylingWithUtilities, customizableSelectElements: customizableSelect, smacss,
-  resetReloaded, resetCss, normalizeCss, aboutNormalizeCss, sass, aboutLess, aboutBootstrap, objectOrientedCss,
-  cssModules, celebratingDecadeStyledComponents: styledComponents, customProperties, layer, container, has,
-  nestingSelector, scope, pseudoClasses, prefersReducedMotion, understandingSuccessCriterion1: meaningfulSequence,
-  usingCssCustomProperties
+  wathan, utilityFirst, bem, bemHistory, stylingWithUtilities, customizableSelect, smacss, resetReloaded, resetCss,
+  normalizeCss, aboutNormalizeCss, sass, aboutLess, aboutBootstrap, objectOrientedCss, cssModules, styledComponents,
+  customProperties, layer, container, has, nestingSelector, scope, pseudoClasses, prefersReducedMotion,
+  meaningfulSequence, usingCssCustomProperties
 } = presentation;
 const sheet = (file: string): string => fileInRepository(`src/styles/${file}.css`);
 const stylelintConfig = fileInRepository('stylelint.config.js');

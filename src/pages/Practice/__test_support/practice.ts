@@ -35,11 +35,11 @@ export const practicePage = {
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
   paragraph: (opening: RegExp): HTMLElement => {
-    const found = within(practice()).getAllByRole('paragraph').find(paragraph => opening.test(paragraph.textContent ?? ''));
-    if (found) {
-      return found;
+    const found = within(practice()).getAllByRole('paragraph').filter(paragraph => opening.test(paragraph.textContent ?? ''));
+    if (found.length === 1) {
+      return found[0];
     }
-    throw new Error(`no paragraph opening ${opening}`);
+    throw new Error(`${found.length} paragraphs opening ${opening}, not one`);
   },
   itemsListedAfter: (opening: RegExp): string[] => {
     const list = within(practice()).getAllByRole('paragraph').find(paragraph => opening.test(paragraph.textContent ?? ''))?.nextElementSibling;
