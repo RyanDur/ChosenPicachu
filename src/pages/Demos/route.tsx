@@ -1,19 +1,21 @@
 import {FC} from 'react';
 import {Outlet, useLocation} from 'react-router';
-import {Maybe} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
 import {PageError} from '@pages/PageError';
 import NoSuchRoom from '@pages/NoRoom/route';
 import names from '@pages/names.json';
-import {Paths} from '@pages/Paths';
-import {demoTopicAt, DemoTopics, topicNames} from './types';
+import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Trading';
 
 const headerOf = (topic: DemoTopics) => <Header title={`Demos ${topicNames[topic]}`} listed={names.demos[topic]}/>;
 
-const useTopic = (): Maybe<DemoTopics> => demoTopicAt(useLocation().pathname.slice(Paths.demos.length).split('/')[0]);
+const useTopic = (): Maybe<DemoTopics> => {
+  const {pathname} = useLocation();
+  return maybe(Object.values(DemoTopics).find(topic => pathname.startsWith(demoAddress(topic))));
+};
 
 export const ErrorBoundary: FC = () => {
   const header = useTopic().map(headerOf).orElse(null);
