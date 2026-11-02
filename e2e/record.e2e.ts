@@ -113,3 +113,12 @@ test('a reader who follows a moment link on Practice lands on that moment in the
   await expect(page).toHaveURL(/\/record\/#the-document-needs-to-come-first$/);
   await expect(recordPage(page).moment('The document needs to come first')).toBeFocused();
 });
+
+test('a reader who follows the Behavior tab\'s 2014 moment lands on the moment the data took one direction, inside 2014\'s fold', async ({page}) => {
+  await page.goto('practice/behavior/');
+
+  await practicePage(page).momentLink('2014 moment').click();
+
+  await expect(page).toHaveURL(/\/record\/#the-data-needs-one-direction$/);
+  await expect(recordPage(page).moment('The data needs one direction')).toBeFocused();
+});

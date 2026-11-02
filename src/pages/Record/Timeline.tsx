@@ -11,6 +11,7 @@ import {BrowsersTakePen} from './moments/BrowsersTakePen';
 import {PageBecomesApplication} from './moments/PageBecomesApplication';
 import {SomeoneNeedsComponents} from './moments/SomeoneNeedsComponents';
 import {Html5SaysIt} from './moments/Html5SaysIt';
+import {OneDirection} from './moments/OneDirection';
 import {DocumentComesBack} from './moments/DocumentComesBack';
 import {WebGoesPublic} from './moments/WebGoesPublic';
 import {HtmlTwo} from './moments/HtmlTwo';
@@ -48,6 +49,7 @@ const stories: Record<MomentKey, FC> = {
   frameworks: Frameworks,
   cssTwoOne: CssTwoOne,
   someoneNeedsComponents: SomeoneNeedsComponents,
+  oneDirection: OneDirection,
   html5SaysIt: Html5SaysIt,
   documentComesBack: DocumentComesBack,
   constantsNeedHome: ConstantsNeedHome,

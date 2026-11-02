@@ -156,7 +156,7 @@ describe('the record', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
-      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016', '2017', '2025']);
+      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', 'July', 'October', '2016', '2017', '2025']);
     expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
       'CERN needs to share what it knows',
       'The information needs one interface',
@@ -175,7 +175,7 @@ describe('the record', () => {
       'The application needs a frame',
       'The specification needs its tests',
       'Someone needs components',
-      'The rules need writing down',
+      'The data needs one direction, and the rules need writing down',
       'The document needs to come first',
       'The constants need a home',
       'The elements need to arrive'
@@ -1023,13 +1023,14 @@ describe('the record\'s three stories', () => {
 
   test('should end Behavior\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
     expect(recordPage.storyMomentsHeading('Behavior')).toBeVisible();
-    expect(recordPage.storyMomentLines('Behavior')).toEqual(['1995 Pages need to respond', '1997 The language needs a standard', '2005 The page needs to update in place', '2009 The standard needs to move again', '2010 The application needs a frame', '2013 Someone needs components', '2016 The document needs to come first']);
+    expect(recordPage.storyMomentLines('Behavior')).toEqual(['1995 Pages need to respond', '1997 The language needs a standard', '2005 The page needs to update in place', '2009 The standard needs to move again', '2010 The application needs a frame', '2013 Someone needs components', '2014 The data needs one direction', '2016 The document needs to come first']);
     expect(recordPage.storyMomentLine('Behavior', '1995 Pages need to respond')).toHaveAttribute('href', `${Paths.record}#pages-need-to-respond`);
     expect(recordPage.storyMomentLine('Behavior', '1997 The language needs a standard')).toHaveAttribute('href', `${Paths.record}#the-language-needs-a-standard`);
     expect(recordPage.storyMomentLine('Behavior', '2005 The page needs to update in place')).toHaveAttribute('href', `${Paths.record}#the-page-needs-to-update-in-place`);
     expect(recordPage.storyMomentLine('Behavior', '2009 The standard needs to move again')).toHaveAttribute('href', `${Paths.record}#the-standard-needs-to-move-again`);
     expect(recordPage.storyMomentLine('Behavior', '2010 The application needs a frame')).toHaveAttribute('href', `${Paths.record}#the-application-needs-a-frame`);
     expect(recordPage.storyMomentLine('Behavior', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
+    expect(recordPage.storyMomentLine('Behavior', '2014 The data needs one direction')).toHaveAttribute('href', `${Paths.record}#the-data-needs-one-direction`);
     expect(recordPage.storyMomentLine('Behavior', '2016 The document needs to come first')).toHaveAttribute('href', `${Paths.record}#the-document-needs-to-come-first`);
   });
 

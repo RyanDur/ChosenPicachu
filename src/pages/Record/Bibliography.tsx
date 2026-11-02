@@ -306,6 +306,18 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Pete Hunt, React blog, 5 June 2013</span>
           </li>
           <li>
+            <a className="signpost" href="https://facebookarchive.github.io/flux/docs/in-depth-overview"><cite>In-Depth Overview</cite></a>{' '}
+            <span className="provenance caption">Flux documentation, Facebook, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://guide.elm-lang.org/architecture/"><cite>The Elm Architecture</cite></a>{' '}
+            <span className="provenance caption">An Introduction to Elm, undated</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://redux.js.org/understanding/thinking-in-redux/three-principles"><cite>Three Principles</cite></a>{' '}
+            <span className="provenance caption">Redux documentation, undated</span>
+          </li>
+          <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope"><cite>@scope</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>
