@@ -1,8 +1,5 @@
 .practice-opening,
 .practice {
-  display: grid;
-  align-content: start;
-  gap: var(--base-x-1_5);
   padding: var(--base-x-5) var(--page-inset);
 
   .paragraph {
@@ -10,7 +7,21 @@
   }
 }
 
+.practice-opening {
+  display: grid;
+  align-content: start;
+  gap: var(--base-x-1_5);
+}
+
 .practice {
+  display: flow-root;
+  inline-size: 100%;
+  container-type: inline-size;
+
+  > * + * {
+    margin-block-start: var(--base-x-1_5);
+  }
+
   .practice-list {
     display: grid;
     gap: var(--base-x-0_5);

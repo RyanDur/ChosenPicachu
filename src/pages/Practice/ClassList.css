@@ -1,26 +1,7 @@
 .class-list {
-  display: grid;
-  gap: var(--base);
-  margin: 0;
-
-  .class-list-wide,
-  .class-list-narrow {
+  .class-list-drawing {
     inline-size: 100%;
     block-size: auto;
-  }
-
-  .class-list-narrow {
-    display: none;
     max-inline-size: var(--base-x-60);
-  }
-
-  @media (width < 860px) {
-    .class-list-wide {
-      display: none;
-    }
-
-    .class-list-narrow {
-      display: block;
-    }
   }
 }
