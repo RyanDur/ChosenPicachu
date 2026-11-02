@@ -1,6 +1,12 @@
 import {expect, test} from '@playwright/test';
 import {iPhone, sortableList} from './__test_support';
 
+test.afterEach(async ({page}, testInfo) => {
+  if (testInfo.status !== testInfo.expectedStatus) {
+    await testInfo.attach('drag events', {body: await sortableList(page).dragEventsSeen(), contentType: 'text/plain'});
+  }
+});
+
 test('an eager list takes the new order the moment the carried item crosses a neighbour', async ({page}) => {
   await page.goto('demos/drag-and-drop/');
   const list = sortableList(page);

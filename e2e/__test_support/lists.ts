@@ -44,24 +44,37 @@ export const sortableList = (page: Page) => {
       if (box === null) throw new Error('the grip never stood');
       await grip.dragTo(items.nth(1), {force: true, sourcePosition: {x: box.width / 2 + fingertipMiss, y: box.height / 2}});
     },
+    // what the engine fired while an item was carried, for a failing journey's report: CI's WebKit is the only engine the carry hangs in
+    dragEventsSeen: (): Promise<string> => page.evaluate(() => document.documentElement.dataset.dragLog ?? 'no drag event was heard'),
     carry: async (item: string, onto: string): Promise<Carried> => {
       await siteFrame(page).hydrated();
       const from = await middleOf(gripFor(item));
       const to = await pastTheMiddleOf(seatOf(onto), from);
+      await page.evaluate(() => {
+        const root = document.documentElement;
+        const logged = (event: Event): void => {
+          const target = event.target instanceof Element ? `${event.target.tagName.toLowerCase()} ${(event.target.textContent ?? '').trim().slice(0, 16)}` : 'document';
+          root.dataset.dragLog = `${root.dataset.dragLog ?? ''}${Math.round(event.timeStamp)} ${event.type} ${target}\n`;
+        };
+        ['dragstart', 'dragenter', 'dragover', 'dragleave', 'drop', 'dragend'].forEach(type => document.addEventListener(type, logged, true));
+      });
       await page.mouse.move(from.x, from.y);
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
       await page.mouse.move(to.x, to.y, {steps: 12});
       // a drop only lands where the page has heard a dragover, and a loaded engine can coalesce the moves that would fire one,
-      // so the page listens first, and only then does the pointer move within the target to fire one it will hear
+      // so the page listens first, and only then does the pointer move within the target to fire one it will hear;
+      // WebKit on Linux ends the drag when an eager list moves the carried item's element, and then no dragover can come
       await page.evaluate(() => {
-        delete document.documentElement.dataset.heardDragover;
-        document.addEventListener('dragover', () => {
-          document.documentElement.dataset.heardDragover = 'at the target';
-        }, {once: true});
+        delete document.documentElement.dataset.dragHeard;
+        const heard = (event: DragEvent): void => {
+          document.documentElement.dataset.dragHeard = event.type;
+        };
+        document.addEventListener('dragover', heard, {once: true});
+        document.addEventListener('dragend', heard, {once: true});
       });
       await page.mouse.move(to.x + 1, to.y);
-      await page.waitForFunction(() => document.documentElement.dataset.heardDragover === 'at the target');
+      await page.waitForFunction(() => 'dragHeard' in document.documentElement.dataset);
       return {drop: (): Promise<void> => page.mouse.up()};
     },
     fingerOnTheGrip: async (item: string): Promise<Pressed> => {
