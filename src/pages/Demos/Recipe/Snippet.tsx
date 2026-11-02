@@ -36,6 +36,11 @@ const shortName = (path: string): string => path.split('/').slice(-2).join('/');
 
 const nameOf = (path: string, owner?: string): string => has(owner) ? `${owner}’s ${shortName(path)}` : shortName(path);
 
+const splitIndent = (text: string): [string, string] => {
+  const code = text.trimStart();
+  return [text.slice(0, text.length - code.length), code];
+};
+
 const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   keyword: 'keyword-ink bold',
   string: 'string-ink',
@@ -52,14 +57,17 @@ export const Snippet: FC<Props> = ({label, lines}) => {
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
-      <code>{lines.map(({text, dim = false}, at) =>
-        <span className={classNames('line', dim && inkOf.comment)} key={at}>
+      <code>{lines.map(({text, dim = false}, at) => {
+        const [indent, code] = splitIndent(text);
+        return <span className={classNames('line', dim && inkOf.comment)} key={at}>
+          {has(indent) && <span className="indent">{indent}</span>}
           {dim
-            ? text
-            : highlight(label, text).map(({text: piece, kind}, part) =>
+            ? code
+            : highlight(label, code).map(({text: piece, kind}, part) =>
               kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
-        </span>)}</code>
+        </span>;
+      })}</code>
     </pre>
     <figcaption className="sources caption ink">
       {sources.length > 0
