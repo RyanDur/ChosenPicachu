@@ -68,6 +68,9 @@ export const userForm = {
     await swiftKeys.click(await within(form()).findByRole('button', {name: 'Add'}));
   },
 
+  addButton: (): HTMLElement => within(form()).getByRole('button', {name: 'Add'}),
+  updateButtonIfAny: (): HTMLElement | null => screen.queryByRole('button', {name: 'Update'}),
+
   add: (): Promise<void> => userEvent.click(within(form()).getByRole('button', {name: 'Add'})),
 
   update: (): Promise<void> => swiftKeys.click(within(form()).getByRole('button', {name: 'Update'}))

@@ -1,7 +1,7 @@
 import {Paths} from '@pages/Paths';
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {appAddress} from '@__test_support/address';
+import {render, waitFor} from '@testing-library/react';
 import {createSearchParams} from 'react-router';
 import {fullNameOf} from '@components/Users/UserInfo/user';
 import {
@@ -18,7 +18,7 @@ import {
   usersUnreachable
 } from '@components/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
-import {usersTable} from '../__test_support';
+import {usersPage, usersTable} from '../__test_support';
 import {userAt} from '../mode';
 
 describe('the users page', () => {
@@ -27,7 +27,7 @@ describe('the users page', () => {
 
     render(<TestApp at={Paths.users}/>);
 
-    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users could not be reached')).toBeInTheDocument();
+    expect(await usersPage.says('the users could not be reached')).toBeInTheDocument();
   });
 
   describe('ranking the users', () => {
@@ -36,8 +36,8 @@ describe('the users page', () => {
       render(<TestApp at={Paths.users}/>);
       await usersTable.roster();
 
-      expect(screen.getByRole('table', {name: 'User candidates'})).toBeInTheDocument();
-      expect(screen.getByRole('region', {name: 'User Candidates'})).toBeInTheDocument();
+      expect(usersTable.titled('User candidates')).toBeInTheDocument();
+      expect(usersPage.region('User Candidates')).toBeInTheDocument();
     });
 
     it('a person without a birthday shows no age', async () => {
@@ -115,8 +115,8 @@ describe('the users page', () => {
       render(<TestApp at={userAt('nobody', 'edit')}/>);
       await usersTable.roster();
 
-      expect(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Add'})).toBeVisible();
-      expect(screen.queryByRole('button', {name: 'Update'})).not.toBeInTheDocument();
+      expect(userForm.addButton()).toBeVisible();
+      expect(userForm.updateButtonIfAny()).not.toBeInTheDocument();
     });
 
     it('Clone opens the form to add a copy of the person', async () => {
@@ -127,8 +127,7 @@ describe('the users page', () => {
 
       await usersTable.clone(fullNameOf(kai));
 
-      const form = within(screen.getByRole('form', {name: 'User Information'}));
-      expect(form.getByRole('button', {name: 'Add'})).toBeVisible();
+      expect(userForm.addButton()).toBeVisible();
       expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
     });
 
@@ -152,7 +151,7 @@ describe('the users page', () => {
 
       await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
 
-      expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+      expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
       expect(usersTable.names()).toEqual([fullNameOf(standing)]);
     });
   });
@@ -215,7 +214,7 @@ describe('the users page', () => {
     });
 
     test('editing a user offers no door to add another', () => {
-      expect(screen.queryByRole('link', {name: 'Add New User'})).not.toBeInTheDocument();
+      expect(usersTable.addNewUserIfAny()).not.toBeInTheDocument();
     });
 
     test('the date of birth is picked from a date field', () => {
@@ -246,7 +245,7 @@ describe('the users page', () => {
 
     it('canceling an edit returns to viewing the user', async () => {
       await userForm.cancel();
-      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
+      expect(appAddress.shown()).toContain('mode=view');
     });
   });
 
@@ -307,7 +306,7 @@ describe('the users page', () => {
 
     await usersTable.remove(fullNameOf(person));
 
-    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
     expect(usersTable.names()).toContain(fullNameOf(person));
   });
 
@@ -320,7 +319,7 @@ describe('the users page', () => {
 
     await usersTable.remove(fullNameOf(person));
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id='));
+    await waitFor(() => expect(appAddress.shown()).not.toContain('id='));
   });
 
   test('a cloned user stands once more in the roster', async () => {
@@ -343,10 +342,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const quinsRow = await usersTable.rowOf(fullNameOf(quin));
 
-    await userEvent.click(within(quinsRow).getByRole('button', {name: `remove ${fullNameOf(pia)}`}));
+    await usersTable.unfriend(quinsRow, fullNameOf(pia));
 
-    await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullNameOf(pia)}`})).not.toBeInTheDocument());
-    expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+    await waitFor(() => expect(usersTable.friendRemovalIfAny(quinsRow, fullNameOf(pia))).not.toBeInTheDocument());
+    expect(usersTable.friendChooser(quinsRow)).toHaveFocus();
   });
 
   test("removing a friend in a person's row sends the backend that person without the friend", async () => {
@@ -357,7 +356,7 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const vicsRow = await usersTable.rowOf(fullNameOf(vic));
 
-    await userEvent.click(within(vicsRow).getByRole('button', {name: `remove ${fullNameOf(wen)}`}));
+    await usersTable.unfriend(vicsRow, fullNameOf(wen));
 
     await waitFor(() => expect(sent()).toMatchObject({id: vic.id, friends: []}));
   });
@@ -370,10 +369,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const zedsRow = await usersTable.rowOf(fullNameOf(zed));
 
-    await userEvent.click(within(zedsRow).getByRole('button', {name: `remove ${fullNameOf(amo)}`}));
+    await usersTable.unfriend(zedsRow, fullNameOf(amo));
 
-    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
-    expect(within(zedsRow).getByRole('button', {name: `remove ${fullNameOf(amo)}`})).toBeInTheDocument();
+    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+    expect(usersTable.friendRemoval(zedsRow, fullNameOf(amo))).toBeInTheDocument();
   });
 
   test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
@@ -384,10 +383,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const xiasRow = await usersTable.rowOf(fullNameOf(xia));
 
-    await userEvent.selectOptions(within(xiasRow).getByRole('combobox', {name: 'Add a friend'}), [fullNameOf(yul)]);
+    await usersTable.befriend(xiasRow, fullNameOf(yul));
 
-    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
-    expect(within(xiasRow).queryByRole('button', {name: `remove ${fullNameOf(yul)}`})).not.toBeInTheDocument();
+    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+    expect(usersTable.friendRemovalIfAny(xiasRow, fullNameOf(yul))).not.toBeInTheDocument();
   });
 
   test("choosing a friend in a person's row sends the backend that person with the friend added", async () => {
@@ -398,7 +397,7 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const tamsRow = await usersTable.rowOf(fullNameOf(tam));
 
-    await userEvent.selectOptions(within(tamsRow).getByRole('combobox', {name: 'Add a friend'}), [fullNameOf(uma)]);
+    await usersTable.befriend(tamsRow, fullNameOf(uma));
 
     await waitFor(() => expect(sent()).toMatchObject({id: tam.id, friends: [uma.id]}));
   });
@@ -412,13 +411,13 @@ describe('the users page', () => {
     setupUserUpdatedResponse(sol.id, unfriended);
     render(<TestApp at={Paths.users}/>);
     const raesRow = await usersTable.rowOf(fullNameOf(rae));
-    await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullNameOf(sol)}`}));
-    await waitFor(() => expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus());
+    await usersTable.unfriend(raesRow, fullNameOf(sol));
+    await waitFor(() => expect(usersTable.friendChooser(raesRow)).toHaveFocus());
     await usersTable.edit(fullNameOf(sol));
 
     await userForm.update();
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode='));
-    expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();
+    await waitFor(() => expect(appAddress.shown()).not.toContain('mode='));
+    expect(usersTable.friendChooser(raesRow)).not.toHaveFocus();
   });
 });

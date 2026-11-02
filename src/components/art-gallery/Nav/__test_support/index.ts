@@ -1,0 +1,1 @@
+export {galleryNav} from './nav';
