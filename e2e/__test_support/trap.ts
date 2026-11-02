@@ -1,4 +1,5 @@
-import type {Locator, Page} from '@playwright/test';
+import type {ElementHandle, Locator, Page} from '@playwright/test';
+import {assertionPatience} from './patience';
 import {clickWhereItIs} from './scrolling';
 
 export type SortChoice = 'name' | 'date' | 'size';
@@ -47,6 +48,37 @@ export const contextChooser = (page: Page) => {
     wearing: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true}),
     said: chooser.getByRole('status', {name: 'what card one formed'})
   };
+};
+
+const withinAMoment = (waiting: Promise<unknown>): Promise<boolean> => waiting.then(() => true, () => false);
+
+const listOpens = async (page: Page, choice: ElementHandle<Element> | null, cardTwo: ElementHandle<Element> | null, where: 'over' | 'under'): Promise<boolean> =>
+  page.waitForFunction(({choice, cardTwo, over}) => {
+    choice?.scrollIntoView({block: 'center'});
+    const {left, top, width, height} = choice?.getBoundingClientRect() ?? new DOMRect();
+    const topmost = document.elementFromPoint(left + width / 2, top + height / 2);
+    return (over ? choice : cardTwo)?.contains(topmost) ?? false;
+  }, {choice, cardTwo, over: where === 'over'}, {timeout: assertionPatience}).then(() => true, () => false);
+
+export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly (readonly [Worn, 'over' | 'under'])[]): Promise<Worn[]> => {
+  const figure = page.getByRole('figure', {name: /^What card one wears decides/});
+  const chooser = contextChooser(page);
+  const cardTwo = await figure.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle();
+  const wrong: Worn[] = [];
+  for (const [worn, where] of whereTheListOpens) {
+    await chooser.wearing(worn).click();
+    const chosen = await withinAMoment(figure.getByRole('radio', {name: worn, exact: true, checked: true}).waitFor({timeout: assertionPatience}));
+    await chooser.open();
+    const [drawn, said] = await Promise.all([
+      listOpens(page, await chooser.choice('date').elementHandle(), cardTwo, where),
+      withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience}))
+    ]);
+    if (!(chosen && drawn && said)) {
+      wrong.push(worn);
+    }
+    await page.keyboard.press('Escape');
+  }
+  return wrong;
 };
 
 export const topLayerMenu = (page: Page) => {
