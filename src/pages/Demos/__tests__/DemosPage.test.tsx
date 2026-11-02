@@ -86,7 +86,7 @@ describe('The Demos page', () => {
       ['accordions', 'z-index', 'drag-and-drop', 'charts', 'tables'].map(topic => demosAt(topic, '?world=vanilla')));
   });
 
-  test('a tab switch keeps the page, so the exhibits already dealt stay as they were', async () => {
+  test('returning to the Accordions tab shows the exhibits it showed before', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     const dealt = (await demoTabs.arrivedOn('Accordions')).textContent;
 
