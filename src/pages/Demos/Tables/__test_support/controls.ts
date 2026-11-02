@@ -11,7 +11,7 @@ export const tableControls = {
   region,
   shown: (): HTMLElement | null => screen.queryByRole('region', {name: 'table controls'}),
   settings: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'settings'}, untilTheTablesTabRenders),
-  readout: (table: string): HTMLElement => screen.getByText(table),
+  readout: (table: string): Promise<HTMLElement> => screen.findByText(table, {}, untilTheTablesTabRenders),
   reading: async (dial: string): Promise<HTMLElement> => readingOf(await region(), dial),
   axes: async (): Promise<string[]> => within(await region()).getAllByRole('group').map(axis => computeAccessibleName(axis)),
   radios: async (): Promise<string[]> => within(await region()).getAllByRole('radio').map(radio => computeAccessibleName(radio)),
