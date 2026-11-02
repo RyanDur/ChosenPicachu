@@ -393,6 +393,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a>{' '}
             <span className="provenance caption">appcontinuum.io, undated</span>
           </li>
+          <li>
+            <a className="signpost" href="https://github.com/RyanDur/sand"><cite>sand</cite></a>{' '}
+            <span className="provenance caption">Ryan Durling’s library, GitHub, version 10.0.0</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

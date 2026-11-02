@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Kind, highlight} from './highlight';
 import {Sample} from './sample';
@@ -15,23 +16,25 @@ type Props = {
   lines: readonly Line[];
 };
 
-type Source = {path: string; url: string; first: number; last: number};
+type Source = {path: string; url: string; owner?: string; first: number; last: number};
 
 const sourcesOf = (lines: readonly Line[]): Source[] =>
   lines.reduce<Source[]>((sources, {from}) => {
     if (from) {
-      const {sample: {path, url}, line} = from;
+      const {sample: {path, url, owner}, line} = from;
       const known = sources.find(source => source.path === path);
       return known
         ? sources.map(source => source === known
           ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
           : source)
-        : [...sources, {path, url, first: line, last: line}];
+        : [...sources, {path, url, owner, first: line, last: line}];
     }
     return sources;
   }, []);
 
 const shortName = (path: string): string => path.split('/').slice(-2).join('/');
+
+const nameOf = (path: string, owner?: string): string => has(owner) ? `${owner}’s ${shortName(path)}` : shortName(path);
 
 const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   keyword: 'keyword-ink bold',
@@ -60,9 +63,9 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     </pre>
     <figcaption className="sources caption ink">
       {sources.length > 0
-        ? sources.map(({path, url, first, last}) =>
+        ? sources.map(({path, url, owner, first, last}) =>
           <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
-            key={path}>{shortName(path)} on GitHub</a>)
+            key={path}>{nameOf(path, owner)} on GitHub</a>)
         : 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;

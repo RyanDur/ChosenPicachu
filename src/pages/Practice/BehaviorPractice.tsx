@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {MomentLink} from '@pages/Record/MomentLink';
-import {EventsCarve, ReducerCarve, TableReducerCarve} from './BehaviorCarves';
+import {ConditionCarve, EventsCarve, PreludeCarve, ReducerCarve, SheetQuestionsCarve, TableReducerCarve} from './BehaviorCarves';
 import {OneDirection} from './OneDirection';
 
 export const BehaviorPractice: FC = () =>
@@ -26,6 +26,20 @@ export const BehaviorPractice: FC = () =>
       direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
+    <p className="paragraph">I wrote small functions so a condition reads in words: <code className="monospaced">has</code>,{' '}
+      <code className="monospaced">not</code>, <code className="monospaced">empty</code> and{' '}
+      <code className="monospaced">is</code>, from my own library,{' '}
+      <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
+    <PreludeCarve/>
+    <p className="paragraph">So the table asks whether a drag is under way and a column is settling the way I would say
+      it:</p>
+    <ConditionCarve/>
+    <p className="paragraph">The style sheet asks its questions in the same words. <code className="monospaced">:has()</code> asks
+      whether an element holds something, <code className="monospaced">:not()</code> turns a question round,
+      and <code className="monospaced">:is()</code> asks whether any of a list is true:</p>
+    <SheetQuestionsCarve/>
+    <p className="paragraph">Nobody reading either should have to turn a symbol round in their head to learn what was
+      asked.</p>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
       decides what is true when it arrives.
