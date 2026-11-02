@@ -48,10 +48,21 @@ export const sortableList = (page: Page) => {
       await siteFrame(page).hydrated();
       const from = await middleOf(gripFor(item));
       const to = await pastTheMiddleOf(seatOf(onto), from);
+      // a drop only lands where the page has heard a dragover, and a loaded engine can be asked to drop before it fires one
+      const heardAtTheTarget = page.evaluate(({x, y}) => new Promise<void>(resolve => {
+        const heard = (event: DragEvent): void => {
+          if (Math.abs(event.clientX - x) < 2 && Math.abs(event.clientY - y) < 2) {
+            document.removeEventListener('dragover', heard);
+            resolve();
+          }
+        };
+        document.addEventListener('dragover', heard);
+      }), to);
       await page.mouse.move(from.x, from.y);
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
       await page.mouse.move(to.x, to.y, {steps: 12});
+      await heardAtTheTarget;
       return {drop: (): Promise<void> => page.mouse.up()};
     },
     fingerOnTheGrip: async (item: string): Promise<Pressed> => {
