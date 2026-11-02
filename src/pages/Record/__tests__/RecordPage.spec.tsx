@@ -682,8 +682,6 @@ describe('the record', () => {
 
   test.each([
     ['Authors need control of the look', 'https://www.w3.org/History.html', '“CERN thus decides not to continue WWW development”'],
-    ['Authors need control of the look', 'https://www.w3.org/People/howcome/p/cascade.html', '“it may not be obvious how to mix 40% helvetica and 60% times”'],
-    ['Authors need control of the look', 'https://www.w3.org/People/howcome/p/cascade.html', '“# first, redefine influence to dictatorship”'],
     ['The web needs collaborators', 'https://www.w3.org/History.html', '“freely usable by anyone, with no fees being payable to CERN”'],
     ['Pages need to respond', 'https://brendaneich.com/2008/04/popularity/', '“Scheme was the bait”'],
     ['The browsers’ tags need a standard', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“was then circulated through the Internet community for comment”'],
@@ -702,7 +700,6 @@ describe('the record', () => {
     ['Someone needs to go first', 'https://thehistoryoftheweb.com/look-back-history-css/', 'ESPN followed a few months later'],
     ['The separation needs proof', 'https://csszengarden.com/pages/about/', '“a collaborative gallery that could show what CSS could accomplish”'],
     ['The separation needs proof', 'https://csszengarden.com/', '“You may modify the style sheet in any way you wish, but not the HTML.”'],
-    ['The separation needs proof', 'https://www.w3.org/People/howcome/p/cascade.html', '“a mix”'],
     ['The standard needs the real world', 'https://www.w3.org/2004/04/webapps-cdf-ws/summary', '“8 voted Yes. 14 voted No.”'],
     ['The standard needs the real world', 'https://whatwg.org/position-paper', '“a rising threat of single-vendor solutions”'],
     ['The standard needs the real world', 'https://html.spec.whatwg.org/multipage/introduction.html', '“technologies need to be backwards compatible”'],
@@ -732,13 +729,6 @@ describe('the record', () => {
     ['The document needs to come first', 'https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html', '“research into zero-bundle-size React Server Components”'],
     ['The document needs to come first', 'https://nextjs.org/blog/next-13-4', '4 May 2023'],
     ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
-    ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“not just by publishing stories about it, but by adopting it outright”'],
-    ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“Not long after Wired took that leap, many other large, well-known sites and companies began following suit.”'],
-    ['Someone needs to go first', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/', '“the site is a stunning example of how standards can be made to work today”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Cascading Style Sheets Standard Boasts Unprecedented Interoperability”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“it took many years for implementations and the specification to converge”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“Why is CSS 2.1 taking so long?”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
     ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],
     ['The specification needs its tests', 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/', 'Media Queries'],
@@ -749,8 +739,6 @@ describe('the record', () => {
     ['The browsers need to agree', 'https://www.w3.org/Style/LieBos2e/history/Overview.html', '“does not fully support CSS1”'],
     ['The browsers need to agree', 'https://thehistoryoftheweb.com/look-back-history-css/', '“the first browser with full CSS Level 1 support”'],
     ['The browsers need to agree', 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac', '27 March 2000'],
-    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm', '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”'],
-    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm', '“All 100%-conformant CSS1 agents should be able to render the document elements above this paragraph indistinguishably (to the pixel) from this reference rendering”'],
     ['The language needs a standard', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”'],
     ['The language needs a standard', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
     ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],
@@ -761,6 +749,54 @@ describe('the record', () => {
     ['The pages need to look the same', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“Microsoft couldn’t get a license from Sun”']
   ])('should tell %s, quoting its source by a link', (title, source, quotation) => {
     expect(within(itemHeadedBy('the timeline', title)).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
+  });
+
+  test('should link the mix of helvetica and times to Lie’s 1994 draft', () => {
+    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“it may not be obvious how to mix 40% helvetica and 60% times”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+  });
+
+  test('should link the redefined influence to Lie’s 1994 draft', () => {
+    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“# first, redefine influence to dictatorship”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+  });
+
+  test('should link the separation’s “a mix” to Lie’s 1994 draft', () => {
+    expect(within(itemHeadedBy('the timeline', 'The separation needs proof')).getByRole('link', {name: '“a mix”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+  });
+
+  test('should link Wired adopting standards outright to Bowman’s ten years later', () => {
+    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“not just by publishing stories about it, but by adopting it outright”', hidden: true})).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
+  });
+
+  test('should link the sites that followed Wired to Bowman’s ten years later', () => {
+    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“Not long after Wired took that leap, many other large, well-known sites and companies began following suit.”', hidden: true})).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
+  });
+
+  test('should link the stunning example to Meyer’s post of 11 October 2002', () => {
+    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“the site is a stunning example of how standards can be made to work today”', hidden: true})).toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/');
+  });
+
+  test('should link the release’s headline to the W3C’s CSS 2.1 release', () => {
+    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“Cascading Style Sheets Standard Boasts Unprecedented Interoperability”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link the years to converge to the W3C’s CSS 2.1 release', () => {
+    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“it took many years for implementations and the specification to converge”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link why CSS 2.1 took so long to the W3C’s CSS 2.1 release', () => {
+    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“Why is CSS 2.1 taking so long?”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link the 9000 tests to the W3C’s CSS 2.1 release', () => {
+    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link the percentage width to the CSS1 test suite’s test5526c', () => {
+    expect(within(itemHeadedBy('the timeline', 'The browsers need to agree')).getByRole('link', {name: '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
+  });
+
+  test('should link the pixel-exact rendering to the CSS1 test suite’s test5526c', () => {
+    expect(within(itemHeadedBy('the timeline', 'The browsers need to agree')).getByRole('link', {name: '“All 100%-conformant CSS1 agents should be able to render the document elements above this paragraph indistinguishably (to the pixel) from this reference rendering”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
   });
 
   test('should open the bridge on how every feature here is built, need first, in the record\'s voice', () => {
