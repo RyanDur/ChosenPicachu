@@ -10,15 +10,6 @@ const storyMoments = (name: string): HTMLElement => within(story(name)).getByRol
 const openFullerStory = async (title: string): Promise<void> =>
   userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story'));
 
-const shelvedAs = (work: string): HTMLElement => {
-  const entry = within(research()).getAllByRole('listitem', {hidden: true})
-    .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
-  if (entry) {
-    return entry;
-  }
-  throw new Error(`no work on the research shelf named ${work}`);
-};
-
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
   momentsTold: async (): Promise<string | undefined> =>
@@ -27,29 +18,17 @@ export const recordPage = {
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
-  openingQuotationSource: (): HTMLElement => screen.getByRole('link', {name: /^proposing the WorldWideWeb, 1990$/}),
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
-  storyEssay: (name: string): string[] => within(story(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
   storyQuotations: (name: string, quoted: string): HTMLElement[] => within(story(name)).getAllByRole('link', {name: quoted}),
   storyMomentsHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 3, name: 'the moments it rests on'}),
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),
   storyMomentLine: (name: string, line: string): HTMLElement => within(storyMoments(name)).getByRole('link', {name: line}),
-  timeline: (): HTMLElement => screen.getByRole('region', {name: 'How the web got its languages'}),
   concert,
   concertLinks: (): (string | null)[][] => within(concert()).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
   followConcertLink: async (name: string): Promise<void> =>
     userEvent.click(within(concert()).getByRole('link', {name})),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
-  shelvedAs,
-  shelfHolding: (work: string): string | null => {
-    const shelf = within(research()).getAllByRole('region', {hidden: true})
-      .find(candidate => within(candidate).queryByRole('link', {name: work, hidden: true}) !== null);
-    if (shelf) {
-      return within(shelf).getByRole('heading', {level: 3, hidden: true}).textContent;
-    }
-    throw new Error(`no shelf holds ${work}`);
-  },
   shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
   sourcesLinked: (): string[] => {
     const shelf = research();
