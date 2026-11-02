@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
+import {directoryInRepository, fileInRepository} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {
@@ -217,4 +218,30 @@ export const BehaviorPractice: FC = () =>
       language tells its whole story alone.
       The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three
       responsibilities do not.</p>
+    <p className="paragraph">The state test is not read by eye either. Three gates hold the site to it, and each is a
+      few lines in the repository. The review holds one more rule.</p>
+    <ul className="practice-list">
+      <li className="paragraph">The core is tested as functions, because it is functions.{' '}
+        <a className="signpost" href={directoryInRepository('src/components/DragSortableTable/__tests__')}>Four
+          specs</a>, <code className="monospaced">sorting</code>, <code className="monospaced">travel</code>,{' '}
+        <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>, call the
+        table’s code with no page at all, and they run on every commit.
+      </li>
+      <li className="paragraph">The shell is tested as journeys, because it touches the world. They drive the tables by
+        pointer and by key in three browsers, and{' '}
+      <a className="signpost" href={fileInRepository('AGENTS.md')}>“Journeys run as a reader who asks for less
+        motion, and none is retried or skipped.”</a>
+      </li>
+      <li className="paragraph"><code className="monospaced">tsc -b</code> runs{' '}
+        <a className="signpost" href={fileInRepository('scripts/git-hooks/pre-commit')}>before every commit</a>, so a
+        commit that lets a forbidden state into a type is refused.
+      </li>
+    </ul>
+    <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
+      <a className="signpost" href={fileInRepository('AGENTS.md')}>“No refs: no <code
+        className="monospaced">useRef</code>, <code className="monospaced">createRef</code> or <code
+        className="monospaced">forwardRef</code> anywhere in <code className="monospaced">src</code>.”</a> A ref keeps
+      a value outside the state, where no reducer sees it and no test reads it. The one exception is{' '}
+      <code className="monospaced">MeasuredPanel</code>, which holds its element only to read the height the panel
+      stands at.</p>
   </>;

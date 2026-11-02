@@ -3,6 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {directoryInRepository, fileInRepository} from '@pages/Paths';
 
 const oneDirection = /^One direction\./;
 const twoTracks = /^Two tracks\./;
@@ -151,5 +152,34 @@ describe('the Behavior practice tab', () => {
 
     expect(practicePage.link('CustomEvent'))
       .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent');
+  });
+  test('should send the four specs to the table’s tests', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.linksInItem(/^The core is tested as functions/))
+      .toEqual([['Four specs', directoryInRepository('src/components/DragSortableTable/__tests__')]]);
+  });
+
+  test('should send the quotation on how journeys run to AGENTS.md', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.quotationAddressIn(/^The shell is tested as journeys/)).toBe(fileInRepository('AGENTS.md'));
+  });
+
+  test('should send before every commit to the pre-commit hook', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.linksInItem(/^tsc -b runs before every commit/))
+      .toEqual([['before every commit', fileInRepository('scripts/git-hooks/pre-commit')]]);
+  });
+
+  test('should send the quotation of the no-refs rule to AGENTS.md', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.quotationAddressIn(/^The rule the review holds is one line in AGENTS.md/)).toBe(fileInRepository('AGENTS.md'));
   });
 });
