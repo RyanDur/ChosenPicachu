@@ -272,7 +272,7 @@ export const PresentationPractice: FC = () =>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
-      isolation: one component’s rules reach no other. Isolation is the last of the seven problems with CSS at scale that Christopher Chedeau listed in a 2014 talk, and
-      the Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
+      isolation: one component’s rules reach no other. Isolation is the last of the seven problems with CSS at scale that Christopher Chedeau listed in a 2014 talk.
+      The Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
       list.</p>
   </>;
