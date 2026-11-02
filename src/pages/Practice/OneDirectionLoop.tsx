@@ -1,5 +1,7 @@
 import {FC} from 'react';
+import {classNames} from '@components/class-names';
 import './PracticeDrawing.css';
+import './OneDirectionLoop.css';
 
 type Box = {readonly label: string; readonly x: number; readonly y: number};
 
@@ -17,7 +19,7 @@ const page: Box = {label: 'page', x: 6, y: 150};
 const shell: Box = {label: 'shell', x: 354, y: 90};
 
 const DrawnBox: FC<{box: Box; look: string}> = ({box: {label, x, y}, look}) => <>
-  <rect className={look} x={x} y={y} width={width} height={height}/>
+  <rect className={classNames('loop-box', look)} x={x} y={y} width={width} height={height}/>
   <text className="drawn-caption" x={x + inset} y={y + inset} dominantBaseline="hanging">{label}</text>
 </>;
 
@@ -30,13 +32,13 @@ const arrowhead = ({x, y}: Point, toward: Point): string => {
 };
 
 const Arrow: FC<{from: Point; to: Point}> = ({from, to}) => <>
-  <line className="drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
+  <line className="loop-arrow drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
   <polygon className="drawn-filled" points={arrowhead(from, to)}/>
 </>;
 
-export const OneDirection: FC = () =>
+export const OneDirectionLoop: FC = () =>
   <figure className="practice-drawing">
-    <svg className="drawing center ink-filled" viewBox="0 0 480 220" width="480" height="220" aria-hidden="true">
+    <svg className="one-direction-loop drawing center ink-filled" viewBox="0 0 480 220" width="480" height="220" aria-hidden="true">
       <DrawnBox box={event} look="hollow drawn"/>
       <DrawnBox box={reducer} look="hollow drawn"/>
       <DrawnBox box={state} look="hollow drawn"/>
@@ -47,7 +49,8 @@ export const OneDirection: FC = () =>
       <Arrow from={{x: state.x, y: state.y + height / 2}} to={{x: page.x + width, y: page.y + height / 2}}/>
       <Arrow from={{x: page.x + width / 2, y: page.y}} to={{x: event.x + width / 2, y: event.y + height}}/>
     </svg>
-    <figcaption className="caption"><strong className="bold">One direction.</strong> An event goes in, the state comes out,
-      the page is drawn from it; the shell is outside the loop.
+    <figcaption className="caption"><strong className="bold">One direction.</strong> An event goes to the reducer, the
+      reducer returns the next state, the page is drawn from the state, and the page sends the next event. The shell,
+      drawn apart, holds the state and runs the loop; nothing inside the loop knows it is there.
     </figcaption>
   </figure>;

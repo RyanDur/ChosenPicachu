@@ -109,6 +109,6 @@ export const yearsOfTwo: Partial<Record<string, YearOfTwo>> = {
     tells: 'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4, which came the next year, CSS itself ran as JavaScript. In December 1996 CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.'
   },
   '2014': {
-    tells: 'Two concerns moved in 2014. In July Facebook’s Flux went public, a pattern in which data moves one way through a page instead of binding both ways. In October HTML5 became a W3C Recommendation, and the rules the browsers had been following were written down.'
+    tells: 'Two concerns moved in 2014. In July Flux’s code went public. It is a pattern in which data moves one way through a page instead of binding both ways. In October HTML5 became a W3C Recommendation, and the rules the browsers had been following were written down.'
   }
 };

@@ -6,8 +6,7 @@ export const practicePage = (page: Page) => {
     practice,
     title: (concern: string): Locator => page.getByRole('heading', {name: `Practice ${concern}`, level: 1}),
     momentLink: (name: string): Locator => practice.getByRole('link', {name}).first(),
-    drawing: (caption: RegExp): Locator => practice.getByRole('figure', {name: caption}),
-    carve: (file: RegExp): Locator => practice.getByRole('figure', {name: file}),
+    figure: (caption: RegExp): Locator => practice.getByRole('figure', {name: caption}),
     drawingsHeardIn: (figure: Locator): Locator => figure.getByRole('img'),
     comesAfter: async (later: Locator, earlier: Locator): Promise<boolean> =>
       later.evaluate((element, before) => (before.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0,

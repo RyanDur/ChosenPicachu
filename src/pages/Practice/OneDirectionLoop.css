@@ -1,0 +1,7 @@
+.one-direction-loop {
+  .loop-box,
+  .loop-arrow {
+    stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
+  }
+}

@@ -4,7 +4,7 @@ import {practicePage} from './__test_support';
 test('a reader with the styles off meets "Where a rule lives" once, under its caption', async ({page}) => {
   const practice = practicePage(page);
   await page.goto('practice/presentation/');
-  const drawing = practice.drawing(/^Where a rule lives\./);
+  const drawing = practice.figure(/^Where a rule lives\./);
   await expect(drawing).toBeVisible();
 
   await practice.readWithTheStylesOff();
@@ -15,7 +15,7 @@ test('a reader with the styles off meets "Where a rule lives" once, under its ca
 test('a reader with the styles off meets the page\'s table of contents once, under its caption', async ({page}) => {
   const practice = practicePage(page);
   await page.goto('practice/structure/');
-  const drawing = practice.drawing(/^The page’s table of contents\./);
+  const drawing = practice.figure(/^The page’s table of contents\./);
   await expect(drawing).toBeVisible();
 
   await practice.readWithTheStylesOff();
@@ -27,9 +27,9 @@ test('a screen reader on the Behavior tab hears the one-direction drawing as its
   const practice = practicePage(page);
   await page.goto('practice/behavior/');
 
-  const drawing = practice.drawing(/^One direction\. An event goes in, the state comes out, the page is drawn from it; the shell is outside the loop\.$/);
+  const drawing = practice.figure(/^One direction\. An event goes to the reducer, .* nothing inside the loop knows it is there\.$/);
 
   await expect(drawing).toBeVisible();
   await expect(practice.drawingsHeardIn(drawing)).toHaveCount(0);
-  expect(await practice.comesAfter(drawing, practice.carve(/reducer\.ts on GitHub/))).toBe(true);
+  await expect.poll(() => practice.comesAfter(drawing, practice.figure(/reducer\.ts on GitHub/))).toBe(true);
 });

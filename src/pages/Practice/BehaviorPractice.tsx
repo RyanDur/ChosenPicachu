@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {ConditionCarve, EventsCarve, PreludeCarve, ReducerCarve, SheetQuestionsCarve, TableReducerCarve} from './BehaviorCarves';
-import {OneDirection} from './OneDirection';
+import {OneDirectionLoop} from './OneDirectionLoop';
 
 export const BehaviorPractice: FC = () =>
   <>
@@ -13,17 +13,17 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">A reducer is that pure function, and its type says so: it takes the state and an event and
       returns the state.</p>
     <ReducerCarve/>
-    <p className="paragraph">The events are named for what happened. Two come from the reader’s hands, and one from a
-      server:</p>
+    <p className="paragraph">Two events come from the reader’s hands, and one from a server:</p>
     <EventsCarve/>
     <p className="paragraph">The table’s reducer is small reducers combined, and it ignores any event that is not the
       table’s:</p>
     <TableReducerCarve/>
-    <p className="paragraph">The column order is held, as the demos store’s arrangement; the columns on screen are
-      worked out from it by <code className="monospaced">selectColumns</code>, so nothing stores them twice.</p>
-    <OneDirection/>
+    <p className="paragraph">The demos store holds the column order, as its arrangement.{' '}
+      <code className="monospaced">selectColumns</code> works out the columns on screen from it, so nothing stores them
+      twice.</p>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
       direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
+    <OneDirectionLoop/>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
     <p className="paragraph">I wrote small functions so a condition reads in words: <code className="monospaced">has</code>,{' '}
