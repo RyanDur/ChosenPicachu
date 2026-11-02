@@ -6,9 +6,8 @@ import {
   harvardArtResponse,
   vamArtResponse
 } from '@components/art-gallery/__test_support/fixtures';
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import userEvent from '@testing-library/user-event';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
 import {
@@ -39,8 +38,8 @@ describe('The gallery.', () => {
     render(<TestApp at={Paths.artGallery}/>);
 
     expect(await galleryWall.framesAppear()).toHaveLength(defaultRecordLimit);
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
+    expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
 
   describe('when looking at an individual piece', () => {
@@ -90,11 +89,11 @@ describe('The gallery.', () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await userEvent.click(await screen.findByText('Harvard Art Museums'));
+    await galleryPage.choose('Harvard Art Museums');
 
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
+    expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
 
   test('choosing the Victoria and Albert hangs its works on the wall', async () => {
@@ -102,11 +101,11 @@ describe('The gallery.', () => {
     setupVAMAllArtResponse(vamArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await userEvent.click(await screen.findByText('The Victoria and Albert Museum'));
+    await galleryPage.choose('The Victoria and Albert Museum');
 
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
+    expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
 
   test("choosing Cleveland hangs Cleveland's works on the wall", async () => {
@@ -114,10 +113,10 @@ describe('The gallery.', () => {
     setupClevelandAllArtResponse(clevelandArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await userEvent.click(await screen.findByText('The Cleveland Museum of Art'));
+    await galleryPage.choose('The Cleveland Museum of Art');
 
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
 
   test('a museum whose pictures are refused has no door', async () => {
@@ -127,9 +126,9 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.getByRole('link', {name: 'Harvard Art Museums'})).toBeInTheDocument();
-    expect(screen.queryByRole('link', {name: 'The Art Institute of Chicago'})).not.toBeInTheDocument();
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    expect(galleryPage.museum('Harvard Art Museums')).toBeInTheDocument();
+    expect(galleryPage.museumIfAny('The Art Institute of Chicago')).not.toBeInTheDocument();
   });
 
   test('the gallery opens at the first museum that answers', async () => {
@@ -139,8 +138,8 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=harvard');
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    expect(galleryPage.urlSearch()).toHaveTextContent('tab=harvard');
   });
 
   test('a door to a closed museum leads to an open one', async () => {
@@ -150,8 +149,8 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=harvard'));
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
+    await waitFor(() => expect(galleryPage.urlSearch()).toHaveTextContent('tab=harvard'));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
   });
 
   test('a door that names no museum leads to the first open one', async () => {
@@ -159,8 +158,8 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?tab=bogus`}/>);
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic'));
-    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
+    await waitFor(() => expect(galleryPage.urlSearch()).toHaveTextContent('tab=aic'));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
   });
 
   test('the first open museum is the door, however quickly the museums answer', async () => {
@@ -168,15 +167,12 @@ describe('The gallery.', () => {
     const aicAnswers = heldAICPictures();
 
     render(<TestApp at={Paths.artGallery}/>);
-    await screen.findByRole('link', {name: 'The Victoria and Albert Museum'});
+    await galleryPage.museumAppears('The Victoria and Albert Museum');
 
     aicAnswers();
 
-    expect(await screen.findByRole('link', {
-      name: 'The Art Institute of Chicago',
-      current: 'page'
-    })).toBeInTheDocument();
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
+    expect(await galleryPage.currentMuseum('The Art Institute of Chicago')).toBeInTheDocument();
+    expect(galleryPage.urlSearch()).toHaveTextContent('tab=aic');
   });
 
   test('while the museums are asked there are no doors, only the loading sign', async () => {
@@ -186,32 +182,46 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(screen.getByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
-    expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
+    expect(galleryPage.wallsLoading()).toHaveLength(1);
+    expect(galleryPage.museumsIfAny()).not.toBeInTheDocument();
   });
 
-  const loadingSignsWhenOpenedAt = async (at: string, page: number): Promise<{whileAsked: number; onceHung: number; onceTheOtherAnswers: number}> => {
-    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page});
+  test('opened on a museum while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 1});
     const vamAnswers = heldVAMPictures();
-    render(<TestApp at={`${Paths.artGallery}${at}`}/>);
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await galleryPage.museumsAppear();
-    const whileAsked = galleryPage.wallsLoading().length;
+
+    expect(galleryPage.wallsLoading()).toHaveLength(1);
 
     wallArrives();
     await galleryWall.framesAppear();
-    const onceHung = galleryPage.wallsLoading().length;
+
+    expect(galleryPage.wallsLoading()).toHaveLength(0);
 
     vamAnswers();
     await galleryPage.museumAppears('The Victoria and Albert Museum');
-    return {whileAsked, onceHung, onceTheOtherAnswers: galleryPage.wallsLoading().length};
-  };
 
-  test('opened on a museum while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
-    expect(await loadingSignsWhenOpenedAt('?tab=aic', 1)).toEqual({whileAsked: 1, onceHung: 0, onceTheOtherAnswers: 0});
+    expect(galleryPage.wallsLoading()).toHaveLength(0);
   });
 
   test('opened on a link to a museum’s page 2 while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
-    expect(await loadingSignsWhenOpenedAt('?tab=aic&page=2', 2)).toEqual({whileAsked: 1, onceHung: 0, onceTheOtherAnswers: 0});
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const vamAnswers = heldVAMPictures();
+    render(<TestApp at={`${Paths.artGallery}?tab=aic&page=2`}/>);
+    await galleryPage.museumsAppear();
+
+    expect(galleryPage.wallsLoading()).toHaveLength(1);
+
+    wallArrives();
+    await galleryWall.framesAppear();
+
+    expect(galleryPage.wallsLoading()).toHaveLength(0);
+
+    vamAnswers();
+    await galleryPage.museumAppears('The Victoria and Albert Museum');
+
+    expect(galleryPage.wallsLoading()).toHaveLength(0);
   });
 
   test('switching museums while another is still asked keeps one thing loading until the new wall is hung', async () => {
@@ -221,11 +231,11 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await galleryWall.framesAppear();
 
-    await userEvent.click(screen.getByRole('link', {name: 'The Victoria and Albert Museum'}));
+    await galleryPage.enter('The Victoria and Albert Museum');
 
-    expect(screen.getAllByRole('progressbar', {name: 'loading gallery'})).toHaveLength(1);
+    expect(galleryPage.wallsLoading()).toHaveLength(1);
     vamWallArrives();
-    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+    await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
   });
 
   test('the doors appear once the museums answer', async () => {
@@ -237,7 +247,7 @@ describe('The gallery.', () => {
     aicAnswers();
     vamAnswers();
 
-    expect(await screen.findByRole('navigation', {name: 'museums'})).toBeInTheDocument();
+    expect(await galleryPage.museumsAppear()).toBeInTheDocument();
   });
 
   test('when no museum is open the page says so', async () => {
@@ -246,43 +256,41 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(await screen.findByAltText('no museum is open')).toBeInTheDocument();
-    expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    expect(await galleryPage.noMuseumOpen()).toBeInTheDocument();
+    expect(galleryPage.museumsIfAny()).not.toBeInTheDocument();
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
   });
 
-  const wallHungWithTheNextPageHeld = async (): Promise<() => void> => {
+  test('the count of works stays while the next page loads', async () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
-    return nextPageArrives;
-  };
 
-  test('the count of works stays while the next page loads', async () => {
-    const nextPageArrives = await wallHungWithTheNextPageHeld();
+    await galleryPage.nextPage();
 
-    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-
-    await screen.findByRole('progressbar', {name: 'loading gallery'});
-    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
+    await galleryWall.loadingSignAppears();
+    expect(galleryPage.pagination()).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
 
     nextPageArrives();
 
-    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+    await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
   });
 
   test('while the next page is on its way the wall shows the loading sign and does not say the museum answered with nothing', async () => {
-    const nextPageArrives = await wallHungWithTheNextPageHeld();
+    setupAICAllArtResponse(aicArtResponse);
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    render(<TestApp at={Paths.artGallery}/>);
+    await galleryWall.framesAppear();
 
-    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+    await galleryPage.nextPage();
 
-    await screen.findByRole('progressbar', {name: 'loading gallery'});
-    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
+    await galleryWall.loadingSignAppears();
+    expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
 
     nextPageArrives();
 
-    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+    await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
   });
 
   test('on the last page the count ends at the total', async () => {
@@ -291,6 +299,6 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
     await galleryWall.framesAppear();
 
-    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
+    expect(galleryPage.pagination()).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
   });
 });
