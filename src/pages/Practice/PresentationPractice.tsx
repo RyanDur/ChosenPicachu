@@ -18,7 +18,7 @@ const importList = fileInRepository('src/index.css');
 
 export const PresentationPractice: FC = () =>
   <>
-    <h3 className="part-heading paragraph bold">What organizing CSS has to solve</h3>
+    <h3 className="paragraph bold">What organizing CSS has to solve</h3>
     <p className="paragraph">I keep any CSS that is structurally part of a component, its grid and placement, in a
       style sheet beside it. Everything else is sharable and lives in the shared style sheets: the reset, the tokens,
       which name each value once, and the vocabulary, the looks any element can wear. A class names what the element
@@ -108,7 +108,7 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and{' '}
     <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s container is and what an element contains, which a
       selector alone could not.</p>
-    <h3 className="part-heading paragraph bold">What this site keeps</h3>
+    <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
       <a className="signpost" href={bemHistory.address}>“any changes to the code of one page affected the code of other pages”</a>,
@@ -143,7 +143,7 @@ export const PresentationPractice: FC = () =>
       framework, or a template partial, rather than a CSS class. I keep two things from that: no shared look before
       its second use, and every value from a constrained set. I give up two: the value in the class name, and reuse in
       the component rather than the style sheet.</p>
-    <h3 className="part-heading paragraph bold">Where a rule lives</h3>
+    <h3 className="paragraph bold">Where a rule lives</h3>
     <p className="paragraph">Here is each style sheet in turn, in the order <code className="monospaced">index.css</code>{' '}
       imports them. First the{' '}
       <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
@@ -208,7 +208,7 @@ export const PresentationPractice: FC = () =>
       nested rule depends on the class around it. A rule nests
       under its component’s class when it belongs to that component alone; a look any element can wear stays a single
       flat class in the vocabulary.</p>
-    <h3 className="part-heading paragraph bold">What a class is named for</h3>
+    <h3 className="paragraph bold">What a class is named for</h3>
     <p className="paragraph">The vocabulary’s words are the looks every component draws on:{' '}
       <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>,{' '}
       <code className="monospaced">rounded-corners</code>, <code className="monospaced">muted-ink</code>,{' '}
@@ -249,7 +249,7 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">shoved</code> for a neighbor pushed aside. One style sheet, the table’s, says what each
       does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ. Shoved
       has a rule per direction: two across for columns, two down for rows.</p>
-    <h3 className="part-heading paragraph bold">What the style sheet owes the reader</h3>
+    <h3 className="paragraph bold">What the style sheet owes the reader</h3>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can set, so the
       style sheet checks{' '}
     <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a>{' '}
@@ -257,7 +257,7 @@ export const PresentationPractice: FC = () =>
       through, so the HTML keeps{' '}
     <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a>{' '}
       and the style sheet only changes the picture.</p>
-    <h3 className="part-heading paragraph bold">Where the platform catches up</h3>
+    <h3 className="paragraph bold">Where the platform catches up</h3>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state
       changes it. Select options had no such way round, and now they need none: they can be styled with{' '}
@@ -265,7 +265,7 @@ export const PresentationPractice: FC = () =>
       it will <a className="signpost" href={customizableSelect.address}>“fall back to a classic select experience”</a>. That
       is the record’s pattern since the <MomentLink to="needOutrunsStandards">1996 moment</MomentLink>: a workaround,
       and then the platform.</p>
-    <h3 className="part-heading paragraph bold">The test a class list has to pass</h3>
+    <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
       isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list. Isolation means one component’s

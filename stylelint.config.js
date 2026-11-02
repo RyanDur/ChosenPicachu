@@ -5,7 +5,7 @@ const root = dirname(fileURLToPath(import.meta.url));
 
 const structure = [
   'display', '/^grid/', '/^flex/', 'gap', 'row-gap', 'column-gap', 'order',
-  'position', 'float', 'clear', '/^inset/', 'top', 'right', 'bottom', 'left', 'z-index', '/^position-/', 'anchor-name',
+  'position', 'float', '/^inset/', 'top', 'right', 'bottom', 'left', 'z-index', '/^position-/', 'anchor-name',
   '/^padding/', '/^margin/', 'box-sizing',
   'width', 'height', '/^min-/', '/^max-/', 'inline-size', 'block-size', 'aspect-ratio',
   '/^align-/', '/^justify-/', '/^place-/',
