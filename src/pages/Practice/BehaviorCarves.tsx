@@ -5,9 +5,13 @@ import demosStoreSource from '@pages/Demos/store.ts?sample';
 import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
+import exchangeSource from '@pages/Demos/exchange.ts?sample';
+import useDragSortableSource from '@components/DragSortableTable/useDragSortable.ts?sample';
+import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';
+import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import surfaceSheet from '../../styles/surface.css?sample';
 import {aside, Snippet} from '@pages/Demos/Recipe';
-import {span} from '@pages/Demos/Recipe/carve';
+import {span, unit} from '@pages/Demos/Recipe/carve';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
@@ -57,3 +61,24 @@ export const SheetQuestionsCarve: FC = () => <>
   <Snippet label="CSS" lines={oneLine(surfaceSheet, '.attentive:where(:not(:disabled))')}/>
   <Snippet label="CSS" lines={oneLine(surfaceSheet, ':is(:hover, :focus) > .liftable')}/>
 </>;
+
+export const MiddlewareCarve: FC = () => <Snippet label="TS" lines={unit(storeSource, 'export type Middleware')}/>;
+
+const fromTheSocket = '.onMessage(event =>';
+
+export const ExchangeCarve: FC = () => <Snippet label="TS" lines={[
+  ...span(exchangeSource, fromTheSocket, fromTheSocket),
+  aside('// …'),
+  ...span(exchangeSource, '.onFailure(cause => {', 'dispatch(candlesRefused(period));')
+]}/>;
+
+const reactHand = 'const [hand] = useState(() => tableStore());';
+const plainHand = 'const hand = tableStore();';
+
+export const BuildsCarve: FC = () => <>
+  <Snippet label="TS" lines={span(useDragSortableSource, reactHand, reactHand)}/>
+  <Snippet label="TS" lines={span(lazyBuildSource, plainHand, plainHand)}/>
+</>;
+
+export const TableEventsCarve: FC = () =>
+  <Snippet label="TS" lines={span(bootSource, "table.addEventListener('column-moved'", "table.addEventListener('sorted'")}/>;

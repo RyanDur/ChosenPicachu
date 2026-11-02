@@ -26,4 +26,20 @@ describe('the Behavior practice tab', () => {
     expect(practicePage.link(/operable through a keyboard interface/))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
   });
+
+  test('should send the sequence of events to Martin Fowler’s Event Sourcing', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/Capture all changes to an application state as a sequence of events/))
+      .toHaveAttribute('href', 'https://martinfowler.com/eaaDev/EventSourcing.html');
+  });
+
+  test('should send CustomEvent to MDN', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link('CustomEvent'))
+      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent');
+  });
 });

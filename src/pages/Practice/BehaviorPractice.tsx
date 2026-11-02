@@ -1,10 +1,27 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
 import {MomentLink} from '@pages/Record/MomentLink';
-import {ConditionCarve, EventsCarve, PreludeCarve, ReducerCarve, SheetQuestionsCarve, TableReducerCarve} from './BehaviorCarves';
+import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {
+  BuildsCarve,
+  ConditionCarve,
+  EventsCarve,
+  ExchangeCarve,
+  MiddlewareCarve,
+  PreludeCarve,
+  ReducerCarve,
+  SheetQuestionsCarve,
+  TableEventsCarve,
+  TableReducerCarve
+} from './BehaviorCarves';
 import {OneDirectionLoop} from './OneDirectionLoop';
+
+const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
+const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';
 
 export const BehaviorPractice: FC = () =>
   <>
+    <h3 className="paragraph bold">What is true and what happened</h3>
     <p className="paragraph">Behavior splits into what is true and what happened. The state is what is
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
       cannot be worked out from something else. Events are what happened, so I name them in the past tense:
@@ -24,6 +41,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
       direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
     <OneDirectionLoop/>
+    <h3 className="paragraph bold">Code that reads as sentences</h3>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
     <p className="paragraph">I wrote small functions so a condition reads in words: <code className="monospaced">has</code>,{' '}
@@ -40,26 +58,48 @@ export const BehaviorPractice: FC = () =>
     <SheetQuestionsCarve/>
     <p className="paragraph">Nobody reading either should have to turn a symbol round in their head to learn what was
       asked.</p>
+    <h3 className="paragraph bold">Where the world comes in</h3>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
       decides what is true when it arrives.
       The <MomentLink to="pageBecomesApplication">2005 moment</MomentLink> is where that pattern got its name, Ajax, and became
       ordinary.</p>
+    <p className="paragraph">The shell is where the world comes in. The store lets a piece of code stand between an
+      event and the reducer, a middleware:</p>
+    <MiddlewareCarve/>
+    <p className="paragraph">The demos page’s middleware holds the socket and the fetches. What arrives becomes an
+      event, and it goes to the same reducer a key press reaches:</p>
+    <ExchangeCarve/>
+    <p className="paragraph">Martin Fowler named the idea in 2005:{' '}
+      <a className="signpost" href={eventSourcing}>“Capture all changes to an application state as a sequence of
+        events.”</a> I keep the sequence only as long as a reducer needs it, but every change still arrives as an
+      event.</p>
+    <h3 className="paragraph bold">The core and the shell</h3>
     <p className="paragraph">The core is functional and the shell is imperative. The functions that move
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds
       the state, listens for events, applies the next state and updates the screen. Requests go out through the same
       path that state changes come in. Change the framework, or remove it, and only the shell changes.
       The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should outlast them.</p>
+    <p className="paragraph">The <Link className="signpost" to={demoAddress(DemoTopics.tables)}>tables demo</Link> shows
+      it. Its React build and its plain-script build take the same table store, so the same reducer answers both:</p>
+    <BuildsCarve/>
+    <p className="paragraph">The plain-script build finds its tables by their data attribute and listens for the
+      table’s own events, each named for what happened. A{' '}
+    <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
+    <TableEventsCarve/>
+    <h3 className="paragraph bold">The platform first</h3>
     <p className="paragraph">The platform comes first here too. An accordion on the demos page opens and closes
       with no script, a popover closes itself, and the browser already provides the back button, scroll restoration and
       focus order. Script that rebuilds those takes on their bugs. I write behavior only for what the platform does
       not yet do.
       The <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what rebuilding them by hand cost.</p>
+    <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}
     <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a keyboard interface”</a>. The page
       announces each change too: a sighted reader watches the order change, and a screen reader user hears the same
       change read out.</p>
+    <h3 className="paragraph bold">The test the state has to pass</h3>
     <p className="paragraph">The test is to read the state on its own. If the data does not say what is
       true without the page open beside it, behavior has leaked into presentation. The other two languages take the
       same test: the HTML makes sense with the styles off, and the class list says what the element needs. Each

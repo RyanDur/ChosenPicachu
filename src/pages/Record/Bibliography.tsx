@@ -397,6 +397,14 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://github.com/RyanDur/sand"><cite>sand</cite></a>{' '}
             <span className="provenance caption">Ryan Durling’s library, GitHub, version 10.0.0</span>
           </li>
+          <li>
+            <a className="signpost" href="https://martinfowler.com/eaaDev/EventSourcing.html"><cite>Event Sourcing</cite></a>{' '}
+            <span className="provenance caption">Martin Fowler, 12 December 2005</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent"><cite>CustomEvent</cite></a>{' '}
+            <span className="provenance caption">MDN</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

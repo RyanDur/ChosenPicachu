@@ -108,7 +108,7 @@ test('a line in a story\'s list lands on that moment in the timeline below, with
 test('a reader who follows a moment link on Practice lands on that moment in the record, with focus there', async ({page}) => {
   await page.goto('practice/');
 
-  await practicePage(page).momentLink('2016 moment').click();
+  await practicePage(page).link('2016 moment').click();
 
   await expect(page).toHaveURL(/\/record\/#the-document-needs-to-come-first$/);
   await expect(recordPage(page).moment('The document needs to come first')).toBeFocused();

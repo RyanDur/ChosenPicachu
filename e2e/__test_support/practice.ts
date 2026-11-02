@@ -5,7 +5,7 @@ export const practicePage = (page: Page) => {
   return {
     practice,
     title: (concern: string): Locator => page.getByRole('heading', {name: `Practice ${concern}`, level: 1}),
-    momentLink: (name: string): Locator => practice.getByRole('link', {name}).first(),
+    link: (name: string): Locator => practice.getByRole('link', {name}).first(),
     figure: (caption: RegExp): Locator => practice.getByRole('figure', {name: caption}),
     drawingsHeardIn: (figure: Locator): Locator => figure.getByRole('img'),
     comesAfter: async (later: Locator, earlier: Locator): Promise<boolean> =>
