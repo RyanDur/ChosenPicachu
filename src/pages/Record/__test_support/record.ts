@@ -28,6 +28,7 @@ export const recordPage = {
     .map(link => [link.textContent, link.getAttribute('href')]),
   followConcertLink: async (name: string): Promise<void> =>
     userEvent.click(within(concert()).getByRole('link', {name})),
+  bridgeLink: (name: string): HTMLElement => screen.getByRole('link', {name}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
   sourcesLinked: (): string[] => {

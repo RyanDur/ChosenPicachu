@@ -143,7 +143,6 @@ describe('the record', () => {
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(demos.compareDocumentPosition(research) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(demos).toHaveAttribute('href', Paths.demos);
   });
 
   test('should keep every source a quotation on the page links to on the research shelf, links between moments aside', () => {
@@ -196,10 +195,10 @@ describe('the record', () => {
   });
 
   test('should open every beat into its fuller story, closed until asked', () => {
-    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
+    const folds = recordPage.fullerStories();
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(21);
-    expect(recordPage.fullerStories().filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
+    expect(folds).toHaveLength(21);
+    expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
   });
 
   test('should link “CERN thus decides not to continue…” in Authors need control of the look to w3.org', () => {
@@ -572,15 +571,15 @@ describe('the record', () => {
   });
 
   test('should send the reader on from the bridge to the Practice page', () => {
-    expect(screen.getByRole('link', {name: 'the Practice page'})).toHaveAttribute('href', Paths.practice);
+    expect(recordPage.bridgeLink('the Practice page')).toHaveAttribute('href', Paths.practice);
   });
 
   test('should send the reader on from the bridge to the Demos', () => {
-    expect(screen.getByRole('link', {name: 'The Demos'})).toHaveAttribute('href', Paths.demos);
+    expect(recordPage.bridgeLink('The Demos')).toHaveAttribute('href', Paths.demos);
   });
 
   test('should send the reader on from the bridge to the accordions', () => {
-    expect(screen.getByRole('link', {name: 'the accordions'})).toHaveAttribute('href', `${Paths.demos}accordions/`);
+    expect(recordPage.bridgeLink('the accordions')).toHaveAttribute('href', `${Paths.demos}accordions/`);
   });
 
   test('should tell the concert after the timeline closes and before the tee-up', () => {
