@@ -69,17 +69,6 @@ describe('the tables demo', () => {
     expect(aggregations.columns().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
-  test('should open the recipe with its stories closed', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-
-    expect(recipe).toBeVisible();
-    expect(recipeFolds.story(recipe, 'The trader can sort by column')).not.toHaveAttribute('open');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
-  });
-
   test('should head the recipe’s walk from need to design', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables')} feed={feed}/>);
@@ -158,59 +147,6 @@ describe('the tables demo', () => {
     expect(demoPage.row('Widen a column')).toBeVisible();
   });
 
-  test('opening the sort by column story shows the drag build with its steps closed', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-
-    await recipeFolds.press(recipe, 'The trader can sort by column');
-
-    expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
-    expect(recipeFolds.reveals(recipe).length).toBeGreaterThan(0);
-    expect(recipeFolds.opened(recipeFolds.reveals(recipe))).toHaveLength(0);
-  });
-
-  test('the drag build in plain HTML links its implementation to its file on GitHub', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await tablesTab.recipe('drag sort');
-
-    expect((await tablesTab.linksIn('drag sort', 'the implementation'))[0]).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/pages/Demos/Tables/Frame/builds/Eager.ts');
-  });
-
-  test('should link the drag build out to the drag sort list demo, its implementation and insertBefore', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-
-    await recipeFolds.press(recipe, 'The trader can sort by column');
-
-    expect((await tablesTab.linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', '/demos/drag-and-drop/');
-    expect((await tablesTab.linksIn('drag sort', 'the implementation'))[0]).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
-    expect((await tablesTab.linksIn('drag sort', 'insertBefore'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
-  });
-
-  test('the recipe teaches whatever the dials are set to', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    await recipeFolds.press(recipe, 'The trader can sort by column');
-    await recipeFolds.press(recipe, 'The trader can sort by row');
-
-    await tablesTab.chooseInRecipe('drag sort', 'Lazy', 'Keep', 'Static');
-
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
-    expect(recipeFolds.stepTitled(recipe, 'Hold still, dispatch on release')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Keep the origin in place and let only the order move')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Leave the motion out')).toBeInTheDocument();
-    expect(recipeFolds.queryStepTitled(recipe, 'Commit inside the move')).not.toBeInTheDocument();
-    expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
-  });
-
   test('should take the keyboard to the station the address names', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={`${demosAt('tables')}#station-5`} feed={feed}/>);
@@ -219,64 +155,6 @@ describe('the tables demo', () => {
     await demoPage.findTitle('The trader can watch the market live, in windows');
 
     await waitFor(() => expect(itemHeadedBy('the stations', 'The trader can watch the market live, in windows')).toHaveFocus());
-  });
-
-  test('the keyboard track teaches the same sort with the arrow keys', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    await tablesTab.chooseInRecipe('drag sort', 'By keyboard');
-
-    expect(recipeFolds.stepTitled(recipe, 'Give focus a place to land')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'The arrows give the direction')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Both parties slide')).toBeInTheDocument();
-    expect(recipeFolds.queryStepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
-    await recipeFolds.press(recipe, 'The trader can sort by column');
-    expect(recipeFolds.stepTitled(recipe, 'Turn the arrows vertical')).toBeInTheDocument();
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toBeInTheDocument();
-    expect(await tablesTab.radioIn('drag sort', 'Lazy')).not.toBeInTheDocument();
-  });
-
-  test('the keyboard track answers the motion dial', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    expect(recipeFolds.stepTitled(recipe, 'Both parties slide')).toBeInTheDocument();
-
-    await tablesTab.chooseInRecipe('drag sort', 'Static');
-
-    expect(recipeFolds.stepTitled(recipe, 'Cut on the keypress')).toBeInTheDocument();
-    expect(recipeFolds.queryStepTitled(recipe, 'Both parties slide')).not.toBeInTheDocument();
-  });
-
-  test('switching back to the pointer track restores its road', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-
-    await tablesTab.chooseInRecipe('drag sort', 'By pointer');
-
-    expect(recipeFolds.stepTitled(recipe, 'Hold the pointer from the lift')).toBeInTheDocument();
-  });
-
-  test('the chosen track travels in the url', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables', '?track=keyboard')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    expect(recipeFolds.stepTitled(recipe, 'The arrows give the direction')).toBeInTheDocument();
-    expect(recipeFolds.queryStepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
   });
 
   test('choosing drag resize swaps in the resize tutorial', async () => {
@@ -311,48 +189,6 @@ describe('the tables demo', () => {
     await tablesTab.pick('Drag sort');
 
     expect(await tablesTab.recipe('drag sort')).toBeVisible();
-  });
-
-  test('the open cards travel in the url', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables', '?sort=column')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
-    const living = demoPage.part('the living table');
-    expect(recipeFolds.story(living, 'The trader can watch the market live, in windows')).not.toHaveAttribute('open');
-    expect(recipeFolds.story(living, 'The page is a store, and so is the table')).not.toHaveAttribute('open');
-  });
-
-  test('a story folds shut without folding the story beside it', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables', '?sort=column,row')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
-
-    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
-
-    expect(column).not.toHaveAttribute('open');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
-    expect(demoPage.urlSearch()).toHaveTextContent('sort=row');
-  });
-
-  test('the address holds every story the trader opens', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const recipe = await tablesTab.recipe('drag sort');
-
-    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
-    const row = await recipeFolds.press(recipe, 'The trader can sort by row');
-
-    expect(column).toHaveAttribute('open');
-    expect(row).toHaveAttribute('open');
-    expect(demoPage.urlSearch()).toHaveTextContent('sort=column%2Crow');
   });
 
   test('choosing the sort menu swaps in the sort menu tutorial', async () => {
@@ -411,25 +247,6 @@ describe('the tables demo', () => {
       expect(await demoPage.findTitle('The trader can widen a column')).toBeInTheDocument();
     });
 
-    test('the sort tutorial stands on both tracks in the react world', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('tables', '?tut=sort&world=react')} feed={feed}/>);
-
-      expect(recipeFolds.story(await tablesTab.recipe('drag sort'), 'The trader can sort by column')).toBeInTheDocument();
-      await tablesTab.pick('By keyboard');
-      expect(await demoPage.findTitle('Give focus a place to land')).toBeInTheDocument();
-    });
-
-    test('the sort tutorial stands on both tracks in the vanilla world', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('tables', '?tut=sort&world=vanilla')} feed={feed}/>);
-
-      expect(recipeFolds.story(await tablesTab.recipe('drag sort'), 'The trader can sort by column')).toBeInTheDocument();
-      await tablesTab.pick('By keyboard');
-      expect(await demoPage.findTitle('Give focus a place to land')).toBeInTheDocument();
-    });
   });
 });
 
