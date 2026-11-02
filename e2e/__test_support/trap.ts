@@ -1,4 +1,4 @@
-import type {ElementHandle, Locator, Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 import {clickWhereItIs} from './scrolling';
 
@@ -46,35 +46,41 @@ export const contextChooser = (page: Page) => {
   return {
     ...oldWaySortBy(chooser),
     wearing: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true}),
+    chosen: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true, checked: true}),
     said: chooser.getByRole('status', {name: 'what card one formed'})
   };
 };
 
 const withinAMoment = (waiting: Promise<unknown>): Promise<boolean> => waiting.then(() => true, () => false);
 
-const listOpens = async (page: Page, choice: ElementHandle<Element> | null, cardTwo: ElementHandle<Element> | null, where: 'over' | 'under'): Promise<boolean> =>
-  page.waitForFunction(({choice, cardTwo, over}) => {
-    choice?.scrollIntoView({block: 'center'});
-    const {left, top, width, height} = choice?.getBoundingClientRect() ?? new DOMRect();
-    const topmost = document.elementFromPoint(left + width / 2, top + height / 2);
-    return (over ? choice : cardTwo)?.contains(topmost) ?? false;
-  }, {choice, cardTwo, over: where === 'over'}, {timeout: assertionPatience}).then(() => true, () => false);
+const nextFrame = (page: Page): Promise<void> => page.evaluate(() => new Promise<void>(drawn => requestAnimationFrame(() => drawn())));
 
-export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly (readonly [Worn, 'over' | 'under'])[]): Promise<Worn[]> => {
-  const figure = page.getByRole('figure', {name: /^What card one wears decides/});
+const settledWithinAMoment = async (page: Page, read: () => Promise<string>, want: string): Promise<string> => {
+  const deadline = Date.now() + assertionPatience;
+  let seen = await read();
+  while (seen !== want && Date.now() < deadline) {
+    await nextFrame(page);
+    seen = await read();
+  }
+  return seen;
+};
+
+export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly (readonly [Worn, 'over' | 'under'])[]): Promise<string[]> => {
   const chooser = contextChooser(page);
-  const cardTwo = await figure.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle();
-  const wrong: Worn[] = [];
+  const wrong: string[] = [];
   for (const [worn, where] of whereTheListOpens) {
     await chooser.wearing(worn).click();
-    const chosen = await withinAMoment(figure.getByRole('radio', {name: worn, exact: true, checked: true}).waitFor({timeout: assertionPatience}));
+    if (!await withinAMoment(chooser.chosen(worn).waitFor({timeout: assertionPatience}))) {
+      wrong.push(`${worn}: not chosen`);
+    }
     await chooser.open();
-    const [drawn, said] = await Promise.all([
-      listOpens(page, await chooser.choice('date').elementHandle(), cardTwo, where),
-      withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience}))
-    ]);
-    if (!(chosen && drawn && said)) {
-      wrong.push(worn);
+    const onTop = where === 'over' ? 'the choice' : 'card two';
+    const seen = await settledWithinAMoment(page, () => chooser.onTopAt('date'), onTop);
+    if (seen !== onTop) {
+      wrong.push(`${worn}: ${seen} on top at date, not ${onTop}`);
+    }
+    if (!await withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience}))) {
+      wrong.push(`${worn}: said "${await chooser.said.textContent() ?? ''}", not ${where} card two`);
     }
     await page.keyboard.press('Escape');
   }
