@@ -405,6 +405,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent"><cite>CustomEvent</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>
+          <li>
+            <a className="signpost" href="https://github.com/michaljanocko/schemawax"><cite>schemawax</cite></a>{' '}
+            <span className="provenance caption">Michal Janočko, GitHub, version 1.0.12</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

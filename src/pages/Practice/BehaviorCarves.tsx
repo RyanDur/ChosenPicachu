@@ -6,6 +6,7 @@ import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
+import coinbaseSource from '@pages/Demos/Charts/coinbase/index.ts?sample';
 import useDragSortableSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';
 import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
@@ -82,3 +83,7 @@ export const BuildsCarve: FC = () => <>
 
 export const TableEventsCarve: FC = () =>
   <Snippet label="TS" lines={span(bootSource, "table.addEventListener('column-moved'", "table.addEventListener('sorted'")}/>;
+
+export const TradeDecoderCarve: FC = () => <Snippet label="TS" lines={unit(coinbaseSource, 'const MatchDecoder')}/>;
+
+export const DecodeTradeCarve: FC = () => <Snippet label="TS" lines={unit(coinbaseSource, 'export const decodeTrade')}/>;

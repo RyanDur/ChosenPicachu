@@ -55,6 +55,14 @@ describe('the Behavior practice tab', () => {
       .toHaveAttribute('href', 'https://martinfowler.com/eaaDev/EventSourcing.html');
   });
 
+  test('should send schemawax and its own description to its repository', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link('schemawax')).toHaveAttribute('href', 'https://github.com/michaljanocko/schemawax');
+    expect(practicePage.link(/Tiny typed data decoder/)).toHaveAttribute('href', 'https://github.com/michaljanocko/schemawax');
+  });
+
   test('should send CustomEvent to MDN', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
