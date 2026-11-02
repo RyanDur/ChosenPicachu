@@ -41,6 +41,20 @@ describe('a code sample', () => {
     expect(codeSample.fileAddresses()).toEqual([`${store.url}#L2-L2`, `${shared.url}#L1-L1`]);
   });
 
+  test('should show each line of a carved sample with its indent, as it reads in the file', () => {
+    const travel = aSample('const travel = (event) => {\n  if (event.buttons === 0) {\n    drop();\n  }\n};\n');
+    render(<Snippet label="TS" lines={[...span(travel, 'const travel', '};'), aside('  // dimmed, and indented')]}/>);
+
+    expect(codeSample.code()).toEqual([
+      'const travel = (event) => {',
+      '  if (event.buttons === 0) {',
+      '    drop();',
+      '  }',
+      '};',
+      '  // dimmed, and indented'
+    ]);
+  });
+
   test('should link to no file when it was written for the page and not taken from the code', () => {
     render(<Snippet label="CSS" lines={[plain('.fold {'), aside('/* written here */'), plain('}')]}/>);
 

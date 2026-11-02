@@ -5,5 +5,6 @@ const fileLinks = (): HTMLElement[] => within(screen.getByRole('figure')).queryA
 export const codeSample = {
   fileLink: (name: string): HTMLElement => within(screen.getByRole('figure')).getByRole('link', {name}),
   fileNames: (): string[] => fileLinks().map(({textContent}) => textContent ?? ''),
-  fileAddresses: (): (string | null)[] => fileLinks().map(link => link.getAttribute('href'))
+  fileAddresses: (): (string | null)[] => fileLinks().map(link => link.getAttribute('href')),
+  code: (): string[] => (within(screen.getByRole('figure')).getByRole('code').textContent ?? '').split('\n').slice(0, -1)
 };
