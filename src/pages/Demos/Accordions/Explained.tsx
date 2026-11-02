@@ -186,8 +186,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices, the fold type and the fold motion, set the accordions in the sections below. The fold measured by plain script is
-        the exception: it is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
+      <p className="paragraph">Two choices, the fold type and the fold motion, set the other accordions below. Each choice is a dial, a control on the page that sets how a
         build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
       <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a selector, which names the elements it
@@ -268,7 +267,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <h3 id="measured-heading" className="sub-title bold">The measured height</h3>
         <figure className={exhibit}>
           <PlainFold/>
-          <figcaption className="caption">Press the bar: with motion allowed, the script measures the text and the
+          <figcaption className="caption">This fold is built by plain script, so the dials above do not set it: it is one checkbox fold and
+            always reveals. Press the bar: with motion allowed, the script measures the text and the
             style sheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it
             opens at once.</figcaption>
         </figure>
