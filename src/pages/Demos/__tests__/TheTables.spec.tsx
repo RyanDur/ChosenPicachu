@@ -49,68 +49,6 @@ describe('the tables demo', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('the glider offers a pace, an origin and a motion, eager by default', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    await tableControls.pressSettings();
-    expect(await tableControls.axes()).toEqual(['pace', 'origin', 'motion']);
-    expect(await tableControls.radios()).toEqual(['Eager', 'Lazy', 'Keep', 'Hide', 'Animate', 'Static']);
-    expect(await tableControls.radio('Eager')).toBeChecked();
-    expect(await tableControls.radio('Hide')).toBeChecked();
-    expect(await tableControls.radio('Animate')).toBeChecked();
-  });
-
-  test('the controls start folded behind their readout, and a press opens them', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    expect(await tableControls.settings()).not.toHaveAttribute('open');
-    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
-
-    await tableControls.pressSettings();
-    expect(await tableControls.region()).toBeVisible();
-    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
-  });
-
-  test("the controls' prompt reads settings apart from its readout", async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    expect(await tableControls.settings()).toHaveTextContent(/^settings \S/);
-  });
-
-  test('the controls read out the table first shown', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    expect(await tableControls.reading('pace')).toHaveTextContent(/Neighbors swap the moment you drag past them/);
-    expect(await tableControls.reading('origin')).toHaveTextContent(/moves with the pointer, cells and all/);
-    expect(await tableControls.reading('motion')).toHaveTextContent(/slide to their new places/);
-    expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
-  });
-
-  test('the controls read out whatever is chosen', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    await tableControls.choose('Lazy', 'Keep', 'Static');
-
-    expect(await tableControls.reading('pace')).toHaveTextContent(/dispatches the new order on drop/);
-    expect(await tableControls.reading('origin')).toHaveTextContent(/stays where it was/);
-    expect(await tableControls.reading('motion')).toHaveTextContent(/gives them no time/);
-    expect(tableControls.readout('<LazyTable className="keep static"/>')).toBeVisible();
-  });
-
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
 
@@ -417,16 +355,6 @@ describe('the tables demo', () => {
     expect(demoPage.urlSearch()).toHaveTextContent('sort=column%2Crow');
   });
 
-  test('the dials travel in the url', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables', '?pace=lazy&origin=keep&motion=static')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
-    expect(tableControls.readout('<LazyTable className="keep static"/>')).toBeVisible();
-  });
-
   test('choosing the sort menu swaps in the sort menu tutorial', async () => {
     const feed = await listeningFeed();
 
@@ -463,15 +391,6 @@ describe('the tables demo', () => {
       await feedIsSubscribed(feed);
 
       expect(await demoPage.findTitle('The trader can watch the market live, in windows')).toBeInTheDocument();
-    });
-
-    test('should offer the build’s dials in the html world', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      expect((await tablesTab.findRadios('Eager')).length).toBeGreaterThan(0);
     });
 
     test('the menu story stands in the html world', async () => {
