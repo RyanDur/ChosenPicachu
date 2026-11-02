@@ -234,9 +234,7 @@ describe('the fold motion', () => {
     const foldMotion = accordionsTab.choiceIn(tab, 'fold motion');
 
     expect(outOfReadingOrder([start, foldType, foldMotion, oldWay])).toEqual([]);
-    for (const part of parts) {
-      expect(await explanation.part(part)).not.toContainElement(foldMotion);
-    }
+    expect(await accordionsTab.partsHolding(foldMotion, parts)).toEqual([]);
   });
 
   test('should open on the reveal', async () => {
@@ -350,10 +348,9 @@ describe('the accordion in HTML alone', () => {
   test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const folds = explanation.foldsIn(await explanation.part(htmlAlone));
+    const part = await explanation.part(htmlAlone);
 
-    expect(folds).toHaveLength(3);
-    ['basalt', 'cinder', 'meadow'].forEach((name, at) => expect(explanation.saying(folds[at], name)).toBeInTheDocument());
+    expect(explanation.foldLabelsIn(part)).toEqual(['basalt', 'cinder', 'meadow']);
   });
 
   test('should open its part on the three folds', async () => {

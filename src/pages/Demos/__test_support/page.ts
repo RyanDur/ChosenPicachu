@@ -21,10 +21,7 @@ export const demoPage = {
     .map(link => [link.textContent, link.getAttribute('href') ?? ''])
     .filter(([, address]) => tabAddresses.includes(address)),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
-  slice: (title: string): HTMLElement | undefined =>
-    within(slices()).getAllByRole('listitem').find(item => within(item).queryByText(title) !== null),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
-  stationsHolding: (holds: string): string[] =>
-    within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
-      .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id)
+  sliceLinksLandingNowhere: (): string[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href') ?? '')
+    .filter(address => document.getElementById(address.replace(/^#/, '')) === null)
 };

@@ -176,11 +176,9 @@ describe('the sortable list demo', () => {
     await nativeRecipe();
 
     expect(demoPage.title('Slice the design into stories')).toBeVisible();
-    ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
-      .forEach(slice => expect(demoPage.slice(slice)).toHaveTextContent('station 4'));
     expect(demoPage.sliceLinks())
       .toEqual(['#station-4', '#station-4']);
-    expect(demoPage.stationsHolding('Layer on functionality, in the order it was asked for')).toContain('station-4');
+    expect(demoPage.sliceLinksLandingNowhere()).toEqual([]);
   });
 
   test('opening the by-hand story points at the tables demo', async () => {

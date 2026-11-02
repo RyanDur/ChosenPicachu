@@ -1,5 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {untilTheTablesTabRenders} from './controls';
 
 type Headers = {
@@ -26,7 +27,7 @@ export const tablesTab = {
   columnHeader: (name: string): HTMLElement => screen.getByRole('columnheader', {name}),
   table: (name: string): Headers => headersOf(screen.getByRole('table', {name})),
   headersIn: (name: string): Headers => headersOf(part(name)),
-  columnIn: (name: string, column: string): HTMLElement => within(part(name)).getByRole('columnheader', {name: column}),
+  columnsIn: (name: string): string[] => within(part(name)).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
   linksIn: async (build: string, name: string | RegExp): Promise<HTMLElement[]> =>
     within(await recipe(build)).getAllByRole('link', {name}),
   radioIn: async (build: string, name: string): Promise<HTMLElement | null> => within(await recipe(build)).queryByRole('radio', {name}),

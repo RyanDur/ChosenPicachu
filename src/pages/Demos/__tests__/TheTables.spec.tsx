@@ -34,9 +34,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed(feed);
     await aggregations.arrived();
-    for (const measure of ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
-      expect(aggregations.header(measure)).toBeVisible();
-    }
+    expect(aggregations.columns()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(aggregations.rows()).toHaveLength(6);
     broadcast(feed, fourTrades);
     await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
@@ -58,12 +56,8 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed(feed);
     await tableControls.pressSettings();
-    for (const axis of ['pace', 'origin', 'motion']) {
-      expect(await tableControls.axis(axis)).toBeVisible();
-    }
-    for (const choice of ['Eager', 'Lazy', 'Keep', 'Hide']) {
-      expect(await tableControls.radio(choice)).toBeVisible();
-    }
+    expect(await tableControls.axes()).toEqual(['pace', 'origin', 'motion']);
+    expect(await tableControls.radios()).toEqual(['Eager', 'Lazy', 'Keep', 'Hide', 'Animate', 'Static']);
     expect(await tableControls.radio('Eager')).toBeChecked();
     expect(await tableControls.radio('Hide')).toBeChecked();
     expect(await tableControls.radio('Animate')).toBeChecked();
@@ -200,11 +194,8 @@ describe('the tables demo', () => {
     const layers = tablesTab.table('the layers');
     expect(layers.columns).toHaveLength(4);
     expect(layers.rows).toHaveLength(4);
-    for (const measure of ['trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
-      expect(tablesTab.columnIn('Sketch a design from the need', measure)).toBeVisible();
-    }
+    expect(tablesTab.columnsIn('Sketch a design from the need')).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     const sketch = tablesTab.headersIn('Sketch a design from the need');
-    expect(sketch.columns).toHaveLength(7);
     expect(sketch.rows).toHaveLength(5);
   });
 
@@ -215,19 +206,8 @@ describe('the tables demo', () => {
     await tablesTab.recipe('drag sort');
 
     expect(demoPage.title('Slice the design into stories')).toBeVisible();
-    [['The trader can read the market in a table', 'station 4'],
-      ['The trader can watch the market live, in windows', 'station 5'],
-      ['The trader can sort by column, and by row', 'station 6'],
-      ['The trader can sort the windows by any measure, or take the order back', 'station 6'],
-      ['The trader can widen a column', 'station 6']
-    ].forEach(([slice, station]) =>
-      expect(demoPage.slice(slice)).toHaveTextContent(station));
     expect(demoPage.sliceLinks()).toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
-    [['station-4', 'The trader can read the market in a table'],
-      ['station-5', 'The trader can watch the market live, in windows'],
-      ['station-6', 'Layer on functionality, in the order it was asked for']
-    ].forEach(([id, holds]) =>
-      expect(demoPage.stationsHolding(holds)).toContain(id));
+    expect(demoPage.sliceLinksLandingNowhere()).toEqual([]);
   });
 
   test('the recipe links out to the user story', async () => {

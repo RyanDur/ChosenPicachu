@@ -43,6 +43,8 @@ export const explanation = {
   partTitles: (holder: HTMLElement): string[] => within(holder).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   sectionTitles: (part: HTMLElement): string[] => within(part).getAllByRole('heading', {level: 3}).map(heading => heading.textContent),
   foldsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('group'),
+  foldLabelsIn: (holder: HTMLElement): string[] => within(holder).getAllByRole('group')
+    .map(fold => fold.querySelector(':scope > summary')?.textContent ?? ''),
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   firstLinkIn: (run: HTMLElement): HTMLElement => within(run).getAllByRole('link')[0],
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),

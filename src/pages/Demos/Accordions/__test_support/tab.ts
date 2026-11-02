@@ -22,6 +22,10 @@ export const accordionsTab = {
     await userEvent.click(control);
     return control;
   },
+  partsHolding: async (element: HTMLElement, parts: string[]): Promise<string[]> => {
+    const holding = await Promise.all(parts.map(async name => (await screen.findByRole('region', {name})).contains(element)));
+    return parts.filter((_, at) => holding[at]);
+  },
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
