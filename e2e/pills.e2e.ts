@@ -1,13 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {desktop, iPadUpright, iPhone, phoneSideways, pillsAFingerCannotChoose, pillSwitch} from './__test_support';
-
-const everyPillIsChosenByAFinger = async (page: Page, at: string, groups: string[]): Promise<void> => {
-  await page.goto(at);
-
-  const unchosen = await pillsAFingerCannotChoose(page, groups);
-
-  expect(unchosen).toEqual([]);
-};
 
 for (const {reader, device} of [
   {reader: 'a phone', device: iPhone},
@@ -17,14 +9,71 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    test('every pill on the accordions demo is chosen by a finger that lands just off its middle', ({page}) =>
-      everyPillIsChosenByAFinger(page, 'demos/accordions/', ['fold type', 'fold motion']));
+    test('every fold type pill on the accordions demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/accordions/');
 
-    test('every pill on the tables demo is chosen by a finger that lands just off its middle', ({page}) =>
-      everyPillIsChosenByAFinger(page, 'demos/tables/', ['world', 'pace', 'origin', 'motion']));
+      expect(await pillsAFingerCannotChoose(page, 'fold type')).toEqual([]);
+    });
 
-    test('every pill on the z-index demo is chosen by a finger that lands just off its middle', ({page}) =>
-      everyPillIsChosenByAFinger(page, 'demos/z-index/', ['card raised', 'side', 'align', 'entrance', 'stack']));
+    test('every fold motion pill on the accordions demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/accordions/');
+
+      expect(await pillsAFingerCannotChoose(page, 'fold motion')).toEqual([]);
+    });
+
+    test('every world pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/');
+
+      expect(await pillsAFingerCannotChoose(page, 'world')).toEqual([]);
+    });
+
+    test('every pace pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/');
+
+      expect(await pillsAFingerCannotChoose(page, 'pace')).toEqual([]);
+    });
+
+    test('every origin pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/');
+
+      expect(await pillsAFingerCannotChoose(page, 'origin')).toEqual([]);
+    });
+
+    test('every motion pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/');
+
+      expect(await pillsAFingerCannotChoose(page, 'motion')).toEqual([]);
+    });
+
+    test('every card raised pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/z-index/');
+
+      expect(await pillsAFingerCannotChoose(page, 'card raised')).toEqual([]);
+    });
+
+    test('every side pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/z-index/');
+
+      expect(await pillsAFingerCannotChoose(page, 'side')).toEqual([]);
+    });
+
+    test('every align pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/z-index/');
+
+      expect(await pillsAFingerCannotChoose(page, 'align')).toEqual([]);
+    });
+
+    test('every entrance pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/z-index/');
+
+      expect(await pillsAFingerCannotChoose(page, 'entrance')).toEqual([]);
+    });
+
+    test('every stack pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/z-index/');
+
+      expect(await pillsAFingerCannotChoose(page, 'stack')).toEqual([]);
+    });
   });
 }
 

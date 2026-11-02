@@ -35,19 +35,16 @@ const chosenWithinAMoment = (page: Page, group: string, name: string): Promise<b
   .waitFor({state: 'attached', timeout: assertionPatience})
   .then(() => true, () => false);
 
-export const pillsAFingerCannotChoose = async (page: Page, groups: string[]): Promise<string[]> => {
-  const unchosen: string[] = [];
-  for (const group of groups) {
-    await shownGroup(page, group);
-    const pills = pillSwitch(page, group);
-    const [names, startedOn] = [await pills.names(), await pills.chosen()];
-    if (names.length < 2) unchosen.push(`${group}: fewer than two pills`);
-    const eachTapMovesTheChoice = [...names.filter(name => name !== startedOn), startedOn];
+export const pillsAFingerCannotChoose = async (page: Page, group: string): Promise<string[]> => {
+  await shownGroup(page, group);
+  const pills = pillSwitch(page, group);
+  const [names, startedOn] = [await pills.names(), await pills.chosen()];
+  const unchosen: string[] = names.length < 2 ? ['fewer than two pills'] : [];
+  const eachTapMovesTheChoice = [...names.filter(name => name !== startedOn), startedOn];
 
-    for (const name of eachTapMovesTheChoice) {
-      await fingerTap(page, pills.wordsOf(name));
-      if (!await chosenWithinAMoment(page, group, name)) unchosen.push(`${group}: ${name}`);
-    }
+  for (const name of eachTapMovesTheChoice) {
+    await fingerTap(page, pills.wordsOf(name));
+    if (!await chosenWithinAMoment(page, group, name)) unchosen.push(name);
   }
   return unchosen;
 };
