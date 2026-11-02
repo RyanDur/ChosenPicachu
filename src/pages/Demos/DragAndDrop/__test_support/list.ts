@@ -16,7 +16,6 @@ export const sortableList = {
     within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem').map(({textContent}) => textContent ?? ''),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
   fingerDown,
-  grip,
   fingerTap: async (item: string): Promise<void> => {
     await userEvent.pointer({keys: '[TouchA]', target: grip(item)});
   },
