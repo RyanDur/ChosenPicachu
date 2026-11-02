@@ -4,6 +4,7 @@ import actionsSource from '@components/DragSortableTable/actions.ts?sample';
 import demosStoreSource from '@pages/Demos/store.ts?sample';
 import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import tableStateSource from '@components/DragSortableTable/table-state.ts?sample';
+import reportSource from '@components/DragSortableTable/report.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
@@ -96,3 +97,15 @@ export const RecentTradesCarve: FC = () => <Snippet label="TS" lines={unit(recen
 
 export const HistoryCarve: FC = () =>
   <Snippet label="TS" lines={span(exchangeSource, 'const fetching = recentTrades(', "onTrouble({type: 'historyRefused', cause})")}/>;
+
+export const WalksCarve: FC = () => <Snippet label="TS" lines={[
+  ...unit(actionsSource, 'export const columnWalkedTo'),
+  aside('// …'),
+  ...unit(actionsSource, 'export const rowWalkedTo')
+]}/>;
+
+export const WalkCaseCarve: FC = () =>
+  <Snippet label="TS" lines={span(reducerSource, "case 'columnMovedBeside':", "const to = action.type === 'columnWalkedTo'")}/>;
+
+export const MoveReportCarve: FC = () =>
+  <Snippet label="TS" lines={span(reportSource, 'export const moveReport', '`${report.name} moved to ${report.position')}/>;

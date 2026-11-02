@@ -434,6 +434,16 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C WAI</span>
           </li>
           <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/focus-order.html"><cite>Understanding
+              Success Criterion 2.4.3: Focus Order</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.1, updated 9 March 2026</span>
+          </li>
+          <li>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html"><cite>Understanding
+              Success Criterion 4.1.3: Status Messages</cite></a>{' '}
+            <span className="provenance caption">W3C WAI, WCAG 2.1, updated 11 May 2026</span>
+          </li>
+          <li>
             <a className="signpost" href="https://vuejs.org/guide/scaling-up/sfc"><cite>Single-File
               Components</cite></a>{' '}
             <span className="provenance caption">The Vue guide, vuejs.org</span>

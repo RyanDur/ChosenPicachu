@@ -53,7 +53,7 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(outOfReadingOrder([
-      practicePage.figure('DragSortableTable/reducer.ts on GitHub'),
+      practicePage.figures('DragSortableTable/reducer.ts on GitHub')[0],
       practicePage.figure(oneDirection)
     ])).toEqual([]);
   });
@@ -119,6 +119,30 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.drawingsSeenIn(twoTracks)).toEqual([]);
+  });
+
+  test('should send focus moving in an order that preserves meaning to WCAG’s focus order', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/in an order that preserves meaning and operability/))
+      .toHaveAttribute('href', 'https://www.w3.org/WAI/WCAG21/Understanding/focus-order.html');
+  });
+
+  test('should send the output’s announcement to MDN’s output element', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/without requiring that focus is switched away/))
+      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output');
+  });
+
+  test('should send status message to WCAG’s status messages', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link('status message'))
+      .toHaveAttribute('href', 'https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html');
   });
 
   test('should send CustomEvent to MDN', async () => {

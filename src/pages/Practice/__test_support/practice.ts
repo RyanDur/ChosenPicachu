@@ -81,6 +81,7 @@ export const practicePage = {
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
   figure: (name: string | RegExp): HTMLElement => within(practice()).getByRole('figure', {name}),
+  figures: (name: string | RegExp): HTMLElement[] => within(practice()).getAllByRole('figure', {name}),
   drawingsSeenIn: (figure: string | RegExp): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),

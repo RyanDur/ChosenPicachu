@@ -11,13 +11,16 @@ import {
   ExchangeCarve,
   HistoryCarve,
   MiddlewareCarve,
+  MoveReportCarve,
   PreludeCarve,
   RecentTradesCarve,
   ReducerCarve,
   SheetQuestionsCarve,
   TableEventsCarve,
   TableReducerCarve,
-  TradeDecoderCarve
+  TradeDecoderCarve,
+  WalkCaseCarve,
+  WalksCarve
 } from './BehaviorCarves';
 import {OneDirectionLoop} from './OneDirectionLoop';
 import {TwoTracks} from './TwoTracks';
@@ -30,6 +33,9 @@ const schemawax = 'https://github.com/michaljanocko/schemawax';
 const illegalStates = 'https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/';
 const sand = 'https://github.com/RyanDur/sand';
 const railway = 'https://fsharpforfunandprofit.com/rop/';
+const focusOrder = 'https://www.w3.org/WAI/WCAG21/Understanding/focus-order.html';
+const statusMessages = 'https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html';
+const output = 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output';
 
 export const BehaviorPractice: FC = () =>
   <>
@@ -183,9 +189,25 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}
     <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
-      keyboard interface”</a>. The page
-      announces each change too: a sighted reader watches the order change, and a screen reader user hears the same
-      change read out.</p>
+      keyboard interface”</a>.</p>
+    <p className="paragraph">On the tables demo, an arrow key walks a column or a row: it moves it one place each time
+      the key is pressed. The table names each walk for what happened:</p>
+    <WalksCarve/>
+    <p className="paragraph">A walk and a drag end in the same case of the same reducer, so the keyboard cannot drift
+      from the pointer:</p>
+    <WalkCaseCarve/>
+    <p className="paragraph">The focus stays on the column or row being walked, so the next key press moves it again.
+      WCAG 2.4.3 asks that focus moves <a className="signpost" href={focusOrder}>“in an order that preserves meaning
+        and operability”</a>.</p>
+    <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
+      reader user hears where the column went. The report is a type, and{' '}
+    <code className="monospaced">moveReport</code> turns it into words:</p>
+    <MoveReportCarve/>
+    <p className="paragraph">Both builds write those words into an <code className="monospaced">output</code> named
+      move report. An output is a status, and MDN says a screen reader announces what is posted in
+      it <a className="signpost" href={output}>“without requiring that focus is switched away from the controls that
+        produce those results”</a>. That is what WCAG 4.1.3 asks of
+      a <a className="signpost" href={statusMessages}>status message</a>.</p>
     <h3 className="paragraph bold">The test the state has to pass</h3>
     <p className="paragraph">The test is to read the state on its own. If the data does not say what is
       true without the page open beside it, behavior has leaked into presentation. The other two languages take the
