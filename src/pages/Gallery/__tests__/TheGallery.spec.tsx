@@ -6,10 +6,11 @@ import {
   harvardArtResponse,
   vamArtResponse
 } from '@components/art-gallery/__test_support/fixtures';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {galleryPage} from '../__test_support/gallery';
 import {
   heldAICAllArtResponse,
   heldAICArtPieceResponse,
@@ -50,8 +51,8 @@ describe('The gallery.', () => {
 
       await galleryWall.openPiece(firstPiece.title);
 
-      expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
-      expect(screen.getByRole('figure')).toBeInTheDocument();
+      expect(await galleryPage.artistShown(firstPiece.artist_display)).toBeInTheDocument();
+      expect(galleryPage.easel()).toBeInTheDocument();
     });
 
     it('should update the header with the piece title', async () => {
@@ -61,8 +62,7 @@ describe('The gallery.', () => {
 
       await galleryWall.openPiece(firstPiece.title);
 
-      const header = within(screen.getByRole('banner'));
-      expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
+      expect(await galleryPage.headerShows(firstPiece.title)).toBeInTheDocument();
     });
 
     it('opening a second piece leaves nothing of the first on the easel', async () => {
@@ -70,18 +70,18 @@ describe('The gallery.', () => {
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
       await galleryWall.openPiece(firstPiece.title);
-      await within(screen.getByRole('banner')).findByText(firstPiece.title);
+      await galleryPage.headerShows(firstPiece.title);
       const secondArrives = heldAICArtPieceResponse(anAICPieceResponse(secondPiece), secondPiece.id);
 
-      await userEvent.click(screen.getByRole('link', {name: 'Gallery'}));
+      await galleryPage.backToTheWall();
       await galleryWall.openPiece(secondPiece.title);
 
-      expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
-      expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
-      expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+      expect(await galleryPage.pieceLoadingAppears()).toBeInTheDocument();
+      expect(galleryPage.title()).toHaveTextContent('A piece');
+      expect(galleryPage.easel()).not.toBeInTheDocument();
 
       secondArrives();
-      expect(await within(screen.getByRole('banner')).findByText(secondPiece.title)).toBeInTheDocument();
+      expect(await galleryPage.headerShows(secondPiece.title)).toBeInTheDocument();
     });
   });
 
@@ -190,22 +190,20 @@ describe('The gallery.', () => {
     expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
   });
 
-  const loadingSigns = (): number => screen.queryAllByRole('progressbar', {name: 'loading gallery'}).length;
-
   const loadingSignsWhenOpenedAt = async (at: string, page: number): Promise<{whileAsked: number; onceHung: number; onceTheOtherAnswers: number}> => {
     const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page});
     const vamAnswers = heldVAMPictures();
     render(<TestApp at={`${Paths.artGallery}${at}`}/>);
-    await screen.findByRole('navigation', {name: 'museums'});
-    const whileAsked = loadingSigns();
+    await galleryPage.museumsAppear();
+    const whileAsked = galleryPage.wallsLoading().length;
 
     wallArrives();
     await galleryWall.framesAppear();
-    const onceHung = loadingSigns();
+    const onceHung = galleryPage.wallsLoading().length;
 
     vamAnswers();
-    await screen.findByRole('link', {name: 'The Victoria and Albert Museum'});
-    return {whileAsked, onceHung, onceTheOtherAnswers: loadingSigns()};
+    await galleryPage.museumAppears('The Victoria and Albert Museum');
+    return {whileAsked, onceHung, onceTheOtherAnswers: galleryPage.wallsLoading().length};
   };
 
   test('opened on a museum while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {

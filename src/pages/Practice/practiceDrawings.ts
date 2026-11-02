@@ -4,12 +4,10 @@ import {has} from '@ryandur/sand';
 
 export type Size = {readonly width: number; readonly height: number};
 
-type Frame = {readonly svg: string; readonly size: Size};
-
 type Drawing = {
   readonly sheet: string;
   readonly sizes: {readonly wide: Size; readonly stacked: Size};
-  readonly frames: (siteStyle: string) => {wide: Frame; stacked: Frame};
+  readonly frames: (siteStyle: string) => {wide: string; stacked: string};
 };
 
 // a media attribute cannot read a custom property, so the width spacing.css names --phone-held-upright is named here for both pictures
@@ -39,13 +37,11 @@ const rect = ({look, x, y, width, height}: Box): string =>
   `<rect class="${look}" x="${x}" y="${y}" width="${width}" height="${height}"/>`;
 
 // an image cannot read the page's style sheets, so each frame carries the site's own, and measures its column by its own width
-const framed = (drawing: string, size: Size, siteStyle: string, drawn: string): Frame => ({
-  svg: `<svg xmlns="http://www.w3.org/2000/svg" class="${drawing} ink-filled" viewBox="0 0 ${size.width} ${size.height}" width="${size.width}" height="${size.height}">` +
-    `<style><![CDATA[${siteStyle}:root{--drawing-column:100vw;--drawn-width:${size.width}px;}]]></style>` +
-    drawn +
-    '</svg>',
-  size
-});
+const framed = (drawing: string, size: Size, siteStyle: string, drawn: string): string =>
+  `<svg xmlns="http://www.w3.org/2000/svg" class="${drawing} ink-filled" viewBox="0 0 ${size.width} ${size.height}" width="${size.width}" height="${size.height}">` +
+  `<style><![CDATA[${siteStyle}:root{--drawing-column:100vw;--drawn-width:${size.width}px;}]]></style>` +
+  drawn +
+  '</svg>';
 
 const margin = 6;
 
@@ -119,7 +115,7 @@ const whereARuleLives = ((): Drawing => {
     caption(box.label, {x: box.x + inset, y: box.y + inset}) +
     (box.label === styles.surface.label ? caption('lifted', liftedIn(box)) : '');
 
-  const frame = (boxes: Box[], {from, to}: Wears, siteStyle: string): Frame => framed('where-a-rule-lives', sizeAround(boxes), siteStyle,
+  const frame = (boxes: Box[], {from, to}: Wears, siteStyle: string): string => framed('where-a-rule-lives', sizeAround(boxes), siteStyle,
     boxes.map(drawnBox).join('') +
     `<line class="wears-line drawn dashed-drawn" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"/>` +
     caption('wears', {x: (from.x + to.x) / 2 + inset, y: (from.y + to.y) / 2}));

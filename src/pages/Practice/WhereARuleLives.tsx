@@ -3,12 +3,11 @@ import wideFrame from './drawings/where-a-rule-lives-wide.svg?url&no-inline';
 import stackedFrame from './drawings/where-a-rule-lives-stacked.svg?url&no-inline';
 import {phoneHeldUpright, practiceDrawings} from './practiceDrawings';
 import './PracticeDrawing.css';
-import './WhereARuleLives.css';
 
 const {wide, stacked} = practiceDrawings['where-a-rule-lives'].sizes;
 
 export const WhereARuleLives: FC = () =>
-  <figure className="where-a-rule-lives practice-drawing">
+  <figure className="practice-drawing">
     <picture className="center">
       <source media={phoneHeldUpright} srcSet={stackedFrame} width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>

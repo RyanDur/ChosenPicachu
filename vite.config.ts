@@ -141,8 +141,8 @@ const drawings = (): Plugin => {
     mkdirSync(folder, {recursive: true});
     drawn.forEach(({name, sheet, frames}) => {
       const {wide, stacked} = frames(squeezed([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
-      writeFileSync(`${folder}${name}-wide.svg`, wide.svg);
-      writeFileSync(`${folder}${name}-stacked.svg`, stacked.svg);
+      writeFileSync(`${folder}${name}-wide.svg`, wide);
+      writeFileSync(`${folder}${name}-stacked.svg`, stacked);
     });
   };
   return {

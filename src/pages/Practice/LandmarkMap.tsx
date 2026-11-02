@@ -3,12 +3,11 @@ import wideFrame from './drawings/landmark-map-wide.svg?url&no-inline';
 import stackedFrame from './drawings/landmark-map-stacked.svg?url&no-inline';
 import {phoneHeldUpright, practiceDrawings} from './practiceDrawings';
 import './PracticeDrawing.css';
-import './LandmarkMap.css';
 
 const {wide, stacked} = practiceDrawings['landmark-map'].sizes;
 
 export const LandmarkMap: FC = () =>
-  <figure className="landmark-map practice-drawing">
+  <figure className="practice-drawing">
     <picture className="center">
       <source media={phoneHeldUpright} srcSet={stackedFrame} width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
