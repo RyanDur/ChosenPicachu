@@ -31,7 +31,6 @@ export const recordPage = {
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
   storyEssay: (name: string): string[] => within(story(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
   storyQuotations: (name: string, quoted: string): HTMLElement[] => within(story(name)).getAllByRole('link', {name: quoted}),
-  storyLink: (name: string, link: string): HTMLElement => within(story(name)).getByRole('link', {name: link}),
   storyMomentsHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 3, name: 'the moments it rests on'}),
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),
   storyMomentLine: (name: string, line: string): HTMLElement => within(storyMoments(name)).getByRole('link', {name: line}),

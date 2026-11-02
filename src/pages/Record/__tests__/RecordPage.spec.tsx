@@ -1510,10 +1510,6 @@ describe('the record\'s three stories', () => {
     recordPage.storyQuotations('Presentation', quoted).forEach(link => expect(link).toHaveAttribute('href', page));
   });
 
-  test('should send the reader from Presentation’s rule to the Practice page’s Presentation tab, for how this site keeps it', () => {
-    expect(recordPage.storyLink('Presentation', 'Practice page’s Presentation tab')).toHaveAttribute('href', `${Paths.practice}presentation/`);
-  });
-
   test('should tell Behavior\'s story as the words give it, 7 paragraphs, paragraph for paragraph', () => {
     expect(recordPage.storyEssay('Behavior')).toEqual([
       'In April 1995 Brendan Eich joined Netscape to put a programming language in the browser, and in about ten days of May he wrote the interpreter. The need, in his words, was that “the lack of programmability of Web pages made them static, text-heavy, with at best images in tables or floating on the right or left”. Netscape had two audiences in mind, component authors writing Java and the scripters, “amateur or pro, who would write code directly embedded in HTML”, and the language was for the second, a “glue language” for “the Web designers and part time programmers who were building Web content from components such as images, plugins, and Java applets”. You could, he said, “buy it by the yard”. The script could touch the page the server had sent, change its properties and respond to events. Some early adopters, “even in late 1995”, built applications from script and frames, but “the means to communicate with servers generally involved reloading whole Web pages”.',

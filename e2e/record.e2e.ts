@@ -31,7 +31,7 @@ test('a keyboard reader who follows a line in Presentation\'s story reaches that
 test('a reader who follows the Presentation story\'s link to Practice lands on the Practice page\'s Presentation tab', async ({page}) => {
   await page.goto('record/');
 
-  await recordPage(page).storyLinkTo('Presentation', 'Practice page’s Presentation tab').click();
+  await recordPage(page).storyLinkTo('Presentation', 'The Practice page’s Presentation tab').click();
 
   await expect(page).toHaveURL(/\/practice\/presentation\/$/);
   await expect(practicePage(page).title('Presentation')).toBeVisible();
