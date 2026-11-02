@@ -2,17 +2,14 @@ import {Explainer} from '@components/Explainer';
 import {FC, useEffect, useState} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
-import {Dials} from '../../Controls';
-import {World} from '../params';
+import {useSearchParamsObject} from '@components/search-params';
+import {Dials, motionParam, originParam, paceParam} from '../../Controls';
+import {worldParam} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
 import {selectColumns, selectRows} from '../../store';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import '../Aggregations.css';
-
-type Props = Dials & {
-  world: World;
-};
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
@@ -33,7 +30,10 @@ const VanillaStage: FC<Dials> = dials => {
   </>;
 };
 
-export const Aggregations: FC<Props> = ({world, ...dials}) => {
+export const Aggregations: FC = () => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react'} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
+  const dials = {pace, origin, motion};
   useEffect(warmed, []);
 
   return <section aria-label="live aggregations" className="aggregations card rounded-corners lifted padded contained">

@@ -1,35 +1,34 @@
-import {act, render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
+import {TestApp} from '@__test_support/TestApp';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
-import {bought, sold} from '@pages/Demos/Charts/__test_support/trades';
-import {DemosProvider} from '@pages/Demos/Provider';
-import {DemosStore, demosStore, tradeArrived} from '@pages/Demos/store';
-import {aggregations} from '@pages/Demos/Tables/__test_support';
-import {Pace, Motion} from '@pages/Demos/Controls';
+import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
+import {Trading} from '@pages/Demos/Trading';
+import {aggregations, tableControls} from '@pages/Demos/Tables/__test_support';
+import {TableControls} from '../../TableControls';
 import {Aggregations} from '../Aggregations';
 
 const now = 1700000000000;
 const fourTrades = [
-  bought(0.10, {id: 950001, price: 50001, tradedAt: now - 30 * 60000}),
-  sold(0.25, {id: 950002, price: 50002, tradedAt: now - 10 * 60000}),
-  bought(0.05, {id: 950003, price: 50003, tradedAt: now - 3 * 60000}),
-  bought(0.01, {id: 950004, price: 50004, tradedAt: now})
+  tradeFrame(50001, now - 30 * 60000, '0.10', 'bought'),
+  tradeFrame(50002, now - 10 * 60000, '0.25', 'sold'),
+  tradeFrame(50003, now - 3 * 60000, '0.05', 'bought'),
+  tradeFrame(50004, now, '0.01', 'bought')
 ];
-
-const aggregationsOf = (store: DemosStore, pace: Pace = 'eager', motion: Motion = 'animated') =>
-  <DemosProvider store={store}><Aggregations world="react" pace={pace} origin="hide" motion={motion}/></DemosProvider>;
 
 describe('the live aggregations', () => {
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
-    const store = demosStore();
-    render(aggregationsOf(store));
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
     await aggregations.arrived();
     expect(aggregations.columns()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(aggregations.rows()).toHaveLength(6);
 
-    act(() => fourTrades.forEach(trade => store.dispatch(tradeArrived(trade))));
+    broadcast(feed, fourTrades);
 
-    expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
-      ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
+      ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
     expect(sortableTable.texts(aggregations.row('last 5 minutes'))).toEqual(
       ['last 5 minutes', '2', '2', '0', '0.06', '$50,003.17', '+$1.00']);
     expect(sortableTable.texts(aggregations.row('last 15 minutes'))).toEqual(
@@ -41,13 +40,14 @@ describe('the live aggregations', () => {
   });
 
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
-    const store = demosStore();
-    const {rerender} = render(aggregationsOf(store));
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading><TableControls world="react"/></TestApp>);
+    await feedIsSubscribed(feed);
     await aggregations.arrived();
     await aggregations.moveWindowByKey(1, '{ArrowDown}');
     await aggregations.moveColumnByKey('trades', '{ArrowRight}');
 
-    rerender(aggregationsOf(store, 'lazy', 'static'));
+    await tableControls.choose('Lazy', 'Static');
 
     expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
     expect(aggregations.columns().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
