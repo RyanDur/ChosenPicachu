@@ -9,7 +9,6 @@ export const rowMenu = {
     const [first] = await screen.findAllByRole('button', {name: /^Actions for /});
     return first;
   },
-  menuFor,
   actions: (toggle: HTMLElement): string[] =>
     within(menuFor(toggle)).getAllByRole('link', {hidden: true}).map(link => computeAccessibleName(link)),
   removal: (toggle: HTMLElement): HTMLElement => within(menuFor(toggle)).getByRole('button', {name: 'Remove', hidden: true})

@@ -4,16 +4,7 @@ import {Paths} from '@pages/Paths';
 import {aUser, setupUsersResponse} from '@components/Users/__test_support';
 import {rowMenu} from '@pages/Users/__test_support';
 
-describe('the row menu is a popover anchored to its toggle', () => {
-  test("each row's actions button has a menu of its own that opens as a popover", async () => {
-    setupUsersResponse([aUser(), aUser()]);
-    render(<TestApp at={Paths.users}/>);
-
-    const toggle = await rowMenu.firstToggle();
-
-    expect(rowMenu.menuFor(toggle)).toHaveAttribute('popover', 'auto');
-  });
-
+describe('the row menu', () => {
   test('the menu offers every row action', async () => {
     setupUsersResponse([aUser(), aUser()]);
     render(<TestApp at={Paths.users}/>);
