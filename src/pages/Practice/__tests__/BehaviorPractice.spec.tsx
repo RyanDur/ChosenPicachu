@@ -30,6 +30,22 @@ describe('the Behavior practice tab', () => {
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
   });
 
+  test('should head the Behavior tab’s parts in reading order, closing on the test the state has to pass', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.partHeadings()).toEqual([
+      'What is true and what happened',
+      'Code that reads as sentences',
+      'Where the world comes in',
+      'Trusted at the boundary',
+      'The core and the shell',
+      'The platform first',
+      'Every gesture has a key',
+      'The test the state has to pass'
+    ]);
+  });
+
   test('should draw one direction after the table’s reducer', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');

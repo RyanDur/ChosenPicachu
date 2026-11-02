@@ -254,10 +254,11 @@ export const StructurePractice: FC = () =>
     <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
       know is open: the old-way
       menu’s, and the Expand button on the z-index tab’s pile of cards. <code
-      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. Each drawing in the
-      page’s markup is hidden whole, since its caption says what it shows. An image’s{' '}
-    <code className="monospaced">alt</code> is its text for a screen reader. A drawing served as an image, like the
-      landmark map, has an empty <code className="monospaced">alt</code> for the same reason. The lettering of a glyph, a dial’s axis label and a code
+      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s{' '}
+    <code className="monospaced">alt</code> is its text for a screen reader. Each drawing is hidden whole, since its
+      caption says what it shows: a drawing in the page’s markup by <code className="monospaced">aria-hidden</code>,
+      and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. The
+      lettering of a glyph, a dial’s axis label and a code
       sample’s language label is hidden, since the button’s, the dial’s or the sample’s name already says it.</p>
     <p className="paragraph">So the rule, in one line: a name, always; a role, only where no element carries the
       meaning or one must be taken away; a state, only where the platform has none.</p>

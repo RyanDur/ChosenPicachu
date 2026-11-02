@@ -67,16 +67,16 @@ export const BehaviorPractice: FC = () =>
       decides what is true when it arrives.
       The <MomentLink to="pageBecomesApplication">2005 moment</MomentLink> is where that pattern got its name, Ajax, and became
       ordinary.</p>
-    <p className="paragraph">The shell is where the world comes in. The store lets a piece of code stand between an
-      event and the reducer, a middleware:</p>
+    <p className="paragraph">The shell is where the world comes in. A middleware is code the store lets stand
+      between an event and the reducer:</p>
     <MiddlewareCarve/>
     <p className="paragraph">The demos page’s middleware holds the socket and the fetches. What arrives becomes an
       event, and it goes to the same reducer a key press reaches:</p>
     <ExchangeCarve/>
-    <p className="paragraph">Martin Fowler named the idea in 2005:{' '}
-      <a className="signpost" href={eventSourcing}>“Capture all changes to an application state as a sequence of
-        events.”</a> I keep the sequence only as long as a reducer needs it, but every change still arrives as an
-      event.</p>
+    <p className="paragraph">Martin Fowler’s <a className="signpost" href={eventSourcing}>Event Sourcing</a>, in 2005,
+      goes further: <a className="signpost" href={eventSourcing}>“Capture all changes to an application state as a
+        sequence of events.”</a> It keeps every event, so the history can be replayed. This store keeps only the state
+      each event leaves, so it cannot replay anything, but every change still arrives as an event.</p>
     <h3 className="paragraph bold">Trusted at the boundary</h3>
     <p className="paragraph">I like to trust my boundaries. A value from a socket or a fetch is unknown until it is
       checked, so I check it once, where it enters, and nothing after that has to wonder.</p>
@@ -99,7 +99,7 @@ export const BehaviorPractice: FC = () =>
       path that state changes come in. Change the framework, or remove it, and only the shell changes.
       The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should outlast them.</p>
     <p className="paragraph">The <Link className="signpost" to={demoAddress(DemoTopics.tables)}>tables demo</Link> shows
-      it. Its React build and its plain-script build take the same table store, so the same reducer answers both:</p>
+      the split. Its React build and its plain-script build take the same table store, so the same reducer answers both:</p>
     <BuildsCarve/>
     <p className="paragraph">The plain-script build finds its tables by their data attribute and listens for the
       table’s own events, each named for what happened. A{' '}
