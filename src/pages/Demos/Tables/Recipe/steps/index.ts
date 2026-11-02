@@ -1,4 +1,3 @@
-export type {Track, World} from '../../params';
 export {frameCarry, gap, gripSource, headerCss, selectorsSource, sortableCss, stateSource, surveySource, travelSource, liftSource, arrowsSource} from './sources';
 export {AccessTrack, AgainstTheStream, NamesInTheCode, OwnedPixels, QuietDials, TheImplementation, TheWholeBuild, TurnedVertical, TwoRoads} from './tells';
 export {CssShare} from './share';
