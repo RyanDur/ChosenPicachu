@@ -20,6 +20,7 @@ import {CssTwoOne} from './moments/CssTwoOne';
 import {EcmaScript} from './moments/EcmaScript';
 import {EsFive} from './moments/EsFive';
 import {DefaultsAgree} from './moments/DefaultsAgree';
+import {ConstantsNeedHome} from './moments/ConstantsNeedHome';
 import {Frameworks} from './moments/Frameworks';
 import {inOrder, MomentKey, moments, YearOfTwo, yearsOfTwo} from './moments/moments';
 import {concernsOf} from './moments/concerns';
@@ -47,7 +48,8 @@ const stories: Record<MomentKey, FC> = {
   cssTwoOne: CssTwoOne,
   someoneNeedsComponents: SomeoneNeedsComponents,
   html5SaysIt: Html5SaysIt,
-  documentComesBack: DocumentComesBack
+  documentComesBack: DocumentComesBack,
+  constantsNeedHome: ConstantsNeedHome
 };
 
 type Entry = {readonly kind: 'moment'; readonly key: MomentKey} | {readonly kind: 'year'; readonly year: string; readonly of: readonly MomentKey[]; readonly told: YearOfTwo};

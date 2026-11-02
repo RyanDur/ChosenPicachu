@@ -625,7 +625,7 @@ describe('the record', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
-      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016']);
+      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016', '2017']);
     expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
       'CERN needs to share what it knows',
       'The information needs one interface',
@@ -645,7 +645,8 @@ describe('the record', () => {
       'The specification needs its tests',
       'Someone needs components',
       'The rules need writing down',
-      'The document needs to come first'
+      'The document needs to come first',
+      'The constants need a home'
     ]);
   });
 
@@ -666,7 +667,7 @@ describe('the record', () => {
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(19);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(20);
     const folds = recordPage.fullerStories();
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/, /skin disease/]
@@ -1013,6 +1014,32 @@ describe('the record', () => {
     await waitFor(() => expect(itemHeadedBy('the timeline', 'The specification needs its tests')).toHaveFocus());
   });
 
+  test('should link Sass’s variable to its documentation', () => {
+    expect(recordPage.momentLink('The constants need a home', '“you assign a value to a name that begins with $, and then you can refer to that name instead of the value itself”'))
+      .toHaveAttribute('href', 'https://sass-lang.com/documentation/variables/');
+  });
+
+  test('should link the custom property’s definition to MDN’s guide to them', () => {
+    expect(recordPage.momentLink('The constants need a home', '“entities defined by CSS authors that represent specific values to be reused throughout a document”'))
+      .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties');
+  });
+
+  test('should link Wathan’s essay by its title', () => {
+    expect(recordPage.momentLink('The constants need a home', 'CSS Utility Classes and “Separation of Concerns”'))
+      .toHaveAttribute('href', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/');
+  });
+
+  test('should link Tailwind’s theme section to its version 3 documentation', () => {
+    expect(recordPage.momentLink('The constants need a home', '“is where you define your project’s color palette, type scale, fonts, breakpoints, border radius values, and more”'))
+      .toHaveAttribute('href', 'https://v3.tailwindcss.com/docs/theme');
+  });
+
+  test('should carry the 2017 moment’s reader back to the 2013 moment’s components, with focus there', async () => {
+    await recordPage.followFromMoment('The constants need a home', 'The 2013 moment');
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'Someone needs components')).toHaveFocus());
+  });
+
   test('should link the percentage width to the CSS1 test suite’s test5526c', () => {
     expect(recordPage.momentLink('The browsers need to agree', '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”')).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
   });
@@ -1096,6 +1123,16 @@ describe('the record', () => {
   test('should shelve normalize.css’s tags on the Presentation shelf, credited to both its authors and dated by version 1.0', () => {
     expect(recordPage.shelvedAs('normalize.css tags')).toHaveTextContent('Nicolas Gallagher and Jonathan Neal, GitHub, version 1.0.0, 14 August 2012');
     expect(recordPage.shelfHolding('normalize.css tags')).toBe('Presentation');
+  });
+
+  test('should shelve Sass’s Variables on the Presentation shelf, undated', () => {
+    expect(recordPage.shelvedAs('Variables')).toHaveTextContent('Sass, sass-lang.com, undated');
+    expect(recordPage.shelfHolding('Variables')).toBe('Presentation');
+  });
+
+  test('should shelve Tailwind’s Theme Configuration on the Presentation shelf, as its version 3 documentation', () => {
+    expect(recordPage.shelvedAs('Theme Configuration')).toHaveTextContent('Tailwind CSS documentation, version 3, undated');
+    expect(recordPage.shelfHolding('Theme Configuration')).toBe('Presentation');
   });
 
   test('should shelve Writing Efficient CSS on the Presentation shelf, as David Hyatt’s for Mozilla in 2000, in its archived copy of 5 May 2012', () => {
@@ -1414,7 +1451,7 @@ describe('the record\'s three stories', () => {
 
   test('should end Presentation\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
     expect(recordPage.storyMomentsHeading('Presentation')).toBeVisible();
-    expect(recordPage.storyMomentLines('Presentation')).toEqual(['1994 Authors need control of the look', '1996 The pages need to look the same', '1996 The style sheet needs a standard', '1998 The browsers need to agree', '2002 Someone needs to go first', '2003 The separation needs proof', '2007 The defaults need to agree', '2011 The specification needs its tests', '2013 Someone needs components']);
+    expect(recordPage.storyMomentLines('Presentation')).toEqual(['1994 Authors need control of the look', '1996 The pages need to look the same', '1996 The style sheet needs a standard', '1998 The browsers need to agree', '2002 Someone needs to go first', '2003 The separation needs proof', '2007 The defaults need to agree', '2011 The specification needs its tests', '2013 Someone needs components', '2017 The constants need a home']);
     expect(recordPage.storyMomentLine('Presentation', '1994 Authors need control of the look')).toHaveAttribute('href', `${Paths.record}#authors-need-control-of-the-look`);
     expect(recordPage.storyMomentLine('Presentation', '1996 The pages need to look the same')).toHaveAttribute('href', `${Paths.record}#the-pages-need-to-look-the-same`);
     expect(recordPage.storyMomentLine('Presentation', '1996 The style sheet needs a standard')).toHaveAttribute('href', `${Paths.record}#the-style-sheet-needs-a-standard`);
@@ -1424,6 +1461,7 @@ describe('the record\'s three stories', () => {
     expect(recordPage.storyMomentLine('Presentation', '2007 The defaults need to agree')).toHaveAttribute('href', `${Paths.record}#the-defaults-need-to-agree`);
     expect(recordPage.storyMomentLine('Presentation', '2011 The specification needs its tests')).toHaveAttribute('href', `${Paths.record}#the-specification-needs-its-tests`);
     expect(recordPage.storyMomentLine('Presentation', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
+    expect(recordPage.storyMomentLine('Presentation', '2017 The constants need a home')).toHaveAttribute('href', `${Paths.record}#the-constants-need-a-home`);
   });
 
   test.each([

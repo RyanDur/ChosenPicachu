@@ -23,7 +23,8 @@ export const inOrder = ordered([
   'cssTwoOne',
   'someoneNeedsComponents',
   'html5SaysIt',
-  'documentComesBack'
+  'documentComesBack',
+  'constantsNeedHome'
 ]);
 
 export type MomentKey = typeof inOrder[number];
@@ -88,7 +89,8 @@ export const moments: Record<MomentKey, MomentHeading> = {
   cssTwoOne: named({year: '2011'}, 'The specification needs its tests'),
   someoneNeedsComponents: named({year: '2013'}, 'Someone needs components'),
   html5SaysIt: named({year: '2014'}, 'The rules need writing down'),
-  documentComesBack: named({year: '2016'}, 'The document needs to come first')
+  documentComesBack: named({year: '2016'}, 'The document needs to come first'),
+  constantsNeedHome: named({year: '2017'}, 'The constants need a home')
 };
 
 export type YearOfTwo = {
