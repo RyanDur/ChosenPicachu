@@ -26,5 +26,5 @@ test('a search engine that runs no script reads the Record’s description count
   const page = await (await request.get('record/')).text();
   const [, told] = /one sentence said (?:<!-- -->)?([a-z-]+)(?:<!-- -->)? ways/.exec(page) ?? [];
 
-  expect(headOf(page)).toEqual({title: names.record.title, description: names.record.description.replace('{moments}', told)});
+  expect(headOf(page)).toEqual({title: names.record.title, description: names.record.descriptionTemplate.replace('{moments}', told)});
 });

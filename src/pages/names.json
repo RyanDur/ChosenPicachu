@@ -41,7 +41,7 @@
   },
   "record": {
     "title": "The record · Chosen Picachu",
-    "description": "How the web got its three languages, in {moments} moments from 1989 on, each with its fuller story and its sources."
+    "descriptionTemplate": "How the web got its three languages, in {moments} moments from 1989 on, each with its fuller story and its sources."
   },
   "practice": {
     "structure": {

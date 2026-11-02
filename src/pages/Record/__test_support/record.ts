@@ -21,6 +21,8 @@ const shelvedAs = (work: string): HTMLElement => {
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
+  momentsTold: async (): Promise<string | undefined> =>
+    /one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent)?.[1],
   paragraphOpening,
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),

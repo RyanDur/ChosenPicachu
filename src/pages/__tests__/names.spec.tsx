@@ -5,8 +5,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
-import {recordListing} from '@pages/Record/listing';
-import {inOrder} from '@pages/Record/moments/moments';
+import {recordPage} from '@pages/Record/__test_support/record';
 import {practiceAt} from '@pages/Practice/__test_support/practice';
 import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
@@ -17,40 +16,125 @@ describe('each page is named where a search shows it', () => {
   test('should describe the record by as many moments as its timeline holds', async () => {
     render(<TestApp at={Paths.record}/>);
 
-    const [, count] = /one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent) ?? [];
-
-    expect(described()).toContain(`in ${count} moments`);
+    expect(described()).toContain(`in ${await recordPage.momentsTold()} moments`);
   });
 
-  test.each([
-    ['the home page', Paths.home, names.home],
-    ['the accordions tab', demosAt('accordions'), names.demos.accordions],
-    ['the z-index tab', demosAt('z-index'), names.demos['z-index']],
-    ['the drag sort tab', demosAt('drag-and-drop'), names.demos['drag-and-drop']],
-    ['the charts tab', demosAt('charts'), names.demos.charts],
-    ['the tables tab', demosAt('tables'), names.demos.tables],
-    ['the price line’s page', chartPageAt('price'), names.charts.price],
-    ['the pie’s page', chartPageAt('pie'), names.charts.pie],
-    ['the users page', Paths.users, names.users],
-    ['the gallery', `${Paths.artGallery}?page=1&size=8&tab=aic`, names.gallery],
-    ['the games page', Paths.games, names.games],
-    ['the record', Paths.record, recordListing(inOrder.length)],
-    ['the practice page, on Structure when no tab is named', Paths.practice, names.practice.structure],
-    ['practice’s structure tab', practiceAt('structure'), names.practice.structure],
-    ['practice’s presentation tab', practiceAt('presentation'), names.practice.presentation],
-    ['practice’s behavior tab', practiceAt('behavior'), names.practice.behavior],
-    ['an address with no room', '/nowhere/', names.noRoom]
-  ])('should give %s its own title and description', async (_page, path, {title, description}) => {
-    render(<TestApp at={path}/>);
+  test('should give the home page its own title and description', async () => {
+    render(<TestApp at={Paths.home}/>);
 
-    await waitFor(() => expect(document.title).toBe(title));
-    expect(described()).toBe(description);
+    await waitFor(() => expect(document.title).toBe(names.home.title));
+    expect(described()).toBe(names.home.description);
   });
 
-  test('should describe the behavior tab by what it organizes', async () => {
+  test('should give the accordions tab its own title and description', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.demos.accordions.title));
+    expect(described()).toBe(names.demos.accordions.description);
+  });
+
+  test('should give the z-index tab its own title and description', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.demos['z-index'].title));
+    expect(described()).toBe(names.demos['z-index'].description);
+  });
+
+  test('should give the drag sort tab its own title and description', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.demos['drag-and-drop'].title));
+    expect(described()).toBe(names.demos['drag-and-drop'].description);
+  });
+
+  test('should give the charts tab its own title and description', async () => {
+    render(<TestApp at={demosAt('charts')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.demos.charts.title));
+    expect(described()).toBe(names.demos.charts.description);
+  });
+
+  test('should give the tables tab its own title and description', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.demos.tables.title));
+    expect(described()).toBe(names.demos.tables.description);
+  });
+
+  test('should give the price line’s page its own title and description', async () => {
+    render(<TestApp at={chartPageAt('price')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.charts.price.title));
+    expect(described()).toBe(names.charts.price.description);
+  });
+
+  test('should give the pie’s page its own title and description', async () => {
+    render(<TestApp at={chartPageAt('pie')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.charts.pie.title));
+    expect(described()).toBe(names.charts.pie.description);
+  });
+
+  test('should give the users page its own title and description', async () => {
+    render(<TestApp at={Paths.users}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.users.title));
+    expect(described()).toBe(names.users.description);
+  });
+
+  test('should give the gallery its own title and description', async () => {
+    render(<TestApp at={`${Paths.artGallery}?page=1&size=8&tab=aic`}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.gallery.title));
+    expect(described()).toBe(names.gallery.description);
+  });
+
+  test('should give the games page its own title and description', async () => {
+    render(<TestApp at={Paths.games}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.games.title));
+    expect(described()).toBe(names.games.description);
+  });
+
+  test('should give the record its own title', async () => {
+    render(<TestApp at={Paths.record}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.record.title));
+  });
+
+  test('should give the practice page Structure’s title and description when no tab is named', async () => {
+    render(<TestApp at={Paths.practice}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.practice.structure.title));
+    expect(described()).toBe(names.practice.structure.description);
+  });
+
+  test('should give practice’s structure tab its own title and description', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.practice.structure.title));
+    expect(described()).toBe(names.practice.structure.description);
+  });
+
+  test('should give practice’s presentation tab its own title and description', async () => {
+    render(<TestApp at={practiceAt('presentation')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.practice.presentation.title));
+    expect(described()).toBe(names.practice.presentation.description);
+  });
+
+  test('should give practice’s behavior tab its own title and description', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
 
-    await waitFor(() => expect(described()).toBe('How I organize behavior: what is true and what happened, a functional core under an imperative shell, and a keyboard twin for every pointer action.'));
+    await waitFor(() => expect(document.title).toBe(names.practice.behavior.title));
+    expect(described()).toBe(names.practice.behavior.description);
+  });
+
+  test('should give an address with no room its own title and description', async () => {
+    render(<TestApp at="/nowhere/"/>);
+
+    await waitFor(() => expect(document.title).toBe(names.noRoom.title));
+    expect(described()).toBe(names.noRoom.description);
   });
 
   test('should name the closed room for what it is when a page breaks', async () => {
@@ -121,10 +205,31 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.demos['z-index'].description);
   });
 
-  test.each(Object.entries(names.charts))('should describe the %s chart’s page with the story its tutorial tells', async (kind, {description}) => {
-    render(<TestApp at={chartPageAt(kind, `?graph=${kind}`)}/>);
+  test('should describe the price chart’s page with the story its tutorial tells', async () => {
+    render(<TestApp at={chartPageAt('price', '?graph=price')}/>);
 
-    expect(await screen.findByRole('heading', {name: description.replace(/\.$/, '')})).toBeInTheDocument();
-    await waitFor(() => expect(described()).toBe(description));
+    expect(await screen.findByRole('heading', {name: names.charts.price.description.replace(/\.$/, '')})).toBeInTheDocument();
+    await waitFor(() => expect(described()).toBe(names.charts.price.description));
+  });
+
+  test('should describe the candles chart’s page with the story its tutorial tells', async () => {
+    render(<TestApp at={chartPageAt('candles', '?graph=candles')}/>);
+
+    expect(await screen.findByRole('heading', {name: names.charts.candles.description.replace(/\.$/, '')})).toBeInTheDocument();
+    await waitFor(() => expect(described()).toBe(names.charts.candles.description));
+  });
+
+  test('should describe the pressure chart’s page with the story its tutorial tells', async () => {
+    render(<TestApp at={chartPageAt('pressure', '?graph=pressure')}/>);
+
+    expect(await screen.findByRole('heading', {name: names.charts.pressure.description.replace(/\.$/, '')})).toBeInTheDocument();
+    await waitFor(() => expect(described()).toBe(names.charts.pressure.description));
+  });
+
+  test('should describe the pie chart’s page with the story its tutorial tells', async () => {
+    render(<TestApp at={chartPageAt('pie', '?graph=pie')}/>);
+
+    expect(await screen.findByRole('heading', {name: names.charts.pie.description.replace(/\.$/, '')})).toBeInTheDocument();
+    await waitFor(() => expect(described()).toBe(names.charts.pie.description));
   });
 });
