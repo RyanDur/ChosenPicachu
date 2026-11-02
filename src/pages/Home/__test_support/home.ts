@@ -19,10 +19,8 @@ export const homePage = {
   sectionHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   quotationIn: (name: string): HTMLElement => within(section(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(section(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
-  concernText: (name: string): string[] => ownParagraphs(name).map(paragraph => paragraph.textContent ?? ''),
   claim,
   sectionHeading: (name: string): HTMLElement => within(section(name)).getByRole('heading', {level: 2, name}),
-  sectionText: (name: string): string[] => within(section(name)).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''),
   sectionLinks: (name: string): HTMLElement[] => within(section(name)).getAllByRole('link'),
   sourcesLinked: (): string[] => within(screen.getByRole('main')).getAllByRole('link')
     .map(link => link.getAttribute('href') ?? '')
