@@ -4,6 +4,7 @@ import {MomentLink} from '@pages/Record/MomentLink';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {
   BuildsCarve,
+  CarryCarve,
   ConditionCarve,
   DecodeTradeCarve,
   EventsCarve,
@@ -21,6 +22,7 @@ import {OneDirectionLoop} from './OneDirectionLoop';
 const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
 const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';
 const schemawax = 'https://github.com/michaljanocko/schemawax';
+const illegalStates = 'https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/';
 
 export const BehaviorPractice: FC = () =>
   <>
@@ -47,9 +49,26 @@ export const BehaviorPractice: FC = () =>
     <OneDirectionLoop/>
     <h3 className="paragraph bold">Code that reads as sentences</h3>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
-      refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was
-      written.</p>
-    <p className="paragraph">I wrote small functions so a condition reads in
+      refuses what cannot be.</p>
+    <p className="paragraph">Here is what that refusal looks like. A drag carries a column or a row, never both and never
+      neither, so <code className="monospaced">Carry</code> takes one of two shapes. Each shape names its axis and what
+      it holds:</p>
+    <CarryCarve/>
+    <p className="paragraph">Two booleans, one for a held column and one for a held row, would let the state say both at
+      once. The union has no way to say it.</p>
+    <p className="paragraph">A sort runs one of two ways, so <code className="monospaced">Direction</code> is those two
+      words, <code className="monospaced">'ascending' | 'descending'</code>, and a misspelled direction is an error
+      before the page runs. Every field of the table’s state is <code className="monospaced">readonly</code>, so the
+      type checker refuses an edit to an old state, and the reducer has to return a new one. Where a value may be
+      missing, as the report is before anything has moved, the code says so with sand’s{' '}
+    <code className="monospaced">Maybe</code>.</p>
+    <p className="paragraph">The type checker runs as <code className="monospaced">tsc -b</code> in the pre-commit hook. A
+      commit that lets a forbidden state in is never made.</p>
+    <p className="paragraph">Scott Wlaschin calls this using the type system to{' '}
+      <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
+      Yaron Minsky.</p>
+    <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
+      there when it was written. I wrote small functions so a condition reads in
       words: <code className="monospaced">has</code>,{' '}
     <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
     <code className="monospaced">notEmpty</code>, from my own library,{' '}

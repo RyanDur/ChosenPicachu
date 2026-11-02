@@ -459,6 +459,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://github.com/michaljanocko/schemawax"><cite>schemawax</cite></a>{' '}
             <span className="provenance caption">Michal Janočko, GitHub, version 1.0.12</span>
           </li>
+          <li>
+            <a className="signpost" href="https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/"><cite>Designing with types: Making illegal states unrepresentable</cite></a>{' '}
+            <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 14 January 2013</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

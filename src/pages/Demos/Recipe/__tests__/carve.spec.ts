@@ -40,6 +40,10 @@ const looks = (carried: boolean): readonly (string | false)[] => [
     carried && 'carried'
 ];
 
+type Held =
+    | {axis: 'column'}
+    | {axis: 'row'};
+
 const trailing = 'never carved';
 `);
 
@@ -140,6 +144,14 @@ describe('carving examples out of the source they teach', () => {
       '',
       row,
       '};'
+    ]);
+  });
+
+  test('a union type continues through each of its members', () => {
+    expect(unit(source, 'type Held').map(({text}) => text)).toEqual([
+      'type Held =',
+      "    | {axis: 'column'}",
+      "    | {axis: 'row'};"
     ]);
   });
 

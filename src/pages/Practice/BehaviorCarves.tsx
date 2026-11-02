@@ -3,6 +3,7 @@ import storeSource from '@components/store.ts?sample';
 import actionsSource from '@components/DragSortableTable/actions.ts?sample';
 import demosStoreSource from '@pages/Demos/store.ts?sample';
 import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
+import tableStateSource from '@components/DragSortableTable/table-state.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
@@ -87,3 +88,5 @@ export const TableEventsCarve: FC = () =>
 export const TradeDecoderCarve: FC = () => <Snippet label="TS" lines={unit(coinbaseSource, 'const MatchDecoder')}/>;
 
 export const DecodeTradeCarve: FC = () => <Snippet label="TS" lines={unit(coinbaseSource, 'export const decodeTrade')}/>;
+
+export const CarryCarve: FC = () => <Snippet label="TS" lines={unit(tableStateSource, 'export type Carry')}/>;

@@ -79,6 +79,14 @@ describe('the Behavior practice tab', () => {
     expect(practicePage.link(/Tiny typed data decoder/)).toHaveAttribute('href', 'https://github.com/michaljanocko/schemawax');
   });
 
+  test('should send make illegal states unrepresentable to Wlaschin’s post', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/make illegal states unrepresentable/))
+      .toHaveAttribute('href', 'https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/');
+  });
+
   test('should send CustomEvent to MDN', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
