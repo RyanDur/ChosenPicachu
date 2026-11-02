@@ -6,6 +6,8 @@
   container-type: inline-size;
 
   .drawing {
+    --drawing-column: 100cqi;
+
     display: block;
     inline-size: auto;
     max-inline-size: 100%;

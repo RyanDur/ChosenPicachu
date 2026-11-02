@@ -1,5 +1,7 @@
 import {FC} from 'react';
 import {MomentLink} from '@pages/Record/MomentLink';
+import {EventsCarve, ReducerCarve, TableReducerCarve} from './BehaviorCarves';
+import {OneDirection} from './OneDirection';
 
 export const BehaviorPractice: FC = () =>
   <>
@@ -7,8 +9,20 @@ export const BehaviorPractice: FC = () =>
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
       cannot be worked out from something else. Events are what happened, so I name them in the past tense:
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
-      I keep the state in one place, and replacing it is the only way anything on screen changes.
-      AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
+      I keep the state in one place, and replacing it is the only way anything on screen changes.</p>
+    <p className="paragraph">A reducer is that pure function, and its type says so: it takes the state and an event and
+      returns the state.</p>
+    <ReducerCarve/>
+    <p className="paragraph">The events are named for what happened. Two come from the reader’s hands, and one from a
+      server:</p>
+    <EventsCarve/>
+    <p className="paragraph">The table’s reducer is small reducers combined, and it ignores any event that is not the
+      table’s:</p>
+    <TableReducerCarve/>
+    <p className="paragraph">The column order is held, as the demos store’s arrangement; the columns on screen are
+      worked out from it by <code className="monospaced">selectColumns</code>, so nothing stores them twice.</p>
+    <OneDirection/>
+    <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
       direction, the <MomentLink to="oneDirection">2014 moment</MomentLink>’s answer.</p>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
