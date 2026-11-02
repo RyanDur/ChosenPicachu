@@ -11,3 +11,5 @@ export const tutorialParam: schema.Decoder<Tutorial> = schema.literalUnion('sort
 export type World = 'react' | 'vanilla';
 
 export const worldParam: schema.Decoder<World> = schema.literalUnion('react', 'vanilla');
+
+export const defaultTablesDials: {tut: Tutorial; world: World; track: Track} = {tut: 'sort', world: 'react', track: 'pointer'};

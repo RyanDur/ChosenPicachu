@@ -2,7 +2,7 @@ import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {World, worldParam} from '../params';
+import {defaultTablesDials, World, worldParam} from '../params';
 import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?sample';
 import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample';
@@ -309,7 +309,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const ResizeRecipe: FC = () => {
-  const {world = 'react'} = useSearchParamsObject({world: worldParam});
+  const {world} = useSearchParamsObject({world: worldParam}, defaultTablesDials);
   return <section aria-label="build the drag resize yourself" className="build-steps">
     <Stories><WidenStory world={world}/></Stories>
   </section>;

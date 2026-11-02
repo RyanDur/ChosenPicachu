@@ -4,7 +4,7 @@ import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {World, worldParam} from '../params';
+import {defaultTablesDials, World, worldParam} from '../params';
 import {TheImplementation} from './steps';
 import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
@@ -266,14 +266,14 @@ const FlowStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const StillTableRecipe: FC = () => {
-  const {world = 'react'} = useSearchParamsObject({world: worldParam});
+  const {world} = useSearchParamsObject({world: worldParam}, defaultTablesDials);
   return <section aria-label="the still table" className="build-steps">
     <Stories><StillStory world={world}/></Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
-  const {world = 'react'} = useSearchParamsObject({world: worldParam});
+  const {world} = useSearchParamsObject({world: worldParam}, defaultTablesDials);
   return <section aria-label="the living table" className="build-steps">
     <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
   </section>;

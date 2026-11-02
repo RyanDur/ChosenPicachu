@@ -1,6 +1,6 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {tutorialParam, World, worldParam} from './params';
+import {defaultTablesDials, tutorialParam, World, worldParam} from './params';
 import {PillGlider} from '@components/PillGlider';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
@@ -22,7 +22,8 @@ const worldCopy: Record<World, string> = {
 };
 
 export const Tutorials: FC = () => {
-  const {tut: shown = 'sort', world = 'react', updateSearchParams} = useSearchParamsObject({tut: tutorialParam, world: worldParam});
+  const {tut: shown, world, updateSearchParams} =
+    useSearchParamsObject({tut: tutorialParam, world: worldParam}, defaultTablesDials);
   useArrival();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
