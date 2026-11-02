@@ -12,7 +12,6 @@ export const demoPage = {
   title: (name: string): HTMLElement => screen.getByRole('heading', {name}),
   findTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
   says: (told: string | RegExp): HTMLElement => screen.getByText(told),
-  everySaying: (told: RegExp): HTMLElement[] => screen.getAllByText(told),
   findSays: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
   saidAnywhere: (told: string): HTMLElement | null => screen.queryByText(told),
   signpost: (name: string): HTMLElement => screen.getByRole('link', {name}),

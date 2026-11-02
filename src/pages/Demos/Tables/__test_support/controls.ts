@@ -1,5 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {readingOf} from '@pages/Demos/Controls/__test_support/reading';
 
 export const untilTheTablesTabRenders = {timeout: 5000};
 
@@ -11,6 +12,7 @@ export const tableControls = {
   settings: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'settings'}, untilTheTablesTabRenders),
   readout: (table: string): HTMLElement => screen.getByText(table),
   axis: async (name: string): Promise<HTMLElement> => within(await region()).getByRole('group', {name}),
+  reading: async (dial: string): Promise<HTMLElement> => readingOf(await region(), dial),
   radio: async (name: string): Promise<HTMLElement> => within(await region()).getByRole('radio', {name}),
   choose: async (...choices: string[]): Promise<void> => {
     for (const name of choices) {
