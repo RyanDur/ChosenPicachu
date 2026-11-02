@@ -36,9 +36,9 @@ const shortName = (path: string): string => path.split('/').slice(-2).join('/');
 
 const nameOf = (path: string, owner?: string): string => has(owner) ? `${owner}’s ${shortName(path)}` : shortName(path);
 
-const splitIndent = (text: string): [string, string] => {
+const splitIndent = (text: string): {indent: string; code: string} => {
   const code = text.trimStart();
-  return [text.slice(0, text.length - code.length), code];
+  return {indent: text.slice(0, text.length - code.length), code};
 };
 
 const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
@@ -58,7 +58,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({text, dim = false}, at) => {
-        const [indent, code] = splitIndent(text);
+        const {indent, code} = splitIndent(text);
         return <span className={classNames('line', dim && inkOf.comment)} key={at}>
           {has(indent) && <span className="indent">{indent}</span>}
           {dim
