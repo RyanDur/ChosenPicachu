@@ -106,8 +106,8 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and{' '}
     <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.{' '}
     <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and{' '}
-    <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s container is and what an element contains, which a
-      selector alone could not.</p>
+    <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s container is and what an element contains. A
+      selector alone could not ask either.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -167,12 +167,13 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">A few sizes belong to one component and sit in its own style sheet:</p>
     <ul className="practice-list">
       <li className="paragraph">its own breakpoints, in pixels, and its container queries, in rems, in pixels and one measure
-        in ch, since they follow the window, a container or a line of text; the drawings float only where their width plus
-        45ch fits the column;</li>
+        in ch, since they follow the window, a container or a line of text;</li>
       <li className="paragraph">a table’s or a page’s width, in rems, measured to what it holds: a table’s columns at
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
     </ul>
+    <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in the
+      column.</p>
     <p className="paragraph">Only values the code works out at runtime are written inline, mostly as{' '}
       <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
       the style sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom properties
@@ -192,7 +193,7 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules, and two of those print their reason. For a tag selector
+    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules. Two of those print their reason. For a tag selector
       outside the reset:{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       For a look in a component style sheet, that the property{' '}
@@ -267,7 +268,7 @@ export const PresentationPractice: FC = () =>
       and then the platform.</p>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
-      what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
-      isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list. Isolation means one component’s
-      rules reach no other.</p>
+      what it needs, in the names the design uses, the style sheet has become a pile of overrides. Isolation means
+      one component’s rules reach no other. It is the last of the seven problems in Chedeau’s talk, and this test guards
+      it; the concert quotes his list.</p>
   </>;
