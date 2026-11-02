@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
@@ -61,6 +61,16 @@ test('a person in the roster drags to a new seat once the roster has arrived, an
   await expect.poll(() => roster.whatTheMoveReportSaid()).toEqual([`${first} moved to 3 of ${rest.length + 3}`]);
 });
 
+const aFingerLandsOnTheStateChoice = async (page: Page, end: 'start' | 'end'): Promise<void> => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.homeState).toBeVisible();
+
+  await users.tapTheHomeStateAt(end);
+
+  await expect(users.homeState).toBeFocused();
+};
+
 const handhelds = [
   {reader: 'an iPhone', device: iPhone},
   {reader: 'an iPad in split view', device: iPadSplitView}
@@ -80,17 +90,9 @@ for (const {reader, device} of handhelds) {
       await expect(users.columns.last()).toBeInViewport({ratio: 0.5});
     });
 
-    for (const end of ['start', 'end'] as const) {
-      test(`a finger at the ${end} of the State choice's box lands on the State choice`, async ({page}) => {
-        const users = usersPage(page);
-        await page.goto('users');
-        await expect(users.homeState).toBeVisible();
+    test('a finger at the start of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'start'));
 
-        await users.tapTheHomeStateAt(end);
-
-        await expect(users.homeState).toBeFocused();
-      });
-    }
+    test('a finger at the end of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'end'));
   });
 }
 

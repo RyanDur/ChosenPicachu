@@ -1,4 +1,7 @@
 import type {Locator, Page} from '@playwright/test';
+import {assertionPatience} from './patience';
+import {demoSettings} from './demo-settings';
+import {fingerTap} from './finger';
 import {siteFrame} from './site';
 
 export const pillSwitch = (page: Page, name: string) => {
@@ -19,4 +22,32 @@ export const dialRow = (page: Page, name: string) => {
   const pills = page.getByRole('group', {name, exact: true}).last();
   const row = page.getByRole('listitem').filter({has: pills}).last();
   return {row, reading: row.getByRole('status'), shownNames: row.getByText(name, {exact: true})};
+};
+
+const shownGroup = async (page: Page, group: string): Promise<void> => {
+  const hidden = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first();
+  await hidden.getByRole('radio', {includeHidden: true}).first().waitFor({state: 'attached'});
+  if (await hidden.isHidden()) await demoSettings(page).press();
+};
+
+const chosenWithinAMoment = (page: Page, group: string, name: string): Promise<boolean> => page.getByRole('group', {name: group, exact: true}).first()
+  .getByRole('radio', {name, exact: true, checked: true, includeHidden: true})
+  .waitFor({state: 'attached', timeout: assertionPatience})
+  .then(() => true, () => false);
+
+export const pillsAFingerCannotChoose = async (page: Page, groups: string[]): Promise<string[]> => {
+  const unchosen: string[] = [];
+  for (const group of groups) {
+    await shownGroup(page, group);
+    const pills = pillSwitch(page, group);
+    const [names, startedOn] = [await pills.names(), await pills.chosen()];
+    if (names.length < 2) unchosen.push(`${group}: fewer than two pills`);
+    const eachTapMovesTheChoice = [...names.filter(name => name !== startedOn), startedOn];
+
+    for (const name of eachTapMovesTheChoice) {
+      await fingerTap(page, pills.wordsOf(name));
+      if (!await chosenWithinAMoment(page, group, name)) unchosen.push(`${group}: ${name}`);
+    }
+  }
+  return unchosen;
 };

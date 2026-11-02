@@ -1,26 +1,35 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import {desktop, iPhone, topLayerMenu, trappedMenu} from './__test_support';
 
 const overEverything = 'The list opened over everything around it. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.';
+
+const theTopLayerMenuIsOverEverything = async (page: Page): Promise<void> => {
+  const menu = topLayerMenu(page);
+  await expect(menu.menu).toBeVisible();
+  await expect.poll(() => menu.onTopAt('name'), 'name').toBe(true);
+  await expect.poll(() => menu.onTopAt('date'), 'date').toBe(true);
+  await expect.poll(() => menu.onTopAt('size'), 'size').toBe(true);
+  await expect(trappedMenu(page).said).toHaveText(overEverything);
+};
+
+const opensOverEverythingWithCardOne = async (page: Page, state: 'contained' | 'free'): Promise<void> => {
+  await page.goto(`demos/z-index/?card-one=${state}`);
+  const menu = topLayerMenu(page);
+
+  await menu.open();
+
+  await theTopLayerMenuIsOverEverything(page);
+};
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
     test.use(device);
 
-    for (const state of ['contained', 'free']) {
-      test(`the menu in the top layer opens over everything around it with card one ${state}, and the exhibit says so`, async ({page}) => {
-        await page.goto(`demos/z-index/?card-one=${state}`);
-        const menu = topLayerMenu(page);
+    test('the menu in the top layer opens over everything around it with card one contained, and the exhibit says so', ({page}) =>
+      opensOverEverythingWithCardOne(page, 'contained'));
 
-        await menu.open();
-
-        await expect(menu.menu).toBeVisible();
-        for (const choice of ['name', 'date', 'size'] as const) {
-          await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
-        }
-        await expect(trappedMenu(page).said).toHaveText(overEverything);
-      });
-    }
+    test('the menu in the top layer opens over everything around it with card one free, and the exhibit says so', ({page}) =>
+      opensOverEverythingWithCardOne(page, 'free'));
   });
 }
 
@@ -33,11 +42,7 @@ test.describe('a phone', () => {
 
     await menu.openFromTheBottomEdge();
 
-    await expect(menu.menu).toBeVisible();
-    for (const choice of ['name', 'date', 'size'] as const) {
-      await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
-    }
-    await expect(trappedMenu(page).said).toHaveText(overEverything);
+    await theTopLayerMenuIsOverEverything(page);
   });
 });
 

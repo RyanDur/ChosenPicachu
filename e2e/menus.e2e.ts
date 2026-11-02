@@ -1,22 +1,24 @@
 import {Locator, Page, expect, test} from '@playwright/test';
 import {chartsPage, dragSortTable, siteFrame, stages} from './__test_support';
 
-const menus: readonly {exhibit: string; at: string; toggle: (page: Page) => Locator; menu: (page: Page) => Locator}[] = [
-  {exhibit: 'the price period', at: 'demos/charts/', toggle: page => chartsPage(page).periodToggle, menu: page => page.getByLabel('price period by')},
-  {exhibit: "a column's sort", at: 'demos/tables/', toggle: page => dragSortTable(page, stages[0].table(page)).sortToggle('trades'), menu: page => dragSortTable(page, stages[0].table(page)).sortMenu('trades')}
-];
+const opensFromTheKeyboardClosesOnEscape = async (page: Page, at: string, toggle: Locator, menu: Locator): Promise<void> => {
+  await page.goto(at);
+  await expect(toggle).toBeVisible({timeout: 30_000});
+  await siteFrame(page).hydrated();
 
-for (const {exhibit, at, toggle, menu} of menus) {
-  test(`${exhibit} menu opens from the keyboard and closes on Escape`, async ({page}) => {
-    await page.goto(at);
-    await expect(toggle(page)).toBeVisible({timeout: 30_000});
-    await siteFrame(page).hydrated();
+  await toggle.focus();
+  await page.keyboard.press('Enter');
+  await expect(menu).toBeVisible();
 
-    await toggle(page).focus();
-    await page.keyboard.press('Enter');
-    await expect(menu(page)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+};
 
-    await page.keyboard.press('Escape');
-    await expect(menu(page)).toBeHidden();
-  });
-}
+test('the price period menu opens from the keyboard and closes on Escape', ({page}) =>
+  opensFromTheKeyboardClosesOnEscape(page, 'demos/charts/', chartsPage(page).periodToggle, page.getByLabel('price period by')));
+
+test("a column's sort menu opens from the keyboard and closes on Escape", ({page}) => {
+  const trades = dragSortTable(page, stages[0].table(page));
+
+  return opensFromTheKeyboardClosesOnEscape(page, 'demos/tables/', trades.sortToggle('trades'), trades.sortMenu('trades'));
+});

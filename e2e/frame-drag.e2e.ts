@@ -1,5 +1,5 @@
-import {expect, test} from '@playwright/test';
-import {dragSortTable, iPadUpright, iPhone, stages, stagesWith} from './__test_support';
+import {expect, type Page, test} from '@playwright/test';
+import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stagesWith} from './__test_support';
 
 for (const {name, at, table} of [...stagesWith('origin=keep'), ...stagesWith('origin=hide')]) {
   test(`a trader drags a column and a row into new seats without the page erring, in ${name}`, async ({page}) => {
@@ -75,26 +75,36 @@ for (const {name, at, table} of stages) {
   });
 }
 
-for (const {reader, device, presses} of [
-  {reader: 'an iPad held upright', device: iPadUpright, presses: ['name'] as const},
-  {reader: 'a phone', device: iPhone, presses: ['name', 'middle'] as const}
+const aFingerCarriesTheColumn = async (page: Page, browserName: string, {at, table}: Stage, from: FingerPress): Promise<void> => {
+  test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
+  await page.goto(at);
+  const trades = dragSortTable(page, table(page));
+  await expect(trades.columnHeader('trades')).toBeVisible();
+
+  await trades.fingerDragColumn('trades', {by: 240, from});
+
+  await expect.poll(async () => (await trades.columnOrder()).indexOf('trades')).toBeGreaterThan(1);
+};
+
+for (const {reader, device} of [
+  {reader: 'an iPad held upright', device: iPadUpright},
+  {reader: 'a phone', device: iPhone}
 ]) {
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {name, at, table} of stages) {
-      for (const from of presses) {
-        test(`a finger pressed on a column's ${from} carries it to a new seat, in ${name}`, async ({page, browserName}) => {
-          test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
-          await page.goto(at);
-          const trades = dragSortTable(page, table(page));
-          await expect(trades.columnHeader('trades')).toBeVisible();
-
-          await trades.fingerDragColumn('trades', {by: 240, from});
-
-          await expect.poll(async () => (await trades.columnOrder()).indexOf('trades')).toBeGreaterThan(1);
-        });
-      }
+    for (const stage of stages) {
+      test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
+        aFingerCarriesTheColumn(page, browserName, stage, 'name'));
     }
   });
 }
+
+test.describe('a phone', () => {
+  test.use(iPhone);
+
+  for (const stage of stages) {
+    test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
+      aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
+  }
+});

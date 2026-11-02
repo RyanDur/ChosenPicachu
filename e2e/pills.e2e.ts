@@ -1,16 +1,12 @@
 import {Page, expect, test} from '@playwright/test';
-import {demoSettings, desktop, fingerTap, iPadUpright, iPhone, phoneSideways, pillSwitch} from './__test_support';
+import {desktop, iPadUpright, iPhone, phoneSideways, pillsAFingerCannotChoose, pillSwitch} from './__test_support';
 
-const choicesOn = [
-  {demo: 'the accordions demo', at: 'demos/accordions/', groups: ['fold type', 'fold motion']},
-  {demo: 'the tables demo', at: 'demos/tables/', groups: ['world', 'pace', 'origin', 'motion']},
-  {demo: 'the z-index demo', at: 'demos/z-index/', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
-];
+const everyPillIsChosenByAFinger = async (page: Page, at: string, groups: string[]): Promise<void> => {
+  await page.goto(at);
 
-const shownGroup = async (page: Page, group: string): Promise<void> => {
-  const hidden = page.getByRole('group', {name: group, exact: true, includeHidden: true}).first();
-  await expect(hidden.getByRole('radio', {includeHidden: true}).first()).toBeAttached();
-  if (await hidden.isHidden()) await demoSettings(page).press();
+  const unchosen = await pillsAFingerCannotChoose(page, groups);
+
+  expect(unchosen).toEqual([]);
 };
 
 for (const {reader, device} of [
@@ -21,24 +17,14 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {demo, at, groups} of choicesOn) {
-      test(`every pill on ${demo} is chosen by a finger that lands just off its middle`, async ({page}) => {
-        await page.goto(at);
+    test('every pill on the accordions demo is chosen by a finger that lands just off its middle', ({page}) =>
+      everyPillIsChosenByAFinger(page, 'demos/accordions/', ['fold type', 'fold motion']));
 
-        for (const group of groups) {
-          await shownGroup(page, group);
-          const pills = pillSwitch(page, group);
-          const [names, startedOn] = [await pills.names(), await pills.chosen()];
-          expect(names.length, group).toBeGreaterThan(1);
-          const eachTapMovesTheChoice = [...names.filter(name => name !== startedOn), startedOn];
+    test('every pill on the tables demo is chosen by a finger that lands just off its middle', ({page}) =>
+      everyPillIsChosenByAFinger(page, 'demos/tables/', ['world', 'pace', 'origin', 'motion']));
 
-          for (const name of eachTapMovesTheChoice) {
-            await fingerTap(page, pills.wordsOf(name));
-            await expect(pills.pill(name), `${group}: ${name}`).toBeChecked();
-          }
-        }
-      });
-    }
+    test('every pill on the z-index demo is chosen by a finger that lands just off its middle', ({page}) =>
+      everyPillIsChosenByAFinger(page, 'demos/z-index/', ['card raised', 'side', 'align', 'entrance', 'stack']));
   });
 }
 

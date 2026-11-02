@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {stackingPile} from './__test_support';
+import {type Card, stackingPile} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {
   await page.goto('demos/z-index/');
@@ -28,19 +28,20 @@ test('the pile opens with Third on top, then Second, then First, in the order th
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 });
 
-for (const {card, input, raising, fromTheTop} of [
-  {card: 'First', input: 'a pointer', raising: (page: Page) => stackingPile(page).raise('First'), fromTheTop: ['First', 'Third', 'Second']},
-  {card: 'Second', input: 'the keyboard', raising: (page: Page) => stackingPile(page).raiseByKeyboard('Second'), fromTheTop: ['Second', 'Third', 'First']}
-]) {
-  test(`${card} raised by ${input} lands on top, and the others keep their order under it`, async ({page}) => {
-    await page.goto('demos/z-index/');
-    await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
+const raisedLandsOnTop = async (page: Page, raising: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
+  await page.goto('demos/z-index/');
+  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 
-    await raising(page);
+  await raising();
 
-    await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(fromTheTop);
-  });
-}
+  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(fromTheTop);
+};
+
+test('First raised by a pointer lands on top, and the others keep their order under it', ({page}) =>
+  raisedLandsOnTop(page, () => stackingPile(page).raise('First'), ['First', 'Third', 'Second']));
+
+test('Second raised by the keyboard lands on top, and the others keep their order under it', ({page}) =>
+  raisedLandsOnTop(page, () => stackingPile(page).raiseByKeyboard('Second'), ['Second', 'Third', 'First']));
 
 test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {
   await page.goto('demos/z-index/');

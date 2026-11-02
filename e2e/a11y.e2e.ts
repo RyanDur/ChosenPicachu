@@ -1,8 +1,8 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {chartsPage, markets, recordPage, scriptedMarket, violationsOf} from './__test_support';
+import {chartsPage, recordPage, scriptedMarket, violationsOf} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -58,17 +58,19 @@ for (const {name, path, ready, loaded} of pages) {
   });
 }
 
-for (const {trend, sign, prices} of markets) {
-  test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
-    const charts = chartsPage(page);
-    await scriptedMarket(page, prices);
-    await page.goto('demos/charts/');
+const thePriceCardHasNoViolations = async (page: Page, prices: number[], sign: RegExp): Promise<void> => {
+  const charts = chartsPage(page);
+  await scriptedMarket(page, prices);
+  await page.goto('demos/charts/');
 
-    await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
-    await expect(charts.priceDelta).toHaveText(sign);
+  await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+  await expect(charts.priceDelta).toHaveText(sign);
 
-    const results = await new AxeBuilder({page}).include(await charts.priceCardScope()).withTags(['wcag2a', 'wcag2aa']).analyze();
+  const results = await new AxeBuilder({page}).include(await charts.priceCardScope()).withTags(['wcag2a', 'wcag2aa']).analyze();
 
-    expect(violationsOf(results)).toEqual([]);
-  });
-}
+  expect(violationsOf(results)).toEqual([]);
+};
+
+test('the rising price card has no accessibility violations', ({page}) => thePriceCardHasNoViolations(page, [50000, 50100], /^\+/));
+
+test('the falling price card has no accessibility violations', ({page}) => thePriceCardHasNoViolations(page, [50100, 50000], /^-/));

@@ -1,20 +1,18 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import {iPhone, tutorialTable, type TutorialTableName} from './__test_support';
 
-const tables: {tab: string; name: TutorialTableName}[] = [
-  {tab: 'tables', name: 'the clues'},
-  {tab: 'drag-and-drop', name: 'the clues'},
-  {tab: 'tables', name: 'the layers'}
-];
+const tabPassesOver = async (page: Page, tab: string, name: TutorialTableName): Promise<void> => {
+  await page.goto(`demos/${tab}/`);
+
+  expect(await tutorialTable(page, name).tabLandsInside()).toBe(false);
+};
 
 test.describe('a phone', () => {
   test.use(iPhone);
 
-  for (const {tab, name} of tables) {
-    test(`passes over ${name} on the ${tab} tab with the Tab key`, async ({page}) => {
-      await page.goto(`demos/${tab}/`);
+  test('passes over the clues on the tables tab with the Tab key', ({page}) => tabPassesOver(page, 'tables', 'the clues'));
 
-      expect(await tutorialTable(page, name).tabLandsInside()).toBe(false);
-    });
-  }
+  test('passes over the clues on the drag-and-drop tab with the Tab key', ({page}) => tabPassesOver(page, 'drag-and-drop', 'the clues'));
+
+  test('passes over the layers on the tables tab with the Tab key', ({page}) => tabPassesOver(page, 'tables', 'the layers'));
 });

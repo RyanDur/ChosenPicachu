@@ -1,4 +1,4 @@
-import {expect} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
 import {
   accordionsTab,
   builds,
@@ -239,27 +239,30 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   });
 }
 
+const theFoldChoiceShowsItsName = async (page: Page, name: string): Promise<void> => {
+  await page.goto('demos/accordions/');
+  const {row, shownNames} = dialRow(page, name);
+
+  await row.scrollIntoViewIfNeeded();
+
+  await expect(shownNames.filter({visible: true}).first(), name).toHaveText(name);
+  await expect(row).toMatchAriaSnapshot(`
+    - listitem:
+      - /children: equal
+      - group "${name}"
+      - status
+  `);
+};
+
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
   test.describe(reader, () => {
     test.use(device);
 
-    test('each fold choice shows its name, and a screen reader meets the named pills first, then the reading', async ({page}) => {
-      await page.goto('demos/accordions/');
+    test('the fold type choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
+      theFoldChoiceShowsItsName(page, 'fold type'));
 
-      for (const name of ['fold type', 'fold motion']) {
-        const {row, shownNames} = dialRow(page, name);
-        await row.scrollIntoViewIfNeeded();
-        await expect(shownNames.filter({visible: true}).first(), name).toHaveText(name);
-      }
-      for (const name of ['fold type', 'fold motion']) {
-        await expect(dialRow(page, name).row).toMatchAriaSnapshot(`
-          - listitem:
-            - /children: equal
-            - group "${name}"
-            - status
-        `);
-      }
-    });
+    test('the fold motion choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
+      theFoldChoiceShowsItsName(page, 'fold motion'));
   });
 }
 

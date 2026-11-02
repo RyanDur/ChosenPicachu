@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, type Page, test} from '@playwright/test';
 import {galleryPage, piecePage} from './__test_support';
 
 test('every door the gallery offers hangs art from its museum', async ({page}) => {
@@ -67,11 +67,17 @@ test('the users page opens with somewhere to add a person and the people already
   await expect(page.getByRole('table')).toBeVisible();
 });
 
-for (const entry of ['users', 'demos', 'games', 'gallery']) {
-  test(`arriving directly at ${entry} is a real 200, not a fallback`, async ({page}) => {
-    const response = await page.goto(entry);
+const arrivesDirectly = async (page: Page, entry: string): Promise<void> => {
+  const response = await page.goto(entry);
 
-    expect(response?.status()).toBe(200);
-    await expect(page.getByRole('navigation').first()).toBeVisible({timeout: 30_000});
-  });
-}
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole('navigation').first()).toBeVisible({timeout: 30_000});
+};
+
+test('arriving directly at users is a real 200, not a fallback', ({page}) => arrivesDirectly(page, 'users'));
+
+test('arriving directly at demos is a real 200, not a fallback', ({page}) => arrivesDirectly(page, 'demos'));
+
+test('arriving directly at games is a real 200, not a fallback', ({page}) => arrivesDirectly(page, 'games'));
+
+test('arriving directly at gallery is a real 200, not a fallback', ({page}) => arrivesDirectly(page, 'gallery'));

@@ -1,45 +1,50 @@
 import {expect, type Page, test} from '@playwright/test';
 import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
 
+const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<void> => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto(path);
+
+  await expect(feedback.open).toBeInViewport();
+  const toggles = await feedback.pressed();
+
+  await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
+  await expect(feedback.dialog).toBeVisible();
+  await expect(feedback.words).toBeFocused();
+};
+
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {name, path} of [{name: 'the home page', path: ''}, {name: 'the accordions tab', path: 'demos/accordions/'}, {name: 'the tables tab', path: 'demos/tables/'}]) {
-      test(`finds Feedback on ${name} without scrolling and opens it onto the field`, async ({page}) => {
-        await github(page);
-        const feedback = feedbackOn(page);
-        await page.goto(path);
+    test('finds Feedback on the home page without scrolling and opens it onto the field', ({page}) => findsFeedbackWithoutScrolling(page, ''));
 
-        await expect(feedback.open).toBeInViewport();
-        const toggles = await feedback.pressed();
+    test('finds Feedback on the accordions tab without scrolling and opens it onto the field', ({page}) =>
+      findsFeedbackWithoutScrolling(page, 'demos/accordions/'));
 
-        await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
-        await expect(feedback.dialog).toBeVisible();
-        await expect(feedback.words).toBeFocused();
-      });
-    }
+    test('finds Feedback on the tables tab without scrolling and opens it onto the field', ({page}) => findsFeedbackWithoutScrolling(page, 'demos/tables/'));
   });
 }
 
-for (const {way, closing} of [
-  {way: 'Escape', closing: async (page: Page) => page.keyboard.press('Escape')},
-  {way: 'Cancel', closing: async (page: Page) => feedbackOn(page).cancel.click()},
-  {way: 'a click on the veil', closing: async (page: Page) => page.mouse.click(5, 5)}
-]) {
-  test(`${way} closes Feedback and gives focus back to it`, async ({page}) => {
-    await github(page);
-    const feedback = feedbackOn(page);
-    await page.goto('demos/accordions/');
-    await feedback.open.click();
-    await expect(feedback.words).toBeFocused();
+const closesFeedbackGivingFocusBack = async (page: Page, closing: () => Promise<void>): Promise<void> => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/accordions/');
+  await feedback.open.click();
+  await expect(feedback.words).toBeFocused();
 
-    await closing(page);
+  await closing();
 
-    await expect(feedback.dialog).toBeHidden();
-    await expect(feedback.open).toBeFocused();
-  });
-}
+  await expect(feedback.dialog).toBeHidden();
+  await expect(feedback.open).toBeFocused();
+};
+
+test('Escape closes Feedback and gives focus back to it', ({page}) => closesFeedbackGivingFocusBack(page, () => page.keyboard.press('Escape')));
+
+test('Cancel closes Feedback and gives focus back to it', ({page}) => closesFeedbackGivingFocusBack(page, () => feedbackOn(page).cancel.click()));
+
+test('a click on the veil closes Feedback and gives focus back to it', ({page}) => closesFeedbackGivingFocusBack(page, () => page.mouse.click(5, 5)));
 
 test('a click inside the dialog’s edge keeps Feedback open', async ({page}) => {
   await github(page);
@@ -82,25 +87,27 @@ test('an empty note is refused by the platform', async ({page}) => {
   expect(posted).toHaveLength(0);
 });
 
-for (const field of ['words', 'reach'] as const) {
-  test(`Enter in the ${field === 'words' ? 'note' : 'reach'} field sends, and the dialog closes onto Sent`, async ({page}) => {
-    const posted = await github(page);
-    const feedback = feedbackOn(page);
-    await page.goto('demos/tables/');
-    await expect(siteFrame(page).title).toHaveText('Demos Tables');
-    await feedback.open.click();
-    await feedback.words.pressSequentially('The sort menu hides behind the header.');
-    await feedback.reach.pressSequentially('reader@example.test');
+const enterSendsOntoSent = async (page: Page, field: 'words' | 'reach'): Promise<void> => {
+  const posted = await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await expect(siteFrame(page).title).toHaveText('Demos Tables');
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides behind the header.');
+  await feedback.reach.pressSequentially('reader@example.test');
 
-    await feedback[field].press('Enter');
+  await feedback[field].press('Enter');
 
-    await expect(feedback.dialog).toBeHidden();
-    await expect(feedback.sent).toContainText('Sent.');
-    await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
-    expect(posted[0].variables.title).toBe('Feedback: Demos Tables (/demos/tables/)');
-    expect(posted[0].variables.body).toContain('The sort menu hides behind the header.');
-  });
-}
+  await expect(feedback.dialog).toBeHidden();
+  await expect(feedback.sent).toContainText('Sent.');
+  await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  expect(posted[0].variables.title).toBe('Feedback: Demos Tables (/demos/tables/)');
+  expect(posted[0].variables.body).toContain('The sort menu hides behind the header.');
+};
+
+test('Enter in the note field sends, and the dialog closes onto Sent', ({page}) => enterSendsOntoSent(page, 'words'));
+
+test('Enter in the reach field sends, and the dialog closes onto Sent', ({page}) => enterSendsOntoSent(page, 'reach'));
 
 test('a note GitHub refuses stays in the open dialog, and it says so', async ({page}) => {
   await github(page, {refuse: 'Bad credentials'});
