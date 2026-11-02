@@ -147,15 +147,15 @@ export const BehaviorPractice: FC = () =>
       the edge, the code that decides what the page says:</p>
     <HistoryCarve/>
     <p className="paragraph">In the React build, the edge turns the failure into a sentence and shows it in a banner.
-      The reducer never sees the failure.</p>
+      The reducer never sees why a step failed.</p>
     <p className="paragraph">Scott Wlaschin’s 2014 talk <a className="signpost" href={railway}>Railway Oriented
       Programming</a> draws the same idea as a railway, with the success track as
       the <a className="signpost" href={railway}>“happy path”</a>.</p>
     <p className="paragraph">The boundary, the types and the two tracks work together. Each value is checked where it
-      enters, and the types refuse what cannot be. A failure rides its own track to the edge. The reducer may hear that
-      a fetch was refused or the feed failed, as <code className="monospaced">candlesRefused</code>{' '}
-      and <code className="monospaced">feedFailed</code>, but never why. So everything the reducer gets is already true,
-      and nothing in it can fail.</p>
+      enters, the types refuse what cannot be, and a failure rides its own track to the edge. So everything the
+      reducer gets is already true, and nothing in it can fail. It may still hear that a fetch was refused or the feed
+      failed, as <code className="monospaced">candlesRefused</code> and <code className="monospaced">feedFailed</code>,
+      but never why.</p>
     <h3 className="paragraph bold">The core and the shell</h3>
     <p className="paragraph">The core is functional and the shell is imperative. The functions that move
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds
@@ -176,15 +176,16 @@ export const BehaviorPractice: FC = () =>
       part <Link className="signpost" to={`${practiceAddress('Structure')}#${elementsPart}`}>From the content to the
         element</Link> lists what the elements do on their own. A details opens and shuts, a modal dialog holds focus, a
       popover closes on Escape, and a form refuses an empty required field, so I don’t script any of it. The browser
-      also provides the back button, scroll restoration and focus order. Script that rebuilds those takes on their
-      bugs, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what rebuilding them by hand
-      cost.</p>
+      also provides the back button, scroll restoration and focus order. Rebuilding them in script means getting them
+      right a second time, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what that
+      cost when pages rebuilt the back button and scroll restoration by hand.</p>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
       the feature. The feedback dialog holds the site’s two. Its buttons open and close it with invoker commands, and
-      where a browser has none, a click handler does it instead. It closes on a click outside it
-      with <code className="monospaced">closedby</code>, and where a browser lacks that, a click handler closes it too.
-      Any other behavior the platform lacks I attach with script: by a data attribute in plain HTML, like the tables
-      demo’s <code className="monospaced">data-drag-sortable</code>, and by a component in React.</p>
+      where a browser has none, a click handler does it instead. Its <code className="monospaced">closedby</code>{' '}
+      attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too.</p>
+    <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
+      it by a data attribute, like the tables demo’s <code className="monospaced">data-drag-sortable</code>, and React
+      uses a component.</p>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}

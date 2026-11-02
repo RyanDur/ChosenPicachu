@@ -88,7 +88,7 @@ export const StructurePractice: FC = () =>
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
-    <h3 className="paragraph bold" id={elementsPart}>From the content to the element</h3>
+    <h3 className="paragraph bold" id={elementsPart} tabIndex={-1}>From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
     <a className="signpost"
