@@ -52,7 +52,7 @@ export const contextChooser = (page: Page) => {
 export const topLayerMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
   const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, in the top layer$/});
-  const menu = page.getByLabel('Sort by, in the top layer', {exact: true}).and(page.getByRole('list'));
+  const menu = trap.getByRole('list').filter({has: page.getByRole('button', {name: 'size', exact: true}), hasNot: page.getByRole('list')});
   const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
   return {
     sortBy,

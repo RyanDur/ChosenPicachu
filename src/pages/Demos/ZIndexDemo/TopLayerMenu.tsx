@@ -10,7 +10,7 @@ export const TopLayerMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
 
   return <>
     <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu} aria-label={`${words}, in the top layer`}>{words}</button>
-    <Menu id={menu} popover="auto" className="card rounded-corners lifted" aria-label="Sort by, in the top layer"
+    <Menu id={menu} popover="auto" className="card rounded-corners lifted"
       onToggle={({newState}) => {
         if (newState === 'open') {
           onOpened();

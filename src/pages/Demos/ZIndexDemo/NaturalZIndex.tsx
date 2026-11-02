@@ -24,7 +24,7 @@ export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
   const layer = (card: RaisedCard) => classNames('layer card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
   return <figure className={classNames('natural-z-index', className)}>
-    <button className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
+    <button type="button" className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <PillGlider label="card raised" name="card-raised" options={cardsToRaise} chosen={raised} onChosen={onRaised}/>
     <ol id="z-index-layers" className="demo-container">
