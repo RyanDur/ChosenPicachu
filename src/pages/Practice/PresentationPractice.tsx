@@ -23,8 +23,8 @@ export const PresentationPractice: FC = () =>
       style sheet beside it. Everything else is sharable and lives in the shared style sheets: the reset, the tokens,
       which name each value once, and the vocabulary, the looks any element can wear. A class names what the element
       is, what it needs, or what is true right now. Those are the rules,
-      and the rest of this tab says how they hold.</p>
-    <p className="paragraph">They hold because a style sheet is read by more than the browser, and I write it for all of its
+      and the rest of this tab says how each is kept.</p>
+    <p className="paragraph">The rules come from the readers: a style sheet is read by more than the browser, and I write it for all of its
       readers. The browser reads it to match each selector against the page, and takes the rule the cascade says
       wins. The designer reads it to change the look, and a look is changed in one place or in forty. The next
       developer reads a class list to learn what an element is and needs, before opening any style sheet. A lint reads it
@@ -51,8 +51,8 @@ export const PresentationPractice: FC = () =>
       <div className="need">
         <dt className="paragraph bold">Name</dt>
         <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
-          <a className="signpost" href={classLint}>class lint</a> holds it, refusing a class no style sheet reads and a
-          class list that does not put the component’s own class first. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+          <a className="signpost" href={classLint}>class lint</a> holds what a lint can, refusing a class no style sheet reads and a
+          class list that does not put the component’s own class first. The naming is mine to keep. Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
           where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
           where I part.</dd>
       </div>
@@ -76,7 +76,7 @@ export const PresentationPractice: FC = () =>
           the platform’s own way to say that order in a rule.</dd>
       </div>
     </dl>
-    <p className="paragraph">The field put the look in other
+    <p className="paragraph">CSS has one global scope, so every rule can reach every element. The field put the look in other
       places first, before the platform had a token, an order or a scope of its own. A reset put the defaults in the author’s hands: Eric
       Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
       the browser’s margins, line heights and heading sizes,{' '}
@@ -106,8 +106,8 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and{' '}
     <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.{' '}
     <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and{' '}
-    <a className="signpost" href={has.address}>:has()</a>, since December 2023, give a rule reach that no method
-      had.</p>
+    <a className="signpost" href={has.address}>:has()</a>, since December 2023, give a rule a reach a style sheet alone did not have: a rule by its
+      container’s width, and a rule by what an element contains.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -132,7 +132,7 @@ export const PresentationPractice: FC = () =>
       word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a state, since a
       modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of the block”</a>.
-      I split them, and the class list below says why. I also give up the one-class selector.</p>
+      I split them, and the class list below says why.</p>
     <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on{' '}
       <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
       utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
@@ -191,7 +191,7 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five are stylelint rules, and each prints its reason. For a tag selector
+    <p className="paragraph">Three of the five are held by stylelint rules, and two of those print their reason. For a tag selector
       outside the reset:{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       For a look in a component style sheet, that the property{' '}
@@ -203,7 +203,8 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">@scope</code> for a rule’s reach, because the import order above gives the cascade its
       order and a component’s own classes, with its rules keyed on them, give a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
-      a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. A rule nests
+      a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. That is BEM’s one-class selector,
+      given up. A rule nests
       under its component’s class when it belongs to that component alone; a look any element can wear stays a single
       flat class in the vocabulary.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
@@ -239,7 +240,7 @@ export const PresentationPractice: FC = () =>
       ring is today and every element that asks for one follows. The states say what is true right now. The platform
       already names most of them, such as <code className="monospaced">:hover</code>,{' '}
       <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and{' '}
-      <code className="monospaced">:checked</code>, so the style sheet uses those{' '}
+      <code className="monospaced">:checked</code>, so a rule uses those{' '}
       <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>{' '}
       and no class is written. I add a state name only where the platform has no word:{' '}
       <code className="monospaced">carried</code> for the column or row being dragged,{' '}
@@ -266,5 +267,5 @@ export const PresentationPractice: FC = () =>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
-      isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list.</p>
+      isolation, the last of the seven problems in Chedeau’s talk, that one component’s rules reach no other; the concert quotes his list.</p>
   </>;

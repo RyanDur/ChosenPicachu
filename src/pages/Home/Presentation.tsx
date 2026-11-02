@@ -36,7 +36,7 @@ export const Presentation: FC = () =>
       view.</p>
     <p className="paragraph">A transition needs to know where it ends. A fold that slides open ends at whatever height
       its content needs, and that height depends on the content and the width of the screen, so no number in the style sheet
-      can name it. For years the style sheet had no way to animate to it, so a script measured the height, or the style sheet
+      can name it. For years there was no way to animate to an unknown height: a script measured it, or the style sheet
       guessed one too large. Now the style sheet can do it alone, and{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>the accordions</Link> show both ways. The style sheet
       still can’t say every look, and where it can’t, a workaround fills in until it can. So the rule is that the look

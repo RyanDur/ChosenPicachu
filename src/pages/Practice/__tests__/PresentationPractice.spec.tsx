@@ -94,7 +94,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^The field put the look in other places first/)).toEqual([
+    expect(practicePage.linksIn(/^CSS has one global scope, so every rule can reach every element/)).toEqual([
       ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
       ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
       ['normalize.css', 'https://necolas.github.io/normalize.css/'],
@@ -158,7 +158,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [[message, address]] = practicePage.linksIn(/^Three of the five are stylelint rules, and each prints its reason/);
+    const [[message, address]] = practicePage.linksIn(/^Three of the five are held by stylelint rules/);
 
     expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -169,7 +169,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [, [message, address]] = practicePage.linksIn(/^Three of the five are stylelint rules, and each prints its reason/);
+    const [, [message, address]] = practicePage.linksIn(/^Three of the five are held by stylelint rules/);
 
     expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
