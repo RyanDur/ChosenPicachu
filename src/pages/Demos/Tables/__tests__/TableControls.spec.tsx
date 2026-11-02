@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
+import {tableControls} from '@pages/Demos/Tables/__test_support';
 import {TableControls} from '../TableControls';
 
 describe('the table controls', () => {
@@ -60,9 +60,10 @@ describe('the table controls', () => {
     expect(tableControls.readout('<LazyTable className="keep static"/>')).toBeVisible();
   });
 
-  test('offer the build’s dials in the html world', async () => {
+  test('read out the frame, not the React table, in the html world', async () => {
     render(<TestApp at="/"><TableControls world="vanilla"/></TestApp>);
 
-    expect((await tablesTab.findRadios('Eager')).length).toBeGreaterThan(0);
+    expect(await tableControls.settings()).not.toHaveAttribute('open');
+    expect(tableControls.readout('<TableFrame/>')).toBeVisible();
   });
 });
