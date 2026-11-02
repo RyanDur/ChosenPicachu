@@ -334,20 +334,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.drawingsSeenIn(tableOfContents)).toEqual([]);
-  });
-
-  test('should label each drawn landmark with its element and, where it has one, its name', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(practicePage.drawnIn(tableOfContents)).toEqual(expect.arrayContaining([
-      'header',
-      'section · pages and feedback', 'nav · site', 'feedback',
-      'main', 'nav · tabs', 'only where a page has tabs',
-      'footer', 'only where a page has one',
-      'section · role alert · live region · top layer'
-    ]));
+    expect(practicePage.imagesHeardIn(tableOfContents)).toEqual([]);
   });
 
   test('should open the Structure tab from its address, reading how I organize it from its first rule to its test', async () => {

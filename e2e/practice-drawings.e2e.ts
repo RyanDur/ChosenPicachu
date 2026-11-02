@@ -9,5 +9,16 @@ test('a reader with the styles off meets "Where a rule lives" once, under its ca
 
   await practice.readWithTheStylesOff();
 
-  expect(await practice.drawingsShownIn(drawing)).toBe(1);
+  await expect(practice.drawingsShownIn(drawing)).toHaveCount(1);
+});
+
+test('a reader with the styles off meets the page\'s table of contents once, under its caption', async ({page}) => {
+  const practice = practicePage(page);
+  await page.goto('practice/structure/');
+  const drawing = practice.drawing(/^The page’s table of contents\./);
+  await expect(drawing).toBeVisible();
+
+  await practice.readWithTheStylesOff();
+
+  await expect(practice.drawingsShownIn(drawing)).toHaveCount(1);
 });

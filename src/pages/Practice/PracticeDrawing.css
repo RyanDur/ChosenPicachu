@@ -5,34 +5,16 @@
   gap: var(--base);
   container-type: inline-size;
 
-  .drawing-wide,
-  .drawing-stacked {
-    --drawing-column: 100cqi;
-
-    inline-size: 100%;
+  .drawing {
+    display: block;
+    inline-size: auto;
+    max-inline-size: 100%;
     block-size: auto;
-    max-inline-size: var(--drawn-width);
-  }
-
-  .drawing-stacked {
-    --drawn-width: 300px;
-
-    display: none;
   }
 
   @container (width >= 855px) {
     float: inline-end;
     inline-size: var(--drawn-width);
     margin-inline-start: var(--base-x-3);
-  }
-
-  @media (width <= 600px) {
-    .drawing-wide {
-      display: none;
-    }
-
-    .drawing-stacked {
-      display: block;
-    }
   }
 }

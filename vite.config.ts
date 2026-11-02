@@ -7,7 +7,7 @@ import {loadEnv} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
 import {usersServerScript} from './src/components/Users/resource/usersServer.ts';
-import {squeezed, whereARuleLivesFrames} from './src/pages/Practice/whereARuleLivesFrames.ts';
+import {practiceDrawings, squeezed} from './src/pages/Practice/practiceDrawings.ts';
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
@@ -132,14 +132,18 @@ const frameCss = (): Plugin => ({
 // a drawing loaded as an image cannot read the page's style sheets, so its frames are written as files carrying the site's own
 const drawings = (): Plugin => {
   const at = (path: string): string => fileURLToPath(new URL(path, import.meta.url));
-  const sheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
-    './src/styles/drawing.css', './src/pages/Practice/WhereARuleLives.css'].map(at);
+  const siteSheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
+    './src/styles/drawing.css'].map(at);
+  const drawn = Object.entries(practiceDrawings).map(([name, {sheet, frames}]) => ({name, sheet: at(`./${sheet}`), frames}));
+  const sheets = [...siteSheets, ...drawn.map(({sheet}) => sheet)];
   const folder = at('./src/pages/Practice/drawings/');
   const draw = (): void => {
-    const {wide, stacked} = whereARuleLivesFrames(squeezed(sheets.map(sheet => readFileSync(sheet, 'utf8')).join('')));
     mkdirSync(folder, {recursive: true});
-    writeFileSync(`${folder}where-a-rule-lives-wide.svg`, wide.svg);
-    writeFileSync(`${folder}where-a-rule-lives-stacked.svg`, stacked.svg);
+    drawn.forEach(({name, sheet, frames}) => {
+      const {wide, stacked} = frames(squeezed([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
+      writeFileSync(`${folder}${name}-wide.svg`, wide.svg);
+      writeFileSync(`${folder}${name}-stacked.svg`, stacked.svg);
+    });
   };
   return {
     name: 'drawings',
