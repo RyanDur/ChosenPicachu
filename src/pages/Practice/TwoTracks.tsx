@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Box, DrawnArrow, DrawnBox} from './drawn';
+import {Box, bottomMiddle, DrawnArrow, DrawnBox, leftMiddle, rightMiddle} from './drawn';
 import './PracticeDrawing.css';
 
 const width = 90;
@@ -14,8 +14,10 @@ const trades: Box = {label: 'trades', x: 246, y: success - height / 2, width, he
 const reducer: Box = {label: 'reducer', x: 384, y: success - height / 2, width, height};
 const edge: Box = {label: 'edge', x: 384, y: failure - height / 2, width, height};
 
-const Switch: FC<{step: Box}> = ({step: {x, y}}) =>
-  <line className="drawn-line drawn" x1={x + width / 2} y1={y + height} x2={x + width / 2 + landing} y2={failure}/>;
+const Switch: FC<{step: Box}> = ({step}) => {
+  const from = bottomMiddle(step);
+  return <line className="drawn-line drawn" x1={from.x} y1={from.y} x2={from.x + landing} y2={failure}/>;
+};
 
 export const TwoTracks: FC = () =>
   <figure className="practice-drawing">
@@ -27,13 +29,12 @@ export const TwoTracks: FC = () =>
       <DrawnBox box={trades} look="hollow drawn"/>
       <DrawnBox box={reducer} look="hollow drawn"/>
       <DrawnBox box={edge} look="hollow drawn"/>
-      <DrawnArrow from={{x: fetch.x + width, y: success}} to={{x: decode.x, y: success}}/>
-      <DrawnArrow from={{x: decode.x + width, y: success}} to={{x: trades.x, y: success}}/>
-      <DrawnArrow from={{x: trades.x + width, y: success}} to={{x: reducer.x, y: success}}/>
+      <DrawnArrow from={rightMiddle(fetch)} to={leftMiddle(decode)}/>
+      <DrawnArrow from={rightMiddle(decode)} to={leftMiddle(trades)}/>
+      <DrawnArrow from={rightMiddle(trades)} to={leftMiddle(reducer)}/>
       <Switch step={fetch}/>
       <Switch step={decode}/>
-      <Switch step={trades}/>
-      <DrawnArrow from={{x: 6, y: failure}} to={{x: edge.x, y: failure}}/>
+      <DrawnArrow from={{x: 6, y: failure}} to={leftMiddle(edge)}/>
     </svg>
     <figcaption className="caption"><strong className="bold">Two tracks.</strong> A result rides the success track to the
       reducer until a step fails. Then it rides the failure track to the edge, where the page decides what to say.

@@ -16,7 +16,7 @@ const carveLinks = (): HTMLElement[] => within(practice()).getAllByRole('figure'
   .filter(figure => within(figure).queryAllByRole('code').length > 0)
   .flatMap(carve => within(carve).queryAllByRole('link'));
 
-const drawnTexts = (figure: string): HTMLElement[] =>
+const drawnTexts = (figure: string | RegExp): HTMLElement[] =>
   within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption, figcaption *'});
 
 export const practiceAt = (concern: string): string => `${Paths.practice}${concern}/`;
@@ -80,8 +80,8 @@ export const practicePage = {
       .map(link => link.getAttribute('href') ?? '')
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
-  figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
-  drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
+  figure: (name: string | RegExp): HTMLElement => within(practice()).getByRole('figure', {name}),
+  drawingsSeenIn: (figure: string | RegExp): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),
   imagesHeardIn: (caption: string): HTMLElement[] =>

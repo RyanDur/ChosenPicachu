@@ -5,6 +5,11 @@ export type Point = {readonly x: number; readonly y: number};
 
 export type Box = Point & {readonly label: string; readonly width: number; readonly height: number};
 
+export const leftMiddle = ({x, y, height}: Box): Point => ({x, y: y + height / 2});
+export const rightMiddle = ({x, y, width, height}: Box): Point => ({x: x + width, y: y + height / 2});
+export const topMiddle = ({x, y, width}: Box): Point => ({x: x + width / 2, y});
+export const bottomMiddle = ({x, y, width, height}: Box): Point => ({x: x + width / 2, y: y + height});
+
 const inset = 9;
 const head = 6;
 

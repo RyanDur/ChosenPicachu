@@ -134,18 +134,20 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Here is the request for recent trades. The response is fetched, checked against its
       decoder and turned into trades. If a step fails, the steps after it do not run:</p>
     <RecentTradesCarve/>
-    <p className="paragraph">The exchange takes the result at the end of that line. A success goes to the reducer
-      as <code className="monospaced">historyArrived</code>. A failure goes to the edge, the code that decides what the
-      page says:</p>
+    <p className="paragraph">The exchange takes the result that <code className="monospaced">recentTrades</code>{' '}
+      returns. A success goes to the reducer as <code className="monospaced">historyArrived</code>. A failure goes to
+      the edge, the code that decides what the page says:</p>
     <HistoryCarve/>
-    <p className="paragraph">In the React build, the edge turns the trouble into a sentence and shows it in a banner.
+    <p className="paragraph">In the React build, the edge turns the failure into a sentence and shows it in a banner.
       The reducer never sees the failure.</p>
     <p className="paragraph">Scott Wlaschin’s 2014 talk <a className="signpost" href={railway}>Railway Oriented
       Programming</a> draws the same idea as a railway, with the success track as
       the <a className="signpost" href={railway}>“happy path”</a>.</p>
     <p className="paragraph">The boundary, the types and the two tracks work together. Each value is checked where it
-      enters, the types refuse what cannot be, and a failure stays on its own track to the edge. So everything the
-      reducer gets is already true, and nothing in it can fail.</p>
+      enters, and the types refuse what cannot be. A failure rides its own track to the edge. The reducer may hear that
+      a fetch was refused or the feed failed, as <code className="monospaced">candlesRefused</code>{' '}
+      and <code className="monospaced">feedFailed</code>, but never why. So everything the reducer gets is already true,
+      and nothing in it can fail.</p>
     <h3 className="paragraph bold">The core and the shell</h3>
     <p className="paragraph">The core is functional and the shell is imperative. The functions that move
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds

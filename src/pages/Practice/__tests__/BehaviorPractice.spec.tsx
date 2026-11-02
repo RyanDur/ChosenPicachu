@@ -4,9 +4,8 @@ import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice'
 import {momentAddress} from '@pages/Record/MomentLink';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
-const oneDirection = 'One direction. An event goes to the reducer, the reducer returns the next state, the page is drawn from the state, and the page sends the next event. The shell, drawn apart, holds the state and runs the loop, and nothing inside the loop knows the shell is there.';
-const twoTracks = 'Two tracks. A result rides the success track to the reducer until a step fails. Then it rides '
-  + 'the failure track to the edge, where the page decides what to say.';
+const oneDirection = /^One direction\./;
+const twoTracks = /^Two tracks\./;
 
 describe('the Behavior practice tab', () => {
   test('should send the one direction to the July 2014 moment', async () => {
@@ -63,7 +62,7 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.imagesHeardIn(oneDirection)).toEqual([]);
+    expect(practicePage.drawingsSeenIn(oneDirection)).toEqual([]);
   });
 
   test('should send the sequence of events to Martin Fowler’s Event Sourcing', async () => {
@@ -119,7 +118,7 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.imagesHeardIn(twoTracks)).toEqual([]);
+    expect(practicePage.drawingsSeenIn(twoTracks)).toEqual([]);
   });
 
   test('should send CustomEvent to MDN', async () => {
