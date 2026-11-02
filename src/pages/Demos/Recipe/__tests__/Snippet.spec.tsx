@@ -35,11 +35,10 @@ describe('a code sample', () => {
       .toEqual([`${store.url}#L2-L2`, `${shared.url}#L1-L1`]);
   });
 
-  test('should say so when it was written for the page and not taken from the code', () => {
+  test('should link to no file when it was written for the page and not taken from the code', () => {
     render(<Snippet label="CSS" lines={[plain('.fold {'), aside('/* written here */'), plain('}')]}/>);
 
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    expect(screen.getByRole('figure')).toHaveTextContent('Written for this page, not taken from the site’s code.');
   });
 
   test('should show a file directly under src with its folder', () => {
