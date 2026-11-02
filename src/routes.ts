@@ -4,11 +4,19 @@ import {Paths} from './pages/Paths';
 import {GalleryPaths} from './pages/Gallery/GalleryRouter/GalleryPaths';
 import names from './pages/names.json' with {type: 'json'};
 
+const demoTabs: Record<keyof typeof names.demos, string> = {
+  accordions: 'pages/Demos/Accordions/tab.tsx',
+  'z-index': 'pages/Demos/ZIndexDemo/tab.tsx',
+  'drag-and-drop': 'pages/Demos/DragAndDrop/tab.tsx',
+  charts: 'pages/Demos/Charts/tab.tsx',
+  tables: 'pages/Demos/Tables/tab.tsx'
+};
+
 export default [
   route(Paths.home, 'pages/Home/route.tsx'),
   route(Paths.demos, 'pages/Demos/SavedTab/route.tsx'),
   layout('pages/Demos/route.tsx',
-    Object.keys(names.demos).map(topic => route(`${Paths.demos}${topic}/`, `pages/Demos/tabs/${topic}/route.tsx`))),
+    Object.entries(demoTabs).map(([topic, file]) => route(`${Paths.demos}${topic}/`, file))),
   route(Paths.chartTutorial, 'pages/Demos/Charts/route.tsx'),
   route(Paths.users, 'pages/Users/route.tsx'),
   route(`${Paths.artGallery}${GalleryPaths.home}`, 'pages/Gallery/route.tsx'),

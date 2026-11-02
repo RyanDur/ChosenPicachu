@@ -1,8 +1,8 @@
 import {FC} from 'react';
 import {useEnv} from '@components/Env';
-import {ChartsIntroduction} from '../../Charts/Introduction';
-import {Workspace} from '../../Charts/Workspace';
-import {ChartsTutorial} from '../../Charts/Tutorial';
+import {ChartsIntroduction} from './Introduction';
+import {Workspace} from './Workspace';
+import {ChartsTutorial} from './Tutorial';
 
 const ChartsTab: FC = () => {
   const {tradeProduct} = useEnv();

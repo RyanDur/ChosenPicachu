@@ -1,7 +1,9 @@
 import {FC, useState} from 'react';
 import {seeded} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
-import {AccordionsExplained, foldMotionParam, foldTypeParam} from '../../Accordions';
+import {AccordionsExplained} from './Explained';
+import {foldMotionParam} from './fold-motion';
+import {foldTypeParam} from './fold-type';
 
 type Draws = ReturnType<typeof seeded>;
 

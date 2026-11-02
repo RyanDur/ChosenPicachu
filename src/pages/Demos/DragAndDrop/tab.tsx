@@ -1,18 +1,16 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {
-  EagerHideAnimatedList,
-  EagerHideStaticList,
-  EagerKeepAnimatedList,
-  EagerKeepStaticList,
-  LazyHideAnimatedList,
-  LazyHideStaticList,
-  LazyKeepAnimatedList,
-  LazyKeepStaticList
-} from '../../DragAndDrop';
-import {ListTutorials} from '../../DragAndDrop/Tutorials';
-import {DragSortIntroduction} from '../../DragAndDrop/Introduction';
-import {defaultDials, motionParam, originParam, paceParam} from '../../Controls';
+import {EagerHideAnimatedList} from './EagerHideAnimatedList';
+import {EagerHideStaticList} from './EagerHideStaticList';
+import {EagerKeepAnimatedList} from './EagerKeepAnimatedList';
+import {EagerKeepStaticList} from './EagerKeepStaticList';
+import {LazyHideAnimatedList} from './LazyHideAnimatedList';
+import {LazyHideStaticList} from './LazyHideStaticList';
+import {LazyKeepAnimatedList} from './LazyKeepAnimatedList';
+import {LazyKeepStaticList} from './LazyKeepStaticList';
+import {ListTutorials} from './Tutorials';
+import {DragSortIntroduction} from './Introduction';
+import {defaultDials, motionParam, originParam, paceParam} from '../Controls';
 
 const lists = {
   eager: {

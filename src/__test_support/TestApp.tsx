@@ -42,7 +42,7 @@ const Probes: FC = () => {
 
 type RouteModule = {readonly default: FC; readonly ErrorBoundary?: FC};
 
-const modules = import.meta.glob<RouteModule>('../pages/**/route.tsx', {eager: true});
+const modules = import.meta.glob<RouteModule>('../pages/**/{route,tab}.tsx', {eager: true});
 
 type Room = {path?: string; file: string; children?: Room[]};
 

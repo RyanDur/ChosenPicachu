@@ -1,17 +1,15 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {
-  BannerExplained,
-  cardOneParam,
-  FormsContextExplained,
-  MenuExplained,
-  PopoverExplained,
-  raisedParam,
-  StackingExplained,
-  wornParam
-} from '../../ZIndexDemo';
-import {TopLayerTutorial} from '../../ZIndexDemo/Tutorial';
-import {ZIndexIntroduction} from '../../ZIndexDemo/Introduction';
+import {BannerExplained} from './BannerExplained';
+import {cardOneParam} from './card-one';
+import {FormsContextExplained} from './FormsContextExplained';
+import {MenuExplained} from './MenuExplained';
+import {PopoverExplained} from './PopoverExplained';
+import {raisedParam} from './raised';
+import {StackingExplained} from './Explained';
+import {wornParam} from './worn';
+import {TopLayerTutorial} from './Tutorial';
+import {ZIndexIntroduction} from './Introduction';
 
 const ZIndexTab: FC = () => {
   const {raised, 'card-one': cardOne, wears, updateSearchParams} = useSearchParamsObject(
