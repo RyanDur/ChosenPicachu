@@ -628,7 +628,7 @@ describe('the record', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
-      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2009', '2010', '2011', '2013', '2014', '2016']);
+      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016']);
     expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
       'CERN needs to share what it knows',
       'The information needs one interface',
@@ -642,6 +642,7 @@ describe('the record', () => {
       'The separation needs proof',
       'The standard needs the real world',
       'The page needs to update in place',
+      'The defaults need to agree',
       'The standard needs to move again',
       'The application needs a frame',
       'The specification needs its tests',
@@ -668,7 +669,7 @@ describe('the record', () => {
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(18);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(19);
     const folds = recordPage.fullerStories();
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /aural/, /hid the differences between the browsers then installed/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/, /skin disease/]
@@ -791,6 +792,37 @@ describe('the record', () => {
     expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
   });
 
+  test('should link Meyer’s reason for a reset to his Reset Reasoning', () => {
+    expect(recordPage.momentLink('The defaults need to agree', '“The basic reason is that all browsers have presentation defaults, but no browsers have the same defaults.”'))
+      .toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2007/04/18/reset-reasoning/');
+  });
+
+  test('should link Meyer’s starting point to his Reset Reloaded', () => {
+    expect(recordPage.momentLink('The defaults need to agree', '“Think of these as a starting point for creating your own defaults”'))
+      .toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/');
+  });
+
+  test('should link the reset’s goal to Meyer’s Reset CSS page', () => {
+    expect(recordPage.momentLink('The defaults need to agree', '“to reduce browser inconsistencies in things like default line heights, margins and font sizes of headings”'))
+      .toHaveAttribute('href', 'https://meyerweb.com/eric/tools/css/reset/');
+  });
+
+  test('should date normalize.css’s first release by its tags', () => {
+    expect(recordPage.momentLink('The defaults need to agree', 'August 2012'))
+      .toHaveAttribute('href', 'https://github.com/necolas/normalize.css/tags');
+  });
+
+  test('should link normalize.css’s aim to Gallagher’s About normalize.css', () => {
+    expect(recordPage.momentLink('The defaults need to agree', '“preserve useful browser defaults rather than erasing them”'))
+      .toHaveAttribute('href', 'https://nicolasgallagher.com/about-normalize-css/');
+  });
+
+  test('should carry the 2007 moment’s reader on to the 2011 moment’s tests, with focus there', async () => {
+    await recordPage.followFromMoment('The defaults need to agree', 'the 2011 moment');
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The specification needs its tests')).toHaveFocus());
+  });
+
   test('should link the percentage width to the CSS1 test suite’s test5526c', () => {
     expect(within(itemHeadedBy('the timeline', 'The browsers need to agree')).getByRole('link', {name: '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
   });
@@ -864,6 +896,16 @@ describe('the record', () => {
   test('should shelve CSS Utility Classes and “Separation of Concerns” on the Presentation shelf, as Adam Wathan, 2017', () => {
     expect(recordPage.shelvedAs('CSS Utility Classes and “Separation of Concerns”')).toHaveTextContent('Adam Wathan, 2017');
     expect(recordPage.shelfHolding('CSS Utility Classes and “Separation of Concerns”')).toBe('Presentation');
+  });
+
+  test('should shelve Reset Reasoning on the Presentation shelf, as Eric Meyer’s of 18 April 2007', () => {
+    expect(recordPage.shelvedAs('Reset Reasoning')).toHaveTextContent('Eric Meyer, meyerweb.com, 18 April 2007');
+    expect(recordPage.shelfHolding('Reset Reasoning')).toBe('Presentation');
+  });
+
+  test('should shelve normalize.css’s tags on the Presentation shelf, dated by its first release', () => {
+    expect(recordPage.shelvedAs('normalize.css tags')).toHaveTextContent('Nicolas Gallagher, GitHub, version 1.0.0, 14 August 2012');
+    expect(recordPage.shelfHolding('normalize.css tags')).toBe('Presentation');
   });
 
   test('should shelve Writing Efficient CSS on the Presentation shelf, as David Hyatt’s for Mozilla in 2000, in its archived copy of 5 May 2012', () => {
@@ -1182,13 +1224,14 @@ describe('the record\'s three stories', () => {
 
   test('should end Presentation\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
     expect(recordPage.storyMomentsHeading('Presentation')).toBeVisible();
-    expect(recordPage.storyMomentLines('Presentation')).toEqual(['1994 Authors need control of the look', '1996 The pages need to look the same', '1996 The style sheet needs a standard', '1998 The browsers need to agree', '2002 Someone needs to go first', '2003 The separation needs proof', '2011 The specification needs its tests', '2013 Someone needs components']);
+    expect(recordPage.storyMomentLines('Presentation')).toEqual(['1994 Authors need control of the look', '1996 The pages need to look the same', '1996 The style sheet needs a standard', '1998 The browsers need to agree', '2002 Someone needs to go first', '2003 The separation needs proof', '2007 The defaults need to agree', '2011 The specification needs its tests', '2013 Someone needs components']);
     expect(recordPage.storyMomentLine('Presentation', '1994 Authors need control of the look')).toHaveAttribute('href', `${Paths.record}#authors-need-control-of-the-look`);
     expect(recordPage.storyMomentLine('Presentation', '1996 The pages need to look the same')).toHaveAttribute('href', `${Paths.record}#the-pages-need-to-look-the-same`);
     expect(recordPage.storyMomentLine('Presentation', '1996 The style sheet needs a standard')).toHaveAttribute('href', `${Paths.record}#the-style-sheet-needs-a-standard`);
     expect(recordPage.storyMomentLine('Presentation', '1998 The browsers need to agree')).toHaveAttribute('href', `${Paths.record}#the-browsers-need-to-agree`);
     expect(recordPage.storyMomentLine('Presentation', '2002 Someone needs to go first')).toHaveAttribute('href', `${Paths.record}#someone-needs-to-go-first`);
     expect(recordPage.storyMomentLine('Presentation', '2003 The separation needs proof')).toHaveAttribute('href', `${Paths.record}#the-separation-needs-proof`);
+    expect(recordPage.storyMomentLine('Presentation', '2007 The defaults need to agree')).toHaveAttribute('href', `${Paths.record}#the-defaults-need-to-agree`);
     expect(recordPage.storyMomentLine('Presentation', '2011 The specification needs its tests')).toHaveAttribute('href', `${Paths.record}#the-specification-needs-its-tests`);
     expect(recordPage.storyMomentLine('Presentation', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
   });

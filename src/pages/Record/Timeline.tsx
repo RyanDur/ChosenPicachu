@@ -19,6 +19,7 @@ import {WiredRedesign} from './moments/WiredRedesign';
 import {CssTwoOne} from './moments/CssTwoOne';
 import {EcmaScript} from './moments/EcmaScript';
 import {EsFive} from './moments/EsFive';
+import {DefaultsAgree} from './moments/DefaultsAgree';
 import {Frameworks} from './moments/Frameworks';
 import {inOrder, MomentKey, moments, YearOfTwo, yearsOfTwo} from './moments/moments';
 import {concernsOf} from './moments/concerns';
@@ -40,6 +41,7 @@ const stories: Record<MomentKey, FC> = {
   zenGarden: ZenGarden,
   browsersTakePen: BrowsersTakePen,
   pageBecomesApplication: PageBecomesApplication,
+  defaultsAgree: DefaultsAgree,
   esFive: EsFive,
   frameworks: Frameworks,
   cssTwoOne: CssTwoOne,

@@ -7,6 +7,8 @@ const research = (): HTMLElement => screen.getByRole('region', {name: 'The resea
 const concert = (): HTMLElement => screen.getByRole('region', {name: 'The concert'});
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
 const storyMoments = (name: string): HTMLElement => within(story(name)).getByRole('list', {name: `${name}, the moments it rests on`});
+const openFullerStory = async (title: string): Promise<void> =>
+  userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story'));
 
 const shelvedAs = (work: string): HTMLElement => {
   const entry = within(research()).getAllByRole('listitem', {hidden: true})
@@ -54,8 +56,13 @@ export const recordPage = {
       .map(link => link.getAttribute('href') ?? '')
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
-  openFullerStory: async (title: string): Promise<void> =>
-    userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story')),
+  openFullerStory,
+  momentLink: (title: string, name: string): HTMLElement =>
+    within(itemHeadedBy('the timeline', title)).getByRole('link', {name, hidden: true}),
+  followFromMoment: async (title: string, name: string): Promise<void> => {
+    await openFullerStory(title);
+    await userEvent.click(within(itemHeadedBy('the timeline', title)).getByRole('link', {name}));
+  },
   momentsOf: (year: string): (string | null)[][] => within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
     within(moment).getByRole('time').getAttribute('datetime'),
     within(moment).getByRole('time').textContent,
