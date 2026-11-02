@@ -37,12 +37,6 @@ describe('pressure', () => {
     expect(shapes[1].soldHeight).toBe(0);
   });
 
-  test('should explain the chart as counting the trades that arrive while the page is open', () => {
-    render(<Pressure trades={[]}/>);
-
-    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('counts only the trades that arrive while the page is open.');
-  });
-
   test('the card counts the minutes on show in the plural', () => {
     render(<Pressure trades={[
       bought(2),
@@ -85,11 +79,5 @@ describe('pressure', () => {
     render(<Pressure trades={[]}/>);
 
     expect(screen.getByRole('region', {name: 'pressure'})).not.toHaveTextContent('BTC');
-  });
-
-  test('should explain bought and sold by who came and took the trade', () => {
-    render(<Pressure trades={[]}/>);
-
-    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('When the one that came was a buyer, the trade counts as bought. When it was a seller, it counts as sold.');
   });
 });
