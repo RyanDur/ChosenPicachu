@@ -76,7 +76,7 @@ describe('the 1991 moment', () => {
   });
 
   test('should link the summary’s words to the summary, and shelve it beside the reply', () => {
-    expect(within(itemHeadedBy('the timeline', 'The web needs collaborators')).getByRole('link', {name: '“The very small start-up effort is designed to allow small contributions.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt');
+    expect(recordPage.quotationIn('The web needs collaborators', '“The very small start-up effort is designed to allow small contributions.”')).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt');
     expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'WorldWideWeb: Summary, posted to alt.hypertext', hidden: true})).toBeInTheDocument();
   });
 });
@@ -117,7 +117,7 @@ describe('the 1994 moment', () => {
   });
 
   test('should link the thesis’s words to the thesis, and shelve it', () => {
-    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“formed the basis for CSS”', hidden: true})).toHaveAttribute('href', 'https://www.wiumlie.no/2006/phd/#ch-postweb');
+    expect(recordPage.quotationIn('Authors need control of the look', '“formed the basis for CSS”')).toHaveAttribute('href', 'https://www.wiumlie.no/2006/phd/#ch-postweb');
     expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Cascading Style Sheets', hidden: true})).toBeInTheDocument();
   });
 });
@@ -681,115 +681,308 @@ describe('the record', () => {
     });
   });
 
-  test.each([
-    ['Authors need control of the look', 'https://www.w3.org/History.html', '“CERN thus decides not to continue WWW development”'],
-    ['The web needs collaborators', 'https://www.w3.org/History.html', '“freely usable by anyone, with no fees being payable to CERN”'],
-    ['Pages need to respond', 'https://brendaneich.com/2008/04/popularity/', '“Scheme was the bait”'],
-    ['The browsers’ tags need a standard', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“was then circulated through the Internet community for comment”'],
-    ['Pages need to respond', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“buy it by the yard”'],
-    ['The information needs one interface', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”'],
-    ['The information needs one interface', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html', '“registered by the W3 team”'],
-    ['The information needs one interface', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html', '“a line of ASCII characters terminated by a CR LF”'],
-    ['The information needs one interface', 'https://worldwideweb.cern.ch/worldwideweb/', '“a single click was used for editing”'],
-    ['The information needs one interface', 'https://worldwideweb.cern.ch/history/', '“was later renamed Nexus to avoid confusion with the World Wide Web project”'],
-    ['The web needs collaborators', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt', '“Collaborators welcome!”'],
-    ['The browsers’ tags need a standard', 'https://www.rfc-editor.org/rfc/rfc1866', '“to distinguish it from the previous informal specifications”'],
-    ['The style sheet needs a standard', 'https://www.w3.org/TR/REC-CSS1-961217', '“One of the fundamental features of CSS is that style sheets cascade”'],
-    ['Someone needs to go first', 'https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/', '“as much as 14% of our users”'],
-    ['Someone needs to go first', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/', '“calls this a gutsy move”'],
-    ['Someone needs to go first', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/', '“the point man on the Wired redesign”'],
-    ['Someone needs to go first', 'https://thehistoryoftheweb.com/look-back-history-css/', 'ESPN followed a few months later'],
-    ['The separation needs proof', 'https://csszengarden.com/pages/about/', '“a collaborative gallery that could show what CSS could accomplish”'],
-    ['The separation needs proof', 'https://csszengarden.com/', '“You may modify the style sheet in any way you wish, but not the HTML.”'],
-    ['The standard needs the real world', 'https://www.w3.org/2004/04/webapps-cdf-ws/summary', '“8 voted Yes. 14 voted No.”'],
-    ['The standard needs the real world', 'https://whatwg.org/position-paper', '“a rising threat of single-vendor solutions”'],
-    ['The standard needs the real world', 'https://html.spec.whatwg.org/multipage/introduction.html', '“technologies need to be backwards compatible”'],
-    ['The page needs to update in place', 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php', '“the user waits some more”'],
-    ['The page needs to update in place', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they want the same APIs and they don’t get them”'],
-    ['The page needs to update in place', 'http://prototypejs.org/', '“smooths over the rough edges of cross-browser development”'],
-    ['The page needs to update in place', 'https://jquery.com/', '“an easy-to-use API that works across a multitude of browsers”'],
-    ['The page needs to update in place', 'https://en.wikipedia.org/wiki/XMLHttpRequest', 'Microsoft.XMLHTTP'],
-    ['The page needs to update in place', 'https://en.wikipedia.org/wiki/Google_Maps', 'ten days before the essay'],
-    ['The standard needs to move again', 'https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html', '“A split committee is good for no one and nothing, least of all any language specs that might come out of it.”'],
-    ['The standard needs to move again', 'https://tc39.es/process-document/', '“Two compatible implementations which pass the Test262 acceptance tests”'],
-    ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ActionScript', '“Completely conforming implementation of the ECMAScript fourth edition draft specification”'],
-    ['The standard needs to move again', 'https://ecma-international.org/publications-and-standards/standards/ecma-262/', '“Therefore ‘ECMA-262 Edition 4’ as an Ecma International publication does not exist”'],
-    ['The application needs a frame', 'https://angularjs.org/', '“Neither of these address the root problem that HTML was not designed for dynamic views.”'],
-    ['The application needs a frame', 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md', '20 October 2010'],
-    ['The application needs a frame', 'https://en.wikipedia.org/wiki/React_(software)', '“first deployed on Facebook’s News Feed in 2011”'],
-    ['Someone needs components', 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html', '“React isn’t an MVC framework”'],
-    ['Someone needs components', 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html', 'Christopher Chedeau’s talk'],
-    ['Someone needs components', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope', '“works across the latest devices and browser versions”'],
-    ['The rules need writing down', 'https://www.w3.org/TR/html-design-principles/', '“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”'],
-    ['The rules need writing down', 'https://html.spec.whatwg.org/multipage/parsing.html', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”'],
-    ['The rules need writing down', 'https://html.spec.whatwg.org/multipage/syntax.html', '“for legacy reasons”'],
-    ['The rules need writing down', 'https://www.w3.org/TR/html-design-principles/', '“users over authors over implementors over specifiers over theoretical purity”'],
-    ['The document needs to come first', 'https://web.dev/rendering-on-the-web/', '“Running client-side scripts to add application state and interactivity to server-rendered HTML”'],
-    ['The document needs to come first', 'https://vercel.com/blog/next', '“a small framework for server-rendered universal JavaScript webapps”'],
-    ['The document needs to come first', 'https://jasonformat.com/islands-architecture/', 'documented the islands architecture'],
-    ['The document needs to come first', 'https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html', '“research into zero-bundle-size React Server Components”'],
-    ['The document needs to come first', 'https://nextjs.org/blog/next-13-4', '4 May 2023'],
-    ['Someone needs to go first', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”'],
-    ['The specification needs its tests', 'https://www.w3.org/2011/05/css-pr.html.en', '“can focus its efforts on rapidly advancing CSS with new modules”'],
-    ['The specification needs its tests', 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/', 'Media Queries'],
-    ['The language needs a standard', 'https://262.ecma-international.org/5.1/', '“adopted by the Ecma General Assembly of June 1997”'],
-    ['The browsers need to agree', 'https://www.w3.org/TR/1998/REC-CSS2-19980512/', '“content positioning, downloadable fonts, table layout, features for internationalization, automatic counters and numbering”'],
-    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html', '“checked each page for correctness and completeness”'],
-    ['The browsers need to agree', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm', '“All discrepancies should be traceable to CSS1 implementation shortcomings.”'],
-    ['The browsers need to agree', 'https://www.w3.org/Style/LieBos2e/history/Overview.html', '“does not fully support CSS1”'],
-    ['The browsers need to agree', 'https://thehistoryoftheweb.com/look-back-history-css/', '“the first browser with full CSS Level 1 support”'],
-    ['The browsers need to agree', 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac', '27 March 2000'],
-    ['The language needs a standard', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”'],
-    ['The language needs a standard', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html', '“The Ecma standard codifies just the core language, not the DOM,”'],
-    ['The language needs a standard', 'https://en.wikipedia.org/wiki/JScript', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”'],
-    ['The standard needs to move again', 'https://en.wikipedia.org/wiki/ECMAScript_version_history', '“On 3 December 2009, ECMA-262 5th edition was published”'],
-    ['The application needs a frame', 'https://en.wikipedia.org/wiki/AngularJS', '“JavaScript-based web framework for developing single-page applications”'],
-    ['The pages need to look the same', 'https://thehistoryoftheweb.com/look-back-history-css/', '“it wasn’t long before web pages lost all semantic value”'],
-    ['The pages need to look the same', 'https://www.w3.org/People/Raggett/book4/ch02.html', '“The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”'],
-    ['The pages need to look the same', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html', '“Microsoft couldn’t get a license from Sun”']
-  ])('should tell %s, quoting its source by a link', (title, source, quotation) => {
-    expect(within(itemHeadedBy('the timeline', title)).getByRole('link', {name: quotation, hidden: true})).toHaveAttribute('href', source);
+  test('should link “CERN thus decides not to continue…” in Authors need control of the look to w3.org', () => {
+    expect(recordPage.quotationIn('Authors need control of the look', '“CERN thus decides not to continue WWW development”')).toHaveAttribute('href', 'https://www.w3.org/History.html');
+  });
+
+  test('should link “freely usable by anyone, with no…” in The web needs collaborators to w3.org', () => {
+    expect(recordPage.quotationIn('The web needs collaborators', '“freely usable by anyone, with no fees being payable to CERN”')).toHaveAttribute('href', 'https://www.w3.org/History.html');
+  });
+
+  test('should link “Scheme was the bait” in Pages need to respond to brendaneich.com', () => {
+    expect(recordPage.quotationIn('Pages need to respond', '“Scheme was the bait”')).toHaveAttribute('href', 'https://brendaneich.com/2008/04/popularity/');
+  });
+
+  test('should link “was then circulated through the Internet…” in The browsers’ tags need a standard to w3.org', () => {
+    expect(recordPage.quotationIn('The browsers’ tags need a standard', '“was then circulated through the Internet community for comment”')).toHaveAttribute('href', 'https://www.w3.org/People/Raggett/book4/ch02.html');
+  });
+
+  test('should link “buy it by the yard” in Pages need to respond to infoworld.com', () => {
+    expect(recordPage.quotationIn('Pages need to respond', '“buy it by the yard”')).toHaveAttribute('href', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html');
+  });
+
+  test('should link “Nodes do not need to be…” in The information needs one interface to w3.org', () => {
+    expect(recordPage.quotationIn('The information needs one interface', '“Nodes do not need to be on the same machine: links may point across machine boundaries.”')).toHaveAttribute('href', 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html');
+  });
+
+  test('should link “registered by the W3 team” in The information needs one interface to info.cern.ch', () => {
+    expect(recordPage.quotationIn('The information needs one interface', '“registered by the W3 team”')).toHaveAttribute('href', 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html');
+  });
+
+  test('should link “a line of ASCII characters terminated…” in The information needs one interface to w3.org', () => {
+    expect(recordPage.quotationIn('The information needs one interface', '“a line of ASCII characters terminated by a CR LF”')).toHaveAttribute('href', 'https://www.w3.org/Protocols/HTTP/AsImplemented.html');
+  });
+
+  test('should link “a single click was used for…” in The information needs one interface to worldwideweb.cern.ch', () => {
+    expect(recordPage.quotationIn('The information needs one interface', '“a single click was used for editing”')).toHaveAttribute('href', 'https://worldwideweb.cern.ch/worldwideweb/');
+  });
+
+  test('should link “was later renamed Nexus to avoid…” in The information needs one interface to worldwideweb.cern.ch', () => {
+    expect(recordPage.quotationIn('The information needs one interface', '“was later renamed Nexus to avoid confusion with the World Wide Web project”')).toHaveAttribute('href', 'https://worldwideweb.cern.ch/history/');
+  });
+
+  test('should link “Collaborators welcome!” in The web needs collaborators to w3.org', () => {
+    expect(recordPage.quotationIn('The web needs collaborators', '“Collaborators welcome!”')).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt');
+  });
+
+  test('should link “to distinguish it from the previous…” in The browsers’ tags need a standard to rfc-editor.org', () => {
+    expect(recordPage.quotationIn('The browsers’ tags need a standard', '“to distinguish it from the previous informal specifications”')).toHaveAttribute('href', 'https://www.rfc-editor.org/rfc/rfc1866');
+  });
+
+  test('should link “One of the fundamental features of…” in The style sheet needs a standard to w3.org', () => {
+    expect(recordPage.quotationIn('The style sheet needs a standard', '“One of the fundamental features of CSS is that style sheets cascade”')).toHaveAttribute('href', 'https://www.w3.org/TR/REC-CSS1-961217');
+  });
+
+  test('should link “as much as 14% of our…” in Someone needs to go first to the archived devedge.netscape.com', () => {
+    expect(recordPage.quotationIn('Someone needs to go first', '“as much as 14% of our users”')).toHaveAttribute('href', 'https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/');
+  });
+
+  test('should link “calls this a gutsy move” in Someone needs to go first to meyerweb.com', () => {
+    expect(recordPage.quotationIn('Someone needs to go first', '“calls this a gutsy move”')).toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/');
+  });
+
+  test('should link “the point man on the Wired…” in Someone needs to go first to meyerweb.com', () => {
+    expect(recordPage.quotationIn('Someone needs to go first', '“the point man on the Wired redesign”')).toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/');
+  });
+
+  test('should link “ESPN followed a few months later” in Someone needs to go first to thehistoryoftheweb.com', () => {
+    expect(recordPage.quotationIn('Someone needs to go first', 'ESPN followed a few months later')).toHaveAttribute('href', 'https://thehistoryoftheweb.com/look-back-history-css/');
+  });
+
+  test('should link “a collaborative gallery that could show…” in The separation needs proof to csszengarden.com', () => {
+    expect(recordPage.quotationIn('The separation needs proof', '“a collaborative gallery that could show what CSS could accomplish”')).toHaveAttribute('href', 'https://csszengarden.com/pages/about/');
+  });
+
+  test('should link “You may modify the style sheet…” in The separation needs proof to csszengarden.com', () => {
+    expect(recordPage.quotationIn('The separation needs proof', '“You may modify the style sheet in any way you wish, but not the HTML.”')).toHaveAttribute('href', 'https://csszengarden.com/');
+  });
+
+  test('should link “8 voted Yes. 14 voted No.” in The standard needs the real world to w3.org', () => {
+    expect(recordPage.quotationIn('The standard needs the real world', '“8 voted Yes. 14 voted No.”')).toHaveAttribute('href', 'https://www.w3.org/2004/04/webapps-cdf-ws/summary');
+  });
+
+  test('should link “a rising threat of single-vendor solutions” in The standard needs the real world to whatwg.org', () => {
+    expect(recordPage.quotationIn('The standard needs the real world', '“a rising threat of single-vendor solutions”')).toHaveAttribute('href', 'https://whatwg.org/position-paper');
+  });
+
+  test('should link “technologies need to be backwards compatible” in The standard needs the real world to html.spec.whatwg.org', () => {
+    expect(recordPage.quotationIn('The standard needs the real world', '“technologies need to be backwards compatible”')).toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/introduction.html');
+  });
+
+  test('should link “the user waits some more” in The page needs to update in place to the archived www.adaptivepath.com', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', '“the user waits some more”')).toHaveAttribute('href', 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php');
+  });
+
+  test('should link “they want the same APIs and…” in The page needs to update in place to infoworld.com', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', '“they want the same APIs and they don’t get them”')).toHaveAttribute('href', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html');
+  });
+
+  test('should link “smooths over the rough edges of…” in The page needs to update in place to prototypejs.org', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', '“smooths over the rough edges of cross-browser development”')).toHaveAttribute('href', 'http://prototypejs.org/');
+  });
+
+  test('should link “an easy-to-use API that works across…” in The page needs to update in place to jquery.com', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', '“an easy-to-use API that works across a multitude of browsers”')).toHaveAttribute('href', 'https://jquery.com/');
+  });
+
+  test('should link “Microsoft.XMLHTTP” in The page needs to update in place to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', 'Microsoft.XMLHTTP')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/XMLHttpRequest');
+  });
+
+  test('should link “ten days before the essay” in The page needs to update in place to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The page needs to update in place', 'ten days before the essay')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/Google_Maps');
+  });
+
+  test('should link “A split committee is good for…” in The standard needs to move again to the archived mail.mozilla.org', () => {
+    expect(recordPage.quotationIn('The standard needs to move again', '“A split committee is good for no one and nothing, least of all any language specs that might come out of it.”')).toHaveAttribute('href', 'https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html');
+  });
+
+  test('should link “Two compatible implementations which pass the…” in The standard needs to move again to tc39.es', () => {
+    expect(recordPage.quotationIn('The standard needs to move again', '“Two compatible implementations which pass the Test262 acceptance tests”')).toHaveAttribute('href', 'https://tc39.es/process-document/');
+  });
+
+  test('should link “Completely conforming implementation of the ECMAScript…” in The standard needs to move again to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The standard needs to move again', '“Completely conforming implementation of the ECMAScript fourth edition draft specification”')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/ActionScript');
+  });
+
+  test('should link “Therefore ‘ECMA-262 Edition 4’ as an…” in The standard needs to move again to ecma-international.org', () => {
+    expect(recordPage.quotationIn('The standard needs to move again', '“Therefore ‘ECMA-262 Edition 4’ as an Ecma International publication does not exist”')).toHaveAttribute('href', 'https://ecma-international.org/publications-and-standards/standards/ecma-262/');
+  });
+
+  test('should link “Neither of these address the root…” in The application needs a frame to angularjs.org', () => {
+    expect(recordPage.quotationIn('The application needs a frame', '“Neither of these address the root problem that HTML was not designed for dynamic views.”')).toHaveAttribute('href', 'https://angularjs.org/');
+  });
+
+  test('should link “20 October 2010” in The application needs a frame to github.com', () => {
+    expect(recordPage.quotationIn('The application needs a frame', '20 October 2010')).toHaveAttribute('href', 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md');
+  });
+
+  test('should link “first deployed on Facebook’s News Feed…” in The application needs a frame to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The application needs a frame', '“first deployed on Facebook’s News Feed in 2011”')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/React_(software)');
+  });
+
+  test('should link “React isn’t an MVC framework” in Someone needs components to legacy.reactjs.org', () => {
+    expect(recordPage.quotationIn('Someone needs components', '“React isn’t an MVC framework”')).toHaveAttribute('href', 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html');
+  });
+
+  test('should link “Christopher Chedeau’s talk” in Someone needs components to blog.vjeux.com', () => {
+    expect(recordPage.quotationIn('Someone needs components', 'Christopher Chedeau’s talk')).toHaveAttribute('href', 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html');
+  });
+
+  test('should link “works across the latest devices and…” in Someone needs components to developer.mozilla.org', () => {
+    expect(recordPage.quotationIn('Someone needs components', '“works across the latest devices and browser versions”')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope');
+  });
+
+  test('should link “In case of conflict, consider users…” in The rules need writing down to w3.org', () => {
+    expect(recordPage.quotationIn('The rules need writing down', '“In case of conflict, consider users over authors over implementors over specifiers over theoretical purity.”')).toHaveAttribute('href', 'https://www.w3.org/TR/html-design-principles/');
+  });
+
+  test('should link “few (if any) web browsers ever…” in The rules need writing down to html.spec.whatwg.org', () => {
+    expect(recordPage.quotationIn('The rules need writing down', '“few (if any) web browsers ever implemented true SGML parsing for HTML documents”')).toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/parsing.html');
+  });
+
+  test('should link “for legacy reasons” in The rules need writing down to html.spec.whatwg.org', () => {
+    expect(recordPage.quotationIn('The rules need writing down', '“for legacy reasons”')).toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/syntax.html');
+  });
+
+  test('should link “users over authors over implementors over…” in The rules need writing down to w3.org', () => {
+    expect(recordPage.quotationIn('The rules need writing down', '“users over authors over implementors over specifiers over theoretical purity”')).toHaveAttribute('href', 'https://www.w3.org/TR/html-design-principles/');
+  });
+
+  test('should link “Running client-side scripts to add application…” in The document needs to come first to web.dev', () => {
+    expect(recordPage.quotationIn('The document needs to come first', '“Running client-side scripts to add application state and interactivity to server-rendered HTML”')).toHaveAttribute('href', 'https://web.dev/rendering-on-the-web/');
+  });
+
+  test('should link “a small framework for server-rendered universal…” in The document needs to come first to vercel.com', () => {
+    expect(recordPage.quotationIn('The document needs to come first', '“a small framework for server-rendered universal JavaScript webapps”')).toHaveAttribute('href', 'https://vercel.com/blog/next');
+  });
+
+  test('should link “documented the islands architecture” in The document needs to come first to jasonformat.com', () => {
+    expect(recordPage.quotationIn('The document needs to come first', 'documented the islands architecture')).toHaveAttribute('href', 'https://jasonformat.com/islands-architecture/');
+  });
+
+  test('should link “research into zero-bundle-size React Server Components” in The document needs to come first to legacy.reactjs.org', () => {
+    expect(recordPage.quotationIn('The document needs to come first', '“research into zero-bundle-size React Server Components”')).toHaveAttribute('href', 'https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html');
+  });
+
+  test('should link “4 May 2023” in The document needs to come first to nextjs.org', () => {
+    expect(recordPage.quotationIn('The document needs to come first', '4 May 2023')).toHaveAttribute('href', 'https://nextjs.org/blog/next-13-4');
+  });
+
+  test('should link “marked the first time a large,…” in Someone needs to go first to stopdesign.com', () => {
+    expect(recordPage.quotationIn('Someone needs to go first', '“marked the first time a large, well-known, daily-content publisher had dropped tables for layout”')).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
+  });
+
+  test('should link “CSS 2.1 is a really large…” in The specification needs its tests to w3.org', () => {
+    expect(recordPage.quotationIn('The specification needs its tests', '“CSS 2.1 is a really large collection of formatting features, and we had to not only carefully review and specify all the potential interactions between them, but also learn from existing implementations and of course tests. Time ensured quality and interoperability.”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link “can focus its efforts on rapidly…” in The specification needs its tests to w3.org', () => {
+    expect(recordPage.quotationIn('The specification needs its tests', '“can focus its efforts on rapidly advancing CSS with new modules”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+  });
+
+  test('should link “Media Queries” in The specification needs its tests to w3.org', () => {
+    expect(recordPage.quotationIn('The specification needs its tests', 'Media Queries')).toHaveAttribute('href', 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/');
+  });
+
+  test('should link “adopted by the Ecma General Assembly…” in The language needs a standard to 262.ecma-international.org', () => {
+    expect(recordPage.quotationIn('The language needs a standard', '“adopted by the Ecma General Assembly of June 1997”')).toHaveAttribute('href', 'https://262.ecma-international.org/5.1/');
+  });
+
+  test('should link “content positioning, downloadable fonts, table layout,…” in The browsers need to agree to w3.org', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '“content positioning, downloadable fonts, table layout, features for internationalization, automatic counters and numbering”')).toHaveAttribute('href', 'https://www.w3.org/TR/1998/REC-CSS2-19980512/');
+  });
+
+  test('should link “checked each page for correctness and…” in The browsers need to agree to w3.org', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '“checked each page for correctness and completeness”')).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html');
+  });
+
+  test('should link “All discrepancies should be traceable to…” in The browsers need to agree to w3.org', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '“All discrepancies should be traceable to CSS1 implementation shortcomings.”')).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
+  });
+
+  test('should link “does not fully support CSS1” in The browsers need to agree to w3.org', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '“does not fully support CSS1”')).toHaveAttribute('href', 'https://www.w3.org/Style/LieBos2e/history/Overview.html');
+  });
+
+  test('should link “the first browser with full CSS…” in The browsers need to agree to thehistoryoftheweb.com', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '“the first browser with full CSS Level 1 support”')).toHaveAttribute('href', 'https://thehistoryoftheweb.com/look-back-history-css/');
+  });
+
+  test('should link “27 March 2000” in The browsers need to agree to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The browsers need to agree', '27 March 2000')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac');
+  });
+
+  test('should link “they ended up inventing ECMAScript, which…” in The language needs a standard to infoworld.com', () => {
+    expect(recordPage.quotationIn('The language needs a standard', '“they ended up inventing ECMAScript, which sounds a little like a skin disease”')).toHaveAttribute('href', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html');
+  });
+
+  test('should link “The Ecma standard codifies just the…” in The language needs a standard to the archived www.computerworld.com', () => {
+    expect(recordPage.quotationIn('The language needs a standard', '“The Ecma standard codifies just the core language, not the DOM,”')).toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
+  });
+
+  test('should link “JScript was first supported in the…” in The language needs a standard to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The language needs a standard', '“JScript was first supported in the Internet Explorer 3.0 browser released in August 1996”')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/JScript');
+  });
+
+  test('should link “On 3 December 2009, ECMA-262 5th…” in The standard needs to move again to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The standard needs to move again', '“On 3 December 2009, ECMA-262 5th edition was published”')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/ECMAScript_version_history');
+  });
+
+  test('should link “JavaScript-based web framework for developing single-page…” in The application needs a frame to en.wikipedia.org', () => {
+    expect(recordPage.quotationIn('The application needs a frame', '“JavaScript-based web framework for developing single-page applications”')).toHaveAttribute('href', 'https://en.wikipedia.org/wiki/AngularJS');
+  });
+
+  test('should link “it wasn’t long before web pages…” in The pages need to look the same to thehistoryoftheweb.com', () => {
+    expect(recordPage.quotationIn('The pages need to look the same', '“it wasn’t long before web pages lost all semantic value”')).toHaveAttribute('href', 'https://thehistoryoftheweb.com/look-back-history-css/');
+  });
+
+  test('should link “The BLINK tag was ousted in…” in The pages need to look the same to w3.org', () => {
+    expect(recordPage.quotationIn('The pages need to look the same', '“The BLINK tag was ousted in an HTML ERB meeting. Netscape would only abolish it if Microsoft agreed to get rid of MARQUEE; the deal was struck and both tags disappeared.”')).toHaveAttribute('href', 'https://www.w3.org/People/Raggett/book4/ch02.html');
+  });
+
+  test('should link “Microsoft couldn’t get a license from…” in The pages need to look the same to infoworld.com', () => {
+    expect(recordPage.quotationIn('The pages need to look the same', '“Microsoft couldn’t get a license from Sun”')).toHaveAttribute('href', 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html');
   });
 
   test('should link the mix of helvetica and times to Lie’s 1994 draft', () => {
-    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“it may not be obvious how to mix 40% helvetica and 60% times”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+    expect(recordPage.quotationIn('Authors need control of the look', '“it may not be obvious how to mix 40% helvetica and 60% times”')).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
   });
 
   test('should link the redefined influence to Lie’s 1994 draft', () => {
-    expect(within(itemHeadedBy('the timeline', 'Authors need control of the look')).getByRole('link', {name: '“# first, redefine influence to dictatorship”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+    expect(recordPage.quotationIn('Authors need control of the look', '“# first, redefine influence to dictatorship”')).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
   });
 
   test('should link the separation’s “a mix” to Lie’s 1994 draft', () => {
-    expect(within(itemHeadedBy('the timeline', 'The separation needs proof')).getByRole('link', {name: '“a mix”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
+    expect(recordPage.quotationIn('The separation needs proof', '“a mix”')).toHaveAttribute('href', 'https://www.w3.org/People/howcome/p/cascade.html');
   });
 
   test('should link Wired adopting standards outright to Bowman’s ten years later', () => {
-    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“not just by publishing stories about it, but by adopting it outright”', hidden: true})).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
+    expect(recordPage.quotationIn('Someone needs to go first', '“not just by publishing stories about it, but by adopting it outright”')).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
   });
 
   test('should link the sites that followed Wired to Bowman’s ten years later', () => {
-    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“Not long after Wired took that leap, many other large, well-known sites and companies began following suit.”', hidden: true})).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
+    expect(recordPage.quotationIn('Someone needs to go first', '“Not long after Wired took that leap, many other large, well-known sites and companies began following suit.”')).toHaveAttribute('href', 'https://stopdesign.com/archive/2012/10/11/ten-years-later.html');
   });
 
   test('should link the stunning example to Meyer’s post of 11 October 2002', () => {
-    expect(within(itemHeadedBy('the timeline', 'Someone needs to go first')).getByRole('link', {name: '“the site is a stunning example of how standards can be made to work today”', hidden: true})).toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/');
+    expect(recordPage.quotationIn('Someone needs to go first', '“the site is a stunning example of how standards can be made to work today”')).toHaveAttribute('href', 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/');
   });
 
   test('should link the release’s headline to the W3C’s CSS 2.1 release', () => {
-    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“Cascading Style Sheets Standard Boasts Unprecedented Interoperability”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+    expect(recordPage.quotationIn('The specification needs its tests', '“Cascading Style Sheets Standard Boasts Unprecedented Interoperability”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
   });
 
   test('should link the years to converge to the W3C’s CSS 2.1 release', () => {
-    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“it took many years for implementations and the specification to converge”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+    expect(recordPage.quotationIn('The specification needs its tests', '“it took many years for implementations and the specification to converge”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
   });
 
   test('should link why CSS 2.1 took so long to the W3C’s CSS 2.1 release', () => {
-    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“Why is CSS 2.1 taking so long?”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+    expect(recordPage.quotationIn('The specification needs its tests', '“Why is CSS 2.1 taking so long?”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
   });
 
   test('should link the 9000 tests to the W3C’s CSS 2.1 release', () => {
-    expect(within(itemHeadedBy('the timeline', 'The specification needs its tests')).getByRole('link', {name: '“More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
+    expect(recordPage.quotationIn('The specification needs its tests', '“More than 9000 CSS tests have made it easier for designers to create style sheets that work across browsers, and across devices.”')).toHaveAttribute('href', 'https://www.w3.org/2011/05/css-pr.html.en');
   });
 
   test('should link Meyer’s reason for a reset to his Reset Reasoning', () => {
@@ -824,11 +1017,11 @@ describe('the record', () => {
   });
 
   test('should link the percentage width to the CSS1 test suite’s test5526c', () => {
-    expect(within(itemHeadedBy('the timeline', 'The browsers need to agree')).getByRole('link', {name: '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
+    expect(recordPage.quotationIn('The browsers need to agree', '“width: 10.638%; /* refers to parent element’s width of 47em. = 5em or 50px */”')).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
   });
 
   test('should link the pixel-exact rendering to the CSS1 test suite’s test5526c', () => {
-    expect(within(itemHeadedBy('the timeline', 'The browsers need to agree')).getByRole('link', {name: '“All 100%-conformant CSS1 agents should be able to render the document elements above this paragraph indistinguishably (to the pixel) from this reference rendering”', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
+    expect(recordPage.quotationIn('The browsers need to agree', '“All 100%-conformant CSS1 agents should be able to render the document elements above this paragraph indistinguishably (to the pixel) from this reference rendering”')).toHaveAttribute('href', 'https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm');
   });
 
   test('should open the bridge on how every feature here is built, need first, in the record\'s voice', () => {

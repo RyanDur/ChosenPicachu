@@ -21,6 +21,8 @@ const shelvedAs = (work: string): HTMLElement => {
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
+  quotationIn: (moment: string, quotation: string): HTMLElement =>
+    within(itemHeadedBy('the timeline', moment)).getByRole('link', {name: quotation, hidden: true}),
   paragraphOpening,
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
