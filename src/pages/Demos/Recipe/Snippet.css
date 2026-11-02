@@ -1,14 +1,13 @@
 .snippet {
-  position: relative;
   margin: 0;
   padding: var(--base-x-1_5) var(--base-x-2);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 
   .lang {
-    position: absolute;
-    top: var(--base);
-    right: var(--base-x-1_5);
+    float: inline-end;
+    margin-block-start: calc(var(--base) - var(--base-x-1_5));
+    margin-inline: var(--base) calc(var(--base-x-1_5) - var(--base-x-2));
   }
 
   .line {
