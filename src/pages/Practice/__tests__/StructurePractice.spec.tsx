@@ -170,7 +170,7 @@ describe('the Structure practice tab', () => {
     ])).toEqual([]);
   });
 
-  test('should list the four gates that hold the site to it: axe, html-validate, outOfReadingOrder and stylelint', async () => {
+  test('should list the four gates that hold the site to the styles-off test: axe, html-validate, outOfReadingOrder and stylelint', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
