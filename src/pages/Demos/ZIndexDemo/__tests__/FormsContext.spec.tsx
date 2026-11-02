@@ -6,14 +6,6 @@ import {theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const heading = 'What else forms a stacking context';
 
-const formedOncePressedWearing = async (worn: string): Promise<HTMLElement> => {
-  render(<TestApp at={demosAt('z-index')}/>);
-  const chooser = await wearsChooser.find();
-  await wearsChooser.putOn(chooser, worn);
-  await wearsChooser.pressSortBy(chooser);
-  return wearsChooser.formed(chooser);
-};
-
 describe('the part on what else forms a stacking context', () => {
   test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
@@ -35,31 +27,73 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened over card two once card one wears nothing and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('nothing')).toHaveTextContent('The list opened over card two. Card one wears nothing, so it forms no stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'nothing');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened over card two. Card one wears nothing, so it forms no stacking context.');
   });
 
   test('should say the list opened over card two once card one wears position: relative and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('position: relative')).toHaveTextContent('The list opened over card two. position: relative alone forms no stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'position: relative');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened over card two. position: relative alone forms no stacking context.');
   });
 
   test('should say the list opened over card two once card one wears an outline and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('outline')).toHaveTextContent('The list opened over card two. An outline forms no stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'outline');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened over card two. An outline forms no stacking context.');
   });
 
   test('should say the list opened under card two once card one wears z-index: 1 and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('z-index: 1')).toHaveTextContent('The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'z-index: 1');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.');
   });
 
   test('should say the list opened under card two once card one wears opacity: 0.9 and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('opacity: 0.9')).toHaveTextContent('The list opened under card two. opacity: 0.9 formed a stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'opacity: 0.9');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. opacity: 0.9 formed a stacking context.');
   });
 
   test('should say the list opened under card two once card one wears a transform and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('transform: rotate(-1deg)')).toHaveTextContent('The list opened under card two. The transform formed a stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'transform: rotate(-1deg)');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. The transform formed a stacking context.');
   });
 
   test('should say the list opened under card two once card one wears isolation: isolate and Sort by is pressed', async () => {
-    expect(await formedOncePressedWearing('isolation: isolate')).toHaveTextContent('The list opened under card two. isolation: isolate formed a stacking context.');
+    render(<TestApp at={demosAt('z-index')}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'isolation: isolate');
+
+    await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. isolation: isolate formed a stacking context.');
   });
 
   test('should go quiet when another choice is made after Sort by was pressed', async () => {
@@ -90,16 +124,52 @@ describe('the part on what else forms a stacking context', () => {
     expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).toBeChecked();
   });
 
-  test('should open each property’s run on its page at MDN', async () => {
+  test('should send position: relative to its page at MDN', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
+
     const part = await explanation.part(heading);
 
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/position');
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^is paint\. An outline, a border/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/outline');
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context on a positioned element\. It forms one on a grid item too, which card one is here/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/z-index');
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^, like any opacity below 1, forms a context/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/opacity');
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context, as any transform does/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/transform');
-    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context and does nothing more\. Use it to keep/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/isolation');
+    expect(explanation.linkNamed(part, 'position: relative')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/position');
+  });
+
+  test('should send outline to its page at MDN', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'outline')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/outline');
+  });
+
+  test('should send z-index: 1 to its page at MDN', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'z-index: 1')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/z-index');
+  });
+
+  test('should send opacity: 0.9 to its page at MDN', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'opacity: 0.9')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/opacity');
+  });
+
+  test('should send transform: rotate(-1deg) to its page at MDN', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'transform: rotate(-1deg)')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/transform');
+  });
+
+  test('should send isolation: isolate to its page at MDN', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'isolation: isolate')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/isolation');
   });
 
   test('should link anchor positioning to MDN', async () => {

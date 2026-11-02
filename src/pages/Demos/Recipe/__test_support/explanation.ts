@@ -46,7 +46,6 @@ export const explanation = {
   foldLabelsIn: (holder: HTMLElement): string[] => within(holder).getAllByRole('group')
     .map(fold => fold.querySelector(':scope > summary')?.textContent ?? ''),
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
-  firstLinkIn: (run: HTMLElement): HTMLElement => within(run).getAllByRole('link')[0],
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),
   drawingNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
