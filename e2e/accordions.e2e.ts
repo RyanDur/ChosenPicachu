@@ -11,8 +11,7 @@ import {
   nameOn,
   showing,
   siteFrame,
-  tabsTo,
-  textOf
+  tabsTo
 } from './__test_support';
 import {everyBuildJourneys, test} from './__test_support/fold-journeys';
 
@@ -32,12 +31,8 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
     await page.goto(showing(build));
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
-    const parts = await accordionsTab(page).partsOf(build);
 
-    for (const part of parts) {
-      await expect(textOf(part)).toBeAttached();
-      await expect.poll(part.showsText).toBe(false);
-    }
+    await expect.poll(() => accordionsTab(page).partsNotHidingTheirText(build)).toEqual([]);
   });
   test(`an open fold in ${build} shows its text`, async ({page}) => {
     await page.goto(showing(build));

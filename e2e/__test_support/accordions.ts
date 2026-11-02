@@ -143,6 +143,8 @@ export const accordionsTab = (page: Page) => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
+  const partsOf = async (build: Build): Promise<Part[]> =>
+    (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index));
   return {
     goTo: async (build: Build): Promise<void> => {
       await page.goto(showing(build));
@@ -172,8 +174,16 @@ export const accordionsTab = (page: Page) => {
       await pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
         page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}));
     },
-    partsOf: async (build: Build): Promise<Part[]> =>
-      (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
+    partsOf,
+    partsNotHidingTheirText: async (build: Build): Promise<number[]> => {
+      const notHiding: number[] = [];
+      for (const [index, part] of (await partsOf(build)).entries()) {
+        if (await textOf(part).count() === 0 || await part.showsText()) {
+          notHiding.push(index + 1);
+        }
+      }
+      return notHiding;
+    }
   };
 };
 

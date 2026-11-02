@@ -150,11 +150,7 @@ test.describe('a visitor at a desk', () => {
     const works = galleryPage(page).wall;
     await expect(works.first()).toBeVisible();
 
-    for (const work of await works.all()) {
-      await work.scrollIntoViewIfNeeded();
-      const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
-      await expect(work.getByRole('img', {name: alt, exact: true})).toBeVisible();
-    }
+    expect(await galleryPage(page).picturesNotShown()).toEqual([]);
   });
 });
 

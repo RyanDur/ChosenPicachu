@@ -20,3 +20,33 @@ export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => 
   const box = await scrolledToTheMiddle(aimedAt);
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2 + fingertipMiss);
 };
+
+const aMomentToOpen = 2000;
+
+const opensWithinAMoment = (fold: Locator): Promise<boolean> => fold.evaluate((details, moment) => new Promise<boolean>(answered => {
+  if (details.hasAttribute('open')) {
+    answered(true);
+    return;
+  }
+  const watch = new MutationObserver(() => {
+    watch.disconnect();
+    answered(details.hasAttribute('open'));
+  });
+  watch.observe(details, {attributes: true, attributeFilter: ['open']});
+  setTimeout(() => {
+    watch.disconnect();
+    answered(details.hasAttribute('open'));
+  }, moment);
+}), aMomentToOpen);
+
+export const foldsAFingerLeavesShut = async (page: Page, folds: Locator[]): Promise<string[]> => {
+  const shut: string[] = [];
+  for (const fold of folds) {
+    const bar = fold.getByText(/\S/).first();
+    await fingerTap(page, bar);
+    if (!await opensWithinAMoment(fold)) {
+      shut.push(await bar.textContent() ?? '');
+    }
+  }
+  return shut;
+};

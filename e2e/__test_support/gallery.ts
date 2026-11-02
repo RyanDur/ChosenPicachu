@@ -1,5 +1,7 @@
 import type {Page} from '@playwright/test';
 
+const aMomentToArrive = 5000;
+
 const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json';
 
 export const galleryPage = (page: Page) => {
@@ -26,6 +28,19 @@ export const galleryPage = (page: Page) => {
     tapSearchLabel: (): Promise<void> => page.getByText('Search For:', {exact: true}).click(),
     emptyWall: page.getByAltText('the museum answered with nothing'),
     firstPainting: wall.first().getByRole('link').first(),
+    picturesNotShown: async (): Promise<string[]> => {
+      const missing: string[] = [];
+      for (const work of await wall.all()) {
+        await work.scrollIntoViewIfNeeded();
+        const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
+        const shown = await work.getByRole('img', {name: alt, exact: true}).waitFor({state: 'visible', timeout: aMomentToArrive})
+          .then(() => true, () => false);
+        if (!shown) {
+          missing.push(alt);
+        }
+      }
+      return missing;
+    },
     holdTheArtInstitute: async (): Promise<void> => {
       await page.route(theArtInstitutesOpeningPicture, () => new Promise<void>(() => undefined));
     },

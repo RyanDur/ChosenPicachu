@@ -14,7 +14,7 @@ export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
 export {demoSettings} from './demo-settings';
 export {courseStations} from './stations';
-export {fingerTap, fingertipMiss} from './finger';
+export {fingerTap, fingertipMiss, foldsAFingerLeavesShut} from './finger';
 export {dialRow, pillSwitch} from './pills';
 export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
