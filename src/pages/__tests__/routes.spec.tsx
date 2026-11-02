@@ -89,12 +89,26 @@ describe('a room still loading', () => {
     expect(site.closedRoomIfAny()).not.toBeInTheDocument();
   });
 
-  test.each([Paths.home, demosAt('tables'), practiceAt('behavior'), Paths.games])('leaves every page on the rail unmarked at %s', async at => {
+  const anUnmarkedRail: null[] = Array.from({length: 8}, () => null);
+  const railMarksWhileLoadingAt = async (at: string): Promise<(string | null)[]> => {
     loading(at);
+    return (await site.railLinks()).map(link => link.getAttribute('aria-current'));
+  };
 
-    const links = await site.railLinks();
-    expect(links).toHaveLength(8);
-    links.forEach(link => expect(link).not.toHaveAttribute('aria-current'));
+  test('leaves every page on the rail unmarked at Home', async () => {
+    expect(await railMarksWhileLoadingAt(Paths.home)).toEqual(anUnmarkedRail);
+  });
+
+  test('leaves every page on the rail unmarked at a Demos tab', async () => {
+    expect(await railMarksWhileLoadingAt(demosAt('tables'))).toEqual(anUnmarkedRail);
+  });
+
+  test('leaves every page on the rail unmarked at a Practice tab', async () => {
+    expect(await railMarksWhileLoadingAt(practiceAt('behavior'))).toEqual(anUnmarkedRail);
+  });
+
+  test('leaves every page on the rail unmarked at Games', async () => {
+    expect(await railMarksWhileLoadingAt(Paths.games)).toEqual(anUnmarkedRail);
   });
 });
 
@@ -167,34 +181,63 @@ describe('the rail takes the reader to Practice', () => {
 });
 
 describe('the rail goes straight to the first tab', () => {
-  test.each([
-    ['Demos', demosAt('accordions')],
-    ['Practice', practiceAt('structure')]
-  ])('should link %s to %s', async (name, address) => {
+  test('should link Demos to its Accordions tab', async () => {
     render(<TestApp at={Paths.home}/>);
 
-    expect(within(await site.nav()).getByRole('link', {name})).toHaveAttribute('href', address);
+    expect(within(await site.nav()).getByRole('link', {name: 'Demos'})).toHaveAttribute('href', demosAt('accordions'));
+  });
+
+  test('should link Practice to its Structure tab', async () => {
+    render(<TestApp at={Paths.home}/>);
+
+    expect(within(await site.nav()).getByRole('link', {name: 'Practice'})).toHaveAttribute('href', practiceAt('structure'));
   });
 });
 
 describe('the rail says which page the reader is on', () => {
-  test.each([
-    ['Home', Paths.home],
-    ['Demos', Paths.demos],
-    ['Demos', demosAt('tables')],
-    ['Users', Paths.users],
-    ['Gallery', `${Paths.artGallery}?page=3&size=8&tab=aic`],
-    ['Games', Paths.games],
-    ['Record', Paths.record],
-    ['Practice', Paths.practice],
-    ['Practice', practiceAt('presentation')],
-    ['Demos', chartPageAt('price')]
-  ])('should announce %s as the current page, and no other', async (name, path) => {
+  const currentPagesAt = async (path: string): Promise<(string | null)[]> => {
     render(<TestApp at={path}/>);
-    const nav = await site.nav();
+    return within(await site.nav()).getAllByRole('link', {current: 'page'}).map(link => link.textContent);
+  };
 
-    expect(within(nav).getByRole('link', {name, current: 'page'})).toBeInTheDocument();
-    expect(within(nav).getAllByRole('link', {current: 'page'})).toHaveLength(1);
+  test('should announce Home as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.home)).toEqual(['Home']);
+  });
+
+  test('should announce Demos as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.demos)).toEqual(['Demos']);
+  });
+
+  test('should announce Demos as the current page on a Demos tab, and no other', async () => {
+    expect(await currentPagesAt(demosAt('tables'))).toEqual(['Demos']);
+  });
+
+  test('should announce Users as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.users)).toEqual(['Users']);
+  });
+
+  test('should announce Gallery as the current page on a page of a museum, and no other', async () => {
+    expect(await currentPagesAt(`${Paths.artGallery}?page=3&size=8&tab=aic`)).toEqual(['Gallery']);
+  });
+
+  test('should announce Games as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.games)).toEqual(['Games']);
+  });
+
+  test('should announce Record as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.record)).toEqual(['Record']);
+  });
+
+  test('should announce Practice as the current page, and no other', async () => {
+    expect(await currentPagesAt(Paths.practice)).toEqual(['Practice']);
+  });
+
+  test('should announce Practice as the current page on a Practice tab, and no other', async () => {
+    expect(await currentPagesAt(practiceAt('presentation'))).toEqual(['Practice']);
+  });
+
+  test('should announce Demos as the current page on a chart page, and no other', async () => {
+    expect(await currentPagesAt(chartPageAt('price'))).toEqual(['Demos']);
   });
 
   test('should move the mark to the page the reader follows, and keep the reader on it', async () => {
@@ -229,17 +272,25 @@ describe('leaving a page', () => {
     await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
   });
 
-  test.each([
-    {page: 'Demos', at: demosAt('accordions'), arrived: () => demoTabs.arrivedOn('Accordions'), switchTab: () => demoTabs.open('Charts'), title: 'Demos Charts'},
-    {page: 'Practice', at: practiceAt('structure'), arrived: () => practicePage.arrivedOn('Structure'), switchTab: () => practicePage.pickTab('Behavior'), title: 'Practice Behavior'}
-  ])('switching $page tabs keeps the reader where they were on the page', async ({at, arrived, switchTab, title}) => {
-    render(<TestApp at={at}/>);
-    await arrived();
+  test('switching Demos tabs keeps the reader where they were on the page', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+    await demoTabs.arrivedOn('Accordions');
     const landings = scrolling.recordLandings();
 
-    await switchTab();
+    await demoTabs.open('Charts');
 
-    await site.titled(title);
+    await site.titled('Demos Charts');
+    expect(landings).toEqual([]);
+  });
+
+  test('switching Practice tabs keeps the reader where they were on the page', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+    const landings = scrolling.recordLandings();
+
+    await practicePage.pickTab('Behavior');
+
+    await site.titled('Practice Behavior');
     expect(landings).toEqual([]);
   });
 
