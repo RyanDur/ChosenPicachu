@@ -1,8 +1,16 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
+import {momentAddress} from '@pages/Record/MomentLink';
 
 describe('the Behavior practice tab', () => {
+  test('should send the one direction to the July 2014 moment', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link('July 2014 moment')).toHaveAttribute('href', momentAddress('oneDirection'));
+  });
+
   test('should open the Behavior tab from its address', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
 

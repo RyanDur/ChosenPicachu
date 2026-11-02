@@ -113,6 +113,7 @@ export const Concert: FC = () =>
       order the people involved count when that choice is hard: <a className="signpost"
       href="https://www.w3.org/TR/html-design-principles/">“consider
         users over authors over implementors over specifiers over theoretical purity.”</a> The record runs from
-      1989, and the method is still at work. Server components were announced in December 2020. Invoker commands have
+      1989, and the method is still at work. Three of its answers are recent. Server components were announced in
+      December 2020. Invoker commands have
       been in every engine since December 2025, and @scope since March 2026.</p>
   </section>;

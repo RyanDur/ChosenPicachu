@@ -45,6 +45,10 @@ export const recordPage = {
     await openFullerStory(title);
     await userEvent.click(within(itemHeadedBy('the timeline', title)).getByRole('link', {name}));
   },
+  followFromMomentInYear: async (year: string, title: string, name: string): Promise<void> => {
+    await openFullerStory(year);
+    await userEvent.click(within(itemHeadedBy('the timeline', title)).getByRole('link', {name}));
+  },
   momentsOf: (year: string): (string | null)[][] => within(screen.getByRole('list', {name: year})).getAllByRole('listitem').map(moment => [
     within(moment).getByRole('time').getAttribute('datetime'),
     within(moment).getByRole('time').textContent,

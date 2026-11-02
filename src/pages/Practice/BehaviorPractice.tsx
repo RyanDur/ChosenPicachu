@@ -23,7 +23,7 @@ export const BehaviorPractice: FC = () =>
       worked out from it by <code className="monospaced">selectColumns</code>, so nothing stores them twice.</p>
     <OneDirection/>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
-      direction, the <MomentLink to="oneDirection">2014 moment</MomentLink>’s answer.</p>
+      direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price

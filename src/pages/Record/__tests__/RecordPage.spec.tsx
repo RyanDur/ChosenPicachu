@@ -1280,3 +1280,41 @@ describe('the 2025 moment', () => {
     await waitFor(() => expect(itemHeadedBy('the timeline', 'Someone needs components')).toHaveFocus());
   });
 });
+
+describe('the 2014 moment of one direction', () => {
+  const flux = 'https://facebookarchive.github.io/flux/docs/in-depth-overview';
+  const elm = 'https://guide.elm-lang.org/architecture/';
+
+  beforeEach(async () => {
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+  });
+
+  test('should link the cascading updates to Flux’s overview', () => {
+    expect(recordPage.momentLink('The data needs one direction', '“two-way data bindings led to cascading updates, where changing one object led to another object changing, which could also trigger more updates”'))
+      .toHaveAttribute('href', flux);
+  });
+
+  test('should link the unidirectional data flow to Flux’s overview', () => {
+    expect(recordPage.momentLink('The data needs one direction', '“a unidirectional data flow”')).toHaveAttribute('href', flux);
+  });
+
+  test('should link the three parts to the Elm Architecture', () => {
+    expect(recordPage.momentLink('The data needs one direction', '“always breaks into three parts”')).toHaveAttribute('href', elm);
+  });
+
+  test('should link the pattern emerging to the Elm Architecture', () => {
+    expect(recordPage.momentLink('The data needs one direction', '“seems to emerge naturally in Elm”')).toHaveAttribute('href', elm);
+  });
+
+  test('should link the only way to change the state to Redux’s Three Principles', () => {
+    expect(recordPage.momentLink('The data needs one direction', '“The only way to change the state is to emit an action, an object describing what happened.”'))
+      .toHaveAttribute('href', 'https://redux.js.org/understanding/thinking-in-redux/three-principles');
+  });
+
+  test('should carry the 2014 moment’s reader back to the 2010 moment’s binding, with focus there', async () => {
+    await recordPage.followFromMomentInYear('The data needs one direction, and the rules need writing down', 'The data needs one direction', 'The 2010 moment');
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'The application needs a frame')).toHaveFocus());
+  });
+});

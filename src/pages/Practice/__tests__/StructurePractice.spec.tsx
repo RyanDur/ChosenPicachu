@@ -30,7 +30,7 @@ describe('the Structure practice tab', () => {
       ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
       ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
       ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
-      ['2014 moment', momentAddress('html5SaysIt')]
+      ['October 2014 moment', momentAddress('html5SaysIt')]
     ]);
   });
 
