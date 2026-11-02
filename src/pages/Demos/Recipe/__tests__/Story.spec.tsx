@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, within} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {Step, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
@@ -16,7 +16,19 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(within(card('The reader can follow two steps')).getByText('2 steps')).toBeVisible();
+    expect(recipeFolds.tallyOf(card('The reader can follow two steps'))).toBe('2 steps');
+  });
+
+  test('with one step says 1 step', () => {
+    render(<TestApp at="/"><Stories>
+      <Story param="tale" id="told" can="The reader can follow one step" soThat="the build is shortest">
+        <Steps>
+          <Step title="Only">one</Step>
+        </Steps>
+      </Story>
+    </Stories></TestApp>);
+
+    expect(recipeFolds.tallyOf(card('The reader can follow one step'))).toBe('1 step');
   });
 
   test('with no build shows no step tally', () => {
@@ -26,6 +38,6 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(within(card('The reader can read prose alone')).queryByText(/\d+ steps?/)).not.toBeInTheDocument();
+    expect(recipeFolds.tallyOf(card('The reader can read prose alone'))).toBeUndefined();
   });
 });
