@@ -67,6 +67,17 @@ test('a reader following the Structure tab\'s link to the concert lands on its p
   await expect(recordPage(page).customElementsParagraph.getByRole('link').first()).toBeFocused();
 });
 
+test('a reader following the Presentation tab\'s link to the concert lands on its paragraph quoting Chedeau\'s list, and one Tab carries on to that paragraph\'s first link', async ({page}) => {
+  await page.goto('practice/presentation/');
+
+  await practicePage(page).practice.getByRole('link', {name: 'concert', exact: true}).click();
+
+  await expect(page).toHaveURL(/\/record\/#style-in-script$/);
+  await expect(recordPage(page).styleInScriptParagraph).toBeFocused();
+  await pressTab(page);
+  await expect(recordPage(page).styleInScriptParagraph.getByRole('link').first()).toBeFocused();
+});
+
 test('the concert\'s link to a moment inside a year of two lands on it again after the reader closes the year\'s fold', async ({page}) => {
   await page.goto('record/');
   const record = recordPage(page);

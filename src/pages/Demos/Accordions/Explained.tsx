@@ -186,7 +186,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices set the accordions in the sections below, except the fold measured by plain
+      <p className="paragraph">Two choices, the fold type and the fold motion, set the accordions in the sections below, except the fold measured by plain
         script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
         build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>

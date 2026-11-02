@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {moments} from './moments/moments';
-import {customElementsParagraph} from './concertAddress';
+import {customElementsParagraph, styleInScriptParagraph} from './concertAddress';
 
 export const Concert: FC = () =>
   <section className="concert trim-rule-above" aria-labelledby="the-concert">
@@ -46,7 +46,7 @@ export const Concert: FC = () =>
       and the browsers caught up with it over the years that followed. The principles name what that separation was
       for: <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“HTML should allow separation of
         content and presentation.”</a> HTML allowed it once there was a language to separate presentation into.</p>
-    <p className="paragraph hyphenated">Script covered for style twice. The first time was Navigator 4, which ran CSS as
+    <p id={styleInScriptParagraph} className="paragraph hyphenated" tabIndex={-1}>Script covered for style twice. The first time was Navigator 4, which ran CSS as
       script, as <Link className="signpost" to={`#${moments.needOutrunsStandards.id}`}>the 1996 moment</Link> tells, and
       also let developers write JavaScript Style Sheets, bypassing CSS entirely. JavaScript Style Sheets did not survive
       the browser. The second time was 2014, when Christopher Chedeau listed Facebook’s <a className="signpost"

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {customElementsAddress} from '@pages/Record/concertAddress';
+import {styleInScriptAddress} from '@pages/Record/concertAddress';
 import {fileInRepository} from '@pages/Paths';
 import {presentation} from '@pages/Record/sources/presentation';
 import {MomentLink} from '@pages/Record/MomentLink';
@@ -195,11 +195,12 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules. The rules for a tag selector and for a look in a component style sheet print their reason. For a tag selector
-      outside the reset:{' '}
-    <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
-      For a look in a component style sheet, that the property{' '}
-    <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
+    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules.{' '}
+      <code className="monospaced">selector-max-type</code>, for a tag selector outside the reset, prints{' '}
+      <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.{' '}
+      <code className="monospaced">property-allowed-list</code>, for a look in a component style sheet, prints that the
+      property{' '}
+      <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”</a>.
       The rules for a number where a token belongs, and for a token nothing declares, name the property. BEM and SMACSS held their
       lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
@@ -271,6 +272,7 @@ export const PresentationPractice: FC = () =>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
-      isolation: one component’s rules reach no other. It is the last of the seven problems in Chedeau’s talk, and
-      the <Link className="signpost" to={customElementsAddress}>concert</Link> quotes his list.</p>
+      isolation: one component’s rules reach no other. Isolation is the last of the seven problems in Chedeau’s talk, and
+      this test guards it; the Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
+      list.</p>
   </>;
