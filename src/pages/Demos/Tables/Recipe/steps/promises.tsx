@@ -19,4 +19,5 @@ const motions: Record<Motion, string> = {
 
 export const Promises: FC<{pace: Pace; origin: Origin; motion: Motion}> = ({pace, origin, motion}) =>
   <Tell>This particular table keeps three more
-    promises. A dial’s promise is what the table guarantees under that setting. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;
+    promises. A dial’s promise is what the table guarantees under that
+    setting. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;

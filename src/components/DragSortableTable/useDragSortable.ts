@@ -20,7 +20,11 @@ export type Sortable = TableContext & {
   readonly className: string;
 };
 
-export const useDragSortable = <C extends Labelled>(columns: readonly TableColumn<C>[], rows: readonly Seated[], {origin, motion}: Choices): Sortable => {
+export const useDragSortable = <C extends Labelled>(
+  columns: readonly TableColumn<C>[],
+  rows: readonly Seated[],
+  {origin, motion}: Choices
+): Sortable => {
   const [hand] = useState(() => tableStore());
   const held = () => hand.state;
   const state = useSyncExternalStore(hand.subscribe, held, held);

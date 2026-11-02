@@ -16,10 +16,10 @@ export const Structure: FC = () =>
       clicked. A form sends when Enter is pressed in one of its fields, and refuses an empty required field in the
       browser’s own words. A fold built from{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>a details element</Link> opens and shuts from
-      the mouse or the keyboard, a job that took a script for years before the element arrived. A screen reader tells its user what each element is and what state it is in: a list
-      and how many items it holds, a button and whether it is disabled, a fold and whether it is open. Its user can also
-      jump from heading to heading. None of this needs a script, only the right element. Knowing which one is the hard
-      part, and sometimes no element fits yet.</p>
+      the mouse or the keyboard, a job that took a script for years before the element arrived. A screen reader tells
+      its user what each element is and what state it is in: a list and how many items it holds, a button and whether it
+      is disabled, a fold and whether it is open. Its user can also jump from heading to heading. None of this needs a
+      script, only the right element. Knowing which one is the hard part, and sometimes no element fits yet.</p>
     <p className="paragraph">The same markup is read by more than the browser. A screen reader reads it aloud for
       someone who can’t see the page. A browser’s reader view shows it as plain, resizable text for someone with low
       vision, or for anyone who reads better without the clutter. A search engine reads it to learn what the page is

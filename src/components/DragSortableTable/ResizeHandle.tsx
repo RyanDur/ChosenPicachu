@@ -38,7 +38,8 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       event.currentTarget.setPointerCapture(event.pointerId);
       maybe(event.currentTarget.closest('table')).map(table => {
         awaken(table);
-        maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)).map(grip => dispatch(gripped(column, grip)));
+        maybe(grippedAt(table.getBoundingClientRect().width, event.clientX))
+          .map(grip => dispatch(gripped(column, grip)));
       });
     }}
     onPointerMove={held ? followed : undefined}

@@ -23,7 +23,10 @@ describe('VAM as a source of art', () => {
     });
 
     test('names no artist on a work VAM credits to no maker', async () => {
-      anyRequestRespondsWith(JSON.stringify({...vamArtResponse, records: vamArtResponse.records.map(({_primaryMaker: _, ...record}) => record)}));
+      anyRequestRespondsWith(JSON.stringify({
+        ...vamArtResponse,
+        records: vamArtResponse.records.map(({_primaryMaker: _, ...record}) => record)
+      }));
 
       const actual = await art.getAll({page: 1, size: 8, source: Source.VAM}).orNull();
 

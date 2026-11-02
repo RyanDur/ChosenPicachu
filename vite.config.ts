@@ -123,13 +123,15 @@ const frameCss = (): Plugin => ({
     if (id.startsWith('\0framecss')) {
       const path = id.slice('\0framecss'.length, -'.js'.length);
       this.addWatchFile(path);
-      const {code} = transform({filename: path, code: readFileSync(path), targets: browserslistToTargets(browserslist())});
+      const {code} =
+        transform({filename: path, code: readFileSync(path), targets: browserslistToTargets(browserslist())});
       return `export default ${JSON.stringify(code.toString())};`;
     }
   }
 });
 
-// a drawing loaded as an image cannot read the page's style sheets, so its frames are written as files carrying the site's own
+// a drawing loaded as an image cannot read the page's style sheets, so its frames are written as files carrying the
+// site's own
 const drawings = (): Plugin => {
   const at = (path: string): string => fileURLToPath(new URL(path, import.meta.url));
   const siteSheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
@@ -228,11 +230,13 @@ export default defineConfig(({mode}) => ({
   build: {
     cssCodeSplit: false
   },
-  plugins: [drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
+  plugins: [
+    drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(),
+    runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
-    svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
-    include: '**/*.svg'
-  })],
+      svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
+      include: '**/*.svg'
+    })],
   test: {
     globals: true,
     environment: 'jsdom',

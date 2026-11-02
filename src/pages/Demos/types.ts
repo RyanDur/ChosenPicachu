@@ -21,7 +21,8 @@ export const topicNames: Record<DemoTopics, string> = {
 
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
 
-export const demoTopicAt = (segment?: string): Maybe<DemoTopics> => maybe(Object.values(DemoTopics).find(topic => topic === segment));
+export const demoTopicAt = (segment?: string): Maybe<DemoTopics> =>
+  maybe(Object.values(DemoTopics).find(topic => topic === segment));
 
 export const demoTopicOf = (tab = ''): DemoTopics =>
   maybe(formerTabs.get(tab)).either(former => former, () => demoTopicAt(tab).orElse(DemoTopics.accordions));

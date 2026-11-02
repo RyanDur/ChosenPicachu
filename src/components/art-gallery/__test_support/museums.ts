@@ -132,7 +132,10 @@ export const heldVAMPictures = (): () => void => {
   return release;
 };
 
-export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}) =>
+export const setupClevelandAllArtResponse = (
+  response: ClevelandAllArtResponse,
+  {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}
+) =>
   server.use(http.get(`${clevelandDomain}/`, ({request}) =>
     paramsMatch(request, {
       skip: String((page - 1) * limit),
@@ -141,7 +144,10 @@ export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, 
       ...(has(search) ? {q: search} : {})
     }) ? HttpResponse.json(response) : undefined));
 
-export const setupVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}) =>
+export const setupVAMAllArtResponse = (
+  response: VAMAllArtResponse,
+  {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}
+) =>
   server.use(http.get(`${vamDomain}/objects/search`, ({request}) =>
     paramsMatch(request, {
       page: String(page),
@@ -150,7 +156,10 @@ export const setupVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page
       ...(has(search) ? {q: search} : {})
     }) ? HttpResponse.json(response) : undefined));
 
-export const heldVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page}: AllArt = {limit: defaultRecordLimit, page: 1}): () => void => {
+export const heldVAMAllArtResponse = (
+  response: VAMAllArtResponse,
+  {limit, page}: AllArt = {limit: defaultRecordLimit, page: 1}
+): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${vamDomain}/objects/search`, async ({request}) => {
     if (!paramsMatch(request, {page: String(page), page_size: String(limit), images_exist: 'true'})) return undefined;

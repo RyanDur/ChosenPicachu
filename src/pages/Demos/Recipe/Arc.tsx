@@ -15,8 +15,8 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
     <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>
     <p className="overview paragraph muted-ink">
       Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a
-      line of it and what it commits the build to, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> shows; the clues point at the element to
-      build it with.
+      line of it and what it commits the build to, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> shows;
+      the clues point at the element to build it with.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
@@ -88,7 +88,8 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
       <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks
       through. The whole of it reads as one:
     </p>
     <hgroup className="story arriving card rounded-corners lifted">

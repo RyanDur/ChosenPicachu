@@ -50,7 +50,8 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
 
 const columnBeside = (context: MountedTable, name: string, neighbour: string): void => {
   const current = context.order();
-  columnShoving(context, name, interior(current.indexOf(neighbour), current.length), context.store.state.drag?.survey.columnWidths ?? {});
+  columnShoving(context, name, interior(current.indexOf(neighbour), current.length),
+    context.store.state.drag?.survey.columnWidths ?? {});
 };
 
 const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: Pick<RowNudge, 'to' | 'heights'>): void => {
@@ -61,7 +62,10 @@ const rowShoving = (context: MountedTable, row: string, before: readonly string[
 const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowNudge): void => {
   const before = context.standing();
   rowShoving(context, row, before, {to, heights});
-  settleRow(context, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
+  settleRow(context, row, settlingFromSeat({
+    x: 0,
+    y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)
+  }));
 };
 
 const rowTo = (context: MountedTable, row: string, to: number): void => {
@@ -98,9 +102,11 @@ const moved = (context: MountedTable, moving: Moving): void => {
   hand.dispatch(drifted(moving));
   const {drag} = hand.state;
   if (drag?.axis === 'column') {
-    eagerTravel(columnUnder(order(), drag.survey), drag.held, neighbour => columnBeside(context, drag.held, neighbour))(moving);
+    eagerTravel(columnUnder(order(), drag.survey), drag.held,
+      neighbour => columnBeside(context, drag.held, neighbour))(moving);
   } else if (drag?.axis === 'row') {
-    eagerTravel(rowUnder(standing(), drag.survey), drag.held, neighbour => rowBeside(context, drag.held, neighbour))(moving);
+    eagerTravel(rowUnder(standing(), drag.survey), drag.held,
+      neighbour => rowBeside(context, drag.held, neighbour))(moving);
   }
 };
 

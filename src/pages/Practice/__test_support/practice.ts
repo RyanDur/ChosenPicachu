@@ -68,7 +68,9 @@ export const practicePage = {
     const next = maybe(parts[parts.indexOf(heading) + 1]);
     return within(practice()).getAllByRole('link')
       .filter(link => Boolean(heading.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING))
-      .filter(link => next.map(after => Boolean(after.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING)).orElse(true))
+      .filter(link => next
+        .map(after => Boolean(after.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING))
+        .orElse(true))
       .map(link => [link.textContent, link.getAttribute('href')]);
   },
   sourcesLinked: (): string[] => {

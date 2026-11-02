@@ -41,22 +41,24 @@ const PriceStory: FC = () =>
     can="The trader can watch the price move, live"
     soThat="the session reads at a glance">
     <Tell>I could have reached for a chart library, but this chart is one line and two axes. So I draw the line with
-      SVG, the browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.</Tell>
+      SVG, the browser’s own format for shapes, and its points are arithmetic over the trades the page already
+      holds.</Tell>
     <Tell>Trades arrive faster than anyone can read, so they are grouped into equal spans of time. Each span becomes one
       candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
-    <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
-      in time order.</Tell>
+    <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are
+      joined in time order.</Tell>
     <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. Every time it redraws the chart, the candles made from live trades, the joined series and the
-      points are worked out again. None of them is stored.</Tell>
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. Every time it redraws the chart, the candles made
+      from live trades, the joined series and the points are worked out again. None of them is stored.</Tell>
     <Steps>
       <Step title="Open a socket, and keep only what decodes">
         <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
-          <Says>The browser opens a <Mdn path="Web/API/WebSocket">WebSocket</Mdn>, a connection the server can keep sending
-            on, and asks the exchange for one product’s matches. A match is one trade.</Says>
-          <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields a
-            match has, each of the right kind. And its price, its size and its time have to turn into real numbers. What
-            passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from, as the{' '}
+          <Says>The browser opens a <Mdn path="Web/API/WebSocket">WebSocket</Mdn>, a connection the server can keep
+            sending on, and asks the exchange for one product’s matches. A match is one trade.</Says>
+          <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields
+            a match has, each of the right kind. And its price, its size and its time have to turn into real numbers.
+            What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from,
+            as the{' '}
           <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
             it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
@@ -72,10 +74,11 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Fetch the recent past, and join it to the live trades">
         <Words want="The trader arrives mid-session. The left of the chart happened before they came.">
-          <Says>The exchange also answers plain requests over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>. The page asks it for
-            recent candles, each the size the chosen period uses, and checks them as it checks the live messages.</Says>
-          <Says>mergeLive joins the two. It takes the fetched candles up to where the live ones begin, then the live ones,
-            and keeps only as many as the chart shows.</Says>
+          <Says>The exchange also answers plain requests over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>. The page asks it
+            for recent candles, each the size the chosen period uses, and checks them as it checks the live
+            messages.</Says>
+          <Says>mergeLive joins the two. It takes the fetched candles up to where the live ones begin, then the live
+            ones, and keeps only as many as the chart shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -88,9 +91,9 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Group the live trades into candles">
         <Words want="Raw trades arrive too fast to draw. The line needs one point for each span of time.">
-          <Says>bucketTrades goes through the live trades in order and makes one candle for each span. The first trade in a
-            span opens the candle. Each later one raises its high or lowers its low if it has to, becomes its close, and
-            adds to its volume.</Says>
+          <Says>bucketTrades goes through the live trades in order and makes one candle for each span. The first trade
+            in a span opens the candle. Each later one raises its high or lowers its low if it has to, becomes its
+            close, and adds to its volume.</Says>
           <Says>One candle for each span is one point for each span, which is all a line needs.</Says>
         </Words>
         <Codes>
@@ -102,19 +105,19 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Let the trader choose the period">
         <Words want="A trader watching the last few minutes and one reading the whole week are asking different questions. The trader picks the period, and everything on the chart follows it.">
-          <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of menu
-            the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
-          <Says>Each period has its own span for a candle, its own limit on how many candles the chart holds, and its own
-            spacing for the marks on the time axis. The hour has candles of a minute, 60 of them, marked every ten minutes.
-            The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them,
-            marked every day.</Says>
+          <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of
+            menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
+          <Says>Each period has its own span for a candle, its own limit on how many candles the chart holds, and its
+            own spacing for the marks on the time axis. The hour has candles of a minute, 60 of them, marked every ten
+            minutes. The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours,
+            28 of them, marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
-            of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li, which is one item of a list, and a
-            button.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. Item gives its button the
-            site’s shared classes that set its look; the menu’s look is the page’s to choose, so the page passes Menu
-            those classes, as the sample shows.</Says>
+            of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li,
+            which is one item of a list, and a button.</Says>
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
+            sheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look
+            is the page’s to choose, so the page passes Menu those classes, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -128,12 +131,12 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Turn each candle into a point on the line">
         <Words want="The line has to stay smooth while trades keep arriving, on a slow machine too.">
-          <Says>Each candle becomes a point by proportion. Its time sets how far across the point is, and its closing price
-            sets how far down, with the highest price at the top.</Says>
-          <Says>The points go to one SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>, a line drawn through a list of
-            points. A new trade means new points, and React draws the new line. Nothing on the page is measured, and the line is
-            never animated: it is drawn again. Only the dot on the newest point moves, sliding to its new place over 300
-            milliseconds.</Says>
+          <Says>Each candle becomes a point by proportion. Its time sets how far across the point is, and its closing
+            price sets how far down, with the highest price at the top.</Says>
+          <Says>The points go to one SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>, a line drawn through a
+            list of points. A new trade means new points, and React draws the new line. Nothing on the page is measured,
+            and the line is never animated: it is drawn again. Only the dot on the newest point moves, sliding to its
+            new place over 300 milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -146,10 +149,10 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Label the prices and the time">
         <Words want="A line with no labels is a shape, not a chart. The trader needs the high, the low and the time under it.">
-          <Says>Axes wraps the body of any chart. At the side it labels the highest price, the lowest, and the one midway
-            between them. Along the bottom it marks the time.</Says>
-          <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour on the
-            day chart, every day on the week chart.</Says>
+          <Says>Axes wraps the body of any chart. At the side it labels the highest price, the lowest, and the one
+            midway between them. Along the bottom it marks the time.</Says>
+          <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
+            on the day chart, every day on the week chart.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -172,11 +175,12 @@ const CandlesStory: FC = () =>
     <Steps>
       <Step title="Make the candles the way the price line does">
         <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
-          <Says>The page has one live feed and gives every chart the same trades. This chart groups them into candles with
-            bucketTrades and joins the fetched past with mergeLive, the same two functions the price line uses.</Says>
+          <Says>The page has one live feed and gives every chart the same trades. This chart groups them into candles
+            with bucketTrades and joins the fetched past with mergeLive, the same two functions the price line
+            uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
-          <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the price
-            line: the kind of menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
+          <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the
+            price line: the kind of menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -188,17 +192,18 @@ const CandlesStory: FC = () =>
       </Step>
       <Step title="Draw each candle as a body, a wall and a wick">
         <Words want="Open, high, low, close: four numbers for each span, drawn as one mark.">
-          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a
-            thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body
-            moved 1 right and 1.5 down, which gives the body an edge.</Says>
+          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick,
+            a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the
+            body moved 1 right and 1.5 down, which gives the body an edge.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
-            lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body 60%
-            of the slot wide, so two candles never touch.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. A candle
-            that closed at or above its open gets the class up, and one that closed lower gets down.</Says>
-          <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that lives
-            in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps what is not a look:
-            the chart’s size, the wick’s hairline width and how the shapes move.</Says>
+            lowest low at the bottom. Across the chart, windowSlots gives each candle an equal slot and makes the body
+            60% of the slot wide, so two candles never touch.</Says>
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
+            sheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed
+            lower gets down.</Says>
+          <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that
+            lives in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps
+            what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.</Says>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
@@ -225,10 +230,12 @@ const CandlesStory: FC = () =>
         <Words want="A price move on little trading and one on heavy trading mean different things. The trader reads both at once.">
           <Says>volumeShapes draws a bar under each candle for how much was traded in that span. The tallest bar is the
             busiest span on the chart, and every other bar is in proportion to it.</Says>
-          <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.</Says>
+          <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its
+            candle.</Says>
           <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
             properties, values a style sheet names once and other rules read, and a side class sets them. volume-side
-            sets leather for the bar and drab for its edge, and the bars read both through side-face and side-wall.</Says>
+            sets leather for the bar and drab for its edge, and the bars read both through side-face and
+            side-wall.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -247,8 +254,8 @@ const CandlesStory: FC = () =>
       </Step>
       <Step title="Use the same axes">
         <Words want="Candles with no labels are a shape, not a chart. They need their prices labeled and their time marked.">
-          <Says>The same Axes wraps this chart. Its prices come from the highest high and the lowest low of the candles on
-            show, and its time marks follow the period, as on the price line.</Says>
+          <Says>The same Axes wraps this chart. Its prices come from the highest high and the lowest low of the candles
+            on show, and its time marks follow the period, as on the price line.</Says>
           <Says>Axes does one job, so every chart that has that job uses it.</Says>
         </Words>
         <Codes>
@@ -270,15 +277,16 @@ const PressureStory: FC = () =>
     <Tell>So this chart reads something the feed already carries. Every trade has an order that was waiting and one that
       came and took it, and Coinbase marks each trade with the side of the one that was waiting. A trade marked sell is
       one a buyer took. The chart sums each minute into the size buyers took and the size sellers took.</Tell>
-    <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades that
-      arrive while the page is open, and the page keeps the newest 1,500 of those.</Tell>
+    <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades
+      that arrive while the page is open, and the page keeps the newest 1,500 of those.</Tell>
     <Steps>
       <Step title="Sum each minute by who took the trade">
         <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
-          <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says what
-            the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.</Says>
-          <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for each
-            minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes.</Says>
+          <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says
+            what the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is
+            sell.</Says>
+          <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for
+            each minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -305,17 +313,19 @@ const PressureStory: FC = () =>
       </Step>
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
-          <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
-            below. The bought bars wear buy-side and the sold bars sell-side. A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
+          <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above,
+            orange below. The bought bars wear buy-side and the sold bars sell-side. A class, as
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             says, is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
             shared style sheet.</Says>
-          <Says>A side class sets a side’s colors as custom properties, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
-            values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall reads the wall color for the second rectangle
-            set just behind it, which gives it an edge. The middle line wears drawn, which gives it its charcoal
-            stroke.</Says>
+          <Says>A side class sets a side’s colors as custom properties, which
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
+            values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
+            reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
+            wears drawn, which gives it its charcoal stroke.</Says>
           <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
-          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The caption says how many minutes are on show, up to the last 1,500
-            trades.</Says>
+          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars.
+            The caption says how many minutes are on show, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -343,10 +353,10 @@ const PieStory: FC = () =>
     soThat="the whole pot reads in one circle">
     <Tell>The pressure chart sums each minute on its own. The pie sums up to the last 1,500 trades as
       a whole: one slice for the size buyers took and one for the size sellers took.</Tell>
-    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only what has
-      arrived since the page opened.</Tell>
-    <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that only
-      ever rotate, and a share is how far they have turned into view.</Tell>
+    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only
+      what has arrived since the page opened.</Tell>
+    <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that
+      only ever rotate, and a share is how far they have turned into view.</Tell>
     <Steps>
       <Step title="Add up each side">
         <Words want="One number for each side. The pie asks nothing about time.">
@@ -364,30 +374,33 @@ const PieStory: FC = () =>
         <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
           <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
             painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class,
-            which is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says.</Says>
+            which is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions
+              tab</TabLink> says.</Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
-          <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
-            frame.</Says>
+          <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on
+            every frame.</Says>
           <Says>A rotation is one angle, and a CSS transition, which moves a property from its old value to its new
             one over a set time, can move it smoothly; the shape is never rebuilt. So I build the
             cut from rotation alone.</Says>
           <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
             nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the
             other.</Says>
-          <Says>The first window shows the first half-turn of the slice, and the second shows the rest. A share is how far
-            the two half-discs have turned into their windows, in degrees. A slice of less than half a turn leaves its
-            second half-disc turned out of sight.</Says>
-          <Says>A side that took everything is both half-discs fully in view. Nothing changes shape. Everything that moves is
-            a rotation or a shift, each over 300 milliseconds.</Says>
+          <Says>The first window shows the first half-turn of the slice, and the second shows the rest. A share is how
+            far the two half-discs have turned into their windows, in degrees. A slice of less than half a turn leaves
+            its second half-disc turned out of sight.</Says>
+          <Says>A side that took everything is both half-discs fully in view. Nothing changes shape. Everything that
+            moves is a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
-          <Says>The markup passes each number to the style sheet as a custom property, which the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
+          <Says>The markup passes each number to the style sheet as a custom property, which
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             explains: a value set by name on the element,
-            such as <code className="monospaced">--turn</code>, and read back in the style sheet with <code className="monospaced">var()</code>. The style sheet declares each one
-            with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a starting value. The turn and the
-            swing are angles, and the push out from the center is two lengths. Before the markup sets them, a slice sits
-            unturned at the center.</Says>
+            such as <code className="monospaced">--turn</code>, and read back in the style sheet
+            with <code className="monospaced">var()</code>. The style sheet declares each one
+            with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a
+            starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before
+            the markup sets them, a slice sits unturned at the center.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -408,8 +421,8 @@ const PieStory: FC = () =>
       </Step>
       <Step title="Print each share">
         <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
-          <Says>The legend prints each share as a whole percentage, in its slice’s color. The caption says what the pie is:
-            the size traded on each side, up to the last 1,500 trades.</Says>
+          <Says>The legend prints each share as a whole percentage, in its slice’s color. The caption says what the pie
+            is: the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -424,15 +437,16 @@ const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
-    <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period. A reload or a shared link needs nothing else to bring the
-      layout back.</Tell>
-    <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on
-      the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer is over the
-      chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the
-      pointer. It swaps with its neighbor once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbor slides into the place it left.</Tell>
+    <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and
+      choosing a period. A reload or a shared link needs nothing else to bring the layout back.</Tell>
+    <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting
+      written on the element. A chart is draggable only while its grip is pressed, and the grip shows when the pointer
+      is over the chart. While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of
+      it under the pointer. It swaps with its neighbor once the pointer has moved a third of the chart’s height from
+      where it took hold, up or down, and the neighbor slides into the place it left.</Tell>
     <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
-      and down arrows move it one place and focus stays on it. Delete or Backspace removes it. When one chart is left it has no
-      grip and no remove button, and the key does nothing, so the workspace always has a chart.</Tell>
+      and down arrows move it one place and focus stays on it. Delete or Backspace removes it. When one chart is left it
+      has no grip and no remove button, and the key does nothing, so the workspace always has a chart.</Tell>
     <Steps>
       <Step title="Read the charts from the address">
         <Words want="The layout is the trader’s, so it has to come back after a reload and travel in a link.">
@@ -444,8 +458,9 @@ const WorkspaceStory: FC = () =>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
             page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. Item gives its
-            button the shared classes that set its look, and the page passes Menu the menu’s own, as the sample shows.</Says>
+          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
+            sheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu
+            the menu’s own, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -460,17 +475,18 @@ const WorkspaceStory: FC = () =>
       </Step>
       <Step title="A chart swaps once the pointer has moved a third of its height">
         <Words want="A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.">
-          <Says>On dragstart, the <TabLink to={DemoTopics.zIndex}>event</TabLink> the browser sends when a drag begins, the code marks where the pointer is on
-            the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the
-            pointer with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under
-            it; a third above, with the one over it. Then the mark is set again to where the pointer is.</Says>
+          <Says>On dragstart, the <TabLink to={DemoTopics.zIndex}>event</TabLink> the browser sends when a drag begins,
+            the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves
+            over a chart, the code compares the pointer with that mark. A third of the held chart’s height below the
+            mark, the chart swaps with the one under it; a third above, with the one over it. Then the mark is set again
+            to where the pointer is.</Says>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
           <Says>The neighbor’s slide is the{' '}
             <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
-            turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot be swapped
-            with one that is still sliding.</Says>
+            turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot
+            be swapped with one that is still sliding.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -526,7 +542,8 @@ export const ChartsTutorial: FC = () => {
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
-      We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is the workspace, told as a <a className="signpost"
+      We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is
+      the workspace, told as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>. Each chart above opens its own story: click it, or press Enter on it. Open one

@@ -22,7 +22,8 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
   handle.addEventListener('pointerdown', event => {
     event.stopPropagation();
     awaken(context);
-    maybe(grippedAt(context.table.getBoundingClientRect().width, event.clientX)).map(grip => saidAfter(context, gripped(column, grip)));
+    maybe(grippedAt(context.table.getBoundingClientRect().width, event.clientX))
+      .map(grip => saidAfter(context, gripped(column, grip)));
     handle.setPointerCapture(event.pointerId);
   });
   handle.addEventListener('pointermove', event => not(pointerHolds(context.store.state, column))

@@ -19,7 +19,10 @@ export const UsersPage: FC = () => {
   const {raise} = useBanners();
   const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: modeParam});
   const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
-  const open = openedOn(userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial)), param);
+  const open = openedOn(
+    userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial)),
+    param
+  );
 
   useEffect(() => {
     store.dispatch(opened());

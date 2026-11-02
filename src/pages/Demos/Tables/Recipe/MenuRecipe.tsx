@@ -42,13 +42,21 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says><code className="monospaced">SortMenu</code> is the whole chooser: three buttons naming the three choices,
-          raising <code className="monospaced">onSorted</code> with which column asked for what. The page dispatches it, and that is the
-          whole answer. The rows cut to their ranked seats on the next frame, in the animated
-          table and the static one alike.</Says>
+        ? <Says><code className="monospaced">SortMenu</code> is the whole chooser: three buttons naming the three
+          choices, raising <code className="monospaced">onSorted</code> with which column asked for what. The page
+          dispatches it, and that is the whole answer. The rows cut to their ranked seats on the next frame, in the
+          animated table and the static one alike.</Says>
         : <>
-          <Says>The toggle and its menu are the button and the menu the page writes, marked <code className="monospaced">data-sort-toggle</code> and <code className="monospaced">data-sort-menu</code>. When boot calls <code className="monospaced">dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
-          <Says>When one is chosen it calls <code className="monospaced">choose</code> with the context <code className="monospaced">dragSortable</code> gave it, what the table knows about itself and the functions it answers with; <code className="monospaced">choose</code> raises <code className="monospaced">sorted</code> to the page and writes the move report, the output that tells a screen reader what happened. The page dispatches the sort into its arrangement and calls <code className="monospaced">reconcile</code>, which reseats the rows. The rows cut to their ranked seats, in the animated build and the static one alike.</Says>
+          <Says>The toggle and its menu are the button and the menu the page writes,
+            marked <code className="monospaced">data-sort-toggle</code> and <code className="monospaced">data-sort-menu</code>. When boot calls <code className="monospaced">dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
+          <Says>When one is chosen it calls <code className="monospaced">choose</code> with the
+            context <code className="monospaced">dragSortable</code> gave it, what the table knows about itself and the
+            functions it answers
+            with; <code className="monospaced">choose</code> raises <code className="monospaced">sorted</code> to the
+            page and writes the move report, the output that tells a screen reader what happened. The page
+            dispatches the sort into its arrangement and calls <code className="monospaced">reconcile</code>, which
+            reseats the rows. The rows cut to their ranked seats, in the animated build and the static one
+            alike.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -83,7 +91,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
           <Says>The platform provides the whole popup: point the
             button’s <Mdn path="Web/HTML/Element/button#popovertarget"><code className="monospaced">popoverTarget</code></Mdn> at the
-            menu, and <Mdn path="Web/HTML/Global_attributes/popover"><code className="monospaced">popover="auto"</code></Mdn> brings
+            menu,
+            and <Mdn path="Web/HTML/Global_attributes/popover"><code className="monospaced">popover="auto"</code></Mdn> brings
             the top layer, light-dismiss, and the accessibility relationship. The plan is to
             write no popup JavaScript at all.</Says>
         </Words>
@@ -99,19 +108,20 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             the menu an id and point the button’s <code className="monospaced">popoverTarget</code> at it;
             that is the whole wiring. Pressing the button toggles the popover (the
             default <Mdn path="Web/HTML/Element/button#popovertargetaction"><code className="monospaced">popovertargetaction</code></Mdn>)
-            with no <code className="monospaced">onClick</code> anywhere, and the invoker-to-popup accessibility relationship comes
-            along free. <code className="monospaced">popover="auto"</code> chooses
+            with no <code className="monospaced">onClick</code> anywhere, and the invoker-to-popup accessibility
+            relationship comes along free. <code className="monospaced">popover="auto"</code> chooses
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
           <Says>In the React world the sample is built from Menu, Entry and Item. Each is a component, a function that
-            writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and each writes one element.</Says>
+            writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and each
+            writes one element.</Says>
           {world === 'react'
-            ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet and
-              that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>
+            ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet
+              and that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>
             : <Says>In the vanilla world the buttons carry the same shared classes Item gives them in React, looks
-              that live in the site’s shared style sheet and that an element wears by name, and the menu’s own classes are
-              written on it by hand, as the sample shows.</Says>}
+              that live in the site’s shared style sheet and that an element wears by name, and the menu’s own classes
+              are written on it by hand, as the sample shows.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
@@ -136,22 +146,28 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
           <Mdn path="Web/CSS/position-area"> <code className="monospaced">position-area</code></Mdn> picks cells.{' '}
-          <code className="monospaced">block-end</code> takes the row below the toggle; <code className="monospaced">span-inline-start</code> starts from the toggle’s
+          <code className="monospaced">block-end</code> takes the row below the
+            toggle; <code className="monospaced">span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
-            this writing mode. <Mdn path="Web/CSS/position-try-fallbacks"><code className="monospaced">position-try-fallbacks</code></Mdn>:{' '}
-          <code className="monospaced">flip-block</code> is the escape hatch: when the row below has no room, the whole area flips
-            above. You measure nothing and write no JavaScript.</Says>
+            this writing
+            mode. <Mdn path="Web/CSS/position-try-fallbacks"><code className="monospaced">position-try-fallbacks</code></Mdn>:{' '}
+          <code className="monospaced">flip-block</code> is the escape hatch: when the row below has no room, the whole
+            area flips above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
-            that is this rule’s business: your site reset already zeroes <code className="monospaced">menu</code>, and a page’s own
-            styles, the author’s, beat the browser’s default styles, its user-agent style sheet, however narrowly the
-            browser’s rules are aimed, because the <Mdn path="Web/CSS/Cascade">cascade</Mdn>, the order CSS uses to choose
-            between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list markers
-            are the reset’s job too; this site’s reset drops them for <code className="monospaced">menu</code> alongside <code className="monospaced">ol</code> and <code className="monospaced">ul</code>.</Says>
-          <Says>One line remains that no reset should write for you: <Mdn path="Web/CSS/inset"><code className="monospaced">inset: auto</code></Mdn>. The
-            browser’s default style sheet centers every popover with <code className="monospaced">inset: 0</code>, and centered versus anchored is this menu’s own
-            decision, which is why the fallback below deliberately puts <code className="monospaced">inset: 0</code> back.</Says>
+            that is this rule’s business: your site reset already zeroes <code className="monospaced">menu</code>, and a
+            page’s own styles, the author’s, beat the browser’s default styles, its user-agent style sheet, however
+            narrowly the browser’s rules are aimed, because the <Mdn path="Web/CSS/Cascade">cascade</Mdn>, the order CSS
+            uses to choose between rules that disagree, ranks who wrote a rule before how narrowly it is aimed. The list
+            markers are the reset’s job too; this site’s reset drops them
+            for <code className="monospaced">menu</code> alongside <code className="monospaced">ol</code> and <code className="monospaced">ul</code>.</Says>
+          <Says>One line remains that no reset should write for
+            you: <Mdn path="Web/CSS/inset"><code className="monospaced">inset: auto</code></Mdn>. The
+            browser’s default style sheet centers every popover with <code className="monospaced">inset: 0</code>, and
+            centered versus anchored is this menu’s own decision, which is why the fallback below deliberately
+            puts <code className="monospaced">inset: 0</code> back.</Says>
           <Says>Engines that have popovers but not anchor positioning get
-            your <Mdn path="Web/CSS/@supports"><code className="monospaced">@supports</code></Mdn> fallback: a centered popover.</Says>
+            your <Mdn path="Web/CSS/@supports"><code className="monospaced">@supports</code></Mdn> fallback: a centered
+            popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
               ...span(menuCss, 'inset: auto;', 'inset: auto;'),
@@ -175,11 +191,18 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           {world === 'react'
             ? <Says>The sort is one value in the page’s arrangement, a column name and a
               direction. When the page gives the table its columns it marks the sorting one, and
-              only that one, so the <code className="monospaced">th</code> announces <code className="monospaced">aria-sort</code> from what it was given and the toggle
-              wears the direction’s glyph from that attribute.</Says>
-            : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page calls <code className="monospaced">reconcile</code> after a new sort, <code className="monospaced">announceSort</code> walks the columns and <code className="monospaced">announce</code>, one function, sets each <code className="monospaced">th</code> from what
-              it was given: the sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and every other <code className="monospaced">th</code> loses it. One value holds the sort, so the headers always agree with
-              it.</Says>}
+              only that one, so
+              the <code className="monospaced">th</code> announces <code className="monospaced">aria-sort</code> from
+              what it was given and the toggle wears the direction’s glyph from that attribute.</Says>
+            : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page
+              calls <code className="monospaced">reconcile</code> after a new
+              sort, <code className="monospaced">announceSort</code> walks the columns
+              and <code className="monospaced">announce</code>, one function, sets
+              each <code className="monospaced">th</code> from what
+              it was given: the
+              sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and
+              every other <code className="monospaced">th</code> loses it. One value holds the sort, so the headers
+              always agree with it.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
@@ -268,16 +291,23 @@ const RankStory: FC<{build: Build}> = ({build}) => {
         </Words>
         <Reveal>
           {world === 'react'
-            ? <Says>The toggle and the menu each stop the <code className="monospaced">pointerdown</code>, so the header never gets your press. The toggle sits itself at the header’s end
-              edge. And not every column offers a menu: a menu
-              exists only where the page writes one inside the header, and a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the cell, which matches an
-              element by what it contains, pads for the toggle when one is there.</Says>
-            : <Says>The toggle and the menu each stop the <code className="monospaced">pointerdown</code>, so the header never gets your press. The toggle sits itself at the header’s end edge. And not every column offers a menu: menus
-              exist only where the markup writes them, a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the cell, which matches an element by what it
-              contains, pads for the toggle when one is there, and <code className="monospaced">reconcile</code> reads the sortable set off the table’s markup each time it writes the cells.</Says>}
-          <Says>The toggle’s look is shared classes. <code className="monospaced">borderless</code> and <code className="monospaced">unfilled</code> take off the
-            browser’s button chrome, <code className="monospaced">muted-ink</code> grays its glyph, and <code className="monospaced">attentive</code> fills it with the approach color, the pale green, under a hovering pointer and draws the site’s
-            ring when the keyboard reaches it.</Says>
+            ? <Says>The toggle and the menu each stop the <code className="monospaced">pointerdown</code>, so the header
+              never gets your press. The toggle sits itself at the header’s end edge. And not every column offers a
+              menu: a menu exists only where the page writes one inside the header, and
+              a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the cell, which
+              matches an element by what it contains, pads for the toggle when one is there.</Says>
+            : <Says>The toggle and the menu each stop the <code className="monospaced">pointerdown</code>, so the header
+              never gets your press. The toggle sits itself at the header’s end edge. And not every column offers a
+              menu: menus exist only where the markup writes them,
+              a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the cell, which
+              matches an element by what it contains, pads for the toggle when one is there,
+              and <code className="monospaced">reconcile</code> reads the sortable set off the table’s markup each time
+              it writes the cells.</Says>}
+          <Says>The toggle’s look is shared
+            classes. <code className="monospaced">borderless</code> and <code className="monospaced">unfilled</code> take off the
+            browser’s button chrome, <code className="monospaced">muted-ink</code> grays its glyph,
+            and <code className="monospaced">attentive</code> fills it with the approach color, the pale green, under
+            a hovering pointer and draws the site’s ring when the keyboard reaches it.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[

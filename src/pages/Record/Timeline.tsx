@@ -99,6 +99,8 @@ export const Timeline: FC = () =>
         : <Year key={entry.year} year={entry.year} of={entry.of} told={entry.told}/>)}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone needs something, the community answers, and the platform learns the answer. The concert below reads the moments together.
+      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone needs
+      something, the community answers, and the platform learns the answer. The concert below reads the moments
+      together.
     </p>
   </section>;

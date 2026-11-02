@@ -7,8 +7,8 @@ export const RoadEnd: FC = () =>
   <Step title="What drag and drop cannot give you">
     <Words want="You cannot change how the browser draws its drag image, its cursor or its cancel.">
       <Says>The drag image is a picture taken once at dragstart, so it cannot be animated, and on macOS it cannot be
-        made opaque. The cursor is the browser’s. The cancel is the browser’s animation; on macOS it is the system’s, and
-        nothing in the page can shorten it. When those pixels matter, build the drag from
+        made opaque. The cursor is the browser’s. The cancel is the browser’s animation; on macOS it is the system’s,
+        and nothing in the page can shorten it. When those pixels matter, build the drag from
         pointer events instead, which is what the{' '}
       <TabLink to={DemoTopics.tables}>Tables demo</TabLink> does.</Says>
     </Words>

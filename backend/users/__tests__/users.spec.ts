@@ -53,7 +53,8 @@ describe('the users backend', () => {
 
       const joined = next.find(({id}) => not(roster.some(known => known.id === id)));
       expect(next).toHaveLength(roster.length + 1);
-      expect(JSON.parse(JSON.stringify(joined))).toEqual({...JSON.parse(JSON.stringify(someone)), id: expect.any(String)});
+      expect(JSON.parse(JSON.stringify(joined)))
+        .toEqual({...JSON.parse(JSON.stringify(someone)), id: expect.any(String)});
     });
   });
 

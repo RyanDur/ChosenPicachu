@@ -42,7 +42,8 @@ const framedBesides = directory => readdirSync(directory)
  * @param {string} directory
  * @returns {string[]}
  */
-const homesOf = directory => directory === src || !directory.startsWith(src) ? [src] : [directory, ...homesOf(dirname(directory))];
+const homesOf = directory =>
+  directory === src || !directory.startsWith(src) ? [src] : [directory, ...homesOf(dirname(directory))];
 
 /** @param {string} file */
 const nearbyOf = file => {

@@ -87,8 +87,8 @@ export const ChartPage: FC = () => {
           href="https://initialcapacity.io/insights/user-story"
           target="_blank"
           rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
-        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps that
-        build it, with the real code from this site, so what you read is what runs. The
+        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
+        that build it, with the real code from this site, so what you read is what runs. The
         links go to MDN
         if you want more.
       </p>

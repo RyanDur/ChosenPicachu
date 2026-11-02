@@ -17,8 +17,8 @@ export const DeadZone: FC = () =>
     <Reveal>
       <Says>This step is JavaScript alone. To find the column under the pointer, the code adds the columns’ widths from
         the left until the total passes the pointer’s x.</Says>
-      <Says>That column gives way only once the pointer is past a dead zone on the side it came in by. The dead zone is a
-        quarter of that column’s width, or half the difference between it and the carried column when that is more,
+      <Says>That column gives way only once the pointer is past a dead zone on the side it came in by. The dead zone is
+        a quarter of that column’s width, or half the difference between it and the carried column when that is more,
         which is the case when a narrow column passes a much wider one.</Says>
       <Says>After a switch the pointer is over the carried column itself, which does nothing. Going back means crossing
         the neighbor’s dead zone again.</Says>

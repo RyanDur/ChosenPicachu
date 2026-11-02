@@ -10,7 +10,8 @@ export const InnerHalf: FC = () =>
     <Words want="Swap at the first touch of a neighbor and the order flickers: at the boundary, every pixel of movement flips it back and forth.">
       <Says>Nothing has to be measured ahead of time. The browser fires dragover on whatever the pointer is over, so the
         event’s own target is the neighbor, and the neighbor’s bounding box, the rectangle the browser reports for an
-        element’s place and size, is the space to cross. A <Term word="crossing">crossing</Term> counts only once the pointer is past the neighbor’s outer quarter.</Says>
+        element’s place and size, is the space to cross. A <Term word="crossing">crossing</Term> counts only once the
+        pointer is past the neighbor’s outer quarter.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

@@ -87,7 +87,8 @@ export const resting: TableState = {columnMarks: {}, rowMarks: {}, floors: {}};
 export const columnOf = (order: readonly string[], cell: Element): string =>
   order.find(name => cell.classList.contains(name)) ?? '';
 
-export const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState => ({...state, widths, floors});
+export const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
+  ({...state, widths, floors});
 
 export const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
   has(state.widths) ? {...state, floors} : measure(state, widths, floors);
@@ -155,10 +156,17 @@ export const namedShare = (state: TableState, column: string): number | undefine
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 
-const marked = <Shove>(marks: Readonly<Record<string, Marks<Shove>>>, key: string, mark: Marks<Shove>): Readonly<Record<string, Marks<Shove>>> =>
+const marked = <Shove>(
+  marks: Readonly<Record<string, Marks<Shove>>>,
+  key: string,
+  mark: Marks<Shove>
+): Readonly<Record<string, Marks<Shove>>> =>
   ({...marks, [key]: {...marks[key], ...mark}});
 
-const unsettledMark = <Shove>(marks: Readonly<Record<string, Marks<Shove>>>, key: string): Readonly<Record<string, Marks<Shove>>> =>
+const unsettledMark = <Shove>(
+  marks: Readonly<Record<string, Marks<Shove>>>,
+  key: string
+): Readonly<Record<string, Marks<Shove>>> =>
   Object.fromEntries(Object.entries(marks).filter(([marked]) => marked !== key));
 
 export const unsettle = (state: TableState, target: Carry, from: Settling): TableState =>
@@ -204,7 +212,11 @@ export const orderAtLift = (drag: Drag): readonly string[] =>
 
 export const ground = ({drag: _drag, ...state}: TableState): TableState => state;
 
-export const seatOffset = (state: TableState, order: readonly string[], standing: readonly string[]): Drift | undefined => {
+export const seatOffset = (
+  state: TableState,
+  order: readonly string[],
+  standing: readonly string[]
+): Drift | undefined => {
   const {drag} = state;
   if (!has(drag)) {
     return undefined;

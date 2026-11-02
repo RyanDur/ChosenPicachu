@@ -30,7 +30,8 @@ export const HideItem: FC<ItemProps> = (
       updateDragging(false);
     }}
     draggable={dragging}>
-    <Grip item={item} order={order} onPressed={() => updateDragging(true)} onReleased={() => updateDragging(false)} onArranged={onArranged}/>
+    <Grip item={item} order={order} onPressed={() => updateDragging(true)} onReleased={() => updateDragging(false)}
+      onArranged={onArranged}/>
     <span className="value display-figure">{item}</span>
   </li>;
 };

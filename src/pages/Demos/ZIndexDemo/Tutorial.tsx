@@ -20,9 +20,11 @@ export const TopLayerTutorial: FC = () => {
     <h2 id={titled} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
-      the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you can watch the mechanics.
+      the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you
+      can watch the mechanics.
     </p>
-    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting; the banner sets none.</p>
+    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting; the banner
+      sets none.</p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">
         When something breaks, tell me. Do not make me guess why the chart went quiet,
@@ -61,8 +63,8 @@ export const TopLayerTutorial: FC = () => {
       <li className="paragraph">Given a page with the news raised, when a card with a z-index of its own scrolls past,
         then the note stays on top.
       </li>
-      <li className="paragraph">Given a reader with a screen reader, when news is raised, then it is read out without the
-        reader going to look.
+      <li className="paragraph">Given a reader with a screen reader, when news is raised, then it is read out without
+        the reader going to look.
       </li>
     </ul>
     <p className="overview paragraph">

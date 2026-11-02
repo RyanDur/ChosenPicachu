@@ -32,10 +32,11 @@ import {useEnv} from '@components/Env';
 
 type Draws = ReturnType<typeof seeded>;
 
-const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) => Array.from({length: count}, () => ({
-  key: dealt(),
-  value: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
-}));
+const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
+  Array.from({length: count}, () => ({
+    key: dealt(),
+    value: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
+  }));
 
 export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
   const {pace, origin, motion, type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
@@ -54,12 +55,12 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
 
   return <>
     <p className="demos-opening paragraph">
-      Each tab below is one feature a page needs. I built each one here and explain it. The tabs run from simple to expert: an
-      accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns
-      and rows you drag while trades keep landing. A tab shows the
-      feature first, with dials wherever the build has a choice. Then comes the explanation, with what the platform gives
-      now beside the tricks we used before it. Then come the steps that build it, each beside the code that runs on this
-      page. Start with the accordions if HTML, CSS and
+      Each tab below is one feature a page needs. I built each one here and explain it. The tabs run from simple to
+      expert: an accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose
+      columns and rows you drag while trades keep landing. A tab shows the
+      feature first, with dials wherever the build has a choice. Then comes the explanation, with what the platform
+      gives now beside the tricks we used before it. Then come the steps that build it, each beside the code that runs
+      on this page. Start with the accordions if HTML, CSS and
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" current={topic}
@@ -68,7 +69,8 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
       {({
         [DemoTopics.accordions]:
               <>
-                <AccordionsExplained contents={accordionContents} type={type} onTypeChosen={next => updateSearchParams({type: next})}
+                <AccordionsExplained contents={accordionContents} type={type}
+                  onTypeChosen={next => updateSearchParams({type: next})}
                   motion={foldMotion} onMotionChosen={next => updateSearchParams({style: next})}/>
               </>,
         [DemoTopics.zIndex]: <>

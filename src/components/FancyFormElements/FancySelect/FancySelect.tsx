@@ -29,7 +29,9 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
     disabled = false,
     readOnly = false
   }
-) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
+) => (readOnly || disabled)
+  ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled}
+    inputId={selectId}>{children}</FancyInput> :
   <label id={id} className={classNames('fancy-select', 'fancy', 'soft-cornered', className)}>
     <span className={classNames('fancy-title', 'bold', 'card-banded', required && 'alarm-starred')}>{children}</span>
     <select id={selectId}

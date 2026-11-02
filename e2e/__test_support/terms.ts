@@ -1,6 +1,10 @@
 import type {Locator, Page} from '@playwright/test';
 
-export const definedTerm = async (page: Page, story: string, term: string): Promise<{word: Locator; definition: Locator}> => {
+export const definedTerm = async (
+  page: Page,
+  story: string,
+  term: string
+): Promise<{word: Locator; definition: Locator}> => {
   const fold = page.getByRole('group', {name: story, exact: true}).first();
   await fold.getByRole('heading', {name: story, exact: true}).click();
   const word = fold.getByRole('button', {name: term, exact: true}).first();

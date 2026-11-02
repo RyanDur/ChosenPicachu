@@ -7,7 +7,8 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step title="Accept the drop, or the platform takes it back">
     <Words want="By default nothing accepts a drop: release over the list and the browser plays the cancel, carrying the card back to where it came from, and you cannot stop it.">
-      <Says>A bare list looks finished. Then you release over it, the card flies back, and your drop handler never ran.</Says>
+      <Says>A bare list looks finished. Then you release over it, the card flies back, and your drop handler never
+        ran.</Says>
       <Says>One call accepts the <Mdn path="Web/API/HTMLElement/drop_event">drop</Mdn>: the dragover handler
         calls <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn>, the method that tells the browser not to do
         what it would by default. The default is to refuse the drop, so preventing it accepts the drop, and nothing else

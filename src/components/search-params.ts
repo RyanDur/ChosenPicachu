@@ -39,9 +39,17 @@ type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
 };
 type Params = {[p: string]: string | number};
 
-export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>): SearchParamsObject<T, Record<never, never>>;
-export function useSearchParamsObject<T extends Params, D extends Partial<NoInfer<T>>>(decoders: ParamDecoders<T>, defaults: D): SearchParamsObject<T, D>;
-export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>, defaults: Partial<T> = {}): SearchParamsObject<T, Record<never, never>> {
+export function useSearchParamsObject<T extends Params>(
+  decoders: ParamDecoders<T>
+): SearchParamsObject<T, Record<never, never>>;
+export function useSearchParamsObject<T extends Params, D extends Partial<NoInfer<T>>>(
+  decoders: ParamDecoders<T>,
+  defaults: D
+): SearchParamsObject<T, D>;
+export function useSearchParamsObject<T extends Params>(
+  decoders: ParamDecoders<T>,
+  defaults: Partial<T> = {}
+): SearchParamsObject<T, Record<never, never>> {
   const [searchParams, setSearchParams] = useSearchParams();
   const [shown] = useSearchParamsOnceHydrated();
   const given: Partial<T> = {...defaults, ...decodeParams(decoders, Object.fromEntries(shown.entries()))};

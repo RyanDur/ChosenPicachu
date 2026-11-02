@@ -146,7 +146,13 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await hydrated();
       await resizeHandle(name).focus();
     },
-    holdHandle: async (name: string): Promise<{carryTo: (by: number) => Promise<void>; carryHome: () => Promise<void>; letGo: () => Promise<void>}> => {
+    holdHandle: async (
+      name: string
+    ): Promise<{
+      carryTo: (by: number) => Promise<void>;
+      carryHome: () => Promise<void>;
+      letGo: () => Promise<void>;
+    }> => {
       const middle = await centreOfHandle(name);
       await page.mouse.move(middle.x, middle.y);
       await page.mouse.down();

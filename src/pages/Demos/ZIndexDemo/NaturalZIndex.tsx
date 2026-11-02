@@ -32,6 +32,7 @@ export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
       <li className={layer('second')}>Second</li>
       <li className={layer('third')}>Third</li>
     </ol>
-    <figcaption className="caption"><strong className="bold">The pile.</strong> Raise a card over the others with the pills above it.</figcaption>
+    <figcaption className="caption"><strong className="bold">The pile.</strong> Raise a card over the others with the
+      pills above it.</figcaption>
   </figure>;
 };

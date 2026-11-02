@@ -82,14 +82,29 @@ export const unsettled = (target: Carry, from: Settling): Action => ({type: 'uns
 export const settled = (target: Carry): Action => ({type: 'settled', target});
 export const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
 export const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
-export const columnMovedBeside = (name: string, neighbour: string, widths: PixelSizes, order: readonly string[]): Action =>
+export const columnMovedBeside = (
+  name: string,
+  neighbour: string,
+  widths: PixelSizes,
+  order: readonly string[]
+): Action =>
   ({type: 'columnMovedBeside', name, neighbour, widths, order});
 export const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
 type LabelledRow = {readonly row: string; readonly label: string};
 
-export const rowMovedBeside = ({row, label}: LabelledRow, neighbour: string, heights: PixelSizes, standing: readonly string[]): Action =>
+export const rowMovedBeside = (
+  {row, label}: LabelledRow,
+  neighbour: string,
+  heights: PixelSizes,
+  standing: readonly string[]
+): Action =>
   ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
-export const rowWalkedTo = ({row, label}: LabelledRow, to: number, heights: PixelSizes, standing: readonly string[]): Action =>
+export const rowWalkedTo = (
+  {row, label}: LabelledRow,
+  to: number,
+  heights: PixelSizes,
+  standing: readonly string[]
+): Action =>
   ({type: 'rowWalkedTo', row, label, to, heights, standing});
 export const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});

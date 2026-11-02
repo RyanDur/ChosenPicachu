@@ -28,7 +28,8 @@ export const PageControl = () => {
   };
 
   return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">
-    <label id="go-to-label" className="go-to-label control-label field next-approached" htmlFor="go-to">Page #{page}</label>
+    <label id="go-to-label" className="go-to-label control-label field next-approached" htmlFor="go-to">Page
+      #{page}</label>
     <input type="number"
       id="go-to"
       min={firstPage}

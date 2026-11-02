@@ -26,37 +26,42 @@ const gap = plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
-    <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. The columns are declared
-      once, each with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content, but a live table
-      would never hold still: a column sized by its content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout, the work of deciding every box’s size and place. And you could carry widths in
-      the data, but they are layout, not data. So I deal the opening widths from the page’s style sheet.
-      With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills
-      its container and the columns hold still while the values change.</Says>
+    <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s
+      rules pick out. The columns are declared once, each with a name and a class; how wide they open is CSS. You could
+      let the browser size the columns by their content, but a live table would never hold still: a column sized by its
+      content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout,
+      the work of deciding every box’s size and place. And you could carry widths in the data, but they are layout, not
+      data. So I deal the opening widths from the page’s style sheet.
+      With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so
+      the table always fills its container and the columns hold still while the values change.</Says>
     <Says>No JavaScript knows these widths, because nothing needs the size until you touch something. The first
       press or focus of a resize handle measures the headers as they stand and creates the{' '}
     <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
       runtime is state, and until then nothing has changed.</Says>
   </>,
-  vanilla: <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s rules pick out. The columns are
-    declared once, each a header cell with a name and a class; how wide they open is CSS. You could let the browser size the columns by their content,
-    but a live table would never hold still: a column sized by its content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout, the work of deciding every box’s size and place. And you
-    could carry widths in the markup, but they are layout, not content. So I deal the opening widths from the page’s
-    style sheet. With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the table always fills its
-    container and the columns
+  vanilla: <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
+    sheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they
+    open is CSS. You could let the browser size the columns by their content, but a live table would never hold still: a
+    column sized by its content widens with a longer number and moves every column beside it. Each time, the browser
+    redoes its layout, the work of deciding every box’s size and place. And you could carry widths in the markup, but
+    they are layout, not content. So I deal the opening widths from the page’s style sheet.
+    With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so the
+    table always fills its container and the columns
     hold still while the values change.</Says>
 };
 
 const suppliedBy: Record<World, ReactNode> = {
   react: <>
-    <Says>The page writes the whole table itself: the <code className="monospaced">table</code>, its caption, the head and the body, and after
-      it an <code className="monospaced">output</code>, the move report that tells a screen reader what moved, whose <code className="monospaced">for</code> names the
-      table it reports on. The two choices the later steps explain, <code className="monospaced">origin</code>, whether a carried row’s or
-      column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
-      table.</Says>
-    <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook. A component is a function
-      that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. A hook is a function a component calls while it
-      renders. It calls one to keep something across renders, or to read something kept outside React. The page calls
-      the hook with its columns, its rows and the two choices.</Says>
+    <Says>The page writes the whole table itself: the <code className="monospaced">table</code>, its caption, the head
+      and the body, and after it an <code className="monospaced">output</code>, the move report that tells a screen
+      reader what moved, whose <code className="monospaced">for</code> names the
+      table it reports on. The two choices the later steps explain, <code className="monospaced">origin</code>, whether
+      a carried row’s or column’s cells stay visible in their place, and <code className="monospaced">motion</code>,
+      whether moves animate, are classes on the table.</Says>
+    <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook. A component is a
+      function that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. A
+      hook is a function a component calls while it renders. It calls one to keep something across renders, or to read
+      something kept outside React. The page calls the hook with its columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
       when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
       subscribers, the functions that asked to hear of changes. The hand holds what is held, the widths, and the marks a
@@ -70,24 +75,27 @@ const suppliedBy: Record<World, ReactNode> = {
       the grip inside it.</Says>
   </>,
   vanilla: <>
-    <Says>The page writes the whole table as it would for any table: the <code className="monospaced">table</code>, its caption, the head and
-      the body, and after it an <code className="monospaced">output</code>, the move report that tells a screen reader what moved,
-      whose <code className="monospaced">for</code> names the table it reports on. One attribute, <code className="monospaced">data-drag-sortable</code>, marks the table as
-      one that drag-sorts. Each header cell carries <code className="monospaced">data-column</code>, which names its column for the
-      script, so the classes the page writes only dress the cell. The two choices the later steps explain, <code
+    <Says>The page writes the whole table as it would for any table: the <code className="monospaced">table</code>, its
+      caption, the head and the body, and after it an <code className="monospaced">output</code>, the move report that
+      tells a screen reader what moved, whose <code className="monospaced">for</code> names the table it reports on. One
+      attribute, <code className="monospaced">data-drag-sortable</code>, marks the table as
+      one that drag-sorts. Each header cell carries <code className="monospaced">data-column</code>, which names its
+      column for the script, so the classes the page writes only dress the cell. The two choices the later steps
+      explain, <code
       className="monospaced">origin</code>, whether a carried row’s or
-      column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
-      table.</Says>
-    <Says>At boot a script finds every table so marked and calls <code className="monospaced">dragSortable</code> on it. There are two builds
-      of <code className="monospaced">dragSortable</code>, eager and lazy, one file each, and the pace is which one boot calls.</Says>
+      column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate,
+      are classes on the table.</Says>
+    <Says>At boot a script finds every table so marked and calls <code className="monospaced">dragSortable</code> on it.
+      There are two builds of <code className="monospaced">dragSortable</code>, eager and lazy, one file each, and the
+      pace is which one boot calls.</Says>
     <Says>The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
       when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its
       subscribers, the functions that asked to hear of changes. The hand holds what is held and the
       widths. The call also wires the table’s listeners at once.</Says>
-    <Says>The call returns <code className="monospaced">reconcile</code>, the function the page calls whenever its own store changes. Reconcile
-      moves the cells to the new order and writes the text that changed.</Says>
-    <Says>The table keeps no copy of the order: the page gives <code className="monospaced">dragSortable</code> two functions that read its
-      columns and rows, and the table asks them when it needs an answer.</Says>
+    <Says>The call returns <code className="monospaced">reconcile</code>, the function the page calls whenever its own
+      store changes. Reconcile moves the cells to the new order and writes the text that changed.</Says>
+    <Says>The table keeps no copy of the order: the page gives <code className="monospaced">dragSortable</code> two
+      functions that read its columns and rows, and the table asks them when it needs an answer.</Says>
     <Says>The table itself is the browser’s, so it shows with its rows before the script runs and without it.</Says>
     <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
       by the grip inside it.</Says>
@@ -132,7 +140,9 @@ const foldSays: Record<World, ReactNode> = {
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows always match the trades the page holds.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
-    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
+    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the
+    trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and
+    reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -186,8 +196,8 @@ const StillStory: FC<{world: World}> = ({world}) =>
             element brings behavior you would otherwise have to build: readers move through it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
-            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the behavior you
-            need.</Says>
+            first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the
+            behavior you need.</Says>
           {dealCodes[world]}
         </Reveal>
       </Step>
@@ -212,8 +222,8 @@ const FlowStory: FC<{world: World}> = ({world}) =>
         </Words>
         <Reveal>
           <Says>One GET for the last thousand trades, decoded and cleaned. When the stream is
-            also running, the function <Term word="hydrate">hydrated</Term> merges the two, drops whatever the stream already delivered,
-            and keeps everything in time order.</Says>
+            also running, the function <Term word="hydrate">hydrated</Term> merges the two, drops whatever the stream
+            already delivered, and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(hydrateSource, 'export const recentTrades'), gap,
@@ -231,8 +241,9 @@ const FlowStory: FC<{world: World}> = ({world}) =>
         </Words>
         <Reveal>
           <Says>The handshake subscribes to the product.
-            Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade, appended under a cap so a long session never grows without bound.
-            A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
+            Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade, appended under a cap
+            so a long session never grows without bound. A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks
+            the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(exchangeSource, 'const stream = streaming('), gap,

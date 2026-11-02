@@ -10,8 +10,8 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
   <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
       <Says>The second axis should come from substitutions, not new machinery: a real
-        button for the pointer, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer question
-        asked downward.</Says>
+        button for the pointer, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer
+        question asked downward.</Says>
     </Words>
     <Reveal>
       <Says>Rows reuse the machinery the columns built, with three substitutions. The grip is a
@@ -28,8 +28,14 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           reads that loss as the drop. Chrome lets go lazily, on the next move, so it never
           shows there. The element that lifts is the element that travels, and the loss never
           fires.</Says>
-        : <Says>The grip does the traveling as well as the lifting: the move, the drop and the capture loss are wired on the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer, WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the drop.</Says>}
-      {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes, marked <code className="monospaced">data-row-grip</code>. When boot calls <code className="monospaced">dragSortable</code> it attaches the lift, the carry and the arrow keys to that button, with the verbs the pace decides.</Says>}
+        : <Says>The grip does the traveling as well as the lifting: the move, the drop and the capture loss are wired on
+          the grip itself, never on the cell around it. Safari requires it: when another element takes the pointer,
+          WebKit drops the grip’s capture at once, with no button down, and the drag reads that loss as the
+          drop.</Says>}
+      {world === 'vanilla' && <Says>In the vanilla build the grip is the button the page writes,
+        marked <code className="monospaced">data-row-grip</code>. When boot
+        calls <code className="monospaced">dragSortable</code> it attaches the lift, the carry and the arrow keys to
+        that button, with the verbs the pace decides.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[

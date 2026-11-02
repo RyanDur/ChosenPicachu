@@ -39,23 +39,27 @@ export const BehaviorPractice: FC = () =>
       table’s:</p>
     <TableReducerCarve/>
     <p className="paragraph">The demos store holds the column order in its{' '}
-      <code className="monospaced">arrangement</code>. <code className="monospaced">selectColumns</code> works out the columns on screen from it, so nothing stores them
-      twice.</p>
-    <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
-      direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
+      <code className="monospaced">arrangement</code>. <code className="monospaced">selectColumns</code> works out the
+      columns on screen from it, so nothing stores them twice.</p>
+    <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and
+      view both ways. I keep one direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s
+      answer.</p>
     <OneDirectionLoop/>
     <h3 className="paragraph bold">Code that reads as sentences</h3>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
-      refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
-    <p className="paragraph">I wrote small functions so a condition reads in words: <code className="monospaced">has</code>,{' '}
-      <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
-      <code className="monospaced">notEmpty</code>, from my own library,{' '}
-      <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
+      refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was
+      written.</p>
+    <p className="paragraph">I wrote small functions so a condition reads in
+      words: <code className="monospaced">has</code>,{' '}
+    <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
+    <code className="monospaced">notEmpty</code>, from my own library,{' '}
+    <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
     <PreludeCarve/>
     <p className="paragraph">Here the table asks, in words I would say aloud, whether a drag is under way and a column
       is settling:</p>
     <ConditionCarve/>
-    <p className="paragraph">The style sheet asks its questions in the same words. <code className="monospaced">:has()</code> asks
+    <p className="paragraph">The style sheet asks its questions in the same
+      words. <code className="monospaced">:has()</code> asks
       whether an element holds something, <code className="monospaced">:not()</code> turns a question round,
       and <code className="monospaced">:is()</code> asks whether any of a list is true:</p>
     <SheetQuestionsCarve/>
@@ -65,8 +69,8 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
       decides what is true when it arrives.
-      The <MomentLink to="pageBecomesApplication">2005 moment</MomentLink> is where that pattern got its name, Ajax, and became
-      ordinary.</p>
+      The <MomentLink to="pageBecomesApplication">2005 moment</MomentLink> is where that pattern got its name, Ajax, and
+      became ordinary.</p>
     <p className="paragraph">The shell is where the world comes in. A middleware is code the store lets stand
       between an event and the reducer:</p>
     <MiddlewareCarve/>
@@ -97,9 +101,11 @@ export const BehaviorPractice: FC = () =>
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds
       the state, listens for events, applies the next state and updates the screen. Requests go out through the same
       path that state changes come in. Change the framework, or remove it, and only the shell changes.
-      The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should outlast them.</p>
+      The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should
+      outlast them.</p>
     <p className="paragraph">The <Link className="signpost" to={demoAddress(DemoTopics.tables)}>tables demo</Link> shows
-      the split. Its React build and its plain-script build take the same table store, so the same reducer answers both:</p>
+      the split. Its React build and its plain-script build take the same table store, so the same reducer answers
+      both:</p>
     <BuildsCarve/>
     <p className="paragraph">The plain-script build finds its tables by their data attribute and listens for the
       table’s own events, each named for what happened. A{' '}
@@ -114,7 +120,8 @@ export const BehaviorPractice: FC = () =>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}
-    <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a keyboard interface”</a>. The page
+    <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
+      keyboard interface”</a>. The page
       announces each change too: a sighted reader watches the order change, and a screen reader user hears the same
       change read out.</p>
     <h3 className="paragraph bold">The test the state has to pass</h3>
@@ -122,5 +129,6 @@ export const BehaviorPractice: FC = () =>
       true without the page open beside it, behavior has leaked into presentation. The other two languages take the
       same test: the HTML makes sense with the styles off, and the class list says what the element needs. Each
       language tells its whole story alone.
-      The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three responsibilities do not.</p>
+      The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three
+      responsibilities do not.</p>
   </>;

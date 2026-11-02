@@ -53,7 +53,8 @@ export const contextChooser = (page: Page) => {
 
 const withinAMoment = (waiting: Promise<unknown>): Promise<boolean> => waiting.then(() => true, () => false);
 
-const nextFrame = (page: Page): Promise<void> => page.evaluate(() => new Promise<void>(drawn => requestAnimationFrame(() => drawn())));
+const nextFrame = (page: Page): Promise<void> =>
+  page.evaluate(() => new Promise<void>(drawn => requestAnimationFrame(() => drawn())));
 
 const settledWithinAMoment = async (page: Page, read: () => Promise<string>, want: string): Promise<string> => {
   const deadline = Date.now() + assertionPatience;
@@ -98,7 +99,8 @@ export const topLayerMenu = (page: Page) => {
     choice,
     open: async (): Promise<void> => {
       await sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
-      // Playwright's click retries a button it finds unstable by scrolling it to the view's edge, where the list opens upward
+      // Playwright's click retries a button it finds unstable by scrolling it to the view's edge, where the list opens
+      // upward
       await clickWhereItIs(page, sortBy);
     },
     openFromTheBottomEdge: async (): Promise<void> => {

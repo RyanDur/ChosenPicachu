@@ -69,7 +69,8 @@ test('Tab never lands on the page behind the open dialog', async ({page}) => {
 
   for (let step = 0; step < 8; step += 1) {
     await pressTab(page);
-    expect(await feedback.dialog.evaluate(dialog => dialog.contains(document.activeElement) || document.activeElement === document.body)).toBe(true);
+    expect(await feedback.dialog.evaluate(dialog =>
+      dialog.contains(document.activeElement) || document.activeElement === document.body)).toBe(true);
   }
 });
 

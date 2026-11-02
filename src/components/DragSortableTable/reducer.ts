@@ -4,7 +4,8 @@ import {Foreign, TableAction, isTableAction} from './actions';
 import {Landing, landingReport} from './report';
 import {displacedBetween, interior, spanCrossed} from './survey';
 import {
-  Carry, TableState, awaken, orderAtLift, dragHandle, drift, endKeyedSizingOf, endSizingOf, grip, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, tradeBy, ungripOf, unsettle
+  Carry, TableState, awaken, orderAtLift, dragHandle, drift, endKeyedSizingOf, endSizingOf, grip, ground, landColumn,
+  landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, tradeBy, ungripOf, unsettle
 } from './table-state';
 
 export type TableReducer = Reducer<TableState, Foreign>;

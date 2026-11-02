@@ -68,8 +68,8 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     </figure>
     <Explainer>
       Up to the last {LATEST_TRADES_CAP.toLocaleString('en-US')} trades, as one circle, split by who came and took each
-      trade. The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took from
-      waiting buyers. The fetched past doesn’t say who took each trade, so the pie starts empty and counts only the
+      trade. The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took
+      from waiting buyers. The fetched past doesn’t say who took each trade, so the pie starts empty and counts only the
       trades that arrive while the page is open.
     </Explainer>
   </section>;

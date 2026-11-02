@@ -7,8 +7,8 @@ import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Keep which item is held in state, not in the drag’s payload">
-    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in, the
-      payload. It exists to carry data between windows, and mid-drag it is locked: a handler
+    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in,
+      the payload. It exists to carry data between windows, and mid-drag it is locked: a handler
       for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
       on whatever the pointer is over, may not read what dragstart wrote. So the payload cannot steer the sort.</>}>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read

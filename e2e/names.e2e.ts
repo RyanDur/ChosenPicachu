@@ -17,7 +17,8 @@ const listed = {
 };
 
 test('a search engine that runs no script reads each page’s own title and description', async ({request}) => {
-  const read = await Promise.all(Object.keys(listed).map(async route => [route, headOf(await (await request.get(route)).text())]));
+  const read = await Promise.all(Object.keys(listed).map(async route =>
+    [route, headOf(await (await request.get(route)).text())]));
 
   expect(Object.fromEntries(read)).toEqual(listed);
 });

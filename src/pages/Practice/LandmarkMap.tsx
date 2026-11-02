@@ -12,7 +12,7 @@ export const LandmarkMap: FC = () =>
       <source media={phoneHeldUpright} srcSet={stackedFrame} width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
     </picture>
-    <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Each landmark, with its
-      element and, where it has one, its name.
+    <figcaption className="caption"><strong className="bold">The page’s table of contents.</strong> Each landmark, with
+      its element and, where it has one, its name.
     </figcaption>
   </figure>;

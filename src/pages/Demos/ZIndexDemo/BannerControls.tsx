@@ -45,7 +45,9 @@ export type BannerControlsProps = {
   onStackChosen: (stack: Stack) => void;
 };
 
-export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen}) =>
+export const BannerControls: FC<BannerControlsProps> = ({
+  side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen
+}) =>
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <DialGroup>
@@ -81,7 +83,8 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         onChosen={onEnterChosen}
         reading={<>
           <span className="when-motion-allowed">{copy.enter[enter]}</span>{' '}
-          <span className="when-less-motion">If your system asks for less motion, a new banner appears in place, whichever entrance you choose.</span>
+          <span className="when-less-motion">If your system asks for less motion, a new banner appears in place,
+            whichever entrance you choose.</span>
         </>}/>
       <DialRow label="stack"
         name="banner-stack"

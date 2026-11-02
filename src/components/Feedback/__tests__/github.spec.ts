@@ -13,7 +13,11 @@ const github = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
   server.use(http.post(asking.endpoint, async ({request}) => {
     const body: unknown = await request.json();
     const question = typeof body === 'object' && body !== null && 'query' in body && 'variables' in body
-      ? {query: String(body.query), variables: Object.fromEntries(Object.entries(Object(body.variables)).map(([key, value]) => [key, String(value)]))}
+      ? {
+        query: String(body.query),
+        variables: Object.fromEntries(Object.entries(Object(body.variables))
+          .map(([key, value]) => [key, String(value)]))
+      }
       : {query: '', variables: {}};
     asked.push(question);
     return HttpResponse.json(answer(question), {status});

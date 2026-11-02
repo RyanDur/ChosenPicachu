@@ -55,7 +55,8 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const view = viewOf(candles, trades[trades.length - 1]);
-  const points = sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
+  const points =
+    sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trending = view.map(trendOf);
   const trend = trending.orElse(undefined);

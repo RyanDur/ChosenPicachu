@@ -10,7 +10,8 @@ const steps: Partial<Record<string, (at: number, count: number) => number>> = {
   End: (_at, count) => count - 1
 };
 
-const nextChoice = (key: string, at: number, count: number): Maybe<number> => maybe(steps[key]).map(step => step(at, count));
+const nextChoice = (key: string, at: number, count: number): Maybe<number> =>
+  maybe(steps[key]).map(step => step(at, count));
 
 const focusOn = (element: HTMLElement): void => element.focus();
 
@@ -71,7 +72,8 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
       aria-label={`${words}, the old way`}
-      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()} onKeyDown={onButtonKey}>{words}</button>
+      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()}
+      onKeyDown={onButtonKey}>{words}</button>
     {open && <Menu id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
       {sortChoices.map((choice, at) =>
         <Entry key={choice} role="none">

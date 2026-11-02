@@ -503,7 +503,11 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('charts')} feed={feed}/>);
 
       await feedIsLive(feed);
-      broadcast(feed, [tradeFrame(50000), tradeFrame(50001, 1700000000500), ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))]);
+      broadcast(feed, [
+        tradeFrame(50000),
+        tradeFrame(50001, 1700000000500),
+        ...[50002, 50003, 50004, 50005].map(price => tradeFrame(price, 1700000060000))
+      ]);
       expect(await chartsDesk.findOnPriceCard('$50,005.00')).toBeVisible();
       expect(chartsDesk.onPriceCard('+$4.00')).toBeVisible();
     });

@@ -42,7 +42,9 @@ export type ControlsProps = Dials & {
   onMotionChosen: (motion: Motion) => void;
 };
 
-export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPaceChosen, onOriginChosen, onMotionChosen, children}) => {
+export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({
+  copy, pace, origin, motion, onPaceChosen, onOriginChosen, onMotionChosen, children
+}) => {
   const heading = `${copy.kind}-controls-heading`;
   return <Disclosure label="settings" className="demo-settings"
     prompt={<>settings{' '}<code className="readout caption monospaced">{copy.readout(pace, origin, motion)}</code></>}>

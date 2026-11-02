@@ -8,7 +8,11 @@ export const pressTab = (page: Page, {backwards = false} = {}): Promise<void> =>
 };
 
 export const tabsTo = async (page: Page, control: Locator, {within = 80} = {}): Promise<void> => {
-  for (let press = 0; press < within && not(await control.evaluate(element => element === document.activeElement)); press++) {
+  for (
+    let press = 0;
+    press < within && not(await control.evaluate(element => element === document.activeElement));
+    press++
+  ) {
     await pressTab(page);
   }
 };

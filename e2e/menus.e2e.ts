@@ -1,7 +1,12 @@
 import {Locator, Page, expect, test} from '@playwright/test';
 import {chartsPage, dragSortTable, siteFrame, stages} from './__test_support';
 
-const opensFromTheKeyboardClosesOnEscape = async (page: Page, at: string, toggle: Locator, menu: Locator): Promise<void> => {
+const opensFromTheKeyboardClosesOnEscape = async (
+  page: Page,
+  at: string,
+  toggle: Locator,
+  menu: Locator
+): Promise<void> => {
   await page.goto(at);
   await expect(toggle).toBeVisible({timeout: 30_000});
   await siteFrame(page).hydrated();

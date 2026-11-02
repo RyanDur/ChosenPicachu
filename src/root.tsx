@@ -34,7 +34,8 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
       </div>
       <noscript>
         <p>
-          Found a mistake, or a better way? Say so on the site’s <a href="https://github.com/RyanDur/ChosenPicachu/discussions">Discussions page on GitHub</a>.
+          Found a mistake, or a better way? Say so on the
+          site’s <a href="https://github.com/RyanDur/ChosenPicachu/discussions">Discussions page on GitHub</a>.
         </p>
       </noscript>
       <Scripts/>
@@ -58,7 +59,8 @@ const Site: FC<{room: ReactNode}> = ({room}) => {
   const {pathname, hash, state} = useLocation();
   const navigation = useNavigationType();
   const [places] = useState(readersPlaces);
-  const [place, setPlace] = useState<{pathname: string; hash: string; arrival: Arrival}>({pathname, hash, arrival: arrivalOf(hash, navigation, state)});
+  const [place, setPlace] = useState<{pathname: string; hash: string; arrival: Arrival}>(
+    {pathname, hash, arrival: arrivalOf(hash, navigation, state)});
   if (place.pathname !== pathname || place.hash !== hash) {
     setPlace({pathname, hash, arrival: arrivalOf(hash, navigation, state)});
   }
@@ -79,7 +81,8 @@ export const ErrorBoundary: FC = () =>
 export const HydrateFallback: FC = () =>
   <Site room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false} pageUnknown>
     <noscript>
-      <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here without it.</p>
+      <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here
+        without it.</p>
     </noscript>
   </Page>}/>;
 

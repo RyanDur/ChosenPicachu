@@ -15,7 +15,11 @@ export const headerNeeds = (travels: boolean, width?: number): readonly (string 
 
 export const cellNeeds = ['muted-rule-after', 'muted-rule-below'] as const;
 
-export const motionStates = (carried: boolean, settlingFrom?: Settling, shove?: ColumnShove | RowShove): readonly (string | false)[] => [
+export const motionStates = (
+  carried: boolean,
+  settlingFrom?: Settling,
+  shove?: ColumnShove | RowShove
+): readonly (string | false)[] => [
   (carried || has(settlingFrom) || has(shove)) && 'paper-in-motion',
   carried && 'carried',
   has(settlingFrom) && 'settling',

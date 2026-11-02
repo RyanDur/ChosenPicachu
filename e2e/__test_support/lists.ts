@@ -23,7 +23,8 @@ export const sortableList = (page: Page) => {
     if (box === null) throw new Error('the list never stood');
     return {x: box.x + box.width / 2, y: box.y + box.height / 2};
   };
-  // the middle of a seat is where the list decides whether a carried item has passed it, and engines round it either way
+  // the middle of a seat is where the list decides whether a carried item has passed it, and engines round it either
+  // way
   const pastTheMiddleOf = async (target: Locator, from: {x: number; y: number}): Promise<{x: number; y: number}> => {
     const middle = await middleOf(target);
     const box = await target.boundingBox();
@@ -43,9 +44,11 @@ export const sortableList = (page: Page) => {
       const grip = items.first().getByRole('button', {name: /^grip for/});
       const box = await grip.boundingBox();
       if (box === null) throw new Error('the grip never stood');
-      await grip.dragTo(items.nth(1), {force: true, sourcePosition: {x: box.width / 2 + fingertipMiss, y: box.height / 2}});
+      await grip.dragTo(items.nth(1),
+        {force: true, sourcePosition: {x: box.width / 2 + fingertipMiss, y: box.height / 2}});
     },
-    // what the engine fired while an item was carried, for a failing journey's report: CI's WebKit is the only engine the carry hangs in
+    // what the engine fired while an item was carried, for a failing journey's report: CI's WebKit is the only engine
+    // the carry hangs in
     dragEventsSeen: (): Promise<string> => page.evaluate(() => document.documentElement.dataset.dragLog ?? 'no drag event was heard'),
     carry: async (item: string, onto: string): Promise<Carried> => {
       await siteFrame(page).hydrated();
@@ -63,9 +66,10 @@ export const sortableList = (page: Page) => {
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
       await page.mouse.move(to.x, to.y, {steps: 12});
-      // a drop only lands where the page has heard a dragover. CI's WebKit log showed why one move is not enough: a move onto
-      // an element the eager list has just put under the pointer fires dragenter and no dragover, and only a further move over
-      // the same element fires one. So the page listens first, and the pointer nudges within the target until it is heard.
+      // a drop only lands where the page has heard a dragover. CI's WebKit log showed why one move is not enough: a
+      // move onto an element the eager list has just put under the pointer fires dragenter and no dragover, and only a
+      // further move over the same element fires one. So the page listens first, and the pointer nudges within the
+      // target until it is heard.
       await page.evaluate(() => {
         delete document.documentElement.dataset.dragoverHeard;
         document.addEventListener('dragover', () => {

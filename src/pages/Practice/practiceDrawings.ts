@@ -10,7 +10,8 @@ type Drawing = {
   readonly frames: (siteStyle: string) => {wide: string; stacked: string};
 };
 
-// a media attribute cannot read a custom property, so the width spacing.css names --phone-held-upright is named here for both pictures
+// a media attribute cannot read a custom property, so the width spacing.css names --phone-held-upright is named here
+// for both pictures
 export const phoneHeldUpright = '(width <= 600px)';
 
 type Box = {
@@ -36,7 +37,8 @@ const caption = (words: string, {x, y}: Point): string =>
 const rect = ({look, x, y, width, height}: Box): string =>
   `<rect class="${look}" x="${x}" y="${y}" width="${width}" height="${height}"/>`;
 
-// an image cannot read the page's style sheets, so each frame carries the site's own, and measures its column by its own width
+// an image cannot read the page's style sheets, so each frame carries the site's own, and measures its column by its
+// own width
 const framed = (drawing: string, size: Size, siteStyle: string, drawn: string): string =>
   `<svg xmlns="http://www.w3.org/2000/svg" class="${drawing} ink-filled" viewBox="0 0 ${size.width} ${size.height}" width="${size.width}" height="${size.height}">` +
   `<style><![CDATA[${siteStyle}:root{--drawing-column:100vw;--drawn-width:${size.width}px;}]]></style>` +
@@ -65,8 +67,10 @@ const whereARuleLives = ((): Drawing => {
   type Column = {readonly x: number; readonly y: number; readonly width: number; readonly look: string};
   type Wears = {readonly from: Point; readonly to: Point};
 
-  const row = (label: string, {x, y, width, look}: Column, at: number): Box => ({label, look, x, y: y + at * 24, width, height: 18});
-  const column = (labels: readonly string[], placed: Column): Box[] => labels.map((label, at) => row(label, placed, at));
+  const row = (label: string, {x, y, width, look}: Column, at: number): Box =>
+    ({label, look, x, y: y + at * 24, width, height: 18});
+  const column = (labels: readonly string[], placed: Column): Box[] =>
+    labels.map((label, at) => row(label, placed, at));
   const rowOf = <Label extends string>(labels: readonly Label[], label: Label, placed: Column): Box =>
     row(label, placed, labels.indexOf(label));
 
@@ -86,7 +90,9 @@ const whereARuleLives = ((): Drawing => {
 
   const component = (x: number, y: number, besideEachOther: boolean): {boxes: Box[]; sortMenu: Box} => {
     const files: Column = {x: x + 12, y: y + 24, width: 126, look: file};
-    const sheets: Column = besideEachOther ? {x: x + 150, y: y + 24, width: 126, look: sheet} : {x: x + 12, y: y + 138, width: 126, look: sheet};
+    const sheets: Column = besideEachOther
+      ? {x: x + 150, y: y + 24, width: 126, look: sheet}
+      : {x: x + 12, y: y + 138, width: 126, look: sheet};
     return {
       boxes: [
         {label: 'DragSortableTable', look: folder, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 288},

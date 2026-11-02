@@ -44,12 +44,18 @@ const OneState: FC<{world: World}> = ({world}) =>
       {world === 'react'
         ? <>
           <Says>The page creates its store once, with the exchange as its middleware, and passes it to
-            a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades and the
-            same arrangement.</Says>
-          <Says><code className="monospaced">useDragSortable</code> creates the table’s own store once, empty, and every part inside <code className="monospaced">DragSortable</code>,
+            a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades
+            and the same arrangement.</Says>
+          <Says><code className="monospaced">useDragSortable</code> creates the table’s own store once, empty, and every
+            part inside <code className="monospaced">DragSortable</code>,
             the provider, reads and writes through that one.</Says>
         </>
-        : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the arrangement in one store with the same exchange as middleware, and gives <code className="monospaced">dragSortable</code> two functions that read its columns and rows. <code className="monospaced">dragSortable</code> keeps only the hand, empty, as a store of its own. Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the order.</Says>}
+        : <Says>The page and the table split the stores as React does. The page, in boot.ts, builds the trades and the
+          arrangement in one store with the same exchange as middleware, and
+          gives <code className="monospaced">dragSortable</code> two functions that read its columns and
+          rows. <code className="monospaced">dragSortable</code> keeps only the hand, empty, as a store of its own.
+          Its listeners dispatch the drag and the widths to the hand, and raise on the table whatever changes the
+          order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
@@ -72,12 +78,12 @@ const OneState: FC<{world: World}> = ({world}) =>
 const ActionsAreData: FC = () =>
   <Step title="Actions are data, and one reducer reads them">
     <Words want="A change must say what happened, not how to poke the state, and it must leave the old value untouched.">
-      <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries the
-        column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’ order as shown, ranked while a sort
-        holds.
+      <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries
+        the column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’
+        order as shown, ranked while a sort holds.
         columnMovedBeside carries the neighbor and the widths.</Says>
-      <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> reads the type and returns the
-        next state.</Says>
+      <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> reads the type and
+        returns the next state.</Says>
     </Words>
     <Reveal>
       <Says>My first draft dispatched functions from state to state and called them reducers. They were not
@@ -85,8 +91,8 @@ const ActionsAreData: FC = () =>
       <Says>Making the action data costs a union of types and one switch. It gets what the shape guarantees: the
         store knows nothing about tables, a layer of middleware can read what kind of action is passing, and a
         dispatch can be logged or replayed as a record.</Says>
-      <Says>A <Term word="slice">slice</Term> is a reducer with the state it starts from, and a store starts from its slice’s
-        beginning, so nobody names an initial state.</Says>
+      <Says>A <Term word="slice">slice</Term> is a reducer with the state it starts from, and a store starts from its
+        slice’s beginning, so nobody names an initial state.</Says>
       <Says>Slices combine by key when a state has more than one concern, each seeing only its own. The page’s
         store is three: the trades, the candles and the arrangement.</Says>
       <Says>The arrangement’s reducer handles what a drag and the menu decided: a column moved to a position, a row
@@ -103,7 +109,8 @@ const ActionsAreData: FC = () =>
         reducer that writes it.</Says>
       <Says>The parts hold no state and compose no reducers: they ask the store, and they dispatch to it.</Says>
       <Says>The table is never given the trades. The page projects them into rows, a key and the value under each
-        column, ranked by the sort while one holds, and passes that projection to the table’s behavior in the order it should stand.</Says>
+        column, ranked by the sort while one holds, and passes that projection to the table’s behavior in the order it
+        should stand.</Says>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
@@ -138,7 +145,8 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           <Says>Anything a component would derive from state is a selector instead, so the component holds no
             arithmetic over the store.</Says>
         </>
-        : <Says>The table reads the order and the standing from the page’s store, through the two functions it was given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
+        : <Says>The table reads the order and the standing from the page’s store, through the two functions it was
+          given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(contextSource, 'export const useTableSelector'), gap,
@@ -160,8 +168,8 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
 const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
   <Step title="The exchange is middleware">
     <Words want="Trades must reach the store without any chart or table knowing where they come from.">
-      <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its state and its
-        dispatch, then the next dispatch, and it returns the dispatch for its place in the chain.</Says>
+      <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its
+        state and its dispatch, then the next dispatch, and it returns the dispatch for its place in the chain.</Says>
       <Says>The chain is composed inside the store’s own dispatch, so every action passes through it before the
         reducer runs. The path is strict: middleware, then the reducer, then the listeners.</Says>
       <Says>A store built with no middleware has a chain of one.</Says>
@@ -177,13 +185,16 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
         candlesRefused.</Says>
       <Says>On feedReleased it hangs up.</Says>
-      <Says>It lets every other action through untouched. Nothing in the page or in the table knows a socket exists: the page dispatches that it wants the feed, and it sees the store change.</Says>
+      <Says>It lets every other action through untouched. Nothing in the page or in the table knows a socket exists: the
+        page dispatches that it wants the feed, and it sees the store change.</Says>
       {world === 'react'
         ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
           one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <>
-          <Says>The page builds the store with the same layer and dispatches the request last, once it has called <code className="monospaced">dragSortable</code> on the table and is listening for what the trader does.</Says>
+          <Says>The page builds the store with the same layer and dispatches the request last, once it has
+            called <code className="monospaced">dragSortable</code> on the table and is listening for what the trader
+            does.</Says>
           <Says>The frame’s socket lives as long as the frame does.</Says>
         </>}
       <Codes>
@@ -209,17 +220,20 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>
-      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that calls <Term word="reconcile">reconcile</Term>, the function the vanilla build returned, with the columns as they stood before the change, so the table follows the order the page now holds.</Says>
-      {world === 'vanilla' && <Says><code className="monospaced">dragSortable</code> subscribes once itself, to its own hand.</Says>}
+      <Says>React subscribes a component and ignores all four. The vanilla page subscribes a listener that
+        calls <Term word="reconcile">reconcile</Term>, the function the vanilla build returned, with the columns as they
+        stood before the change, so the table follows the order the page now holds.</Says>
+      {world === 'vanilla' && <Says><code className="monospaced">dragSortable</code> subscribes once itself, to its own
+        hand.</Says>}
       <Says>A listener that mirrored the state to a backend would read the action and know exactly what to send.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <>
-          <Says>The page’s provider and <code className="monospaced">useDragSortable</code> each subscribe through useSyncExternalStore, React’s hook
-            for reading a store kept outside React.</Says>
-          <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the carried cells’ marks. The markup
-            renders through the new state, and React reconciles the page’s elements, moving only the ones whose
+          <Says>The page’s provider and <code className="monospaced">useDragSortable</code> each subscribe through
+            useSyncExternalStore, React’s hook for reading a store kept outside React.</Says>
+          <Says>So a trade or a move re-renders the page’s rows, and a drag re-renders the carried cells’ marks. The
+            markup renders through the new state, and React reconciles the page’s elements, moving only the ones whose
             place changed.</Says>
           <Says>The table raises what the trader did as an event, onColumnMoved, onRowMoved or onSorted, and the page
             dispatches it.</Says>
@@ -227,11 +241,14 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
         </>
         : <>
           <Says>The page listens three times and subscribes once.</Says>
-          <Says>The three listeners take the events the table raises, <code className="monospaced">column-moved</code>, <code className="monospaced">row-moved</code> and <code className="monospaced">sorted</code>, each dispatched into the arrangement; the one subscription calls <code className="monospaced">reconcile</code> whenever the store changes, and <code className="monospaced">reconcile</code> moves the real cells, touching only the ones whose place changed.</Says>
+          <Says>The three listeners take the events the table
+            raises, <code className="monospaced">column-moved</code>, <code className="monospaced">row-moved</code> and <code className="monospaced">sorted</code>, each dispatched into the arrangement; the one subscription calls <code className="monospaced">reconcile</code> whenever the store changes, and <code className="monospaced">reconcile</code> moves the real cells, touching only the ones whose place changed.</Says>
           <Says>A listener on the hand, which the code names dress, adds and removes the carried cells’ classes and
             custom properties and sets the widths.</Says>
-          <Says><code className="monospaced">reconcile</code> writes only the text that differs, and reseats the rows whenever their order changes, by a sort or a move.</Says>
-          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s listener uses the state before the change, the columns as they stood, and keeps nothing of its own.</Says>
+          <Says><code className="monospaced">reconcile</code> writes only the text that differs, and reseats the rows
+            whenever their order changes, by a sort or a move.</Says>
+          <Says>The store gives every listener the state before the change and a way to read the state now. The page’s
+            listener uses the state before the change, the columns as they stood, and keeps nothing of its own.</Says>
         </>}
       <Codes>
         {world === 'react'
@@ -252,14 +269,18 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>I could let each chart and each table keep its own copy of the trades. They would drift from each other
       and from the stream, and every listener would need to know which world it landed in.</Tell>
-    <Tell>So the page is a <Term word="store">store</Term> in the Redux shape, without Redux. Redux is a JavaScript library
-      that keeps an application’s state in one store, and this page borrows that shape and none of its code.</Tell>
-    <Tell>One value holds the trades, the candles the charts ask for, and the arrangement. <Term word="action">Actions</Term> are
-      records of what happened, one <Term word="reducer">reducer</Term> reads them, <Term word="selector">selectors</Term> are named,
+    <Tell>So the page is a <Term word="store">store</Term> in the Redux shape, without Redux. Redux is a JavaScript
+      library that keeps an application’s state in one store, and this page borrows that shape and none of its
+      code.</Tell>
+    <Tell>One value holds the trades, the candles the charts ask for, and the
+      arrangement. <Term word="action">Actions</Term> are
+      records of what happened, one <Term word="reducer">reducer</Term> reads
+      them, <Term word="selector">selectors</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
     <Tell>Both builds call the table’s store the hand. It holds the drag and the widths once measured. The React
-      build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes. Each table has one. It holds only what the trader
-      does to it, and it raises what the trader did back to the page.</Tell>
+      build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes.
+      Each table has one. It holds only what the trader does to it, and it raises what the trader did back to the
+      page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>
       <OneState world={world}/>

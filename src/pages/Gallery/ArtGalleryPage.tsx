@@ -34,8 +34,9 @@ const shownFor = (answers: Answers, tab?: Source): Shown => {
     .orElse<Shown>({shown: 'noMuseumOpen'});
 };
 
-const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) => (answer: Result<boolean, HTTPError>): void =>
-  tell(known => ({...known, [museum]: answer.orElse(false)}));
+const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) =>
+  (answer: Result<boolean, HTTPError>): void =>
+    tell(known => ({...known, [museum]: answer.orElse(false)}));
 
 export const ArtGalleryPage: FC = () => {
   const [answers, updateAnswers] = useState<Answers>({});

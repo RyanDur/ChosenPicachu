@@ -42,8 +42,10 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
         </label>
         <p className="paragraph">Its list has z-index: 9999.</p>
         <ul className="trap-ways">
-          <li className="trap-way"><p className="caption">The old way</p><SortMenu onOpened={() => updateOpened(some(cardOne))}/></li>
-          <li className="trap-way"><p className="caption">The top layer</p><TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/></li>
+          <li className="trap-way"><p className="caption">The old
+            way</p><SortMenu onOpened={() => updateOpened(some(cardOne))}/></li>
+          <li className="trap-way"><p className="caption">The top
+            layer</p><TopLayerMenu onOpened={() => updateOpened(some<Opened>('top layer'))}/></li>
         </ul>
       </li>
       <li className="old-way-card card rounded-corners floating positioned forms-context">
@@ -51,6 +53,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
       </li>
     </ol>
     <output aria-label="where the list opened" className="paragraph">{openedAsTheCardsAre.map(place => whereItOpened[place]).orElse('')}</output>
-    <figcaption className="caption"><strong className="bold">The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
+    <figcaption className="caption"><strong className="bold">The trap.</strong> A list with z-index: 9999 opens under a
+      card with z-index: 1.</figcaption>
   </figure>;
 };

@@ -92,7 +92,8 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(record.timelineStories.first()).toBeVisible();
       await expect(record.researchFold).toBeVisible();
 
-      expect(await foldsAFingerLeavesShut(page, [...await record.timelineStories.all(), record.researchFold])).toEqual([]);
+      expect(await foldsAFingerLeavesShut(page, [...await record.timelineStories.all(), record.researchFold]))
+        .toEqual([]);
     });
 
     test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', async ({page}) => {

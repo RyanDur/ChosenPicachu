@@ -20,7 +20,8 @@ export const rowMoved = (row: string, to: number, standing: readonly string[]): 
 export const sorted = (column: string, direction?: Direction): ArrangementAction => ({type: 'sorted', column, direction});
 export const arrived = (keys: readonly string[]): ArrangementAction => ({type: 'arrived', keys});
 
-export const arrangementOf = (columns: readonly string[], rows: readonly string[] = []): Arrangement => ({columns, rows});
+export const arrangementOf = (columns: readonly string[], rows: readonly string[] = []): Arrangement =>
+  ({columns, rows});
 
 const seatingOf = (standing: readonly string[], arrival: readonly string[]): readonly string[] =>
   [...standing.filter(key => arrival.includes(key)), ...arrival.filter(key => !standing.includes(key))];
@@ -46,7 +47,8 @@ const arrangementActions: Record<ArrangementAction['type'], true> = {
   arrived: true
 };
 
-const isArrangementAction = (action: {readonly type: string}): action is ArrangementAction => action.type in arrangementActions;
+const isArrangementAction = (action: {readonly type: string}): action is ArrangementAction =>
+  action.type in arrangementActions;
 
 const answering = (arrangement: Arrangement, action: ArrangementAction): Arrangement => {
   switch (action.type) {

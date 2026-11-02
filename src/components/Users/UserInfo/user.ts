@@ -31,4 +31,5 @@ export type UserEdit = Omit<User, 'friends'>;
 export const fullNameOf = ({info}: NewUser): string => `${info.firstName} ${info.lastName}`;
 
 export const befriended = (user: User, friendId: string): User => ({...user, friends: [...user.friends, friendId]});
-export const unfriended = (user: User, friendId: string): User => ({...user, friends: user.friends.filter(id => id !== friendId)});
+export const unfriended = (user: User, friendId: string): User =>
+  ({...user, friends: user.friends.filter(id => id !== friendId)});

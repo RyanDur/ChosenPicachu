@@ -14,7 +14,11 @@ import {Column, DragSortable, Motion, Origin, useDragSortable} from '@components
 
 type Dials = {origin: Origin; motion: Motion};
 
-type Table = FC<HeaderEvents & BodyEvents & Dials & {caption: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
+type Table = FC<HeaderEvents & BodyEvents & Dials & {
+  caption: string;
+  columns: readonly TableColumn<Measured>[];
+  rows: readonly Measures[];
+}>;
 
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 

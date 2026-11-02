@@ -46,10 +46,13 @@ export const TopLayerRecipe: FC = () => {
     can="The user sees the news above everything"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
-      term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
-      element around the banner forms a stacking context by the ways{' '}
-    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the window, does not lift it out of that context,
-      as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
+      term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>.
+      An element around the banner forms a stacking context by the ways{' '}
+    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
+      context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the
+      window, does not lift it out of that context,
+      as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
+        loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
       I made the panel a popover, drawn in the top layer like the new menu
       above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
       both are.</Tell>
@@ -72,7 +75,8 @@ export const TopLayerRecipe: FC = () => {
         <Words want="A popover is in the top layer only while it is shown. The panel should be shown when news arrives and hidden when the last of it is dismissed.">
           <Says>A React effect, code that React runs after it has updated the page, runs when the number of banners
             changes. showPopover shows the panel when the first banner arrives, and hidePopover hides it when the last
-            one has gone. matches(':popover-open') says whether the panel is shown, so neither call is made twice.</Says>
+            one has gone. matches(':popover-open') says whether the panel is shown, so neither call is made
+            twice.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -84,18 +88,20 @@ export const TopLayerRecipe: FC = () => {
         dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine places, and no arithmetic: the browser already centers a popover.">
           <Says>The browser’s own style sheet, the styles every page starts with, gives a popover a fixed position, a
-            size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window.
-            It takes only the room its content needs, and the auto margins share the rest, which centers it in the
-            window. That style sheet also gives a popover a border, a background and padding; the panel wears borderless
-            and unfilled, which take off the first two, and padding: 0, so only the banners inside it show.</Says>
+            size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the
+            window. It takes only the room its content needs, and the auto margins share the rest, which centers it in
+            the window. That style sheet also gives a popover a border, a background and padding; the panel wears
+            borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it
+            show.</Says>
           <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
             that <cite>The user can have multiple banners</cite> explains in its
             step{' '}
           <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
             from off screen</cite></Link>.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
-            spare room and the panel holds to that edge. <code className="monospaced">middle</code> and <code className="monospaced">center</code> set auto again. They change
-            nothing. I keep them so the choice shows in the class names.</Says>
+            spare room and the panel holds to that
+            edge. <code className="monospaced">middle</code> and <code className="monospaced">center</code> set auto
+            again. They change nothing. I keep them so the choice shows in the class names.</Says>
           <Says>On this page margin-block is the margins above and below the panel, and margin-inline is the ones to
             its left and right. Here, {sideFact[side]} And {alignFact[align]}</Says>
           <Says>The sample is the component’s line: the two class names the dials choose arrive as side and align, and
@@ -113,8 +119,9 @@ export const TopLayerRecipe: FC = () => {
       <Step title="Style each banner">
         <Words want="A banner is read at a glance, by someone busy with something else.">
           <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
-            site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color, and hairline-outline for a thin border in that color. The dismiss button is a square of fixed size that does not
-            shrink when the message is long. Its look is shared classes too: borderless and unfilled take off the
+            site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color,
+            and hairline-outline for a thin border in that color. The dismiss button is a square of fixed size that does
+            not shrink when the message is long. Its look is shared classes too: borderless and unfilled take off the
             browser’s own button border and ground, glyph-icon sets the × at the size the site’s icons are drawn, and
             muted-ink grays it.</Says>
         </Words>

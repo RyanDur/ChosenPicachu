@@ -50,7 +50,9 @@ export const lastAnswered = async (fetching, {repository, workflow, runId}, warn
 };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {GH_TOKEN, GITHUB_REPOSITORY, GITHUB_RUN_ID, REVIEW_WORKFLOW, REVIEW_ASKED_FROM, REVIEW_PUSHED_FROM} = process.env;
+  const {
+    GH_TOKEN, GITHUB_REPOSITORY, GITHUB_RUN_ID, REVIEW_WORKFLOW, REVIEW_ASKED_FROM, REVIEW_PUSHED_FROM
+  } = process.env;
   const asked = (REVIEW_ASKED_FROM ?? '').trim();
   const reviewed = has(asked)
     ? undefined

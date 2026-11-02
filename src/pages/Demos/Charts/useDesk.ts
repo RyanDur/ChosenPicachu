@@ -11,7 +11,8 @@ export const useDesk = () => {
   return {
     seats,
     absentKinds: absent(seats),
-    periodOf: (kind: ChartKind): Period => maybe(seats.find(seat => seat.kind === kind)).map(({period}) => period).orElse(Period.hour),
+    periodOf: (kind: ChartKind): Period =>
+      maybe(seats.find(seat => seat.kind === kind)).map(({period}) => period).orElse(Period.hour),
     choosePeriod: (kind: ChartKind, period: Period) => updateSearchParams({charts: periodChosen(kind, period, seats)}),
     add: (kind: ChartKind) => updateSearchParams({charts: added(kind, seats)}),
     remove: (at: number) => updateSearchParams({charts: without(at, seats)}),

@@ -6,7 +6,9 @@ const noConcerns: Maybe<string> = nothing();
 
 export const ConcernsInTheYear = createContext<Maybe<string>>(noConcerns);
 
-export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>> = ({of: {date, title, id}, tells, children}) => {
+export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>> = ({
+  of: {date, title, id}, tells, children
+}) => {
   const concerns = useContext(ConcernsInTheYear);
   return date.kind === 'year'
     ? <li className="moment trim-rail-along" id={id} tabIndex={-1}>

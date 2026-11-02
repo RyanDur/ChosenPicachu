@@ -185,7 +185,8 @@ export const ExclusiveRadioToggleAccordion: FC<AccordionProps> = ({
   </fieldset>
 </article>;
 
-const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean => target instanceof HTMLInputElement && target.checked;
+const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean =>
+  target instanceof HTMLInputElement && target.checked;
 
 const withPart = (open: readonly string[], key: string, opened: boolean): readonly string[] =>
   opened ? [...open, key] : open.filter(part => part !== key);

@@ -43,7 +43,8 @@ export const UserInformation: FC<{open?: Opened; className?: string}> = ({open =
 const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
   const users = useUsersDispatch();
   const hydrated = useHydrated();
-  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started.either(user => user, () => newUser(firstAvatar))));
+  const [draft, dispatch] = useReducer(formReducer, shown(open),
+    started => draftOf(started.either(user => user, () => newUser(firstAvatar))));
   const user = userOf(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);

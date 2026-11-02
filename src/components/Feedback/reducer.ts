@@ -27,7 +27,14 @@ const stillSending = ({sending}: Draft): Sending => sending.state === 'sending' 
 export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => {
   switch (action.type) {
     case FeedbackActions.OPENED:
-      return {...draft, key: action.key, openings: draft.openings + 1, thread: discussions, sending: stillSending(draft), sentTo: undefined};
+      return {
+        ...draft,
+        key: action.key,
+        openings: draft.openings + 1,
+        thread: discussions,
+        sending: stillSending(draft),
+        sentTo: undefined
+      };
     case FeedbackActions.THREAD_FOUND:
       return aboutPage(draft, action.key) ? {...draft, thread: action.url} : draft;
     case FeedbackActions.THREAD_UNKNOWN:

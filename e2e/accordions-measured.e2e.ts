@@ -11,14 +11,16 @@ import {
 } from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
 
-// WebKit stopped starting page.goto after about 90 navigations of these journeys mixed with the tab's others in one worker; a worker of their own keeps them apart
+// WebKit stopped starting page.goto after about 90 navigations of these journeys mixed with the tab's others in one
+// worker; a worker of their own keeps them apart
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
 const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, textOf(part));
 
 const tallestOf = async (parts: Part[]): Promise<Part> => {
-  const heights = await Promise.all(parts.map(part => textOf(part).evaluate(text => text.getBoundingClientRect().height)));
+  const heights = await Promise.all(parts.map(part =>
+    textOf(part).evaluate(text => text.getBoundingClientRect().height)));
   return parts[heights.indexOf(Math.max(...heights))];
 };
 

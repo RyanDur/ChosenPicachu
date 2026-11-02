@@ -65,7 +65,8 @@ describe('the users page', () => {
 
       expect(usersTable.worksFromHomeColumn()).toContain('Yes');
       expect(usersTable.worksFromHomeColumn()).toContain('No');
-      expect(usersTable.worksFromHomeColumn()).toEqual([...usersTable.worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
+      expect(usersTable.worksFromHomeColumn())
+        .toEqual([...usersTable.worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
     });
 
     it('every row can be lifted by its grip', async () => {

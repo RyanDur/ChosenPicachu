@@ -35,7 +35,9 @@ export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
   const seat = (region: string): Locator => page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
-  const carryByTheGrip = async (region: string): Promise<{height: number; pointerWhenTheyTrade: (step: number) => Promise<number>}> => {
+  const carryByTheGrip = async (
+    region: string
+  ): Promise<{height: number; pointerWhenTheyTrade: (step: number) => Promise<number>}> => {
     const chart = seat(region);
     await chart.hover();
     const [box, grip] = await Promise.all([chart.boundingBox(), chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox()]);

@@ -6,8 +6,9 @@ export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' |
 export type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
-export const Diagram: FC<PropsWithChildren<{title: string; says: string; height: number}>> = ({title, says, height, children}) =>
-  <Figure className="diagram" viewBox={`0 0 320 ${height}`} title={title} says={says}>{children}</Figure>;
+export const Diagram: FC<PropsWithChildren<{title: string; says: string; height: number}>> =
+  ({title, says, height, children}) =>
+    <Figure className="diagram" viewBox={`0 0 320 ${height}`} title={title} says={says}>{children}</Figure>;
 
 const looksOf: Record<Kind, string> = {
   piece: 'paper-filled drawn',

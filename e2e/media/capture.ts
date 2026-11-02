@@ -220,7 +220,12 @@ export const headerOrder = (card: Locator): Promise<string[]> =>
 
 type Gait = {steps?: number; anchor?: number};
 
-export const slowDrag = async (page: Page, from: Box, toX: number, {steps = 30, anchor = 0.5}: Gait = {}): Promise<void> => {
+export const slowDrag = async (
+  page: Page,
+  from: Box,
+  toX: number,
+  {steps = 30, anchor = 0.5}: Gait = {}
+): Promise<void> => {
   const start = {x: from.x + from.width * anchor, y: from.y + from.height / 2};
   for (let step = 1; step <= steps; step++) {
     await page.mouse.move(start.x + (toX - start.x) * (step / steps), start.y);

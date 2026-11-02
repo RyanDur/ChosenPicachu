@@ -73,7 +73,8 @@ describe('the users store', () => {
 
     store.dispatch(friendAdded(first.id, second.id));
 
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
+    await vi.waitFor(() =>
+      expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
   });
 
   it('an added friend sends the backend the person as the roster has them, with the friend after the ones they had', async () => {
@@ -112,7 +113,8 @@ describe('the users store', () => {
     setupUsersResponse([befriended, ...someUsers.slice(1)]);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
     store.dispatch(opened());
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
+    await vi.waitFor(() =>
+      expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
     const sent = setupUserUpdatedResponse(first.id, [befriended, ...someUsers.slice(1)]);
 
     store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));

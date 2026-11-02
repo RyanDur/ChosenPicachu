@@ -12,7 +12,8 @@ import {museumNamed} from '@components/art-gallery/museums/museums';
 import './GallerySettings.css';
 
 const Readout: FC = () => {
-  const {search, tab, page} = useSearchParamsObject({search: schema.string, tab: sourceParam, page: numberParam}, {page: 1});
+  const {search, tab, page} =
+    useSearchParamsObject({search: schema.string, tab: sourceParam, page: numberParam}, {page: 1});
   const pages = paginationOf(useGallery().wall).map(({totalPages}) => ` of ${totalPages}`).orElse('');
   const where = has(search) ? search : maybe(tab).map(museumNamed).orElse('the gallery');
   return <span className="readout">

@@ -15,8 +15,12 @@ const shoves = Object.values(shoveOf);
 const marks: readonly Motion[] = ['settling', ...shoves];
 const motions: readonly Motion[] = ['carried', ...marks];
 
-export const changeMotion = (cell: Element, {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}): void => {
-  const wearing = motions.filter(motion => on.includes(motion) || (cell.classList.contains(motion) && !off.includes(motion)));
+export const changeMotion = (
+  cell: Element,
+  {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}
+): void => {
+  const wearing = motions.filter(motion =>
+    on.includes(motion) || (cell.classList.contains(motion) && !off.includes(motion)));
   cell.classList.remove('paper-in-motion', ...motions);
   if (wearing.length > 0) {
     cell.classList.add('paper-in-motion', ...wearing);

@@ -1,7 +1,8 @@
 import {Locator, expect, test} from '@playwright/test';
 import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
-const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
+const focusIsIn = (region: Locator): Promise<boolean> =>
+  region.evaluate(element => element.contains(document.activeElement));
 
 const handhelds = [
   {reader: 'a phone', device: iPhone},

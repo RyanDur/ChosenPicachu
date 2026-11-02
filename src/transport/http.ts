@@ -7,7 +7,11 @@ export const http = {
       maybe(response, isOk).map(bodyResult)
         .orElse(fail(response))),
 
-  post: <T>(endpoint: string, body: unknown, {headers}: {headers?: Record<string, string>} = {}): Result.Async<T, HTTPError> =>
+  post: <T>(
+    endpoint: string,
+    body: unknown,
+    {headers}: {headers?: Record<string, string>} = {}
+  ): Result.Async<T, HTTPError> =>
     request(endpoint, HTTPMethod.POST, {body, headers}).mBind(response =>
       maybe(response, isOk).or(() => maybe(response, isCreated)).map(bodyResult)
         .orElse(fail(response))),

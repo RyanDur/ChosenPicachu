@@ -40,17 +40,20 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
         <ANumberInsideALayer/>
       </li>
       <li className="run">
-        <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are compared in the
-          nearest context that holds them both: here the tab’s panel, which{' '}
-        <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking context</cite></a> explains.
-          There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so card two is painted over card one, list and all. No
-          number on the list can change that, because the list is never compared with card two.</p>
+        <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are
+          compared in the nearest context that holds them both: here the tab’s panel, which{' '}
+        <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
+          context</cite></a> explains.
+          There the browser compares card one and card two, 1 against 1, and a tie goes to the one later in the code, so
+          card two is painted over card one, list and all. No number on the list can change that, because the list is
+          never compared with card two.</p>
         <Where9999IsCompared/>
       </li>
       <li className="run">
         <p className="paragraph">With the box unchecked, card one’s z-index is auto. The card is still positioned,
-          but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the tab panel’s context, where card two is, and there 9999 is the larger number. With the box checked again, the
-          card forms its layer again, with the list inside it.</p>
+          but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the tab
+          panel’s context, where card two is, and there 9999 is the larger number. With the box checked again, the card
+          forms its layer again, with the list inside it.</p>
         <Snippet label="HTML" lines={[
           ...span(trappedSource, "<li className={classNames('old-way-card", '</label>')
         ]}/>

@@ -37,7 +37,8 @@ export const CssShare: FC<{world: World}> = ({world}) =>
         exists. Each button writes a tabindex it would not need anywhere but Safari, whose
         plain Tab skips a bare button; the keyboard track says why.</Says>
       {world === 'vanilla' && <Says>In the vanilla build the grip’s button and the handle’s button are marked for what
-        they do, <code className="monospaced">data-row-grip</code> and <code className="monospaced">data-resize-handle</code>, and <code className="monospaced">dragSortable</code> attaches the
+        they
+        do, <code className="monospaced">data-row-grip</code> and <code className="monospaced">data-resize-handle</code>, and <code className="monospaced">dragSortable</code> attaches the
         behavior to each when boot calls it.</Says>}
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>

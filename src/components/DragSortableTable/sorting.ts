@@ -20,7 +20,11 @@ export const directionOf = (label: string): Direction | undefined => {
   return has(choice) ? choice.direction : undefined;
 };
 
-export const ranked = <Seat>(seats: readonly Seat[], valueOf: (seat: Seat) => Value | undefined, direction: Direction): Seat[] =>
+export const ranked = <Seat>(
+  seats: readonly Seat[],
+  valueOf: (seat: Seat) => Value | undefined,
+  direction: Direction
+): Seat[] =>
   [...seats].sort((left, right) => {
     const first = valueOf(left);
     const second = valueOf(right);

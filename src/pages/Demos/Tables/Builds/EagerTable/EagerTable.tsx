@@ -14,7 +14,9 @@ type Props = HeaderEvents & BodyEvents & {
   rows: readonly Measures[];
 };
 
-export const EagerTable: FC<Props> = ({caption, origin, motion, columns, rows, onColumnMoved, onSorted, onRowMoved}) => {
+export const EagerTable: FC<Props> = ({
+  caption, origin, motion, columns, rows, onColumnMoved, onSorted, onRowMoved
+}) => {
   const sortable = useDragSortable(columns, seated(rows), {origin, motion});
   return <DragSortable value={sortable}>
     <table id="live-aggregations" className={sortable.className}>

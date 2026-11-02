@@ -52,7 +52,8 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(...headerCell, className, ...headerNeeds(travels, width), ...motionStates(carried, settlingFrom, shoved))}
+    className={classNames(
+      ...headerCell, className, ...headerNeeds(travels, width), ...motionStates(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

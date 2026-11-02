@@ -18,7 +18,8 @@ export const BannerTrap: FC = () => {
   return <figure className="banner-trap card rounded-corners lifted padded">
     <ol className="trap-steps">
       <li className="paragraph">Press Raise a banner, built the old way.</li>
-      <li className="paragraph">Scroll until card two reaches the bottom of the window, and watch it pass over the banner.</li>
+      <li className="paragraph">Scroll until card two reaches the bottom of the window, and watch it pass over the
+        banner.</li>
       <li className="paragraph">Press Raise a banner, in the top layer, and scroll again.</li>
     </ol>
     <ol className="old-way-cards">
@@ -45,6 +46,7 @@ export const BannerTrap: FC = () => {
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>
-    <figcaption className="caption"><strong className="bold">The banners.</strong> A fixed banner with z-index: 9999 is covered by a card with z-index: 1.</figcaption>
+    <figcaption className="caption"><strong className="bold">The banners.</strong> A fixed banner with z-index: 9999 is
+      covered by a card with z-index: 1.</figcaption>
   </figure>;
 };

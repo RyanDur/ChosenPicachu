@@ -156,7 +156,8 @@ export const accordionsTab = (page: Page) => {
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
-    holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
+    holdsFocus: (build: Build): Promise<boolean> =>
+      built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
     closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
       await siteFrame(page).hydrated();
@@ -191,7 +192,8 @@ export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', 
 
 export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)[]> =>
   page.getByRole('region', {name: 'How we used to build a fold'}).getByRole('radio')
-    .evaluateAll(toggles => toggles.map(toggle => toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
+    .evaluateAll(toggles => toggles.map(toggle =>
+      toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
 
 export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
   const [outer, inner] = await Promise.all([around.boundingBox(), inside.boundingBox()]);

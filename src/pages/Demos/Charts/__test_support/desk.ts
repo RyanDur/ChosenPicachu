@@ -55,7 +55,8 @@ const findChart = (name: string): Promise<HTMLElement> => screen.findByRole('reg
 
 const onChart = (name: string, told: string): HTMLElement => within(chart(name)).getByText(told);
 
-const findOnChart = async (name: string, told: string): Promise<HTMLElement> => within(await findChart(name)).findByText(told);
+const findOnChart = async (name: string, told: string): Promise<HTMLElement> =>
+  within(await findChart(name)).findByText(told);
 
 const priceCard = (): HTMLElement => chart('live trades');
 

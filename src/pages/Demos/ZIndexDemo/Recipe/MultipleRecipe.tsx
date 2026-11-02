@@ -22,12 +22,13 @@ const stackFact: Record<Stack, string> = {
 type Axis = 'vertical' | 'sideways';
 
 const axisFact: Record<Axis, ReactNode> = {
-  vertical: <><code className="monospaced">:where(.stack-down, .stack-up)</code> is the part of the rule’s selector that matches the panel with
-    either class, and the rule applies to each banner in it. So I write the <code className="monospaced">grid-template-rows</code> rule
-    once for the downward and upward stacks, and the <code className="monospaced">grid-template-columns</code> rule once for the two sideways
-    stacks.</>,
-  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of the rule’s selector that matches the panel
-    with either class, and the rule applies to each banner in it. So I write
+  vertical: <><code className="monospaced">:where(.stack-down, .stack-up)</code> is the part of the rule’s selector that
+    matches the panel with either class, and the rule applies to each banner in it. So I write
+    the <code className="monospaced">grid-template-rows</code> rule
+    once for the downward and upward stacks, and the <code className="monospaced">grid-template-columns</code> rule once
+    for the two sideways stacks.</>,
+  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of the rule’s selector
+    that matches the panel with either class, and the rule applies to each banner in it. So I write
     the <code className="monospaced">grid-template-columns</code> rule once for the leftward and rightward stacks, and
     the <code className="monospaced">grid-template-rows</code> rule once for the two vertical stacks.</>
 };
@@ -63,17 +64,19 @@ const ownedGap: Record<Axis, string> = {
 const SettleStep: FC = () => (
   <Step title="Change a banner’s height smoothly when its text rewraps">
     <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
-      <Says>A <code className="monospaced">ResizeObserver</code>, a browser object that calls back when an element changes size, sets each message’s
-        height to a measured number of pixels. The number travels in a custom property
+      <Says>A <code className="monospaced">ResizeObserver</code>, a browser object that calls back when an element
+        changes size, sets each message’s height to a measured number of pixels. The number travels in a custom property
         named <code className="monospaced">--news-block-size</code>.</Says>
-      <Says>The style sheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that starts with @ and sets
-        something up for the style sheet without picking out elements. This one gives a custom property a type and a starting
-        value: a length or auto, starting as auto, so a message that has not been measured keeps its own height. A
-        rewrap then changes one number to another, and the transition on <code className="monospaced">block-size</code>, the CSS name for
+      <Says>The style sheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that
+        starts with @ and sets something up for the style sheet without picking out elements. This one gives a custom
+        property a type and a starting value: a length or auto, starting as auto, so a message that has not been
+        measured keeps its own height. A rewrap then changes one number to another, and the transition
+        on <code className="monospaced">block-size</code>, the CSS name for
         height on this page, runs between them.</Says>
       <Says>Before it measures, the code removes the height it set last
-        time. <code className="monospaced">scrollHeight</code>, the height of everything inside the element even where it overflows, is never
-        less than the element’s own height, so a message measured with the old height still on it could only grow.</Says>
+        time. <code className="monospaced">scrollHeight</code>, the height of everything inside the element even where
+        it overflows, is never less than the element’s own height, so a message measured with the old height still on it
+        could only grow.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -118,9 +121,10 @@ export const MultipleRecipe: FC = () => {
       <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
         <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
           <Says>A banner is the list item with the class trouble. Each banner is a grid, a layout of rows and
-            columns, with a single row or column, called a track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
-            one track takes all of it, and at 0fr it takes none. The starting style sets the track to 0fr and the
-            banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.</Says>
+            columns, with a single row or column, called a track. Here {stackFact[stack]} A track’s size can be given in
+            fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none. The
+            starting style sets the track to 0fr and the banner’s own rule sets it to 1fr, so the transition opens the
+            gap over 0.3 seconds.</Says>
           <Says>{axisFact[axisOf(stack)]}</Says>
           <Says>{gapFact[stack]}</Says>
           <Says>A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both

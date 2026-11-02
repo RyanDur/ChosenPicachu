@@ -75,7 +75,12 @@ for (const {name, at, table} of stages) {
   });
 }
 
-const aFingerCarriesTheColumn = async (page: Page, browserName: string, {at, table}: Stage, from: FingerPress): Promise<void> => {
+const aFingerCarriesTheColumn = async (
+  page: Page,
+  browserName: string,
+  {at, table}: Stage,
+  from: FingerPress
+): Promise<void> => {
   test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
   await page.goto(at);
   const trades = dragSortTable(page, table(page));

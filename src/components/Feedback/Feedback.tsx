@@ -45,7 +45,8 @@ const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
 
 const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
   const box = event.currentTarget.getBoundingClientRect();
-  const onTheVeil = event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
+  const onTheVeil = event.clientX < box.left || event.clientX > box.right
+    || event.clientY < box.top || event.clientY > box.bottom;
   if (lightDismissMissing() && event.target === event.currentTarget && onTheVeil) {
     event.currentTarget.close();
   }
@@ -115,7 +116,10 @@ export const Feedback: FC = () => {
     }
     const {openings, words, reach} = draft;
     dispatch(noteSubmitted());
-    sent({endpoint: feedbackEndpoint, token: feedbackToken}, {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
+    sent(
+      {endpoint: feedbackEndpoint, token: feedbackToken},
+      {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})}
+    )
       .onSuccess(url => dispatch(noteSent(openings, url)))
       .onFailure(why => dispatch(noteRefused(why)));
   };
@@ -132,7 +136,8 @@ export const Feedback: FC = () => {
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
           <p className="paragraph">About: {pageName}</p>
         </hgroup>
-        <p className="feedback-thread field paragraph">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
+        <p className="feedback-thread field paragraph">It goes to <a className="signpost" href={draft.thread}>this
+          page’s thread on GitHub</a>, where you can read what others said.</p>
         <label className="feedback-field">
           <span className="feedback-label field bold approached">What did you find?</span>
           <textarea className="feedback-words bare card borderless paragraph ink" name="words" required enterKeyHint="send" value={draft.words}

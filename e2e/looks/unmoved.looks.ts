@@ -16,7 +16,12 @@ const steadyLookOf = async (page: Page): Promise<Look> => {
   return last;
 };
 
-const looked = async (browser: Browser, base: string, view: View, viewport: {width: number; height: number}): Promise<Look> => {
+const looked = async (
+  browser: Browser,
+  base: string,
+  view: View,
+  viewport: {width: number; height: number}
+): Promise<Look> => {
   const context = await browser.newContext({viewport, reducedMotion: 'reduce', serviceWorkers: view.withoutWorkers ? 'block' : 'allow'});
   const page: Page = await context.newPage();
   const settled = await heldStill(page);
@@ -35,7 +40,10 @@ const looked = async (browser: Browser, base: string, view: View, viewport: {wid
 for (const viewport of sizes) {
   for (const view of views) {
     test(`${view.page.name}, ${view.name}, at ${viewport.width}, looks as it did`, async ({browser}) => {
-      const [before, after] = await Promise.all([looked(browser, stages.before, view, viewport), looked(browser, stages.after, view, viewport)]);
+      const [before, after] = await Promise.all([
+        looked(browser, stages.before, view, viewport),
+        looked(browser, stages.after, view, viewport)
+      ]);
       const moved = differences(before, after);
 
       expect(moved, moved.slice(0, 60).join('\n')).toEqual([]);

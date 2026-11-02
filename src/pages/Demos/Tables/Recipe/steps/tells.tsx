@@ -18,12 +18,13 @@ export const TheImplementation: FC<{world: World; react: string; vanilla: string
     target="_blank"
     rel="noreferrer">the implementation</a>.</Tell>;
 
-export const TheWholeBuild: FC<{world: World; tableSource: Sample; buildSrc: Sample}> = ({world, tableSource, buildSrc}) =>
-  <Codes>
-    {world === 'react'
-      ? <Snippet label="TS" lines={withoutImports(tableSource)}/>
-      : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
-  </Codes>;
+export const TheWholeBuild: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
+  ({world, tableSource, buildSrc}) =>
+    <Codes>
+      {world === 'react'
+        ? <Snippet label="TS" lines={withoutImports(tableSource)}/>
+        : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
+    </Codes>;
 
 export const NamesInTheCode: FC = () =>
   <Tell>A walk is the code’s name for a move made with the arrow keys. A strike is the moment the pointer crosses far
@@ -31,10 +32,12 @@ export const NamesInTheCode: FC = () =>
     measurement taken at the grab: the table’s box, every column’s width, and later the row heights.</Tell>;
 
 export const TwoRoads: FC = () =>
-  <Tell>There are two ways to drag something across a page, and I built both. The <TabLink to={DemoTopics.dragAndDrop}>Drag sort list demo</TabLink> uses
+  <Tell>There are two ways to drag something across a page, and I built both.
+    The <TabLink to={DemoTopics.dragAndDrop}>Drag sort list demo</TabLink> uses
     the native API, where the platform brings most of the behavior for very little code;
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
-    platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, which leave every pixel of the drag
+    platform, the macOS cancel) are that demo’s own story. This table uses <Mdn path="Web/API/Pointer_events">pointer
+      events</Mdn>, which leave every pixel of the drag
     to the code, and no drag-and-drop library is anywhere in the build.</Tell>;
 
 export const AgainstTheStream: FC = () =>
@@ -59,8 +62,8 @@ export const OwnedPixels: FC<{world: World}> = ({world}) =>
 
 export const TurnedVertical: FC = () =>
   <Tell>I could build rows their own machinery, but the need is the same motion
-    turned vertical, so rows reuse what the columns built. Three things differ: a grip button to grab, row heights in the survey, and a vertical
-    hit test. The promises the dials set carry over unchanged.</Tell>;
+    turned vertical, so rows reuse what the columns built. Three things differ: a grip button to grab, row heights in
+    the survey, and a vertical hit test. The promises the dials set carry over unchanged.</Tell>;
 
 export const AccessTrack: FC = () =>
   <Tell>I could build the keyboard its own sorting system, but the state, the clamps

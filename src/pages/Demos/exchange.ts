@@ -30,7 +30,12 @@ const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble:
   return () => fetching.cancel();
 };
 
-const candlesFor = ({tradeHistory, tradeProduct}: Exchange, period: Period, dispatch: Dispatch, onTrouble: Trouble): Closer => {
+const candlesFor = (
+  {tradeHistory, tradeProduct}: Exchange,
+  period: Period,
+  dispatch: Dispatch,
+  onTrouble: Trouble
+): Closer => {
   if (empty(tradeHistory)) {
     dispatch(candlesRefused(period));
     return () => undefined;
@@ -44,7 +49,11 @@ const candlesFor = ({tradeHistory, tradeProduct}: Exchange, period: Period, disp
   return () => fetching.cancel();
 };
 
-const opened = ({tradeFeed, tradeHistory, tradeProduct}: Exchange, dispatch: Dispatch, onTrouble: Trouble): readonly Closer[] => {
+const opened = (
+  {tradeFeed, tradeHistory, tradeProduct}: Exchange,
+  dispatch: Dispatch,
+  onTrouble: Trouble
+): readonly Closer[] => {
   const history = tradeHistory ? [historyOf(tradeHistory, tradeProduct, dispatch, onTrouble)] : [];
   if (!tradeFeed) {
     return history;

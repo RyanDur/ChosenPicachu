@@ -59,7 +59,8 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-    className={classNames(...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
+    className={classNames(
+      ...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
@@ -73,7 +74,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
       onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-      onKeyDown={rowArrows(row, () => standing, {nudged: ({to, heights}) => nudged(to, heights), moved: ({to}) => arrived(to)})}/>
+      onKeyDown={rowArrows(row, () => standing, {
+        nudged: ({to, heights}) => nudged(to, heights),
+        moved: ({to}) => arrived(to)
+      })}/>
     {label}
   </th>;
 };

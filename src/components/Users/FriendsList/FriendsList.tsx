@@ -18,7 +18,12 @@ type Report =
   | {stage: 'asked'; of: Membership}
   | {stage: 'settled'; of: Membership};
 
-const placeAfter = (userId: string, friends: readonly User[], candidatesLeft: readonly User[], of: Membership): string =>
+const placeAfter = (
+  userId: string,
+  friends: readonly User[],
+  candidatesLeft: readonly User[],
+  of: Membership
+): string =>
   of.change === 'removed'
     ? placeAfterRemoval(userId, friends, of.at)
     : placeAfterAddition(userId, candidatesLeft, of.friend.id);

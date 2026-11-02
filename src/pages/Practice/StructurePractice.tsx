@@ -17,13 +17,13 @@ export const StructurePractice: FC = () =>
   <>
     <h3 className="paragraph bold">What organizing markup has to solve</h3>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
-      for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are the
-      rules I hold the markup to, and the rest of this tab says how each is kept. They are not kept everywhere yet: in
-      the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
+      for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are
+      the rules I hold the markup to, and the rest of this tab says how each is kept. They are not kept everywhere yet:
+      in the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
-      it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On a long page
-      most of its users go to the headings first: 71.6% in{' '}
+      it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On
+      a long page most of its users go to the headings first: 71.6% in{' '}
     <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said they{' '}
     <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
       landmarks. Reader view and a search engine read it for the content in order, with its meaning. The next
@@ -67,10 +67,10 @@ export const StructurePractice: FC = () =>
     </dl>
     <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
     <h3 className="paragraph bold">The skeleton, and a name where a landmark repeats</h3>
-    <p className="paragraph">The skeleton comes first, and I keep this site’s skeleton the same on every page. One header and one
-      main; a footer where a page has one, as the gallery does. A nav named site, for the links that move you around
-      the site. A section named pages and feedback, the rail that holds that nav and the feedback button. Where a page
-      has tabs, a nav named by the tabs’ own label.</p>
+    <p className="paragraph">The skeleton comes first, and I keep this site’s skeleton the same on every page. One
+      header and one main; a footer where a page has one, as the gallery does. A nav named site, for the links that move
+      you around the site. A section named pages and feedback, the rail that holds that nav and the feedback button.
+      Where a page has tabs, a nav named by the tabs’ own label.</p>
     <p className="paragraph">Landmarks are what a screen reader lists and jumps to. Where one kind appears more than
       once, I name each, so they can be told apart. The{' '}
     <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly:{' '}
@@ -96,7 +96,8 @@ export const StructurePractice: FC = () =>
       href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
       an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
       a computed result. The answer to "what is this?" is usually an element’s name.
-      Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">October 2014 moment</MomentLink>.</p>
+      Semantic markup is the first objective listed in the <MomentLink to="html5SaysIt">October 2014
+        moment</MomentLink>.</p>
     <p className="paragraph">The element is the name. It tells the browser, a screen reader and the next developer at
       once
       what the thing is, so I choose it first and make a new one only for a behavior that has no element.</p>
@@ -219,8 +220,8 @@ export const StructurePractice: FC = () =>
     <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of
       last resort, for when no other element is suitable”</a>.{' '}
       The survey above says most screen reader users move through a long page by its headings, and a page built of
-      divs gives them nothing to move by. Everywhere else the element says what it is. A figure has its caption, a list is a
-      list, and a button is a button even when it looks like a link.
+      divs gives them nothing to move by. Everywhere else the element says what it is. A figure has its caption, a list
+      is a list, and a button is a button even when it looks like a link.
       The standard that calls a div a last resort is the one the browser makers wrote themselves, from the{' '}
     <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a

@@ -26,10 +26,12 @@ export const UsersTable: FC = () => {
           onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
           onSorted={({column, direction}) => dispatch(sorted(column, direction))}>
           <Column column="full-name" className="full-name">Full Name<ResizeHandle column="full-name"/></Column>
-          <DraggableColumn column="home-city" className="home-city">Home City<ResizeHandle column="home-city"/></DraggableColumn>
+          <DraggableColumn column="home-city" className="home-city">Home
+            City<ResizeHandle column="home-city"/></DraggableColumn>
           <DraggableColumn column="age" className="age">Age<SortMenu column="age"/><ResizeHandle column="age"/></DraggableColumn>
           <DraggableColumn column="friends" className="friends">Friends<ResizeHandle column="friends"/></DraggableColumn>
-          <Column column="works-from-home" className="works-from-home">Works from Home<SortMenu column="works-from-home"/><ResizeHandle column="works-from-home"/></Column>
+          <Column column="works-from-home" className="works-from-home">Works from
+            Home<SortMenu column="works-from-home"/><ResizeHandle column="works-from-home"/></Column>
         </Headers>
       </thead>
       <Body

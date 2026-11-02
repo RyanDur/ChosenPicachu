@@ -24,7 +24,12 @@ const failureIn = ({errors}: schema.Output<typeof refusal>): HTTPError =>
 
 const answered = <T>(data: schema.Decoder<T>) => schema.object({required: {data}});
 
-const asked = <T>({endpoint, token}: GitHub, query: string, variables: Record<string, string>, data: schema.Decoder<T>): Result.Async<T, HTTPError> =>
+const asked = <T>(
+  {endpoint, token}: GitHub,
+  query: string,
+  variables: Record<string, string>,
+  data: schema.Decoder<T>
+): Result.Async<T, HTTPError> =>
   http.post<unknown>(endpoint, {query, variables}, {headers: {authorization: `bearer ${token}`}})
     .mBind(reply => maybe(refusal.decode(reply))
       .map(refused => asyncFailure<HTTPError, T>(failureIn(refused)))
@@ -39,7 +44,9 @@ const searching = `query($search: String!) {
 const found = schema.object({
   required: {
     search: schema.object({
-      required: {nodes: schema.array(schema.object({required: {id: schema.string, url: schema.string, title: schema.string}}))}
+      required: {
+        nodes: schema.array(schema.object({required: {id: schema.string, url: schema.string, title: schema.string}}))
+      }
     })
   }
 });
@@ -62,7 +69,9 @@ const replying = `mutation($discussionId: ID!, $body: String!) {
 }`;
 
 const commented = schema.object({
-  required: {addDiscussionComment: schema.object({required: {comment: schema.object({required: {url: schema.string}})}})}
+  required: {
+    addDiscussionComment: schema.object({required: {comment: schema.object({required: {url: schema.string}})}})
+  }
 });
 
 const bodyOf = ({words, reach, from}: Note): string =>
@@ -71,5 +80,6 @@ const bodyOf = ({words, reach, from}: Note): string =>
 export const sent = (github: GitHub, note: Note): Result.Async<string, HTTPError> =>
   threadFor(github, note.page).mBind(thread => thread.either(
     ({id, url}) => asked(github, replying, {discussionId: id, body: bodyOf(note)}, commented).map(() => url),
-    () => asked(github, opening, {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)}, opened)
+    () => asked(github, opening,
+      {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)}, opened)
       .map(({createDiscussion}) => createDiscussion.discussion.url)));

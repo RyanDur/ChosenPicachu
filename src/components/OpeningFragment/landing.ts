@@ -8,7 +8,8 @@ export type Watch = {readonly last?: Measured; readonly held: number; readonly w
 
 export const watching: Watch = {held: 0, waited: 0};
 
-const unmoved = (now: Measured, last?: Measured): boolean => last?.top === now.top && last.pageHeight === now.pageHeight;
+const unmoved = (now: Measured, last?: Measured): boolean =>
+  last?.top === now.top && last.pageHeight === now.pageHeight;
 
 export const watched = (watch: Watch, now: Measured): Watch | 'land' => {
   const held = now.visible && unmoved(now, watch.last) ? watch.held + 1 : 0;

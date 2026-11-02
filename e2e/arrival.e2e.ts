@@ -12,7 +12,8 @@ const settledScrollY = async (page: Page): Promise<number> => {
   return last;
 };
 
-// Firefox restores a fractional scroll as much as a pixel and a fifth from where the reader left it, on a phone and on a desk
+// Firefox restores a fractional scroll as much as a pixel and a fifth from where the reader left it, on a phone and on
+// a desk
 const theSamePlace = 2;
 
 for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as const) {
@@ -30,12 +31,14 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
       await page.goBack();
 
       await expect(page.getByRole('heading', {name: 'Slice the design into stories'})).toBeAttached();
-      await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial)).toBeLessThanOrEqual(theSamePlace);
+      await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial))
+        .toBeLessThanOrEqual(theSamePlace);
 
       await page.goForward();
 
       await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
-      await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab)).toBeLessThanOrEqual(theSamePlace);
+      await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab))
+        .toBeLessThanOrEqual(theSamePlace);
     });
   });
 }

@@ -102,7 +102,11 @@ describe('Gallery Navigation', () => {
   });
 
   test('a museum with nothing to show counts 0 - 0 of 0', async () => {
-    setupAICEveryPage({...aicArtResponse, data: [], pagination: {...aicArtResponse.pagination, total: 0, total_pages: 0}});
+    setupAICEveryPage({
+      ...aicArtResponse,
+      data: [],
+      pagination: {...aicArtResponse.pagination, total: 0, total_pages: 0}
+    });
     render(<TestApp at={Paths.artGallery}/>);
 
     await waitFor(() => expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(/^0 - 0of0$/));
