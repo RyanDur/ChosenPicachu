@@ -117,7 +117,7 @@ describe('the tables demo', () => {
     expect(await tableControls.settings()).toHaveTextContent(/^settings \S/);
   });
 
-  test('the controls read out whatever is chosen', async () => {
+  test('the controls read out the table first shown', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('tables')} feed={feed}/>);
@@ -127,6 +127,12 @@ describe('the tables demo', () => {
     expect(await tableControls.reading('origin')).toHaveTextContent(/moves with the pointer, cells and all/);
     expect(await tableControls.reading('motion')).toHaveTextContent(/slide to their new places/);
     expect(tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
+  });
+
+  test('the controls read out whatever is chosen', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
 
     await tableControls.choose('Lazy', 'Keep', 'Static');
 
