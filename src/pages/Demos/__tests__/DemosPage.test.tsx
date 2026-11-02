@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import {render, screen, within} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {Paths} from '@pages/Paths';
@@ -10,36 +10,25 @@ describe('The Demos page', () => {
   test('should mark Accordions as the current tab when it is the demo shown', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
-
-    expect(tabs.getByRole('link', {name: 'Accordions', current: 'page'})).toBeInTheDocument();
-    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+    expect(await demoTabs.current()).toEqual(['Accordions']);
   });
 
   test('should mark Drag sort as the current tab when it is the demo shown', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 
-    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
-
-    expect(tabs.getByRole('link', {name: 'Drag sort', current: 'page'})).toBeInTheDocument();
-    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+    expect(await demoTabs.current()).toEqual(['Drag sort']);
   });
 
   test('should mark Tables as the current tab when it is the demo shown', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
-
-    expect(tabs.getByRole('link', {name: 'Tables', current: 'page'})).toBeInTheDocument();
-    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+    expect(await demoTabs.current()).toEqual(['Tables']);
   });
 
   test('should run its tabs in the order the opening names them, simple to expert', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const tabs = within(await screen.findByRole('navigation', {name: 'demos'})).getAllByRole('link');
-
-    expect(tabs.map(tab => tab.textContent)).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
+    expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
   test('the demos page’s own address lands on the Accordions tab', async () => {
@@ -113,8 +102,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Accordions');
 
-    const region = await screen.findByRole('region', {name: 'Accordions'});
-    expect(within(region).queryByRole('heading', {name: 'Accordions'})).not.toBeInTheDocument();
+    expect(await demoTabs.headingRepeatingItsName('Accordions')).not.toBeInTheDocument();
   });
 
   test('should name the Z-index tab by its region, with no heading inside repeating it', async () => {
@@ -122,8 +110,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Z-index');
 
-    const region = await screen.findByRole('region', {name: 'Z-index'});
-    expect(within(region).queryByRole('heading', {name: 'Z-index'})).not.toBeInTheDocument();
+    expect(await demoTabs.headingRepeatingItsName('Z-index')).not.toBeInTheDocument();
   });
 
   test('should name the Drag sort tab by its region, with no heading inside repeating it', async () => {
@@ -131,8 +118,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Drag sort');
 
-    const region = await screen.findByRole('region', {name: 'Drag sort'});
-    expect(within(region).queryByRole('heading', {name: 'Drag sort'})).not.toBeInTheDocument();
+    expect(await demoTabs.headingRepeatingItsName('Drag sort')).not.toBeInTheDocument();
   });
 
   test('should name the Charts tab by its region, with no heading inside repeating it', async () => {
@@ -140,8 +126,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Charts');
 
-    const region = await screen.findByRole('region', {name: 'Charts'});
-    expect(within(region).queryByRole('heading', {name: 'Charts'})).not.toBeInTheDocument();
+    expect(await demoTabs.headingRepeatingItsName('Charts')).not.toBeInTheDocument();
   });
 
   test('should name the Tables tab by its region, with no heading inside repeating it', async () => {
@@ -149,8 +134,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Tables');
 
-    const region = await screen.findByRole('region', {name: 'Tables'});
-    expect(within(region).queryByRole('heading', {name: 'Tables'})).not.toBeInTheDocument();
+    expect(await demoTabs.headingRepeatingItsName('Tables')).not.toBeInTheDocument();
   });
 
   test('should title the page Demos Accordions, the name on its tab, once that tab is chosen', async () => {
@@ -158,7 +142,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Accordions');
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Accordions'})).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Accordions')).toBeInTheDocument();
   });
 
   test('should title the page Demos Z-index, the name on its tab, once that tab is chosen', async () => {
@@ -166,7 +150,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Z-index');
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Z-index'})).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should title the page Demos Drag sort, the name on its tab, once that tab is chosen', async () => {
@@ -174,7 +158,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Drag sort');
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Drag sort'})).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Drag sort')).toBeInTheDocument();
   });
 
   test('should title the page Demos Charts, the name on its tab, once that tab is chosen', async () => {
@@ -182,7 +166,7 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Charts');
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Charts'})).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Charts')).toBeInTheDocument();
   });
 
   test('should title the page Demos Tables, the name on its tab, once that tab is chosen', async () => {
@@ -190,6 +174,6 @@ describe('The Demos page', () => {
 
     await demoTabs.open('Tables');
 
-    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Tables'})).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 });
