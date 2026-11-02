@@ -11,7 +11,6 @@ const listed = {
   'users/': names.users,
   'gallery/': names.gallery,
   'games/': names.games,
-  'record/': names.record,
   ...Object.fromEntries(Object.entries(names.demos).map(([tab, listing]) => [`demos/${tab}/`, listing])),
   ...Object.fromEntries(Object.entries(names.charts).map(([kind, listing]) => [`demos/charts/${kind}/`, listing])),
   ...Object.fromEntries(Object.entries(names.practice).map(([tab, listing]) => [`practice/${tab}/`, listing]))
@@ -21,4 +20,11 @@ test('a search engine that runs no script reads each page’s own title and desc
   const read = await Promise.all(Object.keys(listed).map(async route => [route, headOf(await (await request.get(route)).text())]));
 
   expect(Object.fromEntries(read)).toEqual(listed);
+});
+
+test('a search engine that runs no script reads the Record’s description counting the moments its page tells', async ({request}) => {
+  const page = await (await request.get('record/')).text();
+  const [, told] = /one sentence said (?:<!-- -->)?([a-z-]+)(?:<!-- -->)? ways/.exec(page) ?? [];
+
+  expect(headOf(page)).toEqual({title: names.record.title, description: names.record.description.replace('{moments}', told)});
 });

@@ -5,6 +5,8 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
+import {recordListing} from '@pages/Record/listing';
+import {inOrder} from '@pages/Record/moments/moments';
 import {practiceAt} from '@pages/Practice/__test_support/practice';
 import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
@@ -17,7 +19,7 @@ describe('each page is named where a search shows it', () => {
 
     const [, count] = /one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent) ?? [];
 
-    expect(names.record.description).toContain(`in ${count} moments`);
+    expect(described()).toContain(`in ${count} moments`);
   });
 
   test.each([
@@ -32,7 +34,7 @@ describe('each page is named where a search shows it', () => {
     ['the users page', Paths.users, names.users],
     ['the gallery', `${Paths.artGallery}?page=1&size=8&tab=aic`, names.gallery],
     ['the games page', Paths.games, names.games],
-    ['the record', Paths.record, names.record],
+    ['the record', Paths.record, recordListing(inOrder.length)],
     ['the practice page, on Structure when no tab is named', Paths.practice, names.practice.structure],
     ['practice’s structure tab', practiceAt('structure'), names.practice.structure],
     ['practice’s presentation tab', practiceAt('presentation'), names.practice.presentation],

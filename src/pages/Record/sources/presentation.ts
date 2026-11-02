@@ -46,7 +46,7 @@ export const presentation = {
   resetReasoning: {title: 'Reset Reasoning', address: 'https://meyerweb.com/eric/thoughts/2007/04/18/reset-reasoning/', provenance: 'Eric Meyer, meyerweb.com, 18 April 2007'},
   resetReloaded: {title: 'Reset Reloaded', address: 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/', provenance: 'Eric Meyer, meyerweb.com, 1 May 2007'},
   resetCss: {title: 'Reset CSS', address: 'https://meyerweb.com/eric/tools/css/reset/', provenance: 'Eric Meyer, meyerweb.com, version 2.0, 2011'},
-  normalizeCss: {title: 'normalize.css', address: 'https://necolas.github.io/normalize.css/', provenance: 'Nicolas Gallagher, undated'},
+  normalizeCss: {title: 'normalize.css', address: 'https://necolas.github.io/normalize.css/', provenance: 'Nicolas Gallagher and Jonathan Neal, undated'},
   aboutNormalizeCss: {title: 'About normalize.css', address: 'https://nicolasgallagher.com/about-normalize-css/', provenance: 'Nicolas Gallagher, 28 February 2012'},
   normalizeTags: {title: 'normalize.css tags', address: 'https://github.com/necolas/normalize.css/tags', provenance: 'Nicolas Gallagher and Jonathan Neal, GitHub, version 1.0.0, 14 August 2012'},
   sass: {title: 'Sass', address: 'https://sass-lang.com/', provenance: 'sass-lang.com, undated'},

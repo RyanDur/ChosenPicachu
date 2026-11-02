@@ -1195,8 +1195,8 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('Reset CSS')).toBe('Presentation');
   });
 
-  test('should shelve normalize.css on the Presentation shelf, as Nicolas Gallagher, undated', () => {
-    expect(recordPage.shelvedAs('normalize.css')).toHaveTextContent('Nicolas Gallagher, undated');
+  test('should shelve normalize.css on the Presentation shelf, as Nicolas Gallagher and Jonathan Neal, undated', () => {
+    expect(recordPage.shelvedAs('normalize.css')).toHaveTextContent('Nicolas Gallagher and Jonathan Neal, undated');
     expect(recordPage.shelfHolding('normalize.css')).toBe('Presentation');
   });
 
