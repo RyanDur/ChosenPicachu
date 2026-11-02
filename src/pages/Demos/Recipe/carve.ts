@@ -28,6 +28,21 @@ const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>)
   return !'=:{>~+[|'.includes(ahead[0]);
 };
 
+const opensABlock = (line: string, pending: Closer[]): boolean =>
+  pending.length === 1 && pending[0] === '}' && line.trimEnd().endsWith('{');
+
+const halfAStatement = (line: string): boolean => {
+  const pending: Closer[] = [];
+  for (const glyph of line.split('')) {
+    if (glyph in openers) {
+      pending.push(openers[glyph]);
+    } else if ('})]'.includes(glyph) && pending.pop() !== glyph) {
+      return true;
+    }
+  }
+  return pending.length > 0 && !opensABlock(line, pending);
+};
+
 export const unit = (sample: Sample, anchor: string): Line[] => {
   const source = sample.text;
   const found = source.indexOf(anchor);
@@ -69,7 +84,11 @@ export const span = (sample: Sample, from: string, to: string): Line[] => {
   }
   const start = source.lastIndexOf('\n', first) + 1;
   const close = source.indexOf('\n', last);
-  return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample, lineAt(source, start));
+  const lines = source.slice(start, close < 0 ? source.length : close).split('\n');
+  if (lines.length === 1 && halfAStatement(lines[0])) {
+    throw new Error(`the one line at "${from}" is half a statement; carve its whole statement`);
+  }
+  return dedented(lines, sample, lineAt(source, start));
 };
 
 export const withoutImports = (sample: Sample): Line[] => {

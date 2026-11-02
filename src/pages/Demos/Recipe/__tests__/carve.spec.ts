@@ -238,6 +238,19 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a one-line span that leaves a bracket open fails loudly instead of teaching half a statement', () => {
+    expect(() => span(source, 'const seeded', 'const seeded')).toThrow(/const seeded/);
+  });
+
+  test('a one-line span that closes what it never opened fails loudly instead of teaching half a statement', () => {
+    expect(() => span(source, '({...shares', '({...shares')).toThrow(/shares/);
+  });
+
+  test('a one-line span may open a block it leaves for the next lines', () => {
+    expect(span(source, 'if (event.buttons', 'if (event.buttons').map(({text}) => text))
+      .toEqual(['if (event.buttons === 0) {']);
+  });
+
   test('a missing anchor fails loudly instead of teaching nothing', () => {
     expect(() => unit(source, 'const vanished = ')).toThrow(/vanished/);
     expect(() => span(source, 'onPointerMove', 'onGone')).toThrow(/onGone/);
