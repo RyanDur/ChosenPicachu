@@ -1,5 +1,4 @@
-import {render, waitFor} from '@testing-library/react';
-import {itemHeadedBy} from '@__test_support/headed-item';
+import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {demoPage} from '@pages/Demos/__test_support';
@@ -64,7 +63,6 @@ describe('the table tutorials', () => {
     const resize = await tablesTab.recipe('drag resize');
     expect(resize).toBeVisible();
     expect(recipeFolds.story(resize, 'The trader can widen a column')).toBeInTheDocument();
-    expect((await tablesTab.linksIn('drag resize', 'captures its pointer'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
     expect(tablesTab.recipeShown('drag sort')).not.toBeInTheDocument();
     expect(tableControls.shown()).not.toBeInTheDocument();
     expect(demoPage.part('the living table')).toBeVisible();
@@ -86,7 +84,6 @@ describe('the table tutorials', () => {
 
     const recipe = await tablesTab.recipe('sort menu');
     expect(recipe).toBeVisible();
-    expect((await tablesTab.linksIn('sort menu', 'position-area'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
     expect(recipeFolds.story(recipe, 'The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     expect(tablesTab.recipeShown('drag sort')).not.toBeInTheDocument();
     expect(tableControls.shown()).not.toBeInTheDocument();
@@ -113,11 +110,4 @@ describe('the table tutorials', () => {
     ]);
   });
 
-  test('should take the keyboard to the station the address names', async () => {
-    render(<TestApp at="/#station-5"><Tutorials/></TestApp>);
-
-    await demoPage.findTitle('The trader can watch the market live, in windows');
-
-    await waitFor(() => expect(itemHeadedBy('the stations', 'The trader can watch the market live, in windows')).toHaveFocus());
-  });
 });

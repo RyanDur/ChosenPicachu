@@ -16,4 +16,10 @@ describe('the drag resize recipe', () => {
 
     expect(await demoPage.findTitle('The trader can widen a column')).toBeInTheDocument();
   });
+
+  test('should link capturing the pointer to setPointerCapture on MDN', async () => {
+    render(<TestApp at="/"><ResizeRecipe/></TestApp>);
+
+    expect((await tablesTab.linksIn('drag resize', 'captures its pointer'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
+  });
 });
