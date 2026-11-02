@@ -1,5 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {Paths} from '@pages/Paths';
 import {aUser, setupUsersResponse} from '@components/Users/__test_support';
 
@@ -25,8 +26,7 @@ describe('the row menu is a popover anchored to its toggle', () => {
     const row = await firstRow();
     const toggle = within(row).getByRole('button', {name: /^Actions for /});
 
-    ['View', 'Edit', 'Clone'].forEach(action =>
-      expect(within(menuFor(toggle)).getByRole('link', {name: action, hidden: true})).toBeInTheDocument());
+    expect(within(menuFor(toggle)).getAllByRole('link', {hidden: true}).map(link => computeAccessibleName(link))).toEqual(['View', 'Edit', 'Clone']);
     expect(within(menuFor(toggle)).getByRole('button', {name: 'Remove', hidden: true})).toBeInTheDocument();
   });
 });
