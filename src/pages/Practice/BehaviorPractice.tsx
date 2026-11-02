@@ -21,6 +21,8 @@ import {
 } from './BehaviorCarves';
 import {OneDirectionLoop} from './OneDirectionLoop';
 import {TwoTracks} from './TwoTracks';
+import {elementsPart} from './StructurePractice';
+import {practiceAddress} from './types';
 
 const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
 const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';
@@ -164,11 +166,19 @@ export const BehaviorPractice: FC = () =>
     <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
     <TableEventsCarve/>
     <h3 className="paragraph bold">The platform first</h3>
-    <p className="paragraph">The platform comes first here too. An accordion on the demos page opens and closes
-      with no script, a popover closes itself, and the browser already provides the back button, scroll restoration and
-      focus order. Script that rebuilds those takes on their bugs. I write behavior only for what the platform does
-      not yet do.
-      The <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what rebuilding them by hand cost.</p>
+    <p className="paragraph">The platform comes first here too. The Structure tab’s
+      part <Link className="signpost" to={`${practiceAddress('Structure')}#${elementsPart}`}>From the content to the
+        element</Link> lists what the elements do on their own. A details opens and shuts, a modal dialog holds focus, a
+      popover closes on Escape, and a form refuses an empty required field, so I don’t script any of it. The browser
+      also provides the back button, scroll restoration and focus order. Script that rebuilds those takes on their
+      bugs, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what rebuilding them by hand
+      cost.</p>
+    <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
+      the feature. The feedback dialog holds the site’s two. Its buttons open and close it with invoker commands, and
+      where a browser has none, a click handler does it instead. It closes on a click outside it
+      with <code className="monospaced">closedby</code>, and where a browser lacks that, a click handler closes it too.
+      Any other behavior the platform lacks I attach with script: by a data attribute in plain HTML, like the tables
+      demo’s <code className="monospaced">data-drag-sortable</code>, and by a component in React.</p>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}

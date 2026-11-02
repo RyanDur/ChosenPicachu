@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {useArrival} from '@components/OpeningFragment';
 import {Tabs} from '@components/Tabs';
 import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
 import {practiceAddress} from './types';
@@ -16,6 +17,7 @@ const practices: Record<Concern, FC> = {
 };
 
 export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
+  useArrival();
   const Practice = practices[concern];
 
   return <>
