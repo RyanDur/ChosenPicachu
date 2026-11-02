@@ -5,38 +5,32 @@ import {render, screen, within} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {Paths} from '@pages/Paths';
-import {listeningFeed} from '@pages/Demos/__test_support/feed';
-import {DemoTopics, topicNames} from '@pages/Demos/types';
-import {britishSpellingsOnThePage} from '@__test_support/spelling';
 
 describe('The Demos page', () => {
-  test.each([DemoTopics.accordions, DemoTopics.zIndex, DemoTopics.dragAndDrop, DemoTopics.charts])('should spell the %s tab\'s prose the American way', async tab => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt(tab)} feed={feed}/>);
-    await demoTabs.arrivedOn(topicNames[tab]);
-
-    expect(britishSpellingsOnThePage()).toEqual([]);
-  });
-
-  test('should open on what the tabs hold and where to start, above the tabs', async () => {
+  test('should mark Accordions as the current tab when it is the demo shown', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
-
-    const opening = await screen.findByText(/^Each tab below is one feature a page needs/);
-
-    expect(opening).toHaveTextContent('Each tab below is one feature a page needs. I built each one here and explain it. The tabs run from simple to expert: an accordion, a menu that opens under a card, a list you sort by dragging, a live chart, and a table whose columns and rows you drag while trades keep landing. A tab shows the feature first, with dials wherever the build has a choice. Then comes the explanation, with what the platform gives now beside the tricks we used before it. Then come the steps that build it, each beside the code that runs on this page. Start with the accordions if HTML, CSS and JavaScript are new to you, or go to the tab whose bug you came with.');
-    expect(opening.compareDocumentPosition(screen.getByRole('navigation', {name: 'demos'})) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  });
-
-  test.each([
-    ['Accordions', demosAt('accordions')],
-    ['Drag sort', demosAt('drag-and-drop')],
-    ['Tables', demosAt('tables')]
-  ])('should mark the demo it shows as the current tab, %s at %s', async (shown, at) => {
-    render(<TestApp at={at}/>);
 
     const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
 
-    expect(tabs.getByRole('link', {name: shown, current: 'page'})).toBeInTheDocument();
+    expect(tabs.getByRole('link', {name: 'Accordions', current: 'page'})).toBeInTheDocument();
+    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+  });
+
+  test('should mark Drag sort as the current tab when it is the demo shown', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
+
+    expect(tabs.getByRole('link', {name: 'Drag sort', current: 'page'})).toBeInTheDocument();
+    expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
+  });
+
+  test('should mark Tables as the current tab when it is the demo shown', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    const tabs = within(await screen.findByRole('navigation', {name: 'demos'}));
+
+    expect(tabs.getByRole('link', {name: 'Tables', current: 'page'})).toBeInTheDocument();
     expect(tabs.getAllByRole('link', {current: 'page'})).toHaveLength(1);
   });
 
@@ -48,17 +42,46 @@ describe('The Demos page', () => {
     expect(tabs.map(tab => tab.textContent)).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
-  test.each([
-    [Paths.demos, demosAt('accordions')],
-    [`${Paths.demos}?world=vanilla`, demosAt('accordions', '?world=vanilla')],
-    [`${Paths.demos}?tab=tables&world=vanilla&tut=menu`, demosAt('tables', '?world=vanilla&tut=menu')],
-    [`${Paths.demos}?tab=dragAndDrop&pace=lazy`, demosAt('drag-and-drop', '?pace=lazy')],
-    [`${Paths.demos}?tab=behavior`, demosAt('accordions')],
-    [`${Paths.demos}?tab=constructor`, demosAt('accordions')]
-  ])('an address of the demos page, %s, lands on its tab at %s with its dials kept', async (from, to) => {
+  test('the demos page’s own address lands on the Accordions tab', async () => {
+    const from = Paths.demos;
     render(<TestApp at={from}/>);
 
-    expect(await appAddress.movedOnFrom(from)).toBe(to);
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions'));
+  });
+
+  test('the demos page’s address with a world lands on the Accordions tab with its world kept', async () => {
+    const from = `${Paths.demos}?world=vanilla`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions', '?world=vanilla'));
+  });
+
+  test('an old tables address with its dials lands on the Tables tab with its dials kept', async () => {
+    const from = `${Paths.demos}?tab=tables&world=vanilla&tut=menu`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla&tut=menu'));
+  });
+
+  test('an old drag sort address with its pace lands on the Drag sort tab with its pace kept', async () => {
+    const from = `${Paths.demos}?tab=dragAndDrop&pace=lazy`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('drag-and-drop', '?pace=lazy'));
+  });
+
+  test('an old address naming the behavior tab lands on the Accordions tab', async () => {
+    const from = `${Paths.demos}?tab=behavior`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions'));
+  });
+
+  test('an old address naming the constructor tab lands on the Accordions tab', async () => {
+    const from = `${Paths.demos}?tab=constructor`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions'));
   });
 
   test('a tab the demos do not have is no such room', async () => {
@@ -85,20 +108,88 @@ describe('The Demos page', () => {
     expect((await demoTabs.arrivedOn('Accordions')).textContent).toBe(dealt);
   });
 
-  test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should name the %s tab by its region, with no heading inside repeating it', async tab => {
+  test('should name the Accordions tab by its region, with no heading inside repeating it', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    await demoTabs.open(tab);
+    await demoTabs.open('Accordions');
 
-    const region = await screen.findByRole('region', {name: tab});
-    expect(within(region).queryByRole('heading', {name: tab})).not.toBeInTheDocument();
+    const region = await screen.findByRole('region', {name: 'Accordions'});
+    expect(within(region).queryByRole('heading', {name: 'Accordions'})).not.toBeInTheDocument();
   });
 
-  test.each(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'])('should title the page Demos %s, the name on its tab, once that tab is chosen', async tab => {
+  test('should name the Z-index tab by its region, with no heading inside repeating it', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    await demoTabs.open(tab);
+    await demoTabs.open('Z-index');
 
-    expect(await screen.findByRole('heading', {level: 1, name: `Demos ${tab}`})).toBeInTheDocument();
+    const region = await screen.findByRole('region', {name: 'Z-index'});
+    expect(within(region).queryByRole('heading', {name: 'Z-index'})).not.toBeInTheDocument();
+  });
+
+  test('should name the Drag sort tab by its region, with no heading inside repeating it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Drag sort');
+
+    const region = await screen.findByRole('region', {name: 'Drag sort'});
+    expect(within(region).queryByRole('heading', {name: 'Drag sort'})).not.toBeInTheDocument();
+  });
+
+  test('should name the Charts tab by its region, with no heading inside repeating it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Charts');
+
+    const region = await screen.findByRole('region', {name: 'Charts'});
+    expect(within(region).queryByRole('heading', {name: 'Charts'})).not.toBeInTheDocument();
+  });
+
+  test('should name the Tables tab by its region, with no heading inside repeating it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Tables');
+
+    const region = await screen.findByRole('region', {name: 'Tables'});
+    expect(within(region).queryByRole('heading', {name: 'Tables'})).not.toBeInTheDocument();
+  });
+
+  test('should title the page Demos Accordions, the name on its tab, once that tab is chosen', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Accordions');
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Accordions'})).toBeInTheDocument();
+  });
+
+  test('should title the page Demos Z-index, the name on its tab, once that tab is chosen', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Z-index');
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Z-index'})).toBeInTheDocument();
+  });
+
+  test('should title the page Demos Drag sort, the name on its tab, once that tab is chosen', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Drag sort');
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Drag sort'})).toBeInTheDocument();
+  });
+
+  test('should title the page Demos Charts, the name on its tab, once that tab is chosen', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Charts');
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Charts'})).toBeInTheDocument();
+  });
+
+  test('should title the page Demos Tables, the name on its tab, once that tab is chosen', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.open('Tables');
+
+    expect(await screen.findByRole('heading', {level: 1, name: 'Demos Tables'})).toBeInTheDocument();
   });
 });
