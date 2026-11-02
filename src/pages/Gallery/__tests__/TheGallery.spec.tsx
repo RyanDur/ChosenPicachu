@@ -190,23 +190,30 @@ describe('The gallery.', () => {
     expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
   });
 
-  test.each([
-    {from: 'a museum', at: '?tab=aic', page: 1},
-    {from: 'a link to a museum\u2019s page 2', at: '?tab=aic&page=2', page: 2}
-  ])('opened on $from while another museum is still asked, the wall is the one thing loading, and stays the only one', async ({at, page}) => {
+  const loadingSigns = (): number => screen.queryAllByRole('progressbar', {name: 'loading gallery'}).length;
+
+  const loadingSignsWhenOpenedAt = async (at: string, page: number): Promise<{whileAsked: number; onceHung: number; onceTheOtherAnswers: number}> => {
     const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page});
     const vamAnswers = heldVAMPictures();
     render(<TestApp at={`${Paths.artGallery}${at}`}/>);
-
     await screen.findByRole('navigation', {name: 'museums'});
+    const whileAsked = loadingSigns();
 
-    expect(screen.getAllByRole('progressbar', {name: 'loading gallery'})).toHaveLength(1);
     wallArrives();
     await galleryWall.framesAppear();
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    const onceHung = loadingSigns();
+
     vamAnswers();
     await screen.findByRole('link', {name: 'The Victoria and Albert Museum'});
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    return {whileAsked, onceHung, onceTheOtherAnswers: loadingSigns()};
+  };
+
+  test('opened on a museum while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
+    expect(await loadingSignsWhenOpenedAt('?tab=aic', 1)).toEqual({whileAsked: 1, onceHung: 0, onceTheOtherAnswers: 0});
+  });
+
+  test('opened on a link to a museum’s page 2 while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
+    expect(await loadingSignsWhenOpenedAt('?tab=aic&page=2', 2)).toEqual({whileAsked: 1, onceHung: 0, onceTheOtherAnswers: 0});
   });
 
   test('switching museums while another is still asked keeps one thing loading until the new wall is hung', async () => {
