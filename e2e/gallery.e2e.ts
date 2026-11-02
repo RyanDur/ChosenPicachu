@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
+import {desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
@@ -152,6 +152,24 @@ test.describe('a visitor at a desk', () => {
     await expect(works.first()).toBeVisible();
 
     expect(await galleryPage(page).picturesNotShown()).toEqual([]);
+  });
+});
+
+test.describe('a phone held sideways, partway down the gallery', () => {
+  test.use(phoneSideways);
+
+  test('following NEXT opens the next page at its top', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+    await gallery.wall.last().scrollIntoViewIfNeeded();
+    await gallery.nextPage.scrollIntoViewIfNeeded();
+    expect(await documentScrollY(page)).toBeGreaterThan(0);
+
+    await gallery.nextPage.click();
+    await expect(page).toHaveURL(/page=2/);
+
+    await expect.poll(() => documentScrollY(page)).toBe(0);
   });
 });
 

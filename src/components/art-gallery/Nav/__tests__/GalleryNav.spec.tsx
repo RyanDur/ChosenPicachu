@@ -2,7 +2,6 @@ import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
-import {scrolling} from '@components/__test_support/scrolling';
 import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@components/art-gallery/__test_support';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {anyRequestFailsToConnect} from '@__test_support/server';
@@ -20,17 +19,14 @@ describe('Gallery Navigation', () => {
     expect(appAddress.shown()).not.toContain('page');
   });
 
-  test('the next page is a page on, and starts at the top', async () => {
+  test('the next page is a page on', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
-    const landings = scrolling.recordLandings();
 
     await galleryNav.go('NEXT');
 
     expect(appAddress.shown()).toContain('page=2');
-    expect(landings).toContainEqual(scrolling.atTheTop('page'));
-    expect(landings.filter(({where}) => where === 'elsewhere')).toEqual([]);
   });
 
   test('there is no way back from the first page', async () => {
