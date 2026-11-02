@@ -1,6 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC, useState} from 'react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {PillGlider} from '../index';
 
 const styles = [
@@ -21,9 +22,7 @@ describe('the pill glider', () => {
       chosen="eager" onChosen={() => undefined}/>);
 
     expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
-    for (const {display} of styles) {
-      expect(screen.getByRole('radio', {name: display})).toBeVisible();
-    }
+    expect(screen.getAllByRole('radio').map(radio => computeAccessibleName(radio))).toEqual(['Eager', 'Lazy', 'Hide Eager', 'Hide Lazy']);
     expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
   });
 
