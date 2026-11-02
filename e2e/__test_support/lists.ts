@@ -3,6 +3,7 @@ import {fingertipMiss} from './finger';
 import {siteFrame} from './site';
 
 type Carried = {
+  readonly carryOnTo: (onto: string) => Promise<void>;
   readonly drop: () => Promise<void>;
 };
 
@@ -62,20 +63,33 @@ export const sortableList = (page: Page) => {
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
       await page.mouse.move(to.x, to.y, {steps: 12});
-      // a drop only lands where the page has heard a dragover, and a loaded engine can coalesce the moves that would fire one,
-      // so the page listens first, and only then does the pointer move within the target to fire one it will hear;
-      // WebKit on Linux ends the drag when an eager list moves the carried item's element, and then no dragover can come
+      // a drop only lands where the page has heard a dragover. CI's WebKit log showed why one move is not enough: a move onto
+      // an element the eager list has just put under the pointer fires dragenter and no dragover, and only a further move over
+      // the same element fires one. So the page listens first, and the pointer nudges within the target until it is heard.
       await page.evaluate(() => {
-        delete document.documentElement.dataset.dragHeard;
-        const heard = (event: DragEvent): void => {
-          document.documentElement.dataset.dragHeard = event.type;
-        };
-        document.addEventListener('dragover', heard, {once: true});
-        document.addEventListener('dragend', heard, {once: true});
+        delete document.documentElement.dataset.dragoverHeard;
+        document.addEventListener('dragover', () => {
+          document.documentElement.dataset.dragoverHeard = 'yes';
+        }, {once: true});
       });
-      await page.mouse.move(to.x + 1, to.y);
-      await page.waitForFunction(() => 'dragHeard' in document.documentElement.dataset);
-      return {drop: (): Promise<void> => page.mouse.up()};
+      const nudges = [1, 0, 1, 0, 1, 0, 1, 0];
+      let heard = false;
+      for (const nudge of nudges) {
+        if (heard) break;
+        await page.mouse.move(to.x + nudge, to.y);
+        heard = await page.waitForFunction(() => 'dragoverHeard' in document.documentElement.dataset, undefined, {timeout: 250})
+          .then(() => true, () => false);
+      }
+      if (!heard) throw new Error(`no dragover was heard at the target after ${nudges.length} nudges`);
+      let at = {x: to.x + 1, y: to.y};
+      return {
+        carryOnTo: async (next: string): Promise<void> => {
+          const there = await pastTheMiddleOf(seatOf(next), at);
+          await page.mouse.move(there.x, there.y, {steps: 12});
+          at = there;
+        },
+        drop: (): Promise<void> => page.mouse.up()
+      };
     },
     fingerOnTheGrip: async (item: string): Promise<Pressed> => {
       await siteFrame(page).hydrated();

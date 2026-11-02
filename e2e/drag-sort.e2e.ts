@@ -28,6 +28,18 @@ test('a lazy list holds its order while an item is carried, and takes the new or
   await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
 });
 
+test('an eager list keeps following a carried item back across a neighbour, so the drag has not ended under the reader', async ({page}) => {
+  await page.goto('demos/drag-and-drop/?pace=eager');
+  const list = sortableList(page);
+  const carried = await list.carry('A', 'C');
+  await expect(list.moveReport).toHaveText('A moved to 3 of 3');
+
+  await carried.carryOnTo('C');
+
+  await expect(list.moveReport).toHaveText('A moved to 2 of 3');
+  await carried.drop();
+});
+
 test('a dragged item in an eager list says where it landed', async ({page}) => {
   await page.goto('demos/drag-and-drop/?pace=eager');
   const list = sortableList(page);
