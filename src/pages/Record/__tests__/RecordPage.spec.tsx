@@ -1,4 +1,3 @@
-import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
@@ -426,9 +425,7 @@ describe('the 2013 moment', () => {
   });
 
   test('should send the reader to the 2010 moment for the single-page application\'s shape', async () => {
-    const moment = itemHeadedBy('the timeline', 'Someone needs components');
-    await userEvent.click(within(moment).getByText('the fuller story'));
-    await userEvent.click(within(moment).getByRole('link', {name: 'the 2010 moment'}));
+    await recordPage.followFromMoment('Someone needs components', 'the 2010 moment');
 
     await waitFor(() => expect(itemHeadedBy('the timeline', 'The application needs a frame')).toHaveFocus());
   });
