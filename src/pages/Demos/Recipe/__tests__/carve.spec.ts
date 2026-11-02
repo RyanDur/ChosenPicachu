@@ -72,7 +72,7 @@ describe('carving examples out of the source they teach', () => {
   test('every carved line remembers the file it was taken from', () => {
     const carved = [...unit(source, 'const travel = '), ...span(source, 'onPointerMove', 'onPointerUp')];
 
-    expect(new Set(carved.map(({from}) => from?.sample))).toEqual(new Set([source]));
+    expect(new Set(carved.map(({from}) => from?.file))).toEqual(new Set([source]));
   });
 
   test('every carved line knows its place in the file it was taken from', () => {

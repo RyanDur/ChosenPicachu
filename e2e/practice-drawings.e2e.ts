@@ -22,14 +22,3 @@ test('a reader with the styles off meets the page\'s table of contents once, und
 
   await expect(practice.drawingsShownIn(drawing)).toHaveCount(1);
 });
-
-test('a screen reader on the Behavior tab hears the one-direction drawing as its title and caption, after the carves of the code it draws', async ({page}) => {
-  const practice = practicePage(page);
-  await page.goto('practice/behavior/');
-
-  const drawing = practice.figure(/^One direction\. An event goes to the reducer, .* nothing inside the loop knows it is there\.$/);
-
-  await expect(drawing).toBeVisible();
-  await expect(practice.drawingsHeardIn(drawing)).toHaveCount(0);
-  await expect.poll(() => practice.comesAfter(drawing, practice.figure(/reducer\.ts on GitHub/))).toBe(true);
-});

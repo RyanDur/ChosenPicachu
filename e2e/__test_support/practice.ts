@@ -7,10 +7,6 @@ export const practicePage = (page: Page) => {
     title: (concern: string): Locator => page.getByRole('heading', {name: `Practice ${concern}`, level: 1}),
     link: (name: string): Locator => practice.getByRole('link', {name}).first(),
     figure: (caption: RegExp): Locator => practice.getByRole('figure', {name: caption}),
-    drawingsHeardIn: (figure: Locator): Locator => figure.getByRole('img'),
-    comesAfter: async (later: Locator, earlier: Locator): Promise<boolean> =>
-      later.evaluate((element, before) => (before.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0,
-        await earlier.elementHandle()),
     // a drawing is an image the caption speaks for, hidden from a reader's tools, so the count is of what shows
     drawingsShownIn: (figure: Locator): Locator => figure.getByRole('img', {includeHidden: true})
       .or(figure.getByRole('presentation', {includeHidden: true}))

@@ -2,13 +2,13 @@ import {FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Kind, highlight} from './highlight';
-import {Sample} from './sample';
+import {CodeFile} from './sample';
 import './Snippet.css';
 
 export type Line = {
   text: string;
   dim?: boolean;
-  from?: {sample: Sample; line: number};
+  from?: {file: CodeFile; line: number};
 };
 
 type Props = {
@@ -21,7 +21,7 @@ type Source = {path: string; url: string; owner?: string; first: number; last: n
 const sourcesOf = (lines: readonly Line[]): Source[] =>
   lines.reduce<Source[]>((sources, {from}) => {
     if (from) {
-      const {sample: {path, url, owner}, line} = from;
+      const {file: {path, url, owner}, line} = from;
       const known = sources.find(source => source.path === path);
       return known
         ? sources.map(source => source === known

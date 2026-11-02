@@ -12,10 +12,9 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
 
 const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
-const captionsACarve = (link: HTMLElement): boolean => {
-  const figure = link.closest('figure');
-  return figure !== null && link.closest('figcaption') !== null && within(figure).queryAllByRole('code').length > 0;
-};
+const carveLinks = (): HTMLElement[] => within(practice()).getAllByRole('figure')
+  .filter(figure => within(figure).queryAllByRole('code').length > 0)
+  .flatMap(carve => within(carve).queryAllByRole('link'));
 
 const drawnTexts = (figure: string): HTMLElement[] =>
   within(within(practice()).getByRole('figure', {name: figure})).getAllByText(/./, {ignore: 'code, figcaption, figcaption *'});
@@ -72,10 +71,13 @@ export const practicePage = {
       .filter(link => next.map(after => Boolean(after.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING)).orElse(true))
       .map(link => [link.textContent, link.getAttribute('href')]);
   },
-  sourcesLinked: (): string[] => within(practice()).getAllByRole('link')
-    .filter(link => not(leadsToThisSitesCode(link)) && not(captionsACarve(link)))
-    .map(link => link.getAttribute('href') ?? '')
-    .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
+  sourcesLinked: (): string[] => {
+    const pointersToCode = carveLinks();
+    return within(practice()).getAllByRole('link')
+      .filter(link => not(leadsToThisSitesCode(link)) && not(pointersToCode.includes(link)))
+      .map(link => link.getAttribute('href') ?? '')
+      .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
+  },
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))

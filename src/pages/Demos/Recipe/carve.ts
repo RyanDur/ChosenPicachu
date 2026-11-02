@@ -11,7 +11,7 @@ const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
   const margin = Math.min(...lines
     .filter(line => line.trim().length > 0)
     .map(line => line.length - line.trimStart().length));
-  return lines.map((line, at) => ({text: line.slice(margin), from: {sample: from, line: firstLine + at}}));
+  return lines.map((line, at) => ({text: line.slice(margin), from: {file: from, line: firstLine + at}}));
 };
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean => {

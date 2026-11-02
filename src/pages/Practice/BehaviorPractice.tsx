@@ -35,8 +35,8 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">The table’s reducer is small reducers combined, and it ignores any event that is not the
       table’s:</p>
     <TableReducerCarve/>
-    <p className="paragraph">The demos store holds the column order, as its arrangement.{' '}
-      <code className="monospaced">selectColumns</code> works out the columns on screen from it, so nothing stores them
+    <p className="paragraph">The demos store holds the column order in its{' '}
+      <code className="monospaced">arrangement</code>. <code className="monospaced">selectColumns</code> works out the columns on screen from it, so nothing stores them
       twice.</p>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and view both ways. I keep one
       direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s answer.</p>
@@ -45,19 +45,19 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">An event is a name for what happened. The state’s type is a name for what is true, and it
       refuses what cannot be. So the code reads as sentences to the next reader, who was not there when it was written.</p>
     <p className="paragraph">I wrote small functions so a condition reads in words: <code className="monospaced">has</code>,{' '}
-      <code className="monospaced">not</code>, <code className="monospaced">empty</code> and{' '}
-      <code className="monospaced">is</code>, from my own library,{' '}
+      <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
+      <code className="monospaced">notEmpty</code>, from my own library,{' '}
       <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
     <PreludeCarve/>
-    <p className="paragraph">So the table asks whether a drag is under way and a column is settling the way I would say
-      it:</p>
+    <p className="paragraph">Here the table asks, in words I would say aloud, whether a drag is under way and a column
+      is settling:</p>
     <ConditionCarve/>
     <p className="paragraph">The style sheet asks its questions in the same words. <code className="monospaced">:has()</code> asks
       whether an element holds something, <code className="monospaced">:not()</code> turns a question round,
       and <code className="monospaced">:is()</code> asks whether any of a list is true:</p>
     <SheetQuestionsCarve/>
-    <p className="paragraph">Nobody reading either should have to turn a symbol round in their head to learn what was
-      asked.</p>
+    <p className="paragraph">I would rather the next reader meet a word than work out what a{' '}
+      <code className="monospaced">!</code> asks. The cost is that they learn sand’s words first.</p>
     <h3 className="paragraph bold">Where the world comes in</h3>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still

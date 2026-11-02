@@ -3,6 +3,7 @@ import {Snippet} from '../Snippet';
 import {aside, plain} from '../lines';
 import {span} from '../carve';
 import {aSample} from '../__test_support';
+import {CodeFile} from '../sample';
 
 const store = aSample('export const store = 1;\nexport const more = 2;\n', 'src/pages/Demos/store.ts');
 const shared = aSample('export type Store = {};\n', 'src/components/store.ts');
@@ -12,6 +13,13 @@ describe('a code sample', () => {
     render(<Snippet label="TS" lines={span(store, 'export const store', 'export const more')}/>);
 
     expect(screen.getByRole('link', {name: 'Demos/store.ts on GitHub'})).toHaveAttribute('href', `${store.url}#L1-L2`);
+  });
+
+  test('should name the library a sample was taken from before its file', () => {
+    const library: CodeFile = {path: 'src/lib/util/index.ts', url: 'https://github.com/RyanDur/sand/blob/main/src/lib/util/index.ts', owner: 'sand'};
+    render(<Snippet label="TS" lines={[{text: 'export const has = notEmpty;', from: {file: library, line: 188}}]}/>);
+
+    expect(screen.getByRole('link', {name: 'sand’s util/index.ts on GitHub'})).toHaveAttribute('href', `${library.url}#L188-L188`);
   });
 
   test('should link each file it was taken from, in the order they first appear', () => {

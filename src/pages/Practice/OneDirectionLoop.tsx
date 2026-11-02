@@ -51,6 +51,6 @@ export const OneDirectionLoop: FC = () =>
     </svg>
     <figcaption className="caption"><strong className="bold">One direction.</strong> An event goes to the reducer, the
       reducer returns the next state, the page is drawn from the state, and the page sends the next event. The shell,
-      drawn apart, holds the state and runs the loop; nothing inside the loop knows it is there.
+      drawn apart, holds the state and runs the loop, and nothing inside the loop knows the shell is there.
     </figcaption>
   </figure>;

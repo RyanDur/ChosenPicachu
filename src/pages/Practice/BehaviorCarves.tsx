@@ -10,10 +10,11 @@ import useDragSortableSource from '@components/DragSortableTable/useDragSortable
 import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';
 import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import surfaceSheet from '../../styles/surface.css?sample';
+import accordionsSheet from '@pages/Demos/Accordions/Accordions.css?sample';
 import {aside, Snippet} from '@pages/Demos/Recipe';
 import {span, unit} from '@pages/Demos/Recipe/carve';
 import {Line} from '@pages/Demos/Recipe/Snippet';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {CodeFile, Sample} from '@pages/Demos/Recipe/sample';
 
 const reducerType = span(storeSource, 'export type Reducer', '(state, action) => reducers.reduce');
 const lifted = span(actionsSource, 'export const lifted', 'export const lifted');
@@ -31,13 +32,12 @@ export const EventsCarve: FC = () => <>
 export const TableReducerCarve: FC = () => <Snippet label="TS" lines={tableReducer}/>;
 
 // sand ships only its built files, so its source is carved by hand from the commit the installed 10.0.0 was built from
-const sandUtil: Sample = {
-  text: '',
+const sandUtil: CodeFile = {
   path: 'src/lib/util/index.ts',
   owner: 'sand',
   url: 'https://github.com/RyanDur/sand/blob/65821220fe38666bfad429a6a1b4cfbb65b4c463/src/lib/util/index.ts'
 };
-const sandLine = (line: number, text: string): Line => ({text, from: {sample: sandUtil, line}});
+const sandLine = (line: number, text: string): Line => ({text, from: {file: sandUtil, line}});
 
 export const PreludeCarve: FC = () => <Snippet label="TS" lines={[
   sandLine(77, 'export const not = (value: unknown): boolean => !value;'),
@@ -58,7 +58,7 @@ const oneLine = (sheet: Sample, line: string): Line[] => span(sheet, line, line)
 
 export const SheetQuestionsCarve: FC = () => <>
   <Snippet label="CSS" lines={oneLine(basePageSheet, '&:not(:has(.header-settings)) .app-title')}/>
-  <Snippet label="CSS" lines={oneLine(surfaceSheet, '.attentive:where(:not(:disabled))')}/>
+  <Snippet label="CSS" lines={oneLine(accordionsSheet, '.info-toggle:not(:checked) ~ .info')}/>
   <Snippet label="CSS" lines={oneLine(surfaceSheet, ':is(:hover, :focus) > .liftable')}/>
 </>;
 

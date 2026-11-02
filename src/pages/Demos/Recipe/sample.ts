@@ -2,5 +2,10 @@ export type Sample = {
   text: string;
   path: string;
   url: string;
+};
+
+export type CodeFile = {
+  path: string;
+  url: string;
   owner?: string;
 };
