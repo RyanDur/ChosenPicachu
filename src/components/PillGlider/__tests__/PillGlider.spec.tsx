@@ -1,8 +1,7 @@
-import {render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render} from '@testing-library/react';
 import {FC, useState} from 'react';
-import {computeAccessibleName} from 'dom-accessibility-api';
 import {PillGlider} from '../index';
+import {pillGlider} from '../__test_support/glider';
 
 const styles = [
   {display: 'Eager', value: 'eager'},
@@ -21,17 +20,17 @@ describe('the pill glider', () => {
     render(<PillGlider label="drag style" name="drag-style" options={styles}
       chosen="eager" onChosen={() => undefined}/>);
 
-    expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
-    expect(screen.getAllByRole('radio').map(radio => computeAccessibleName(radio))).toEqual(['Eager', 'Lazy', 'Hide Eager', 'Hide Lazy']);
-    expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
+    expect(pillGlider.group('drag style')).toBeVisible();
+    expect(pillGlider.choices()).toEqual(['Eager', 'Lazy', 'Hide Eager', 'Hide Lazy']);
+    expect(pillGlider.choice('Eager')).toBeChecked();
   });
 
   test('choosing a pill makes it the chosen one', async () => {
     render(<Choosing/>);
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+    await pillGlider.choose('Hide Lazy');
 
-    expect(screen.getByRole('radio', {name: 'Hide Lazy'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Eager'})).not.toBeChecked();
+    expect(pillGlider.choice('Hide Lazy')).toBeChecked();
+    expect(pillGlider.choice('Eager')).not.toBeChecked();
   });
 });
