@@ -79,8 +79,6 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Scott Wlaschin calls this using the type system to{' '}
       <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
       Yaron Minsky.</p>
-    <p className="paragraph">The pre-commit hook runs the type checker as <code className="monospaced">tsc -b</code>,
-      and refuses a commit that lets a forbidden state into a type.</p>
     <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
       there when it was written. I wrote small functions so a condition reads in
       words: <code className="monospaced">has</code>,{' '}
@@ -198,10 +196,9 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">A walk and a drag that passes a neighbour share one case of the reducer, so a key and
       a pointer move the other columns by the same rule:</p>
     <WalkCaseCarve/>
-    <p className="paragraph">The focus stays on the column or row being walked, so the next key press moves it again.
-      If the focus moved away, the next press would not reach the column. WCAG 2.4.3 asks that focus moves{' '}
-    <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>, and keeping
-      it on the walked column keeps the keyboard operable.</p>
+    <p className="paragraph">The focus stays on the column or row being walked, so the next key press reaches it
+      again. WCAG 2.4.3 asks that focus moves{' '}
+    <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
     <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
       reader user hears where the column or row went. The report is a type, and{' '}
     <code className="monospaced">moveReport</code> turns it into words:</p>
@@ -218,8 +215,8 @@ export const BehaviorPractice: FC = () =>
       language tells its whole story alone.
       The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three
       responsibilities do not.</p>
-    <p className="paragraph">The state test is not read by eye either. Three gates hold the site to it, and each is a
-      few lines in the repository. The review holds one more rule.</p>
+    <p className="paragraph">Nobody checks the state test by eye. Three gates hold the site to it, and the review holds
+      one more rule.</p>
     <ul className="practice-list">
       <li className="paragraph">The core is tested as functions, because it is functions.{' '}
         <a className="signpost" href={directoryInRepository('src/components/DragSortableTable/__tests__')}>Four
@@ -228,7 +225,8 @@ export const BehaviorPractice: FC = () =>
         table’s code with no page at all, and they run on every commit.
       </li>
       <li className="paragraph">The shell is tested as journeys, because it touches the world. They drive the tables by
-        pointer and by key in three browsers, and{' '}
+        pointer and by key in three browsers and check the order a reader sees and the move report a screen reader
+        hears, and{' '}
       <a className="signpost" href={fileInRepository('AGENTS.md')}>“Journeys run as a reader who asks for less
         motion, and none is retried or skipped.”</a>
       </li>
