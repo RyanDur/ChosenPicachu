@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {seeded} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import {AccordionsExplained} from './Explained';
@@ -13,19 +13,18 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
     value: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
   }));
 
+const draws = seeded('the accordion exhibits');
+const dealt = draws.wordDeck();
+const contents = {
+  measured: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+  known: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+  platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
+  gridRow: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
+};
+
 const AccordionsTab: FC = () => {
   const {type, style, updateSearchParams} =
     useSearchParamsObject({type: foldTypeParam, style: foldMotionParam}, {type: 'exclusive', style: 'reveal'});
-  const [contents] = useState(() => {
-    const draws = seeded('the accordion exhibits');
-    const dealt = draws.wordDeck();
-    return {
-      measured: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
-      known: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
-      platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
-      gridRow: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
-    };
-  });
 
   return <AccordionsExplained contents={contents} type={type}
     onTypeChosen={next => updateSearchParams({type: next})}
