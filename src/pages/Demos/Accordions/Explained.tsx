@@ -267,8 +267,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <h3 id="measured-heading" className="sub-title bold">The measured height</h3>
         <figure className={exhibit}>
           <PlainFold/>
-          <figcaption className="caption">This fold is a page of its own, built by plain script, so the dials above do not reach it. It always
-            opens to reveal its text, whichever fold type is chosen. Press the bar: with motion allowed, the script measures the text and the
+          <figcaption className="caption">This fold is a separate page set inside this one, so the dials above do not reach it. Its
+            script is plain, with no library. Whichever fold type and fold motion are chosen, it is one fold, and its text is
+            uncovered from the top down. Press the bar: with motion allowed, the script measures the text and the
             style sheet slides the panel to that height, and a second press slides it shut. With less motion asked for, it
             opens at once.</figcaption>
         </figure>
