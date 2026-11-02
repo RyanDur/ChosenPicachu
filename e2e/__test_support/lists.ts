@@ -52,13 +52,16 @@ export const sortableList = (page: Page) => {
       await page.mouse.down();
       await page.mouse.move(from.x + 10, from.y, {steps: 3});
       await page.mouse.move(to.x, to.y, {steps: 12});
-      // a drop only lands where the page has heard a dragover, and a loaded engine can coalesce the moves that would fire one;
-      // any dragover after the pointer reaches the target is at the target, and a held drag fires one at least every 350 ms
-      const heardAtTheTarget = page.evaluate(() => new Promise<void>(resolve => {
-        document.addEventListener('dragover', () => resolve(), {once: true});
-      }));
+      // a drop only lands where the page has heard a dragover, and a loaded engine can coalesce the moves that would fire one,
+      // so the page listens first, and only then does the pointer move within the target to fire one it will hear
+      await page.evaluate(() => {
+        delete document.documentElement.dataset.heardDragover;
+        document.addEventListener('dragover', () => {
+          document.documentElement.dataset.heardDragover = 'at the target';
+        }, {once: true});
+      });
       await page.mouse.move(to.x + 1, to.y);
-      await heardAtTheTarget;
+      await page.waitForFunction(() => document.documentElement.dataset.heardDragover === 'at the target');
       return {drop: (): Promise<void> => page.mouse.up()};
     },
     fingerOnTheGrip: async (item: string): Promise<Pressed> => {
