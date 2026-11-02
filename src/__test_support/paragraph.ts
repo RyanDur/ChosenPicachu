@@ -1,6 +1,6 @@
 import {screen, within} from '@testing-library/react';
 
-export const paragraphOpeningIn = (container: HTMLElement) => (opening: RegExp): HTMLElement => {
+const paragraphOpeningIn = (container: HTMLElement) => (opening: RegExp): HTMLElement => {
   const found = within(container).getAllByRole('paragraph').filter(paragraph => opening.test(paragraph.textContent ?? ''));
   if (found.length === 1) {
     return found[0];

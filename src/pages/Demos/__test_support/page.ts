@@ -13,7 +13,6 @@ export const demoPage = {
   findTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
   says: (told: string | RegExp): HTMLElement => screen.getByText(told),
   findSays: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
-  saidAnywhere: (told: string): HTMLElement | null => screen.queryByText(told),
   signpost: (name: string): HTMLElement => screen.getByRole('link', {name}),
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
