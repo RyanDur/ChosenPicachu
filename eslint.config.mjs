@@ -29,7 +29,10 @@ const shape = {
   '@stylistic/type-annotation-spacing': 'error',
   '@stylistic/jsx-curly-spacing': ['error', {when: 'never'}],
   '@stylistic/jsx-equals-spacing': ['error', 'never'],
-  '@stylistic/jsx-tag-spacing': ['error', {beforeSelfClosing: 'never', beforeClosing: 'never'}]
+  '@stylistic/jsx-tag-spacing': ['error', {beforeSelfClosing: 'never', beforeClosing: 'never'}],
+  '@stylistic/max-len': ['error', {
+    code: 120, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreRegExpLiterals: true
+  }]
 };
 
 const comparedToUndefined = {
