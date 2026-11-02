@@ -78,8 +78,8 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...unit(headerSource, 'const moved = '), gap,
-            ...span(headerSource, '...motionLooks(carried', '...motionLooks(carried'), gap,
-            ...unit(looksSource, 'export const motionLooks'), gap,
+            ...span(headerSource, '...motionStates(carried', '...motionStates(carried'), gap,
+            ...unit(looksSource, 'export const motionStates'), gap,
             ...span(headerSource, "'--seat-x': pixels(seat?.x)", "'--drift-x': pixels(drift?.x)")
           ]}/>
           : <Snippet label="TS" lines={[

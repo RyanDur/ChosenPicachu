@@ -4,7 +4,7 @@ import {useTableSelector} from './context';
 import {columnHeld, columnMarks, driftOfColumn, driftOfRow, rowHeld, rowMarks, seatOfColumn, seatOfRow} from './selectors';
 import {pixels, shoveDistance} from './table-state';
 import './motion.css';
-import {cellLooks, motionLooks} from './looks';
+import {cellNeeds, motionStates} from './looks';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
   const {settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(columnMarks(column));
@@ -21,7 +21,7 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
-    className={classNames('cell', className, ...cellLooks, ...motionLooks(columnCarried || rowCarried, from, shove))}
+    className={classNames('cell', className, ...cellNeeds, ...motionStates(columnCarried || rowCarried, from, shove))}
     style={{
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
       '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),

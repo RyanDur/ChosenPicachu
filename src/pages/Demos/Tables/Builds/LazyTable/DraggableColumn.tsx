@@ -14,7 +14,7 @@ import {Grab, columnLift} from '@components/DragSortableTable/lift';
 import {columnArrows} from '@components/DragSortableTable/arrows';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
-import {headerCell, headerLooks, headerNeeds, motionLooks} from '@components/DragSortableTable/looks';
+import {headerCell, headerNeeds, motionStates} from '@components/DragSortableTable/looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
@@ -59,7 +59,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-    className={classNames(...headerCell, className, ...headerLooks, ...headerNeeds(travels, width), ...motionLooks(carried, settlingFrom, shoved))}
+    className={classNames(...headerCell, className, ...headerNeeds(travels, width), ...motionStates(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

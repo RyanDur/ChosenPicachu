@@ -7,8 +7,11 @@ import {dressWidths} from './resize';
 export const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
   [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
 
+export const columnsShown = (table: HTMLTableElement): string[] =>
+  headersOf(table).flatMap(th => columnOfHeader(th).either(column => [column], (): string[] => []));
+
 export const sortableOf = (table: HTMLTableElement): string[] =>
-  headersOf(table).map(columnOfHeader).filter(column => is(table.querySelector(`#sort-${column}`)));
+  columnsShown(table).filter(column => is(table.querySelector(`#sort-${column}`)));
 
 export const markGrips = (table: HTMLTableElement): void => {
   const headers = headersOf(table);
@@ -37,7 +40,7 @@ const reconcileColumns = (table: HTMLTableElement, shown: readonly string[], ord
 
 export const arrangeColumns = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
   const {table, order} = context;
-  const shown = headersOf(table).map(columnOfHeader);
+  const shown = columnsShown(table);
   if (changed(shown, order())) {
     keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, shown, order()));
     markGrips(table);

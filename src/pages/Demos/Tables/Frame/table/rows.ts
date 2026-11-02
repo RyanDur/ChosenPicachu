@@ -1,9 +1,9 @@
 import {maybe} from '@ryandur/sand';
 import {gripLabel} from '@components/DragSortableTable/survey';
 import {isMeasure} from '@pages/Demos/Tables/Aggregations/cells';
-import {changed, columnOfHeader, MountedTable} from './table-state';
+import {changed, MountedTable} from './table-state';
 import {keepingFocus} from './focus';
-import {headersOf, sortableOf} from './columns';
+import {columnsShown, sortableOf} from './columns';
 
 export const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
 
@@ -11,7 +11,7 @@ export const lanesOf = (body: HTMLTableSectionElement): ReadonlyMap<string, HTML
   new Map([...body.rows].map(lane => [rowOf(lane), lane]));
 
 export const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
-  const order = headersOf(table).map(columnOfHeader);
+  const order = columnsShown(table);
   rows().forEach(row =>
     maybe(lanes.get(row.window.display)).map(lane =>
       sortableOf(table).forEach(measure => {

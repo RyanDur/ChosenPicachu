@@ -155,12 +155,11 @@ const wired = (context: TableContext): void => {
   hand.subscribe((previous, current) => dress(context, previous, current()));
   markGrips(table);
   wireParts(context);
-  headersOf(table).forEach(th => {
-    const held = columnOfHeader(th);
+  headersOf(table).forEach(th => columnOfHeader(th).map(held => {
     th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carrying(th, context);
     th.addEventListener('keydown', columnArrows(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
-  });
+  }));
 };
 
 export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): Reconcile => {

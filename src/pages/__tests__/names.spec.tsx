@@ -1,7 +1,7 @@
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
-import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {chartPage, chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
@@ -208,28 +208,28 @@ describe('each page is named where a search shows it', () => {
   test('should describe the price chart’s page with the story its tutorial tells', async () => {
     render(<TestApp at={chartPageAt('price', '?graph=price')}/>);
 
-    expect(await screen.findByRole('heading', {name: names.charts.price.description.replace(/\.$/, '')})).toBeInTheDocument();
+    expect(await chartPage.storyHeading(names.charts.price.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.price.description));
   });
 
   test('should describe the candles chart’s page with the story its tutorial tells', async () => {
     render(<TestApp at={chartPageAt('candles', '?graph=candles')}/>);
 
-    expect(await screen.findByRole('heading', {name: names.charts.candles.description.replace(/\.$/, '')})).toBeInTheDocument();
+    expect(await chartPage.storyHeading(names.charts.candles.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.candles.description));
   });
 
   test('should describe the pressure chart’s page with the story its tutorial tells', async () => {
     render(<TestApp at={chartPageAt('pressure', '?graph=pressure')}/>);
 
-    expect(await screen.findByRole('heading', {name: names.charts.pressure.description.replace(/\.$/, '')})).toBeInTheDocument();
+    expect(await chartPage.storyHeading(names.charts.pressure.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.pressure.description));
   });
 
   test('should describe the pie chart’s page with the story its tutorial tells', async () => {
     render(<TestApp at={chartPageAt('pie', '?graph=pie')}/>);
 
-    expect(await screen.findByRole('heading', {name: names.charts.pie.description.replace(/\.$/, '')})).toBeInTheDocument();
+    expect(await chartPage.storyHeading(names.charts.pie.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.pie.description));
   });
 });

@@ -117,7 +117,6 @@ describe('the tables tab’s own words', () => {
     {choice: 'tut=resize&world=vanilla', sentence: '<button type="button" tabindex="0" data-resize-handle class="resize-handle'},
     {choice: 'world=vanilla', sentence: '<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable> <caption class="off-screen">Live aggregations by window</caption> <thead>'},
     {choice: 'track=pointer&world=vanilla', sentence: 'In the vanilla build the grip’s button and the handle’s button are marked for what they do, data-row-grip and data-resize-handle, and dragSortable attaches the behavior to each when boot calls it.'},
-    {choice: 'world=vanilla', sentence: 'The page writes the whole table as it would for any table: the table, its caption, the head and the body, and after it an output, the move report that tells a screen reader what moved, whose for names the table it reports on. One attribute, data-drag-sortable, marks the table as one that drag-sorts. The two choices the later steps explain, origin, whether a carried row’s or column’s cells stay visible in their place, and motion, whether moves animate, are classes on the table.'},
     {choice: 'world=vanilla', sentence: 'At boot a script finds every table so marked and calls dragSortable on it. There are two builds of dragSortable, eager and lazy, one file each, and the pace is which one boot calls.'},
     {choice: 'world=vanilla', sentence: 'The call makes the hand, a store of the table’s own. A store is one plain object that holds state and answers when asked. It takes actions, records of what happened, through its dispatch, and after each action it calls its subscribers, the functions that asked to hear of changes. The hand holds what is held and the widths. The call also wires the table’s listeners at once.'},
     {choice: 'world=vanilla', sentence: 'The call returns reconcile, the function the page calls whenever its own store changes. Reconcile moves the cells to the new order and writes the text that changed.'},
@@ -1253,7 +1252,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
 
-    expect(recipe).toHaveTextContent(/export const motionLooks[^]*\(carried \|\| has\(settlingFrom\) \|\| has\(shove\)\) && 'paper-in-motion'/);
+    expect(recipe).toHaveTextContent(/export const motionStates[^]*\(carried \|\| has\(settlingFrom\) \|\| has\(shove\)\) && 'paper-in-motion'/);
   });
 
   test('should carve the line that gives a traded header shared, in the react world', async () => {

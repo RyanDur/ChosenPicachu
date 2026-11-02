@@ -9,7 +9,7 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number, nam
     }
     header.classList.add('shared');
     header.style.setProperty('--share', `${share}%`);
-    maybe(header.querySelector('.resize-handle')).map(handle =>
+    maybe(header.querySelector('[data-resize-handle]')).map(handle =>
       handle.setAttribute('aria-label', resizeLabel(column, named)));
   });
 };
