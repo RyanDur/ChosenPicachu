@@ -36,6 +36,12 @@ export const vanillaFrame = {
     document.body.innerHTML = startingTable({origin, motion});
     feedTheTable(document, pace);
   },
+  standWithAHeaderUnnamed: (column: string): void => {
+    window.__env = {...env, tradeFeed: ''};
+    document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
+    header(column).removeAttribute('data-column');
+    feedTheTable(document, 'eager');
+  },
   table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),
   header,
   row,

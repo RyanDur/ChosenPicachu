@@ -41,5 +41,5 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
 };
 
 export const resizeHandle = (context: Resizing, handle: HTMLElement): void => {
-  maybe(handle.closest('th')).mBind(columnOfHeader).map(column => resizing(context, column, handle));
+  maybe(handle.closest('th')).map(th => resizing(context, columnOfHeader(th), handle));
 };

@@ -113,6 +113,6 @@ export const Concert: FC = () =>
       order the people involved count when that choice is hard: <a className="signpost"
       href="https://www.w3.org/TR/html-design-principles/">“consider
         users over authors over implementors over specifiers over theoretical purity.”</a> The record runs from
-      1989, and the method is still at work: its newest answers are server components, announced in December 2020, and
-      @scope, in every engine since March 2026.</p>
+      1989, and the method is still at work: among its answers are server components, announced in December 2020,
+      @scope, in every engine since March 2026, and invoker commands, since December 2025.</p>
   </section>;

@@ -7,8 +7,7 @@ import {dressWidths} from './resize';
 export const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
   [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
 
-export const columnsShown = (table: HTMLTableElement): string[] =>
-  headersOf(table).flatMap(th => columnOfHeader(th).either(column => [column], (): string[] => []));
+export const columnsShown = (table: HTMLTableElement): string[] => headersOf(table).map(columnOfHeader);
 
 export const sortableOf = (table: HTMLTableElement): string[] =>
   columnsShown(table).filter(column => is(table.querySelector(`#sort-${column}`)));

@@ -21,6 +21,10 @@ describe('the frame table', () => {
     expect(vanillaFrame.header('change')).not.toHaveAttribute('tabindex');
   });
 
+  it('should refuse to stand a table whose header names no column, rather than seat its cells a column off', () => {
+    expect(() => vanillaFrame.standWithAHeaderUnnamed('trades')).toThrow('a sortable table’s header names no column');
+  });
+
   it('should move a row one seat per press after its own grip has been reseated', async () => {
     vanillaFrame.stand();
 

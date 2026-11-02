@@ -1,7 +1,7 @@
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {chartPage, chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {chartPage} from '@pages/Demos/Charts/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
@@ -163,7 +163,7 @@ describe('each page is named where a search shows it', () => {
       setupAICArtPieceResponse(anAICPieceResponse(piece), piece.id);
       render(<TestApp at={Paths.artGallery}/>);
 
-      await userEvent.click(within(await galleryWall.frameTitled(piece.title)).getByRole('img'));
+      await galleryWall.openPiece(piece.title);
 
       await waitFor(() => expect(document.title).toBe(`${piece.title} · Gallery · Chosen Picachu`));
       expect(described()).toBe(`${piece.title}, by ${piece.artist_display}, from the gallery’s wall.`);
@@ -174,7 +174,7 @@ describe('each page is named where a search shows it', () => {
       setupAICArtPieceResponse(anAICPieceResponse({...piece, artist_display: ''}), piece.id);
       render(<TestApp at={Paths.artGallery}/>);
 
-      await userEvent.click(within(await galleryWall.frameTitled(piece.title)).getByRole('img'));
+      await galleryWall.openPiece(piece.title);
 
       await waitFor(() => expect(document.title).toBe(`${piece.title} · Gallery · Chosen Picachu`));
       expect(described()).toBe(`${piece.title}, from the gallery’s wall.`);
@@ -185,9 +185,9 @@ describe('each page is named where a search shows it', () => {
       const answer = heldAICArtPieceResponse(anAICPieceResponse(piece), piece.id);
       render(<TestApp at={Paths.artGallery}/>);
 
-      await userEvent.click(within(await galleryWall.frameTitled(piece.title)).getByRole('img'));
+      await galleryWall.openPiece(piece.title);
 
-      await screen.findByRole('heading', {name: 'A piece'});
+      await galleryWall.pieceStillComing();
       expect(document.title).toBe(names.gallery.title);
       expect(described()).toBe(names.gallery.description);
       answer();

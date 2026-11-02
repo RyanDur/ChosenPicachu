@@ -1,4 +1,4 @@
-import {Maybe, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {TableStore} from '@components/DragSortableTable/store';
 import {Report} from '@components/DragSortableTable/report';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
@@ -32,7 +32,11 @@ export type Given = {
 
 export type Reconcile = (before: readonly TableColumn<Labelled>[]) => void;
 
-export const columnOfHeader = (th: Element): Maybe<string> => maybe(th.getAttribute('data-column'));
+export const columnOfHeader = (th: Element): string => maybe(th.getAttribute('data-column')).either(
+  column => column,
+  () => {
+    throw new Error(`a sortable table’s header names no column: ${th.outerHTML.slice(0, th.outerHTML.indexOf('>') + 1)}`);
+  });
 
 export const changed = <T>(before: readonly T[], after: readonly T[]): boolean =>
   before.length !== after.length || after.some((at, position) => before[position] !== at);

@@ -38,7 +38,7 @@ const keepingTheColumnStill = (chrome: Element): void => {
 
 export const sortMenu = (context: Pick<MountedTable, 'table' | 'report'>, menu: HTMLElement): void => {
   maybe(menu.closest('th')).map(th => {
-    columnOfHeader(th).map(column => menu.querySelectorAll('button').forEach(item => choosing(context, column, item)));
+    menu.querySelectorAll('button').forEach(item => choosing(context, columnOfHeader(th), item));
     [menu, ...th.querySelectorAll('[data-sort-toggle]')].forEach(keepingTheColumnStill);
   });
 };

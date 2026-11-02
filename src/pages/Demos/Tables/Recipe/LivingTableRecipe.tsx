@@ -74,7 +74,7 @@ const suppliedBy: Record<World, ReactNode> = {
       the body, and after it an <code className="monospaced">output</code>, the move report that tells a screen reader what moved,
       whose <code className="monospaced">for</code> names the table it reports on. One attribute, <code className="monospaced">data-drag-sortable</code>, marks the table as
       one that drag-sorts. Each header cell carries <code className="monospaced">data-column</code>, which names its column for the
-      script, so the class list only dresses the cell. The two choices the later steps explain, <code
+      script, so the classes the page writes only dress the cell. The two choices the later steps explain, <code
       className="monospaced">origin</code>, whether a carried row’s or
       column’s cells stay visible in their place, and <code className="monospaced">motion</code>, whether moves animate, are classes on the
       table.</Says>
