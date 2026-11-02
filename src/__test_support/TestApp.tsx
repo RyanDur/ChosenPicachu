@@ -44,9 +44,11 @@ type RouteModule = {readonly default: FC; readonly ErrorBoundary?: FC};
 
 const modules = import.meta.glob<RouteModule>('../pages/**/route.tsx', {eager: true});
 
-const roomOf = ({path, file}: {path?: string; file: string}): RouteObject => {
+type Room = {path?: string; file: string; children?: Room[]};
+
+const roomOf = ({path, file, children}: Room): RouteObject => {
   const {default: Component, ErrorBoundary} = modules[`../${file}`];
-  return {path, Component, ErrorBoundary};
+  return {path, Component, ErrorBoundary, children: children?.map(roomOf)};
 };
 
 const siteRoute = {
@@ -64,8 +66,11 @@ const routed = (children: ReactNode): boolean =>
 
 const pathOf = (at: string): string => new URL(at, 'http://test').pathname;
 
+const everyRoom = (rooms: RouteObject[]): RouteObject[] =>
+  rooms.flatMap(room => [room, ...everyRoom(room.children ?? [])]);
+
 const roomAt = (at: string): RouteObject | undefined =>
-  siteRoute.children.find((room: RouteObject) => room.path === pathOf(at));
+  everyRoom(siteRoute.children).find(room => room.path === pathOf(at));
 
 const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)

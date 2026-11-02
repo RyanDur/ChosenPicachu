@@ -12,6 +12,7 @@ export const demoTabs = {
     within(await screen.findByRole('region', {name})).queryByRole('heading', {name}),
   title: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
   arrivedOn: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
+  tab: async (name: string): Promise<HTMLElement> => within(await tabList()).getByRole('link', {name}),
   open: async (name: string): Promise<void> =>
     userEvent.click(within(await tabList()).getByRole('link', {name})),
   assumedLinks: async (name: string): Promise<(string | null)[][]> => assumedLinksIn(await screen.findByRole('region', {name})),

@@ -97,6 +97,16 @@ describe('The Demos page', () => {
     expect((await demoTabs.arrivedOn('Accordions')).textContent).toBe(dealt);
   });
 
+  test('a tab switch leaves focus on the tab the reader chose, since the tabs stay where they were', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+    await demoTabs.arrivedOn('Accordions');
+
+    await demoTabs.open('Z-index');
+    await demoTabs.arrivedOn('Z-index');
+
+    expect(await demoTabs.tab('Z-index')).toHaveFocus();
+  });
+
   test('should name the Accordions tab by its region, with no heading inside repeating it', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
