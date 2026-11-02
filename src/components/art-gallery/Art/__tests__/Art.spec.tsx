@@ -3,12 +3,13 @@ import {GalleryProviders} from '@components/art-gallery';
 import {anyRequestFailsToConnect} from '@__test_support/server';
 import {server} from '@__test_support/server';
 import {env} from '@env';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@components/art-gallery';
 import {Source} from '@components/art-gallery/museums/source';
 import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
+import {site} from '@pages/__test_support';
 import {heldAICAllArtResponse, setupAICAllArtResponse, galleryWall} from '@components/art-gallery/__test_support';
 
 describe('The gallery.', () => {
@@ -31,32 +32,40 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    const figures = await galleryWall.hangs();
-    const walls = figures.map(figure => within(figure).getByRole('img'));
+    const walls = await galleryWall.pictures();
     expect(walls.length).toBeGreaterThan(6);
     walls.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));
     walls.slice(6).forEach(img => expect(img).toHaveAttribute('loading', 'lazy'));
+  });
+
+  test('only the first piece is asked for at high priority', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    render(<TestApp at={Paths.artGallery}/>);
+
+    const walls = await galleryWall.pictures();
+    expect(walls[0]).toHaveAttribute('fetchpriority', 'high');
+    walls.slice(1).forEach(img => expect(img).not.toHaveAttribute('fetchpriority', 'high'));
   });
 
   test('the loading sign stands until the art arrives, and no frame before it', async () => {
     const artArrives = heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await screen.findByRole('progressbar', {name: 'loading gallery'});
-    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+    await galleryWall.loadingSignAppears();
+    expect(galleryWall.frames()).toEqual([]);
 
     artArrives();
 
-    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+    await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
   });
 
   test('a museum with nothing to show leaves the wall empty', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
     render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
 
-    expect(await screen.findByAltText('the museum answered with nothing')).toBeInTheDocument();
-    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    expect(await galleryWall.standIn('the museum answered with nothing')).toBeInTheDocument();
+    expect(galleryWall.frames()).toEqual([]);
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
   });
 
   test('a museum that cannot be reached leaves the wall empty, and says so', async () => {
@@ -64,10 +73,9 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
 
-    expect(await screen.findByAltText('the museum refused to answer')).toBeInTheDocument();
-    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
-    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(within(screen.getByRole('alert', {hidden: true}))
-      .getByText('the museum could not be reached')).toBeInTheDocument();
+    expect(await galleryWall.standIn('the museum refused to answer')).toBeInTheDocument();
+    expect(galleryWall.frames()).toEqual([]);
+    expect(galleryWall.loadingSign()).not.toBeInTheDocument();
+    expect(site.announced('the museum could not be reached')).toBeInTheDocument();
   });
 });
