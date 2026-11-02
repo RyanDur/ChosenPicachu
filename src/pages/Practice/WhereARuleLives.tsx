@@ -1,106 +1,18 @@
 import {FC} from 'react';
+import wideFrame from './drawings/where-a-rule-lives-wide.svg?url&no-inline';
+import stackedFrame from './drawings/where-a-rule-lives-stacked.svg?url&no-inline';
+import {whereARuleLivesSizes} from './whereARuleLivesFrames';
 import './PracticeDrawing.css';
 import './WhereARuleLives.css';
 
-type Box = {
-  readonly label: string;
-  readonly look: string;
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-};
-
-type Point = {readonly x: number; readonly y: number};
-
-type Wears = {readonly from: Point; readonly to: Point};
-
-const inset = 6;
-
-const folder = 'folder-box hollow drawn';
-const group = 'group-box hollow drawn';
-const file = 'file-box hollow drawn';
-const sheet = 'sheet-box hollow drawn';
-
-const tokens = ['reset', 'colors', 'spacing'] as const;
-const vocabulary = ['button', 'typography', 'surface', 'drawing', 'placement', 'glide'] as const;
-const parts = ['DraggableColumn.tsx', 'RowGrip.tsx', 'SortMenu.tsx', 'ResizeHandle.tsx'] as const;
-const ownSheets = ['Table.css', 'Header.css', 'RowGrip.css'] as const;
-
-type Column = {readonly x: number; readonly y: number; readonly width: number; readonly look: string};
-
-const row = (label: string, {x, y, width, look}: Column, at: number): Box => ({label, look, x, y: y + at * 24, width, height: 18});
-
-const column = (labels: readonly string[], placed: Column): Box[] => labels.map((label, at) => row(label, placed, at));
-
-const rowOf = <Label extends string>(labels: readonly Label[], label: Label, placed: Column): Box =>
-  row(label, placed, labels.indexOf(label));
-
-const tree = (x: number, y: number): {boxes: Box[]; surface: Box} => {
-  const words: Column = {x: x + 18, y: y + 138, width: 174, look: file};
-  return {
-    boxes: [
-      {label: 'src/styles', look: folder, x, y, width: 210, height: 288},
-      {label: 'the reset and the tokens', look: group, x: x + 9, y: y + 24, width: 192, height: 90},
-      ...column(tokens, {x: x + 18, y: y + 42, width: 174, look: file}),
-      {label: 'the vocabulary, by concern', look: group, x: x + 9, y: y + 120, width: 192, height: 162},
-      ...column(vocabulary, words)
-    ],
-    surface: rowOf(vocabulary, 'surface', words)
-  };
-};
-
-const component = (x: number, y: number, besideEachOther: boolean): {boxes: Box[]; sortMenu: Box} => {
-  const files: Column = {x: x + 12, y: y + 24, width: 126, look: file};
-  const sheets: Column = besideEachOther ? {x: x + 150, y: y + 24, width: 126, look: sheet} : {x: x + 12, y: y + 138, width: 126, look: sheet};
-  return {
-    boxes: [
-      {label: 'DragSortableTable', look: folder, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 288},
-      ...column(parts, files),
-      ...column(ownSheets, sheets)
-    ],
-    sortMenu: rowOf(parts, 'SortMenu.tsx', files)
-  };
-};
-
-const liftedIn = (surface: Box): Point => ({x: surface.x + surface.width - 48, y: surface.y + inset});
-
-const rightMiddle = ({x, y, width, height}: Box): Point => ({x: x + width, y: y + height / 2});
-const leftMiddle = ({x, y, height}: Box): Point => ({x, y: y + height / 2});
-const topMiddle = ({x, y, width}: Box): Point => ({x: x + width / 2, y});
-
-const margin = 6;
-
-const viewBoxAround = (boxes: Box[]): string =>
-  `0 0 ${Math.max(...boxes.map(({x, width}) => x + width)) + margin} ${Math.max(...boxes.map(({y, height}) => y + height)) + margin}`;
-
-const styles = tree(6, 6);
-
-const wideComponent = component(252, 6, false);
-const wide: Box[] = [...styles.boxes, ...wideComponent.boxes];
-const wideWears: Wears = {from: rightMiddle(styles.surface), to: leftMiddle(wideComponent.sortMenu)};
-
-const stackedComponent = component(6, 306, true);
-const stacked: Box[] = [...styles.boxes, ...stackedComponent.boxes];
-const stackedWears: Wears = {from: rightMiddle(styles.surface), to: topMiddle(stackedComponent.sortMenu)};
-
-const DrawnBox: FC<{box: Box; lifted: boolean}> = ({box, lifted}) => <>
-  <rect className={box.look} x={box.x} y={box.y} width={box.width} height={box.height}/>
-  <text className="drawn-caption" x={box.x + inset} y={box.y + inset} dominantBaseline="hanging">{box.label}</text>
-  {lifted && <text className="drawn-caption" x={liftedIn(box).x} y={liftedIn(box).y} dominantBaseline="hanging">lifted</text>}
-</>;
-
-const Frame: FC<{boxes: Box[]; liftedLabel: string; wears: Wears; className: string}> = ({boxes, liftedLabel, wears: {from, to}, className}) =>
-  <svg className={`${className} ink-filled`} viewBox={viewBoxAround(boxes)} aria-hidden="true">
-    {boxes.map(box => <DrawnBox key={box.label} box={box} lifted={box.label === liftedLabel}/>)}
-    <line className="wears-line drawn dashed-drawn" x1={from.x} y1={from.y} x2={to.x} y2={to.y}/>
-    <text className="drawn-caption" x={(from.x + to.x) / 2 + inset} y={(from.y + to.y) / 2} dominantBaseline="hanging">wears</text>
-  </svg>;
+const {wide, stacked} = whereARuleLivesSizes;
 
 export const WhereARuleLives: FC = () =>
   <figure className="where-a-rule-lives practice-drawing">
-    <Frame boxes={wide} liftedLabel={styles.surface.label} wears={wideWears} className="drawing-wide center"/>
-    <Frame boxes={stacked} liftedLabel={styles.surface.label} wears={stackedWears} className="drawing-stacked center"/>
+    <picture className="center">
+      <source media="(width <= 600px)" srcSet={stackedFrame} width={stacked.width} height={stacked.height}/>
+      <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
+    </picture>
     <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in{' '}
       <code className="monospaced">src/styles</code>, by concern. A component’s structure lives beside the component.
     </figcaption>

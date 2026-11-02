@@ -191,31 +191,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.drawingsSeenIn(whereARuleLives)).toEqual([]);
-  });
-
-  test('should draw src/styles in two groups, one component’s parts with its style sheets beside them, and the word it wears, wide and stacked', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    const tree = [
-      'src/styles',
-      'the reset and the tokens', 'reset', 'colors', 'spacing',
-      'the vocabulary, by concern', 'button', 'typography', 'surface', 'lifted', 'drawing', 'placement', 'glide'
-    ];
-    const component = ['DragSortableTable', 'DraggableColumn.tsx', 'RowGrip.tsx', 'SortMenu.tsx', 'ResizeHandle.tsx', 'Table.css', 'Header.css', 'RowGrip.css'];
-    const frame = [...tree, ...component, 'wears'];
-
-    expect(practicePage.drawnIn(whereARuleLives)).toEqual([...frame, ...frame]);
-  });
-
-  test('should draw src/styles’ style sheets in the order index.css imports them, wide and stacked', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    const imported = sheetsImported();
-
-    expect(practicePage.drawnIn(whereARuleLives).filter(label => imported.includes(label))).toEqual([...imported, ...imported]);
+    expect(practicePage.imagesHeardIn(whereARuleLives)).toEqual([]);
   });
 
   test('should send Wathan’s case and Tailwind’s own words to their sources', async () => {

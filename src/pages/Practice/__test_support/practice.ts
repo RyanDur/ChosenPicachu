@@ -116,6 +116,8 @@ export const practicePage = {
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),
   drawnIn: (figure: string): string[] => drawnTexts(figure).map(text => text.textContent),
+  imagesHeardIn: (caption: string): HTMLElement[] =>
+    within(within(practice()).getByRole('figure', {name: caption})).queryAllByRole('img'),
   link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
   citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
     .filter(opensAMoment)

@@ -1,4 +1,4 @@
-import {readFileSync} from 'node:fs';
+import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {execSync} from 'node:child_process';
 import {relative} from 'node:path';
 import {defineConfig} from 'vitest/config';
@@ -7,6 +7,7 @@ import {loadEnv} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
 import {usersServerScript} from './src/components/Users/resource/usersServer.ts';
+import {squeezed, whereARuleLivesFrames} from './src/pages/Practice/whereARuleLivesFrames.ts';
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
@@ -128,6 +129,30 @@ const frameCss = (): Plugin => ({
   }
 });
 
+// a drawing loaded as an image cannot read the page's style sheets, so its frames are written as files carrying the site's own
+const drawings = (): Plugin => {
+  const at = (path: string): string => fileURLToPath(new URL(path, import.meta.url));
+  const sheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
+    './src/styles/drawing.css', './src/pages/Practice/WhereARuleLives.css'].map(at);
+  const folder = at('./src/pages/Practice/drawings/');
+  const draw = (): void => {
+    const {wide, stacked} = whereARuleLivesFrames(squeezed(sheets.map(sheet => readFileSync(sheet, 'utf8')).join('')));
+    mkdirSync(folder, {recursive: true});
+    writeFileSync(`${folder}where-a-rule-lives-wide.svg`, wide.svg);
+    writeFileSync(`${folder}where-a-rule-lives-stacked.svg`, stacked.svg);
+  };
+  return {
+    name: 'drawings',
+    buildStart: draw,
+    configureServer(server) {
+      server.watcher.add(sheets);
+      server.watcher.on('change', changed => {
+        if (sheets.includes(changed)) draw();
+      });
+    }
+  };
+};
+
 const usersServerPlugin = (): Plugin => {
   const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
   const script = usersServerScript;
@@ -199,7 +224,7 @@ export default defineConfig(({mode}) => ({
   build: {
     cssCodeSplit: false
   },
-  plugins: [rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
+  plugins: [drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

@@ -1,4 +1,11 @@
 .where-a-rule-lives {
+  .drawing {
+    display: block;
+    inline-size: auto;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
   .folder-box,
   .group-box,
   .file-box,

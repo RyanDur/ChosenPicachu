@@ -113,8 +113,11 @@ h1, h2, h3, h4, h5, h6, p {
   }
 }
 
+/* :root, not html, so a drawing written as an image file, whose root is its svg, reads the same size and face */
 :root {
   interpolate-size: allow-keywords;
+  font-size: 62.5%;
+  font-family: Arial, sans-serif;
 }
 
 /* clip, not hidden: a hidden box is a scroll container, so scrolling to a step inside an opening fold would scroll the fold */
@@ -132,13 +135,8 @@ details[open]::details-content {
   block-size: auto;
 }
 
-html {
-  font-size: 62.5%;
-}
-
 body {
   font-size: var(--base-x-2);
-  font-family: Arial, sans-serif;
   color: var(--ink);
 }
 

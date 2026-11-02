@@ -5,6 +5,17 @@ export const practicePage = (page: Page) => {
   return {
     practice,
     title: (concern: string): Locator => page.getByRole('heading', {name: `Practice ${concern}`, level: 1}),
-    momentLink: (name: string): Locator => practice.getByRole('link', {name}).first()
+    momentLink: (name: string): Locator => practice.getByRole('link', {name}).first(),
+    drawing: (caption: RegExp): Locator => practice.getByRole('figure', {name: caption}),
+    // a drawing is an image the caption speaks for, hidden from a reader's tools, so the count is of what shows
+    drawingsShownIn: (figure: Locator): Promise<number> => figure.getByRole('img', {includeHidden: true})
+      .or(figure.getByRole('presentation', {includeHidden: true}))
+      .filter({visible: true})
+      .count(),
+    readWithTheStylesOff: (): Promise<void> => page.evaluate(() => {
+      [...document.styleSheets].forEach(sheet => {
+        sheet.disabled = true;
+      });
+    })
   };
 };
