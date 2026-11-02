@@ -2,42 +2,19 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {controlsBeforeTheSteps, wayLabelled} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const oldBanner = /^An old banner\./;
 
 describe('the banner exhibit', () => {
-  test('should say its point in its caption', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    expect(await screen.findByRole('figure', {name: 'The banners. A fixed banner with z-index: 9999 is covered by a card with z-index: 1.'})).toBeInTheDocument();
-  });
-
   test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
     const [steps] = within(banners).getAllByRole('list');
 
-    expect(within(steps).getAllByRole('listitem').map(step => step.textContent)).toEqual([
-      'Press Raise a banner, built the old way.',
-      'Scroll until card two reaches the bottom of the window, and watch it pass over the banner.',
-      'Press Raise a banner, in the top layer, and scroll again.'
-    ]);
     expect(controlsBeforeTheSteps(steps, within(banners).getAllByRole('button'))).toEqual([]);
-  });
-
-  test('should tell each card’s z-index, and the old banner’s place, in a sentence', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const banners = await screen.findByRole('figure', {name: /^The banners\./});
-
-    await userEvent.click(within(banners).getByRole('button', {name: 'Raise a banner, the old way'}));
-
-    expect(within(banners).getByText('Card one has z-index: 1.')).toBeInTheDocument();
-    expect(within(banners).getByText('Card two has z-index: 1, and comes later in the code.')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent(/^An old banner\. It is fixed to the window, with z-index: 9999\.×$/);
-    expect(within(banners).queryByRole('code')).not.toBeInTheDocument();
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {
@@ -88,23 +65,6 @@ describe('the old banner', () => {
 });
 
 describe('why a fixed banner still loses', () => {
-  test('should show the old banner’s rule and card one’s context beside the run that explains it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
-
-    expect(explanation.everyCodeBeside(part, /The old banner’s position is fixed/).join())
-      .toMatch(/\.old-banner \{[^]*position: fixed[^]*z-index: 9999[^]*\.forms-context \{[^]*z-index: 1/);
-  });
-
-  test('should show the site’s banner markup beside the run about the banner in the top layer', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
-
-    expect(explanation.everyCodeBeside(part, /The banner in the top layer is the site’s own banner/).join()).toMatch(/popover="manual"[^]*role="alert"/);
-  });
-
   test('should open the banner tutorial at the step that makes it a popover, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});

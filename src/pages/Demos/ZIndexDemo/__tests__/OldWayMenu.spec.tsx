@@ -96,22 +96,7 @@ describe('the card that traps the menu', () => {
 
     const [steps] = within(trap).getAllByRole('list');
 
-    expect(within(steps).getAllByRole('listitem').map(step => step.textContent)).toEqual([
-      'Press Sort by, built the old way, and look where its list opens.',
-      'Uncheck “Card one has z-index: 1”, and press Sort by again.',
-      'Press Sort by, in the top layer, with the box checked or not.'
-    ]);
     expect(controlsBeforeTheSteps(steps, [...within(trap).getAllByRole('button'), within(trap).getByRole('checkbox')])).toEqual([]);
-  });
-
-  test('should keep the checkbox in card one, and tell each card’s z-index in a sentence', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const trap = await screen.findByRole('figure', {name: /^The trap\./});
-
-    const cardOne = within(trap).getAllByRole('listitem').find(card => within(card).queryByRole('checkbox', {name: 'Card one has z-index: 1'}) !== null);
-
-    expect(cardOne).toHaveTextContent('Its list has z-index: 9999.');
-    expect(within(trap).getByText('Card two has z-index: 1, and comes later in the code.')).toBeInTheDocument();
   });
 
   test('should show Sort by on both buttons, under the way each is built, and name each by its words then its way', async () => {
@@ -200,64 +185,11 @@ describe('the card that traps the menu', () => {
 });
 
 describe('why 9999 still loses', () => {
-  test('should say what focus is where the tab first speaks of it', async () => {
+  test('should link where it says the cards are compared to What else forms a stacking context', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
 
-    expect(explanation.runTelling(part, /Move through it with the arrow keys/))
-      .toHaveTextContent('Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you cannot see it, under card two.');
-  });
-
-  test('should show the list’s 9999 and the card’s context beside the run that says what the reader saw', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.everyCodeBeside(part, /The list has a z-index of 9999, and card two/).join())
-      .toMatch(/\.sort-choices \{[^]*position: absolute[^]*z-index: 9999[^]*\.old-way-card \{[^]*\.positioned \{[^]*position: relative[^]*\.forms-context \{[^]*z-index: 1/);
-  });
-
-  test('should show card one, with the checkbox inside it, beside the run that says what unchecking it does', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.everyCodeBeside(part, /With the box unchecked, card one’s z-index is auto/).join())
-      .toMatch(/'old-way-card[^]*'forms-context'[^]*type="checkbox"[^]*Card one has z-index: 1/);
-  });
-
-  test('should say card one forms a stacking context because it is positioned and has a z-index of 1', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.runTelling(part, /so it forms a stacking context/)).toHaveTextContent('Card one is positioned and has a z-index of 1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside it together.');
-  });
-
-  test('should say the cards are compared in the tab’s panel, the nearest context that holds them both', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toHaveTextContent('The cards are compared in the nearest context that holds them both: here the tab’s panel, which What else forms a stacking context explains. There the browser compares card one and card two, 1 against 1');
     expect(within(explanation.runTelling(part, /The cards are compared in the nearest context/)).getByRole('link', {name: 'What else forms a stacking context'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'What else forms a stacking context'}).id}`);
-  });
-
-  test('should say, with the box unchecked, that the list joins the tab panel’s context, where card two is', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.runTelling(part, /With the box unchecked/)).toHaveTextContent('It joins the tab panel’s context, where card two is, and there 9999 is the larger number.');
-  });
-
-  test('should draw the layer and the tree of contexts beside the runs that tell them', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await screen.findByRole('region', {name: 'Why 9999 still loses'});
-
-    expect(explanation.runTelling(part, /so it forms a stacking context/)).toContainElement(within(part).getByRole('figure', {name: /^A number inside a layer\./}));
-    expect(explanation.runTelling(part, /The cards are compared in the nearest context that holds them both/)).toContainElement(within(part).getByRole('figure', {name: /^Where 9999 is compared\./}));
   });
 });

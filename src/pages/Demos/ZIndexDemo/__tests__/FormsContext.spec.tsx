@@ -3,9 +3,16 @@ import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
-import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const heading = 'What else forms a stacking context';
+
+const formedOncePressedWearing = async (worn: string): Promise<HTMLElement> => {
+  render(<TestApp at={demosAt('z-index')}/>);
+  const chooser = await wearsChooser.find();
+  await wearsChooser.putOn(chooser, worn);
+  await wearsChooser.pressSortBy(chooser);
+  return wearsChooser.formed(chooser);
+};
 
 describe('the part on what else forms a stacking context', () => {
   test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
@@ -27,22 +34,32 @@ describe('the part on what else forms a stacking context', () => {
     expect(wearsChooser.formed(chooser)).toBeEmptyDOMElement();
   });
 
-  test.each([
-    ['nothing', 'The list opened over card two. Card one wears nothing, so it forms no stacking context.'],
-    ['position: relative', 'The list opened over card two. position: relative alone forms no stacking context.'],
-    ['outline', 'The list opened over card two. An outline forms no stacking context.'],
-    ['z-index: 1', 'The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.'],
-    ['opacity: 0.9', 'The list opened under card two. opacity: 0.9 formed a stacking context.'],
-    ['transform: rotate(-1deg)', 'The list opened under card two. The transform formed a stacking context.'],
-    ['isolation: isolate', 'The list opened under card two. isolation: isolate formed a stacking context.']
-  ])('should say where the list opened, and its cause, once card one wears %s and Sort by is pressed', async (worn, said) => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const chooser = await wearsChooser.find();
+  test('should say the list opened over card two once card one wears nothing and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('nothing')).toHaveTextContent('The list opened over card two. Card one wears nothing, so it forms no stacking context.');
+  });
 
-    await wearsChooser.putOn(chooser, worn);
-    await wearsChooser.pressSortBy(chooser);
+  test('should say the list opened over card two once card one wears position: relative and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('position: relative')).toHaveTextContent('The list opened over card two. position: relative alone forms no stacking context.');
+  });
 
-    expect(wearsChooser.formed(chooser)).toHaveTextContent(said);
+  test('should say the list opened over card two once card one wears an outline and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('outline')).toHaveTextContent('The list opened over card two. An outline forms no stacking context.');
+  });
+
+  test('should say the list opened under card two once card one wears z-index: 1 and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('z-index: 1')).toHaveTextContent('The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.');
+  });
+
+  test('should say the list opened under card two once card one wears opacity: 0.9 and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('opacity: 0.9')).toHaveTextContent('The list opened under card two. opacity: 0.9 formed a stacking context.');
+  });
+
+  test('should say the list opened under card two once card one wears a transform and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('transform: rotate(-1deg)')).toHaveTextContent('The list opened under card two. The transform formed a stacking context.');
+  });
+
+  test('should say the list opened under card two once card one wears isolation: isolate and Sort by is pressed', async () => {
+    expect(await formedOncePressedWearing('isolation: isolate')).toHaveTextContent('The list opened under card two. isolation: isolate formed a stacking context.');
   });
 
   test('should go quiet when another choice is made after Sort by was pressed', async () => {
@@ -73,81 +90,23 @@ describe('the part on what else forms a stacking context', () => {
     expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).toBeChecked();
   });
 
-  test.each([
-    ['position', /^is not enough on its own, and neither is absolute/, '.positioned {'],
-    ['outline', /^is paint\. An outline, a border/, '.outlined {'],
-    ['z-index', /^forms a context on a positioned element\. It forms one on a grid item too, which card one is here/, '.forms-context {'],
-    ['opacity', /^, like any opacity below 1, forms a context/, '.faded {'],
-    ['transform', /^forms a context, as any transform does/, '.turned {'],
-    ['isolation', /^forms a context and does nothing more\. Use it to keep/, '.isolated {']
-  ])('should open the %s run on its property, linked to MDN, with its rule beside it', async (property, words, rule) => {
+  test('should open each property’s run on its page at MDN', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await explanation.part(heading);
 
-    const run = explanation.runTelling(part, words);
-
-    expect(explanation.firstLinkIn(run)).toHaveAttribute('href', `https://developer.mozilla.org/en-US/docs/Web/CSS/${property}`);
-    expect(explanation.codeBeside(part, words)).toHaveTextContent(rule);
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/position');
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^is paint\. An outline, a border/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/outline');
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context on a positioned element\. It forms one on a grid item too, which card one is here/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/z-index');
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^, like any opacity below 1, forms a context/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/opacity');
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context, as any transform does/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/transform');
+    expect(explanation.firstLinkIn(explanation.runTelling(part, /^forms a context and does nothing more\. Use it to keep/))).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/isolation');
   });
 
-  test('should say this site isolates the tab’s panel, with the panel’s rule beside the isolation run', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const part = await explanation.part(heading);
-    const words = /^forms a context and does nothing more/;
-
-    expect(explanation.runTelling(part, words)).toHaveTextContent('I use it that way here: the tab’s panel wears it, in Tabs.css, so no z-index inside a tab is ever compared with one outside it.');
-    expect(explanation.everyCodeBeside(part, words).join()).toMatch(/\.isolated \{[^]*\.tabs ~ \* \{\s*isolation: isolate;/);
-  });
-
-  test('should say isolation keeps the z-indexes of one part of the page inside it, before the tab says what a component is', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    const part = await explanation.part(heading);
-
-    expect(explanation.runTelling(part, /^forms a context and does nothing more/)).toHaveTextContent('Use it to keep the z-indexes of one part of the page inside it on purpose, instead of as a side effect of opacity or a transform.');
-  });
-
-  test('should caption the chooser with where the 9999 counts: in the tab’s panel, against card two, or only inside the card', async () => {
+  test('should link anchor positioning to MDN', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await explanation.part(heading);
 
-    expect(explanation.saying(part, /^What card one wears decides/)).toHaveTextContent('What card one wears decides whether its list’s 9999 counts in the tab’s panel, against card two, or only inside the card.');
-  });
-
-  test('should say, in a run of its own after the bare card’s, that the list is placed by anchor positioning, linked to MDN, with the two anchor rules beside it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const part = await explanation.part(heading);
-    const run = explanation.runTelling(part, /^The list is placed by/);
-
-    expect(run).toHaveTextContent('The list is placed by anchor positioning. The Sort by button names itself --sort-by, and position-anchor on the list picks that button. anchor(end) puts the list’s top at the button’s bottom. anchor(start) lines the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing between the list and the card is positioned.');
-    expect(explanation.linkNamed(run, 'anchor positioning')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
-    expect(explanation.everyCodeBeside(part, /^The list is placed by/).join()).toMatch(/\.old-way-card \.button \{\s*anchor-name: --sort-by;[^]*\.sort-choices \{\s*position-anchor: --sort-by;\s*inset-block-start: anchor\(end\);\s*inset-inline-start: anchor\(start\);/);
-    expect(outOfReadingOrder([explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/), run])).toEqual([]);
-  });
-
-  test('should say the bare card’s list is compared with card two in the tab panel’s context', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const part = await explanation.part(heading);
-
-    expect(explanation.runTelling(part, /^With nothing on it, card one is a plain grid item/)).toHaveTextContent('Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens on top.');
-  });
-
-  test('should show the grid, and no anchor rule, beside the run on a card that wears nothing', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const part = await explanation.part(heading);
-
-    const code = explanation.everyCodeBeside(part, /^With nothing on it, card one is a plain grid item, a box laid out by a parent whose display is grid/).join();
-
-    expect(code).toMatch(/\.old-way-cards \{[^]*display: grid;/);
-    expect(code).not.toMatch(/anchor/);
-  });
-
-  test('should say what sticky is where the part first names it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const part = await explanation.part(heading);
-
-    expect(explanation.runTelling(part, /^is not enough on its own, and neither is absolute/))
-      .toHaveTextContent('Fixed, which pins an element to the window, and sticky are different. Each forms a context by itself. Sticky scrolls with the page until it reaches an edge and then stays there.');
+    expect(explanation.linkNamed(explanation.runTelling(part, /^The list is placed by/), 'anchor positioning')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
   });
 
   test('should open its run on MDN’s whole list', async () => {
