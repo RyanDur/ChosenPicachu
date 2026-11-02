@@ -277,9 +277,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <PlainFold/>
           <figcaption className="caption">This fold is a separate page, placed inside this one, so the dials above do
             not reach it. Whichever fold type and fold motion are chosen, it is one fold, and its text is
-            uncovered from the top down. Press the bar: with motion allowed, a script measures the text and the
-            style sheet slides the panel to that height, and a second press slides it shut. With less motion asked for,
-            it opens at once.</figcaption>
+            uncovered from the top down. Press the bar. With motion allowed, a script measures the text, and the
+            style sheet slides the panel to that height. A second press slides it shut. With less motion asked for, it
+            opens at once.</figcaption>
         </figure>
         <ol className={runs}>
           <li className="run">
