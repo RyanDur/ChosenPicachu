@@ -190,8 +190,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         script, which is one checkbox fold and always reveals. Each choice is a dial, a control on the page that sets how a
         build behaves, with a line beside it saying what it does. The fold type also reaches the accordion above: with
         exclusive, its details share a name and opening one closes the others.</p>
-      <p className="paragraph">The fold motion does not reach the accordion above. A style sheet is a file of rules, each a selector naming the
-        elements it applies to and the properties it sets on them. The reset is the one that sets every element’s
+      <p className="paragraph">The fold motion does not reach the accordion above. A style sheet is a file of rules. Each rule has a selector, which names the
+        elements it applies to, and properties, each one aspect of a look, like a height or a color, given a value. The reset is the one that sets every element’s
         defaults, and it gives every details a slide, which only Chromium shows today. The first accordion turns that
         slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
@@ -229,9 +229,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             <Snippet label="HTML" lines={type === 'inclusive' ? span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
-            <p className="paragraph">Now a rule has to match on whether the {input} is checked. A selector
-              is the part of a CSS rule that picks which elements the rule styles,
-              and <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
+            <p className="paragraph">Now a rule has to match on whether the {input} is checked.{' '}
+              <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
               by its state: here, a checked {input}. The ~ is
               a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
               that says how their elements relate; it picks the siblings that come after the element on its left, the

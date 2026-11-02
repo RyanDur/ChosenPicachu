@@ -1134,12 +1134,28 @@ describe('the platform build’s bars', () => {
 });
 
 describe('the known-height build’s style sheet reading the hidden input', () => {
-  test.each([['inclusive', 'checkbox'], ['exclusive', 'radio']])('should say what a selector, a pseudo-class and a combinator are, with %s chosen', async (type, input) => {
-    render(<TestApp at={demosAt('accordions', `?type=${type}`)}/>);
+  const matchesOnTheInput = /Now a rule has to match on/;
+  const mdnLinks = [
+    [':checked', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:checked'],
+    ['combinator', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Subsequent-sibling_combinator']
+  ];
+
+  test('should link the pseudo-class and the combinator to MDN, with inclusive chosen, in the run on a checked checkbox', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.runTelling(oldWay, /Now a rule has to match on/)).toHaveTextContent(`A selector is the part of a CSS rule that picks which elements the rule styles, and :checked is a pseudo-class, a selector that picks an element by its state: here, a checked ${input}. The ~ is a combinator, a symbol between two selectors that says how their elements relate; it picks the siblings that come after the element on its left, the elements with the same parent.`);
+    expect(explanation.linksBeside(oldWay, matchesOnTheInput)).toEqual(expect.arrayContaining(mdnLinks));
+    expect(explanation.runTelling(oldWay, matchesOnTheInput)).toHaveTextContent('a checked checkbox');
+  });
+
+  test('should link the pseudo-class and the combinator to MDN, with exclusive chosen, in the run on a checked radio', async () => {
+    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+
+    expect(explanation.linksBeside(oldWay, matchesOnTheInput)).toEqual(expect.arrayContaining(mdnLinks));
+    expect(explanation.runTelling(oldWay, matchesOnTheInput)).toHaveTextContent('a checked radio');
   });
 });
 

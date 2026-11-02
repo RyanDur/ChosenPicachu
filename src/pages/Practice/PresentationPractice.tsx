@@ -106,8 +106,8 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and{' '}
     <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available.{' '}
     <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and{' '}
-    <a className="signpost" href={has.address}>:has()</a>, since December 2023, give a rule a reach a style sheet alone did not have: a rule by its
-      container’s width, and a rule by what an element contains.</p>
+    <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s container is and what an element contains, which a
+      selector alone could not.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at scale. Its{' '}
       <a className="signpost" href={bemHistory.address}>history</a> says that by 2006{' '}
@@ -191,7 +191,7 @@ export const PresentationPractice: FC = () =>
       component, named for it and kept beside it. A family of components shares a style sheet at the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five are held by stylelint rules, and two of those print their reason. For a tag selector
+    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules, and two of those print their reason. For a tag selector
       outside the reset:{' '}
     <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a class”</a>.
       For a look in a component style sheet, that the property{' '}
@@ -203,8 +203,8 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">@scope</code> for a rule’s reach, because the import order above gives the cascade its
       order and a component’s own classes, with its rules keyed on them, give a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
-      a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. That is BEM’s one-class selector,
-      given up. A rule nests
+      a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. So I give up BEM’s one-class selector, and a
+      nested rule depends on the class around it. A rule nests
       under its component’s class when it belongs to that component alone; a look any element can wear stays a single
       flat class in the vocabulary.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
@@ -267,5 +267,6 @@ export const PresentationPractice: FC = () =>
     <h3 className="paragraph bold">The test a class list has to pass</h3>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
-      isolation, the last of the seven problems in Chedeau’s talk, that one component’s rules reach no other; the concert quotes his list.</p>
+      isolation, the last of the seven problems in Chedeau’s talk; the concert quotes his list. Isolation means one component’s
+      rules reach no other.</p>
   </>;
