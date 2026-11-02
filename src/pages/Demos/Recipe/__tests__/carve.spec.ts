@@ -251,6 +251,18 @@ describe('carving examples out of the source they teach', () => {
       .toEqual(['if (event.buttons === 0) {']);
   });
 
+  test('a one-line span that opens a block and runs on past it fails loudly instead of teaching half a statement', () => {
+    const guarded = aSample('if (ready) { drop();\n    tidy();\n}\n');
+
+    expect(() => span(guarded, 'if (ready)', 'if (ready)')).toThrow(/if \(ready\)/);
+  });
+
+  test('a one-line span that opens two blocks at once fails loudly instead of teaching half a statement', () => {
+    const nested = aSample('const rule = {surface: {\n    onPointerUp: drop\n}};\n');
+
+    expect(() => span(nested, 'const rule', 'const rule')).toThrow(/const rule/);
+  });
+
   test('a missing anchor fails loudly instead of teaching nothing', () => {
     expect(() => unit(source, 'const vanished = ')).toThrow(/vanished/);
     expect(() => span(source, 'onPointerMove', 'onGone')).toThrow(/onGone/);
