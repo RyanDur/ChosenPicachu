@@ -23,7 +23,7 @@ import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {ZIndexIntroduction} from './ZIndexDemo/Introduction';
 import {AccordionsExplained, foldMotionParam, foldTypeParam} from './Accordions';
 import {motionParam, originParam, paceParam} from './Controls';
-import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
+import {Aggregations, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
 import {ChartsIntroduction} from './Charts/Introduction';
 import {DragSortIntroduction} from './DragAndDrop/Introduction';
@@ -38,9 +38,9 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 }));
 
 export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
+  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
     useSearchParamsObject(
-      {pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
+      {pace: paceParam, origin: originParam, motion: motionParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
   const [accordionContents] = useState(() => {
     const draws = seeded('the accordion exhibits');
     const dealt = draws.wordDeck();
@@ -89,8 +89,7 @@ export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
         [DemoTopics.tables]: <>
           <TablesIntroduction/>
           <Aggregations pace={pace} origin={origin} motion={motion} world={world}/>
-          <Tutorials shown={tut} onShown={next => updateSearchParams({tut: next})}
-            track={track} onTrackChosen={next => updateSearchParams({track: next})}/>
+          <Tutorials/>
         </>,
         [DemoTopics.dragAndDrop]: <>
           <DragSortIntroduction/>

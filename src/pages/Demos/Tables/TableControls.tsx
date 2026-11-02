@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {Controls, ControlsProps, Copy} from '../Controls';
+import {useSearchParamsObject} from '@components/search-params';
+import {Controls, Copy, motionParam, originParam, paceParam} from '../Controls';
 import {World} from './params';
 import {capitalized} from '../capitalized';
 
@@ -20,10 +21,12 @@ const copy: Copy = {
   }
 };
 
-type TableControlsProps = ControlsProps & {
-  world: World;
+export const TableControls: FC<{world: World}> = ({world}) => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
+  return <Controls copy={{...copy, readout: (pace, origin, motion) => world === 'vanilla' ? '<TableFrame/>' : copy.readout(pace, origin, motion)}}
+    pace={pace} origin={origin} motion={motion}
+    onPaceChosen={next => updateSearchParams({pace: next})}
+    onOriginChosen={next => updateSearchParams({origin: next})}
+    onMotionChosen={next => updateSearchParams({motion: next})}/>;
 };
-
-export const TableControls: FC<TableControlsProps> = ({world, ...props}) =>
-  <Controls copy={{...copy, readout: (pace, origin, motion) => world === 'vanilla' ? '<TableFrame/>' : copy.readout(pace, origin, motion)}}
-    {...props}/>;

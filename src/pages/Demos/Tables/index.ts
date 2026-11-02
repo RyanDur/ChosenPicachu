@@ -1,2 +1,2 @@
 export {Aggregations} from './Aggregations';
-export {trackParam, tutorialParam, worldParam} from './params';
+export {worldParam} from './params';

@@ -1,11 +1,10 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {motionParam, originParam, paceParam} from '../Controls';
-import {Tutorial, World, worldParam} from './params';
+import {tutorialParam, World, worldParam} from './params';
 import {PillGlider} from '@components/PillGlider';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
-import {Recipe, Track} from './Recipe';
+import {Recipe} from './Recipe';
 import {LayerMap} from './Recipe/LayerMap';
 import {DialNote, Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
@@ -26,16 +25,8 @@ const worldCopy: Record<World, string> = {
   vanilla: 'The table stands in its own document: markup, style sheet, and script, no framework.'
 };
 
-type Props = {
-  shown: Tutorial;
-  onShown: (tutorial: Tutorial) => void;
-  track: Track;
-  onTrackChosen: (track: Track) => void;
-};
-
-export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
+export const Tutorials: FC = () => {
+  const {tut: shown = 'sort', world = 'react', updateSearchParams} = useSearchParamsObject({tut: tutorialParam, world: worldParam});
   useArrival();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
@@ -79,13 +70,10 @@ export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => 
             {display: 'Drag resize', value: 'resize'}
           ]}
           chosen={shown}
-          onPicked={onShown}/>
+          onPicked={next => updateSearchParams({tut: next})}/>
         {shown === 'sort' && <DialNote reads="table"/>}
-        {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
-          onPaceChosen={next => updateSearchParams({pace: next})}
-          onOriginChosen={next => updateSearchParams({origin: next})}
-          onMotionChosen={next => updateSearchParams({motion: next})}/>}
-        {shown === 'sort' && <Recipe track={track} onTrackChosen={onTrackChosen}/>}
+        {shown === 'sort' && <TableControls world={world}/>}
+        {shown === 'sort' && <Recipe/>}
         {shown === 'menu' && <MenuRecipe/>}
         {shown === 'resize' && <ResizeRecipe/>}
       </Station>

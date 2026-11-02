@@ -4,22 +4,16 @@ import {Picks} from '../Picks';
 import {motionParam, originParam, paceParam} from '../../Controls';
 import {worldParam} from '../params';
 import {Stories} from '../../Recipe';
-import {Track} from './steps';
+import {trackParam} from './steps';
 import {EagerRecipe} from './EagerRecipe';
 import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
-export type {Track} from './steps';
 export {trackParam} from './steps';
 
-type Props = {
-  track: Track;
-  onTrackChosen: (track: Track) => void;
-};
-
-export const Recipe: FC<Props> = ({track, onTrackChosen}) => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react'} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
+export const Recipe: FC = () => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', track = 'pointer', updateSearchParams} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam, track: trackParam});
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <Picks label="input track"
@@ -29,7 +23,7 @@ export const Recipe: FC<Props> = ({track, onTrackChosen}) => {
         {display: 'By keyboard', value: 'keyboard'}
       ]}
       chosen={track}
-      onPicked={onTrackChosen}/>
+      onPicked={next => updateSearchParams({track: next})}/>
     <Stories><Chosen track={track} world={world} origin={origin} motion={motion}/></Stories>
   </section>;
 };
