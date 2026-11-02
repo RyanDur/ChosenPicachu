@@ -183,7 +183,8 @@ describe('the users page', () => {
     });
 
     test('the state reads as a field that cannot be chosen', () => {
-      expect(userForm.address('home').getByRole('textbox', {name: 'State'})).toHaveAttribute('readonly');
+      expect(userForm.addressField('home', 'State')).toHaveRole('textbox');
+      expect(userForm.addressField('home', 'State')).toHaveAttribute('readonly');
     });
 
     test('the avatar cannot be rerolled', () => {
@@ -230,7 +231,7 @@ describe('the users page', () => {
     });
 
     test('the state is chosen from a list', () => {
-      expect(userForm.address('home').getByRole('combobox', {name: 'State'})).toBeInTheDocument();
+      expect(userForm.addressField('home', 'State')).toHaveRole('combobox');
     });
 
     it('should be able to reset the form to the original information', async () => {
@@ -257,7 +258,7 @@ describe('the users page', () => {
     render(<TestApp at={userAt(person.id, 'edit')}/>);
     await userForm.showing(person);
 
-    expect(userForm.address('work').getByLabelText('Street')).toHaveValue(work.streetAddress);
+    expect(userForm.addressField('work', 'Street')).toHaveValue(work.streetAddress);
   });
 
   test('Update sends the backend the work address the user already had', async () => {

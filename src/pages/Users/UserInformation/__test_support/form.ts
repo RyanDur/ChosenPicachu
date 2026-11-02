@@ -32,10 +32,13 @@ const fillOutPerson = ({info}: Pick<NewUser, 'info'>): Promise<void> =>
 
 const field = (label: string): HTMLElement => within(form()).getByLabelText(label);
 
+const addressField = (kind: string, label: string): HTMLElement => address(kind).getByLabelText(label);
+
 const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
 
 export const userForm = {
   address,
+  addressField,
   field,
   sameAsHome,
 
