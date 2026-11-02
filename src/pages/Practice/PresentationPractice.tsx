@@ -273,6 +273,6 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">The test is to read a class list on its own. If it does not say what the element is and
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
       isolation: one component’s rules reach no other. Isolation is the last of the seven problems in Chedeau’s talk, and
-      this test guards it; the Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
+      the Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
       list.</p>
   </>;
