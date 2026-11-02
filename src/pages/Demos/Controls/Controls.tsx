@@ -13,10 +13,6 @@ export const paceParam: schema.Decoder<Pace> = schema.literalUnion('eager', 'laz
 export const originParam: schema.Decoder<Origin> = schema.literalUnion('keep', 'hide');
 export const motionParam: schema.Decoder<Motion> = schema.literalUnion('animated', 'static');
 
-export const defaultPace: Pace = 'eager';
-export const defaultOrigin: Origin = 'hide';
-export const defaultMotion: Motion = 'animated';
-
 const styles: Record<Origin, Record<Pace, DragStyle>> = {
   keep: {eager: 'eager-move', lazy: 'lazy-move'},
   hide: {eager: 'hide-eager-move', lazy: 'hide-lazy-move'}
@@ -37,6 +33,8 @@ export type Dials = {
   origin: Origin;
   motion: Motion;
 };
+
+export const defaultDials: Dials = {pace: 'eager', origin: 'hide', motion: 'animated'};
 
 export type ControlsProps = Dials & {
   onPaceChosen: (pace: Pace) => void;

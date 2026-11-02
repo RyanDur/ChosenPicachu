@@ -1,10 +1,10 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
 import {useSearchParamsObject} from '@components/search-params';
-import {defaultMotion, motionParam} from './Controls';
+import {defaultDials, motionParam} from './Controls';
 
 export const MotionDial: FC<{name: string}> = ({name}) => {
-  const {motion = defaultMotion, updateSearchParams} = useSearchParamsObject({motion: motionParam});
+  const {motion, updateSearchParams} = useSearchParamsObject({motion: motionParam}, defaultDials);
   return <PillGlider label="motion"
     name={name}
     options={[

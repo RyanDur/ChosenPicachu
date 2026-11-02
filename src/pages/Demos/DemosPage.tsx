@@ -22,7 +22,7 @@ import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {ZIndexIntroduction} from './ZIndexDemo/Introduction';
 import {AccordionsExplained, foldMotionParam, foldTypeParam} from './Accordions';
-import {defaultMotion, defaultOrigin, defaultPace, motionParam, originParam, paceParam} from './Controls';
+import {defaultDials, motionParam, originParam, paceParam} from './Controls';
 import {Aggregations} from './Tables';
 import {Workspace} from './Charts/Workspace';
 import {ChartsIntroduction} from './Charts/Introduction';
@@ -38,9 +38,8 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 }));
 
 export const DemosPage: FC<{topic: DemoTopics}> = ({topic}) => {
-  const {pace = defaultPace, origin = defaultOrigin, motion = defaultMotion, type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
-    useSearchParamsObject(
-      {pace: paceParam, origin: originParam, motion: motionParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam});
+  const {pace, origin, motion, type = 'exclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', wears = 'nothing', updateSearchParams, searchFromShown} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam, wears: wornParam}, defaultDials);
   const [accordionContents] = useState(() => {
     const draws = seeded('the accordion exhibits');
     const dealt = draws.wordDeck();

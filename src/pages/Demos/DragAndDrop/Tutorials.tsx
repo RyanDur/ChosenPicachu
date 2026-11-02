@@ -1,6 +1,6 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {defaultMotion, defaultOrigin, defaultPace, motionParam, originParam, paceParam} from '../Controls';
+import {defaultDials, motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
 import {DialNote, Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
@@ -32,8 +32,8 @@ const unanswered = [
 ];
 
 export const ListTutorials: FC = () => {
-  const {pace = defaultPace, origin = defaultOrigin, motion = defaultMotion, updateSearchParams} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
+  const {pace, origin, motion, updateSearchParams} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam}, defaultDials);
   useArrival();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
