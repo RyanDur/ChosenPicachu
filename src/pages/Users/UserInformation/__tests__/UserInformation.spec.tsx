@@ -133,10 +133,10 @@ describe('a user form', () => {
 
         await userForm.tickSameAsHome();
 
-        expect(userForm.address('work').getByLabelText('Street')).toHaveValue(info.homeAddress.streetAddress);
-        expect(userForm.address('work').getByLabelText('City')).toHaveValue(info.homeAddress.city);
-        expect(userForm.address('work').getByLabelText('Postal / Zip code')).toHaveValue(info.homeAddress.zip);
-        expect(userForm.address('work').getByLabelText('Street')).toBeDisabled();
+        expect(userForm.addressField('work', 'Street')).toHaveValue(info.homeAddress.streetAddress);
+        expect(userForm.addressField('work', 'City')).toHaveValue(info.homeAddress.city);
+        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(info.homeAddress.zip);
+        expect(userForm.addressField('work', 'Street')).toBeDisabled();
       });
 
       test('unticking Same as Home gives back the work address that was typed', async () => {
@@ -147,10 +147,10 @@ describe('a user form', () => {
 
         await userForm.tickSameAsHome();
 
-        expect(userForm.address('work').getByLabelText('Street')).toHaveValue(info.work.streetAddress);
-        expect(userForm.address('work').getByLabelText('City')).toHaveValue(info.work.city);
-        expect(userForm.address('work').getByLabelText('Postal / Zip code')).toHaveValue(info.work.zip);
-        expect(userForm.address('work').getByLabelText('Street')).toBeEnabled();
+        expect(userForm.addressField('work', 'Street')).toHaveValue(info.work.streetAddress);
+        expect(userForm.addressField('work', 'City')).toHaveValue(info.work.city);
+        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(info.work.zip);
+        expect(userForm.addressField('work', 'Street')).toBeEnabled();
       });
 
       test('the fresh form after adding has the box unticked and the work address open', async () => {
@@ -161,8 +161,8 @@ describe('a user form', () => {
         await userForm.add();
 
         expect(userForm.sameAsHome()).not.toBeChecked();
-        expect(userForm.address('work').getByLabelText('Street')).toBeEnabled();
-        expect(userForm.address('work').getByLabelText('Street')).toHaveValue('');
+        expect(userForm.addressField('work', 'Street')).toBeEnabled();
+        expect(userForm.addressField('work', 'Street')).toHaveValue('');
       });
     });
   });
@@ -174,10 +174,10 @@ describe('a user form', () => {
       expect(screen.getByLabelText('First Name')).not.toBeValid();
       expect(screen.getByLabelText('Last Name')).not.toBeValid();
       expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
-      expect(userForm.address('home').getByLabelText('Street')).not.toBeValid();
-      expect(userForm.address('home').getByLabelText('City')).not.toBeValid();
-      expect(userForm.address('home').getByLabelText('State')).not.toBeValid();
-      expect(userForm.address('home').getByLabelText('Postal / Zip code')).not.toBeValid();
+      expect(userForm.addressField('home', 'Street')).not.toBeValid();
+      expect(userForm.addressField('home', 'City')).not.toBeValid();
+      expect(userForm.addressField('home', 'State')).not.toBeValid();
+      expect(userForm.addressField('home', 'Postal / Zip code')).not.toBeValid();
     });
 
     test('clearing the date of birth leaves it empty and wanting', async () => {
@@ -191,7 +191,7 @@ describe('a user form', () => {
     });
 
     describe('for a zip code', () => {
-      const homeZip = (): HTMLElement => userForm.address('home').getByLabelText('Postal / Zip code');
+      const homeZip = (): HTMLElement => userForm.addressField('home', 'Postal / Zip code');
 
       test('a letter in the zip leaves it invalid', async () => {
         render(added().form);

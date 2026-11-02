@@ -37,7 +37,6 @@ const addressField = (kind: string, label: string): HTMLElement => address(kind)
 const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
 
 export const userForm = {
-  address,
   addressField,
   field,
   sameAsHome,
