@@ -83,8 +83,7 @@ describe('columns by hand', () => {
   test('every column offers a resize handle', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
-    expect(liveTable.resizeHandleIn('trades')).toBeVisible();
-    expect(liveTable.resizeHandleIn('window')).toBeVisible();
+    expect(liveTable.columnsWithoutAResizeHandle()).toEqual([]);
   });
 });
 

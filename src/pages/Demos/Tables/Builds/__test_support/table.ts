@@ -32,6 +32,9 @@ export const liveTable = {
   sortToggle: (column: string): HTMLElement | null => screen.queryByRole('button', {name: `sort ${column}`}),
   sortToggleIn: (column: string): HTMLElement | null => within(header(column)).queryByRole('button', {name: `sort ${column}`}),
   resizeHandleIn: (column: string): HTMLElement => within(header(column)).getByRole('button', {name: new RegExp(`resize ${column}`)}),
+  columnsWithoutAResizeHandle: (): string[] => within(table()).getAllByRole('columnheader')
+    .map(column => column.getAttribute('aria-label') ?? '')
+    .filter(column => within(header(column)).queryByRole('button', {name: new RegExp(`resize ${column}`)}) === null),
   menuChoice,
   choose: async (column: string, choice: MenuChoice): Promise<void> => userEvent.click(menuChoice(column, choice)),
   focusColumn: (name: string): void => header(name).focus(),

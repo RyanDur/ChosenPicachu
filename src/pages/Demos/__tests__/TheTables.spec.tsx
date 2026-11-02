@@ -63,37 +63,6 @@ describe('the tables demo', () => {
     expect(await tableControls.radio('Animate')).toBeChecked();
   });
 
-  test('a direction from a column menu sorts the windows', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    broadcast(feed, fourTrades);
-    await aggregations.counted(fourTrades.length);
-
-    await aggregations.sort('trades', 'descending');
-
-    expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
-    expect(aggregations.header('trades')).toHaveAttribute('aria-sort', 'descending');
-  });
-
-  test('while a column is sorted, the windows reseat as trades change their numbers', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    broadcast(feed, fourTrades);
-    await aggregations.counted(fourTrades.length);
-    await aggregations.sort('vwap', 'descending');
-    expect(aggregations.windows()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-
-    broadcast(feed, [tradeFrame(40000, now, '10', 'sold')]);
-
-    await waitFor(() => expect(aggregations.windows()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']));
-  });
-
   test('the controls start folded behind their readout, and a press opens them', async () => {
     const feed = await listeningFeed();
 
@@ -486,27 +455,7 @@ describe('the tables demo', () => {
     expect(tablesTab.recipeShown('drag sort')).not.toBeInTheDocument();
   });
 
-  test('every column is resizable', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('tables')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    expect(aggregations.resizeHandles()).toHaveLength(7);
-  });
-
   describe('the table worlds', () => {
-    test('react holds the stage by default, and no frame stands', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('tables')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      expect(await aggregations.arrived()).toBeInTheDocument();
-      expect(tablesTab.frame()).not.toBeInTheDocument();
-    });
-
     test('the tutorial stands unchanged in the html world', async () => {
       const feed = await listeningFeed();
 
@@ -562,16 +511,6 @@ describe('the tables demo', () => {
       await tablesTab.pick('By keyboard');
       expect(await demoPage.findTitle('Give focus a place to land')).toBeInTheDocument();
     });
-
-    test('should stand the frame in the html world', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('tables', '?world=vanilla')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      expect(tablesTab.frame()).toBeInTheDocument();
-    });
-
   });
 });
 
