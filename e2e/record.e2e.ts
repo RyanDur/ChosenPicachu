@@ -28,6 +28,15 @@ test('a keyboard reader who follows a line in Presentation\'s story reaches that
   await expect(moment.getByRole('link', {name: 'The Box Acid Test'})).toBeFocused();
 });
 
+test('a reader who follows the Presentation story\'s link to Practice lands on the Practice page\'s Presentation tab', async ({page}) => {
+  await page.goto('record/');
+
+  await recordPage(page).storyLinkTo('Presentation', 'Practice page’s Presentation tab').click();
+
+  await expect(page).toHaveURL(/\/practice\/presentation\/$/);
+  await expect(practicePage(page).title('Presentation')).toBeVisible();
+});
+
 test('an address that names a moment inside a year of two lands on that moment, with the year\'s fold open', async ({page}) => {
   await page.goto('record/#pages-need-to-respond');
   const moment = recordPage(page).moment('Pages need to respond');

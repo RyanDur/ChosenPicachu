@@ -9,6 +9,7 @@ export const recordPage = (page: Page) => ({
   customElementsParagraph: page.getByText(/^Script covered for structure too/),
   concertLinkTo: (moment: string): Locator => page.getByRole('region', {name: 'The concert'}).getByRole('link', {name: moment}),
   story: (concern: string): Locator => page.getByRole('region', {name: concern, exact: true}),
+  storyLinkTo: (concern: string, name: string): Locator => page.getByRole('region', {name: concern, exact: true}).getByRole('link', {name}),
   storyLineTo: (concern: string, line: string): Locator => page.getByRole('list', {name: `${concern}, the moments it rests on`}).getByRole('link', {name: line, exact: true}),
   timelineScope: '[aria-label="the timeline"]',
   researchFold: page.getByRole('region', {name: 'The research'}).getByRole('group').first(),
