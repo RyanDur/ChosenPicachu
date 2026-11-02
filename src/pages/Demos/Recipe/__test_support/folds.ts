@@ -15,7 +15,8 @@ export const recipeFolds = {
         throw new Error(`no step headed ${title}`);
       });
   },
-  stepTitled: (root: HTMLElement, title: string): HTMLElement | null => within(root).queryByRole('heading', {name: title}),
+  stepTitled: (root: HTMLElement, title: string): HTMLElement => within(root).getByRole('heading', {name: title}),
+  queryStepTitled: (root: HTMLElement, title: string): HTMLElement | null => within(root).queryByRole('heading', {name: title}),
   stepTitles: (story: HTMLElement): string[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem')
     .map(step => within(step).getAllByRole('heading')[0].textContent),
   press: async (root: HTMLElement, title: string): Promise<HTMLElement> => {

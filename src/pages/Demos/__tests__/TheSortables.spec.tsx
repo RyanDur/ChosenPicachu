@@ -208,7 +208,7 @@ describe('the sortable list demo', () => {
     expect(recipeFolds.stepTitled(recipe, 'Stash the landing, settle after the drag')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Leave the lifted card where it was')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Glide the settle one tick after the release')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Commit inside the crossing')).not.toBeInTheDocument();
+    expect(recipeFolds.queryStepTitled(recipe, 'Commit inside the crossing')).not.toBeInTheDocument();
   });
 
   test("turning a dial in the recipe turns the list's own controls", async () => {

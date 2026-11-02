@@ -314,7 +314,7 @@ describe('the tables demo', () => {
     expect(recipeFolds.stepTitled(recipe, 'Hold still, dispatch on release')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Keep the origin in place and let only the order move')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Leave the motion out')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Commit inside the move')).not.toBeInTheDocument();
+    expect(recipeFolds.queryStepTitled(recipe, 'Commit inside the move')).not.toBeInTheDocument();
     expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
   });
 
@@ -340,7 +340,7 @@ describe('the tables demo', () => {
     expect(recipeFolds.stepTitled(recipe, 'Give focus a place to land')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'The arrows give the direction')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Both parties slide')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
+    expect(recipeFolds.queryStepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
     await recipeFolds.press(recipe, 'The trader can sort by column');
     expect(recipeFolds.stepTitled(recipe, 'Turn the arrows vertical')).toBeInTheDocument();
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toBeInTheDocument();
@@ -359,7 +359,7 @@ describe('the tables demo', () => {
     await tablesTab.chooseInRecipe('drag sort', 'Static');
 
     expect(recipeFolds.stepTitled(recipe, 'Cut on the keypress')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Both parties slide')).not.toBeInTheDocument();
+    expect(recipeFolds.queryStepTitled(recipe, 'Both parties slide')).not.toBeInTheDocument();
   });
 
   test('switching back to the pointer track restores its road', async () => {
@@ -383,7 +383,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag sort');
     expect(recipeFolds.stepTitled(recipe, 'The arrows give the direction')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
+    expect(recipeFolds.queryStepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
   });
 
   test('choosing drag resize swaps in the resize tutorial', async () => {
