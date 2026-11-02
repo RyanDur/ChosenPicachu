@@ -48,7 +48,7 @@ export const presentation = {
   resetCss: {title: 'Reset CSS', address: 'https://meyerweb.com/eric/tools/css/reset/', provenance: 'Eric Meyer, meyerweb.com, version 2.0, 2011'},
   normalizeCss: {title: 'normalize.css', address: 'https://necolas.github.io/normalize.css/', provenance: 'Nicolas Gallagher, undated'},
   aboutNormalizeCss: {title: 'About normalize.css', address: 'https://nicolasgallagher.com/about-normalize-css/', provenance: 'Nicolas Gallagher, 28 February 2012'},
-  normalizeTags: {title: 'normalize.css tags', address: 'https://github.com/necolas/normalize.css/tags', provenance: 'Nicolas Gallagher, GitHub, version 1.0.0, 14 August 2012'},
+  normalizeTags: {title: 'normalize.css tags', address: 'https://github.com/necolas/normalize.css/tags', provenance: 'Nicolas Gallagher and Jonathan Neal, GitHub, version 1.0.0, 14 August 2012'},
   sass: {title: 'Sass', address: 'https://sass-lang.com/', provenance: 'sass-lang.com, undated'},
   libSass: {title: 'LibSass', address: 'https://sass-lang.com/libsass/', provenance: 'Sass, sass-lang.com, undated'},
   aboutLess: {title: 'About Less', address: 'https://lesscss.org/about/', provenance: 'lesscss.org, undated'},

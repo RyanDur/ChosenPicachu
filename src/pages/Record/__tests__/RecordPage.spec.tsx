@@ -1000,7 +1000,7 @@ describe('the record', () => {
       .toHaveAttribute('href', 'https://meyerweb.com/eric/tools/css/reset/');
   });
 
-  test('should date normalize.css’s first release by its tags', () => {
+  test('should date normalize.css’s version 1.0 by its tags', () => {
     expect(recordPage.momentLink('The defaults need to agree', 'August 2012'))
       .toHaveAttribute('href', 'https://github.com/necolas/normalize.css/tags');
   });
@@ -1096,8 +1096,8 @@ describe('the record', () => {
     expect(recordPage.shelfHolding('Reset Reasoning')).toBe('Presentation');
   });
 
-  test('should shelve normalize.css’s tags on the Presentation shelf, dated by its first release', () => {
-    expect(recordPage.shelvedAs('normalize.css tags')).toHaveTextContent('Nicolas Gallagher, GitHub, version 1.0.0, 14 August 2012');
+  test('should shelve normalize.css’s tags on the Presentation shelf, credited to both its authors and dated by version 1.0', () => {
+    expect(recordPage.shelvedAs('normalize.css tags')).toHaveTextContent('Nicolas Gallagher and Jonathan Neal, GitHub, version 1.0.0, 14 August 2012');
     expect(recordPage.shelfHolding('normalize.css tags')).toBe('Presentation');
   });
 
