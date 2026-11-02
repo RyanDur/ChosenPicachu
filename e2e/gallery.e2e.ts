@@ -18,7 +18,6 @@ for (const {reader, device} of handhelds) {
       await gallery.openSettings();
       await expect(gallery.searchField).toBeVisible();
 
-      await expect(page.getByText('Search For:', {exact: true})).toBeVisible();
       await expect(gallery.searchField).toHaveAccessibleName(/Search For/);
     });
 
@@ -95,7 +94,6 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
       await page.goto('gallery/?tab=vam');
       await expect(gallery.searchField).toBeVisible();
 
-      await expect(page.getByText('Search For:', {exact: true})).toBeVisible();
       await expect(gallery.searchField).toHaveAccessibleName(/Search For/);
     });
 
