@@ -164,7 +164,7 @@ test.describe('a phone held sideways, partway down the gallery', () => {
     await expect(gallery.wall.first()).toBeVisible();
     await gallery.wall.last().scrollIntoViewIfNeeded();
     await gallery.nextPage.scrollIntoViewIfNeeded();
-    expect(await documentScrollY(page)).toBeGreaterThan(0);
+    await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
 
     await gallery.nextPage.click();
     await expect(page).toHaveURL(/page=2/);
