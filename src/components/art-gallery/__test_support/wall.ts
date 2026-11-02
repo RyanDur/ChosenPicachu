@@ -19,6 +19,5 @@ export const galleryWall = {
   pictures: async (): Promise<HTMLElement[]> => (await framesAppear()).map(figure => within(figure).getByRole('img')),
   loadingSignAppears: (): Promise<HTMLElement> => screen.findByRole('progressbar', loadingSign),
   loadingSign: (): HTMLElement | null => screen.queryByRole('progressbar', loadingSign),
-  standIn: (saying: string): Promise<HTMLElement> => screen.findByRole('img', {name: saying}),
-  frameTitled
+  standIn: (saying: string): Promise<HTMLElement> => screen.findByRole('img', {name: saying})
 };

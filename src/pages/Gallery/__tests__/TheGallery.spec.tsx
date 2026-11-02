@@ -48,7 +48,7 @@ describe('The gallery.', () => {
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
-      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
+      await galleryWall.openPiece(firstPiece.title);
 
       expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
       expect(screen.getByRole('figure')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('The gallery.', () => {
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
-      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
+      await galleryWall.openPiece(firstPiece.title);
 
       const header = within(screen.getByRole('banner'));
       expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
@@ -69,12 +69,12 @@ describe('The gallery.', () => {
       setupAICAllArtResponse(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
-      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
+      await galleryWall.openPiece(firstPiece.title);
       await within(screen.getByRole('banner')).findByText(firstPiece.title);
       const secondArrives = heldAICArtPieceResponse(anAICPieceResponse(secondPiece), secondPiece.id);
 
       await userEvent.click(screen.getByRole('link', {name: 'Gallery'}));
-      await userEvent.click(within(await galleryWall.frameTitled(secondPiece.title)).getByRole('img'));
+      await galleryWall.openPiece(secondPiece.title);
 
       expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
       expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
