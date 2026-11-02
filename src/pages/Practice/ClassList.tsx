@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import './PracticeDrawing.css';
 import './ClassList.css';
 
 type Run = {
@@ -54,17 +53,26 @@ const Line: FC<{segments: Segment[]; y: number}> = ({segments, y}) => <>
     : <DrawnRun key={segment.word} run={segment} x={x} y={y}/>)}
 </>;
 
-const ClassListDrawing: FC = () =>
-  <svg className="class-list-drawing center ink-filled" viewBox="0 0 320 112" aria-hidden="true">
+const oneLine: Segment[] = [opening, nouns, needs, states, closing];
+const wideWidth = margin * 2 + lengthOf(oneLine);
+
+const WideClassList: FC = () =>
+  <svg className="class-list-wide ink-filled" viewBox={`0 0 ${wideWidth} 44`} aria-hidden="true">
+    <Line segments={oneLine} y={14}/>
+  </svg>;
+
+const NarrowClassList: FC = () =>
+  <svg className="class-list-narrow center ink-filled" viewBox="0 0 320 112" aria-hidden="true">
     <Line segments={[opening]} y={16}/>
     <Line segments={[nouns, needs]} y={36}/>
     <Line segments={[states, closing]} y={80}/>
   </svg>;
 
 export const ColumnHeaderClassList: FC = () =>
-  <figure className="class-list practice-drawing">
+  <figure className="class-list">
     <code className="off-screen monospaced">{tag}</code>
-    <ClassListDrawing/>
+    <WideClassList/>
+    <NarrowClassList/>
     <figcaption className="caption">The trades column’s header from the Tables demo, its class list trimmed, read left
       to right: nouns, then needs, then states.
     </figcaption>

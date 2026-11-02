@@ -15,7 +15,7 @@ const landmarkRegions = 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regi
 
 export const StructurePractice: FC = () =>
   <>
-    <h3 className="paragraph bold">What organizing markup has to solve</h3>
+    <h3 className="part-heading paragraph bold">What organizing markup has to solve</h3>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
       for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are the
       rules I hold the markup to, and the rest of this tab says how each is kept. They are not kept everywhere yet: in
@@ -66,7 +66,7 @@ export const StructurePractice: FC = () =>
       </div>
     </dl>
     <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
-    <h3 className="paragraph bold">The skeleton, and a name where a landmark repeats</h3>
+    <h3 className="part-heading paragraph bold">The skeleton, and a name where a landmark repeats</h3>
     <p className="paragraph">The skeleton comes first, and I keep this site’s skeleton the same on every page. One header and one
       main; a footer where a page has one, as the gallery does. A nav named site, for the links that move you around
       the site. A section named pages and feedback, the rail that holds that nav and the feedback button. Where a page
@@ -86,7 +86,7 @@ export const StructurePractice: FC = () =>
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
-    <h3 className="paragraph bold">From the content to the element</h3>
+    <h3 className="part-heading paragraph bold">From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
     <a className="signpost"
@@ -154,7 +154,7 @@ export const StructurePractice: FC = () =>
       renders a real element with its role and its keys and adds the one behavior the platform lacks, and both builds
       share the state under them, so the line between the platform and the framework is the line between the markup
       and the components.</p>
-    <h3 className="paragraph bold">Components, one behavior each</h3>
+    <h3 className="part-heading paragraph bold">Components, one behavior each</h3>
     <p className="paragraph">A component is an element that does not exist yet. I write one to add a behavior the
       platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
       a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular.
@@ -197,7 +197,7 @@ export const StructurePractice: FC = () =>
       attribute
       with the semantics and behavior you require already built in, instead of re-purposing an element and adding an
       ARIA role, state or property to make it accessible, then do so.”</a></p>
-    <h3 className="paragraph bold">ARIA last</h3>
+    <h3 className="part-heading paragraph bold">ARIA last</h3>
     <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
       these links are for getting around; a button tells it a press will do something. The right element gives you
       that for free, with{' '}
@@ -257,7 +257,7 @@ export const StructurePractice: FC = () =>
       sample’s language label is hidden, since the button’s, the dial’s or the sample’s name already says it.</p>
     <p className="paragraph">So the rule, in one line: a name, always; a role, only where no element carries the
       meaning or one must be taken away; a state, only where the platform has none.</p>
-    <h3 className="paragraph bold">The styles-off test</h3>
+    <h3 className="part-heading paragraph bold">The styles-off test</h3>
     <p className="paragraph">The test is to read the page with the styles turned off. It should still say
       everything it means, in order, because that is what search engines, reader modes and assistive technology
       read. If the meaning only appears once the CSS loads, it is in the wrong language.

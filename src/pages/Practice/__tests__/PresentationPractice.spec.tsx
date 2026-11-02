@@ -361,11 +361,16 @@ describe('the Presentation practice tab', () => {
     expect(practicePage.drawingsSeenIn('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.')).toEqual([]);
   });
 
-  test('should draw the trades column’s header once, each run with its kind under it: nouns, needs, states', async () => {
+  test('should draw the trades column’s header wide and narrow, each run with its kind under it: nouns, needs, states', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.drawnIn('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.')).toEqual([
+      '<th scope="col" class="',
+      'cell header-cell', 'nouns',
+      'muted-rule-after muted-bar-below focus-ringed', 'needs',
+      'carried', 'states',
+      '">trades</th>',
       '<th scope="col" class="',
       'cell header-cell', 'nouns',
       'muted-rule-after muted-bar-below focus-ringed', 'needs',

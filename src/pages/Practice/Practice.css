@@ -22,6 +22,10 @@
     margin-block-start: var(--base-x-1_5);
   }
 
+  .part-heading {
+    clear: inline-end;
+  }
+
   .practice-list {
     display: grid;
     gap: var(--base-x-0_5);

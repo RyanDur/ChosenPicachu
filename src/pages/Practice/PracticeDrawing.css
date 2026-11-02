@@ -1,4 +1,6 @@
 .practice-drawing {
+  --drawn-width: 480px;
+
   display: grid;
   gap: var(--base);
   container-type: inline-size;
@@ -12,10 +14,6 @@
     max-inline-size: var(--drawn-width);
   }
 
-  .drawing-wide {
-    --drawn-width: 480px;
-  }
-
   .drawing-stacked {
     --drawn-width: 300px;
 
@@ -24,7 +22,7 @@
 
   @container (width >= 855px) {
     float: inline-end;
-    inline-size: var(--base-x-60);
+    inline-size: var(--drawn-width);
     margin-inline-start: var(--base-x-3);
   }
 
