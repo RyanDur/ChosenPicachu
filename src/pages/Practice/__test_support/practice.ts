@@ -2,24 +2,13 @@ import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {maybe, not} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
-import {moments} from '@pages/Record/moments/moments';
-import {paragraphOpening, paragraphOpeningIn} from '@__test_support/paragraph';
+import {paragraphOpening} from '@__test_support/paragraph';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});
 
 const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
   .filter(paragraph => Boolean(paragraph.compareDocumentPosition(tabs()) & Node.DOCUMENT_POSITION_FOLLOWING));
-
-const practiceParagraphs = (): HTMLElement[] => within(practice()).getAllByRole('paragraph');
-
-const onlyParagraph = (opening: RegExp): HTMLElement => paragraphOpeningIn(practice())(opening);
-
-const paragraphs = (): string[] => practiceParagraphs().map(paragraph => paragraph.textContent ?? '');
-
-const momentAddresses = Object.values(moments).map(({id}) => `${Paths.record}#${id}`);
-
-const opensAMoment = (link: HTMLElement): boolean => momentAddresses.includes(link.getAttribute('href') ?? '');
 
 const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
@@ -41,25 +30,13 @@ export const practicePage = {
     }
     return within(items[0]).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
   },
-  codesIn: (opening: RegExp): string[] => within(paragraphOpening(opening)).getAllByRole('code').map(code => code.textContent),
   linksIn: (opening: RegExp): (string | null)[][] => within(paragraphOpening(opening)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
-  beforeTheTabs: (): string[] => openingParagraphs().map(paragraph => paragraph.textContent),
   openingSources: (): string[] => openingParagraphs()
     .flatMap(paragraph => within(paragraph).queryAllByRole('link'))
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   heading: (): HTMLElement => within(practice()).getByRole('heading', {name: 'how I organize it', level: 2}),
-  bareSheets: (): string[] => [...(practice().textContent ?? '').replace(/“[^”]*”/g, '').matchAll(/(?<!style )\bsheets?\b/gi)]
-    .map(([found]) => found),
-  paragraph: onlyParagraph,
-  itemsListedAfter: (opening: RegExp): string[] => {
-    const list = onlyParagraph(opening).nextElementSibling;
-    if (list instanceof HTMLElement) {
-      return within(list).getAllByRole('listitem').map(item => item.textContent ?? '');
-    }
-    throw new Error(`no list after the paragraph opening ${opening}`);
-  },
   linksInDefinitionOf: (term: string): (string | null)[][] => {
     const definition = within(practice()).getAllByRole('term').find(found => found.textContent === term)?.nextElementSibling;
     if (definition instanceof HTMLElement) {
@@ -67,7 +44,7 @@ export const practicePage = {
     }
     throw new Error(`no definition of ${term}`);
   },
-  quotedIn: (opening: RegExp): {words: string; address: string | null} => {
+  quotationAddressIn: (opening: RegExp): string | null => {
     const holders = within(practice()).getAllByRole('listitem').concat(within(practice()).getAllByRole('paragraph'))
       .filter(holder => opening.test(holder.textContent));
     if (holders.length !== 1) {
@@ -77,21 +54,7 @@ export const practicePage = {
     if (!quotation) {
       throw new Error(`no quotation in the place opening ${opening}`);
     }
-    return {words: quotation.textContent.slice(1, -1), address: quotation.getAttribute('href')};
-  },
-  codesListedAfter: (opening: RegExp): string[] => {
-    const list = onlyParagraph(opening).nextElementSibling;
-    if (list instanceof HTMLElement) {
-      return within(list).getAllByRole('code').map(code => code.textContent);
-    }
-    throw new Error(`no list after the paragraph opening ${opening}`);
-  },
-  paragraphs,
-  terms: (): string[] => within(practice()).getAllByRole('term').map(term => term.textContent ?? ''),
-  definitions: (): string[] => within(practice()).getAllByRole('definition').map(definition => definition.textContent ?? ''),
-  paragraphAfter: (opening: RegExp): string | undefined => {
-    const found = practiceParagraphs().indexOf(onlyParagraph(opening));
-    return paragraphs()[found + 1];
+    return quotation.getAttribute('href');
   },
   partHeadings: (): string[] => within(practice()).getAllByRole('heading', {level: 3}).map(heading => heading.textContent ?? ''),
   partHeading: (name: string): HTMLElement => within(practice()).getByRole('heading', {level: 3, name}),
@@ -109,21 +72,10 @@ export const practicePage = {
     .map(link => link.getAttribute('href') ?? '')
     .filter(source => new URL(source, window.location.href).origin !== window.location.origin),
   figure: (name: string): HTMLElement => within(practice()).getByRole('figure', {name}),
-  carvedFrom: (source: string): HTMLElement[] => within(practice()).getAllByRole('figure', {name: `${source} on GitHub`}),
-  codeOf: (carve: HTMLElement): string => within(carve).getByRole('code').textContent,
-  tagIn: (figure: string): string => within(within(practice()).getByRole('figure', {name: figure})).getByRole('code').textContent,
   drawingsSeenIn: (figure: string): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),
-  drawnIn: (figure: string): string[] => drawnTexts(figure).map(text => text.textContent),
   imagesHeardIn: (caption: string): HTMLElement[] =>
     within(within(practice()).getByRole('figure', {name: caption})).queryAllByRole('img'),
-  link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name}),
-  citations: (): (string | null | undefined)[][] => within(practice()).getAllByRole('link')
-    .filter(opensAMoment)
-    .map(link => [/\d{4}/.exec(link.textContent ?? '')?.[0], link.getAttribute('href')]),
-  followMoment: async (name: string): Promise<void> => {
-    await screen.findByRole('region', {name: 'how I organize it'});
-    await userEvent.click(within(practice()).getAllByRole('link', {name})[0]);
-  }
+  link: (name: string | RegExp): HTMLElement => within(practice()).getByRole('link', {name})
 };

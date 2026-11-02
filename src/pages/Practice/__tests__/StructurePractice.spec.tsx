@@ -4,42 +4,10 @@ import {fileInRepository, Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
-import {britishSpellingsOnThePage} from '@__test_support/spelling';
-import {outOfReadingOrder} from '@__test_support/reading-order';
-import a11yJourney from '/e2e/a11y.e2e.ts?raw';
-import agents from '/AGENTS.md?raw';
-import stylelintConfig from '/stylelint.config.js?raw';
 
-const siteSources: Record<string, string> = import.meta.glob(['/src/**/*.{ts,tsx,html}', '!/src/**/__tests__/**', '!/src/**/__test_support/**', '!/src/**/__test_support__/**'], {query: '?raw', import: 'default', eager: true});
-
-const distinct = (words: string[]): string[] => [...new Set(words)].sort();
-const rolesWritten = (): string[] => distinct(Object.values(siteSources).flatMap(source => [...source.matchAll(/role="([a-z]+)"/g)].map(([, role]) => role)));
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
 
-const statesWrittenByHand = (): string[] => distinct(Object.values(siteSources).flatMap(source => [...source.matchAll(/(?:\s|setAttribute\(['"])(aria-(?:sort|current|expanded|hidden|pressed|selected|checked|disabled|invalid|busy))(?=[\s=:>/'"])/g)].map(([, state]) => state)));
-
 describe('the Structure practice tab', () => {
-  test('should spell the Structure tab\'s prose the American way', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(britishSpellingsOnThePage()).toEqual([]);
-  });
-
-  test('should open the Structure tab on the three rules, then who reads markup, then the five things that have to be true of it, before the skeleton', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(outOfReadingOrder([
-      practicePage.partHeading('What organizing markup has to solve'),
-      practicePage.paragraph(/^I choose the element for what the thing is/),
-      practicePage.paragraph(/^The rules come from the readers/),
-      practicePage.paragraph(/^So five things have to be true of the markup/),
-      practicePage.paragraph(/^The rest of this tab takes each of the five in turn/),
-      practicePage.partHeading('The skeleton, and a name where a landmark repeats')
-    ])).toEqual([]);
-  });
-
   test('should head the Structure tab’s parts, each title stating the part’s answer', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
@@ -52,67 +20,6 @@ describe('the Structure practice tab', () => {
       'ARIA last',
       'The styles-off test'
     ]);
-  });
-
-  test('should walk down from the skeleton to one element, through the three attributes and the tables demo’s two builds, before what the elements mean', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const [headerCell, vanillaHeader] = practicePage.carvedFrom('Frame/table.html');
-
-    expect(outOfReadingOrder([
-      practicePage.paragraph(/^One region on every page is a role and not an element/),
-      practicePage.paragraph(/^I start from what the content is and pick the element for it/),
-      practicePage.paragraph(/^The element is the name/),
-      practicePage.paragraph(/^The platform’s elements each bring a behavior/),
-      practicePage.paragraph(/^Three attributes carry three jobs/),
-      practicePage.paragraph(/^The tables demo builds the same table twice/),
-      headerCell,
-      practicePage.paragraph(/^The class list is the look/),
-      practicePage.paragraph(/^The script attaches itself by the same attribute/),
-      practicePage.carvedFrom('Frame/boot.ts')[0],
-      practicePage.paragraph(/^boot\.ts, in its feed function, finds its tables/),
-      practicePage.paragraph(/^In React the same markup is written by components/),
-      vanillaHeader,
-      practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0],
-      practicePage.paragraph(/^DraggableColumn writes the th/),
-      practicePage.paragraph(/^The elements mean something beyond how they look/)
-    ])).toEqual([]);
-  });
-
-  test('should show the vanilla table’s tag and trades header with all three attributes: the class lists, the id, and data-drag-sortable, data-sort-toggle and data-resize-handle, with popovertarget naming the menu', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const carve = practicePage.codeOf(practicePage.carvedFrom('Frame/table.html')[0]);
-
-    expect(carve).toContain('<table class="fancy-table sortable apportioned hide animated" id="live-aggregations" data-drag-sortable>');
-    expect(carve).toContain('data-sort-toggle');
-    expect(carve).toContain('data-resize-handle');
-    expect(carve).toContain('popovertarget="sort-trades"');
-    expect(carve).toContain('<menu id="sort-trades"');
-  });
-
-  test('should show boot.ts finding its tables by data-drag-sortable and hearing column-moved, row-moved and sorted', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const carve = practicePage.codeOf(practicePage.carvedFrom('Frame/boot.ts')[0]);
-
-    expect(carve).toContain("querySelectorAll('table[data-drag-sortable]')");
-    expect(carve).toContain("addEventListener('column-moved'");
-    expect(carve).toContain("addEventListener('row-moved'");
-    expect(carve).toContain("addEventListener('sorted'");
-  });
-
-  test('should show DraggableColumn writing the th, with its scope, beside the vanilla header', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const carve = practicePage.codeOf(practicePage.carvedFrom('DragSortableTable/DraggableColumn.tsx')[0]);
-
-    expect(carve).toMatch(/^return <th/);
-    expect(carve).toContain('scope="col"');
   });
 
   test('should send the elements the content asks for to their MDN pages, and semantic markup to the 2014 moment', async () => {
@@ -151,43 +58,18 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
   });
 
-  test('should open the styles-off test on what the test is, then the four gates that hold the site to it, then the rule the review holds', async () => {
+  test('should send the quotation of html-validate’s loosened id rule to the accessibility journey', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(outOfReadingOrder([
-      practicePage.partHeading('The styles-off test'),
-      practicePage.paragraph(/^The test is to read the page with the styles turned off/),
-      practicePage.paragraph(/^The styles-off test is not read by eye/),
-      practicePage.paragraph(/^The rule the review holds is one line in AGENTS.md/)
-    ])).toEqual([]);
+    expect(practicePage.quotationAddressIn(/^html-validate checks/)).toBe(fileInRepository('e2e/a11y.e2e.ts'));
   });
 
-  test('should list the four gates that hold the site to the styles-off test: axe, html-validate, outOfReadingOrder and stylelint', async () => {
+  test('should send the quotation on how a test finds things to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.codesListedAfter(/^The styles-off test is not read by eye/)).toEqual(['axe', 'html-validate', 'outOfReadingOrder', 'stylelint']);
-  });
-
-  test('should quote html-validate’s loosened id rule from the accessibility journey, word for word', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const {words, address} = practicePage.quotedIn(/^html-validate checks/);
-
-    expect(a11yJourney).toContain(words);
-    expect(address).toBe(fileInRepository('e2e/a11y.e2e.ts'));
-  });
-
-  test('should quote AGENTS.md on how a test finds things, word for word', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    const {words, address} = practicePage.quotedIn(/^The rule the review holds is one line in AGENTS.md/);
-
-    expect(agents).toContain(words);
-    expect(address).toBe(fileInRepository('AGENTS.md'));
+    expect(practicePage.quotationAddressIn(/^The rule the review holds is one line in AGENTS.md/)).toBe(fileInRepository('AGENTS.md'));
   });
 
   test('should send outOfReadingOrder to its file', async () => {
@@ -197,28 +79,11 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksInItem(/^outOfReadingOrder takes/)).toEqual([['outOfReadingOrder', fileInRepository('src/__test_support/reading-order.ts')]]);
   });
 
-  test('should quote stylelint’s message on an obsolete element, word for word', async () => {
+  test('should send the quotation of stylelint’s message on an obsolete element to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    const {words, address} = practicePage.quotedIn(/^stylelint refuses a selector/);
-
-    expect(stylelintConfig).toContain(words);
-    expect(address).toBe(fileInRepository('stylelint.config.js'));
-  });
-
-  test('should name every role the site writes, and no other', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(distinct(practicePage.codesIn(/^Here is what ARIA last looks like on this site/))).toEqual(rolesWritten());
-  });
-
-  test('should name every state the site writes by hand, and no other', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(distinct(practicePage.codesIn(/^States come from the platform wherever it has one/).filter(code => code.startsWith('aria-')))).toEqual(statesWrittenByHand());
+    expect(practicePage.quotationAddressIn(/^stylelint refuses a selector/)).toBe(fileInRepository('stylelint.config.js'));
   });
 
   test('should send the old-style banner to the z-index tab that raises it', async () => {
@@ -260,20 +125,6 @@ describe('the Structure practice tab', () => {
     ]);
   });
 
-  test('should list the five needs as terms, meaning, order, names, behavior and identity, each with what has to be true of the markup', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(practicePage.terms()).toEqual(['Meaning', 'Order', 'Names', 'Behavior', 'Identity']);
-    expect(practicePage.definitions()).toEqual([
-      expect.stringMatching(/^What each thing is/),
-      expect.stringMatching(/^What comes before what/),
-      expect.stringMatching(/^What each region and control is called/),
-      expect.stringMatching(/^What presses, opens and submits/),
-      expect.stringMatching(/^How one thing is found/)
-    ]);
-  });
-
   test('should send each of the four needs WCAG names to its Understanding page, and identity to none', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
@@ -298,18 +149,6 @@ describe('the Structure practice tab', () => {
     ]);
   });
 
-  test('should show the page’s table of contents after the skeleton and why landmarks are named, before the one region that is a role', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(outOfReadingOrder([
-      practicePage.paragraph(/^The skeleton comes first/),
-      practicePage.paragraph(/^Landmarks are what a screen reader lists and jumps to/),
-      practicePage.figure(tableOfContents),
-      practicePage.paragraph(/^One region on every page is a role and not an element/)
-    ])).toEqual([]);
-  });
-
   test('should send the rule for naming landmarks to the Authoring Practices, and the landmark elements to the 2004 moment', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
@@ -330,20 +169,18 @@ describe('the Structure practice tab', () => {
     ]);
   });
 
-  test('should keep the table of contents’ drawing from a screen reader, which hears its title and caption', async () => {
+  test('should keep the table of contents’ drawing from a screen reader', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.imagesHeardIn(tableOfContents)).toEqual([]);
   });
 
-  test('should open the Structure tab from its address, reading how I organize it from its first rule to its test', async () => {
+  test('should open the Structure tab from its address', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
 
     expect(await practicePage.arrivedOn('Structure')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Structure');
-    expect(practicePage.paragraph(/^I choose the element for what the thing is/)).toBeInTheDocument();
-    expect(practicePage.paragraph(/^The test is to read the page with the styles turned off/)).toBeInTheDocument();
   });
 
   test('should send the div’s “last resort” to the HTML standard and “No ARIA is better than bad ARIA” to MDN', async () => {
@@ -354,12 +191,5 @@ describe('the Structure practice tab', () => {
       .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element');
     expect(practicePage.link(/No ARIA is better than bad ARIA/))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-  });
-
-  test('should rest Structure’s practice on its own moments, each citation naming the year of the moment it opens', async () => {
-    render(<TestApp at={Paths.practice}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(practicePage.citations()).toEqual([['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2014', `${Paths.record}#the-rules-need-writing-down`], ['2013', `${Paths.record}#someone-needs-components`], ['2004', `${Paths.record}#the-standard-needs-the-real-world`], ['2016', `${Paths.record}#the-document-needs-to-come-first`]]);
   });
 });

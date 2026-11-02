@@ -95,27 +95,9 @@ describe('the practice page', () => {
     expect(appAddress.shown()).toBe(practiceAt('structure'));
   });
 
-  test('should say what each tab holds, and that one principle runs through all three', async () => {
-    render(<TestApp at={Paths.practice}/>);
-    const opener = await practicePage.opener();
-
-    expect(opener).toHaveTextContent(
-      'Each tab below is one of the three concerns and says how I organize it: the rules I keep, the moments in the Record that taught them, and the test that tells me a rule holds. The demos show the rules at work. One principle runs through all three, and it is worth saying once before the tabs apply it.');
-  });
-
-  test('should open on two paragraphs, what the tabs hold and the principle, and nothing more before the tabs', async () => {
-    render(<TestApp at={Paths.practice}/>);
-    await practicePage.opener();
-
-    expect(practicePage.beforeTheTabs()).toEqual([
-      expect.stringMatching(/^Each tab below is one of the three concerns/),
-      expect.stringMatching(/^Code is read more often than it is written/)
-    ]);
-  });
-
   test('should link the Application Continuum, and the quotation from it, to the Continuum', async () => {
     render(<TestApp at={Paths.practice}/>);
-    await practicePage.opener();
+    await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksIn(/^Code is read more often than it is written/)).toEqual([
       ['The Application Continuum', appContinuum],

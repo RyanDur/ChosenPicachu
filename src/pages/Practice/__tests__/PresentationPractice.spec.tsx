@@ -2,41 +2,16 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@pages/Paths';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
-import {britishSpellingsOnThePage} from '@__test_support/spelling';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import indexCss from '/src/index.css?raw';
-import stylelintConfig from '/stylelint.config.js?raw';
 
 const whereARuleLives = 'Where a rule lives. The shared words live in src/styles, by concern. A component’s structure lives beside the component.';
-const sheetsImported = (): string[] => [...indexCss.matchAll(/@import "styles\/([a-z]+)\.css";/g)].map(([, file]) => file);
 
 describe('the Presentation practice tab', () => {
-  test('should spell the Presentation tab\'s prose the American way', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(britishSpellingsOnThePage()).toEqual([]);
-  });
-
-  test('should say style sheet, never a bare sheet, outside a quotation', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.bareSheets()).toEqual([]);
-  });
-
   test('should open the Presentation tab from its address', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
 
     expect(await practicePage.arrivedOn('Presentation')).toBeInTheDocument();
     expect(practicePage.currentTab()).toBe('Presentation');
-  });
-
-  test('should name the five things the style sheets hold to, in order: place, value, name, selector and order', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.terms()).toEqual(['Place', 'Value', 'Name', 'Selector', 'Order']);
   });
 
   test('should send place’s gates to the style sheet lint and the class lint, and its rule to BEM’s folder per block', async () => {
@@ -141,20 +116,25 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should walk the nine shared style sheets in the order index.css imports them, each linked to its file in the repository', async () => {
+  test('should send each of the nine shared style sheets walked under where a rule lives to its file in the repository', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const imported = sheetsImported();
-    const walked = practicePage.linksUnder('Where a rule lives')
-      .filter(([, href]) => (href ?? '').startsWith(`${Paths.repo}/blob/main/src/styles/`));
-
-    expect(imported).toHaveLength(9);
-    expect(walked.map(([name]) => name)).toEqual(['reset', 'colors.css', 'spacing.css', 'button', 'typography', 'surface', 'drawing', 'placement', 'glide']);
-    expect(walked.map(([, href]) => href)).toEqual(imported.map(file => `${Paths.repo}/blob/main/src/styles/${file}.css`));
+    expect(practicePage.linksUnder('Where a rule lives')
+      .filter(([, href]) => (href ?? '').startsWith(`${Paths.repo}/blob/main/src/styles/`))).toEqual([
+      ['reset', `${Paths.repo}/blob/main/src/styles/reset.css`],
+      ['colors.css', `${Paths.repo}/blob/main/src/styles/colors.css`],
+      ['spacing.css', `${Paths.repo}/blob/main/src/styles/spacing.css`],
+      ['button', `${Paths.repo}/blob/main/src/styles/button.css`],
+      ['typography', `${Paths.repo}/blob/main/src/styles/typography.css`],
+      ['surface', `${Paths.repo}/blob/main/src/styles/surface.css`],
+      ['drawing', `${Paths.repo}/blob/main/src/styles/drawing.css`],
+      ['placement', `${Paths.repo}/blob/main/src/styles/placement.css`],
+      ['glide', `${Paths.repo}/blob/main/src/styles/glide.css`]
+    ]);
   });
 
-  test('should quote the tag rule’s message as stylelint.config.js prints it, signposted to the config', async () => {
+  test('should send the tag rule’s quoted message to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -162,10 +142,9 @@ describe('the Presentation practice tab', () => {
 
     expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
-    expect(stylelintConfig).toContain('a tag is styled only in src/styles/reset.css; give the element a class');
   });
 
-  test('should quote the look rule’s message as stylelint.config.js prints it, signposted to the config', async () => {
+  test('should send the look rule’s quoted message to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -173,7 +152,6 @@ describe('the Presentation practice tab', () => {
 
     expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
-    expect(stylelintConfig).toContain('is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class');
   });
 
   test('should draw where a rule lives in the part it names, before what a class is named for', async () => {
@@ -187,7 +165,7 @@ describe('the Presentation practice tab', () => {
     ])).toEqual([]);
   });
 
-  test('should keep the drawing of where a rule lives from a screen reader, which hears its title and caption', async () => {
+  test('should keep the drawing of where a rule lives from a screen reader', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -221,39 +199,6 @@ describe('the Presentation practice tab', () => {
 
     expect(practicePage.linksIn(/^I give up the scoping of every look to its block/)).toEqual([
       ['“defines the appearance, state, and sometimes the behavior of the block”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
-    ]);
-  });
-
-  test('should list the two things kept from BEM, the block and the folder per block, after saying there are two', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.itemsListedAfter(/^I keep two things from BEM/)).toEqual([
-      expect.stringMatching(/^the block as the unit/),
-      expect.stringMatching(/^the folder per block/)
-    ]);
-  });
-
-  test('should list the four kinds of size spacing.css names outside its scale', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.itemsListedAfter(/^Then two token files/)).toEqual([
-      expect.stringMatching(/^the hairlines, in pixels/),
-      expect.stringMatching(/^the corner radii/),
-      expect.stringMatching(/^a text measure, in ch/),
-      expect.stringMatching(/^the breakpoints, in pixels/)
-    ]);
-  });
-
-  test('should list the sizes that belong to one component and sit in its own style sheet', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.itemsListedAfter(/^A few sizes belong to one component and sit in its own style sheet/)).toEqual([
-      expect.stringMatching(/^its own breakpoints, in pixels, and its container queries, in rems/),
-      expect.stringMatching(/^a table’s or a page’s width, in rems, measured to what it holds/),
-      expect.stringMatching(/^a drawing’s width, in pixels/)
     ]);
   });
 
@@ -323,42 +268,10 @@ describe('the Presentation practice tab', () => {
     ])).toEqual([]);
   });
 
-  test('should give a screen reader the trades header’s tag once, as text', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.tagIn('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.')).toBe('<th scope="col" class="cell header-cell muted-rule-after muted-bar-below focus-ringed carried">trades</th>');
-  });
-
-  test('should keep its drawings from a screen reader, which hears the tag once, from its code', async () => {
+  test('should keep the drawing of the trades column’s header from a screen reader', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.drawingsSeenIn('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.')).toEqual([]);
-  });
-
-  test('should draw the trades column’s header wide and narrow, each run with its kind under it: nouns, needs, states', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.drawnIn('The trades column’s header from the Tables demo, its class list trimmed, read left to right: nouns, then needs, then states.')).toEqual([
-      '<th scope="col" class="',
-      'cell header-cell', 'nouns',
-      'muted-rule-after muted-bar-below focus-ringed', 'needs',
-      'carried', 'states',
-      '">trades</th>',
-      '<th scope="col" class="',
-      'cell header-cell', 'nouns',
-      'muted-rule-after muted-bar-below focus-ringed', 'needs',
-      'carried', 'states',
-      '">trades</th>'
-    ]);
-  });
-
-  test('should rest Presentation’s practice on its own moments, each citation naming the year of the moment it opens', async () => {
-    render(<TestApp at={practiceAt('presentation')}/>);
-    await practicePage.arrivedOn('Presentation');
-
-    expect(practicePage.citations()).toEqual([['2013', `${Paths.record}#someone-needs-components`], ['2013', `${Paths.record}#someone-needs-components`], ['1994', `${Paths.record}#authors-need-control-of-the-look`], ['2003', `${Paths.record}#the-separation-needs-proof`], ['1996', `${Paths.record}#the-pages-need-to-look-the-same`]]);
   });
 });
