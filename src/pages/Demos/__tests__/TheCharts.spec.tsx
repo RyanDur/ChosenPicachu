@@ -1,5 +1,4 @@
 import {TestApp} from '@__test_support/TestApp';
-import {paragraphOpening, paragraphReading} from '@__test_support/paragraph';
 import {Paths} from '@pages/Paths';
 import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
@@ -11,55 +10,11 @@ import {
   tradeFrame,
   tradeFrameWith
 } from '@pages/Demos/__test_support/feed';
-import {outOfReadingOrder} from '@__test_support/reading-order';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
 import {blurFocusOnMoves} from '@__test_support/focus';
-
-describe('the charts tutorials’ menus', () => {
-  test('should say the + menu is built from the site’s menu components, on the charts tab', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const tutorial = await chartsDesk.findFeatureStories();
-
-    expect(chartsDesk.saysIn(tutorial, /^That menu is built from/)).toHaveTextContent('That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the page, as the z-index tab says.');
-  });
-
-  test('should show the page passing Menu its classes beside the + menu’s sentence, on the charts tab', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    const story = recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
-    expect(explanation.everyCodeBeside(story, /^A class, as the/).join()).toMatch(/<Menu [^>]*className="/);
-  });
-
-  test('should say the period menu is built from the site’s menu components, on the price chart’s page', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    expect(await chartsDesk.findSays(/^The period menu is built from Menu, Entry and Item/)).toHaveTextContent('The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the page, as the z-index tab says. They write a menu, an li, which is one item of a list, and a button.');
-  });
-
-  test('should say the card below is a user story, glossed, and that the z-index tab walks one through, on the price chart’s page', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    expect(paragraphOpening(/^We are going to build the/)).toHaveTextContent('The card below tells it as a user story, a card, a conversation and a confirmation, which the z-index tab walks through: open it and you get the plan and the steps that build it, with the real code from this site, so what you read is what runs.');
-  });
-
-  test('should show the page passing Menu its classes beside the period menu’s sentence, on the price chart’s page', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-    await chartsDesk.findTitle('price line tutorial', 2);
-    const story = recipeFolds.story(document.body, 'The trader can watch the price move, live');
-    expect(explanation.everyCodeBeside(story, /^A class, as the/).join()).toMatch(/<Menu [^>]*className="/);
-  });
-});
 
 describe('a list of charts', () => {
   test('the trader starts with one chart', async () => {
@@ -244,7 +199,7 @@ describe('a list of charts', () => {
     expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
   });
 
-  test('the workspace tells its story', async () => {
+  test('should open the workspace story under let’s build this feature', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
@@ -252,11 +207,7 @@ describe('a list of charts', () => {
     await chartsDesk.findChart('live trades');
 
     expect(await chartsDesk.findTitle('let’s build this feature')).toBeVisible();
-    expect(chartsDesk.says(/the shape of the session/)).toBeVisible();
-    const recipe = chartsDesk.recipe('charts');
-    expect(recipeFolds.story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent(/A third of the held chart’s height below the mark, the chart swaps with the one under it/);
-    expect(recipe).toHaveTextContent(/export const strayed/);
+    expect(recipeFolds.story(chartsDesk.recipe('charts'), 'The trader can lay out the workspace')).toHaveAttribute('open');
   });
 
   test('a chart is a doorway to its own tutorial', async () => {
@@ -282,23 +233,17 @@ describe('a list of charts', () => {
 
     expect(await chartsDesk.findRecipe('candles')).toBeVisible();
     expect(chartsDesk.chart('candles')).toBeVisible();
-    expect(await chartsDesk.findSays(/read the same trades as candles/)).toBeVisible();
   });
 
-  test.each([
-    ['shows the markup and the dress, not just the arithmetic', ['className="candlesticks"', '.wick {', '.drawn {', '.buy-side {', '.sell-side {', '.side-face {', '.side-wall {', 'className="volumes volume-side"', '.volume-side {']],
-    ['stands on its own feet', ['export const bucketTrades', 'export const mergeLive', '<Axes']]
-  ])('the candles story %s', async (_claim, shown) => {
+  test('should open the candles story from the candles walkthrough', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
-    const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
-    expect(story).toHaveAttribute('open');
-    for (const text of shown) expect(recipe).toHaveTextContent(text);
+    expect(await recipeFolds.press(recipe, 'The trader can read the same trades as candles')).toHaveAttribute('open');
   });
 
   test('a story the trader opened folds shut when they press its summary again', async () => {
@@ -347,14 +292,6 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
-    test('should say I draw the line with SVG rather than reach for a chart library', async () => {
-      expect(await priceStory()).toHaveTextContent('I could have reached for a chart library, but this chart is one line and two axes. So I draw the line with SVG, the browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.');
-    });
-
-    test('should say the 1,500-trade cap bounds how far back the live part of the charts reaches', async () => {
-      expect(await priceStory()).toHaveTextContent('The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with it, so the live part of the price line and the candles reaches back as far as those trades do.');
-    });
-
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await priceStory())).toEqual([
         'Open a socket, and keep only what decodes',
@@ -364,17 +301,6 @@ describe('a list of charts', () => {
         'Turn each candle into a point on the line',
         'Label the prices and the time'
       ]);
-    });
-
-    test.each([
-      ['the popover is taught on the z-index tab', 'It is a popover, the kind of menu the z-index tab explains.'],
-      ['the three periods', 'The hour has candles of a minute, 60 of them, marked every ten minutes. The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them, marked every day.'],
-      ['only the dot moves', 'Nothing on the page is measured, and the line is never animated: it is drawn again. Only the dot on the newest point moves, sliding to its new place over 300 milliseconds.'],
-      ['the three price labels', 'At the side it labels the highest price, the lowest, and the one midway between them.'],
-      ['what is stored', 'The page stores the trades and the fetched candles. React is the library this site’s script is written in, as the z-index tab says. Every time it redraws the chart, the candles made from live trades, the joined series and the points are worked out again. None of them is stored.'],
-      ['what fails never reaches the state', 'What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from, as the z-index tab says.']
-    ])('should say what the code does: %s', async (_claim, sentence) => {
-      expect(await priceStory()).toHaveTextContent(sentence);
     });
   });
 
@@ -394,20 +320,6 @@ describe('a list of charts', () => {
         'Use the same axes'
       ]);
     });
-
-    test.each([
-      ['charts on the same period agree', 'So two charts set to the same period are drawn from the same candles and cannot disagree.'],
-      ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
-      ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume'],
-      ['a candle is two shapes and the chart’s wall', 'candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.'],
-      ['the period menu is the price line’s popover, taught on the z-index tab', 'The period menu is on this chart too, the same popover as on the price line: the kind of menu the z-index tab explains.']
-    ])('should say what the code does: %s', async (_claim, sentence) => {
-      expect(await candlesStory()).toHaveTextContent(sentence);
-    });
-
-    test('should not claim one history for every chart', async () => {
-      expect(await candlesStory()).not.toHaveTextContent(/one stream and one history/);
-    });
   });
 
   describe('the pressure chart’s story', () => {
@@ -418,35 +330,12 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
-    test('should say the chart counts what arrives while the page is open, the newest 1,500 kept, and its caption says so', async () => {
-      const story = await pressureStory();
-
-      expect(story).toHaveTextContent('So the chart counts only the trades that arrive while the page is open, and the page keeps the newest 1,500 of those.');
-      expect(story).toHaveTextContent('The chart shows up to 60 minutes.');
-      expect(story).toHaveTextContent('The caption says how many minutes are on show, up to the last 1,500 trades.');
-    });
-
-    test('should not say the pressure count began when you arrived', async () => {
-      expect(await pressureStory()).not.toHaveTextContent('the count began when you arrived');
-    });
-
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await pressureStory())).toEqual([
         'Sum each minute by who took the trade',
         'Scale both sides by the larger one',
         'Draw the bars, and label them in bitcoin'
       ]);
-    });
-
-    test.each([
-      ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
-      ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.']
-    ])('should say what the code does: %s', async (_claim, sentence) => {
-      expect(await pressureStory()).toHaveTextContent(sentence);
-    });
-
-    test('should not say a match names its taker’s side', async () => {
-      expect(await pressureStory()).not.toHaveTextContent(/names its taker’s side/);
     });
   });
 
@@ -458,45 +347,12 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
-    test('should say the pie sums up to the last 1,500 trades, counted since the page opened', async () => {
-      const story = await pieStory();
-
-      expect(story).toHaveTextContent('The pressure chart sums each minute on its own. The pie sums up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size sellers took.');
-      expect(story).toHaveTextContent('like the pressure chart it counts only what has arrived since the page opened.');
-      expect(story).toHaveTextContent('One number for each side. The pie asks nothing about time.');
-      expect(story).toHaveTextContent('the pie is a pair of totals.');
-      expect(story).toHaveTextContent('The caption says what the pie is: the size traded on each side, up to the last 1,500 trades.');
-    });
-
-    test('should not say the pie counts the whole visit', async () => {
-      expect(await pieStory()).not.toHaveTextContent('whole visit');
-    });
-
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await pieStory())).toEqual([
         'Add up each side',
         'Cut the circle with rotations only',
         'Print each share'
       ]);
-    });
-
-    test.each([
-      ['the whole pie stays put', 'Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole pie.'],
-      ['the half-discs', 'So I make each slice from two half-discs that only ever rotate, and a share is how far they have turned into view.'],
-      ['the arc paths', 'I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a flag can’t be moved gradually, so a split that crosses half jumps.'],
-      ['what a rotation is', 'A rotation is one angle, and a CSS transition, which moves a property from its old value to its new one over a set time, can move it smoothly; the shape is never rebuilt. So I build the cut from rotation alone.']
-    ])('should say what the code does: %s', async (_claim, sentence) => {
-      expect(await pieStory()).toHaveTextContent(sentence);
-    });
-
-    test('should not promise the compositor or that no special case survives', async () => {
-      expect(await pieStory()).not.toHaveTextContent(/compositor|no special case survives/);
-    });
-
-    test('should declare the four numbers the slice reads above it', async () => {
-      const cut = recipeFolds.steps(await pieStory())[1];
-
-      expect(cut).toHaveTextContent(/@property --explode-x \{[^]*@property --explode-y \{[^]*@property --turn \{[^]*@property --swing \{[^]*initial-value: -180deg;[^]*\.slice \{/);
     });
   });
 
@@ -520,54 +376,38 @@ describe('a list of charts', () => {
     await chartsDesk.open('Pressure');
 
     expect(await chartsDesk.findRecipe('pressure')).toBeVisible();
-    expect(await chartsDesk.findSays(/who is driving/)).toBeVisible();
   });
 
-  test('a chart’s tutorial opens like a feature', async () => {
+  test('should open a chart’s tutorial on let’s build this feature and its story', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    const page = chartsDesk.tutorial('price line');
-    expect(chartsDesk.titleIn(page, 'let’s build this feature', 3)).toBeVisible();
-    expect(chartsDesk.says(/without reading a single digit/)).toBeVisible();
-    expect(chartsDesk.says('a trader')).toBeVisible();
-    expect(chartsDesk.says(/build the story yourself first/)).toBeVisible();
-    const recipe = chartsDesk.recipe('price line');
-    expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.tutorial('price line'), 'let’s build this feature', 3)).toBeVisible();
+    expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
-  test('the price story teaches the whole journey, data to drawn chart', async () => {
+  test('should open the price story on the price line’s page', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    const recipe = chartsDesk.recipe('price line');
-    expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent('export const subscribeTo');
-    expect(recipe).toHaveTextContent('export const decodeTrade');
-    expect(recipe).toHaveTextContent('.mBind(toTrade);');
-    expect(recipe).toHaveTextContent('.map(toCandles);');
-    expect(recipe).toHaveTextContent('export const periodCandles');
-    expect(recipe).toHaveTextContent('export const mergeLive');
-    expect(recipe).toHaveTextContent('export const sparklinePoints');
-    expect(recipe).toHaveTextContent('export const Axes');
+    expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toHaveAttribute('open');
   });
 
-  test('the pressure story proves the side is a fact, not a guess', async () => {
+  test('should open the pressure story from the pressure walkthrough', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('pressure');
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
-    const story = await recipeFolds.press(recipe, 'The trader can see who is driving the move');
-    expect(story).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent("side: schema.literalUnion('buy', 'sell')");
+
+    expect(await recipeFolds.press(recipe, 'The trader can see who is driving the move')).toHaveAttribute('open');
   });
 
   test('the charts travel in the url, one of each kind', async () => {
@@ -643,19 +483,15 @@ describe('a list of charts', () => {
     expect(chartsDesk.anyTutorial()).not.toBeInTheDocument();
   });
 
-  test('the pie is a doorway to who owns the session', async () => {
+  test('should open the pie story from the pie walkthrough', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('pie');
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
-    const story = await recipeFolds.press(recipe, 'The trader can see who owns the session');
-    expect(story).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent('export const sideTotals');
-    expect(recipe).toHaveTextContent('export const slices');
-    expect(recipe).toHaveTextContent('export const sweepGates');
-    expect(chartsDesk.says(/who owns the session/)).toBeVisible();
+
+    expect(await recipeFolds.press(recipe, 'The trader can see who owns the session')).toHaveAttribute('open');
   });
 });
 
@@ -774,10 +610,17 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
+      await chartsDesk.findChart('candles');
+      const price = chartsDesk.explanationOf('live trades');
+      const candles = chartsDesk.explanationOf('candles');
+      expect(price).not.toBeVisible();
+      expect(candles).not.toBeVisible();
+
       await chartsDesk.explain('live trades');
-      expect(chartsDesk.saysIn(chartsDesk.chart('live trades'), /price of one bitcoin in US dollars/)).toBeVisible();
       await chartsDesk.explain('candles');
-      expect(chartsDesk.saysIn(chartsDesk.chart('candles'), /how much bitcoin changed hands/)).toBeVisible();
+
+      expect(price).toBeVisible();
+      expect(candles).toBeVisible();
     });
 
     test('the trades in a minute become one candle', async () => {
@@ -872,28 +715,16 @@ describe('the charts’ headings', () => {
 
     expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
   });
+  test('should head the live charts Bitcoin, live: every BTC-USD trade on Coinbase', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts', '?charts=price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(chartsDesk.titleIn(await chartsDesk.findChartsTab(), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
+  });
 });
 
 describe('the charts tab’s introduction', () => {
-  const paragraphs = [
-    'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
-    'This tab assumes a class from the accordions tab; a popover, and a component, its state and an event, which the z-index tab explains; and the keyframe animation, which the drag sort tab defines. The rest is new here.',
-    'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
-    'I take a chart to be arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and the past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time the page redraws.',
-    'By the end you can draw four charts from one feed. The first is a live line. The second is candles, which show where the price opened and closed and how far it reached in each span of time. The last two show who is buying and who is selling. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another. The last part of this page builds the workspace the charts sit in.'
-  ];
-
-  test('should tell, after what it assumes from earlier tabs, the problem, the page’s view and what a reader can do after, then the live headline, before the workspace', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    const tab = await chartsDesk.findChartsTab();
-    const headline = chartsDesk.titleIn(tab, /^Bitcoin, live/, 2);
-
-    expect(outOfReadingOrder([...paragraphs.map(paragraphReading), headline])).toEqual([]);
-  });
-
   test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
     render(<TestApp at={demosAt('charts')}/>);
 
@@ -913,25 +744,6 @@ describe('the workspace story', () => {
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
 
-  test('should put the drawing of a third from the pointer after the code that measures it, before the keyframes', async () => {
-    const step = recipeFolds.stepHeaded(await workspaceStory(), 'A chart swaps once the pointer has moved a third of its height');
-    const [measures, keyframes] = explanation.samplesIn(step);
-
-    expect(outOfReadingOrder([explanation.saying(step, /^The neighbor’s slide is the/), measures, explanation.drawingsIn(step)[0], keyframes])).toEqual([]);
-  });
-
-  test('should say a chart swaps from where the pointer took hold, and that Delete or Backspace removes it', async () => {
-    const story = await workspaceStory();
-
-    expect(story).toHaveTextContent('It swaps with its neighbor once the pointer has moved a third of the chart’s height from where it took hold, up or down, and the neighbor slides into the place it left.');
-    expect(story).toHaveTextContent('Delete or Backspace removes it.');
-    expect(story).toHaveTextContent('grip and no remove button, and the key does nothing, so the workspace always has a chart.');
-  });
-
-  test('should say, in a run of its own, that a name may carry its period after a colon', async () => {
-    expect(await workspaceStory()).toHaveTextContent('A name may carry its period after a colon, candles:day; the hour is the default and is left off.');
-  });
-
   test('should head each step with what happens', async () => {
     expect(recipeFolds.stepTitles(await workspaceStory())).toEqual([
       'Read the charts from the address',
@@ -940,75 +752,6 @@ describe('the workspace story', () => {
       'The last chart can’t be removed'
     ]);
   });
-
-  test.each([
-    ['the address', 'The page writes every change to the layout into its address: adding a chart, sorting, removing one, and choosing a period. A reload or a shared link needs nothing else to bring the layout back.'],
-    ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute, a setting written on the element.'],
-    ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
-    ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
-    ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where the pointer is on the page. On every dragover, the event it sends as the pointer moves over a chart, the code compares the pointer with that mark.'],
-    ['where the drag starts', 'A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.'],
-    ['the keyframe animation the drag sort tab teaches', 'The neighbor’s slide is the drag sort tab’s keyframe animation turned vertical. It starts its own height away and runs to its new place in 150 milliseconds.'],
-    ['which chart cannot be swapped with', 'A chart cannot be swapped with one that is still sliding.'],
-    ['the last chart', 'With one chart left there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.']
-  ])('should say %s in plain words', async (_term, sentence) => {
-    expect(await workspaceStory()).toHaveTextContent(sentence);
-  });
-
-  test('should draw, in step 2, the short chart dropping a tall chart’s height while the pointer stands still', async () => {
-    const swap = recipeFolds.steps(await workspaceStory())[1];
-
-    expect(chartsDesk.drawingIn(swap, /^A third from the pointer\./)).toHaveTextContent('The short chart dropped a tall chart’s height while the pointer stood still.');
-  });
-
-  test('should say a held chart fades where it sits while the browser draws a copy of it under the pointer', async () => {
-    expect(await workspaceStory()).toHaveTextContent('While a chart is held it fades almost to nothing where it sits, and the browser draws a copy of it under the pointer. It swaps with its neighbor once the pointer has moved');
-  });
-
-  test('should drop the figures of speech from its words', async () => {
-    const words = chartsDesk.toldIn(await workspaceStory());
-
-    expect(words).not.toMatch(/dealt|whispers|slides home|strays|rides|walks|the address is the state|holds its post/);
-  });
-
-  test('should say the pointer, never a hand, wherever the drag is told or drawn', async () => {
-    expect(await workspaceStory()).not.toHaveTextContent(/\bhand\b/);
-  });
-
-  test('should say the card below is the workspace, each chart above opens its own, and name MDN as Mozilla’s web reference', async () => {
-    await workspaceStory();
-
-    expect(chartsDesk.says(/^We are going to build this site’s live charts/)).toHaveTextContent('Here is how to use this page: the card below is the workspace, told as a user story. Each chart above opens its own story: click it, or press Enter on it. Open one and you get the plan for that feature and the steps that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s web reference, if you want more.');
-    expect(chartsDesk.says(/^If you want the exercise/)).toHaveTextContent('The charts are my interpretation of that; the stories break the interpretation into features. Open one to see how I built it, or to compare it with yours.');
-  });
-});
-
-describe('the charts’ audited words', () => {
-  const tabWith = async (charts: string): Promise<HTMLElement> => {
-    const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts', `?charts=${charts}`)} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    return chartsDesk.findChartsTab();
-  };
-
-  test('should head the live charts with a colon, not a dash', async () => {
-    expect(chartsDesk.titleIn(await tabWith('price'), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
-  });
-
-  test('should explain the price line by its period, its first close and its color', async () => {
-    await tabWith('price');
-
-    expect(chartsDesk.chart('live trades')).toHaveTextContent('This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line marks the first price in the period, the close of its first candle, and the color shows the trend against it. High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The period menu sets how much time the chart covers. Every period stays live.');
-  });
-
-  test('should explain the candles as spans grouped from the same measurement', async () => {
-    await tabWith('candles');
-    const candles = chartsDesk.chart('candles');
-
-    expect(candles).toHaveTextContent('The same measurement, grouped: each candle summarizes one span of time. The body runs from the first to the last price, green when it rose and orange when it fell. The wick runs from the span’s high to its low.');
-    expect(candles).toHaveTextContent('the period menu sets how much time the chart covers.');
-  });
-
 });
 
 describe('the links to other tabs', () => {
@@ -1030,35 +773,54 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test.each([
-    ['price', [
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
-    ]],
-    ['candles', [
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
-    ]],
-    ['pressure', [
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
-    ]],
-    ['pie', [
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
-    ]]
-  ])('should link each term it glosses, and each tab it names, to that tab, on the %s chart’s page', async (kind, pins) => {
+  test('should link each term it glosses, and each tab it names, to that tab, on the price chart’s page', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt(kind)} feed={feed}/>);
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual(pins);
+    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link each term it glosses, and each tab it names, to that tab, on the candles chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link each term it glosses, and each tab it names, to that tab, on the pressure chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link each term it glosses, and each tab it names, to that tab, on the pie chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
   });
 });

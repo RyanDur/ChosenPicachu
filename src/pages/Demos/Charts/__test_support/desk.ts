@@ -61,6 +61,11 @@ const priceCard = (): HTMLElement => chart('live trades');
 
 const alert = (): HTMLElement => screen.getByRole('alert', {hidden: true});
 
+const explainer = (name: string): HTMLElement => {
+  const [fold] = within(chart(name)).getAllByRole('group').filter(group => within(group).queryByText('what am I looking at?') !== null);
+  return fold;
+};
+
 const keys = async (chart: string, key: string): Promise<void> => {
   doorway(chart).focus();
   await userEvent.keyboard(`{${key}}`);
@@ -101,14 +106,9 @@ export const chartsDesk = {
   tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
   anyTutorial: (): HTMLElement | null => screen.queryByRole('article', {name: /tutorial/}),
   findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
-  drawingIn: (holder: HTMLElement, name: RegExp): HTMLElement => within(holder).getByRole('figure', {name}),
-  toldIn: (holder: HTMLElement): string => within(holder).getAllByRole('paragraph').map(paragraph => paragraph.textContent).join(' '),
   title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
   findTitle: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
   titleIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
-  says: (told: string | RegExp): HTMLElement => screen.getByText(told),
-  findSays: (told: RegExp): Promise<HTMLElement> => screen.findByText(told),
-  saysIn: (holder: HTMLElement, told: string | RegExp): HTMLElement => within(holder).getByText(told),
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
   feedStatus,
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
@@ -120,5 +120,6 @@ export const chartsDesk = {
   drawnCandles: (): number => parseInt(captionOf('candles'), 10),
   drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
   explain: async (chart: string): Promise<void> =>
-    userEvent.click(within(await screen.findByRole('region', {name: chart})).getByText('what am I looking at?'))
+    userEvent.click(within(await screen.findByRole('region', {name: chart})).getByText('what am I looking at?')),
+  explanationOf: (chart: string): HTMLElement => within(explainer(chart)).getByRole('paragraph')
 };
