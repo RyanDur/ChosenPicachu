@@ -3,7 +3,7 @@ import {FC, useEffect, useState} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {useSearchParamsObject} from '@components/search-params';
-import {Dials, motionParam, originParam, paceParam} from '../../Controls';
+import {defaultMotion, defaultOrigin, defaultPace, Dials, motionParam, originParam, paceParam} from '../../Controls';
 import {worldParam} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
@@ -31,7 +31,7 @@ const VanillaStage: FC<Dials> = dials => {
 };
 
 export const Aggregations: FC = () => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react'} =
+  const {pace = defaultPace, origin = defaultOrigin, motion = defaultMotion, world = 'react'} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   const dials = {pace, origin, motion};
   useEffect(warmed, []);

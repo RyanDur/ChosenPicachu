@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../types';
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {paceParam} from '../../Controls';
+import {defaultPace, paceParam} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
@@ -314,7 +314,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 };
 
 export const MenuRecipe: FC = () => {
-  const {pace = 'eager', world = 'react'} = useSearchParamsObject({pace: paceParam, world: worldParam});
+  const {pace = defaultPace, world = 'react'} = useSearchParamsObject({pace: paceParam, world: worldParam});
   const build: Build = {
     world,
     source: headerSources[pace],

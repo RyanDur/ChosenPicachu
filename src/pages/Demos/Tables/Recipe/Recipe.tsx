@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Picks} from '../Picks';
-import {motionParam, originParam, paceParam} from '../../Controls';
+import {defaultMotion, defaultOrigin, defaultPace, motionParam, originParam, paceParam} from '../../Controls';
 import {worldParam} from '../params';
 import {Stories} from '../../Recipe';
 import {trackParam} from './steps';
@@ -10,7 +10,7 @@ import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
 export const Recipe: FC = () => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', track = 'pointer', updateSearchParams} =
+  const {pace = defaultPace, origin = defaultOrigin, motion = defaultMotion, world = 'react', track = 'pointer', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam, track: trackParam});
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
   return <section aria-label="build the drag sort yourself" className="build-steps">

@@ -1,6 +1,6 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {motionParam, originParam, paceParam} from '../Controls';
+import {defaultMotion, defaultOrigin, defaultPace, motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
 import {DialNote, Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
@@ -32,7 +32,7 @@ const unanswered = [
 ];
 
 export const ListTutorials: FC = () => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
+  const {pace = defaultPace, origin = defaultOrigin, motion = defaultMotion, updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   useArrival();
   const titled = `tutorials${useId()}`;

@@ -11,6 +11,14 @@ export const tablesDemo = (page: Page) => ({
     await siteFrame(page).hydrated();
     await storyAt(page, position).getByText(/^so that /).click();
   },
+  story: (titled: string): Locator =>
+    page.getByRole('group').filter({has: page.getByText(/^so that /)}).filter({hasText: titled}).first(),
+  openStory: async (titled: string): Promise<Locator> => {
+    const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).filter({hasText: titled}).first();
+    await siteFrame(page).hydrated();
+    await story.getByText(/^so that /).first().click();
+    return story;
+  },
   howIBuiltItInTheFirstStory: async (): Promise<Locator> => {
     const story = storyAt(page, 0);
     await siteFrame(page).hydrated();
