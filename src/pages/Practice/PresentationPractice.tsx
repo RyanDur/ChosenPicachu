@@ -79,9 +79,9 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">CSS has one global scope, so every rule can reach every element. The field put the look in other
       places first, before the platform had a token, an order or a scope of its own. A reset put the defaults in the author’s hands: Eric
       Meyer’s <a className="signpost" href={resetCss.address}>reset</a> zeroed
-      the browser’s margins, line heights and heading sizes,{' '}
+      the browser’s margins, padding and borders and evened out its line heights and heading sizes,{' '}
     <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a> in
-      2007, and Nicolas Gallagher’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
+      2007, and Nicolas Gallagher and Jonathan Neal’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
       defaults worth keeping instead, to{' '}
     <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing them”</a>,
       in 2012. A preprocessor put the values in a build step, in a language the browser never sees:{' '}
