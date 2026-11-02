@@ -11,6 +11,16 @@ export const site = {
   pageTitled: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1}),
   titled: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
   nav: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'site'}),
+  main: (): HTMLElement => screen.getByRole('main'),
+  asideIfAny: (): HTMLElement | null => screen.queryByRole('complementary'),
+  errorsReported: (): HTMLElement => screen.getByRole('list', {name: 'errors reported'}),
+  railNames: async (): Promise<string[]> =>
+    within(await screen.findByRole('navigation', {name: 'site'})).getAllByRole('link').map(link => link.textContent),
+  currentPages: async (): Promise<string[]> =>
+    within(await screen.findByRole('navigation', {name: 'site'})).findAllByRole('link', {current: 'page'})
+      .then(links => links.map(link => link.textContent)),
+  railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('navigation', {name: 'site'}),
+  railHoldsFeedback: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('button', {name: 'Feedback'}),
   railLinks: async (): Promise<HTMLElement[]> => within(await screen.findByRole('navigation', {name: 'site'})).getAllByRole('link'),
   railLink: (name: string): HTMLElement => within(screen.getByRole('navigation', {name: 'site'})).getByRole('link', {name}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await screen.findByRole('navigation', {name: 'site'})).getByRole('link', {name})),

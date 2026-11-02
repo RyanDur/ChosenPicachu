@@ -1,6 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
@@ -53,7 +52,7 @@ describe('page error boundaries', () => {
     );
 
     await site.roomSays('This room is closed.');
-    expect(screen.getByRole('list', {name: 'errors reported'})).toHaveTextContent(/^boom$/);
+    expect(site.errorsReported()).toHaveTextContent(/^boom$/);
     expect(caught).toEqual([boom]);
     expect(site.announced('This room is closed.')).toBeInTheDocument();
   });
@@ -117,19 +116,17 @@ describe('the skeleton', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
 
-    const nav = screen.getByRole('navigation', {name: 'site'});
-    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
-    expect(nav.compareDocumentPosition(screen.getByRole('main'))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    const nav = await site.nav();
+    expect(site.asideIfAny()).not.toBeInTheDocument();
+    expect(nav.compareDocumentPosition(site.main())).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
   test('the site nav and Feedback sit together in a region named for what it holds', async () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
 
-    const rail = await site.rail();
-
-    expect(within(rail).getByRole('navigation', {name: 'site'})).toBeInTheDocument();
-    expect(within(rail).getByRole('button', {name: 'Feedback'})).toBeInTheDocument();
+    expect(await site.railHoldsTheNav()).toBeInTheDocument();
+    expect(await site.railHoldsFeedback()).toBeInTheDocument();
   });
 });
 
@@ -137,19 +134,16 @@ describe('the rail lists the site’s pages', () => {
   test('should list Home, Record, Practice, Demos, Users, Gallery, Games and Repo, in that order', async () => {
     render(<TestApp at={Paths.users}/>);
 
-    const nav = await site.nav();
-
-    expect(within(nav).getAllByRole('link').map(link => link.textContent)).toEqual(['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo']);
+    expect(await site.railNames()).toEqual(['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo']);
   });
 
   test('should take the reader to the record from the rail', async () => {
     render(<TestApp at={Paths.users}/>);
-    const nav = await site.nav();
 
-    await userEvent.click(within(nav).getByRole('link', {name: 'Record'}));
+    await site.followRail('Record');
 
-    expect(await within(await site.nav()).findByRole('link', {name: 'Record', current: 'page'})).toBeInTheDocument();
-    expect(await screen.findByRole('heading', {name: 'The record', level: 1})).toBeInTheDocument();
+    expect(await site.titled('The record')).toBeInTheDocument();
+    expect(await site.currentPages()).toEqual(['Record']);
   });
 });
 
@@ -173,10 +167,10 @@ describe('the rail takes the reader to Practice', () => {
   test('should land on the Structure tab', async () => {
     render(<TestApp at={Paths.users}/>);
 
-    await userEvent.click(within(await site.nav()).getByRole('link', {name: 'Practice'}));
+    await site.followRail('Practice');
 
-    expect(await within(await site.nav()).findByRole('link', {name: 'Practice', current: 'page'})).toBeInTheDocument();
-    expect(await screen.findByRole('heading', {name: 'Practice Structure', level: 1})).toBeInTheDocument();
+    expect(await site.titled('Practice Structure')).toBeInTheDocument();
+    expect(await site.currentPages()).toEqual(['Practice']);
   });
 });
 
@@ -184,60 +178,79 @@ describe('the rail goes straight to the first tab', () => {
   test('should link Demos to its Accordions tab', async () => {
     render(<TestApp at={Paths.home}/>);
 
-    expect(within(await site.nav()).getByRole('link', {name: 'Demos'})).toHaveAttribute('href', demosAt('accordions'));
+    await site.nav();
+
+    expect(site.railLink('Demos')).toHaveAttribute('href', demosAt('accordions'));
   });
 
   test('should link Practice to its Structure tab', async () => {
     render(<TestApp at={Paths.home}/>);
 
-    expect(within(await site.nav()).getByRole('link', {name: 'Practice'})).toHaveAttribute('href', practiceAt('structure'));
+    await site.nav();
+
+    expect(site.railLink('Practice')).toHaveAttribute('href', practiceAt('structure'));
   });
 });
 
 describe('the rail says which page the reader is on', () => {
-  const currentPagesAt = async (path: string): Promise<(string | null)[]> => {
-    render(<TestApp at={path}/>);
-    return within(await site.nav()).getAllByRole('link', {current: 'page'}).map(link => link.textContent);
-  };
-
   test('should announce Home as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.home)).toEqual(['Home']);
+    render(<TestApp at={Paths.home}/>);
+
+    expect(await site.currentPages()).toEqual(['Home']);
   });
 
   test('should announce Demos as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.demos)).toEqual(['Demos']);
+    render(<TestApp at={Paths.demos}/>);
+
+    expect(await site.currentPages()).toEqual(['Demos']);
   });
 
   test('should announce Demos as the current page on a Demos tab, and no other', async () => {
-    expect(await currentPagesAt(demosAt('tables'))).toEqual(['Demos']);
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await site.currentPages()).toEqual(['Demos']);
   });
 
   test('should announce Users as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.users)).toEqual(['Users']);
+    render(<TestApp at={Paths.users}/>);
+
+    expect(await site.currentPages()).toEqual(['Users']);
   });
 
   test('should announce Gallery as the current page on a page of a museum, and no other', async () => {
-    expect(await currentPagesAt(`${Paths.artGallery}?page=3&size=8&tab=aic`)).toEqual(['Gallery']);
+    render(<TestApp at={`${Paths.artGallery}?page=3&size=8&tab=aic`}/>);
+
+    expect(await site.currentPages()).toEqual(['Gallery']);
   });
 
   test('should announce Games as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.games)).toEqual(['Games']);
+    render(<TestApp at={Paths.games}/>);
+
+    expect(await site.currentPages()).toEqual(['Games']);
   });
 
   test('should announce Record as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.record)).toEqual(['Record']);
+    render(<TestApp at={Paths.record}/>);
+
+    expect(await site.currentPages()).toEqual(['Record']);
   });
 
   test('should announce Practice as the current page, and no other', async () => {
-    expect(await currentPagesAt(Paths.practice)).toEqual(['Practice']);
+    render(<TestApp at={Paths.practice}/>);
+
+    expect(await site.currentPages()).toEqual(['Practice']);
   });
 
   test('should announce Practice as the current page on a Practice tab, and no other', async () => {
-    expect(await currentPagesAt(practiceAt('presentation'))).toEqual(['Practice']);
+    render(<TestApp at={practiceAt('presentation')}/>);
+
+    expect(await site.currentPages()).toEqual(['Practice']);
   });
 
   test('should announce Demos as the current page on a chart page, and no other', async () => {
-    expect(await currentPagesAt(chartPageAt('price'))).toEqual(['Demos']);
+    render(<TestApp at={chartPageAt('price')}/>);
+
+    expect(await site.currentPages()).toEqual(['Demos']);
   });
 
   test('should move the mark to the page the reader follows, and keep the reader on it', async () => {
@@ -267,7 +280,7 @@ describe('leaving a page', () => {
     await site.pageTitled();
     const landings = scrolling.recordLandings();
 
-    await userEvent.click(within(await site.rail()).getByRole('link', {name: 'Record'}));
+    await site.followRail('Record');
 
     await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('page')));
   });
