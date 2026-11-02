@@ -1,6 +1,5 @@
 import type {Page} from '@playwright/test';
-
-const aMomentToArrive = 5000;
+import {assertionPatience} from './patience';
 
 const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json';
 
@@ -33,7 +32,7 @@ export const galleryPage = (page: Page) => {
       for (const work of await wall.all()) {
         await work.scrollIntoViewIfNeeded();
         const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
-        const shown = await work.getByRole('img', {name: alt, exact: true}).waitFor({state: 'visible', timeout: aMomentToArrive})
+        const shown = await work.getByRole('img', {name: alt, exact: true}).waitFor({state: 'visible', timeout: assertionPatience})
           .then(() => true, () => false);
         if (!shown) {
           missing.push(alt);

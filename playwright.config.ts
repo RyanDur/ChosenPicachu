@@ -1,5 +1,6 @@
 import {defineConfig} from '@playwright/test';
 import {empty, has} from '@ryandur/sand';
+import {assertionPatience} from './e2e/__test_support/patience';
 
 const stage = `http://localhost:${process.env.STAGE_PORT ?? 4517}/ChosenPicachu/`;
 const smoke = '**/smoke.e2e.ts';
@@ -15,6 +16,7 @@ export default defineConfig({
   retries: 0,
   workers: has(process.env.CI) ? 2 : undefined,
   timeout: 60_000,
+  expect: {timeout: assertionPatience},
   use: {
     baseURL: stage,
     contextOptions: {reducedMotion: 'reduce'},
