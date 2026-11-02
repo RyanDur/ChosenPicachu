@@ -89,7 +89,7 @@ describe('The gallery.', () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await galleryPage.choose('Harvard Art Museums');
+    await galleryPage.enter('Harvard Art Museums');
 
     await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
@@ -101,7 +101,7 @@ describe('The gallery.', () => {
     setupVAMAllArtResponse(vamArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await galleryPage.choose('The Victoria and Albert Museum');
+    await galleryPage.enter('The Victoria and Albert Museum');
 
     await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
@@ -113,7 +113,7 @@ describe('The gallery.', () => {
     setupClevelandAllArtResponse(clevelandArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await galleryPage.choose('The Cleveland Museum of Art');
+    await galleryPage.enter('The Cleveland Museum of Art');
 
     await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
     expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
@@ -182,7 +182,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(galleryPage.wallsLoading()).toHaveLength(1);
+    expect(galleryWall.loadingSigns()).toHaveLength(1);
     expect(galleryPage.museumsIfAny()).not.toBeInTheDocument();
   });
 
@@ -192,17 +192,17 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await galleryPage.museumsAppear();
 
-    expect(galleryPage.wallsLoading()).toHaveLength(1);
+    expect(galleryWall.loadingSigns()).toHaveLength(1);
 
     wallArrives();
     await galleryWall.framesAppear();
 
-    expect(galleryPage.wallsLoading()).toHaveLength(0);
+    expect(galleryWall.loadingSigns()).toHaveLength(0);
 
     vamAnswers();
     await galleryPage.museumAppears('The Victoria and Albert Museum');
 
-    expect(galleryPage.wallsLoading()).toHaveLength(0);
+    expect(galleryWall.loadingSigns()).toHaveLength(0);
   });
 
   test('opened on a link to a museum’s page 2 while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
@@ -211,17 +211,17 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic&page=2`}/>);
     await galleryPage.museumsAppear();
 
-    expect(galleryPage.wallsLoading()).toHaveLength(1);
+    expect(galleryWall.loadingSigns()).toHaveLength(1);
 
     wallArrives();
     await galleryWall.framesAppear();
 
-    expect(galleryPage.wallsLoading()).toHaveLength(0);
+    expect(galleryWall.loadingSigns()).toHaveLength(0);
 
     vamAnswers();
     await galleryPage.museumAppears('The Victoria and Albert Museum');
 
-    expect(galleryPage.wallsLoading()).toHaveLength(0);
+    expect(galleryWall.loadingSigns()).toHaveLength(0);
   });
 
   test('switching museums while another is still asked keeps one thing loading until the new wall is hung', async () => {
@@ -233,7 +233,7 @@ describe('The gallery.', () => {
 
     await galleryPage.enter('The Victoria and Albert Museum');
 
-    expect(galleryPage.wallsLoading()).toHaveLength(1);
+    expect(galleryWall.loadingSigns()).toHaveLength(1);
     vamWallArrives();
     await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
   });
