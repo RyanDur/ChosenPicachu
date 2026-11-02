@@ -76,7 +76,7 @@ describe('the 1991 moment', () => {
 
   test('should link the summary’s words to the summary, and shelve it beside the reply', () => {
     expect(recordPage.momentLink('The web needs collaborators', '“The very small start-up effort is designed to allow small contributions.”')).toHaveAttribute('href', 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt');
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'WorldWideWeb: Summary, posted to alt.hypertext', hidden: true})).toBeInTheDocument();
+    expect(recordPage.shelvedAs('WorldWideWeb: Summary, posted to alt.hypertext')).toBeInTheDocument();
   });
 });
 
@@ -117,7 +117,7 @@ describe('the 1994 moment', () => {
 
   test('should link the thesis’s words to the thesis, and shelve it', () => {
     expect(recordPage.momentLink('Authors need control of the look', '“formed the basis for CSS”')).toHaveAttribute('href', 'https://www.wiumlie.no/2006/phd/#ch-postweb');
-    expect(within(screen.getByRole('region', {name: 'The research'})).getByRole('link', {name: 'Cascading Style Sheets', hidden: true})).toBeInTheDocument();
+    expect(recordPage.shelvedAs('Cascading Style Sheets')).toBeInTheDocument();
   });
 });
 
