@@ -12,7 +12,7 @@ const shareMarkup: Record<World, ReactNode> = {
     plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    plain('<th scope="col" class="cell window header-cell">'),
+    plain('<th scope="col" class="cell header-cell window">'),
     plain('<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'),
     plain('<button type="button" tabindex="0" data-resize-handle class="resize-handle" aria-label="resize trades"></button>')
   ]}/>

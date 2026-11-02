@@ -109,7 +109,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.codeOf(practicePage.carvedFrom('Frame/table.html')[1])).toMatch(/^<th scope="col" class="cell trades/);
+    expect(practicePage.codeOf(practicePage.carvedFrom('Frame/table.html')[1])).toMatch(/^<th scope="col" class="cell header-cell trades/);
   });
 
   test('should show DraggableColumn writing the th, with its scope, beside the vanilla header', async () => {

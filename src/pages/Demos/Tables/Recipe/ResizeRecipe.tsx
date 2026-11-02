@@ -25,10 +25,10 @@ const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredWidths'), gap,
-      ...unit(looksSource, 'export const headerStates')
+      ...unit(looksSource, 'export const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(buildSource, '...headerStates(travels, width)', '...headerStates(travels, width)'), gap,
+      ...span(buildSource, '...headerNeeds(travels, width)', '...headerNeeds(travels, width)'), gap,
       ...span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[
@@ -56,7 +56,7 @@ const edgeMarkup: Record<World, ReactNode> = {
     ...span(buildSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>'), gap,
+    ...span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), gap,
     ...span(tableSource, '</menu>', '</th>')
   ]}/>
 };

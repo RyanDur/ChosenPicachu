@@ -5,7 +5,7 @@ export const rowHeaderCell = ['cell', 'row-header'] as const;
 
 export const headerCell = ['cell', 'header-cell'] as const;
 
-export const headerStates = (travels: boolean, width?: number): readonly (string | false)[] => [
+export const headerNeeds = (travels: boolean, width?: number): readonly (string | false)[] => [
   travels && 'grabbable',
   has(width) && 'shared'
 ];

@@ -3,7 +3,7 @@ import {resizeLabel} from '@components/Table/shares';
 import {MountedTable, namedShare, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
-  maybe(table.querySelector(`th.${column}`)).map(header => {
+  maybe(table.querySelector(`th[data-column="${column}"]`)).map(header => {
     if (!(header instanceof HTMLTableCellElement)) {
       return;
     }

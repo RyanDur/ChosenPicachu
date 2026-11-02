@@ -4,14 +4,14 @@ import {shareWidth} from '@components/Table/shares';
 import {useTableSelector} from './context';
 import {columnNamed, unknownColumn, widthOfColumn} from './selectors';
 import './Header.css';
-import {headerCell, headerLooks, headerStates} from './looks';
+import {headerCell, headerLooks, headerNeeds} from './looks';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
   const width = useTableSelector(widthOfColumn(column));
 
   return <th {...th}
-    className={classNames(...headerCell, className, ...headerLooks, ...headerStates(false, width))}
+    className={classNames(...headerCell, className, ...headerLooks, ...headerNeeds(false, width))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

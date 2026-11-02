@@ -7,7 +7,7 @@ import {span} from '@pages/Demos/Recipe/carve';
 import './TableCarves.css';
 
 const tableTag = span(tableSource, '<table class="fancy-table', '<table class="fancy-table');
-const tradesHeader = span(tableSource, '<th scope="col" class="cell trades', '</th>');
+const tradesHeader = span(tableSource, '<th scope="col" class="cell header-cell trades', '</th>');
 const tablesFound = span(bootSource, "[...document.querySelectorAll('table[data-drag-sortable]')]", "querySelectorAll('table[data-drag-sortable]')");
 const reportsHeard = span(bootSource, "table.addEventListener('column-moved'", "table.addEventListener('sorted'");
 const columnWritten = span(columnSource, 'return <th {...th}', '</th>;');

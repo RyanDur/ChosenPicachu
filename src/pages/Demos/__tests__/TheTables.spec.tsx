@@ -1236,7 +1236,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     expect(recipe).toHaveTextContent(/\.resize-handle \{[^]*\.borderless \{[^]*\.unfilled \{[^]*\.held-bar-after \{[^]*\.focus-ringed \{/);
   });
 
-  test('should label the ledger’s headerStates TS, in the react world', async () => {
+  test('should label the ledger’s headerNeeds TS, in the react world', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('tables', '?tut=resize&world=react')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -1244,7 +1244,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     const states = tablesTab.figureIn(recipe, /DragSortableTable\/looks\.ts on GitHub/);
 
     expect(tablesTab.wordsIn(states, 'TS')).toBeInTheDocument();
-    expect(states).toHaveTextContent('export const headerStates');
+    expect(states).toHaveTextContent('export const headerNeeds');
   });
 
   test('should carve the rule that papers a moving cell, in the react world', async () => {
@@ -1262,7 +1262,7 @@ describe('the classes the table wears, as its recipes tell them', () => {
     await feedIsSubscribed(feed);
     const recipe = await tablesTab.recipe('drag resize');
 
-    expect(recipe).toHaveTextContent(/export const headerStates[^]*has\(width\) && 'shared'/);
+    expect(recipe).toHaveTextContent(/export const headerNeeds[^]*has\(width\) && 'shared'/);
   });
 
   test('should say every motion class changes through changeMotion in the vanilla world, with it carved after the reconcile', async () => {

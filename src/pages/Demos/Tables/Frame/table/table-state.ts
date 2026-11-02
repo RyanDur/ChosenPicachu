@@ -31,7 +31,7 @@ export type Given = {
 
 export type Reconcile = (before: readonly TableColumn<Labelled>[]) => void;
 
-export const columnOfHeader = (th: Element): string => th.classList.item(1) ?? '';
+export const columnOfHeader = (th: Element): string => th.getAttribute('data-column') ?? '';
 
 export const changed = <T>(before: readonly T[], after: readonly T[]): boolean =>
   before.length !== after.length || after.some((at, position) => before[position] !== at);

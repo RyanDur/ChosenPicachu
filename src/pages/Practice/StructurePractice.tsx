@@ -126,6 +126,8 @@ export const StructurePractice: FC = () =>
     <HeaderCellCarve/>
     <p className="paragraph">The class list is the look. The id locates the one table of live
       aggregations. <code className="monospaced">data-drag-sortable</code> says the table can be sorted by dragging.
+      On the cell, <code className="monospaced">data-column</code> names its column for the script, so the column’s
+      name in the class list only dresses it.
       Inside the cell, <code className="monospaced">data-resize-handle</code> and <code
       className="monospaced">data-sort-toggle</code> sit on the buttons that do those things.{' '}
     <code className="monospaced">popovertarget</code> names the sort menu by its id, and the menu is a menu element, a

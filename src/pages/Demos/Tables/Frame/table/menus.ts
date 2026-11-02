@@ -5,7 +5,7 @@ import {columnOfHeader, MountedTable} from './table-state';
 import {tell} from './events';
 
 export const announce = (table: ParentNode, column: string, sorted?: Direction): void => {
-  maybe(table.querySelector(`th.${column}`)).map(header => {
+  maybe(table.querySelector(`th[data-column="${column}"]`)).map(header => {
     if (has(sorted)) {
       header.setAttribute('aria-sort', sorted);
     } else {

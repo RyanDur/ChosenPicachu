@@ -203,7 +203,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<th scope="col" class="cell trades header-cell', 'aria-label="sort trades"></button>')
+                ...span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
