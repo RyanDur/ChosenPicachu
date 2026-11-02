@@ -102,19 +102,23 @@ export const BehaviorPractice: FC = () =>
       each event leaves, so it cannot replay anything, but every change still arrives as an event.</p>
     <h3 className="paragraph bold">Trusted at the boundary</h3>
     <p className="paragraph">I like to trust my boundaries. A value from a socket or a fetch is unknown until it is
-      checked, so I check it once, where it enters, and nothing after that has to wonder.</p>
+      checked, so I check it once, where it enters, and the code after that takes it at its type.</p>
     <p className="paragraph"><a className="signpost" href={schemawax}>schemawax</a>,{' '}
       <a className="signpost" href={schemawax}>“Tiny typed data decoder”</a>, lets me write the shape once. The decoder
-      checks a value against it, and the type comes from the decoder, so the two cannot drift apart. Here is the
-      decoder for a trade from Coinbase’s feed:</p>
+      checks a value against that shape, and the type of whatever passes comes from the decoder, so the check and the
+      type cannot drift apart. Here is the decoder for a trade as Coinbase’s feed sends it:</p>
     <TradeDecoderCarve/>
     <p className="paragraph">A trade passes three gates on its way in. The text has to parse, the parsed value has to
-      match the decoder, and its numbers have to be numbers. Whatever fails a gate comes out as nothing, so the
+      match the decoder, and its price, size and time, which the feed sends as text, have to read as numbers. The last
+      gate, <code className="monospaced">toTrade</code>, turns what passed into the page’s own{' '}
+    <code className="monospaced">Trade</code>. <code className="monospaced">decodeTrade</code> returns a{' '}
+    <code className="monospaced">Maybe</code>, a trade or nothing, and it is nothing when any gate fails, so the
       reducer only ever sees a trade:</p>
     <DecodeTradeCarve/>
     <p className="paragraph">The one place this boundary can throw is <code className="monospaced">JSON.parse</code>,
-      and <code className="monospaced">attempt</code>, from sand, turns that throw into nothing. The gallery’s four
-      museums each have a decoder of their own, and each response is typed from its decoder the same way.</p>
+      and <code className="monospaced">attempt</code>, from sand, turns that throw into nothing.</p>
+    <p className="paragraph">The trade is not the only value checked this way. The gallery’s four museums each have a
+      decoder of their own, and each response is typed from its decoder.</p>
     <h3 className="paragraph bold">The core and the shell</h3>
     <p className="paragraph">The core is functional and the shell is imperative. The functions that move
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds
