@@ -157,7 +157,7 @@ describe('the record', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
-      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016', '2017']);
+      ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', '2016', '2017', '2025']);
     expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
       'CERN needs to share what it knows',
       'The information needs one interface',
@@ -178,7 +178,8 @@ describe('the record', () => {
       'Someone needs components',
       'The rules need writing down',
       'The document needs to come first',
-      'The constants need a home'
+      'The constants need a home',
+      'The elements need to arrive'
     ]);
   });
 
@@ -197,7 +198,7 @@ describe('the record', () => {
   test('should open every beat into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(20);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(21);
     expect(recordPage.fullerStories().filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
   });
 
@@ -669,7 +670,7 @@ describe('the record\'s three stories', () => {
 
   test('should end Structure\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
     expect(recordPage.storyMomentsHeading('Structure')).toBeVisible();
-    expect(recordPage.storyMomentLines('Structure')).toEqual(['1989 CERN needs to share what it knows', '1990 The information needs one interface', '1991 The web needs collaborators', '1995 The browsers’ tags need a standard', '1996 The pages need to look the same', '2004 The standard needs the real world', '2013 Someone needs components', '2014 The rules need writing down', '2016 The document needs to come first']);
+    expect(recordPage.storyMomentLines('Structure')).toEqual(['1989 CERN needs to share what it knows', '1990 The information needs one interface', '1991 The web needs collaborators', '1995 The browsers’ tags need a standard', '1996 The pages need to look the same', '2004 The standard needs the real world', '2013 Someone needs components', '2014 The rules need writing down', '2016 The document needs to come first', '2025 The elements need to arrive']);
     expect(recordPage.storyMomentLine('Structure', '1989 CERN needs to share what it knows')).toHaveAttribute('href', `${Paths.record}#cern-needs-to-share-what-it-knows`);
     expect(recordPage.storyMomentLine('Structure', '1990 The information needs one interface')).toHaveAttribute('href', `${Paths.record}#the-information-needs-one-interface`);
     expect(recordPage.storyMomentLine('Structure', '1991 The web needs collaborators')).toHaveAttribute('href', `${Paths.record}#the-web-needs-collaborators`);
@@ -679,6 +680,7 @@ describe('the record\'s three stories', () => {
     expect(recordPage.storyMomentLine('Structure', '2013 Someone needs components')).toHaveAttribute('href', `${Paths.record}#someone-needs-components`);
     expect(recordPage.storyMomentLine('Structure', '2014 The rules need writing down')).toHaveAttribute('href', `${Paths.record}#the-rules-need-writing-down`);
     expect(recordPage.storyMomentLine('Structure', '2016 The document needs to come first')).toHaveAttribute('href', `${Paths.record}#the-document-needs-to-come-first`);
+    expect(recordPage.storyMomentLine('Structure', '2025 The elements need to arrive')).toHaveAttribute('href', `${Paths.record}#the-elements-need-to-arrive`);
   });
 
   test('should link “often, the information has been recorded,…” in Structure’s story to w3.org', () => {
@@ -1263,5 +1265,18 @@ describe('the research shelf and the home page', () => {
 
     expect(linked).not.toEqual([]);
     expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+  });
+});
+
+describe('the 2025 moment', () => {
+  beforeEach(async () => {
+    render(<TestApp at={Paths.record}/>);
+    await recordPage.arrived();
+  });
+
+  test('should carry the 2025 moment’s reader back to the 2013 moment, where components began in script, with focus there', async () => {
+    await recordPage.followFromMoment('The elements need to arrive', 'The 2013 moment');
+
+    await waitFor(() => expect(itemHeadedBy('the timeline', 'Someone needs components')).toHaveFocus());
   });
 });

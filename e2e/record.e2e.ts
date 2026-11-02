@@ -94,6 +94,16 @@ test('a line in a story\'s list lands on that moment in the timeline below, with
   await expect(record.moment('The browsers need to agree')).toBeFocused();
 });
 
+test('a reader who follows Structure\'s line to 2025 lands on the moment the elements arrived, with focus there', async ({page}) => {
+  const record = recordPage(page);
+  await page.goto('record/');
+
+  await record.storyLineTo('Structure', '2025 The elements need to arrive').click();
+
+  await expect(page).toHaveURL(/\/record\/#the-elements-need-to-arrive$/);
+  await expect(record.moment('The elements need to arrive')).toBeFocused();
+});
+
 test('a reader who follows a moment link on Practice lands on that moment in the record, with focus there', async ({page}) => {
   await page.goto('practice/');
 

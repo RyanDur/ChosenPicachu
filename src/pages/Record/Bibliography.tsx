@@ -214,6 +214,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API"><cite>Invoker Commands API</cite></a>{' '}
             <span className="provenance caption">MDN</span>
           </li>
+          <li>
+            <a className="signpost" href="https://open-ui.org/components/popover.research.explainer/"><cite>Popover API (Explainer)</cite></a>{' '}
+            <span className="provenance caption">Open UI, undated</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="presentation research">
