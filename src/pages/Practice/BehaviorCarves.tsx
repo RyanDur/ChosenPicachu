@@ -7,6 +7,7 @@ import tableStateSource from '@components/DragSortableTable/table-state.ts?sampl
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
+import recentTradesSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?sample';
 import coinbaseSource from '@pages/Demos/Charts/coinbase/index.ts?sample';
 import useDragSortableSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';
@@ -90,3 +91,8 @@ export const TradeDecoderCarve: FC = () => <Snippet label="TS" lines={unit(coinb
 export const DecodeTradeCarve: FC = () => <Snippet label="TS" lines={unit(coinbaseSource, 'export const decodeTrade')}/>;
 
 export const CarryCarve: FC = () => <Snippet label="TS" lines={unit(tableStateSource, 'export type Carry')}/>;
+
+export const RecentTradesCarve: FC = () => <Snippet label="TS" lines={unit(recentTradesSource, 'export const recentTrades')}/>;
+
+export const HistoryCarve: FC = () =>
+  <Snippet label="TS" lines={span(exchangeSource, 'const fetching = recentTrades(', "onTrouble({type: 'historyRefused', cause})")}/>;

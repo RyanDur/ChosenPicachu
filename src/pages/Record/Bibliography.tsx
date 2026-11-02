@@ -463,6 +463,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/"><cite>Designing with types: Making illegal states unrepresentable</cite></a>{' '}
             <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 14 January 2013</span>
           </li>
+          <li>
+            <a className="signpost" href="https://fsharpforfunandprofit.com/rop/"><cite>Railway Oriented Programming</cite></a>{' '}
+            <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 2014</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">

@@ -5,6 +5,8 @@ import {momentAddress} from '@pages/Record/MomentLink';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const oneDirection = 'One direction. An event goes to the reducer, the reducer returns the next state, the page is drawn from the state, and the page sends the next event. The shell, drawn apart, holds the state and runs the loop, and nothing inside the loop knows the shell is there.';
+const twoTracks = 'Two tracks. A result rides the success track to the reducer until a step fails. Then it rides '
+  + 'the failure track to the edge, where the page decides what to say.';
 
 describe('the Behavior practice tab', () => {
   test('should send the one direction to the July 2014 moment', async () => {
@@ -39,6 +41,7 @@ describe('the Behavior practice tab', () => {
       'Code that reads as sentences',
       'Where the world comes in',
       'Trusted at the boundary',
+      'When something fails',
       'The core and the shell',
       'The platform first',
       'Every gesture has a key',
@@ -85,6 +88,38 @@ describe('the Behavior practice tab', () => {
 
     expect(practicePage.link(/make illegal states unrepresentable/))
       .toHaveAttribute('href', 'https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/');
+  });
+
+  test('should send the failure riding along untouched to sand', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/rides along untouched until you decide what to do with it/))
+      .toHaveAttribute('href', 'https://github.com/RyanDur/sand');
+  });
+
+  test('should send happy path to Wlaschin’s Railway Oriented Programming', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.link(/happy path/)).toHaveAttribute('href', 'https://fsharpforfunandprofit.com/rop/');
+  });
+
+  test('should draw the two tracks before the request for recent trades', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(outOfReadingOrder([
+      practicePage.figure(twoTracks),
+      practicePage.figure('Aggregations/recent-trades.ts on GitHub')
+    ])).toEqual([]);
+  });
+
+  test('should keep the two-tracks drawing from a screen reader', async () => {
+    render(<TestApp at={practiceAt('behavior')}/>);
+    await practicePage.arrivedOn('Behavior');
+
+    expect(practicePage.imagesHeardIn(twoTracks)).toEqual([]);
   });
 
   test('should send CustomEvent to MDN', async () => {

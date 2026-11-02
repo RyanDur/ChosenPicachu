@@ -14,6 +14,11 @@
     block-size: auto;
   }
 
+  .drawn-line {
+    stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
+  }
+
   @container (width >= 855px) {
     float: inline-end;
     inline-size: var(--drawn-width);

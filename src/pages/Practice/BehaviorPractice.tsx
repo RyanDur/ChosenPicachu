@@ -9,8 +9,10 @@ import {
   DecodeTradeCarve,
   EventsCarve,
   ExchangeCarve,
+  HistoryCarve,
   MiddlewareCarve,
   PreludeCarve,
+  RecentTradesCarve,
   ReducerCarve,
   SheetQuestionsCarve,
   TableEventsCarve,
@@ -18,11 +20,14 @@ import {
   TradeDecoderCarve
 } from './BehaviorCarves';
 import {OneDirectionLoop} from './OneDirectionLoop';
+import {TwoTracks} from './TwoTracks';
 
 const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
 const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';
 const schemawax = 'https://github.com/michaljanocko/schemawax';
 const illegalStates = 'https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/';
+const sand = 'https://github.com/RyanDur/sand';
+const railway = 'https://fsharpforfunandprofit.com/rop/';
 
 export const BehaviorPractice: FC = () =>
   <>
@@ -119,6 +124,28 @@ export const BehaviorPractice: FC = () =>
       and <code className="monospaced">attempt</code>, from sand, turns that throw into nothing.</p>
     <p className="paragraph">The trade is not the only value checked this way. The gallery’s four museums each have a
       decoder of their own, and each response is typed from its decoder.</p>
+    <h3 className="paragraph bold">When something fails</h3>
+    <p className="paragraph">A fetch can fail, and I don’t want every step after it to check.
+      sand’s <code className="monospaced">Result</code> is either a success or a failure, and its README says the
+      failure <a className="signpost" href={sand}>“rides along untouched until you decide what to do with it”</a>.{' '}
+    <code className="monospaced">map</code> and <code className="monospaced">mBind</code> work on a success and let
+      a failure pass.</p>
+    <TwoTracks/>
+    <p className="paragraph">Here is the request for recent trades. The response is fetched, checked against its
+      decoder and turned into trades. If a step fails, the steps after it do not run:</p>
+    <RecentTradesCarve/>
+    <p className="paragraph">The exchange takes the result at the end of that line. A success goes to the reducer
+      as <code className="monospaced">historyArrived</code>. A failure goes to the edge, the code that decides what the
+      page says:</p>
+    <HistoryCarve/>
+    <p className="paragraph">In the React build, the edge turns the trouble into a sentence and shows it in a banner.
+      The reducer never sees the failure.</p>
+    <p className="paragraph">Scott Wlaschin’s 2014 talk <a className="signpost" href={railway}>Railway Oriented
+      Programming</a> draws the same idea as a railway, with the success track as
+      the <a className="signpost" href={railway}>“happy path”</a>.</p>
+    <p className="paragraph">The boundary, the types and the two tracks work together. Each value is checked where it
+      enters, the types refuse what cannot be, and a failure stays on its own track to the edge. So everything the
+      reducer gets is already true, and nothing in it can fail.</p>
     <h3 className="paragraph bold">The core and the shell</h3>
     <p className="paragraph">The core is functional and the shell is imperative. The functions that move
       from one state to the next are pure, so I test them on their own with no page involved. The shell holds
