@@ -62,6 +62,18 @@ describe('the drag sort recipe', () => {
     expect(await tableControls.chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
   });
 
+  test('with no dials in the address, the recipe teaches the build the table controls read out', async () => {
+    render(<TestApp at="/"><Recipe/><TableControls world="react"/></TestApp>);
+    const recipe = await tablesTab.recipe('drag sort');
+
+    await recipeFolds.press(recipe, 'The trader can sort by column');
+
+    expect(recipeFolds.stepTitled(recipe, 'Commit inside the move')).toBeInTheDocument();
+    expect(recipeFolds.stepTitled(recipe, 'Carry the real thing')).toBeInTheDocument();
+    expect(recipeFolds.stepTitled(recipe, 'Let the column settle')).toBeInTheDocument();
+    expect(await tableControls.chosenDials()).toEqual(['Eager', 'Hide', 'Animate']);
+  });
+
   test('the keyboard track teaches the same sort with the arrow keys', async () => {
     render(<TestApp at="/"><Recipe/></TestApp>);
     const recipe = await tablesTab.recipe('drag sort');
