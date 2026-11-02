@@ -59,14 +59,14 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">A sort runs one of two ways, so <code className="monospaced">Direction</code> is those two
       words, <code className="monospaced">'ascending' | 'descending'</code>, and a misspelled direction is an error
       before the page runs. Every field of the table’s state is <code className="monospaced">readonly</code>, so the
-      type checker refuses an edit to an old state, and the reducer has to return a new one. Where a value may be
-      missing, as the report is before anything has moved, the code says so with sand’s{' '}
+      type checker refuses an edit to an old state, and the reducer has to return a new one. The report is missing
+      before anything has moved, and the selector that reads it returns sand’s{' '}
     <code className="monospaced">Maybe</code>.</p>
-    <p className="paragraph">The type checker runs as <code className="monospaced">tsc -b</code> in the pre-commit hook. A
-      commit that lets a forbidden state in is never made.</p>
     <p className="paragraph">Scott Wlaschin calls this using the type system to{' '}
       <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
       Yaron Minsky.</p>
+    <p className="paragraph">The pre-commit hook runs the type checker as <code className="monospaced">tsc -b</code>,
+      and refuses a commit that lets a forbidden state into a type.</p>
     <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
       there when it was written. I wrote small functions so a condition reads in
       words: <code className="monospaced">has</code>,{' '}
