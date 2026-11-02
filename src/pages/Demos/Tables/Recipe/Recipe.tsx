@@ -9,8 +9,6 @@ import {EagerRecipe} from './EagerRecipe';
 import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
-export {trackParam} from './steps';
-
 export const Recipe: FC = () => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', track = 'pointer', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam, track: trackParam});

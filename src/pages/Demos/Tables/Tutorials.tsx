@@ -16,10 +16,6 @@ import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
 
-export type {Tutorial} from './params';
-
-export {tutorialParam} from './params';
-
 const worldCopy: Record<World, string> = {
   react: 'React builds and rebuilds this table; the page you read is its render.',
   vanilla: 'The table stands in its own document: markup, style sheet, and script, no framework.'
