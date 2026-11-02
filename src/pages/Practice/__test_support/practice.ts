@@ -81,7 +81,13 @@ export const practicePage = {
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
   figure: (name: string | RegExp): HTMLElement => within(practice()).getByRole('figure', {name}),
-  figures: (name: string | RegExp): HTMLElement[] => within(practice()).getAllByRole('figure', {name}),
+  sample: (name: string, showing: string): HTMLElement => {
+    const samples = within(practice()).getAllByRole('figure', {name}).filter(figure => figure.textContent.includes(showing));
+    if (samples.length !== 1) {
+      throw new Error(`${samples.length} samples named ${name} showing ${showing}, not one`);
+    }
+    return samples[0];
+  },
   drawingsSeenIn: (figure: string | RegExp): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),

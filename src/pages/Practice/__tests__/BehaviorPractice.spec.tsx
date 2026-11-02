@@ -53,7 +53,7 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(outOfReadingOrder([
-      practicePage.figures('DragSortableTable/reducer.ts on GitHub')[0],
+      practicePage.sample('DragSortableTable/reducer.ts on GitHub', 'const answering'),
       practicePage.figure(oneDirection)
     ])).toEqual([]);
   });

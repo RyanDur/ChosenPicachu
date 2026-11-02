@@ -184,24 +184,25 @@ export const BehaviorPractice: FC = () =>
       where a browser has none, a click handler does it instead. Its <code className="monospaced">closedby</code>{' '}
       attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too.</p>
     <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
-      it by a data attribute, like the tables demo’s <code className="monospaced">data-drag-sortable</code>, and React
-      uses a component.</p>
+      the element that needs it by a data attribute, like the tables demo’s{' '}
+    <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
       arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}
     <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
       keyboard interface”</a>.</p>
-    <p className="paragraph">On the tables demo, an arrow key walks a column or a row: it moves it one place each time
-      the key is pressed. The table names each walk for what happened:</p>
+    <p className="paragraph">On the tables demo, an arrow key walks a column or a row: each press moves it one place.
+      The table names each walk for what happened:</p>
     <WalksCarve/>
-    <p className="paragraph">A walk and a drag end in the same case of the same reducer, so the keyboard cannot drift
-      from the pointer:</p>
+    <p className="paragraph">A walk and a drag that passes a neighbour share one case of the reducer, so a key and
+      a pointer move the other columns by the same rule:</p>
     <WalkCaseCarve/>
     <p className="paragraph">The focus stays on the column or row being walked, so the next key press moves it again.
-      WCAG 2.4.3 asks that focus moves <a className="signpost" href={focusOrder}>“in an order that preserves meaning
-        and operability”</a>.</p>
+      If the focus moved away, the next press would not reach the column. WCAG 2.4.3 asks that focus moves{' '}
+    <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>, and keeping
+      it on the walked column keeps the keyboard operable.</p>
     <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
-      reader user hears where the column went. The report is a type, and{' '}
+      reader user hears where the column or row went. The report is a type, and{' '}
     <code className="monospaced">moveReport</code> turns it into words:</p>
     <MoveReportCarve/>
     <p className="paragraph">Both builds write those words into an <code className="monospaced">output</code> named
