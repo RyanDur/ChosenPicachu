@@ -14,7 +14,7 @@ describe('Gallery Navigation', () => {
   test('no page is asked for until someone asks', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page');
   });
@@ -22,7 +22,7 @@ describe('Gallery Navigation', () => {
   test('the next page is a page on, and starts at the top', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     const landings = scrolling.recordLandings();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
@@ -35,7 +35,7 @@ describe('Gallery Navigation', () => {
   test('there is no way back from the first page', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
@@ -44,7 +44,7 @@ describe('Gallery Navigation', () => {
   test('the last page offers only the way back', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
@@ -58,7 +58,7 @@ describe('Gallery Navigation', () => {
   test('the previous page is a page back', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
@@ -68,7 +68,7 @@ describe('Gallery Navigation', () => {
   test('the first page is one jump back from anywhere', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
@@ -78,7 +78,7 @@ describe('Gallery Navigation', () => {
   test('a page change keeps the search that was made', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?search=q`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -89,7 +89,7 @@ describe('Gallery Navigation', () => {
   test('the pagination counts the works showing, of the total', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1} - ${limit}of${total}`);
   });
@@ -111,7 +111,7 @@ describe('Gallery Navigation', () => {
   test('a museum that refuses leaves no count from the museum before it', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     anyRequestFailsToConnect();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
@@ -137,7 +137,7 @@ describe('Gallery Navigation', () => {
     setupAICAllArtResponse(aicArtResponse);
     heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -150,12 +150,12 @@ describe('Gallery Navigation', () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
     nextPageArrives();
 
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     expect(screen.getByRole('link', {name: 'NEXT'})).toBeInTheDocument();
   });
 });

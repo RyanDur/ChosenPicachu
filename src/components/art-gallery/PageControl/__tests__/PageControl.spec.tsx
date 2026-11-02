@@ -11,7 +11,7 @@ describe('The page controls', () => {
     test('going to a page lands at its top, and clears the field', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
       const landings = scrolling.recordLandings();
 
       await userEvent.type(screen.getByLabelText(/Page #/), '3');
@@ -25,7 +25,7 @@ describe('The page controls', () => {
     test('after going to a page, the field says which page it is', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
 
       await userEvent.type(screen.getByLabelText('Page #1'), '3');
       await userEvent.click(screen.getByRole('button', {name: 'Go'}));
@@ -36,7 +36,7 @@ describe('The page controls', () => {
     test('changing only the page size keeps the page the nav walked to', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
       await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
       await screen.findByLabelText('Page #2');
       await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
@@ -52,7 +52,7 @@ describe('The page controls', () => {
     it('the page field will not go before the first', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
 
       expect(screen.getByLabelText(/Page #/)).toHaveAttribute('min', '1');
     });
@@ -60,7 +60,7 @@ describe('The page controls', () => {
     it('the page field will not go past the last page the museum has', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
 
       expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
     });
@@ -79,7 +79,7 @@ describe('The page controls', () => {
     test('a page typed and then rubbed out leaves the page where the URL has it', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={`${Paths.artGallery}?page=4`}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
 
       await userEvent.type(screen.getByLabelText('Page #4'), '7');
       await userEvent.clear(screen.getByLabelText('Page #4'));
@@ -94,7 +94,7 @@ describe('The page controls', () => {
     it('should allow the user to change the elements per page', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.hangs();
+      await galleryWall.framesAppear();
 
       await userEvent.type(screen.getByLabelText(/Per Page/), '45');
       await userEvent.click(screen.getByRole('button', {name: 'Go'}));

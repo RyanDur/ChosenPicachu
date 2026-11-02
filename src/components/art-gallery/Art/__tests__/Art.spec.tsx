@@ -22,7 +22,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     server.events.removeListener('response:mocked', count);
 
     expect(hits).toEqual(1);
@@ -32,19 +32,19 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    const walls = await galleryWall.pictures();
-    expect(walls.length).toBeGreaterThan(6);
-    walls.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));
-    walls.slice(6).forEach(img => expect(img).toHaveAttribute('loading', 'lazy'));
+    const pictures = await galleryWall.pictures();
+    expect(pictures.length).toBeGreaterThan(6);
+    pictures.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));
+    pictures.slice(6).forEach(img => expect(img).toHaveAttribute('loading', 'lazy'));
   });
 
   test('only the first piece is asked for at high priority', async () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    const walls = await galleryWall.pictures();
-    expect(walls[0]).toHaveAttribute('fetchpriority', 'high');
-    walls.slice(1).forEach(img => expect(img).not.toHaveAttribute('fetchpriority', 'high'));
+    const pictures = await galleryWall.pictures();
+    expect(pictures[0]).toHaveAttribute('fetchpriority', 'high');
+    pictures.slice(1).forEach(img => expect(img).not.toHaveAttribute('fetchpriority', 'high'));
   });
 
   test('the loading sign stands until the art arrives, and no frame before it', async () => {

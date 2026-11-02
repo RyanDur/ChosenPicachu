@@ -37,7 +37,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(await galleryWall.hangs()).toHaveLength(defaultRecordLimit);
+    expect(await galleryWall.framesAppear()).toHaveLength(defaultRecordLimit);
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
     expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
@@ -202,7 +202,7 @@ describe('The gallery.', () => {
 
     expect(screen.getAllByRole('progressbar', {name: 'loading gallery'})).toHaveLength(1);
     wallArrives();
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
     vamAnswers();
     await screen.findByRole('link', {name: 'The Victoria and Albert Museum'});
@@ -214,7 +214,7 @@ describe('The gallery.', () => {
     const vamWallArrives = heldVAMAllArtResponse(vamArtResponse);
     harvardNeverAnswers();
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     await userEvent.click(screen.getByRole('link', {name: 'The Victoria and Albert Museum'}));
 
@@ -250,7 +250,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
     return nextPageArrives;
   };
 
@@ -284,7 +284,7 @@ describe('The gallery.', () => {
     const {total_pages: last, limit, total} = aicArtResponse.pagination;
     setupAICAllArtResponse(aicArtResponse, {limit, page: last});
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
-    await galleryWall.hangs();
+    await galleryWall.framesAppear();
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
   });
