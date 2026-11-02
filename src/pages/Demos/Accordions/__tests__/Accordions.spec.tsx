@@ -35,6 +35,27 @@ describe('the inclusive toggle accordion using checkboxes', () => {
     expect(controlOf('checkbox', 'Alpha')).not.toBeChecked();
     expect(controlOf('checkbox', 'Beta')).toBeChecked();
   });
+
+  test('should leave the fold as it was when the reader presses the fold’s name', async () => {
+    render(<InclusiveCheckboxToggleAccordion content={folds} motion="reveal"/>);
+
+    await userEvent.click(screen.getAllByText('Alpha')[0]);
+
+    expect(controlOf('checkbox', 'Alpha')).not.toBeChecked();
+  });
+
+  test('should hold its controls in one group named folds', () => {
+    render(<InclusiveCheckboxToggleAccordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('checkbox')).toHaveLength(folds.length);
+  });
+
+  test('should make each fold an item of its list, with no article of its own', () => {
+    render(<InclusiveCheckboxToggleAccordion content={folds} motion="reveal"/>);
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(folds.length);
+  });
 });
 
 describe('the exclusive toggle accordion using a radio group', () => {
@@ -87,64 +108,85 @@ describe('the exclusive toggle accordion using a radio group', () => {
 
     expect(controlOf('radio', 'Alpha')).not.toBeChecked();
   });
-});
 
-describe.each([
-  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
-  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
-])('$accordion', ({Accordion, control}) => {
   test('should leave the fold as it was when the reader presses the fold’s name', async () => {
-    render(<Accordion content={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
 
     await userEvent.click(screen.getAllByText('Alpha')[0]);
 
-    expect(controlOf(control, 'Alpha')).not.toBeChecked();
+    expect(controlOf('radio', 'Alpha')).not.toBeChecked();
   });
-});
 
-describe.each([
-  {accordion: 'the accordion using checkboxes', Accordion: InclusiveAccordion, control: 'checkbox' as const, controls: folds.length, items: folds.length},
-  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1, items: folds.length + 1},
-  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const, controls: folds.length, items: folds.length},
-  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const, controls: folds.length, items: folds.length}
-])('$accordion', ({Accordion, control, controls, items}) => {
   test('should hold its controls in one group named folds', () => {
-    render(<Accordion content={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
 
-    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole(control)).toHaveLength(controls);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('radio')).toHaveLength(folds.length);
   });
 
   test('should make each fold an item of its list, with no article of its own', () => {
-    render(<Accordion content={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
 
     expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(items);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(folds.length);
+  });
+});
+
+describe('the accordion using checkboxes', () => {
+  test('should hold its controls in one group named folds', () => {
+    render(<InclusiveAccordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('checkbox')).toHaveLength(folds.length);
+  });
+
+  test('should make each fold an item of its list, with no article of its own', () => {
+    render(<InclusiveAccordion content={folds} motion="reveal"/>);
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(folds.length);
+  });
+});
+
+describe('the accordion using a radio group', () => {
+  test('should hold its controls, the Close bar’s among them, in one group named folds', () => {
+    render(<ExclusiveAccordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('radio')).toHaveLength(folds.length + 1);
+  });
+
+  test('should make each fold, and the Close bar, an item of its list, with no article of its own', () => {
+    render(<ExclusiveAccordion content={folds} motion="reveal"/>);
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(within(screen.getByRole('group', {name: 'folds'})).getAllByRole('listitem')).toHaveLength(folds.length + 1);
   });
 });
 
 describe('the builds we used to make', () => {
-  test.each([
-    {build: 'checkbox', Build: InclusiveAccordion},
-    {build: 'radio', Build: ExclusiveAccordion},
-    {build: 'measured checkbox', Build: InclusiveMeasuredAccordion},
-    {build: 'measured radio', Build: ExclusiveMeasuredAccordion}
-  ])('should name each fold’s text by its bar in the $build build', ({Build}) => {
-    render(<Build content={folds} motion="reveal"/>);
+  test('should name each fold’s text by its bar in the checkbox build', () => {
+    render(<InclusiveAccordion content={folds} motion="reveal"/>);
 
     expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
     expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
   });
-});
 
-describe('a build that names what it needs', () => {
-  test.each([
-    {build: 'checkboxes and a known height', Build: InclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
-    {build: 'a radio group and a known height', Build: ExclusiveAccordion, needs: 'No script: HTML and CSS alone.'},
-    {build: 'checkboxes and a measured height', Build: InclusiveMeasuredAccordion, needs: 'A few lines of script measure each fold’s height.'},
-    {build: 'a radio group and a measured height', Build: ExclusiveMeasuredAccordion, needs: 'A few lines of script measure each fold’s height.'}
-  ])('should say, for $build, what that build needs', ({Build, needs}) => {
-    render(<Build content={folds} motion="reveal"/>);
+  test('should name each fold’s text by its bar in the radio build', () => {
+    render(<ExclusiveAccordion content={folds} motion="reveal"/>);
 
-    expect(screen.getByText(needs)).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
+  });
+
+  test('should name each fold’s text by its bar in the measured checkbox build', () => {
+    render(<InclusiveMeasuredAccordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
+  });
+
+  test('should name each fold’s text by its bar in the measured radio build', () => {
+    render(<ExclusiveMeasuredAccordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
   });
 });

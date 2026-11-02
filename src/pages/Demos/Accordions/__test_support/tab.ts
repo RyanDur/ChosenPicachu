@@ -16,6 +16,7 @@ export const accordionsTab = {
   option,
   choose: async (dial: string, name: string): Promise<void> => userEvent.click(option(await choice(dial), name)),
   readingIn: (row: HTMLElement): HTMLElement => within(row).getByRole('status'),
+  openFold: (fold: HTMLElement): Promise<void> => userEvent.click(within(fold).getByText(computeAccessibleName(fold))),
   openFirstFold: async (part: HTMLElement): Promise<HTMLElement> => {
     const control = within(part).getAllByRole('radio')[0];
     await userEvent.click(control);
@@ -23,12 +24,5 @@ export const accordionsTab = {
   },
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
-  buildTitled: (holder: HTMLElement, name: string | RegExp): HTMLElement => within(holder).getByRole('heading', {name, hidden: true}),
-  foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script'),
-  promises: (part: HTMLElement): string[] => within(within(part).getByRole('table', {name: 'What each element promises'}))
-    .getAllByRole('row').map(row => computeAccessibleName(row)),
-  htmlAloneMarkup: async (): Promise<string> => {
-    const htmlAlone = await screen.findByRole('region', {name: 'An accordion in HTML alone'});
-    return within(within(htmlAlone).getAllByRole('listitem')[0]).getAllByRole('code').map(code => code.textContent).join();
-  }
+  foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
 };
