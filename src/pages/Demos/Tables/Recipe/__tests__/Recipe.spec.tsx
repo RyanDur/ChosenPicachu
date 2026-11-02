@@ -71,7 +71,7 @@ describe('the drag sort recipe', () => {
     expect(recipeFolds.stepTitled(recipe, 'Commit inside the move')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Carry the real thing')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Let the column settle')).toBeInTheDocument();
-    expect(await tableControls.chosenDials()).toEqual(['Eager', 'Hide', 'Animate']);
+    expect(await tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
   test('the keyboard track teaches the same sort with the arrow keys', async () => {
