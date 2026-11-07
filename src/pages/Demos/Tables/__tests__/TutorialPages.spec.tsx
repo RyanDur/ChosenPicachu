@@ -57,6 +57,21 @@ describe('the table tutorials, each on its own page', () => {
     expect(await appAddress.movedOnFrom(demosAt('tables/menu'))).toBe(demosAt('tables'));
   });
 
+  test('a tutorial’s page says its place among the tutorials', async () => {
+    render(<TestApp at={demosAt('tables/menu')}/>);
+
+    expect(await tablesTab().place()).toHaveTextContent('Tables · tutorial 2 of 3');
+  });
+
+  test('the build chosen on a tutorial’s page carries back to the tables tab', async () => {
+    const from = demosAt('tables/menu', '?world=vanilla');
+    render(<TestApp at={from}/>);
+
+    await tablesTab().backToTheTab();
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla'));
+  });
+
   test('the build chosen on the tables tab carries into the tutorial it opens', async () => {
     render(<TestApp at={demosAt('tables', '?world=vanilla')}/>);
 

@@ -56,6 +56,23 @@ describe('page error boundaries', () => {
     expect(site.pageTitle()).toHaveTextContent('Demos Charts');
   });
 
+  test('a tutorial that crashes says the room is closed under its own Demos Tables header', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={demosAt('tables/menu')}>
+        <Route Component={DemosLayout} ErrorBoundary={DemosLayoutBoundary}>
+          <Route path={demosAt('tables/menu')} element={<Boom/>}/>
+        </Route>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+
+    expect(await site.roomSays('This room is closed.')).toBeVisible();
+    expect(site.pageTitle()).toHaveTextContent('Demos Tables · Sort menu');
+  });
+
   test('a crash no page catches is reported and announced', async () => {
     const boom = new Error('boom');
     const Boom = () => {

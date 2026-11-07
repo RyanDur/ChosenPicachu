@@ -22,6 +22,7 @@ export const tablesTab = () => ({
   tutorialLink,
   openTutorial: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
+  place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
   findRadios: (name: string): Promise<HTMLElement[]> => screen.findAllByRole('radio', {name, hidden: true}),
