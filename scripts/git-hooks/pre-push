@@ -2,6 +2,17 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
+# a push that only goes to verify/<issue> branches runs nothing here: CI runs the unit tests, journeys and review
+# for it, so a dev never waits for the machine or for the other dev's journeys (AGENTS.md, "Commits and pushes")
+only_verify=true
+while read -r _ _ remote_ref _; do
+  [[ "$remote_ref" == refs/heads/verify/* ]] || only_verify=false
+done
+if [[ "$only_verify" == true ]]; then
+  echo "pre-push: verify branch, CI runs the gates."
+  exit 0
+fi
+
 echo "pre-push: oxlint + stylelint + tsc + vitest + build..."
 npm run lint
 npm run lint:css
