@@ -32,6 +32,6 @@ export const tableTutorials: TableTutorials = {
   all: () => inOrder,
   nameOf: tutorial => named[tutorial],
   addressOf,
-  placeOf: tutorial => ({number: places[tutorial], of: inOrder.length}),
+  placeOf: tutorial => ({number: inOrder.indexOf(tutorial) + 1, of: inOrder.length}),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial)))
 };
