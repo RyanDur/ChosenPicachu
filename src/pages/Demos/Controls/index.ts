@@ -1,5 +1,7 @@
-export type {Copy, ControlsProps, Dials, Motion, Origin, Pace} from './Controls';
-export {Controls, defaultDials, motionParam, originParam, paceParam} from './Controls';
+export type {Copy, Dials} from './Controls';
+export type {Motion, Origin, Pace} from './useControls';
+export {Controls} from './Controls';
+export {useControls} from './useControls';
 export {PaceDial} from './PaceDial';
 export {OriginDial} from './OriginDial';
 export {MotionDial} from './MotionDial';

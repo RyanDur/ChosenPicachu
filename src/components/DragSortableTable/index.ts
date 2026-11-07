@@ -1,4 +1,3 @@
-export type {DragStyle} from './travel';
 export {Column} from './Column';
 export {DraggableColumn} from './DraggableColumn';
 export {RowHeader} from './RowHeader';

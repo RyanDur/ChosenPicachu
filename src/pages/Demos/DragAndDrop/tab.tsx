@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
 import {EagerHideAnimatedList} from './EagerHideAnimatedList';
 import {EagerHideStaticList} from './EagerHideStaticList';
 import {EagerKeepAnimatedList} from './EagerKeepAnimatedList';
@@ -10,7 +9,7 @@ import {LazyKeepAnimatedList} from './LazyKeepAnimatedList';
 import {LazyKeepStaticList} from './LazyKeepStaticList';
 import {ListTutorials} from './Tutorials';
 import {DragSortIntroduction} from './Introduction';
-import {defaultDials, motionParam, originParam, paceParam} from '../Controls';
+import {useControls} from '../Controls';
 
 const lists = {
   eager: {
@@ -25,7 +24,7 @@ const lists = {
 
 const DragSortTab: FC = () => {
   const {pace, origin, motion} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam}, defaultDials);
+    useControls();
   const List = lists[pace][origin][motion];
 
   return <>

@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useSearchParamsObject} from '@components/search-params';
-import {defaultDials, originParam} from './Controls';
+import {useControls} from './useControls';
 
 export const OriginDial: FC<{name: string}> = ({name}) => {
-  const {origin, updateSearchParams} = useSearchParamsObject({origin: originParam}, defaultDials);
+  const {origin, change} = useControls();
   return <PillGlider label="origin"
     name={name}
     options={[
@@ -12,5 +11,5 @@ export const OriginDial: FC<{name: string}> = ({name}) => {
       {display: 'Hide', value: 'hide'}
     ]}
     chosen={origin}
-    onChosen={next => updateSearchParams({origin: next})}/>;
+    onChosen={next => change({origin: next})}/>;
 };

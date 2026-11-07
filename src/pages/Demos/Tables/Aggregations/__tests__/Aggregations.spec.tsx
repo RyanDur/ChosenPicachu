@@ -41,7 +41,7 @@ describe('the live aggregations', () => {
 
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading><TableControls world="react"/></TestApp>);
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading><TableControls/></TestApp>);
     await feedIsSubscribed(feed);
     await aggregations.arrived();
     await aggregations.moveWindowByKey(1, '{ArrowDown}');

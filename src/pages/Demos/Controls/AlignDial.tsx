@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useSearchParamsObject} from '@components/search-params';
-import {alignParam} from '@components/Banners/params';
+import {useControls} from './useControls';
 
 export const AlignDial: FC<{name: string}> = ({name}) => {
-  const {align = 'center', updateSearchParams} = useSearchParamsObject({align: alignParam});
+  const {align, change} = useControls();
   return <PillGlider label="align"
     name={name}
     options={[
@@ -13,5 +12,5 @@ export const AlignDial: FC<{name: string}> = ({name}) => {
       {display: 'Right', value: 'right'}
     ]}
     chosen={align}
-    onChosen={next => updateSearchParams({align: next})}/>;
+    onChosen={next => change({align: next})}/>;
 };

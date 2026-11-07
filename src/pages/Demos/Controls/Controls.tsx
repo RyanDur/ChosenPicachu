@@ -1,24 +1,9 @@
 import {FC, PropsWithChildren} from 'react';
-import * as schema from 'schemawax';
-import {DragStyle, Motion, Origin} from '@components/DragSortableTable';
+import {Motion, Origin} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
 import {DialGroup, DialRow} from './DialRow';
+import {Pace, useControls} from './useControls';
 import './Controls.css';
-
-export type Pace = 'eager' | 'lazy';
-
-export type {Motion, Origin};
-
-export const paceParam: schema.Decoder<Pace> = schema.literalUnion('eager', 'lazy');
-export const originParam: schema.Decoder<Origin> = schema.literalUnion('keep', 'hide');
-export const motionParam: schema.Decoder<Motion> = schema.literalUnion('animated', 'static');
-
-const styles: Record<Origin, Record<Pace, DragStyle>> = {
-  keep: {eager: 'eager-move', lazy: 'lazy-move'},
-  hide: {eager: 'hide-eager-move', lazy: 'hide-lazy-move'}
-};
-
-export const styled = (pace: Pace, origin: Origin): DragStyle => styles[origin][pace];
 
 export type Copy = {
   kind: 'list' | 'table';
@@ -34,17 +19,8 @@ export type Dials = {
   motion: Motion;
 };
 
-export const defaultDials: Dials = {pace: 'eager', origin: 'hide', motion: 'animated'};
-
-export type ControlsProps = Dials & {
-  onPaceChosen: (pace: Pace) => void;
-  onOriginChosen: (origin: Origin) => void;
-  onMotionChosen: (motion: Motion) => void;
-};
-
-export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({
-  copy, pace, origin, motion, onPaceChosen, onOriginChosen, onMotionChosen, children
-}) => {
+export const Controls: FC<PropsWithChildren<{copy: Copy}>> = ({copy, children}) => {
+  const {pace, origin, motion, change} = useControls();
   const heading = `${copy.kind}-controls-heading`;
   return <Disclosure label="settings" className="demo-settings"
     prompt={<>settings{' '}<code className="readout caption monospaced">{copy.readout(pace, origin, motion)}</code></>}>
@@ -58,7 +34,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({
             {display: 'Lazy', value: 'lazy'}
           ]}
           chosen={pace}
-          onChosen={onPaceChosen}
+          onChosen={next => change({pace: next})}
           reading={copy.pace[pace]}/>
         <DialRow label="origin"
           name={`${copy.kind}-origin`}
@@ -67,7 +43,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({
             {display: 'Hide', value: 'hide'}
           ]}
           chosen={origin}
-          onChosen={onOriginChosen}
+          onChosen={next => change({origin: next})}
           reading={copy.origin[origin]}/>
         <DialRow label="motion"
           name={`${copy.kind}-motion`}
@@ -76,7 +52,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({
             {display: 'Static', value: 'static'}
           ]}
           chosen={motion}
-          onChosen={onMotionChosen}
+          onChosen={next => change({motion: next})}
           reading={copy.motion[motion]}/>
       </DialGroup>
       {children}

@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
-import {defaultDials, Motion, motionParam, Origin, originParam, Pace, paceParam} from '../Controls';
+import {Motion, Origin, Pace, useControls} from '../Controls';
 import {Stories} from '../Recipe';
 import {EagerKeepAnimatedRecipe} from './Recipe/EagerKeepAnimated';
 import {EagerKeepStaticRecipe} from './Recipe/EagerKeepStatic';
@@ -25,7 +24,7 @@ const recipes: Record<Pace, Record<Origin, Record<Motion, FC>>> = {
 
 export const NativeRecipe: FC = () => {
   const {pace, origin, motion} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam}, defaultDials);
+    useControls();
   const Recipe = recipes[pace][origin][motion];
   return <section aria-label="build the native drag sort yourself" className="build-steps">
     <Stories>

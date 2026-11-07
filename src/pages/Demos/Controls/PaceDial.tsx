@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useSearchParamsObject} from '@components/search-params';
-import {defaultDials, paceParam} from './Controls';
+import {useControls} from './useControls';
 
 export const PaceDial: FC<{name: string}> = ({name}) => {
-  const {pace, updateSearchParams} = useSearchParamsObject({pace: paceParam}, defaultDials);
+  const {pace, change} = useControls();
   return <PillGlider label="pace"
     name={name}
     options={[
@@ -12,5 +11,5 @@ export const PaceDial: FC<{name: string}> = ({name}) => {
       {display: 'Lazy', value: 'lazy'}
     ]}
     chosen={pace}
-    onChosen={next => updateSearchParams({pace: next})}/>;
+    onChosen={next => change({pace: next})}/>;
 };

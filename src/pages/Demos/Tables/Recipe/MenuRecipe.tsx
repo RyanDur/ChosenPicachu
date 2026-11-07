@@ -1,11 +1,10 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../types';
 import {FC} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
-import {defaultDials, paceParam} from '../../Controls';
+import {useControls} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {tablesDials, World} from '../params';
+import {World} from '../params';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
@@ -344,7 +343,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 
 export const MenuRecipe: FC = () => {
   const {pace, world} =
-    useSearchParamsObject({pace: paceParam, world: tablesDials.world}, {...defaultDials, ...tablesDials.defaults});
+    useControls();
   const build: Build = {
     world,
     source: headerSources[pace],

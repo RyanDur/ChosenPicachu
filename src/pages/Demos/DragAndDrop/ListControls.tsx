@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Controls, ControlsProps, Copy} from '../Controls';
+import {Controls, Copy} from '../Controls';
 import {capitalized} from '../capitalized';
 
 const copy: Copy = {
@@ -20,4 +20,4 @@ const copy: Copy = {
   }
 };
 
-export const ListControls: FC<ControlsProps> = props => <Controls copy={copy} {...props}/>;
+export const ListControls: FC = () => <Controls copy={copy}/>;

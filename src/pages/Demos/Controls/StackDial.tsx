@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useSearchParamsObject} from '@components/search-params';
-import {stackParam} from '@components/Banners/params';
+import {useControls} from './useControls';
 
 export const StackDial: FC<{name: string}> = ({name}) => {
-  const {stack = 'down', updateSearchParams} = useSearchParamsObject({stack: stackParam});
+  const {stack, change} = useControls();
   return <PillGlider label="stack"
     name={name}
     options={[
@@ -14,5 +13,5 @@ export const StackDial: FC<{name: string}> = ({name}) => {
       {display: 'Right', value: 'right'}
     ]}
     chosen={stack}
-    onChosen={next => updateSearchParams({stack: next})}/>;
+    onChosen={next => change({stack: next})}/>;
 };

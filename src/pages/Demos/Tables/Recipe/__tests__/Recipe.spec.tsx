@@ -47,7 +47,7 @@ describe('the drag sort recipe', () => {
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
-    render(<TestApp at="/"><Recipe/><TableControls world="react"/></TestApp>);
+    render(<TestApp at="/"><Recipe/><TableControls/></TestApp>);
     const recipe = await tablesTab().recipe('drag sort');
     await recipeFolds.press(recipe, 'The trader can sort by column');
     await recipeFolds.press(recipe, 'The trader can sort by row');
@@ -63,7 +63,7 @@ describe('the drag sort recipe', () => {
   });
 
   test('with no dials in the address, the recipe teaches the build the table controls read out', async () => {
-    render(<TestApp at="/"><Recipe/><TableControls world="react"/></TestApp>);
+    render(<TestApp at="/"><Recipe/><TableControls/></TestApp>);
     const recipe = await tablesTab().recipe('drag sort');
 
     await recipeFolds.press(recipe, 'The trader can sort by column');

@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useSearchParamsObject} from '@components/search-params';
-import {enterParam} from '@components/Banners/params';
+import {useControls} from './useControls';
 
 export const EntranceDial: FC<{name: string}> = ({name}) => {
-  const {enter = 'above', updateSearchParams} = useSearchParamsObject({enter: enterParam});
+  const {enter, change} = useControls();
   return <PillGlider label="entrance"
     name={name}
     options={[
@@ -14,5 +13,5 @@ export const EntranceDial: FC<{name: string}> = ({name}) => {
       {display: 'Right', value: 'right'}
     ]}
     chosen={enter}
-    onChosen={next => updateSearchParams({enter: next})}/>;
+    onChosen={next => change({enter: next})}/>;
 };
