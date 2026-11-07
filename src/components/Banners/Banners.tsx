@@ -3,13 +3,12 @@ import {maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
 import {useBanners} from './useBanners';
-import {alignParam, enterParam, sideParam, stackParam} from './params';
+import {bannerDials} from './bannerDials';
 import './Banners.css';
 
 export const Banners: FC = () => {
   const {banners, lower} = useBanners();
-  const {side = 'top', align = 'center', enter = 'above', stack = 'down'} =
-    useSearchParamsObject({side: sideParam, align: alignParam, enter: enterParam, stack: stackParam});
+  const {side, align, enter, stack} = useSearchParamsObject(bannerDials.decoders, bannerDials.defaults);
   const [leaving, setLeaving] = useState<readonly string[]>([]);
 
   useEffect(() => {

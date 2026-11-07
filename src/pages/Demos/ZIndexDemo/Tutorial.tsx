@@ -1,9 +1,8 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../types';
 import {FC, useId} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
-import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners/params';
 import {Stories} from '../Recipe';
+import {useControls} from '../Controls';
 import {useArrival} from '@components/OpeningFragment';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
@@ -11,8 +10,7 @@ import {MultipleRecipe} from './Recipe/MultipleRecipe';
 import '../Recipe/Recipe.css';
 
 export const TopLayerTutorial: FC = () => {
-  const {side = 'top', align = 'center', enter = 'above', stack = 'down', updateSearchParams} =
-    useSearchParamsObject({side: sideParam, align: alignParam, enter: enterParam, stack: stackParam});
+  const {side, align, enter, stack, change} = useControls();
   useArrival();
 
   const titled = `tutorials${useId()}`;
@@ -75,10 +73,10 @@ export const TopLayerTutorial: FC = () => {
       step. The links go to MDN, if you want more.
     </p>
     <BannerControls side={side} align={align} enter={enter} stack={stack}
-      onSideChosen={next => updateSearchParams({side: next})}
-      onAlignChosen={next => updateSearchParams({align: next})}
-      onEnterChosen={next => updateSearchParams({enter: next})}
-      onStackChosen={next => updateSearchParams({stack: next})}/>
+      onSideChosen={next => change({side: next})}
+      onAlignChosen={next => change({align: next})}
+      onEnterChosen={next => change({enter: next})}
+      onStackChosen={next => change({stack: next})}/>
     <section aria-label="build the banners yourself" className="build-steps">
       <Stories>
         <TopLayerRecipe/>

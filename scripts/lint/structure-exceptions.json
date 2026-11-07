@@ -1,6 +1,5 @@
 {
   "one-export": [
-    "src/components/Banners/params.ts",
     "src/components/Banners/raising.ts",
     "src/components/DragSortableTable/actions.ts",
     "src/components/DragSortableTable/arrangement.ts",
@@ -408,10 +407,8 @@
     "src/pages/Demos/Tables/Recipe/steps/tells.tsx",
     "src/pages/Demos/Tables/Recipe/steps/vertical.tsx",
     "src/pages/Demos/Tables/Tutorials.tsx",
-    "src/pages/Demos/ZIndexDemo/BannerControls.tsx",
     "src/pages/Demos/ZIndexDemo/BannerExplained.tsx",
     "src/pages/Demos/ZIndexDemo/ContextChooser.tsx",
-    "src/pages/Demos/ZIndexDemo/Recipe/MultipleRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/TrappedMenu.tsx",
     "src/pages/Demos/ZIndexDemo/Tutorial.tsx",
