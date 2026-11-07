@@ -1,7 +1,7 @@
 import accordionsCss from '../Accordions.css?frame';
 import scaffold from './fold.html?raw';
 import foldJs from './fold.main.ts?frame';
-import {Sheet, siteSheets} from '../../Stage/cascade';
+import {Sheet, siteSheets} from '../../Stage';
 
 export const sheets: Sheet[] = [...siteSheets, {name: 'Accordions.css', css: accordionsCss}];
 

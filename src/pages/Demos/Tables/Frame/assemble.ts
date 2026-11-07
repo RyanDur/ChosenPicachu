@@ -10,7 +10,7 @@ import aggregationsCss from '../Aggregations.css?frame';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
 import {startingTable} from './starting';
-import {Sheet, siteSheets} from '../../Stage/cascade';
+import {Sheet, siteSheets} from '../../Stage';
 
 export const sheets: Sheet[] = [
   ...siteSheets,
