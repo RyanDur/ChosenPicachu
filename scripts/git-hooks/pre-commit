@@ -5,17 +5,19 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-# a commit on a verify/<issue> branch runs nothing here: the branch's push runs the gates in CI
-# (AGENTS.md, "Commits and pushes"); a commit on main still runs them all
-if [[ "$(git branch --show-current)" == verify/* ]]; then
-  echo "pre-commit: verify branch, CI runs the gates."
-  exit 0
-fi
-
-echo "pre-commit: oxlint + stylelint + eslint stylistic + tsc + vitest..."
+echo "pre-commit: oxlint + stylelint + eslint stylistic..."
 npm run lint
 npm run lint:css
 npm run lint:style
+
+# on a verify/<issue> branch the linters are the whole hook: they take seconds and catch what is in the file now,
+# and the branch's push runs the types and the tests in CI (AGENTS.md, "Commits and pushes")
+if [[ "$(git branch --show-current)" == verify/* ]]; then
+  echo "pre-commit: verify branch, CI runs the types and the tests."
+  exit 0
+fi
+
+echo "pre-commit: tsc + vitest..."
 npx tsc -b
 npx vitest run --reporter=dot
 echo "pre-commit: clean."
