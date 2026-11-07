@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+      # a dev pushes a card's sha to verify/<issue> before Accepted: the unit tests, the journeys and the review run;
+      # Lighthouse, pages and smoke run from main only
+      - 'verify/**'
   workflow_dispatch:
     inputs:
       review_from:
@@ -89,6 +92,10 @@ jobs:
           REVIEW_ASKED_FROM: ${{ inputs.review_from }}
           REVIEW_PUSHED_FROM: ${{ github.event.before }}
         run: |
+          if [ "$GITHUB_REF" != refs/heads/main ] && [ -z "$REVIEW_ASKED_FROM" ]; then
+            REVIEW_ASKED_FROM=$(git merge-base origin/main HEAD)
+            export REVIEW_ASKED_FROM
+          fi
           REVIEW_BEFORE=$(node scripts/review/since.mjs)
           echo "REVIEW_BEFORE=$REVIEW_BEFORE" >> "$GITHUB_ENV"
       - name: The home page reviews the code
@@ -114,6 +121,7 @@ jobs:
 
   pages:
     needs: journeys
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-26.04
     concurrency:
       group: github-pages
@@ -221,6 +229,7 @@ jobs:
 
   lighthouse:
     needs: build_test
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
