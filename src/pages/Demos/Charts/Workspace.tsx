@@ -6,8 +6,8 @@ import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
 import {lampOf, statusCopy} from './live-trades';
 import {classNames} from '@components/class-names';
-import {useDemosSelector} from '../Provider';
-import {selectFeedStatus, selectLiveTrades} from '../store';
+import {marketSelectors} from '../Market';
+import {useMarketSelector} from '../Market/Trading';
 import {useDesk} from './useDesk';
 import {seatAfterRemoval} from './desk';
 import {useChartTravel} from './useChartTravel';
@@ -35,8 +35,8 @@ type Props = {
 };
 
 export const Workspace: FC<Props> = ({product}) => {
-  const trades = useDemosSelector(selectLiveTrades);
-  const status = useDemosSelector(selectFeedStatus);
+  const trades = useMarketSelector(marketSelectors.liveTrades);
+  const status = useMarketSelector(marketSelectors.feedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
   const [removal, setRemoval] = useState<Maybe<{at: number; stood: number}>>(nothing());

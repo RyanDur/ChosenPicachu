@@ -1,10 +1,11 @@
 import {empty, streaming} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
-import {decodeTrade, subscribeTo} from './Charts/coinbase';
-import {periodCandles, periodQuery} from './Charts/coinbase/history';
-import {Period} from './Charts/period';
-import {recentTrades} from './Tables/Aggregations/recent-trades';
-import {DemosAction, DemosMiddleware, candlesArrived, candlesRefused, feedFailed, feedOpened, historyArrived, tradeArrived} from './store';
+import {decodeTrade, subscribeTo} from '../Charts/coinbase';
+import {periodCandles, periodQuery} from '../Charts/coinbase/history';
+import {Period} from '../Charts/period';
+import {recentTrades} from '../Tables/Aggregations/recent-trades';
+import {MarketAction, marketActions} from './marketActions';
+import {MarketMiddleware} from './marketStore';
 
 export type Exchange = {
   tradeFeed: string;
@@ -20,12 +21,12 @@ export type FeedTrouble =
   | {type: 'historyRefused'; cause: HTTPError}
   | {type: 'candlesRefused'; cause: HTTPError};
 
-type Dispatch = (action: DemosAction) => void;
+type Dispatch = (action: MarketAction) => void;
 type Trouble = (trouble: FeedTrouble) => void;
 
 const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
   const fetching = recentTrades(base, product)
-    .onSuccess(trades => dispatch(historyArrived(trades)))
+    .onSuccess(trades => dispatch(marketActions.historyArrived(trades)))
     .onFailure(cause => onTrouble({type: 'historyRefused', cause}));
   return () => fetching.cancel();
 };
@@ -37,13 +38,13 @@ const candlesFor = (
   onTrouble: Trouble
 ): Closer => {
   if (empty(tradeHistory)) {
-    dispatch(candlesRefused(period));
+    dispatch(marketActions.candlesRefused(period));
     return () => undefined;
   }
   const fetching = periodCandles(tradeHistory, tradeProduct, periodQuery(period))
-    .onSuccess(candles => dispatch(candlesArrived(period, candles)))
+    .onSuccess(candles => dispatch(marketActions.candlesArrived(period, candles)))
     .onFailure(cause => {
-      dispatch(candlesRefused(period));
+      dispatch(marketActions.candlesRefused(period));
       onTrouble({type: 'candlesRefused', cause});
     });
   return () => fetching.cancel();
@@ -61,21 +62,21 @@ const opened = (
   const stream = streaming(tradeFeed, (): FeedTrouble => ({type: 'handshakeRefused'}))
     .onOpen(socket => {
       socket.send(subscribeTo(tradeProduct));
-      dispatch(feedOpened());
+      dispatch(marketActions.feedOpened());
     })
-    .onMessage(event => decodeTrade(event.data).map(trade => dispatch(tradeArrived(trade))))
+    .onMessage(event => decodeTrade(event.data).map(trade => dispatch(marketActions.tradeArrived(trade))))
     .onClose(() => {
-      dispatch(feedFailed());
+      dispatch(marketActions.feedFailed());
       onTrouble({type: 'hungUp'});
     })
     .onFailure(trouble => {
-      dispatch(feedFailed());
+      dispatch(marketActions.feedFailed());
       onTrouble(trouble);
     });
   return [...history, () => stream.close()];
 };
 
-export const exchange = (env: Exchange, onTrouble: Trouble): DemosMiddleware => api => {
+export const exchange = (env: Exchange, onTrouble: Trouble): MarketMiddleware => api => {
   let closers: readonly Closer[] = [];
   const asked = new Map<Period, Closer>();
   return next => action => {

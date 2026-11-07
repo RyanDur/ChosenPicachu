@@ -5,7 +5,7 @@ import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
-import {columnsOf, rowsOf} from '@pages/Demos/store';
+import {arrangedView} from '@pages/Demos/Market';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
@@ -32,7 +32,7 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Tabl
     arrangementOf(measures.map(({name}) => name), rows.map(windowOf)));
   const arranged = arrangementReducer(arrangement, arrived(rows.map(windowOf)));
 
-  return <Table caption="live aggregations" {...dials} columns={columnsOf(arranged)} rows={rowsOf(arranged, rows)}
+  return <Table caption="live aggregations" {...dials} columns={arrangedView.columnsOf(arranged)} rows={arrangedView.rowsOf(arranged, rows)}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
     onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;

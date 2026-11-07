@@ -10,7 +10,7 @@ export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingF
 export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/actions';
 export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 export {tableStore} from '@components/DragSortableTable/store';
-export {demosStore, feedRequested, selectColumns, selectRows} from '@pages/Demos/store';
+export {marketActions, marketSelectors, marketStore} from '@pages/Demos/Market';
 export {landingReport, moveReport} from '@components/DragSortableTable/report';
 
 export type MountedTable = {

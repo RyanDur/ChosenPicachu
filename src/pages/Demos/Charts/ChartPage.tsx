@@ -2,8 +2,8 @@ import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {DemoTopics, demoAddress} from '../types';
 import {TabLink} from '@pages/Demos/TabLink';
-import {useDemosSelector} from '../Provider';
-import {selectLiveTrades} from '../store';
+import {marketSelectors} from '../Market';
+import {useMarketSelector} from '../Market/Trading';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -25,16 +25,16 @@ type Feature = {
 
 const LivePrice: FC = () => {
   const {periodOf, choosePeriod} = useDesk();
-  return <PriceChart trades={useDemosSelector(selectLiveTrades)}
+  return <PriceChart trades={useMarketSelector(marketSelectors.liveTrades)}
     period={periodOf('price')} onPeriodChosen={period => choosePeriod('price', period)}/>;
 };
 const LiveCandles: FC = () => {
   const {periodOf, choosePeriod} = useDesk();
-  return <Candles trades={useDemosSelector(selectLiveTrades)}
+  return <Candles trades={useMarketSelector(marketSelectors.liveTrades)}
     period={periodOf('candles')} onPeriodChosen={period => choosePeriod('candles', period)}/>;
 };
-const LivePressure: FC = () => <Pressure trades={useDemosSelector(selectLiveTrades)}/>;
-const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
+const LivePressure: FC = () => <Pressure trades={useMarketSelector(marketSelectors.liveTrades)}/>;
+const LivePie: FC = () => <Pie trades={useMarketSelector(marketSelectors.liveTrades)}/>;
 
 const features: Record<ChartKind, Feature> = {
   price: {

@@ -22,7 +22,7 @@ import moneySource from './money.ts?sample';
 import slotsSource from './slots.ts?sample';
 import coinbaseSource from './coinbase/index.ts?sample';
 import historySource from './coinbase/history.ts?sample';
-import demosSource from '@pages/Demos/store.ts?sample';
+import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import liveTradesSource from './live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
 import workspaceSource from './Workspace.tsx?sample';
@@ -67,7 +67,7 @@ const PriceStory: FC = () =>
             ...carve.unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...carve.unit(coinbaseSource, 'export const decodeTrade'), gap,
             ...carve.unit(liveTradesSource, 'export const LATEST_TRADES_CAP'), gap,
-            ...carve.unit(demosSource, 'const tradesReducer')
+            ...carve.unit(marketSliceSource, 'const tradesReducer')
           ]}/>
         </Codes>
       </Step>
@@ -82,7 +82,7 @@ const PriceStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(historySource, 'export const periodCandles'), gap,
-            ...carve.unit(demosSource, 'const candlesReducer'), gap,
+            ...carve.unit(marketSliceSource, 'const candlesReducer'), gap,
             ...carve.unit(candlesHook, 'export const usePeriodCandles'), gap,
             ...carve.unit(shapesSource, 'export const mergeLive')
           ]}/>

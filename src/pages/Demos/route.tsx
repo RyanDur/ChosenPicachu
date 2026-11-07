@@ -8,7 +8,7 @@ import NoSuchRoom from '@pages/NoRoom/route';
 import names from '@pages/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';
-import {Trading} from './Trading';
+import {Trading} from './Market/Trading';
 import {Tutorial, tableTutorials} from './Tables';
 
 const tabHeader = (topic: DemoTopics) => <Header title={`Demos ${topicNames[topic]}`} listed={names.demos[topic]}/>;

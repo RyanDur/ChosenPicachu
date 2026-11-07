@@ -4,16 +4,16 @@ import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials, useControls} from '../../Controls';
 import {TableFrame, warmed} from '../Frame/TableFrame';
-import {useDemosDispatch, useDemosSelector} from '../../Provider';
-import {selectColumns, selectRows} from '../../store';
+import {marketSelectors} from '../../Market';
+import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import '../Aggregations.css';
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
-  const dispatch = useDemosDispatch();
-  const columns = useDemosSelector(selectColumns);
-  const rows = useDemosSelector(selectRows);
+  const dispatch = useMarketDispatch();
+  const columns = useMarketSelector(marketSelectors.columns);
+  const rows = useMarketSelector(marketSelectors.rows);
   return <Table caption="Live aggregations by window" origin={origin} motion={motion} columns={columns} rows={rows}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}

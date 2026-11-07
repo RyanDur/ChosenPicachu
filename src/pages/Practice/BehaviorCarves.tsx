@@ -1,13 +1,13 @@
 import {FC} from 'react';
 import storeSource from '@components/store.ts?sample';
 import actionsSource from '@components/DragSortableTable/actions.ts?sample';
-import demosStoreSource from '@pages/Demos/store.ts?sample';
+import marketActionsSource from '@pages/Demos/Market/marketActions.ts?sample';
 import reducerSource from '@components/DragSortableTable/reducer.ts?sample';
 import tableStateSource from '@components/DragSortableTable/table-state.ts?sample';
 import reportSource from '@components/DragSortableTable/report.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
-import exchangeSource from '@pages/Demos/exchange.ts?sample';
+import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import recentTradesSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?sample';
 import coinbaseSource from '@pages/Demos/Charts/coinbase/index.ts?sample';
 import useDragSortableSource from '@components/DragSortableTable/useDragSortable.ts?sample';
@@ -22,7 +22,7 @@ import {CodeFile, Sample} from '@pages/Demos/Recipe/sample';
 const reducerType = carve.span(storeSource, 'export type Reducer', '(state, action) => reducers.reduce');
 const lifted = carve.span(actionsSource, 'export const lifted', 'export const lifted');
 const dropped = carve.span(actionsSource, 'export const dropped', 'export const dropped');
-const tradeArrived = carve.span(demosStoreSource, 'export const tradeArrived', 'export const tradeArrived');
+const tradeArrived = carve.span(marketActionsSource, 'tradeArrived: trade =>', 'tradeArrived: trade =>');
 const tableReducer = carve.span(reducerSource, 'const answering', 'isTableAction(action) ? answering');
 
 export const ReducerCarve: FC = () => <Snippet label="TS" lines={reducerType}/>;
@@ -72,7 +72,7 @@ const fromTheSocket = '.onMessage(event =>';
 export const ExchangeCarve: FC = () => <Snippet label="TS" lines={[
   ...carve.span(exchangeSource, fromTheSocket, fromTheSocket),
   lines.aside('// …'),
-  ...carve.span(exchangeSource, '.onFailure(cause => {', 'dispatch(candlesRefused(period));')
+  ...carve.span(exchangeSource, '.onFailure(cause => {', 'dispatch(marketActions.candlesRefused(period));')
 ]}/>;
 
 const reactHand = 'const [hand] = useState(() => tableStore());';

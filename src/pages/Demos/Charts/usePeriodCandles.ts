@@ -1,15 +1,15 @@
 import {useEffect} from 'react';
 import {Period} from './period';
 import {PeriodHistory} from './period-history';
-import {useDemosDispatch, useDemosSelector} from '../Provider';
-import {candlesAsked, periodHistoryOf} from '../store';
+import {marketActions, marketSelectors} from '../Market';
+import {useMarketDispatch, useMarketSelector} from '../Market/Trading';
 
 export const usePeriodCandles = (period: Period): PeriodHistory => {
-  const dispatch = useDemosDispatch();
+  const dispatch = useMarketDispatch();
 
   useEffect(() => {
-    dispatch(candlesAsked(period));
+    dispatch(marketActions.candlesAsked(period));
   }, [dispatch, period]);
 
-  return useDemosSelector(periodHistoryOf(period));
+  return useMarketSelector(marketSelectors.periodHistoryOf(period));
 };

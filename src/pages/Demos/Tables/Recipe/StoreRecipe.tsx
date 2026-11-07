@@ -10,9 +10,10 @@ import storeSource from '@components/store.ts?sample';
 import contextSource from '@components/DragSortableTable/context.ts?sample';
 import selectorsSource from '@components/DragSortableTable/selectors.ts?sample';
 import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
-import demosSource from '@pages/Demos/store.ts?sample';
-import exchangeSource from '@pages/Demos/exchange.ts?sample';
-import openingSource from '@pages/Demos/useExchange.ts?sample';
+import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
+import marketStoreSource from '@pages/Demos/Market/marketStore.ts?sample';
+import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
+import openingSource from '@pages/Demos/Market/Trading/useExchange.ts?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
@@ -57,18 +58,18 @@ const OneState: FC<{world: World}> = ({world}) =>
           order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(demosSource, 'export type DemosState'), gap,
+          ...carve.unit(marketSliceSource, 'export type MarketState'), gap,
           ...carve.unit(stateSource, 'export type TableState'), gap,
           ...carve.unit(storeSource, 'export type Store'),
           lines.aside('// a value, a dispatch, a subscribe; the whole store, and the page only names its state')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.unit(demosSource, 'export const demosStore')
+            ...carve.unit(marketStoreSource, 'export const marketStore')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(buildSrc, 'export const dragSortable = '), gap,
-            ...carve.span(bootSource, 'const page = demosStore(', 'page.dispatch(feedRequested());')
+            ...carve.span(bootSource, 'const page = marketStore(', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -119,7 +120,7 @@ const ActionsAreData: FC = () =>
           lines.aside('// the record says what happened; the creator is named for the verb')
         ]}/>
         <Snippet label="TS" lines={[
-          ...carve.unit(demosSource, 'export const demosSlice'), gap,
+          ...carve.unit(marketSliceSource, 'export const marketSlice'), gap,
           ...carve.unit(storeSource, 'export type Slice'), gap,
           ...carve.unit(arrangementSource, 'const answering = '), gap,
           ...carve.unit(reducerSource, 'export const tableReducer'),
@@ -207,7 +208,7 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
             ...carve.unit(openingSource, 'export const useExchange')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(bootSource, 'page.dispatch(feedRequested());', 'page.dispatch(feedRequested());')
+            ...carve.span(bootSource, 'page.dispatch(marketActions.feedRequested());', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>

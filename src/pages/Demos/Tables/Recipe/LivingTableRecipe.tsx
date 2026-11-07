@@ -6,8 +6,8 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {tablesDials, World} from '../params';
 import {TheImplementation} from './steps';
 import {StoreStory} from './StoreRecipe';
-import exchangeSource from '@pages/Demos/exchange.ts?sample';
-import demosSource from '@pages/Demos/store.ts?sample';
+import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
+import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?sample';
 import dealSource from '../Builds/EagerTable/EagerTable.tsx?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
@@ -246,7 +246,7 @@ const FlowStory: FC<{world: World}> = ({world}) =>
           <Codes>
             <Snippet label="TS" lines={[
               ...carve.unit(exchangeSource, 'const stream = streaming('), gap,
-              ...carve.unit(demosSource, 'const tradesReducer')
+              ...carve.unit(marketSliceSource, 'const tradesReducer')
             ]}/>
           </Codes>
         </Reveal>

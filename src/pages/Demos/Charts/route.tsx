@@ -5,7 +5,7 @@ import {Page} from '@pages/BasePage/Page';
 import {PageError} from '@pages/PageError';
 import names from '@pages/names.json';
 import {isChartKind} from './kinds';
-import {Trading} from '../Trading';
+import {Trading} from '../Market/Trading';
 import {ChartPage} from './ChartPage';
 
 const ChartsHeader = () => {

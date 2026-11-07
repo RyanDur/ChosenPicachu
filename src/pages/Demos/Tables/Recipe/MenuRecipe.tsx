@@ -10,7 +10,7 @@ import headerCss from '@components/DragSortableTable/Header.css?sample';
 import sortingSource from '@components/DragSortableTable/sorting.ts?sample';
 import tableSource from '../Frame/table.html?sample';
 import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
-import demosSource from '@pages/Demos/store.ts?sample';
+import marketSelectorsSource from '@pages/Demos/Market/marketSelectors.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
 import frameColumns from '../Frame/table/columns.ts?sample';
 import {buildSources} from '../Frame/builds/sources';
@@ -204,7 +204,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
-                ...carve.unit(demosSource, 'export const selectColumns')
+                ...carve.span(marketSelectorsSource, 'columns: ({arrangement})', 'columns: ({arrangement})')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
@@ -246,7 +246,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             <Snippet label="TS" lines={[
               ...carve.unit(sortingSource, 'export const ranked'), gap,
               ...carve.unit(arrangementSource, 'export const standingOf'), gap,
-              ...carve.unit(demosSource, 'export const selectRows'),
+              ...carve.span(marketSelectorsSource, 'rows: ({arrangement, trades})', 'rows: ({arrangement, trades})'),
               lines.aside('// both worlds ask the arrangement the same question')
             ]}/>
           </Codes>

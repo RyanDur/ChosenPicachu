@@ -2,8 +2,9 @@ import {useEffect, useState} from 'react';
 import {useBanners} from '@components/Banners';
 import {useEnv} from '@components/Env';
 import {troubleWith} from '@transport/trouble';
-import {exchange, FeedTrouble} from './exchange';
-import {DemosStore, demosStore, feedReleased, feedRequested} from './store';
+import {exchange, FeedTrouble} from '../exchange';
+import {marketActions} from '../marketActions';
+import {MarketStore, marketStore} from '../marketStore';
 
 const said = (trouble: FeedTrouble): string => {
   switch (trouble.type) {
@@ -18,14 +19,14 @@ const said = (trouble: FeedTrouble): string => {
   }
 };
 
-export const useExchange = (): DemosStore => {
+export const useExchange = (): MarketStore => {
   const env = useEnv();
   const {raise} = useBanners();
-  const [store] = useState(() => demosStore(exchange(env, trouble => raise(said(trouble)))));
+  const [store] = useState(() => marketStore(exchange(env, trouble => raise(said(trouble)))));
 
   useEffect(() => {
-    store.dispatch(feedRequested());
-    return () => store.dispatch(feedReleased());
+    store.dispatch(marketActions.feedRequested());
+    return () => store.dispatch(marketActions.feedReleased());
   }, [store]);
 
   return store;

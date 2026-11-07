@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
-import {Trading} from '@pages/Demos/Trading';
+import {Trading} from '@pages/Demos/Market/Trading';
 import {aggregations, tableControls} from '@pages/Demos/Tables/__test_support';
 import {TableControls} from '../../TableControls';
 import {Aggregations} from '../Aggregations';
