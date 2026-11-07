@@ -5,6 +5,7 @@ const shown = (): string =>
 
 export const appAddress = {
   shown,
+  fragment: (): string => screen.getByRole('status', {name: 'url fragment'}).textContent,
   drawn: async (): Promise<string> => {
     await screen.findByRole('status', {name: 'url path'});
     return shown();

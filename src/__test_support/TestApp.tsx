@@ -36,6 +36,7 @@ const Probes: FC = () => {
     <Outlet/>
     <output aria-label="url path">{pathname}</output>
     <output aria-label="url search">{search}</output>
+    <output aria-label="url fragment">{hash}</output>
     <ul aria-label="errors reported">{errors.map((error, at) => <li key={`${at} ${error}`}>{error}</li>)}</ul>
   </>;
 };

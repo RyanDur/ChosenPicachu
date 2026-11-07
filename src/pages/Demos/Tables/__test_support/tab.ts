@@ -11,7 +11,7 @@ type Headers = {
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
-const tutorialLink = async (name: string): Promise<HTMLElement> =>
+const tutorialLink = async (name: string | RegExp): Promise<HTMLElement> =>
   within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
 const headersOf = (holder: HTMLElement): Headers =>
   ({columns: within(holder).getAllByRole('columnheader'), rows: within(holder).getAllByRole('rowheader')});
@@ -22,6 +22,7 @@ export const tablesTab = () => ({
   tutorialLink,
   openTutorial: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
+  readTheStationFirst: async (): Promise<void> => userEvent.click(await tutorialLink(/^station \d+ of the tables tab$/)),
   place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
