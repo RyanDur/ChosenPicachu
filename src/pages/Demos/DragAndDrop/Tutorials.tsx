@@ -1,5 +1,5 @@
 import {FC, useId} from 'react';
-import {Clues, Design, Slices} from '../Recipe/Arc';
+import {Clues, Design, Slices} from '../Recipe';
 import {DialNote, Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
 import {ListControls} from './ListControls';

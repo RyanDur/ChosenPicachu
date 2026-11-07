@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Clues} from '../../Recipe/Arc';
+import {Clues} from '../../Recipe';
 
 const clues: [string, string][] = [
   ['keep themselves current', 'The data arrives over time. Nothing here is a page you load once.'],

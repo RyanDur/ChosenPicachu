@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Design} from '../../Recipe/Arc';
+import {Design} from '../../Recipe';
 
 const measures = ['trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];

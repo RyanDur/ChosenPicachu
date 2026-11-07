@@ -4,7 +4,7 @@ import {useSearchParamsObject, useSearchParamsOnceHydrated} from '@components/se
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {Sample} from '../../Recipe/sample';
-import {storyOpenedIn} from '../../Recipe/Story';
+import {storyKeys} from '../../Recipe';
 import {multipleStory, slideInStep} from './MultipleRecipe';
 import {AlignDial, SideDial} from '../../Controls';
 import {fixedBannerLosesHeading, popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
@@ -95,7 +95,7 @@ export const TopLayerRecipe: FC = () => {
           <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
             that <cite>The user can have multiple banners</cite> explains in its
             step{' '}
-          <Link className="signpost" to={{search: `?${storyOpenedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
+          <Link className="signpost" to={{search: `?${storyKeys.openedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
             from off screen</cite></Link>.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that

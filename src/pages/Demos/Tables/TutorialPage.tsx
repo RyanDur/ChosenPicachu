@@ -9,7 +9,7 @@ import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
-import {stationId} from '../Recipe';
+import {stations} from '../Recipe';
 import './TutorialPage.css';
 
 const bodies: Record<Tutorial, FC> = {
@@ -43,7 +43,7 @@ export const TutorialPage: FC = () => {
         <Link className="signpost" to={{
           pathname: demoAddress(DemoTopics.tables),
           search: searchFromShown({}),
-          hash: stationId(tableTutorials.startingStation)
+          hash: stations.idOf(tableTutorials.startingStation)
         }}>
           station {tableTutorials.startingStation} of the tables tab
         </Link>{' '}

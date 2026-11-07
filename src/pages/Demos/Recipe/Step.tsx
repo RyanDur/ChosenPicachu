@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {useRanks} from './ranks';
+import {useRanks} from './useRanks';
 
 type Props = PropsWithChildren<{
   title: string;

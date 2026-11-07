@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Slices} from '../../Recipe/Arc';
+import {Slices} from '../../Recipe';
 
 export const StorySlices: FC = () =>
   <Slices can="The trader can watch the live market in windows they arrange"

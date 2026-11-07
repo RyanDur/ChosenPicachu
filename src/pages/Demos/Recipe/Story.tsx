@@ -1,17 +1,8 @@
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
-import {StoryKey, storyAnchor} from './story-anchor';
+import {storyKeys} from './storyKeys';
 import {useSearchParamsOnceHydrated} from '@components/search-params';
-import {useRanks} from './ranks';
+import {useRanks} from './useRanks';
 import {Steps} from './Steps';
-
-const openedIn = (params: URLSearchParams, param: string): Set<string> =>
-  new Set((params.get(param) ?? '').split(',').filter(part => part !== ''));
-
-export const storyOpenedIn = (params: URLSearchParams, {param, id}: StoryKey): URLSearchParams => {
-  const next = new URLSearchParams(params);
-  next.set(param, [...openedIn(params, param).add(id)].join(','));
-  return next;
-};
 
 const stepsIn = (children: ReactNode): number =>
   Children.toArray(children).reduce<number>((count, child) => {
@@ -35,7 +26,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
   const toggled = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     setSearchParams(previous => {
-      const next = openedIn(previous, param);
+      const next = storyKeys.openIn(previous, param);
       if (next.has(id)) {
         next.delete(id);
       } else {
@@ -51,10 +42,10 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
     }, {replace: true});
   };
   return <li tabIndex={-1}>
-    <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={storyAnchor({param, id})}>
+    <details className="arc" open={storyKeys.openIn(searchParams, param).has(id)} aria-labelledby={storyKeys.anchorOf({param, id})}>
       <summary className="opener sub-title-glyph-before" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
-          <Can className="can paragraph bold" id={storyAnchor({param, id})}>{can}</Can>
+          <Can className="can paragraph bold" id={storyKeys.anchorOf({param, id})}>{can}</Can>
           <p className="so-that paragraph italic muted-ink">so that {soThat}</p>
           {steps > 0 && <p className="step-tally caption muted-ink">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
         </hgroup>

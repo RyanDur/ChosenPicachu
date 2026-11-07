@@ -4,8 +4,7 @@ import {useSearchParamsOnceHydrated} from '@components/search-params';
 import {Snippet, lines, carve} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {fixedBannerLosesHeading} from './part-headings';
-import {storyAnchor} from '../Recipe/story-anchor';
-import {storyOpenedIn} from '../Recipe/Story';
+import {storyKeys} from '../Recipe';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
@@ -39,7 +38,7 @@ export const BannerExplained: FC = () => {
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
-          to={{search: `?${storyOpenedIn(searchParams, topLayerStory)}`, hash: storyAnchor(topLayerStory)}}>the
+          to={{search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`, hash: storyKeys.anchorOf(topLayerStory)}}>the
           tutorial below</Link>. It
           opens at the step where the panel becomes a popover and so is shown in the top layer.</p>
       </li>
