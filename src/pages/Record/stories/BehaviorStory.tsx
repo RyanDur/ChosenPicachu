@@ -10,8 +10,8 @@ export const BehaviorStory: FC = () =>
       their properties, and respond to events, we envisioned a much livelier Web
       consisting of pages that acted more like applications.
     </Quotation>
-    <p className="paragraph">Each of Eich’s three verbs is something a script did to a page the server had already
-      sent. What follows is how script went from changing that page, at Netscape in 1995, to holding a program’s state
+    <p className="paragraph">Each of Eich’s three verbs is something a script could do once the server had sent the
+      page. What follows is how script went from changing that page, at Netscape in 1995, to holding a program’s state
       and events.</p>
     <p className="paragraph">In April 1995 Brendan Eich joined Netscape to put a programming language in the browser,
       and in about ten days of May he wrote the interpreter. The need, in his words, was

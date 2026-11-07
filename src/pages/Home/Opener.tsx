@@ -24,7 +24,7 @@ export const Opener: FC = () =>
       standards listen to developers, watch what they build, and adopt what proves itself across the browsers. Putting
       the job where it belongs lets each language do what it already does.</p>
     <p className="thesis paragraph"><Link className="signpost" to={Paths.record}>The Record</Link> tells each
-      language’s history in full in three
+      language’s full history in three
       stories: <Link className="signpost" to={storyAddress('Structure')}>the Structure
         story</Link>, <Link className="signpost" to={storyAddress('Presentation')}>the Presentation
           story</Link> and <Link className="signpost" to={storyAddress('Behavior')}>the Behavior story</Link>. Then
