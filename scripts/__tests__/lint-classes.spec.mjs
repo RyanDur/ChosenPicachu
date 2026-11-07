@@ -1,6 +1,6 @@
 import {ESLint, RuleTester} from 'eslint';
 import {join} from 'node:path';
-import classes from '../lint/classes.mjs';
+import {classes} from '../lint/classes.mjs';
 
 const fancyField = join(process.cwd(), 'src/components/FancyFormElements/Probe.tsx');
 const banners = join(process.cwd(), 'src/components/Banners/Probe.tsx');

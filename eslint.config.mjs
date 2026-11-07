@@ -2,8 +2,9 @@ import stylistic from '@stylistic/eslint-plugin';
 import parser from '@babel/eslint-parser';
 import testingLibrary from 'eslint-plugin-testing-library';
 import playwright from 'eslint-plugin-playwright';
-import classes from './scripts/lint/classes.mjs';
+import {classes} from './scripts/lint/classes.mjs';
 import {bareInlineCode} from './scripts/lint/inline-code.mjs';
+import {readFileSync} from 'node:fs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -60,6 +61,8 @@ const journeys = Object.fromEntries([
   'valid-describe-callback', 'valid-expect', 'valid-expect-in-promise'
 ].map(rule => [`playwright/${rule}`, 'error']));
 
+const routeModules = [...readFileSync('src/routes.ts', 'utf8').matchAll(/'(pages\/[^']+\.tsx)'/g)].map(([, path]) => `src/${path}`);
+
 export default [
   {
     ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**', '.react-router/**']
@@ -114,5 +117,12 @@ export default [
     ignores: ['e2e/looks/**', 'e2e/media/**'],
     plugins: {playwright},
     rules: {...journeys, 'playwright/no-skipped-test': ['error', {allowConditional: true}]}
+  },
+  {
+    files: ['**/*.{js,mjs,ts,tsx}'],
+    ignores: ['src/root.tsx', 'src/routes.ts', ...routeModules, '*.config.{js,mjs,ts}', '**/*.d.ts'],
+    rules: {'no-restricted-exports': ['error', {
+      restrictDefaultExports: {direct: true, named: true, defaultFrom: true, namedFrom: true, namespaceFrom: true}
+    }]}
   }
 ];

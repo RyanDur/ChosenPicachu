@@ -158,7 +158,7 @@ const html = {
   postprocess: messages => messages.flat()
 };
 
-export default {
+export const classes = {
   rules: {'class-defined': classDefined, 'own-class-first': ownClassFirst},
   processors: {html}
 };
