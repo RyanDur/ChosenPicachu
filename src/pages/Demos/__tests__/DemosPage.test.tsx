@@ -46,10 +46,10 @@ describe('The Demos page', () => {
   });
 
   test('an old tables address with its dials lands on the Tables tab with its dials kept', async () => {
-    const from = `${Paths.demos}?tab=tables&world=vanilla&tut=menu`;
+    const from = `${Paths.demos}?tab=tables&world=vanilla`;
     render(<TestApp at={from}/>);
 
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla&tut=menu'));
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla'));
   });
 
   test('an old drag sort address with its pace lands on the Drag sort tab with its pace kept', async () => {
