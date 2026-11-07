@@ -8,7 +8,7 @@ import {useGallery} from '@pages/Gallery/Context';
 import {opening} from '@pages/Gallery/opening';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {art, museumReply, replyChange} from '@pages/Gallery/museums';
+import {art, museumReply} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 import {StandIn} from '@pages/Gallery/StandIn';
@@ -19,21 +19,11 @@ export const ArtPiece = () => {
   const {tab} = useGallery();
   const {id} = useParams<{id: string}>();
 
-  useEffect(() => maybe(id)
-    .map(chosen => {
-      const {cancel} = art.get({id: chosen, source: tab ?? opening.museum})
-        .onPending(pending => pending && dispatch(replyChange.asked()))
-        .onSuccess(answer => dispatch(replyChange.answered(answer)))
-        .onFailure(error => {
-          dispatch(replyChange.refused());
-          raise(troubleWith('the museum')(error));
-        });
-      return () => {
-        cancel();
-        dispatch(replyChange.abandoned());
-      };
-    })
-    .orElse(() => dispatch(replyChange.abandoned())), [id, tab, dispatch, raise]);
+  useEffect(() => museumReply.ask(
+    maybe(id).map(chosen => () => art.get({id: chosen, source: tab ?? opening.museum})),
+    dispatch,
+    error => raise(troubleWith('the museum')(error))
+  ), [id, tab, dispatch, raise]);
 
   return <>
     {museumReply.awaited(easel) && <Loading label="loading piece"/>}

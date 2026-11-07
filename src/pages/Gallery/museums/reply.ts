@@ -1,5 +1,5 @@
-import {Maybe, nothing, some} from '@ryandur/sand';
-import {ReplyChange} from '@pages/Gallery/museums/replyChange';
+import {Maybe, nothing, Result, some} from '@ryandur/sand';
+import {ReplyChange, replyChange} from '@pages/Gallery/museums/replyChange';
 
 export type MuseumReply<Answer> =
   | {reply: 'unasked'; standing: Maybe<Answer>}
@@ -8,12 +8,18 @@ export type MuseumReply<Answer> =
   | {reply: 'refused'};
 
 type Unasked = Extract<MuseumReply<never>, {reply: 'unasked'}>;
+type Question<Answer, Failure> = () => Result.Async<Answer, Failure>;
 
 type MuseumReplies = {
   readonly initial: Unasked;
   readonly reduce: <Answer>(reply: MuseumReply<Answer>, change: ReplyChange<Answer>) => MuseumReply<Answer>;
   readonly standingOf: <Answer>(reply: MuseumReply<Answer>) => Maybe<Answer>;
   readonly awaited: <Answer>(reply: MuseumReply<Answer>) => boolean;
+  readonly ask: <Answer, Failure>(
+    question: Maybe<Question<Answer, Failure>>,
+    dispatch: (change: ReplyChange<Answer>) => void,
+    refused: (failure: Failure) => void
+  ) => () => void;
 };
 
 export const museumReply: MuseumReplies = {
@@ -33,5 +39,20 @@ export const museumReply: MuseumReplies = {
       default: return reply.standing;
     }
   },
-  awaited: ({reply}) => reply === 'unasked' || reply === 'asked'
+  awaited: ({reply}) => reply === 'unasked' || reply === 'asked',
+  ask: (question, dispatch, refused) => question
+    .map(asked => {
+      const {cancel} = asked()
+        .onPending(pending => pending && dispatch(replyChange.asked()))
+        .onSuccess(answer => dispatch(replyChange.answered(answer)))
+        .onFailure(failure => {
+          dispatch(replyChange.refused());
+          refused(failure);
+        });
+      return () => {
+        cancel();
+        dispatch(replyChange.abandoned());
+      };
+    })
+    .orElse(() => dispatch(replyChange.abandoned()))
 };
