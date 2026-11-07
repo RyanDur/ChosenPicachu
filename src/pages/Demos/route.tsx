@@ -11,12 +11,10 @@ import {DemosPage} from './DemosPage';
 import {Trading} from './Trading';
 import {Tutorial, tableTutorials} from './Tables';
 
-const tutorials = tableTutorials();
-
 const tabHeader = (topic: DemoTopics) => <Header title={`Demos ${topicNames[topic]}`} listed={names.demos[topic]}/>;
 
 const tutorialHeader = (tutorial: Tutorial) =>
-  <Header title={`Demos ${topicNames[DemoTopics.tables]} · ${tutorials.nameOf(tutorial)}`} listed={names.tables[tutorial]}/>;
+  <Header title={`Demos ${topicNames[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`} listed={names.tables[tutorial]}/>;
 
 type Shown = {topic: DemoTopics; header: ReactNode};
 
@@ -26,7 +24,7 @@ const tabAt = (pathname: string): Maybe<Shown> =>
 
 const useDemo = (): Maybe<Shown> => {
   const {pathname} = useLocation();
-  return tutorials.at(pathname).either(
+  return tableTutorials.at(pathname).either(
     tutorial => maybe({topic: DemoTopics.tables, header: tutorialHeader(tutorial)}),
     () => tabAt(pathname));
 };

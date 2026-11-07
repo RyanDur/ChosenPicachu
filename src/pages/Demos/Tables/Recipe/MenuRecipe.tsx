@@ -23,8 +23,6 @@ import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const tableDials = tablesDials();
-
 const gap = plain(' ');
 
 type Build = {
@@ -347,7 +345,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 
 export const MenuRecipe: FC = () => {
   const {pace, world} =
-    useSearchParamsObject({pace: paceParam, world: tableDials.world}, {...defaultDials, ...tableDials.defaults});
+    useSearchParamsObject({pace: paceParam, world: tablesDials.world}, {...defaultDials, ...tablesDials.defaults});
   const build: Build = {
     world,
     source: headerSources[pace],

@@ -11,8 +11,6 @@ import {selectColumns, selectRows} from '../../store';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import '../Aggregations.css';
 
-const tableDials = tablesDials();
-
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
   const dispatch = useDemosDispatch();
@@ -35,8 +33,8 @@ const VanillaStage: FC<Dials> = dials => {
 export const Aggregations: FC = () => {
   const {pace, origin, motion, world} =
     useSearchParamsObject(
-      {pace: paceParam, origin: originParam, motion: motionParam, world: tableDials.world},
-      {...defaultDials, ...tableDials.defaults}
+      {pace: paceParam, origin: originParam, motion: motionParam, world: tablesDials.world},
+      {...defaultDials, ...tablesDials.defaults}
     );
   const dials = {pace, origin, motion};
   useEffect(warmed, []);

@@ -22,8 +22,6 @@ import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 
-const tableDials = tablesDials();
-
 const gap = plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
@@ -268,14 +266,14 @@ const FlowStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const StillTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
+  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
   return <section aria-label="the still table" className="build-steps">
     <Stories><StillStory world={world}/></Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
+  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
   return <section aria-label="the living table" className="build-steps">
     <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
   </section>;

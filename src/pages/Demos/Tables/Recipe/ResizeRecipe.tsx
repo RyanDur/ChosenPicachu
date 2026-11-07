@@ -19,8 +19,6 @@ import {TheImplementation} from './steps';
 import {whatACustomPropertyIs, whatTheDomIs} from './definitions';
 import '../../Recipe/Recipe.css';
 
-const tableDials = tablesDials();
-
 const gap = plain(' ');
 
 const ledgerCodes: Record<World, ReactNode> = {
@@ -311,7 +309,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const ResizeRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
+  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
   return <section aria-label="build the drag resize yourself" className="build-steps">
     <Stories><WidenStory world={world}/></Stories>
   </section>;

@@ -10,8 +10,8 @@ type TablesDials = {
   defaults: {world: World; track: Track};
 };
 
-export const tablesDials = (): TablesDials => ({
+export const tablesDials: TablesDials = {
   track: schema.literalUnion('pointer', 'keyboard'),
   world: schema.literalUnion('react', 'vanilla'),
   defaults: {world: 'react', track: 'pointer'}
-});
+};

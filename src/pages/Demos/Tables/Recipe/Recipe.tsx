@@ -8,13 +8,11 @@ import {EagerRecipe} from './EagerRecipe';
 import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
-const tableDials = tablesDials();
-
 export const Recipe: FC = () => {
   const {pace, origin, motion, world, track, updateSearchParams} =
     useSearchParamsObject(
-      {pace: paceParam, origin: originParam, motion: motionParam, world: tableDials.world, track: tableDials.track},
-      {...defaultDials, ...tableDials.defaults}
+      {pace: paceParam, origin: originParam, motion: motionParam, world: tablesDials.world, track: tablesDials.track},
+      {...defaultDials, ...tablesDials.defaults}
     );
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
   return <section aria-label="build the drag sort yourself" className="build-steps">

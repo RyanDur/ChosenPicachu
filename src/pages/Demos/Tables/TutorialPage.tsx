@@ -11,8 +11,6 @@ import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
 import '../Tutorials.css';
 
-const tutorials = tableTutorials();
-
 const bodies: Record<Tutorial, FC> = {
   sort: DragSortTutorial,
   menu: MenuRecipe,
@@ -24,7 +22,7 @@ export const TutorialPage: FC = () => {
   const titled = `tutorial${useId()}`;
   useArrival();
   return useShownTutorial().either(tutorial => {
-    const {number, of} = tutorials.placeOf(tutorial);
+    const {number, of} = tableTutorials.placeOf(tutorial);
     const Body = bodies[tutorial];
     return <section aria-labelledby={titled}>
       <p className="caption">
@@ -33,7 +31,7 @@ export const TutorialPage: FC = () => {
         </Link>
         {` · tutorial ${number} of ${of}`}
       </p>
-      <h2 id={titled} className="title">{tutorials.nameOf(tutorial)}</h2>
+      <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       <Aggregations/>
       <WorldGlider/>
       <WorldNote/>

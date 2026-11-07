@@ -5,10 +5,8 @@ import {tablesDials} from '../params';
 import {TableControls} from '../TableControls';
 import {Recipe} from '../Recipe';
 
-const tableDials = tablesDials();
-
 export const DragSortTutorial: FC = () => {
-  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
+  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
   return <>
     <DialNote reads="table"/>
     <TableControls world={world}/>

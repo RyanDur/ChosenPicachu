@@ -13,8 +13,6 @@ import {WorldGlider, WorldNote} from './World';
 import '../Tutorials.css';
 import './Tutorials.css';
 
-const tutorials = tableTutorials();
-
 export const Tutorials: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   useArrival();
@@ -46,8 +44,8 @@ export const Tutorials: FC = () => {
         <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <ol className="tutorial-links">
-          {tutorials.all().map(tutorial => <li key={tutorial}>
-            <Link className="tutorial-link signpost reachable" to={`${tutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tutorials.nameOf(tutorial)}</Link>
+          {tableTutorials.all().map(tutorial => <li key={tutorial}>
+            <Link className="tutorial-link signpost reachable" to={`${tableTutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tableTutorials.nameOf(tutorial)}</Link>
           </li>)}
         </ol>
       </Station>
