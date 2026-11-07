@@ -1,10 +1,10 @@
 import {has} from '@ryandur/sand';
 import {Art} from '@pages/Gallery/museums/art';
 
-type Fields = string | null | undefined;
+type MuseumField = string | null | undefined;
 type ArtFields = {
-  readonly attributed: (artist: Fields) => Pick<Art, 'artistInfo'>;
-  readonly pictured: (image: Fields) => Pick<Art, 'image'>;
+  readonly attributed: (artist: MuseumField) => Pick<Art, 'artistInfo'>;
+  readonly pictured: (image: MuseumField) => Pick<Art, 'image'>;
 };
 
 export const artFields: ArtFields = {
