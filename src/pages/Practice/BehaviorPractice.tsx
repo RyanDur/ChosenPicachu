@@ -43,7 +43,7 @@ export const BehaviorPractice: FC = () =>
     <h3 className="paragraph bold">What is true and what happened</h3>
     <p className="paragraph">Behavior splits into what is true and what happened. The state is what is
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
-      cannot be worked out from something else. Events are what happened, so I name them in the past tense:
+      nothing else can give. Events are what happened, so I name them in the past tense:
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
       I keep the state in one place, and replacing it is the only way anything on screen changes.</p>
     <p className="paragraph">A reducer is that pure function, and its type says so: it takes the state and an event and
@@ -80,7 +80,7 @@ export const BehaviorPractice: FC = () =>
       <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
       Yaron Minsky.</p>
     <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
-      there when it was written. I wrote small functions so a condition reads in
+      there when I wrote it. I wrote small functions so a condition reads in
       words: <code className="monospaced">has</code>,{' '}
     <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
     <code className="monospaced">notEmpty</code>, from my own library,{' '}
@@ -113,8 +113,8 @@ export const BehaviorPractice: FC = () =>
         sequence of events.”</a> It keeps every event, so the history can be replayed. This store keeps only the state
       each event leaves, so it cannot replay anything, but every change still arrives as an event.</p>
     <h3 className="paragraph bold">Trusted at the boundary</h3>
-    <p className="paragraph">I like to trust my boundaries. A value from a socket or a fetch is unknown until it is
-      checked, so I check it once, where it enters, and the code after that takes it at its type.</p>
+    <p className="paragraph">I like to trust my boundaries. A value from a socket or a fetch is unknown until a decoder
+      checks it, so I check it once, where it enters, and the code after that takes it at its type.</p>
     <p className="paragraph"><a className="signpost" href={schemawax}>schemawax</a>,{' '}
       <a className="signpost" href={schemawax}>“Tiny typed data decoder”</a>, lets me write the shape once. The decoder
       checks a value against that shape, and the type of whatever passes comes from the decoder, so the check and the
@@ -130,7 +130,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">The one place this boundary can throw is <code className="monospaced">JSON.parse</code>,
       and <code className="monospaced">attempt</code>, from sand, turns that throw into nothing.</p>
     <p className="paragraph">The trade is not the only value checked this way. The gallery’s four museums each have a
-      decoder of their own, and each response is typed from its decoder.</p>
+      decoder of their own, and each decoder types its response.</p>
     <h3 className="paragraph bold">When something fails</h3>
     <p className="paragraph">A fetch can fail, and I don’t want every step after it to check.
       sand’s <code className="monospaced">Result</code> is either a success or a failure, and its README says the
@@ -138,8 +138,9 @@ export const BehaviorPractice: FC = () =>
     <code className="monospaced">map</code> and <code className="monospaced">mBind</code> work on a success and let
       a failure pass.</p>
     <TwoTracks/>
-    <p className="paragraph">Here is the request for recent trades. The response is fetched, checked against its
-      decoder and turned into trades. If a step fails, the steps after it do not run:</p>
+    <p className="paragraph">Here is the request for recent trades. <code className="monospaced">recentTrades</code>
+      fetches the response, checks it against its decoder and turns it into trades. If a step fails, the steps after it
+      do not run:</p>
     <RecentTradesCarve/>
     <p className="paragraph">The exchange takes the result that <code className="monospaced">recentTrades</code>{' '}
       returns. A success goes to the reducer as <code className="monospaced">historyArrived</code>. A failure goes to
@@ -150,8 +151,8 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Scott Wlaschin’s 2014 talk <a className="signpost" href={railway}>Railway Oriented
       Programming</a> draws the same idea as a railway, with the success track as
       the <a className="signpost" href={railway}>“happy path”</a>.</p>
-    <p className="paragraph">The boundary, the types and the two tracks work together. Each value is checked where it
-      enters, the types refuse what cannot be, and a failure rides its own track to the edge. So everything the
+    <p className="paragraph">The boundary, the types and the two tracks work together. A decoder checks each value where
+      it enters, the types refuse what cannot be, and a failure rides its own track to the edge. So everything the
       reducer gets is already true, and nothing in it can fail. It may still hear that a fetch was refused or the feed
       failed, as <code className="monospaced">candlesRefused</code> and <code className="monospaced">feedFailed</code>,
       but never why.</p>
@@ -218,13 +219,13 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Nobody checks the state test by eye. Three gates hold the site to it, and the review holds
       one more rule.</p>
     <ul className="practice-list">
-      <li className="paragraph">The core is tested as functions, because it is functions.{' '}
+      <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
         <a className="signpost" href={directoryInRepository('src/components/DragSortableTable/__tests__')}>Four
           specs</a>, <code className="monospaced">sorting</code>, <code className="monospaced">travel</code>,{' '}
         <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>, call the
         table’s code with no page at all, and they run on every commit.
       </li>
-      <li className="paragraph">The shell is tested as journeys, because it touches the world. They drive the tables by
+      <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers and check the order a reader sees and the move report a screen reader
         hears, and{' '}
       <a className="signpost" href={fileInRepository('AGENTS.md')}>“Journeys run as a reader who asks for less

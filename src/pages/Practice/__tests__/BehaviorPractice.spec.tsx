@@ -157,7 +157,7 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linksInItem(/^The core is tested as functions/))
+    expect(practicePage.linksInItem(/^The specs test the core as functions/))
       .toEqual([['Four specs', directoryInRepository('src/components/DragSortableTable/__tests__')]]);
   });
 
@@ -165,7 +165,7 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.quotationAddressIn(/^The shell is tested as journeys/)).toBe(fileInRepository('AGENTS.md'));
+    expect(practicePage.quotationAddressIn(/^The journeys test the shell/)).toBe(fileInRepository('AGENTS.md'));
   });
 
   test('should send before every commit to the pre-commit hook', async () => {

@@ -138,7 +138,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [[message, address]] = practicePage.linksIn(/^Three of the five needs above, place, value and selector, are held by stylelint rules/);
+    const [[message, address]] = practicePage.linksIn(/^Stylelint rules hold three of the five/);
 
     expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -148,7 +148,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [, [message, address]] = practicePage.linksIn(/^Three of the five needs above, place, value and selector, are held by stylelint rules/);
+    const [, [message, address]] = practicePage.linksIn(/^Stylelint rules hold three of the five/);
 
     expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
     expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
@@ -217,7 +217,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^Only values the code works out at runtime/)).toEqual([
+    expect(practicePage.linksIn(/^I write inline only the values the code works out at runtime/)).toEqual([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'],
       ['2013 moment', `${Paths.record}#someone-needs-components`]
     ]);

@@ -20,7 +20,7 @@ export const StructurePractice: FC = () =>
     <h3 className="paragraph bold">What organizing markup has to solve</h3>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
       for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are
-      the rules I hold the markup to, and the rest of this tab says how each is kept. They are not kept everywhere yet:
+      the rules I hold the markup to, and the rest of this tab says what keeps each. They are not kept everywhere yet:
       in the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
@@ -42,13 +42,13 @@ export const StructurePractice: FC = () =>
       </div>
       <div className="need">
         <dt className="paragraph bold">Order</dt>
-        <dd className="paragraph">What comes before what, so a reading sequence can be worked out from the markup
+        <dd className="paragraph">What comes before what, so a reader can work out the reading sequence from the markup
           (<a className="signpost" href={understanding('meaningful-sequence')}>1.3.2, Meaningful Sequence</a>).
         </dd>
       </div>
       <div className="need">
         <dt className="paragraph bold">Names</dt>
-        <dd className="paragraph">What each region and control is called
+        <dd className="paragraph">The name each region and control carries
           (<a className="signpost" href={understanding('headings-and-labels')}>2.4.6, Headings and Labels</a>), with
           a way past what repeats on every page
           (<a className="signpost" href={understanding('bypass-blocks')}>2.4.1, Bypass Blocks</a>).
@@ -62,7 +62,7 @@ export const StructurePractice: FC = () =>
       </div>
       <div className="need">
         <dt className="paragraph bold">Identity</dt>
-        <dd className="paragraph">How one thing is found, by the next developer and by the script. No criterion
+        <dd className="paragraph">How the next developer and the script find one thing. No criterion
           covers it.
         </dd>
       </div>
@@ -74,12 +74,12 @@ export const StructurePractice: FC = () =>
       you around the site. A section named pages and feedback, the rail that holds that nav and the feedback button.
       Where a page has tabs, a nav named by the tabs’ own label.</p>
     <p className="paragraph">Landmarks are what a screen reader lists and jumps to. Where one kind appears more than
-      once, I name each, so they can be told apart. The{' '}
+      once, I name each, so a screen reader can tell them apart. The{' '}
     <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly:{' '}
     <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
-      provide each instance of that landmark with a unique label.”</a> A section is named by its heading or, where it
-      has none, by a label. If there is nothing to name it by, it is not a section. The landmark elements, header,
-      main, footer and nav, come from the standard the browser makers began writing themselves in the{' '}
+      provide each instance of that landmark with a unique label.”</a> A section takes its name from its heading or,
+      where it has none, from a label. If there is nothing to name it by, it is not a section. The landmark elements,
+      header, main, footer and nav, come from the standard the browser makers began writing themselves in the{' '}
     <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
     <LandmarkMap/>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
@@ -151,7 +151,7 @@ export const StructurePractice: FC = () =>
       decides what is true. That is the <Link className="signpost" to={practiceAddress('Behavior')}>Behavior
         tab</Link>’s split, and the structure makes it possible: the element says what happened and does not decide
       what to do about it.</p>
-    <p className="paragraph">In React the same markup is written by components, each one new element. Below, the plain
+    <p className="paragraph">In React, components write the same markup, each one a new element. Below, the plain
       header cell comes first, then DraggableColumn, the component that writes it in React.</p>
     <ColumnBesideCarve/>
     <p className="paragraph">DraggableColumn writes the th and carries a column. RowGrip writes the grip button and
@@ -171,7 +171,7 @@ export const StructurePractice: FC = () =>
       site’s classes for it. Each saves a line every time it is used, and each costs the reader the doubt of whether it
       is a new element, which is why I say here that they are not. The test for a component is to name the behavior the
       platform lacks. If there is none, it
-      is a wrapper, and the element should be used bare.</p>
+      is a wrapper, and I use the element bare.</p>
     <p className="paragraph">And one behavior each. When no element exists for what I need, I make one, for one
       behavior. I never make an element that does everything, what I call a swiss army element. A component that takes
       twenty
@@ -188,9 +188,8 @@ export const StructurePractice: FC = () =>
       href={fileInRepository('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
       carries a column. The menu is three components that write one element each, as the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
-      that no part has gets a new part with that one job, not a prop on an old one. The platform is built the same way,
-      one element per
-      meaning: a details opens, a dialog holds focus, an output announces.</p>
+      that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
+      same way, one element per meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
       standard’s custom elements give a new tag a name, and leave its role and its keys to the author; a component
       that renders a button has both from the element. The Record’s <Link className="signpost"
@@ -233,7 +232,7 @@ export const StructurePractice: FC = () =>
       same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
       the platform now does for free, is a menu element holding a list of buttons, with role{' '}
     <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role{' '}
-    <code className="monospaced">none</code> on each list item. A menu element is read as a list, not as a menu, and
+    <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
       role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
       that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period
@@ -249,8 +248,8 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">States come from the platform wherever it has one, <code
       className="monospaced">open</code> on a details,{' '}
     <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button.
-      Four are written by hand, where the platform has none.{' '}
-    <code className="monospaced">aria-sort</code> marks which way a table’s header is sorted, because a th has no sort
+      I write four by hand, where the platform has none.{' '}
+    <code className="monospaced">aria-sort</code> marks which way the table sorts on that header, because a th has no sort
       state of its own.{' '}
     <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
       a menu’s chosen item.{' '}
@@ -258,13 +257,13 @@ export const StructurePractice: FC = () =>
       know is open: the old-way
       menu’s, and the Expand button on the z-index tab’s pile of cards. <code
       className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s{' '}
-    <code className="monospaced">alt</code> is its text for a screen reader. Each drawing is hidden whole, since its
+    <code className="monospaced">alt</code> is its text for a screen reader. I hide each drawing whole, since its
       caption says what it shows: a drawing in the page’s markup by <code className="monospaced">aria-hidden</code>,
-      and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. The
-      lettering of a glyph, a dial’s axis label and a code
-      sample’s language label is hidden, since the button’s, the dial’s or the sample’s name already says it.</p>
+      and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. I
+      hide the lettering of a glyph, a dial’s axis label and a code
+      sample’s language label, since the button’s, the dial’s or the sample’s name already says it.</p>
     <p className="paragraph">So the rule, in one line: a name, always; a role, only where no element carries the
-      meaning or one must be taken away; a state, only where the platform has none.</p>
+      meaning or I have to take one away; a state, only where the platform has none.</p>
     <h3 className="paragraph bold">The styles-off test</h3>
     <p className="paragraph">The test is to read the page with the styles turned off. It should still say
       everything it means, in order, because that is what search engines, reader modes and assistive technology
@@ -281,7 +280,7 @@ export const StructurePractice: FC = () =>
       </li>
       <li className="paragraph"><code className="monospaced">html-validate</code> checks every page as the browser has
         rendered it, against its
-        recommended rules. Four style rules are switched off. Two are changed on purpose. A group of checkboxes may
+        recommended rules. I switch four style rules off and change two on purpose. A group of checkboxes may
         share a name, as radios already may, and buttons may not. An id may hold what React’s server render writes,
         since{' '}
       <a className="signpost" href={fileInRepository('e2e/a11y.e2e.ts')}>“React's server render names its own

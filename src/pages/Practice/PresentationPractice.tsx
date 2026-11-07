@@ -25,14 +25,14 @@ export const PresentationPractice: FC = () =>
       style sheet beside it. Everything else is sharable and lives in the shared style sheets: the reset, the tokens,
       which name each value once, and the vocabulary, the looks any element can wear. A class names what the element
       is, what it needs, or what is true right now. Those are the rules,
-      and the rest of this tab says how each is kept.</p>
+      and the rest of this tab says what keeps each.</p>
     <p className="paragraph">The rules come from the readers: a style sheet is read by more than the browser, and I
       write it for all of its readers. The browser reads it to match each selector against the page, and takes the rule
-      the cascade says wins. The designer reads it to change the look, and a look is changed in one place or in forty.
+      the cascade says wins. The designer reads it to change the look, and changes a look in one place or in forty.
       The next developer reads a class list to learn what an element is and needs, before opening any style sheet. A
       lint reads it on every commit, so a rule that strays fails there and not in front of a reader.</p>
-    <p className="paragraph">So five things have to be true of the style sheets, and each is held by a few lines in the
-      repository.</p>
+    <p className="paragraph">So five things have to be true of the style sheets, and a few lines in the repository hold
+      each.</p>
     <dl className="needs">
       <div className="need">
         <dt className="paragraph bold">Place</dt>
@@ -47,8 +47,8 @@ export const PresentationPractice: FC = () =>
       <div className="need">
         <dt className="paragraph bold">Value</dt>
         <dd className="paragraph">Every value written once, as a token. The{' '}
-          <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: a number where a
-          token belongs is refused, and so is a token nothing declares. Custom properties are the platform’s
+          <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: it refuses a number
+          where a token belongs, and a token nothing declares. Custom properties are the platform’s
           token.</dd>
       </div>
       <div className="need">
@@ -126,7 +126,7 @@ export const PresentationPractice: FC = () =>
       Lego 2.0 in 2009, the second version of that shared block library, came a rule for where a block lives:{' '}
     <a className="signpost" href={bemHistory.address}>“each block is stored in a separate folder; each technology is
       represented by a separate file inside the folder”</a>.
-      Every part and every variant is named through its block: <code className="monospaced">card__title</code> and{' '}
+      BEM names every part and every variant through its block: <code className="monospaced">card__title</code> and{' '}
     <code className="monospaced">card_lifted</code> in Yandex’s own spelling,{' '}
     <code className="monospaced">card--lifted</code> in the two-dash style many teams use. Every selector is one
       class, so nothing depends on where a block sits.</p>
@@ -138,7 +138,7 @@ export const PresentationPractice: FC = () =>
     </ul>
     <p className="paragraph">I give up the scoping of every look to its block. In BEM,{' '}
       <code className="monospaced">lifted</code> on a card and <code className="monospaced">lifted</code> on a menu are
-      two modifiers and two rules, so nothing is shared by accident and the same look is written twice. Mine is one
+      two modifiers and two rules, so nothing leaks by accident, and the same look appears twice. Mine is one
       word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a state, since
       a modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of
@@ -189,7 +189,7 @@ export const PresentationPractice: FC = () =>
     </ul>
     <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in
       the column.</p>
-    <p className="paragraph">Only values the code works out at runtime are written inline, mostly as{' '}
+    <p className="paragraph">I write inline only the values the code works out at runtime, mostly as{' '}
       <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a>{' '}
       the style sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom
       properties are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: they took over the
@@ -201,15 +201,15 @@ export const PresentationPractice: FC = () =>
       <a className="signpost" href={sheet('drawing')}>drawing</a>,{' '}
       <a className="signpost" href={sheet('placement')}>placement</a> and{' '}
       <a className="signpost" href={sheet('glide')}>glide</a>. A word in it is one look under one name that any
-      element can wear, resolved through a token. There are about a hundred and fifty. A word is added when a look is
-      needed by its second element, not its first: before that it is structure in the one component’s style sheet.</p>
+      element can wear, resolved through a token. There are about a hundred and fifty. I add a word when a second
+      element needs the look, not the first: before that it is structure in the one component’s style sheet.</p>
     <p className="paragraph">Then the component style sheets, which <code className="monospaced">index.css</code> does
       not import, since each component imports its own. A component’s style sheet holds its structure only, the grid and
       placement of that one component, named for it and kept beside it. A family of components shares a style sheet at
       the family’s root, as the
       tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code>{' '}
       sit at the top of the tables.</p>
-    <p className="paragraph">Three of the five needs above, place, value and selector, are held by stylelint rules.{' '}
+    <p className="paragraph">Stylelint rules hold three of the five: place, value and selector.{' '}
       <code className="monospaced">selector-max-type</code>, for a tag selector outside the reset, prints{' '}
       <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a
         class”</a>.{' '}
@@ -233,7 +233,7 @@ export const PresentationPractice: FC = () =>
       <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>,{' '}
       <code className="monospaced">rounded-corners</code>, <code className="monospaced">muted-ink</code>,{' '}
       <code className="monospaced">attentive</code>. A word in the vocabulary is what Tailwind calls a utility. An
-      element wears the words for its needs, and no new rule is written.</p>
+      element wears the words for its needs, and I write no new rule.</p>
     <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces
       rather than write it again</a>:
       that is Wathan’s rule, and mine. Where I part
@@ -264,8 +264,8 @@ export const PresentationPractice: FC = () =>
       platform already names most of them, such as <code className="monospaced">:hover</code>,{' '}
       <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and{' '}
       <code className="monospaced">:checked</code>, so a rule uses those{' '}
-      <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>{' '}
-      and no class is written. I add a state name only where the platform has no word:{' '}
+      <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>, and I
+      write no class. I add a state name only where the platform has no word:{' '}
       <code className="monospaced">carried</code> for the column or row being dragged,{' '}
       <code className="monospaced">settling</code> for the one sliding back into place,{' '}
       <code className="monospaced">shoved</code> for a neighbor pushed aside. One style sheet, the table’s, says what
