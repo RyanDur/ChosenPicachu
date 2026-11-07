@@ -444,11 +444,6 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">W3C WAI, WCAG 2.1, updated 11 May 2026</span>
           </li>
           <li>
-            <a className="signpost" href="https://vuejs.org/guide/scaling-up/sfc"><cite>Single-File
-              Components</cite></a>{' '}
-            <span className="provenance caption">The Vue guide, vuejs.org</span>
-          </li>
-          <li>
             <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a>{' '}
             <span className="provenance caption">appcontinuum.io, undated</span>
           </li>

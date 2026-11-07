@@ -9,7 +9,6 @@ export const ConcernSection: FC<PropsWithChildren<{concern: Concern}>> = ({conce
     <h2 className="concern-title title" id={concernId(concern)}>{concern}</h2>
     {children}
     <p className="paragraph"><Link className="signpost" to={storyAddress(concern)}>Its story is on the
-      Record.</Link></p>
-    <p className="paragraph"><Link className="signpost" to={practiceAddress(concern)}>How I organize it is on
-      Practice.</Link></p>
+      Record.</Link> <Link className="signpost" to={practiceAddress(concern)}>How I organize it is on
+        Practice.</Link></p>
   </section>;

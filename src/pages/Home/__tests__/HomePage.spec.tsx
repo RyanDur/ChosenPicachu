@@ -5,16 +5,13 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import {homePage} from '@pages/Home/__test_support/home';
 
 describe('the home page', () => {
-  const opener = [/^I made this site/, /^Each language has its own job/, /^I wrote this for developers/, /^More code rarely fixes/, /^Below, each language has a section/, /^The Demos put that practice/];
-
   beforeEach(async () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();
   });
 
   test('should link the opener to the book it names, then its map to the Record, Practice and the Demos, and nothing else', () => {
-    expect(opener.flatMap(opening => homePage.linksIn(homePage.paragraph(opening)))
-      .map(link => [link.textContent, link.getAttribute('href')])).toEqual([
+    expect(homePage.openerLinks()).toEqual([
       ['Resilient Web Design', 'https://resilientwebdesign.com/'],
       ['The Record', Paths.record],
       ['Practice', Paths.practice],
@@ -65,21 +62,15 @@ describe('the home page', () => {
     expect(homePage.quotationSource('Behavior')).toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
   });
 
-  test('should send the Structure claim\'s details element to the accordions demo', () => {
-    expect(homePage.claimLinks('Structure').map(link => [link.textContent, link.getAttribute('href')]))
-      .toEqual([['a details element', `${Paths.demos}accordions/`]]);
+  test('should state the Structure rule in a claim that links nowhere, leaving the deeper reading to its story and to Practice', () => {
+    expect(homePage.claimLinks('Structure')).toEqual([]);
   });
 
-  test('should send the Behavior claim’s quotation from Vue to Vue’s guide on single-file components', () => {
-    expect(homePage.claimLinks('Behavior').map(link => [link.textContent, link.getAttribute('href')]))
-      .toEqual([['“a natural extension of the classic trio of HTML, CSS and JavaScript”', 'https://vuejs.org/guide/scaling-up/sfc']]);
+  test('should state the Presentation rule in a claim that links nowhere, leaving the deeper reading to its story and to Practice', () => {
+    expect(homePage.claimLinks('Presentation')).toEqual([]);
   });
 
-  test('should send the Presentation naming sentence to Practice, the motion claim to web.dev\'s account of which animations stay cheap, and the fold to the accordions demo', () => {
-    expect(homePage.claimLinks('Presentation').map(link => [link.textContent, link.getAttribute('href')])).toEqual([
-      ['Practice', Paths.practice],
-      ['A browser can animate transform and opacity cheaply', 'https://web.dev/articles/animations-overview'],
-      ['the accordions', `${Paths.demos}accordions/`]
-    ]);
+  test('should state the Behavior rule in a claim that links nowhere, leaving the deeper reading to its story and to Practice', () => {
+    expect(homePage.claimLinks('Behavior')).toEqual([]);
   });
 });

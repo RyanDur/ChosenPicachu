@@ -1,6 +1,5 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {paragraphOpening} from '@__test_support/paragraph';
 
 const section = (name: string): HTMLElement => screen.getByRole('region', {name});
 
@@ -10,12 +9,16 @@ const ownParagraphs = (name: string): HTMLElement[] => {
 };
 
 const claim = (name: string): HTMLElement[] =>
-  ownParagraphs(name).filter(paragraph => within(paragraph).queryByRole('link', {name: /^(Its story is on|How I organize it is on)/}) === null);
+  ownParagraphs(name).filter(paragraph => within(paragraph).queryAllByRole('link', {name: /^(Its story is on|How I organize it is on)/}).length === 0);
 
 export const homePage = {
-  arrived: (): Promise<HTMLElement> => screen.findByText(/^I made this site/),
-  paragraph: paragraphOpening,
-  linksIn: (paragraph: HTMLElement): HTMLElement[] => within(paragraph).queryAllByRole('link'),
+  arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 2, name: 'Structure'}),
+  openerLinks: (): (string | null)[][] => {
+    const firstSection = within(screen.getByRole('article')).getAllByRole('heading', {level: 2})[0];
+    return within(screen.getByRole('article')).getAllByRole('link')
+      .filter(link => Boolean(firstSection.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_PRECEDING))
+      .map(link => [link.textContent, link.getAttribute('href')]);
+  },
   sectionHeadings: (): (string | null)[] => within(screen.getByRole('article')).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   quotationIn: (name: string): HTMLElement => within(section(name)).getByRole('blockquote'),
   quotationSource: (name: string): HTMLElement => within(section(name)).getByRole('link', {name: /^Brendan Eich, in Computerworld/}),
