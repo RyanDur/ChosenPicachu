@@ -1,4 +1,5 @@
-import {Locator, expect, test} from '@playwright/test';
+import {Locator, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [

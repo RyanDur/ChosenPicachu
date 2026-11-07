@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
 
 const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<void> => {

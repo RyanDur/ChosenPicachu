@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {chartsPage, oldWayFoldLabels, scriptedMarket, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {

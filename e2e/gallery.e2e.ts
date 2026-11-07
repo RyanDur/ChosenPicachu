@@ -1,4 +1,5 @@
-import {Locator, expect, test} from '@playwright/test';
+import {Locator, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>

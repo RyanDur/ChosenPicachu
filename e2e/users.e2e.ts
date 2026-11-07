@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 

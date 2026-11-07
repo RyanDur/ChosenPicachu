@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, stagesWith} from './__test_support';
 
 for (const {name, at, table} of stagesWith('pace=eager')) {

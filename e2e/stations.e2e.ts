@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {courseStations, pressTab, tabsTo} from './__test_support';
 
 test('a keyboard reader who follows a story\'s station link carries on inside that station with one Tab', async ({page}) => {

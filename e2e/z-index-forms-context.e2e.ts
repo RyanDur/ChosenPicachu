@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {contextChooser, desktop, iPhone, wearsReportedWrong, type Worn} from './__test_support';
 
 const whereTheListOpens: readonly [Worn, 'over' | 'under'][] = [

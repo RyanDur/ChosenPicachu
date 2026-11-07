@@ -1,4 +1,5 @@
-import {type Page, expect, test} from '@playwright/test';
+import {type Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {clickWhereItIs, desktop, documentScrollY, iPhone, siteFrame} from './__test_support';
 
 const settledScrollY = async (page: Page): Promise<number> => {

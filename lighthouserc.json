@@ -8,59 +8,465 @@
     "assert": {
       "assertMatrix": [
         {
-          "matchingUrlPattern": ".*/gallery/.*",
+          "matchingUrlPattern": "/ChosenPicachu/demos/accordions/$",
           "assertions": {
-            "categories:performance": [
-              "error",
-              {
-                "minScore": 0.85
-              }
-            ],
             "categories:accessibility": [
               "error",
               {
                 "minScore": 1
               }
             ],
-            "categories:best-practices": [
+            "resource-summary:document:size": [
               "error",
               {
-                "minScore": 0.9
+                "maxNumericValue": 31744
               }
             ],
-            "categories:seo": [
+            "resource-summary:stylesheet:size": [
               "error",
               {
-                "minScore": 0.92
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 185344
               }
             ]
           }
         },
         {
-          "matchingUrlPattern": "^((?!/gallery/).)*$",
+          "matchingUrlPattern": "/ChosenPicachu/demos/drag\\-and\\-drop/$",
           "assertions": {
-            "categories:performance": [
-              "error",
-              {
-                "minScore": 0.85
-              }
-            ],
             "categories:accessibility": [
               "error",
               {
                 "minScore": 1
               }
             ],
-            "categories:best-practices": [
+            "resource-summary:document:size": [
               "error",
               {
-                "minScore": 0.9
+                "maxNumericValue": 14336
               }
             ],
-            "categories:seo": [
+            "resource-summary:stylesheet:size": [
               "error",
               {
-                "minScore": 0.92
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 162816
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/gallery/\\?tab=vam$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 4096
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 138240
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/games/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 3072
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 129024
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 8192
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 134144
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?tut=menu$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 41984
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/practice/behavior/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 13312
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 190464
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/practice/presentation/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 12288
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 190464
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/practice/structure/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 13312
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 190464
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/record/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 64512
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 195584
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?tut=resize$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 41984
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 41984
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?world=vanilla$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 41984
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/users/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 5120
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 160768
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/z\\-index/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 21504
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 177152
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": ".*",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 65536
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
               }
             ]
           }

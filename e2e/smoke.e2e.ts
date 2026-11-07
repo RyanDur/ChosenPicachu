@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {galleryPage, piecePage} from './__test_support';
 
 test('every door the gallery offers hangs art from its museum', async ({page}) => {

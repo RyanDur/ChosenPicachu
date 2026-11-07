@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {iPhone, sortableList} from './__test_support';
 
 test.afterEach(async ({page}, testInfo) => {

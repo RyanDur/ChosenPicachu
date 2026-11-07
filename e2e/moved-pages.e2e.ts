@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {siteFrame} from './__test_support';
 
 test('a link saved to the old Development address lands on its Practice tab, and Back returns to where it was followed from', async ({page}) => {

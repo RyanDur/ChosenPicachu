@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, iPhone, phoneSideways, stages} from './__test_support';
 
 for (const stage of stages) {

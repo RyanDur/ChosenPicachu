@@ -3,6 +3,7 @@ import parser from '@babel/eslint-parser';
 import testingLibrary from 'eslint-plugin-testing-library';
 import playwright from 'eslint-plugin-playwright';
 import {classes} from './scripts/lint/classes.mjs';
+import {structure} from './scripts/lint/structure.mjs';
 import {bareInlineCode} from './scripts/lint/inline-code.mjs';
 
 const shape = {
@@ -140,6 +141,15 @@ export default [
     rules: {...journeys, 'playwright/no-skipped-test': ['error', {allowConditional: true}]}
   },
   {
+    files: ['e2e/**/*.ts'],
+    ignores: ['e2e/looks/**', 'e2e/media/**', 'e2e/__test_support/journey.ts'],
+    rules: {'no-restricted-imports': ['error', {paths: [{
+      name: '@playwright/test',
+      importNames: ['test'],
+      message: 'a journey takes test from e2e/__test_support/journey.ts, which fails it on any page error'
+    }]}]}
+  },
+  {
     files: ['**/*.{js,mjs,ts,tsx}'],
     ignores: ['src/root.tsx', 'src/routes.ts', ...routeModules, '*.config.{js,mjs,ts}', '**/*.d.ts'],
     rules: {'no-restricted-exports': ['error', {
@@ -170,5 +180,16 @@ export default [
       importNames: ['useRef', 'createRef', 'forwardRef'],
       message: 'a ref holds a dialog shown as a modal, or reads an element\'s details nothing else gives; list the file in refsWithAReason'
     }]}]}
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', '**/*.d.ts'],
+    plugins: {structure},
+    rules: {
+      'structure/one-export': 'error',
+      'structure/has-index': 'error',
+      'structure/through-index': 'error',
+      'structure/index-top-level': 'error'
+    }
   }
 ];

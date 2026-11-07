@@ -1,4 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
+import {Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {type Card, stackingPile} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {

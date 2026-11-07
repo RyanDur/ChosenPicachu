@@ -1,4 +1,5 @@
-import {Locator, Page, expect, test} from '@playwright/test';
+import {Locator, Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, practicePage, feedbackOn, galleryPage, tabsTo, usersPage} from './__test_support';
 
 test.use(desktop);

@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {pillSwitch, practicePage} from './__test_support';
 
 test('a reader who follows the tables demo link on the Behavior tab lands where both builds can be pressed', async ({page}) => {

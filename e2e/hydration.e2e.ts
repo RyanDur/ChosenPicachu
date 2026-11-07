@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {pages} from './pages';
 import {siteFrame, twoFramesLater} from './__test_support';
 

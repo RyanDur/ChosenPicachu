@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {iPad11Upright, iPadUpright, justPastAPhone, splitViewWide} from './__test_support';
 
 const demos = ['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables'];

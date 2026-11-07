@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, iPadUpright, iPhone, phoneSideways, pillsAFingerCannotChoose, pillSwitch} from './__test_support';
 
 for (const {reader, device} of [

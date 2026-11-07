@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {chartsPage, desktop, feedStillConnecting, iPhone} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {

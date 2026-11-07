@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {practicePage, pressTab, recordPage, tabsTo} from './__test_support';
 
 test('opening one fuller story closes the one that was open', async ({page}) => {

@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {chartsPage, fingerTap, galleryPage, iPadUpright, iPhone, phoneSideways, sortableList, usersPage} from './__test_support';
 
 for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {

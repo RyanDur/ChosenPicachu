@@ -1,4 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
+import {Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {definedTerm, desktop, iPhone, pressTab, timesShut, whatHappened} from './__test_support';
 
 const aTapShowsTheDefinition = async (page: Page, tab: string, story: string, term: string): Promise<void> => {

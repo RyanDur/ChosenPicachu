@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {homePage, recordPage} from './__test_support';
 
 test('a reader who follows a story from the home’s opener lands on that story on the record', async ({page}) => {

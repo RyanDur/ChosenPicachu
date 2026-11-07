@@ -1,4 +1,5 @@
-import {expect, test as base} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test as base} from './journey';
 import {accordionsTab, type Build} from './accordions';
 
 export const test = base.extend<object, {workerOfItsOwn: string}>({workerOfItsOwn: ['the accordions tab', {scope: 'worker', option: true}]});

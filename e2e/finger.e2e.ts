@@ -1,4 +1,5 @@
-import {Locator, Page, expect, test} from '@playwright/test';
+import {Locator, Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, iPhone, nameOn, phoneSideways, recordPage, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');

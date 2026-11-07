@@ -1,4 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
+import {Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {bannerTrap, desktop, dialRow, iPhone, pressTab, tabsTo} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {

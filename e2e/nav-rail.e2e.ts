@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, iPad13Upright, iPadUpright, iPhone, siteFrame} from './__test_support';
 
 test.describe('a 13-inch iPad held upright', () => {

@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, pillSwitch, stages, tablesCard} from './__test_support';
 
 test('in the vanilla world, the live table arrives in the card’s own frame and the card holds no second table', async ({page}) => {

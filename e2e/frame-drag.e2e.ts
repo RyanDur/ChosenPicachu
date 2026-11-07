@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stagesWith} from './__test_support';
 
 for (const {name, at, table} of [...stagesWith('origin=keep'), ...stagesWith('origin=hide')]) {

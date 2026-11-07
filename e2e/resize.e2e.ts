@@ -1,4 +1,5 @@
-import {Locator, Page, expect, test} from '@playwright/test';
+import {Locator, Page, expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {Stage, desktop, dragSortTable, fingertipMiss, iPadUpright, iPhone, siteFrame, stages} from './__test_support';
 
 const standing = async (page: Page, stage: Stage) => {

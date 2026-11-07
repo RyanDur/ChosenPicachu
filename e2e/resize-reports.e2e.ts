@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {dragSortTable, stages} from './__test_support';
 
 const asDealt = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];

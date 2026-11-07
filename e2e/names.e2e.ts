@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import names from '../src/pages/names.json' with {type: 'json'};
 
 const headOf = (html: string) => ({

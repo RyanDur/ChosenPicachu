@@ -1,4 +1,5 @@
-import {expect, type Page, test} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {desktop, iPhone, topLayerMenu, trappedMenu} from './__test_support';
 
 const overEverything = 'The list opened over everything around it. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.';

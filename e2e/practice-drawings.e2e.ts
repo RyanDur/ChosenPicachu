@@ -1,4 +1,5 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
+import {test} from './__test_support/journey';
 import {practicePage} from './__test_support';
 
 test('a reader with the styles off meets "Where a rule lives" once, under its caption', async ({page}) => {
