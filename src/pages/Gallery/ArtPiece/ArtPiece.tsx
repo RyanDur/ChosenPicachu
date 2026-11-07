@@ -9,13 +9,13 @@ import {Source} from '@pages/Gallery/museums/source';
 import {useGallery} from '@pages/Gallery/Context';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {art} from '@pages/Gallery/museums';
+import {art, replyChange} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 import {StandIn} from '@pages/Gallery/StandIn';
 
 export const ArtPiece = () => {
-  const {easel, asked, answered, refused, abandoned} = useArtPiece();
+  const {easel, dispatch} = useArtPiece();
   const {raise} = useBanners();
   const {tab} = useGallery();
   const {id} = useParams<{id: string}>();
@@ -23,18 +23,18 @@ export const ArtPiece = () => {
   useEffect(() => maybe(id)
     .map(chosen => {
       const {cancel} = art.get({id: chosen, source: tab ?? Source.AIC})
-        .onPending(pending => pending && asked())
-        .onSuccess(answered)
+        .onPending(pending => pending && dispatch(replyChange.asked()))
+        .onSuccess(answer => dispatch(replyChange.answered(answer)))
         .onFailure(error => {
-          refused();
+          dispatch(replyChange.refused());
           raise(troubleWith('the museum')(error));
         });
       return () => {
         cancel();
-        abandoned();
+        dispatch(replyChange.abandoned());
       };
     })
-    .orElse(abandoned), [id, tab, asked, answered, refused, abandoned, raise]);
+    .orElse(() => dispatch(replyChange.abandoned())), [id, tab, dispatch, raise]);
 
   return <>
     {awaited(easel) && <Loading label="loading piece"/>}

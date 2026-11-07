@@ -6,7 +6,7 @@ import {empty, maybe} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {awaited} from '@pages/Gallery/museums/reply';
-import {art as artResource} from '@pages/Gallery/museums';
+import {art as artResource, replyChange} from '@pages/Gallery/museums';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 import {StandIn} from '@pages/Gallery/StandIn';
@@ -18,18 +18,18 @@ export const ArtGallery: FC = () => {
   useEffect(() => maybe(tab)
     .map(source => {
       const {cancel} = artResource.getAll({page, size, search, source})
-        .onPending(pending => pending && dispatch({type: 'asked'}))
-        .onSuccess(answer => dispatch({type: 'answered', answer}))
+        .onPending(pending => pending && dispatch(replyChange.asked()))
+        .onSuccess(answer => dispatch(replyChange.answered(answer)))
         .onFailure(error => {
-          dispatch({type: 'refused'});
+          dispatch(replyChange.refused());
           raise(troubleWith('the museum')(error));
         });
       return () => {
         cancel();
-        dispatch({type: 'abandoned'});
+        dispatch(replyChange.abandoned());
       };
     })
-    .orElse(() => dispatch({type: 'abandoned'})), [page, search, tab, size, dispatch, raise]);
+    .orElse(() => dispatch(replyChange.abandoned())), [page, search, tab, size, dispatch, raise]);
 
   return <>
     <ul id="art-gallery">

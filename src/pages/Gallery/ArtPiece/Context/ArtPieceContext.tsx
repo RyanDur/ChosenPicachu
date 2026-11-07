@@ -1,19 +1,12 @@
-import {FC, PropsWithChildren, useCallback, useMemo, useState} from 'react';
-import {nothing} from '@ryandur/sand';
-import {Art} from '@pages/Gallery/museums/art';
-import {MuseumReply} from '@pages/Gallery/museums/reply';
-import {Context, PieceContext} from '@pages/Gallery/ArtPiece/Context/useArtPiece';
+import {FC, PropsWithChildren, useMemo, useReducer} from 'react';
+import {Art, replies} from '@pages/Gallery/museums';
+import {Easels} from './easels';
 
-const useArtPieceContext = (): PieceContext => {
-  const [easel, hold] = useState<MuseumReply<Art>>({reply: 'unasked', standing: nothing()});
-  const asked = useCallback(() => hold({reply: 'asked', standing: nothing()}), []);
-  const answered = useCallback((found: Art) => hold({reply: 'answered', answer: found}), []);
-  const refused = useCallback(() => hold({reply: 'refused'}), []);
-  const abandoned = useCallback(() => hold({reply: 'unasked', standing: nothing()}), []);
-  return useMemo(() => ({easel, asked, answered, refused, abandoned}), [easel, asked, answered, refused, abandoned]);
-};
+const easelReplies = replies<Art>();
 
-export const ArtPieceContext: FC<PropsWithChildren> = ({children}) =>
-  <Context.Provider value={useArtPieceContext()}>
+export const ArtPieceContext: FC<PropsWithChildren> = ({children}) => {
+  const [easel, dispatch] = useReducer(easelReplies.reduce, easelReplies.initial);
+  return <Easels.Provider value={useMemo(() => ({easel, dispatch}), [easel])}>
     {children}
-  </Context.Provider>;
+  </Easels.Provider>;
+};
