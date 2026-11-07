@@ -47,8 +47,8 @@ export const TutorialPage: FC = () => {
         }}>
           station {tableTutorials.startingStation} of the tables tab
         </Link>{' '}
-        ends, with the page’s store, the table’s own store and the dispatch each one takes. If those are new to
-        you, read that station first.
+        ends, with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
+        those are new to you, read that station first.
       </p>
       <Body/>
     </section>;
