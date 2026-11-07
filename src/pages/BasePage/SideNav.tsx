@@ -4,8 +4,8 @@ import {Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
 import {toQueryString} from '@transport/url';
-import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {Source} from '@components/art-gallery/museums/source';
+import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {Source} from '@pages/Gallery/museums/source';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
 

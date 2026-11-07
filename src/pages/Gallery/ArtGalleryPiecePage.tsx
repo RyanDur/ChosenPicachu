@@ -1,4 +1,4 @@
 import {FC} from 'react';
-import {ArtPiece} from '@components/art-gallery';
+import {ArtPiece} from '@pages/Gallery';
 
 export const ArtGalleryPiecePage: FC = () => <ArtPiece/>;

@@ -7,8 +7,8 @@ import {Paths} from '@pages/Paths';
 import names from '@pages/names.json';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {practiceAt} from '@pages/Practice/__test_support/practice';
-import {aicArtResponse, anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
-import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
+import {aicArtResponse, anAICPieceResponse} from '@pages/Gallery/__test_support/fixtures';
+import {galleryWall, heldAICArtPieceResponse, setupAICAllArtResponse, setupAICArtPieceResponse} from '@pages/Gallery/__test_support';
 
 const described = (): string | null => document.head.querySelector('meta[name="description"]')?.getAttribute('content') ?? null;
 

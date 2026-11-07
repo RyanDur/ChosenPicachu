@@ -5,10 +5,10 @@ import {
   clevelandArtResponse,
   harvardArtResponse,
   vamArtResponse
-} from '@components/art-gallery/__test_support/fixtures';
+} from '@pages/Gallery/__test_support/fixtures';
 import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {defaultRecordLimit} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
 import {
   heldAICAllArtResponse,
@@ -25,7 +25,7 @@ import {
   setupHarvardAllArtResponse,
   setupVAMAllArtResponse,
   galleryWall
-} from '@components/art-gallery/__test_support';
+} from '@pages/Gallery/__test_support';
 
 const firstPiece = aicArtResponse.data[0];
 const secondPiece = aicArtResponse.data[1];

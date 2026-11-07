@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Paths} from '@pages/Paths';
 import {Page} from '@pages/BasePage/Page';
-import {GalleryProviders} from '@components/art-gallery';
-import {GalleryAside} from '@components/art-gallery/Settings';
-import {GalleryNav} from '@components/art-gallery/Nav';
+import {GalleryProviders} from '@pages/Gallery';
+import {GalleryAside} from '@pages/Gallery/Settings';
+import {GalleryNav} from '@pages/Gallery/Nav';
 import {ArtGalleryPage} from './ArtGalleryPage';
 import {GalleryError, GalleryHeader} from './frame';
 

@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import {site} from '@pages/__test_support';
 import {demosAt} from '@pages/Demos/__test_support';
 import {githubFindingNoThread, githubHoldingAThread, githubHoldingItsAnswer, githubLosingThePageThread} from '../__test_support/github';
-import {setupAICAllArtResponse} from '@components/art-gallery/__test_support';
-import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
+import {setupAICAllArtResponse} from '@pages/Gallery/__test_support';
+import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 
 describe('Feedback in a browser without invoker commands', () => {
   beforeEach(() => {

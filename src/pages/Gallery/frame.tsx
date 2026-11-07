@@ -3,8 +3,8 @@ import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
-import {GalleryProviders} from '@components/art-gallery';
-import {GallerySettings} from '@components/art-gallery/Settings';
+import {GalleryProviders} from '@pages/Gallery';
+import {GallerySettings} from '@pages/Gallery/Settings';
 import names from '@pages/names.json';
 
 export const GalleryHeader = () =>

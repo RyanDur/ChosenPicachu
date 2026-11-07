@@ -5,13 +5,13 @@ import {has, maybe, notEmpty, Result} from '@ryandur/sand';
 import {Tabs} from '@components/Tabs';
 import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
-import {ArtGallery, Source} from '@components/art-gallery';
-import {art} from '@components/art-gallery/museums';
-import {sourceParam} from '@components/art-gallery/museums/source';
-import {museums} from '@components/art-gallery/museums/museums';
+import {ArtGallery, Source} from '@pages/Gallery';
+import {art} from '@pages/Gallery/museums';
+import {sourceParam} from '@pages/Gallery/museums/source';
+import {museums} from '@pages/Gallery/museums/museums';
 import {HTTPError} from '@transport/types';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
-import {StandIn} from '@components/art-gallery/StandIn';
+import {StandIn} from '@pages/Gallery/StandIn';
 
 type Answers = Partial<Record<Source, boolean>>;
 
