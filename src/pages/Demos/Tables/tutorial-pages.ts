@@ -12,6 +12,7 @@ type TableTutorials = {
   addressOf: (tutorial: Tutorial) => string;
   placeOf: (tutorial: Tutorial) => Place;
   at: (pathname: string) => Maybe<Tutorial>;
+  startingStation: number;
 };
 
 const places: Record<Tutorial, number> = {sort: 1, menu: 2, resize: 3};
@@ -33,5 +34,6 @@ export const tableTutorials: TableTutorials = {
   nameOf: tutorial => named[tutorial],
   addressOf,
   placeOf: tutorial => ({number: inOrder.indexOf(tutorial) + 1, of: inOrder.length}),
-  at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial)))
+  at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
+  startingStation: 5
 };

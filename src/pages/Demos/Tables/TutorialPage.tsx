@@ -40,9 +40,12 @@ export const TutorialPage: FC = () => {
       <WorldNote/>
       <p className="paragraph">
         This tutorial adds one feature to the live table above. It starts where{' '}
-        <Link className="signpost"
-          to={{pathname: demoAddress(DemoTopics.tables), search: searchFromShown({}), hash: stationId(5)}}>
-          station 5 of the tables tab
+        <Link className="signpost" to={{
+          pathname: demoAddress(DemoTopics.tables),
+          search: searchFromShown({}),
+          hash: stationId(tableTutorials.startingStation)
+        }}>
+          station {tableTutorials.startingStation} of the tables tab
         </Link>{' '}
         ends, with the table’s store and its dispatch, so read that station first if those are new to you.
       </p>

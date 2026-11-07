@@ -37,7 +37,7 @@ export const Tutorials: FC = () => {
       <Station at={4}>
         <StillTableRecipe/>
       </Station>
-      <Station at={5}>
+      <Station at={tableTutorials.startingStation}>
         <FlowTableRecipe/>
       </Station>
       <Station at={6}>
