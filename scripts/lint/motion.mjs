@@ -1,0 +1,46 @@
+import stylelint from 'stylelint';
+
+const name = 'chosen/compositor-motion';
+const composited = new Set(['transform', 'translate', 'rotate', 'scale', 'opacity', 'filter']);
+const discrete = new Set(['visibility', 'content-visibility', 'display', 'overlay']);
+const notAProperty = /^(\d|\.|-?\d|cubic-bezier|steps|linear|ease|step-|allow-discrete|normal|none|initial|inherit|unset)/;
+
+const messages = stylelint.utils.ruleMessages(name, {
+  /** @param {string} property */
+  moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites`
+});
+
+/** @param {string} value a transition's value, whose functions hold no nested parentheses */
+const items = value => {
+  const flat = value.replace(/\([^()]*\)/g, '()');
+  return flat.split(',').map(item => item.trim()).filter(item => item !== '');
+};
+
+/** @param {string} item */
+const propertyIn = item => item.split(/\s+/).find(word => !notAProperty.test(word)) ?? 'all';
+
+/** @param {string} property */
+const allowed = property => property === 'none' || composited.has(property) || discrete.has(property);
+
+/** @type {import('stylelint').Rule} */
+const rule = primary => (root, result) => {
+  if (primary !== true) return;
+  /**
+   * @param {import('postcss').Declaration} node
+   * @param {string} property
+   */
+  const report = (node, property) =>
+    stylelint.utils.report({ruleName: name, result, node, message: messages.moves(property)});
+  root.walkDecls(/^transition(-property)?$/, declaration => items(declaration.value)
+    .map(item => declaration.prop === 'transition' && item !== 'none' ? propertyIn(item) : item)
+    .filter(property => !allowed(property))
+    .forEach(property => report(declaration, property)));
+  root.walkAtRules('keyframes', keyframes => keyframes.walkDecls(declaration => {
+    if (!allowed(declaration.prop) && declaration.prop !== 'animation-timing-function') report(declaration, declaration.prop);
+  }));
+};
+
+rule.ruleName = name;
+rule.messages = messages;
+
+export const motion = stylelint.createPlugin(name, rule);

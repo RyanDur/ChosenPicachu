@@ -1,5 +1,6 @@
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {motion} from './scripts/lint/motion.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 
@@ -19,6 +20,14 @@ const structure = [
   'stroke-width', 'vector-effect', 'stroke-dasharray', 'stroke-linejoin', 'stroke-linecap'
 ];
 
+const stillMoveOnTheMainThread = [
+  'src/components/art-gallery/Art/Gallery.css', 'src/components/Banners/Banners.css',
+  'src/components/FancyFormElements/Fancy.css', 'src/components/PillGlider/PillGlider.css',
+  'src/pages/Demos/Accordions/Accordions.css', 'src/pages/Demos/Charts/Candles/Candles.css',
+  'src/pages/Demos/Charts/Pressure/Pressure.css', 'src/pages/Demos/Charts/PriceChart/PriceChart.css',
+  'src/pages/Demos/ZIndexDemo/ZIndexDemo.css', 'src/styles/drawing.css', 'src/styles/reset.css', 'src/styles/surface.css'
+];
+
 export default {
   overrides: [
     {
@@ -31,14 +40,17 @@ export default {
     },
     {files: ['src/styles/**/*.css', 'src/index.css'], rules: {'property-allowed-list': null}},
     {files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}},
-    {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}}
+    {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}},
+    {files: stillMoveOnTheMainThread, rules: {'chosen/compositor-motion': null}}
   ],
   extends: ['stylelint-config-recommended'],
   plugins: [
+    motion,
     'stylelint-declaration-strict-value',
     'stylelint-value-no-unknown-custom-properties'
   ],
   rules: {
+    'chosen/compositor-motion': true,
     'selector-disallowed-list': [
       ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
       {message: 'obsolete element — this is a strict html5 site'}
