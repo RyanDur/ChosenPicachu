@@ -267,7 +267,7 @@ describe('the rail says which page the reader is on', () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();
 
-    await homePage.followStorySignpost('Structure');
+    await homePage.followOpenerLink('the Structure story');
 
     await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
     expect(site.railLink('Record')).not.toHaveFocus();

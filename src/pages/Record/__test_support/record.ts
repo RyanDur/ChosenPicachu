@@ -6,6 +6,7 @@ import {paragraphOpening} from '@__test_support/paragraph';
 const research = (): HTMLElement => screen.getByRole('region', {name: 'The research'});
 const concert = (): HTMLElement => screen.getByRole('region', {name: 'The concert'});
 const story = (name: string): HTMLElement => screen.getByRole('region', {name});
+const epigraphOf = (name: string): HTMLElement => within(story(name)).getByRole('figure');
 const storyMoments = (name: string): HTMLElement => within(story(name)).getByRole('list', {name: `${name}, the moments it rests on`});
 const openFullerStory = async (title: string): Promise<void> =>
   userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story'));
@@ -19,6 +20,10 @@ export const recordPage = {
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
+  storyEpigraph: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('blockquote'),
+  storyEpigraphSource: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('link'),
+  storyParagraphs: (name: string): HTMLElement[] => within(story(name)).getAllByRole('paragraph')
+    .filter(paragraph => !epigraphOf(name).contains(paragraph)),
   storyQuotations: (name: string, quoted: string): HTMLElement[] => within(story(name)).getAllByRole('link', {name: quoted}),
   storyMomentsHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 3, name: 'the moments it rests on'}),
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),

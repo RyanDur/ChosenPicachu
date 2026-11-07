@@ -1,7 +1,15 @@
 import {FC} from 'react';
+import {Quotation} from '@components/Quotation';
 
 export const BehaviorStory: FC = () =>
   <>
+    <Quotation voice="paragraph" source={<a className="signpost"
+      href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan
+      Eich, in Computerworld’s A-Z of Programming Languages</a>}>
+      With a scripting language like JS that could touch elements of the page, change
+      their properties, and respond to events, we envisioned a much livelier Web
+      consisting of pages that acted more like applications.
+    </Quotation>
     <p className="paragraph">In April 1995 Brendan Eich joined Netscape to put a programming language in the browser,
       and in about ten days of May he wrote the interpreter. The need, in his words, was
       that <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“the lack of programmability of Web pages made them static, text-heavy, with at best images in tables or floating on the right or left”</a>. Netscape had two audiences in mind, component authors writing Java and the scripters, <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">“amateur or pro, who would write code directly embedded in HTML”</a>, and the language was for the second, a <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“glue language”</a> for <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“the Web designers and part time programmers who were building Web content from components such as images, plugins, and Java applets”</a>. You could, he said, <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html">“buy it by the yard”</a>. The script could touch the page the server had sent, change its properties and respond to events. Some early adopters, <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“even in late 1995”</a>, built applications from script and frames, but <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">“the means to communicate with servers generally involved reloading whole Web pages”</a>.</p>

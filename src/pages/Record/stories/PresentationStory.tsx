@@ -1,9 +1,16 @@
 import {FC} from 'react';
+import {Quotation} from '@components/Quotation';
 import {Link} from 'react-router';
 import {practiceAddress} from '@pages/Practice/types';
 
 export const PresentationStory: FC = () =>
   <>
+    <Quotation voice="paragraph" source={<a className="signpost"
+      href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">the
+      W3C, on HTML and CSS</a>}>
+      The separation of HTML from CSS makes it easier to maintain sites, share style
+      sheets across pages, and tailor pages to different environments.
+    </Quotation>
     <p className="paragraph">In February 1994 Paul Wain of Brunel University asked the www-talk list, then the web’s
       main mailing list, why Mosaic put a blank line in his nested menus when Lynx, a text-only browser, did not, and
       whether there was anything he could do about it. Marc Andreessen, one of Mosaic’s programmers, told him it

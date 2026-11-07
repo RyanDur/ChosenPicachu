@@ -1,11 +1,9 @@
 .home {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--base-x-3);
   padding: var(--base-x-3) var(--page-inset);
 
   .opening {
-    grid-column: 1 / -1;
     display: grid;
     gap: var(--base-x-2);
   }
@@ -15,7 +13,7 @@
     text-wrap: pretty;
   }
 
-  .concern, .closing {
+  .closing {
     align-content: start;
     display: grid;
     gap: var(--base-x-1_5);
@@ -27,18 +25,8 @@
     }
   }
 
-  .closing {
-    grid-column: 1 / -1;
-  }
-
-  .concern-title, .closing-title {
+  .closing-title {
     margin: 0;
     text-wrap: balance;
-  }
-}
-
-@media (width <= 600px), (height <= 500px) {
-  .home {
-    grid-template-columns: 1fr;
   }
 }

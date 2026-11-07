@@ -667,6 +667,30 @@ describe('the record\'s three stories', () => {
     expect(outOfReadingOrder([recordPage.openingQuotation(), recordPage.argument(), recordPage.parts(), recordPage.storyHeading('Structure'), recordPage.storyHeading('Presentation'), recordPage.storyHeading('Behavior'), recordPage.timelineHeading()])).toEqual([]);
   });
 
+  test('should open Structure\'s story on html.com’s words on HTML, before the story itself', () => {
+    expect(outOfReadingOrder([recordPage.storyHeading('Structure'), recordPage.storyEpigraph('Structure'), ...recordPage.storyParagraphs('Structure')])).toEqual([]);
+  });
+
+  test('should send the source of Structure\'s opening words to html.com', () => {
+    expect(recordPage.storyEpigraphSource('Structure')).toHaveAttribute('href', 'https://html.com/html5/');
+  });
+
+  test('should open Presentation\'s story on the W3C’s words on HTML and CSS, before the story itself', () => {
+    expect(outOfReadingOrder([recordPage.storyHeading('Presentation'), recordPage.storyEpigraph('Presentation'), ...recordPage.storyParagraphs('Presentation')])).toEqual([]);
+  });
+
+  test('should send the source of Presentation\'s opening words to the Internet Archive’s copy of the W3C’s page', () => {
+    expect(recordPage.storyEpigraphSource('Presentation')).toHaveAttribute('href', 'https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html');
+  });
+
+  test('should open Behavior\'s story on Brendan Eich’s words on a livelier Web, before the story itself', () => {
+    expect(outOfReadingOrder([recordPage.storyHeading('Behavior'), recordPage.storyEpigraph('Behavior'), ...recordPage.storyParagraphs('Behavior')])).toEqual([]);
+  });
+
+  test('should send the source of Behavior\'s opening words to the Internet Archive’s copy of Eich’s interview', () => {
+    expect(recordPage.storyEpigraphSource('Behavior')).toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
+  });
+
   test('should end Structure\'s story with the moments it rests on, each line landing on its moment in the timeline', () => {
     expect(recordPage.storyMomentsHeading('Structure')).toBeVisible();
     expect(recordPage.storyMomentLines('Structure')).toEqual(['1989 CERN needs to share what it knows', '1990 The information needs one interface', '1991 The web needs collaborators', '1995 The browsers’ tags need a standard', '1996 The pages need to look the same', '2004 The standard needs the real world', '2013 Someone needs components', '2014 The rules need writing down', '2016 The document needs to come first', '2025 The elements need to arrive']);
