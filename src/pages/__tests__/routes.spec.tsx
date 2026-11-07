@@ -8,6 +8,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
+import DemosLayout, {ErrorBoundary as DemosLayoutBoundary} from '@pages/Demos/route';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -36,6 +37,23 @@ describe('page error boundaries', () => {
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Gallery');
     expect(await site.nav()).toBeInTheDocument();
+  });
+
+  test('a tab that crashes says the room is closed under its own Demos header', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={demosAt('charts')}>
+        <Route Component={DemosLayout} ErrorBoundary={DemosLayoutBoundary}>
+          <Route path={demosAt('charts')} element={<Boom/>}/>
+        </Route>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+
+    expect(await site.roomSays('This room is closed.')).toBeVisible();
+    expect(site.pageTitle()).toHaveTextContent('Demos Charts');
   });
 
   test('a crash no page catches is reported and announced', async () => {
