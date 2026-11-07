@@ -43,7 +43,7 @@ export const BehaviorPractice: FC = () =>
     <h3 className="paragraph bold">What is true and what happened</h3>
     <p className="paragraph">Behavior splits into what is true and what happened. The state is what is
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
-      nothing else can give. Events are what happened, so I name them in the past tense:
+      the code cannot work out from something else. Events are what happened, so I name them in the past tense:
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
       I keep the state in one place, and replacing it is the only way anything on screen changes.</p>
     <p className="paragraph">A reducer is that pure function, and its type says so: it takes the state and an event and
@@ -130,7 +130,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">The one place this boundary can throw is <code className="monospaced">JSON.parse</code>,
       and <code className="monospaced">attempt</code>, from sand, turns that throw into nothing.</p>
     <p className="paragraph">The trade is not the only value checked this way. The gallery’s four museums each have a
-      decoder of their own, and each decoder types its response.</p>
+      decoder of their own, and each response takes its type from its decoder.</p>
     <h3 className="paragraph bold">When something fails</h3>
     <p className="paragraph">A fetch can fail, and I don’t want every step after it to check.
       sand’s <code className="monospaced">Result</code> is either a success or a failure, and its README says the
@@ -226,14 +226,14 @@ export const BehaviorPractice: FC = () =>
         table’s code with no page at all, and they run on every commit.
       </li>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
-        pointer and by key in three browsers and check the order a reader sees and the move report a screen reader
-        hears, and{' '}
+        pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
+        hears. AGENTS.md sets one rule for them:{' '}
       <a className="signpost" href={fileInRepository('AGENTS.md')}>“Journeys run as a reader who asks for less
         motion, and none is retried or skipped.”</a>
       </li>
-      <li className="paragraph"><code className="monospaced">tsc -b</code> runs{' '}
-        <a className="signpost" href={fileInRepository('scripts/git-hooks/pre-commit')}>before every commit</a>, so a
-        commit that lets a forbidden state into a type is refused.
+      <li className="paragraph">The pre-commit hook runs <code className="monospaced">tsc -b</code>{' '}
+        <a className="signpost" href={fileInRepository('scripts/git-hooks/pre-commit')}>before every commit</a> and
+        refuses one that lets a forbidden state into a type.
       </li>
     </ul>
     <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}

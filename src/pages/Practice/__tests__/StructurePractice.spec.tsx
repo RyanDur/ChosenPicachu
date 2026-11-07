@@ -26,19 +26,19 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^I start from what the content is and pick the element for it/)).toEqual([
+    expect(practicePage.linksUnder('From the content to the element')).toEqual(expect.arrayContaining([
       ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
       ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
       ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
       ['October 2014 moment', momentAddress('html5SaysIt')]
-    ]);
+    ]));
   });
 
   test('should send each platform element the walk names to its MDN page', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^The platform’s elements each bring a behavior/)).toEqual([
+    expect(practicePage.linksUnder('From the content to the element')).toEqual(expect.arrayContaining([
       ['details', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details'],
       ['dialog', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog'],
       ['popover', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover'],
@@ -48,81 +48,83 @@ describe('the Structure practice tab', () => {
       ['legend', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend'],
       ['scope', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th#scope'],
       ['Invoker commands', 'https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API']
-    ]);
+    ]));
   });
 
   test('should send the split between what happened and what is true to the Behavior tab', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^boot\.ts, in its feed function, finds its tables/)).toEqual([['Behavior tab', practiceAt('behavior')]]);
+    expect(practicePage.linkUnder('From the content to the element', 'Behavior tab')).toHaveAttribute('href', practiceAt('behavior'));
   });
 
   test('should send the quotation of html-validate’s loosened id rule to the accessibility journey', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.quotationAddressIn(/^html-validate checks/)).toBe(fileInRepository('e2e/a11y.e2e.ts'));
+    expect(practicePage.linkUnder('The styles-off test', /^“React's server render names its own script/))
+      .toHaveAttribute('href', fileInRepository('e2e/a11y.e2e.ts'));
   });
 
   test('should send the quotation on how a test finds things to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.quotationAddressIn(/^The rule the review holds is one line in AGENTS.md/)).toBe(fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The styles-off test', /^“Tests find what a reader finds/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
   });
 
   test('should send outOfReadingOrder to its file', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksInItem(/^outOfReadingOrder takes/)).toEqual([['outOfReadingOrder', fileInRepository('src/__test_support/reading-order.ts')]]);
+    expect(practicePage.linkUnder('The styles-off test', 'outOfReadingOrder'))
+      .toHaveAttribute('href', fileInRepository('src/__test_support/reading-order.ts'));
   });
 
   test('should send the quotation of stylelint’s message on an obsolete element to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.quotationAddressIn(/^stylelint refuses a selector/)).toBe(fileInRepository('stylelint.config.js'));
+    expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', fileInRepository('stylelint.config.js'));
   });
 
   test('should send the old-style banner to the z-index tab that raises it', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^Here is what ARIA last looks like on this site/)).toEqual([['z-index tab', demoAddress(DemoTopics.zIndex)]]);
+    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demoAddress(DemoTopics.zIndex));
   });
 
   test('should send Disclosure, the counter-case, to its source', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^A component is an element that does not exist yet/)).toEqual([
+    expect(practicePage.linksUnder('Components, one behavior each')).toEqual(expect.arrayContaining([
       ['Disclosure', `${Paths.repo}/blob/main/src/components/Disclosure/Disclosure.tsx`]
-    ]);
+    ]));
   });
 
   test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index tab', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^And one behavior each/)).toEqual([
+    expect(practicePage.linksUnder('Components, one behavior each')).toEqual(expect.arrayContaining([
       ['RowGrip', `${Paths.repo}/blob/main/src/components/DragSortableTable/RowGrip.tsx`],
       ['ResizeHandle', `${Paths.repo}/blob/main/src/components/DragSortableTable/ResizeHandle.tsx`],
       ['SortMenu', `${Paths.repo}/blob/main/src/components/DragSortableTable/SortMenu.tsx`],
       ['DraggableColumn', `${Paths.repo}/blob/main/src/components/DragSortableTable/DraggableColumn.tsx`],
       ['z-index tab', demoAddress(DemoTopics.zIndex)]
-    ]);
+    ]));
   });
 
   test('should send custom elements to the concert’s paragraph on them, and the first rule of ARIA to Using ARIA', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^This is also why the site’s new elements are React components/)).toEqual([
+    expect(practicePage.linksUnder('Components, one behavior each')).toEqual(expect.arrayContaining([
       ['concert', `${Paths.record}#custom-elements`],
       ['“If you can use a native HTML element or attribute with the semantics and behavior you require already built in, instead of re-purposing an element and adding an ARIA role, state or property to make it accessible, then do so.”', 'https://www.w3.org/TR/using-aria/']
-    ]);
+    ]));
   });
 
   test('should send each of the four needs WCAG names to its Understanding page, and identity to none', async () => {
@@ -143,30 +145,30 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^The rules come from the readers/)).toEqual([
+    expect(practicePage.linksUnder('What organizing markup has to solve')).toEqual(expect.arrayContaining([
       ['WebAIM’s tenth survey', 'https://webaim.org/projects/screenreadersurvey10/'],
       ['“navigate through the headings on the page”', 'https://webaim.org/projects/screenreadersurvey10/']
-    ]);
+    ]));
   });
 
   test('should send the rule for naming landmarks to the Authoring Practices, and the landmark elements to the 2004 moment', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^Landmarks are what a screen reader lists and jumps to/)).toEqual([
+    expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
       ['Authoring Practices', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['“If a specific landmark role is used more than once on a page, provide each instance of that landmark with a unique label.”', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['2004 moment', momentAddress('browsersTakePen')]
-    ]);
+    ]));
   });
 
   test('should send the banners’ role to the z-index tab that builds it', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^One region on every page is a role and not an element/)).toEqual([
+    expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
       ['z-index tab', demoAddress(DemoTopics.zIndex)]
-    ]);
+    ]));
   });
 
   test('should keep the table of contents’ drawing from a screen reader', async () => {

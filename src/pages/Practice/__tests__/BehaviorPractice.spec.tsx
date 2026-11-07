@@ -157,29 +157,29 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linksInItem(/^The specs test the core as functions/))
-      .toEqual([['Four specs', directoryInRepository('src/components/DragSortableTable/__tests__')]]);
+    expect(practicePage.linkUnder('The test the state has to pass', 'Four specs'))
+      .toHaveAttribute('href', directoryInRepository('src/components/DragSortableTable/__tests__'));
   });
 
   test('should send the quotation on how journeys run to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.quotationAddressIn(/^The journeys test the shell/)).toBe(fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The test the state has to pass', /^“Journeys run as a reader/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
   });
 
   test('should send before every commit to the pre-commit hook', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linksInItem(/^tsc -b runs before every commit/))
-      .toEqual([['before every commit', fileInRepository('scripts/git-hooks/pre-commit')]]);
+    expect(practicePage.linkUnder('The test the state has to pass', 'before every commit'))
+      .toHaveAttribute('href', fileInRepository('scripts/git-hooks/pre-commit'));
   });
 
   test('should send the quotation of the no-refs rule to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.quotationAddressIn(/^The rule the review holds is one line in AGENTS.md/)).toBe(fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The test the state has to pass', /^“No refs/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
   });
 });

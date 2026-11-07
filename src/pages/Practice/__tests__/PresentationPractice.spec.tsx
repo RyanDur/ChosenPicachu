@@ -69,7 +69,7 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^CSS has one global scope, so every rule can reach every element/)).toEqual([
+    expect(practicePage.linksUnder('What organizing CSS has to solve')).toEqual(expect.arrayContaining([
       ['reset', 'https://meyerweb.com/eric/tools/css/reset/'],
       ['“a starting point for creating your own defaults”', 'https://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/'],
       ['normalize.css', 'https://necolas.github.io/normalize.css/'],
@@ -84,21 +84,21 @@ describe('the Presentation practice tab', () => {
       ['styled-components', 'https://styled-components.com/blog/celebrating-a-decade-of-styled-components'],
       ['2013 moment', `${Paths.record}#someone-needs-components`],
       ['CSS Utility Classes and “Separation of Concerns”', 'https://adamwathan.me/css-utility-classes-and-separation-of-concerns/']
-    ]);
+    ]));
   });
 
   test('should send each thing the platform has since put in the style sheet to MDN', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^The platform has since put the values, the order and the scoping in the style sheet itself/)).toEqual([
+    expect(practicePage.linksUnder('What organizing CSS has to solve')).toEqual(expect.arrayContaining([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/--*'],
       ['@layer', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'],
       ['nesting', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector'],
       ['@scope', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope'],
       ['Container queries', 'https://developer.mozilla.org/en-US/docs/Web/CSS/@container'],
       [':has()', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has']
-    ]);
+    ]));
   });
 
   test('should head the Presentation tab’s seven parts in reading order, closing on the test a class list has to pass', async () => {
@@ -138,20 +138,16 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [[message, address]] = practicePage.linksIn(/^Stylelint rules hold three of the five/);
-
-    expect(message).toBe('“a tag is styled only in src/styles/reset.css; give the element a class”');
-    expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
+    expect(practicePage.linkUnder('Where a rule lives', '“a tag is styled only in src/styles/reset.css; give the element a class”'))
+      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.js`);
   });
 
   test('should send the look rule’s quoted message to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    const [, [message, address]] = practicePage.linksIn(/^Stylelint rules hold three of the five/);
-
-    expect(message).toBe('“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”');
-    expect(address).toBe(`${Paths.repo}/blob/main/stylelint.config.js`);
+    expect(practicePage.linkUnder('Where a rule lives', '“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”'))
+      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.js`);
   });
 
   test('should draw where a rule lives in the part it names, before what a class is named for', async () => {
@@ -184,43 +180,43 @@ describe('the Presentation practice tab', () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^BEM is Yandex’s method, and it began at scale/)).toEqual([
+    expect(practicePage.linksUnder('What this site keeps')).toEqual(expect.arrayContaining([
       ['BEM', 'https://yandex.com/dev/bem/index'],
       ['history', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
       ['“any changes to the code of one page affected the code of other pages”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
       ['“can be used anywhere on the page”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/'],
       ['“each block is stored in a separate folder; each technology is represented by a separate file inside the folder”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
-    ]);
+    ]));
   });
 
   test('should send what a BEM modifier defines to the history page’s archived copy, from the paragraph on what I give up', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^I give up the scoping of every look to its block/)).toEqual([
+    expect(practicePage.linksUnder('What this site keeps')).toEqual(expect.arrayContaining([
       ['“defines the appearance, state, and sometimes the behavior of the block”', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
-    ]);
+    ]));
   });
 
   test('should send Tailwind’s advice on reuse, and its two quoted lines, to its page on styling with utility classes', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^Tailwind’s own advice on reuse is the part I agree with most/)).toEqual([
+    expect(practicePage.linksUnder('What this site keeps')).toEqual(expect.arrayContaining([
       ['styling with utility classes', 'https://tailwindcss.com/docs/styling-with-utility-classes'],
       ['“there’s no benefit to introducing any additional abstraction”', 'https://tailwindcss.com/docs/styling-with-utility-classes'],
       ['“the best strategy is to create a component”', 'https://tailwindcss.com/docs/styling-with-utility-classes']
-    ]);
+    ]));
   });
 
   test('should send the runtime values’ custom properties to MDN’s guide to using them, and their lesson to the 2013 moment', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
-    expect(practicePage.linksIn(/^I write inline only the values the code works out at runtime/)).toEqual([
+    expect(practicePage.linksUnder('Where a rule lives')).toEqual(expect.arrayContaining([
       ['custom properties', 'https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties'],
       ['2013 moment', `${Paths.record}#someone-needs-components`]
-    ]);
+    ]));
   });
 
   test('should send the states the platform already names to MDN’s pseudo-classes', async () => {

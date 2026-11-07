@@ -20,7 +20,7 @@ export const StructurePractice: FC = () =>
     <h3 className="paragraph bold">What organizing markup has to solve</h3>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
       for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are
-      the rules I hold the markup to, and the rest of this tab says what keeps each. They are not kept everywhere yet:
+      the rules I hold the markup to, and the rest of this tab says what keeps each. I don’t keep them everywhere yet:
       in the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
@@ -249,8 +249,8 @@ export const StructurePractice: FC = () =>
       className="monospaced">open</code> on a details,{' '}
     <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button.
       I write four by hand, where the platform has none.{' '}
-    <code className="monospaced">aria-sort</code> marks which way the table sorts on that header, because a th has no sort
-      state of its own.{' '}
+    <code className="monospaced">aria-sort</code> marks which way a th’s column is sorted, because a th has no sort state of
+      its own.{' '}
     <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
       a menu’s chosen item.{' '}
     <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not

@@ -31,8 +31,8 @@ export const PresentationPractice: FC = () =>
       the cascade says wins. The designer reads it to change the look, and changes a look in one place or in forty.
       The next developer reads a class list to learn what an element is and needs, before opening any style sheet. A
       lint reads it on every commit, so a rule that strays fails there and not in front of a reader.</p>
-    <p className="paragraph">So five things have to be true of the style sheets, and a few lines in the repository hold
-      each.</p>
+    <p className="paragraph">So five things have to be true of the style sheets. Lints and the import list hold most of
+      them, and I keep the naming myself.</p>
     <dl className="needs">
       <div className="need">
         <dt className="paragraph bold">Place</dt>
@@ -138,7 +138,7 @@ export const PresentationPractice: FC = () =>
     </ul>
     <p className="paragraph">I give up the scoping of every look to its block. In BEM,{' '}
       <code className="monospaced">lifted</code> on a card and <code className="monospaced">lifted</code> on a menu are
-      two modifiers and two rules, so nothing leaks by accident, and the same look appears twice. Mine is one
+      two modifiers and two rules, so nothing is shared by accident, and I write the same look twice. Mine is one
       word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a state, since
       a modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of

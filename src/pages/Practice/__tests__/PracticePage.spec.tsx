@@ -99,7 +99,7 @@ describe('the practice page', () => {
     render(<TestApp at={Paths.practice}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linksIn(/^Code is read more often than it is written/)).toEqual([
+    expect(practicePage.openingLinks()).toEqual([
       ['The Application Continuum', appContinuum],
       ['“Naming, organizing, and reducing circular dependencies are the three most important things you’ll ever do as a programmer”', appContinuum]
     ]);
