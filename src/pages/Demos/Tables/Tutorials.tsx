@@ -43,6 +43,10 @@ export const Tutorials: FC = () => {
       <Station at={6}>
         <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
+        <p className="paragraph">
+          Drag sort builds the first two layers, moving a column and moving a row. Sort menu builds the third,
+          ranking by a measure, and Drag resize builds the fourth, widening a column.
+        </p>
         <ol className="tutorial-links">
           {tableTutorials.all().map(tutorial => <li key={tutorial}>
             <Link className="tutorial-link signpost reachable" to={`${tableTutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tableTutorials.nameOf(tutorial)}</Link>
