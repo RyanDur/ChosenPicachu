@@ -1,4 +1,4 @@
 import {useContext} from 'react';
-import {Easels} from './easels';
+import {Easel} from './easel';
 
-export const useArtPiece = () => useContext(Easels);
+export const useArtPiece = () => useContext(Easel);
