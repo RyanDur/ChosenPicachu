@@ -47,7 +47,7 @@ export const Tutorials: FC = () => {
           Drag sort builds the first two layers, moving a column and moving a row. Sort menu builds the third,
           ranking by a measure, and Drag resize builds the fourth, widening a column.
         </p>
-        <ol className="tutorial-links">
+        <ol className="tutorial-links" aria-label="the tutorials">
           {tableTutorials.all().map(tutorial => <li key={tutorial}>
             <Link className="tutorial-link signpost reachable" to={`${tableTutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tableTutorials.nameOf(tutorial)}</Link>
           </li>)}

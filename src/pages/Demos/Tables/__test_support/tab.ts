@@ -24,8 +24,7 @@ export const tablesTab = () => ({
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
   readTheStationFirst: async (): Promise<void> => userEvent.click(await tutorialLink(/^station \d+ of the tables tab$/)),
   tutorialsListed: async (): Promise<string[]> =>
-    within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders)).getAllByRole('link')
-      .filter(link => /\/demos\/tables\/\w+\/?(\?|$)/.test(link.getAttribute('href') ?? ''))
+    within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
       .map(link => computeAccessibleName(link)),
   place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
