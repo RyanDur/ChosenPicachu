@@ -26,7 +26,10 @@ tester.run('one-export', structure.rules['one-export'], {
 });
 
 tester.run('has-index', structure.rules['has-index'], {
-  valid: [{name: 'should accept a file in a directory with an index', code: 'export const x = 1;', filename: withIndex}],
+  valid: [
+    {name: 'should accept a file in a directory with an index', code: 'export const x = 1;', filename: withIndex},
+    {name: 'should ask no index beside a route module', code: 'export default () => null;', filename: at('src/pages/Demos/SavedTab/route.tsx')}
+  ],
   invalid: [{name: 'should refuse a file in a directory with no index', code: 'export const x = 1;', filename: withoutIndex, errors: 1}]
 });
 

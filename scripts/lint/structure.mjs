@@ -154,7 +154,8 @@ const oneExport = ruleWith('one-export', 'a file exports one module function or 
 
 const everyDirectoryHasAnIndex = ruleWith('has-index', 'every directory of code has an index', (file, report) => {
   const directory = dirname(join(root, file));
-  if (isTestPlace(file) || directory === src) return {};
+  // a route module is the framework's door, so a file that is one asks for no index beside it
+  if (isTestPlace(file) || directory === src || routeModules.has(file)) return {};
   return {
     'Program:exit': program => {
       if (not(hasIndex(directory))) report(program, `${fromRoot(directory)} has no index.ts, and every directory of code has one`);
