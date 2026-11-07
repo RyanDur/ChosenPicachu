@@ -4,11 +4,12 @@ import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@pages/Gallery/museums/aic/types';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
-import {aic} from '@pages/Gallery/museums/aic';
 import {HarvardAllArtResponse} from '@pages/Gallery/museums/harvard/types';
-import {harvard} from '@pages/Gallery/museums/harvard';
 import {VAMAllArtResponse} from '@pages/Gallery/museums/vam/types';
 import {ClevelandAllArtResponse} from '@pages/Gallery/museums/cleveland/types';
+
+const aicFields = 'id,title,image_id,artist_display,term_titles,thumbnail';
+const harvardFields = 'id,title,people,primaryimageurl';
 
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;
@@ -31,7 +32,7 @@ type AllArt = {
 
 const allArtParams = (options: AllArt) => ({
   'query[exists][field]': 'image_id',
-  fields: aic.fields.join(),
+  fields: aicFields,
   page: String(options.page),
   limit: String(options.limit),
   ...(has(options.search) ? {q: options.search} : {})
@@ -86,20 +87,20 @@ export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limi
       q: 'imagepermissionlevel:0 AND _exists_:primaryimageurl',
       page: '1',
       size: String(limit),
-      fields: harvard.fields,
+      fields: harvardFields,
       apikey: env.harvardAPIKey
     }) ? HttpResponse.json(response) : undefined));
 
 export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =>
   server.use(http.get(`${env.aicDomain}/:id`, ({request, params}) =>
-    params.id === String(id) && paramsMatch(request, {fields: aic.fields.join()})
+    params.id === String(id) && paramsMatch(request, {fields: aicFields})
       ? HttpResponse.json(response)
       : undefined));
 
 export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${env.aicDomain}/:id`, async ({request, params}) => {
-    if (params.id !== String(id) || !paramsMatch(request, {fields: aic.fields.join()})) return undefined;
+    if (params.id !== String(id) || !paramsMatch(request, {fields: aicFields})) return undefined;
     await held;
     return HttpResponse.json(response);
   }));

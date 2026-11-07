@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Art} from '@pages/Gallery/museums/art';
+import {Art} from '@pages/Gallery/museums/types';
 
 type MuseumField = string | null | undefined;
 type ArtFields = {

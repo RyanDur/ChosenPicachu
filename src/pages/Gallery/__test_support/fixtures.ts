@@ -9,7 +9,7 @@ import {
   HarvardPeople,
   HarvardSearchResponse
 } from '@pages/Gallery/museums/harvard/types';
-import {AllArt, Art} from '@pages/Gallery/museums/art';
+import {AllArt, Art} from '@pages/Gallery/museums/types';
 import {VAMAllArtResponse, VAMArtResponse} from '@pages/Gallery/museums/vam/types';
 import {
   ClevelandAllArtResponse,
