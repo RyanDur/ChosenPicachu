@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import {Paths} from '@pages/Paths';
 import {Page} from '@pages/BasePage/Page';
-import {GalleryProviders} from '@pages/Gallery';
+import {GalleryProviders} from '@pages/Gallery/Providers';
 import {GalleryAside} from '@pages/Gallery/Settings';
 import {GalleryNav} from '@pages/Gallery/Nav';
 import {ArtGalleryPage} from './ArtGalleryPage';
-import {GalleryError, GalleryHeader} from './frame';
+import {GalleryError} from './GalleryError';
+import {GalleryHeader} from './GalleryHeader';
 
 export const ErrorBoundary = GalleryError;
 

@@ -25,16 +25,16 @@ const ClevelandRecordDecoder = schema.object({
   }
 });
 
-export const ClevelandAllArtSchema = schema.object({
+const ClevelandAllArtSchema = schema.object({
   required: {
     info: schema.object({required: {total: schema.number}}),
     data: schema.array(ClevelandRecordDecoder)
   }
 });
 
-export const ClevelandArtSchema = schema.object({required: {data: ClevelandRecordDecoder}});
+const ClevelandArtSchema = schema.object({required: {data: ClevelandRecordDecoder}});
 
-export const ClevelandSearchSchema = schema.object({
+const ClevelandSearchSchema = schema.object({
   required: {data: schema.array(schema.object({required: {title: schema.string}}))}
 });
 
@@ -43,3 +43,9 @@ export type ClevelandRecord = schema.Output<typeof ClevelandRecordDecoder>;
 export type ClevelandAllArtResponse = schema.Output<typeof ClevelandAllArtSchema>;
 export type ClevelandArtResponse = schema.Output<typeof ClevelandArtSchema>;
 export type ClevelandSearchResponse = schema.Output<typeof ClevelandSearchSchema>;
+
+export const clevelandSchema = {
+  allArt: ClevelandAllArtSchema,
+  art: ClevelandArtSchema,
+  search: ClevelandSearchSchema
+};

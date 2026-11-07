@@ -1,10 +1,8 @@
 import {
   HarvardAllArtResponse,
-  HarvardAllArtSchema,
   HarvardArtResponse,
-  HarvardArtSchema,
   HarvardSearchResponse,
-  HarvardSearchSchema
+  harvardSchema
 } from '@pages/Gallery/museums/harvard/types';
 import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
@@ -29,7 +27,7 @@ const searched = ({page, search, size = limits.record}: GetAllArtRequest) => htt
     page,
     size, ...baseQueryString
   })}`, {cache: 'force-cache'})
-  .mBind(validate(HarvardAllArtSchema));
+  .mBind(validate(harvardSchema.allArt));
 
 export const harvard = {
   fields,
@@ -48,7 +46,7 @@ export const harvard = {
 
   art: (id: string) => http
     .get(`${env.harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})
-    .mBind(validate(HarvardArtSchema))
+    .mBind(validate(harvardSchema.art))
     .map(harvardArtToArt),
 
   searchOptions: (search: string) => http
@@ -58,7 +56,7 @@ export const harvard = {
       apikey: env.harvardAPIKey,
       size: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(HarvardSearchSchema))
+    .mBind(validate(harvardSchema.search))
     .map(({records}: HarvardSearchResponse): SearchOptions =>
       records.map(({title}) => title))
 };

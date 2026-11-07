@@ -3,13 +3,13 @@ import {maybe} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {Header, Listing} from '@pages/BasePage/Header';
 import {Page} from '@pages/BasePage/Page';
-import {Art} from '@pages/Gallery/museums/art';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
-import {GalleryProviders} from '@pages/Gallery';
+import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';
 import names from '@pages/names.json';
 import {ArtGalleryPiecePage} from '../ArtGalleryPiecePage';
-import {GalleryError} from '../frame';
+import {GalleryError} from '../GalleryError';
+import {Art} from '@pages/Gallery/museums';
 
 const listingOf = ({title, artistInfo}: Art): Listing => ({
   title: `${title} · ${names.gallery.title}`,

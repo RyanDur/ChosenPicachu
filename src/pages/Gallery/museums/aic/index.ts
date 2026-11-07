@@ -1,11 +1,9 @@
 import {
   AICAllArtResponse,
-  AICAllArtSchema,
   AICArt,
-  AICArtSchema,
   AICPieceData,
   AICSearchResponse,
-  AICSearchSchema
+  aicSchema
 } from '@pages/Gallery/museums/aic/types';
 import {toQueryString} from '@transport/url';
 import {maybe} from '@ryandur/sand';
@@ -34,7 +32,7 @@ export const aic = {
       page,
       limit: size
     })}`, {cache: 'force-cache'})
-    .mBind(validate(AICAllArtSchema))
+    .mBind(validate(aicSchema.allArt))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
         total: pagination.total,
@@ -48,7 +46,7 @@ export const aic = {
 
   art: (id: string) => http
     .get(`${env.aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
-    .mBind(validate(AICArtSchema))
+    .mBind(validate(aicSchema.art))
     .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
   searchOptions: (search: string) => http
@@ -57,7 +55,7 @@ export const aic = {
       fields: 'suggest_autocomplete_all',
       limit: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(AICSearchSchema))
+    .mBind(validate(aicSchema.search))
     .map(({data}: AICSearchResponse): SearchOptions => data
       .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
       .flatMap(option => option.input))

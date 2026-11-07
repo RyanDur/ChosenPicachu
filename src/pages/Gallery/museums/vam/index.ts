@@ -1,9 +1,8 @@
 import {
   VAMAllArtResponse,
-  VAMAllArtSchema,
   VAMArtResponse,
-  VAMArtSchema,
-  VAMSearchRecord
+  VAMSearchRecord,
+  vamSchema
 } from '@pages/Gallery/museums/vam/types';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
@@ -41,7 +40,7 @@ export const vam = {
       page_size: size,
       images_exist: true
     })}`, {cache: 'force-cache'})
-    .mBind(validate(VAMAllArtSchema))
+    .mBind(validate(vamSchema.allArt))
     .map(({info, records}: VAMAllArtResponse): AllArt => ({
       pagination: {
         total: info.record_count,
@@ -55,7 +54,7 @@ export const vam = {
 
   art: (id: string) => http
     .get(`${env.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
-    .mBind(validate(VAMArtSchema))
+    .mBind(validate(vamSchema.art))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
@@ -69,6 +68,6 @@ export const vam = {
       q: search,
       page_size: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(VAMAllArtSchema))
+    .mBind(validate(vamSchema.allArt))
     .map(({records}: VAMAllArtResponse): SearchOptions => records.map(({_primaryTitle}) => _primaryTitle))
 };

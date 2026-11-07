@@ -1,10 +1,9 @@
 import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
-import {SearchOptions} from '@pages/Gallery/museums/art';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import {classNames} from '@components/class-names';
 import {has, Maybe, nothing, some} from '@ryandur/sand';
-import {art} from '@pages/Gallery/museums';
+import {art, SearchOptions} from '@pages/Gallery/museums';
 import {useGallery} from '@pages/Gallery/Context';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';

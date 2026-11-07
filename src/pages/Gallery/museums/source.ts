@@ -1,13 +1,9 @@
-import * as schema from 'schemawax';
-
 export enum Source {
   AIC = 'aic',
   HARVARD = 'harvard',
   VAM = 'vam',
   CLEVELAND = 'cleveland'
 }
-
-export const sourceParam: schema.Decoder<Source> = schema.literalUnion(...Object.values(Source));
 
 export type SearchArt = {
   search: string;

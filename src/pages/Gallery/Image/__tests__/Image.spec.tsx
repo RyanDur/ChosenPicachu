@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {GalleryProviders} from '@pages/Gallery';
+import {GalleryProviders} from '@pages/Gallery/Providers';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {Image} from '@pages/Gallery/Image';
 import userEvent from '@testing-library/user-event';

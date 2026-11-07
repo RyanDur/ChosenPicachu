@@ -24,13 +24,13 @@ const AICPieceResponseDecoder = schema.object({
     thumbnail: schema.nullable(AICThumbnailDecoder)
   }
 });
-export const AICAllArtSchema = schema.object({
+const AICAllArtSchema = schema.object({
   required: {
     pagination: AICPaginationResponseDecoder,
     data: schema.array(AICPieceResponseDecoder)
   }
 });
-export const AICArtSchema = schema.object({
+const AICArtSchema = schema.object({
   required: {
     data: AICPieceResponseDecoder
   }
@@ -46,7 +46,7 @@ const AICAutocompleteDecoder = schema.object({
   }
 });
 
-export const AICSearchSchema = schema.object({
+const AICSearchSchema = schema.object({
   required: {
     pagination: AICPaginationResponseDecoder,
     data: schema.array(AICAutocompleteDecoder)
@@ -61,3 +61,9 @@ export type AICArtResponse = schema.Output<typeof AICArtSchema>;
 export type AICAllArtResponse = schema.Output<typeof AICAllArtSchema>;
 export type AICSearchResponse = schema.Output<typeof AICSearchSchema>;
 export type AICArt = schema.Output<typeof AICPieceResponseDecoder>;
+
+export const aicSchema = {
+  allArt: AICAllArtSchema,
+  art: AICArtSchema,
+  search: AICSearchSchema
+};

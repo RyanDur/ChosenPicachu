@@ -5,8 +5,8 @@ import {useRoomToStandOpen} from '@components/room';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
-import {museums} from '@pages/Gallery/museums/museums';
 import './GallerySettings.css';
+import {museums} from '@pages/Gallery/museums';
 
 const Readout: FC = () => {
   const {search, tab, page, pagination} = useGallery();
@@ -24,11 +24,4 @@ export const GallerySettings: FC = () => {
     <Search id="gallery-search"/>
     <PageControl/>
   </Disclosure>;
-};
-
-export const GalleryAside: FC = () => {
-  const room = useRoomToStandOpen();
-  return room && <aside id="filter" className="filter field backdrop-below" aria-label="gallery settings">
-    <PageControl/>
-  </aside>;
 };

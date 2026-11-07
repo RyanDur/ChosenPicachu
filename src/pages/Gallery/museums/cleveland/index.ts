@@ -1,13 +1,11 @@
 import {has} from '@ryandur/sand';
 import {
   ClevelandAllArtResponse,
-  ClevelandAllArtSchema,
   ClevelandArtResponse,
-  ClevelandArtSchema,
   ClevelandImage,
   ClevelandRecord,
   ClevelandSearchResponse,
-  ClevelandSearchSchema
+  clevelandSchema
 } from './types';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
@@ -48,7 +46,7 @@ const searched = ({page, search, size = limits.record}: GetAllArtRequest) => htt
     has_image: 1,
     fields: clevelandFields
   })}`, {cache: 'force-cache'})
-  .mBind(validate(ClevelandAllArtSchema));
+  .mBind(validate(clevelandSchema.allArt));
 
 export const cleveland = {
   allArt: (request: GetAllArtRequest) => searched(request)
@@ -68,7 +66,7 @@ export const cleveland = {
 
   art: (id: string) => http
     .get(`${env.clevelandDomain}/${id}${toQueryString({fields: clevelandFields})}`, {cache: 'force-cache'})
-    .mBind(validate(ClevelandArtSchema))
+    .mBind(validate(clevelandSchema.art))
     .map(({data}: ClevelandArtResponse): Art => toPiece(data)),
 
   searchOptions: (search: string) => http
@@ -78,6 +76,6 @@ export const cleveland = {
       has_image: 1,
       fields: 'title'
     })}`, {cache: 'force-cache'})
-    .mBind(validate(ClevelandSearchSchema))
+    .mBind(validate(clevelandSchema.search))
     .map(({data}: ClevelandSearchResponse): SearchOptions => data.map(({title}) => title))
 };

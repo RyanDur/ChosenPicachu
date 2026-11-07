@@ -1,10 +1,10 @@
 import {TestApp} from '@__test_support/TestApp';
-import {GalleryProviders} from '@pages/Gallery';
+import {GalleryProviders} from '@pages/Gallery/Providers';
 import {anyRequestFailsToConnect} from '@__test_support/server';
 import {server} from '@__test_support/server';
 import {env} from '@env';
 import {render, waitFor} from '@testing-library/react';
-import {ArtGallery} from '@pages/Gallery';
+import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/museums/source';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {test} from 'vitest';

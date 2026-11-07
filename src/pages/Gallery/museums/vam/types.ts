@@ -31,7 +31,7 @@ const VAMSearchRecordDecoder = schema.object({
   }
 });
 
-export const VAMAllArtSchema = schema.object({
+const VAMAllArtSchema = schema.object({
   required: {
     info: VAMInfoDecoder,
     records: schema.array(VAMSearchRecordDecoder)
@@ -68,7 +68,7 @@ const VAMDetailRecordDecoder = schema.object({
   }
 });
 
-export const VAMArtSchema = schema.object({
+const VAMArtSchema = schema.object({
   required: {
     record: VAMDetailRecordDecoder
   }
@@ -77,3 +77,8 @@ export const VAMArtSchema = schema.object({
 export type VAMSearchRecord = schema.Output<typeof VAMSearchRecordDecoder>;
 export type VAMAllArtResponse = schema.Output<typeof VAMAllArtSchema>;
 export type VAMArtResponse = schema.Output<typeof VAMArtSchema>;
+
+export const vamSchema = {
+  allArt: VAMAllArtSchema,
+  art: VAMArtSchema
+};

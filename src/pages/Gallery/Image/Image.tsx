@@ -4,12 +4,12 @@ import {empty, maybe, Maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
 import {toQueryString} from '@transport/url';
-import {Art} from '@pages/Gallery/museums/art';
 import {useGallery} from '@pages/Gallery/Context';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';
 import {StandIn} from '@pages/Gallery/StandIn';
+import {Art} from '@pages/Gallery/museums';
 
 type Picture = 'arriving' | 'shown' | 'missing';
 

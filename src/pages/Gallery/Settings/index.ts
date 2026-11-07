@@ -1,1 +1,2 @@
-export {GallerySettings, GalleryAside} from './GallerySettings';
+export {GallerySettings} from './GallerySettings';
+export {GalleryAside} from './GalleryAside';
