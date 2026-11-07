@@ -11,6 +11,8 @@ export const PresentationStory: FC = () =>
       The separation of HTML from CSS makes it easier to maintain sites, share style
       sheets across pages, and tailor pages to different environments.
     </Quotation>
+    <p className="paragraph">That separation is the rule this story ends on: the look lives in the style sheet. What
+      follows is how the web came to keep it.</p>
     <p className="paragraph">In February 1994 Paul Wain of Brunel University asked the www-talk list, then the web’s
       main mailing list, why Mosaic put a blank line in his nested menus when Lynx, a text-only browser, did not, and
       whether there was anything he could do about it. Marc Andreessen, one of Mosaic’s programmers, told him it

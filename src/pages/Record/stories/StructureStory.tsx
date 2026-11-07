@@ -7,6 +7,8 @@ export const StructureStory: FC = () =>
       It is not a programming language, but rather a language that identifies the meaning,
       purpose, and structure of text within a document.
     </Quotation>
+    <p className="paragraph">That definition is the rule this story ends on: choose the element that means what the
+      content is. What follows is how HTML came to mean it.</p>
     <p className="paragraph">In March 1989 Tim Berners-Lee had a problem to solve at CERN, and a language was the
       smallest part of it. Several thousand people, spread across institutes and experiments and staying about two years
       each, could not find what the last ones had written

@@ -24,12 +24,12 @@ export const Opener: FC = () =>
       standards listen to developers, watch what they build, and adopt what proves itself across the browsers. Putting
       the job where it belongs lets each language do what it already does.</p>
     <p className="thesis paragraph"><Link className="signpost" to={Paths.record}>The Record</Link> tells each
-      language’s history in full: <Link className="signpost" to={storyAddress('Structure')}>the Structure
+      language’s history in full, in <Link className="signpost" to={storyAddress('Structure')}>the Structure
         story</Link>, <Link className="signpost" to={storyAddress('Presentation')}>the Presentation
-          story</Link> and <Link className="signpost" to={storyAddress('Behavior')}>the Behavior story</Link>, then
-      every moment in order, then the three read together, and the pattern they follow, which HTML’s own design
-      principles wrote down in 2007. <Link className="signpost" to={Paths.practice}>Practice</Link> shows how I
-      organize each language, with a tab for each.</p>
+          story</Link> and <Link className="signpost" to={storyAddress('Behavior')}>the Behavior story</Link>. Then
+      it sets out every moment in order, reads the three languages together, and names the pattern they follow, which
+      HTML’s own design principles wrote down in 2007. <Link className="signpost"
+      to={Paths.practice}>Practice</Link> shows how I organize each language, with a tab for each.</p>
     <p className="thesis paragraph"><Link className="signpost" to={Paths.demos}>The Demos</Link> put that practice to
       work on features built from this site’s own code and explained beside it, running from simple to expert. Some
       compare the trick we used before the platform could do the job with what it does now; the rest show what the

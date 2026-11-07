@@ -87,7 +87,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>{' '}
-            <span className="provenance caption">html.com</span>
+            <span className="provenance caption">html.com, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://html.com/deprecated/"><cite>Deprecated HTML features</cite></a>{' '}
@@ -178,7 +178,7 @@ export const Bibliography: FC = () =>
           </li>
           <li>
             <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html"><cite>HTML and CSS</cite></a>{' '}
-            <span className="provenance caption">the W3C; the definitions survive only in the archive</span>
+            <span className="provenance caption">the W3C, archived 21 December 2014; the definitions survive only in the archive</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security"><cite>Website security</cite></a>{' '}
