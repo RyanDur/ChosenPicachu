@@ -154,6 +154,30 @@ test.describe('a visitor at a desk', () => {
 
     expect(await galleryPage(page).picturesNotShown()).toEqual([]);
   });
+
+  test('keeps the focus on a piece whose picture arrives while it holds it', async ({page}) => {
+    const gallery = galleryPage(page);
+    const letThePicturesThrough = await gallery.holdEveryPicture();
+    await page.goto('gallery/?tab=vam');
+    const piece = gallery.wall.first().getByRole('link');
+    await piece.focus();
+
+    letThePicturesThrough();
+
+    await expect(gallery.wall.first().getByRole('img')).toBeVisible();
+    await expect(piece).toBeFocused();
+  });
+
+  test('shows a stand-in naming the piece when its picture will not load', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.refuseEveryPicture();
+    await page.goto('gallery/?tab=vam');
+    const work = gallery.wall.first();
+
+    await expect(gallery.standInOf(work)).toBeVisible();
+    const said = await gallery.standInOf(work).getAttribute('alt') ?? '';
+    await expect(work).toHaveAccessibleName(said.replace(/ would not load$/, ''));
+  });
 });
 
 test.describe('a phone held sideways, partway down the gallery', () => {

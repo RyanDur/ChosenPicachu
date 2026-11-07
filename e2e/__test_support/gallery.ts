@@ -1,4 +1,4 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 
 const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json';
@@ -39,6 +39,22 @@ export const galleryPage = (page: Page) => {
         }
       }
       return missing;
+    },
+    refuseEveryPicture: async (): Promise<void> => {
+      await page.route('**/vam-image/*/full/**', route => route.abort());
+    },
+    standInOf: (work: Locator): Locator => work.getByRole('img', {name: / would not load$/}),
+    holdEveryPicture: async (): Promise<() => void> => {
+      const held: (() => void)[] = [];
+      let letGo = false;
+      await page.route('**/vam-image/*/full/**', route => {
+        if (letGo) return route.continue();
+        return new Promise<void>(released => held.push(() => released(route.continue())));
+      });
+      return () => {
+        letGo = true;
+        held.splice(0).forEach(release => release());
+      };
     },
     holdTheArtInstitute: async (): Promise<void> => {
       await page.route(theArtInstitutesOpeningPicture, () => new Promise<void>(() => undefined));
