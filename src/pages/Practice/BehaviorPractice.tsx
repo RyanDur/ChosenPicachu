@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {directoryInRepository, fileInRepository} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
-import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {demoAddress, DemoTopics} from '@pages/Demos';
 import {
   BuildsCarve,
   CarryCarve,

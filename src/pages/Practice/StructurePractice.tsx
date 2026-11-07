@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {fileInRepository} from '@pages/Paths';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {customElementsAddress} from '@pages/Record/concertAddress';
-import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {demoAddress, DemoTopics} from '@pages/Demos';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
