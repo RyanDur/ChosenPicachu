@@ -5,6 +5,7 @@ import playwright from 'eslint-plugin-playwright';
 import {classes} from './scripts/lint/classes.mjs';
 import {structure} from './scripts/lint/structure.mjs';
 import {bareInlineCode} from './scripts/lint/inline-code.mjs';
+import {wrap} from './scripts/lint/wrap.mjs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -31,6 +32,7 @@ const shape = {
   '@stylistic/jsx-curly-spacing': ['error', {when: 'never'}],
   '@stylistic/jsx-equals-spacing': ['error', 'never'],
   '@stylistic/jsx-tag-spacing': ['error', {beforeSelfClosing: 'never', beforeClosing: 'never'}],
+  'wrap/needless-wrap': 'error',
   '@stylistic/max-len': ['error', {
     code: 120, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreRegExpLiterals: true
   }]
@@ -41,9 +43,14 @@ const comparedToUndefined = {
   message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
 };
 
-const presence = {'no-restricted-syntax': ['error', comparedToUndefined]};
+const inlineAction = {
+  selector: 'CallExpression[callee.name="dispatch"] > ObjectExpression.arguments',
+  message: 'Dispatch what an action creator returns, as Feedback and UserInformation do, never an object written here.'
+};
 
-const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode]};
+const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction]};
+
+const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction]};
 
 const specs = Object.fromEntries([
   'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
@@ -97,7 +104,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module'
     },
-    plugins: {'@stylistic': stylistic},
+    plugins: {'@stylistic': stylistic, wrap},
     rules: {...shape, ...presence}
   },
   {
@@ -111,7 +118,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module'
     },
-    plugins: {'@stylistic': stylistic},
+    plugins: {'@stylistic': stylistic, wrap},
     rules: {...shape, ...markup}
   },
   {
