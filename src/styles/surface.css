@@ -293,7 +293,7 @@
 
 .next-approached:has(+ :hover, + :focus) { background-color: var(--approach); }
 
-:is(:hover, :focus) > .liftable { box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow); }
+:is(:hover, :focus) > .liftable { filter: drop-shadow(var(--shadow-lifted-far) var(--shadow)) drop-shadow(var(--shadow-lifted-near) var(--dark-shadow)); }
 
 .warmed:is(:hover, :focus-within) { background-color: var(--faded-international-orange-engineering); }
 
