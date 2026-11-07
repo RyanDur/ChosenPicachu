@@ -37,9 +37,9 @@ type Build = {
 const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
   <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
-      <Says>The answer is the sort alone. The page dispatches it: it hands the table’s store an action, a
-        record that a column asked for an order, and the rows cut to their ranked seats. Motion in these tables
-        explains one move: a column or a row, and what it shoved aside.</Says>
+      <Says>The answer is the sort alone. The page dispatches it to its own store as an action, a record that
+        a column asked for an order. The rows then cut to their ranked seats. Motion in these tables explains one
+        move: a column or a row, and what it shoved aside.</Says>
     </Words>
     <Reveal>
       {world === 'react'
