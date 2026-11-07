@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {Kind, Sized} from './looks';
+import {Sized} from './geometry';
+import {Kind} from './looks';
 import {Box} from './Box';
 
 export const Part: FC<Sized & {kind: Kind; name: string}> = ({name, ...box}) => <>

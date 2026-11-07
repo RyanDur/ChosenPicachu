@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {At} from './looks';
+import {At} from './geometry';
 
 const head = (from: At, to: At): string => {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);

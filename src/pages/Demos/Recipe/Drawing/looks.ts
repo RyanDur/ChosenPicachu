@@ -1,6 +1,4 @@
 export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring' | 'topmost';
-export type At = {x: number; y: number};
-export type Sized = At & {width: number; height: number};
 
 type Looks = {
   of: (kind: Kind) => string;
