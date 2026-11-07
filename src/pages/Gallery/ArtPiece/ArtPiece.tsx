@@ -5,9 +5,10 @@ import {Loading} from '@components/Loading';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
+import {opening} from '@pages/Gallery/opening';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {art, museumReply, replyChange, Source} from '@pages/Gallery/museums';
+import {art, museumReply, replyChange} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 import {StandIn} from '@pages/Gallery/StandIn';
@@ -20,7 +21,7 @@ export const ArtPiece = () => {
 
   useEffect(() => maybe(id)
     .map(chosen => {
-      const {cancel} = art.get({id: chosen, source: tab ?? Source.AIC})
+      const {cancel} = art.get({id: chosen, source: tab ?? opening.museum})
         .onPending(pending => pending && dispatch(replyChange.asked()))
         .onSuccess(answer => dispatch(replyChange.answered(answer)))
         .onFailure(error => {

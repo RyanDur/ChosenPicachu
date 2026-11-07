@@ -34,6 +34,14 @@ describe('viewing a piece', () => {
     await waitFor(() => expect(screen.queryByAltText('the museum refused to answer')).not.toBeInTheDocument());
   });
 
+  test('a piece opened with no museum in its address is shown from the Art Institute', async () => {
+    setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
+
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}`}/>);
+
+    expect(await screen.findByText(pieceResponse.data.artist_display)).toBeInTheDocument();
+  });
+
   test('says the artist is unknown when the museum names none', async () => {
     anyRequestRespondsWith(JSON.stringify({...harvardPieceResponse, people: []}));
 

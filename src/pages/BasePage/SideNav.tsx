@@ -4,8 +4,7 @@ import {Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
 import {toQueryString} from '@transport/url';
-import {limits} from '@pages/Gallery';
-import {Source} from '@pages/Gallery/museums';
+import {opening} from '@pages/Gallery';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
 
@@ -50,9 +49,9 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
     <RailLink id="navigate-users" to={Paths.users}>Users</RailLink>
     <RailLink id="navigate-form"
       to={`${Paths.artGallery}${toQueryString({
-        page: 1,
-        size: limits.record,
-        tab: Source.AIC
+        page: opening.page,
+        size: opening.size,
+        tab: opening.museum
       })}`}>Gallery</RailLink>
     <RailLink id="navigate-games" to={Paths.games}>Games</RailLink>
     <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}

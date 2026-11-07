@@ -2,11 +2,11 @@ import {useContext} from 'react';
 import * as schema from 'schemawax';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {museumReply, sourceParam} from '@pages/Gallery/museums';
-import {limits} from '@pages/Gallery/limits';
+import {opening} from '@pages/Gallery/opening';
 import {Wall} from './wall';
 
 const address = {page: numberParam, size: numberParam, tab: sourceParam, search: schema.string};
-const firstShown = {page: 1, size: limits.record};
+const firstShown = {page: opening.page, size: opening.size};
 
 export const useGallery = () => {
   const {wall, dispatch} = useContext(Wall);
