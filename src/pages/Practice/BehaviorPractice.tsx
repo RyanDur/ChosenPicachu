@@ -237,10 +237,11 @@ export const BehaviorPractice: FC = () =>
       </li>
     </ul>
     <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
-      <a className="signpost" href={fileInRepository('AGENTS.md')}>“No refs: no <code
-        className="monospaced">useRef</code>, <code className="monospaced">createRef</code> or <code
-        className="monospaced">forwardRef</code> anywhere in <code className="monospaced">src</code>.”</a> A ref keeps
-      a value outside the state, where no reducer sees it and no test reads it. The one exception is{' '}
-      <code className="monospaced">MeasuredPanel</code>, which holds its element only to read the height the panel
-      stands at.</p>
+      <a className="signpost" href={fileInRepository('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
+        allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
+        with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
+        measured size, when nothing else gives them, such as an event.”</a> A ref keeps a value outside the state,
+      where no reducer sees it and no test reads it. Two files hold one today, both for the second
+      reason: <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
+      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side.</p>
   </>;

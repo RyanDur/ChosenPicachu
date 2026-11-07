@@ -176,10 +176,11 @@ describe('the Behavior practice tab', () => {
       .toHaveAttribute('href', fileInRepository('scripts/git-hooks/pre-commit'));
   });
 
-  test('should send the quotation of the no-refs rule to AGENTS.md', async () => {
+  test('should send the quotation of the ref rule to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linkUnder('The test the state has to pass', /^“No refs/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The test the state has to pass', /^“A useRef is allowed only/))
+      .toHaveAttribute('href', fileInRepository('AGENTS.md'));
   });
 });
