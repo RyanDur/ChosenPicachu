@@ -3,10 +3,9 @@ import {Link} from 'react-router';
 import {empty, maybe, Maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
-import {useSearchParamsObject} from '@components/search-params';
 import {toQueryString} from '@transport/url';
 import {Art} from '@pages/Gallery/museums/art';
-import {sourceParam} from '@pages/Gallery/museums/source';
+import {useGallery} from '@pages/Gallery/Context';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';
@@ -36,7 +35,7 @@ export const Image: FC<ImageProps> = (
     lazy = false
   }) => {
   const [picture, pictured] = useState<Picture>('arriving');
-  const {tab} = useSearchParamsObject({tab: sourceParam});
+  const {tab} = useGallery();
   const {gallery} = useContext(GalleryLinks);
   const door = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
 

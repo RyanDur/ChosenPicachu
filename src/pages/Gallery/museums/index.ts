@@ -30,3 +30,8 @@ export const art = {
   search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
     fromSource(source, resource => resource.searchOptions(search))
 };
+
+export type {AllArt} from '@pages/Gallery/museums/art';
+export type {MuseumReply} from '@pages/Gallery/museums/reply';
+export {standingOf} from '@pages/Gallery/museums/reply';
+export {sourceParam} from '@pages/Gallery/museums/source';

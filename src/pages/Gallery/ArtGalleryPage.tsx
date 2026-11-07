@@ -4,14 +4,13 @@ import {useHydrated} from '@components/hydrated';
 import {has, maybe, notEmpty, Result} from '@ryandur/sand';
 import {Tabs} from '@components/Tabs';
 import {Loading} from '@components/Loading';
-import {useSearchParamsObject} from '@components/search-params';
 import {ArtGallery, Source} from '@pages/Gallery';
 import {art} from '@pages/Gallery/museums';
-import {sourceParam} from '@pages/Gallery/museums/source';
 import {museums} from '@pages/Gallery/museums/museums';
 import {HTTPError} from '@transport/types';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
+import {useGallery} from '@pages/Gallery/Context';
 
 type Answers = Partial<Record<Source, boolean>>;
 
@@ -40,7 +39,7 @@ const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) =>
 
 export const ArtGalleryPage: FC = () => {
   const [answers, updateAnswers] = useState<Answers>({});
-  const {tab, updateSearchParams, searchFromShown} = useSearchParamsObject({tab: sourceParam});
+  const {tab, updateSearchParams, searchFromShown} = useGallery();
   const {pathname} = useLocation();
   const hydrated = useHydrated();
 

@@ -1,44 +1,35 @@
 import {FC, useEffect} from 'react';
-import {numberParam, useSearchParamsObject} from '@components/search-params';
-import * as schema from 'schemawax';
 import {Loading} from '@components/Loading';
 import {Image} from '@pages/Gallery/Image';
-import {useGallery} from '@pages/Gallery/Art/Context';
+import {useGallery} from '@pages/Gallery/Context';
 import {empty, maybe} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {sourceParam} from '@pages/Gallery/museums/source';
 import {awaited} from '@pages/Gallery/museums/reply';
 import {art as artResource} from '@pages/Gallery/museums';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 import {StandIn} from '@pages/Gallery/StandIn';
 
 export const ArtGallery: FC = () => {
-  const {wall, asked, answered, refused, abandoned} = useGallery();
+  const {wall, dispatch, page, size, search, tab} = useGallery();
   const {raise} = useBanners();
-  const {page, size, search, tab} =
-    useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
-      size: defaultRecordLimit,
-      page: 1
-    });
 
   useEffect(() => maybe(tab)
     .map(source => {
       const {cancel} = artResource.getAll({page, size, search, source})
-        .onPending(pending => pending && asked())
-        .onSuccess(answered)
+        .onPending(pending => pending && dispatch({type: 'asked'}))
+        .onSuccess(answer => dispatch({type: 'answered', answer}))
         .onFailure(error => {
-          refused();
+          dispatch({type: 'refused'});
           raise(troubleWith('the museum')(error));
         });
       return () => {
         cancel();
-        abandoned();
+        dispatch({type: 'abandoned'});
       };
     })
-    .orElse(abandoned), [page, search, tab, size, asked, answered, refused, abandoned, raise]);
+    .orElse(() => dispatch({type: 'abandoned'})), [page, search, tab, size, dispatch, raise]);
 
   return <>
     <ul id="art-gallery">

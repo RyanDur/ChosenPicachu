@@ -5,8 +5,8 @@ import {Loading} from '@components/Loading';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {Image} from '@pages/Gallery/Image';
 import {awaited} from '@pages/Gallery/museums/reply';
-import {useSearchParamsObject} from '@components/search-params';
-import {Source, sourceParam} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/museums/source';
+import {useGallery} from '@pages/Gallery/Context';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {art} from '@pages/Gallery/museums';
@@ -17,7 +17,7 @@ import {StandIn} from '@pages/Gallery/StandIn';
 export const ArtPiece = () => {
   const {easel, asked, answered, refused, abandoned} = useArtPiece();
   const {raise} = useBanners();
-  const {tab} = useSearchParamsObject({tab: sourceParam});
+  const {tab} = useGallery();
   const {id} = useParams<{id: string}>();
 
   useEffect(() => maybe(id)

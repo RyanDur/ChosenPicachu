@@ -1,8 +1,7 @@
 import {Link, useLocation} from 'react-router';
 import {gotoTopOfPage} from '@components/scroll';
 import {FC} from 'react';
-import {numberParam, useSearchParamsObject} from '@components/search-params';
-import {paginationOf, useGallery} from '@pages/Gallery/Art/Context';
+import {useGallery} from '@pages/Gallery/Context';
 import './GalleryNav.css';
 
 type Props = {
@@ -10,11 +9,7 @@ type Props = {
 };
 
 export const GalleryNav: FC<Props> = ({id}) => {
-  const pagination = paginationOf(useGallery().wall);
-  const {
-    page,
-    searchFromShown
-  } = useSearchParamsObject({page: numberParam}, {page: 1});
+  const {pagination, page, searchFromShown} = useGallery();
   const location = useLocation();
   const path = location.pathname;
   const firstPage = 1;

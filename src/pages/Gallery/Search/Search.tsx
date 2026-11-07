@@ -1,13 +1,11 @@
 import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router';
 import {SearchOptions} from '@pages/Gallery/museums/art';
-import {sourceParam} from '@pages/Gallery/museums/source';
-import * as schema from 'schemawax';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import {classNames} from '@components/class-names';
 import {has, Maybe, nothing, some} from '@ryandur/sand';
 import {art} from '@pages/Gallery/museums';
+import {useGallery} from '@pages/Gallery/Context';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
@@ -24,10 +22,7 @@ export const Search: FC<Props> = ({id, className}) => {
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);
-  const {tab, search, removeSearchParams, searchFromAddress} = useSearchParamsObject({
-    tab: sourceParam,
-    search: schema.string
-  });
+  const {tab, search, removeSearchParams, searchFromAddress} = useGallery();
 
   useEffect(() => {
     if (searchString === '' || !has(tab)) return () => undefined;

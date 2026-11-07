@@ -1,20 +1,15 @@
 import {SubmitEvent} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
 import {gotoTopOfPage} from '@components/scroll';
-import {paginationOf, useGallery} from '@pages/Gallery/Art/Context';
-import {numberParam, useSearchParamsObject} from '@components/search-params';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {numberParam} from '@components/search-params';
+import {useGallery} from '@pages/Gallery/Context';
 import './PageControl.css';
 
 const typed = (form: FormData, field: string): Maybe<number> =>
   maybe(form.get(field)).mBind(value => maybe(numberParam.decode(value)));
 
 export const PageControl = () => {
-  const pagination = paginationOf(useGallery().wall);
-  const {page, size, updateSearchParams} = useSearchParamsObject({page: numberParam, size: numberParam}, {
-    page: 1,
-    size: defaultRecordLimit
-  });
+  const {pagination, page, size, updateSearchParams} = useGallery();
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
