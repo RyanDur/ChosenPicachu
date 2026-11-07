@@ -138,9 +138,9 @@ export const PresentationPractice: FC = () =>
     </ul>
     <p className="paragraph">I give up the scoping of every look to its block. In BEM,{' '}
       <code className="monospaced">lifted</code> on a card and <code className="monospaced">lifted</code> on a menu are
-      two modifiers and two rules, so nothing is shared by accident, and I write the same look twice. Mine is one
-      word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a state, since
-      a modifier{' '}
+      two modifiers and two rules, so nothing is shared by accident, and a BEM author writes the same look twice. Mine
+      is one word any block can wear, because a look is the style sheet’s job. BEM also has no separate idea of a
+      state, since a modifier{' '}
       <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of
         the block”</a>.
       I split them, and the class list below says why.</p>

@@ -189,7 +189,7 @@ describe('the Presentation practice tab', () => {
     ]));
   });
 
-  test('should send what a BEM modifier defines to the history page’s archived copy, from the paragraph on what I give up', async () => {
+  test('should send what a BEM modifier defines to the history page’s archived copy', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
