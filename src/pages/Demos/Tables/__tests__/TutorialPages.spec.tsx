@@ -15,6 +15,12 @@ describe('the table tutorials, each on its own page', () => {
     expect(await tablesTab().recipe('sort menu')).toBeVisible();
   });
 
+  test('the tables tab lists its tutorials in the order they build on each other: Drag sort, Sort menu, Drag resize', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await tablesTab().tutorialsListed()).toEqual(['Drag sort', 'Sort menu', 'Drag resize']);
+  });
+
   test('the tables tab shows none of the tutorials it lists', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
