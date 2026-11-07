@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {DemoTopics} from '../types';
-import {DialGroup, DialRow} from '../Controls/DialRow';
+import {DialGroup, DialRow} from '../Controls';
 import {
   AccordionProps,
   ExclusiveAccordion,

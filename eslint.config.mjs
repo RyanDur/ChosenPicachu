@@ -81,13 +81,13 @@ const stillReachForThePage = [
   'src/components/Banners/Banners.tsx', 'src/components/Feedback/Feedback.tsx',
   'src/components/OpeningFragment/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
   'src/components/glide.ts', 'src/components/room.ts', 'src/components/scroll/scroll.ts', 'src/pages/BasePage/SideNav.tsx',
-  'src/pages/Demos/Charts/Workspace.tsx', 'src/pages/Demos/Controls/DialRow.tsx',
+  'src/pages/Demos/Charts/Workspace.tsx',
   'src/pages/Demos/Tables/Aggregations/fold.ts', 'src/pages/Demos/ZIndexDemo/BannerTrap.tsx',
   'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
 ];
 
 const refsWithAReason = [
-  'src/pages/Demos/Accordions/MeasuredPanel.tsx'
+  'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
 const stillMoveByScript = ['src/components/glide.ts'];

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
-import {DialGroup, DialRow} from '../Controls/DialRow';
+import {DialGroup, DialRow} from '../Controls';
 
 type Copy = {
   side: Record<Side, string>;

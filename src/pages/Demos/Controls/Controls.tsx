@@ -1,7 +1,8 @@
 import {FC, PropsWithChildren} from 'react';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
-import {DialGroup, DialRow} from './DialRow';
+import {DialGroup} from './DialGroup';
+import {DialRow} from './DialRow';
 import {Pace, useControls} from './useControls';
 import './Controls.css';
 
