@@ -23,8 +23,7 @@ const recipes: Record<Pace, Record<Origin, Record<Motion, FC>>> = {
 };
 
 export const NativeRecipe: FC = () => {
-  const {pace, origin, motion} =
-    useControls();
+  const {pace, origin, motion} = useControls();
   const Recipe = recipes[pace][origin][motion];
   return <section aria-label="build the native drag sort yourself" className="build-steps">
     <Stories>

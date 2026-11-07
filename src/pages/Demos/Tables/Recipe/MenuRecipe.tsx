@@ -344,8 +344,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 };
 
 export const MenuRecipe: FC = () => {
-  const {pace, world} =
-    useControls();
+  const {pace, world} = useControls();
   const build: Build = {
     world,
     source: headerSources[pace],

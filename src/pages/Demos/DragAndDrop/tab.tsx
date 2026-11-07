@@ -23,8 +23,7 @@ const lists = {
 };
 
 const DragSortTab: FC = () => {
-  const {pace, origin, motion} =
-    useControls();
+  const {pace, origin, motion} = useControls();
   const List = lists[pace][origin][motion];
 
   return <>

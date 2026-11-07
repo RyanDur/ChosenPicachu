@@ -29,8 +29,7 @@ const VanillaStage: FC<Dials> = dials => {
 };
 
 export const Aggregations: FC = () => {
-  const {pace, origin, motion, world} =
-    useControls();
+  const {pace, origin, motion, world} = useControls();
   const dials = {pace, origin, motion};
   useEffect(warmed, []);
 
