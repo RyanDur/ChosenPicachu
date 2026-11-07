@@ -153,7 +153,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?tut=menu$",
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/sort/$",
           "assertions": {
             "categories:accessibility": [
               "error",
@@ -164,7 +164,36 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 41984
+                "maxNumericValue": 24576
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/menu/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 13312
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -298,7 +327,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?tut=resize$",
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/resize/$",
           "assertions": {
             "categories:accessibility": [
               "error",
@@ -309,7 +338,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 41984
+                "maxNumericValue": 13312
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -338,7 +367,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 41984
+                "maxNumericValue": 23552
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -367,7 +396,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 41984
+                "maxNumericValue": 23552
               }
             ],
             "resource-summary:stylesheet:size": [

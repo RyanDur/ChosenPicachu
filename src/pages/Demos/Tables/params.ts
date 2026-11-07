@@ -2,14 +2,16 @@ import * as schema from 'schemawax';
 
 export type Track = 'pointer' | 'keyboard';
 
-export const trackParam: schema.Decoder<Track> = schema.literalUnion('pointer', 'keyboard');
-
-export type Tutorial = 'sort' | 'menu' | 'resize';
-
-export const tutorialParam: schema.Decoder<Tutorial> = schema.literalUnion('sort', 'menu', 'resize');
-
 export type World = 'react' | 'vanilla';
 
-export const worldParam: schema.Decoder<World> = schema.literalUnion('react', 'vanilla');
+type TablesDials = {
+  track: schema.Decoder<Track>;
+  world: schema.Decoder<World>;
+  defaults: {world: World; track: Track};
+};
 
-export const defaultTablesDials: {tut: Tutorial; world: World; track: Track} = {tut: 'sort', world: 'react', track: 'pointer'};
+export const tablesDials = (): TablesDials => ({
+  track: schema.literalUnion('pointer', 'keyboard'),
+  world: schema.literalUnion('react', 'vanilla'),
+  defaults: {world: 'react', track: 'pointer'}
+});

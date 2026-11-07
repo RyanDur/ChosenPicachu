@@ -8,7 +8,7 @@ describe('the drag resize recipe', () => {
   test('should link the resize step’s :has() to MDN', async () => {
     render(<TestApp at="/"><ResizeRecipe/></TestApp>);
 
-    expect(await tablesTab.linkIn('drag resize', ':has()')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
+    expect(await tablesTab().linkIn('drag resize', ':has()')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/:has');
   });
 
   test('the resize story stands in the html world', async () => {
@@ -20,6 +20,6 @@ describe('the drag resize recipe', () => {
   test('should link capturing the pointer to setPointerCapture on MDN', async () => {
     render(<TestApp at="/"><ResizeRecipe/></TestApp>);
 
-    expect((await tablesTab.linksIn('drag resize', 'captures its pointer'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
+    expect((await tablesTab().linksIn('drag resize', 'captures its pointer'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
   });
 });

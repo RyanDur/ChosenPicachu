@@ -15,8 +15,10 @@ const demoTabs: Record<keyof typeof names.demos, string> = {
 export default [
   route(Paths.home, 'pages/Home/route.tsx'),
   route(Paths.demos, 'pages/Demos/SavedTab/route.tsx'),
-  layout('pages/Demos/route.tsx',
-    Object.entries(demoTabs).map(([topic, file]) => route(`${Paths.demos}${topic}/`, file))),
+  layout('pages/Demos/route.tsx', [
+    ...Object.entries(demoTabs).map(([topic, file]) => route(`${Paths.demos}${topic}/`, file)),
+    route(`${Paths.demos}tables/:tutorial/`, demoTabs.tables, {id: 'tables-tutorial'})
+  ]),
   route(Paths.chartTutorial, 'pages/Demos/Charts/route.tsx'),
   route(Paths.users, 'pages/Users/route.tsx'),
   route(`${Paths.artGallery}${GalleryPaths.home}`, 'pages/Gallery/route.tsx'),

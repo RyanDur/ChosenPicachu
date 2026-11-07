@@ -5,7 +5,7 @@ import {useSearchParamsObject} from '@components/search-params';
 import {defaultDials, paceParam} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {defaultTablesDials, World, worldParam} from '../params';
+import {tablesDials, World} from '../params';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
@@ -22,6 +22,8 @@ import {TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const tableDials = tablesDials();
 
 const gap = plain(' ');
 
@@ -345,7 +347,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 
 export const MenuRecipe: FC = () => {
   const {pace, world} =
-    useSearchParamsObject({pace: paceParam, world: worldParam}, {...defaultDials, ...defaultTablesDials});
+    useSearchParamsObject({pace: paceParam, world: tableDials.world}, {...defaultDials, ...tableDials.defaults});
   const build: Build = {
     world,
     source: headerSources[pace],

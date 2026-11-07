@@ -39,8 +39,9 @@ export const pages: readonly SitePage[] = [
   {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
   {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
   {name: 'pie chart tutorial', path: 'demos/charts/pie/', ready: 'navigation', loaded: page => homePage(page).recipeStory},
-  {name: 'menu tutorial', path: 'demos/tables/?tut=menu', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
-  {name: 'resize tutorial', path: 'demos/tables/?tut=resize', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
+  {name: 'sort tutorial', path: 'demos/tables/sort/', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
+  {name: 'menu tutorial', path: 'demos/tables/menu/', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
+  {name: 'resize tutorial', path: 'demos/tables/resize/', ready: 'navigation', loaded: page => homePage(page).recipeStory, budgeted: true},
   {
     name: 'drag sort',
     path: 'demos/drag-and-drop/',

@@ -61,6 +61,27 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.demos.tables.description);
   });
 
+  test('should give the drag sort tutorial its own title and description', async () => {
+    render(<TestApp at={demosAt('tables/sort')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.tables.sort.title));
+    expect(described()).toBe(names.tables.sort.description);
+  });
+
+  test('should give the sort menu tutorial its own title and description', async () => {
+    render(<TestApp at={demosAt('tables/menu')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.tables.menu.title));
+    expect(described()).toBe(names.tables.menu.description);
+  });
+
+  test('should give the drag resize tutorial its own title and description', async () => {
+    render(<TestApp at={demosAt('tables/resize')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.tables.resize.title));
+    expect(described()).toBe(names.tables.resize.description);
+  });
+
   test('should give the price line’s page its own title and description', async () => {
     render(<TestApp at={chartPageAt('price')}/>);
 

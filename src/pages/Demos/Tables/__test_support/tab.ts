@@ -11,11 +11,17 @@ type Headers = {
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
+const tutorialLink = async (name: string): Promise<HTMLElement> =>
+  within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
 const headersOf = (holder: HTMLElement): Headers =>
   ({columns: within(holder).getAllByRole('columnheader'), rows: within(holder).getAllByRole('rowheader')});
 
-export const tablesTab = {
+export const tablesTab = () => ({
+  titleShown: (name: string): HTMLElement | null => screen.queryByRole('heading', {name}),
   recipe,
+  tutorialLink,
+  openTutorial: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
+  backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
   findRadios: (name: string): Promise<HTMLElement[]> => screen.findAllByRole('radio', {name, hidden: true}),
@@ -38,4 +44,4 @@ export const tablesTab = {
   },
   linkIn: async (build: string, name: string): Promise<HTMLElement> =>
     within(await recipe(build)).getByRole('link', {name, hidden: true})
-};
+});

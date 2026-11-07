@@ -7,7 +7,7 @@ test.describe('a desktop', () => {
 
   test('the settings a reader left open stay open when the window is made narrow', async ({page}) => {
     const tables = tablesDemo(page);
-    await page.goto('demos/tables/');
+    await page.goto('demos/tables/sort/');
     await demoSettings(page).press();
     await expect(tables.controls).toBeVisible();
 

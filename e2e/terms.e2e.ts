@@ -20,7 +20,7 @@ test.describe('a phone', () => {
 
   test('a tap on middleware shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables', 'The page is a store, and so is the table', 'middleware'));
 
-  test('a tap on survey shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables', 'The trader can sort by column', 'survey'));
+  test('a tap on survey shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/sort', 'The trader can sort by column', 'survey'));
 
   test('a tap on reducer shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables', 'The page is a store, and so is the table', 'reducer'));
 

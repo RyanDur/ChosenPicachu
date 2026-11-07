@@ -28,20 +28,20 @@ for (const {reader, device} of [
       expect(await pillsAFingerCannotChoose(page, 'world')).toEqual([]);
     });
 
-    test('every pace pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/tables/');
+    test('every pace pill on the drag sort tutorial is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/sort/');
 
       expect(await pillsAFingerCannotChoose(page, 'pace')).toEqual([]);
     });
 
-    test('every origin pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/tables/');
+    test('every origin pill on the drag sort tutorial is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/sort/');
 
       expect(await pillsAFingerCannotChoose(page, 'origin')).toEqual([]);
     });
 
-    test('every motion pill on the tables demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/tables/');
+    test('every motion pill on the drag sort tutorial is chosen by a finger that lands just off its middle', async ({page}) => {
+      await page.goto('demos/tables/sort/');
 
       expect(await pillsAFingerCannotChoose(page, 'motion')).toEqual([]);
     });

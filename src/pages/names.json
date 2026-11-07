@@ -31,6 +31,11 @@
     "pressure": {"title": "Pressure · Charts · Chosen Picachu", "description": "The trader can see who is driving the move."},
     "pie": {"title": "Pie · Charts · Chosen Picachu", "description": "The trader can see who owns the session."}
   },
+  "tables": {
+    "sort": {"title": "Drag sort · Tables · Chosen Picachu", "description": "The trader can drag the columns and rows into the order they think in."},
+    "menu": {"title": "Sort menu · Tables · Chosen Picachu", "description": "The trader can sort the windows by any measure, or take the order back."},
+    "resize": {"title": "Drag resize · Tables · Chosen Picachu", "description": "The trader can widen a column, and its neighbor gives up the room."}
+  },
   "users": {
     "title": "Users · Chosen Picachu",
     "description": "A roster of candidates and the form that adds one, with the platform’s own validation."

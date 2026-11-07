@@ -14,6 +14,6 @@ describe('the sort menu recipe', () => {
   test('should link position-area to MDN', async () => {
     render(<TestApp at="/"><MenuRecipe/></TestApp>);
 
-    expect((await tablesTab.linksIn('sort menu', 'position-area'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
+    expect((await tablesTab().linksIn('sort menu', 'position-area'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
   });
 });

@@ -33,10 +33,6 @@
     gap: var(--base-x-2_5);
   }
 
-  .tutorial-picks {
-    justify-self: stretch;
-  }
-
   .build-steps,
   .controls {
     justify-self: stretch;

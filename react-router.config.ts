@@ -10,7 +10,7 @@ export default {
   appDirectory: 'src',
   basename: '/ChosenPicachu/',
   ssr: false,
-  prerender: [...fixed, ...tabsOf(Paths.demos, names.demos), ...tabsOf(`${Paths.demos}charts/`, names.charts), ...tabsOf(Paths.practice, names.practice)],
+  prerender: [...fixed, ...tabsOf(Paths.demos, names.demos), ...tabsOf(`${Paths.demos}charts/`, names.charts), ...tabsOf(`${Paths.demos}tables/`, names.tables), ...tabsOf(Paths.practice, names.practice)],
   future: {
     v8_middleware: true,
     v8_passThroughRequests: true,

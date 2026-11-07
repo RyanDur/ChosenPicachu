@@ -1,0 +1,8 @@
+.tutorial-links {
+  display: grid;
+  gap: var(--base);
+
+  .tutorial-link {
+    display: inline-block;
+  }
+}

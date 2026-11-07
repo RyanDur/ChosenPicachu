@@ -5,6 +5,11 @@ const storyAt = (page: Page, position: number): Locator =>
   page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(position);
 
 export const tablesDemo = (page: Page) => ({
+  tutorials: {
+    link: (name: string): Locator => page.getByRole('region', {name: 'Tables'}).getByRole('link', {name, exact: true}),
+    title: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
+    firstStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
+  },
   controls: page.getByRole('region', {name: 'table controls'}),
   storyAt: (position: number): Locator => storyAt(page, position),
   openStoryAt: async (position: number): Promise<void> => {

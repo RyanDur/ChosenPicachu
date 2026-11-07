@@ -4,7 +4,7 @@ import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {defaultTablesDials, World, worldParam} from '../params';
+import {tablesDials, World} from '../params';
 import {TheImplementation} from './steps';
 import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/exchange.ts?sample';
@@ -21,6 +21,8 @@ import tableSource from '../Frame/table.html?sample';
 import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
+
+const tableDials = tablesDials();
 
 const gap = plain(' ');
 
@@ -266,14 +268,14 @@ const FlowStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const StillTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: worldParam}, defaultTablesDials);
+  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
   return <section aria-label="the still table" className="build-steps">
     <Stories><StillStory world={world}/></Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: worldParam}, defaultTablesDials);
+  const {world} = useSearchParamsObject({world: tableDials.world}, tableDials.defaults);
   return <section aria-label="the living table" className="build-steps">
     <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
   </section>;

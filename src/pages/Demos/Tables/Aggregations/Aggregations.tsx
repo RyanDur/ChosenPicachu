@@ -4,12 +4,14 @@ import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {useSearchParamsObject} from '@components/search-params';
 import {defaultDials, Dials, motionParam, originParam, paceParam} from '../../Controls';
-import {defaultTablesDials, worldParam} from '../params';
+import {tablesDials} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
 import {selectColumns, selectRows} from '../../store';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import '../Aggregations.css';
+
+const tableDials = tablesDials();
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
@@ -33,8 +35,8 @@ const VanillaStage: FC<Dials> = dials => {
 export const Aggregations: FC = () => {
   const {pace, origin, motion, world} =
     useSearchParamsObject(
-      {pace: paceParam, origin: originParam, motion: motionParam, world: worldParam},
-      {...defaultDials, ...defaultTablesDials}
+      {pace: paceParam, origin: originParam, motion: motionParam, world: tableDials.world},
+      {...defaultDials, ...tableDials.defaults}
     );
   const dials = {pace, origin, motion};
   useEffect(warmed, []);
