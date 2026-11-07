@@ -1,0 +1,1 @@
+export {imageOf} from './image';

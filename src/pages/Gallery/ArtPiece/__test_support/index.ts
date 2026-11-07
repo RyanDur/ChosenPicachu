@@ -1,0 +1,1 @@
+export {piecePage} from './piece';
