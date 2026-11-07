@@ -4,7 +4,6 @@ import testingLibrary from 'eslint-plugin-testing-library';
 import playwright from 'eslint-plugin-playwright';
 import {classes} from './scripts/lint/classes.mjs';
 import {bareInlineCode} from './scripts/lint/inline-code.mjs';
-import {readFileSync} from 'node:fs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -61,7 +60,25 @@ const journeys = Object.fromEntries([
   'valid-describe-callback', 'valid-expect', 'valid-expect-in-promise'
 ].map(rule => [`playwright/${rule}`, 'error']));
 
-const routeModules = [...readFileSync('src/routes.ts', 'utf8').matchAll(/'(pages\/[^']+\.tsx)'/g)].map(([, path]) => `src/${path}`);
+const routeModules = [
+  'Demos/Accordions/tab.tsx', 'Demos/ZIndexDemo/tab.tsx', 'Demos/DragAndDrop/tab.tsx', 'Demos/Charts/tab.tsx',
+  'Demos/Tables/tab.tsx', 'Home/route.tsx', 'Demos/SavedTab/route.tsx', 'Demos/route.tsx', 'Demos/Charts/route.tsx',
+  'Users/route.tsx', 'Gallery/route.tsx', 'Gallery/Piece/route.tsx', 'Games/route.tsx', 'Record/route.tsx',
+  'Practice/SavedTab/route.tsx', 'Practice/route.tsx', 'NoRoom/route.tsx'
+].map(path => `src/pages/${path}`);
+
+const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
+
+const stillReachForThePage = [
+  'src/components/Banners/Banners.tsx', 'src/components/Feedback/Feedback.tsx',
+  'src/components/OpeningFragment/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
+  'src/components/glide.ts', 'src/components/room.ts', 'src/components/scroll.ts', 'src/pages/BasePage/SideNav.tsx',
+  'src/pages/Demos/Charts/Workspace.tsx', 'src/pages/Demos/Controls/DialRow.tsx', 'src/pages/Demos/Recipe/Defined.tsx',
+  'src/pages/Demos/Tables/Aggregations/fold.ts', 'src/pages/Demos/ZIndexDemo/BannerTrap.tsx',
+  'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
+];
+
+const stillMoveByScript = ['src/components/glide.ts'];
 
 export default [
   {
@@ -124,5 +141,21 @@ export default [
     rules: {'no-restricted-exports': ['error', {
       restrictDefaultExports: {direct: true, named: true, defaultFrom: true, namedFrom: true, namespaceFrom: true}
     }]}
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', 'src/entry.client.tsx', 'src/env.ts', ...vanilla, ...stillReachForThePage],
+    rules: {'no-restricted-globals': ['error',
+      {name: 'document', message: 'React code never reaches for the document; a vanilla build lives in its own directory'},
+      {name: 'window', message: 'React code never reaches for the window; a vanilla build lives in its own directory'}
+    ]}
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', ...stillMoveByScript],
+    rules: {'no-restricted-properties': ['error',
+      {property: 'startViewTransition', message: 'motion is the style sheet\'s alone'},
+      {property: 'animate', message: 'motion is the style sheet\'s alone'}
+    ]}
   }
 ];
