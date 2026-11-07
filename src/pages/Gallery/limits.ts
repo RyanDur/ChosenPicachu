@@ -1,2 +1,1 @@
-export const defaultRecordLimit = 8;
-export const defaultSearchLimit = 5;
+export const limits = {record: 8, search: 5};

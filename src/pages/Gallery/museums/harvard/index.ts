@@ -6,7 +6,7 @@ import {
   HarvardSearchResponse,
   HarvardSearchSchema
 } from '@pages/Gallery/museums/harvard/types';
-import {defaultRecordLimit, defaultSearchLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
@@ -14,20 +14,17 @@ import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/source';
-import {pictured} from '@pages/Gallery/museums/pictured';
-import {attributed} from '@pages/Gallery/museums/attributed';
+import {artFields} from '@pages/Gallery/museums/artFields';
 
-const {harvardAPIKey, harvardDomain} = env;
-
-export const harvardFields = ['id', 'title', 'people', 'primaryimageurl'].join();
+const fields = ['id', 'title', 'people', 'primaryimageurl'].join();
 const baseQueryString = {
-  fields: harvardFields, apikey: harvardAPIKey
+  fields, apikey: env.harvardAPIKey
 };
 const withImages = (search?: string) =>
   [has(search) && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
-const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-  .get(`${harvardDomain}${toQueryString({
+const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
+  .get(`${env.harvardDomain}${toQueryString({
     q: withImages(search),
     page,
     size, ...baseQueryString
@@ -35,6 +32,8 @@ const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) =
   .mBind(validate(HarvardAllArtSchema));
 
 export const harvard = {
+  fields,
+
   allArt: (request: GetAllArtRequest) => searched(request)
     .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {
@@ -48,16 +47,16 @@ export const harvard = {
   open: () => searched({page: 1}).map(({records}) => records.length > 0),
 
   art: (id: string) => http
-    .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})
+    .get(`${env.harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})
     .mBind(validate(HarvardArtSchema))
     .map(harvardArtToArt),
 
   searchOptions: (search: string) => http
-    .get(`${harvardDomain}${toQueryString({
+    .get(`${env.harvardDomain}${toQueryString({
       title: search,
       fields: 'title',
-      apikey: harvardAPIKey,
-      size: defaultSearchLimit
+      apikey: env.harvardAPIKey,
+      size: limits.search
     })}`, {cache: 'force-cache'})
     .mBind(validate(HarvardSearchSchema))
     .map(({records}: HarvardSearchResponse): SearchOptions =>
@@ -67,7 +66,7 @@ export const harvard = {
 const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
   title: maybe(record.title).orElse('Untitled'),
-  ...pictured(record.primaryimageurl),
-  ...attributed(record.people?.find(person => person.role === 'Artist')?.displayname),
+  ...artFields.pictured(record.primaryimageurl),
+  ...artFields.attributed(record.people?.find(person => person.role === 'Artist')?.displayname),
   altText: maybe(record.title).orElse('Untitled')
 });

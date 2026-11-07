@@ -4,7 +4,7 @@ import {Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
 import {toQueryString} from '@transport/url';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {Source} from '@pages/Gallery/museums/source';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
@@ -51,7 +51,7 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
     <RailLink id="navigate-form"
       to={`${Paths.artGallery}${toQueryString({
         page: 1,
-        size: defaultRecordLimit,
+        size: limits.record,
         tab: Source.AIC
       })}`}>Gallery</RailLink>
     <RailLink id="navigate-games" to={Paths.games}>Games</RailLink>

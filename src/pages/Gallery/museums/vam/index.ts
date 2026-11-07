@@ -5,7 +5,7 @@ import {
   VAMArtSchema,
   VAMSearchRecord
 } from '@pages/Gallery/museums/vam/types';
-import {defaultRecordLimit, defaultSearchLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 import {maybe} from '@ryandur/sand';
 import {toQueryString} from '@transport/url';
@@ -13,9 +13,7 @@ import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/source';
-import {attributed} from '@pages/Gallery/museums/attributed';
-
-const {vamDomain, vamPictures} = env;
+import {artFields} from '@pages/Gallery/museums/artFields';
 
 const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/0/default.jpg`;
 
@@ -29,15 +27,15 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
     image: iiifImage(base, 800),
     srcSet: iiifSrcSet(base)
   })).orElse({}),
-  ...attributed(record._primaryMaker?.name),
+  ...artFields.attributed(record._primaryMaker?.name),
   altText: record._primaryTitle || 'Untitled'
 });
 
 const tipuSultan = '2009BY1329';
 
 export const vam = {
-  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${vamDomain}/objects/search${toQueryString({
+  allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
+    .get(`${env.vamDomain}/objects/search${toQueryString({
       q: search,
       page,
       page_size: size,
@@ -53,23 +51,23 @@ export const vam = {
       pieces: records.map(vamRecordToArt)
     })),
 
-  open: () => http.get(`${vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map(() => true),
+  open: () => http.get(`${env.vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map(() => true),
 
   art: (id: string) => http
-    .get(`${vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
+    .get(`${env.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
     .mBind(validate(VAMArtSchema))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
       ...maybe(record.images?.[0]).map(first => ({image: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)})).orElse({}),
-      ...attributed(record.artistMakerPerson?.[0]?.name.text),
+      ...artFields.attributed(record.artistMakerPerson?.[0]?.name.text),
       altText: maybe(record.titles?.[0]?.title).orElse(record.objectType)
     })),
 
   searchOptions: (search: string) => http
-    .get(`${vamDomain}/objects/search${toQueryString({
+    .get(`${env.vamDomain}/objects/search${toQueryString({
       q: search,
-      page_size: defaultSearchLimit
+      page_size: limits.search
     })}`, {cache: 'force-cache'})
     .mBind(validate(VAMAllArtSchema))
     .map(({records}: VAMAllArtResponse): SearchOptions => records.map(({_primaryTitle}) => _primaryTitle))

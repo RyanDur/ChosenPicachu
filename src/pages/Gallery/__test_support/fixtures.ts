@@ -16,14 +16,14 @@ import {
   ClevelandArtResponse,
   ClevelandSearchResponse
 } from '@pages/Gallery/museums/cleveland/types';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 
 const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
 
 export const pagination = {
   total: 997,
-  limit: defaultRecordLimit,
+  limit: limits.record,
   offset: 0,
   total_pages: 125,
   next_url: faker.internet.url()
@@ -74,7 +74,7 @@ export const aPiece = (): Art => ({
 });
 
 export const info: HarvardInfo = {
-  totalrecordsperquery: defaultRecordLimit,
+  totalrecordsperquery: limits.record,
   totalrecords: faker.number.int({max: 9999}),
   pages: faker.number.int({max: 999})
 };
@@ -112,7 +112,7 @@ export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
 };
-const vamInfo = {record_count: 500, pages: 42, page_size: defaultRecordLimit};
+const vamInfo = {record_count: 500, pages: 42, page_size: limits.record};
 const vamSearchRecords = [...Array(vamInfo.page_size)].map((_, index) => ({
   systemNumber: `O${index}`,
   _primaryTitle: index === 0 ? '' : faker.lorem.words(),
@@ -186,7 +186,7 @@ export const fromHarvardArt: AllArt = {
   }))
 };
 
-const clevelandRecords = [...Array(defaultRecordLimit)].map((_, index) => ({
+const clevelandRecords = [...Array(limits.record)].map((_, index) => ({
   id: 1000 + index,
   title: faker.lorem.words(),
   creators: [{description: faker.person.fullName()}],
@@ -198,7 +198,7 @@ const clevelandRecords = [...Array(defaultRecordLimit)].map((_, index) => ({
 }));
 export const clevelandArtResponse: ClevelandAllArtResponse = {info: {total: 82}, data: clevelandRecords};
 export const fromClevelandArt: AllArt = {
-  pagination: {total: 82, limit: defaultRecordLimit, totalPages: Math.ceil(82 / defaultRecordLimit)},
+  pagination: {total: 82, limit: limits.record, totalPages: Math.ceil(82 / limits.record)},
   pieces: clevelandRecords.map(record => ({
     id: String(record.id),
     title: record.title,

@@ -3,7 +3,7 @@ import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
 import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {anyRequestFailsToConnect} from '@__test_support/server';
 import {appAddress} from '@__test_support/address';
 import {galleryNav} from '../__test_support';
@@ -136,7 +136,7 @@ describe('Gallery Navigation', () => {
 
   test('while the next page is on its way, the way forward and the count stay', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
@@ -149,7 +149,7 @@ describe('Gallery Navigation', () => {
 
   test('the way forward stays once the next page lands', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
     await galleryNav.go('NEXT');

@@ -7,7 +7,12 @@ const names: Record<Source, string> = {
   [Source.CLEVELAND]: 'The Cleveland Museum of Art'
 };
 
-export const museums: readonly {display: string; param: Source}[] =
-  Object.values(Source).map(param => ({display: names[param], param}));
+type Museums = {
+  readonly all: readonly {display: string; param: Source}[];
+  readonly named: (source: Source) => string;
+};
 
-export const museumNamed = (source: Source): string => names[source];
+export const museums: Museums = {
+  all: Object.values(Source).map(param => ({display: names[param], param})),
+  named: source => names[source]
+};

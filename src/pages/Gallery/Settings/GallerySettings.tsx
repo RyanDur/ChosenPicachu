@@ -5,13 +5,13 @@ import {useRoomToStandOpen} from '@components/room';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
-import {museumNamed} from '@pages/Gallery/museums/museums';
+import {museums} from '@pages/Gallery/museums/museums';
 import './GallerySettings.css';
 
 const Readout: FC = () => {
   const {search, tab, page, pagination} = useGallery();
   const pages = pagination.map(({totalPages}) => ` of ${totalPages}`).orElse('');
-  const where = has(search) ? search : maybe(tab).map(museumNamed).orElse('the gallery');
+  const where = has(search) ? search : maybe(tab).map(museums.named).orElse('the gallery');
   return <span className="readout">
     <span className="bold ellipsis">{where}</span><span className="page">, page {page}{pages}</span>
   </span>;

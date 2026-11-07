@@ -9,16 +9,14 @@ import {
   ClevelandSearchResponse,
   ClevelandSearchSchema
 } from './types';
-import {defaultRecordLimit, defaultSearchLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/source';
-import {attributed} from '@pages/Gallery/museums/attributed';
-
-const {clevelandDomain} = env;
+import {artFields} from '@pages/Gallery/museums/artFields';
 
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
@@ -38,12 +36,12 @@ const toPiece = (record: ClevelandRecord): Art => ({
   title: record.title,
   image: record.images?.web?.url,
   srcSet: srcSetOf(record),
-  ...attributed(artistOf(record)),
+  ...artFields.attributed(artistOf(record)),
   altText: record.title
 });
 
-const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-  .get(`${clevelandDomain}/${toQueryString({
+const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
+  .get(`${env.clevelandDomain}/${toQueryString({
     q: search,
     skip: (page - 1) * size,
     limit: size,
@@ -55,7 +53,7 @@ const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) =
 export const cleveland = {
   allArt: (request: GetAllArtRequest) => searched(request)
     .map(({info, data}: ClevelandAllArtResponse): AllArt => {
-      const size = request.size ?? defaultRecordLimit;
+      const size = request.size ?? limits.record;
       return {
         pagination: {
           total: info.total,
@@ -69,14 +67,14 @@ export const cleveland = {
   open: () => searched({page: 1}).map(({data}) => data.length > 0),
 
   art: (id: string) => http
-    .get(`${clevelandDomain}/${id}${toQueryString({fields: clevelandFields})}`, {cache: 'force-cache'})
+    .get(`${env.clevelandDomain}/${id}${toQueryString({fields: clevelandFields})}`, {cache: 'force-cache'})
     .mBind(validate(ClevelandArtSchema))
     .map(({data}: ClevelandArtResponse): Art => toPiece(data)),
 
   searchOptions: (search: string) => http
-    .get(`${clevelandDomain}/${toQueryString({
+    .get(`${env.clevelandDomain}/${toQueryString({
       q: search,
-      limit: defaultSearchLimit,
+      limit: limits.search,
       has_image: 1,
       fields: 'title'
     })}`, {cache: 'force-cache'})

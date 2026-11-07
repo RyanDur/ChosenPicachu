@@ -5,8 +5,7 @@ import {useGallery} from '@pages/Gallery/Context';
 import {empty, maybe} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {awaited} from '@pages/Gallery/museums/reply';
-import {art as artResource, replyChange} from '@pages/Gallery/museums';
+import {art as artResource, replyChange, museumReply} from '@pages/Gallery/museums';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 import {StandIn} from '@pages/Gallery/StandIn';
@@ -42,7 +41,7 @@ export const ArtGallery: FC = () => {
         </figure>
       </li>)}
     </ul>
-    {awaited(wall) && <Loading label="loading gallery"/>}
+    {museumReply.awaited(wall) && <Loading label="loading gallery"/>}
     {wall.reply === 'answered' && empty(wall.answer.pieces) &&
         <StandIn src={noImageGallery} alt="the museum answered with nothing"/>}
     {wall.reply === 'refused' && <StandIn src={noImageGallery} alt="the museum refused to answer"/>}

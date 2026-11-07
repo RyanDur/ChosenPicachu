@@ -33,8 +33,7 @@ export const art = {
 
 export type {AllArt, Art} from '@pages/Gallery/museums/art';
 export type {MuseumReply} from '@pages/Gallery/museums/reply';
-export {standingOf} from '@pages/Gallery/museums/reply';
+export {museumReply} from '@pages/Gallery/museums/reply';
 export {sourceParam} from '@pages/Gallery/museums/source';
 export type {ReplyChange} from '@pages/Gallery/museums/replyChange';
 export {replyChange} from '@pages/Gallery/museums/replyChange';
-export {replies} from '@pages/Gallery/museums/replies';

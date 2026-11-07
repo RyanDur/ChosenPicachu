@@ -4,12 +4,11 @@ import {maybe} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {Image} from '@pages/Gallery/Image';
-import {awaited} from '@pages/Gallery/museums/reply';
 import {Source} from '@pages/Gallery/museums/source';
 import {useGallery} from '@pages/Gallery/Context';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {art, replyChange} from '@pages/Gallery/museums';
+import {art, replyChange, museumReply} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 import {StandIn} from '@pages/Gallery/StandIn';
@@ -37,7 +36,7 @@ export const ArtPiece = () => {
     .orElse(() => dispatch(replyChange.abandoned())), [id, tab, dispatch, raise]);
 
   return <>
-    {awaited(easel) && <Loading label="loading piece"/>}
+    {museumReply.awaited(easel) && <Loading label="loading piece"/>}
     {easel.reply === 'answered' && <figure className="art-work">
       <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
       <figcaption className="artist-display trim hairline-outline italic caption ink">{easel.answer.artistInfo ?? 'Unknown'}</figcaption>

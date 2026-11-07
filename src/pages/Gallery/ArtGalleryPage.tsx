@@ -14,9 +14,9 @@ import {useGallery} from '@pages/Gallery/Context';
 
 type Answers = Partial<Record<Source, boolean>>;
 
-const openIn = (answers: Answers) => museums.filter(({param}) => answers[param] === true);
+const openIn = (answers: Answers) => museums.all.filter(({param}) => answers[param] === true);
 
-const settledIn = (answers: Answers): boolean => museums.every(({param}) => has(answers[param]));
+const settledIn = (answers: Answers): boolean => museums.all.every(({param}) => has(answers[param]));
 
 type Shown =
   | {readonly shown: 'wall'}
@@ -44,7 +44,7 @@ export const ArtGalleryPage: FC = () => {
   const hydrated = useHydrated();
 
   useEffect(() => {
-    const asked = museums.map(({param}) => art.open(param).onComplete(answered(param, updateAnswers)));
+    const asked = museums.all.map(({param}) => art.open(param).onComplete(answered(param, updateAnswers)));
     return () => asked.forEach(asked => asked.cancel());
   }, []);
 

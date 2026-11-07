@@ -8,7 +8,7 @@ import {
 } from '@pages/Gallery/__test_support/fixtures';
 import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import {defaultRecordLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
 import {
   heldAICAllArtResponse,
@@ -37,7 +37,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(await galleryWall.framesAppear()).toHaveLength(defaultRecordLimit);
+    expect(await galleryWall.framesAppear()).toHaveLength(limits.record);
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
     expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe('The gallery.', () => {
 
     await galleryPage.enter('Harvard Art Museums');
 
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
     expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
@@ -103,7 +103,7 @@ describe('The gallery.', () => {
 
     await galleryPage.enter('The Victoria and Albert Museum');
 
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
     expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
@@ -115,7 +115,7 @@ describe('The gallery.', () => {
 
     await galleryPage.enter('The Cleveland Museum of Art');
 
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
     expect(galleryPage.emptyWallIfAny()).not.toBeInTheDocument();
   });
 
@@ -126,7 +126,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
     expect(galleryPage.museum('Harvard Art Museums')).toBeInTheDocument();
     expect(galleryPage.museumIfAny('The Art Institute of Chicago')).not.toBeInTheDocument();
   });
@@ -138,7 +138,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
     expect(galleryPage.urlSearch()).toHaveTextContent('tab=harvard');
   });
 
@@ -150,7 +150,7 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
     await waitFor(() => expect(galleryPage.urlSearch()).toHaveTextContent('tab=harvard'));
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
   });
 
   test('a door that names no museum leads to the first open one', async () => {
@@ -159,7 +159,7 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?tab=bogus`}/>);
 
     await waitFor(() => expect(galleryPage.urlSearch()).toHaveTextContent('tab=aic'));
-    await waitFor(() => expect(galleryWall.frames()).toHaveLength(defaultRecordLimit));
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
   });
 
   test('the first open museum is the door, however quickly the museums answer', async () => {
@@ -187,7 +187,7 @@ describe('The gallery.', () => {
   });
 
   test('opened on a museum while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
-    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 1});
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 1});
     const vamAnswers = heldVAMPictures();
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await galleryPage.museumsAppear();
@@ -206,7 +206,7 @@ describe('The gallery.', () => {
   });
 
   test('opened on a link to a museum’s page 2 while another museum is still asked, the wall is the one thing loading, and stays the only one', async () => {
-    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     const vamAnswers = heldVAMPictures();
     render(<TestApp at={`${Paths.artGallery}?tab=aic&page=2`}/>);
     await galleryPage.museumsAppear();
@@ -263,7 +263,7 @@ describe('The gallery.', () => {
 
   test('the count of works stays while the next page loads', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
@@ -279,7 +279,7 @@ describe('The gallery.', () => {
 
   test('while the next page is on its way the wall shows the loading sign and does not say the museum answered with nothing', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 

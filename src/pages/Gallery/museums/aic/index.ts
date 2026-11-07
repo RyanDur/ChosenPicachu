@@ -9,25 +9,25 @@ import {
 } from '@pages/Gallery/museums/aic/types';
 import {toQueryString} from '@transport/url';
 import {maybe} from '@ryandur/sand';
-import {defaultRecordLimit, defaultSearchLimit} from '@pages/Gallery/limits';
+import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/source';
-import {attributed} from '@pages/Gallery/museums/attributed';
+import {artFields} from '@pages/Gallery/museums/artFields';
 
-const {aicDomain, aicPictures} = env;
+const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
-export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
-
-const iiif = (imageId: string) => `${aicPictures}/${imageId}`;
+const iiif = (imageId: string) => `${env.aicPictures}/${imageId}`;
 
 const aSundayOnLaGrandeJatte = '2d484387-2509-5e8e-2c43-22f9981972eb';
 
 export const aic = {
-  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${aicDomain}/search${toQueryString({
+  fields,
+
+  allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
+    .get(`${env.aicDomain}/search${toQueryString({
       q: search,
       'query[exists][field]': 'image_id',
       fields,
@@ -47,15 +47,15 @@ export const aic = {
   open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map(() => true),
 
   art: (id: string) => http
-    .get(`${aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
+    .get(`${env.aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
     .mBind(validate(AICArtSchema))
     .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
   searchOptions: (search: string) => http
-    .get(`${aicDomain}/search${toQueryString({
+    .get(`${env.aicDomain}/search${toQueryString({
       'query[term][title]': search,
       fields: 'suggest_autocomplete_all',
-      limit: defaultSearchLimit
+      limit: limits.search
     })}`, {cache: 'force-cache'})
     .mBind(validate(AICSearchSchema))
     .map(({data}: AICSearchResponse): SearchOptions => data
@@ -76,6 +76,6 @@ const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
   ...pictured(data.image_id, width),
-  ...attributed(data.artist_display),
+  ...artFields.attributed(data.artist_display),
   altText: maybe(data.thumbnail?.alt_text).orElse(data.term_titles.join(' '))
 });
