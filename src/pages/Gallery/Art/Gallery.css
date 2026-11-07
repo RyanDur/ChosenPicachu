@@ -31,16 +31,18 @@
     .scrim {
       width: auto;
       height: auto;
+
+      &::before { inset: calc(var(--base) * -1) 0 var(--base); }
     }
 
     .piece {
       display: block;
       max-width: 100cqw;
       max-height: 100cqh;
-      transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-      .scrim:focus .piece,
+    .scrim:focus .piece,
     .scrim:hover .piece {
       transform: translateY(calc(var(--base) * -1));
     }

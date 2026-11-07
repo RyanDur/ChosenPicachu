@@ -70,7 +70,7 @@
     box-shadow: initial;
   }
 }
-/* a box-shadow, not a drop-shadow: WebKit leaves the page's top-left corner unpainted while a filter is on the wall */
+/* no filter on a hung piece, at rest or lifted: WebKit left the page's top-left corner unpainted while one was on the wall (2edcb100) */
 .hung { box-shadow: var(--shadow-far) var(--shadow), var(--shadow-near) var(--dark-shadow); }
 .backdrop { background: var(--backdrop); }
 
@@ -293,7 +293,20 @@
 
 .next-approached:has(+ :hover, + :focus) { background-color: var(--approach); }
 
-:is(:hover, :focus) > .liftable { filter: drop-shadow(var(--shadow-lifted-far) var(--shadow)) drop-shadow(var(--shadow-lifted-near) var(--dark-shadow)); }
+.liftable { position: relative; isolation: isolate; }
+
+.liftable::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.liftable:is(:hover, :focus)::before { opacity: 1; }
 
 .warmed:is(:hover, :focus-within) { background-color: var(--faded-international-orange-engineering); }
 

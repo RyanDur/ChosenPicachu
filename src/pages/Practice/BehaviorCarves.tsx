@@ -62,7 +62,7 @@ const oneLine = (sheet: Sample, line: string): Line[] => carve.span(sheet, line,
 export const SheetQuestionsCarve: FC = () => <>
   <Snippet label="CSS" lines={oneLine(basePageSheet, '&:not(:has(.header-settings)) .app-title')}/>
   <Snippet label="CSS" lines={oneLine(accordionsSheet, '.info-toggle:not(:checked) ~ .info')}/>
-  <Snippet label="CSS" lines={oneLine(surfaceSheet, ':is(:hover, :focus) > .liftable')}/>
+  <Snippet label="CSS" lines={oneLine(surfaceSheet, '.liftable:is(:hover, :focus)::before')}/>
 </>;
 
 export const MiddlewareCarve: FC = () => <Snippet label="TS" lines={carve.unit(storeSource, 'export type Middleware')}/>;
