@@ -1,6 +1,6 @@
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
 import {storyKeys} from './storyKeys';
-import {useSearchParamsOnceHydrated} from '@components/search-params';
+import {useOpenStories} from './useOpenStories';
 import {useRanks} from './useRanks';
 import {Steps} from './Steps';
 
@@ -20,29 +20,15 @@ type Props = PropsWithChildren<{
 }>;
 
 export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
-  const [searchParams, setSearchParams] = useSearchParamsOnceHydrated();
+  const stories = useOpenStories(param);
   const {story: Can} = useRanks();
   const steps = stepsIn(children);
   const toggled = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    setSearchParams(previous => {
-      const next = storyKeys.openIn(previous, param);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      const params = new URLSearchParams(previous);
-      if (next.size > 0) {
-        params.set(param, [...next].join(','));
-      } else {
-        params.delete(param);
-      }
-      return params;
-    }, {replace: true});
+    stories.toggle(id);
   };
   return <li tabIndex={-1}>
-    <details className="arc" open={storyKeys.openIn(searchParams, param).has(id)} aria-labelledby={storyKeys.anchorOf({param, id})}>
+    <details className="arc" open={stories.isOpen(id)} aria-labelledby={storyKeys.anchorOf({param, id})}>
       <summary className="opener sub-title-glyph-before" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
           <Can className="can paragraph bold" id={storyKeys.anchorOf({param, id})}>{can}</Can>

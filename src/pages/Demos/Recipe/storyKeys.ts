@@ -4,6 +4,7 @@ type StoryKeys = {
   anchorOf: (story: StoryKey) => string;
   openIn: (params: URLSearchParams, param: string) => Set<string>;
   openedIn: (params: URLSearchParams, story: StoryKey) => URLSearchParams;
+  toggledIn: (params: URLSearchParams, story: StoryKey) => URLSearchParams;
 };
 
 const openIn = (params: URLSearchParams, param: string): Set<string> =>
@@ -15,6 +16,21 @@ export const storyKeys: StoryKeys = {
   openedIn: (params, {param, id}) => {
     const next = new URLSearchParams(params);
     next.set(param, [...openIn(params, param).add(id)].join(','));
+    return next;
+  },
+  toggledIn: (params, {param, id}) => {
+    const open = openIn(params, param);
+    if (open.has(id)) {
+      open.delete(id);
+    } else {
+      open.add(id);
+    }
+    const next = new URLSearchParams(params);
+    if (open.size > 0) {
+      next.set(param, [...open].join(','));
+    } else {
+      next.delete(param);
+    }
     return next;
   }
 };
