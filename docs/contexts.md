@@ -10,7 +10,7 @@ The map was made from the code on `main` at 82efb32b. For each shared file, it c
   - *Page*: the room, its name and its state as it arrives. `pages/BasePage`, `components/PageName`, `components/Env`, `env.ts`, `components/hydrated.ts`, `pages/NoRoom`, `pages/PageError.tsx`.
   - *Navigation*: addresses and arriving at them. `pages/Paths.ts`, `pages/names.json`, `components/search-params.ts`, `components/Tabs`, `components/OpeningFragment`, `components/scroll.ts` (to be replaced by the router's own restoration).
   - *Notices*: what the site tells the reader and what the reader tells it. `components/Banners`, `components/Feedback`.
-- **Transport**: the site's one way to reach a server. `transport/http.ts`, `transport/trouble.ts`. The gallery's museums and the feedback form use it.
+- **Transport**: the site's one way to reach a server, in `src/transport`: `http.ts`, `trouble.ts`, `types.ts`, `url.ts` and `validate.ts`. The gallery's museums, the feedback form and the users' service worker reach their servers through it. The address's search params and the saved tab use its `url.ts` to write a query.
 - **Look**: the style vocabulary. `src/styles`, `components/class-names.ts`.
 - **Parts**: the site's own controls, used by several contexts. `components/Menu`, `components/Disclosure`, `components/PillGlider`, `components/Loading`, `components/Table`, `components/DragSortableTable`, `components/store.ts`, `components/arrays.ts`, `components/grip.svg`. A part moves into a context once only one context uses it.
 - **Home**: `pages/Home`.
