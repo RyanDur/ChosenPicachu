@@ -78,6 +78,10 @@ const stillReachForThePage = [
   'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
 ];
 
+const refsWithAReason = [
+  'src/pages/Demos/Accordions/MeasuredPanel.tsx'
+];
+
 const stillMoveByScript = ['src/components/glide.ts'];
 
 export default [
@@ -157,5 +161,14 @@ export default [
       {property: 'startViewTransition', message: 'motion is the style sheet\'s alone'},
       {property: 'animate', message: 'motion is the style sheet\'s alone'}
     ]}
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', ...refsWithAReason],
+    rules: {'no-restricted-imports': ['error', {paths: [{
+      name: 'react',
+      importNames: ['useRef', 'createRef', 'forwardRef'],
+      message: 'a ref holds a dialog shown as a modal, or reads an element\'s details nothing else gives; list the file in refsWithAReason'
+    }]}]}
   }
 ];
