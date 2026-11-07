@@ -21,10 +21,7 @@ import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside, plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 type Build = {
   world: World;
@@ -61,11 +58,11 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(menuSrc, 'export const SortMenu', '</>;')
+            ...carve.span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMenus, 'const choosing = '), gap,
-            ...unit(frameMenus, 'export const choose = ')
+            ...carve.unit(frameMenus, 'const choosing = '), gap,
+            ...carve.unit(frameMenus, 'export const choose = ')
           ]}/>}
       </Codes>
     </Reveal>
@@ -125,11 +122,11 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), gap,
-                ...span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
+                ...carve.span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), gap,
+                ...carve.span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
+                ...carve.span(tableSource, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -170,12 +167,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
-              ...span(menuCss, 'inset: auto;', 'inset: auto;'),
-              aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), gap,
-              ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
-              aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
-              ...unit(menuCss, '@supports not (position-area: block-end)'),
-              aside('/* no anchor positioning? centered: worse placement, same menu */')
+              ...carve.span(menuCss, 'inset: auto;', 'inset: auto;'),
+              lines.aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), gap,
+              ...carve.span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
+              lines.aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
+              ...carve.unit(menuCss, '@supports not (position-area: block-end)'),
+              lines.aside('/* no anchor positioning? centered: worse placement, same menu */')
             ]}/>
           </Codes>
         </Reveal>
@@ -206,27 +203,27 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(arrangementSource, 'export type Arrangement'), gap,
-                ...unit(demosSource, 'export const selectColumns')
+                ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
+                ...carve.unit(demosSource, 'export const selectColumns')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(arrangementSource, 'export type Arrangement'), gap,
-                ...unit(frameMenus, 'export const announceSort = '), gap,
-                ...unit(frameMenus, 'export const announce = ')
+                ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
+                ...carve.unit(frameMenus, 'export const announceSort = '), gap,
+                ...carve.unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), gap,
-              ...unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
-              aside('/* the glyph is CSS reading the one attribute; no world writes it */')
+              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), gap,
+              ...carve.unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
+              ...carve.unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
+              lines.aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(source, 'const {sorted, data} = useTableSelector(columnNamed', 'const {sorted, data} = useTableSelector(columnNamed'), gap,
-                ...span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
+                ...carve.span(source, 'const {sorted, data} = useTableSelector(columnNamed', 'const {sorted, data} = useTableSelector(columnNamed'), gap,
+                ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
+                ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -247,10 +244,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             sorted.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...unit(sortingSource, 'export const ranked'), gap,
-              ...unit(arrangementSource, 'export const standingOf'), gap,
-              ...unit(demosSource, 'export const selectRows'),
-              aside('// both worlds ask the arrangement the same question')
+              ...carve.unit(sortingSource, 'export const ranked'), gap,
+              ...carve.unit(arrangementSource, 'export const standingOf'), gap,
+              ...carve.unit(demosSource, 'export const selectRows'),
+              lines.aside('// both worlds ask the arrangement the same question')
             ]}/>
           </Codes>
         </Reveal>
@@ -270,15 +267,15 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(arrangementSource, 'export const sortEnded'), gap,
-                ...span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
-                ...unit(rowSrc, 'const beside = ')
+                ...carve.unit(arrangementSource, 'export const sortEnded'), gap,
+                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
+                ...carve.unit(rowSrc, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(arrangementSource, 'export const sortEnded'), gap,
-                ...span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
-                ...unit(buildSrc, 'const rowBeside = '),
-                aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
+                ...carve.unit(arrangementSource, 'export const sortEnded'), gap,
+                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
+                ...carve.unit(buildSrc, 'const rowBeside = '),
+                lines.aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
               ]}/>}
           </Codes>
         </Reveal>
@@ -311,30 +308,30 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...span(menuSrc, 'onPointerDown={event => event.stopPropagation()}',
+                ...carve.span(menuSrc, 'onPointerDown={event => event.stopPropagation()}',
                   'onPointerDown={event => event.stopPropagation()}'),
-                aside('// on the toggle and on the menu both')
+                lines.aside('// on the toggle and on the menu both')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameMenus, 'const keepingTheColumnStill = '), gap,
-                ...span(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
-                aside('// on the toggle and on the menu both')
+                ...carve.unit(frameMenus, 'const keepingTheColumnStill = '), gap,
+                ...carve.span(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
+                lines.aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(tableSrc, '<Column column="window"', '<Column column="window"'),
-                ...span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
-                ...unit(baseCss, '    &:has(.menu-toggle) {')
+                ...carve.span(tableSrc, '<Column column="window"', '<Column column="window"'),
+                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
+                ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameColumns, 'export const sortableOf = ')
+                ...carve.unit(frameColumns, 'export const sortableOf = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .header-cell .menu-toggle {'), gap,
-              ...unit(surfaceCss, '.borderless {'), gap,
-              ...unit(surfaceCss, '.unfilled {'), gap,
-              ...unit(surfaceCss, '.muted-ink {'), gap,
-              ...unit(surfaceCss, '.attentive:where(')
+              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle {'), gap,
+              ...carve.unit(surfaceCss, '.borderless {'), gap,
+              ...carve.unit(surfaceCss, '.unfilled {'), gap,
+              ...carve.unit(surfaceCss, '.muted-ink {'), gap,
+              ...carve.unit(surfaceCss, '.attentive:where(')
             ]}/>
           </Codes>
         </Reveal>

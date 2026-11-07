@@ -15,10 +15,7 @@ import surfaceCss from '../../../../styles/surface.css?sample';
 import typographyCss from '../../../../styles/typography.css?sample';
 import '../../Recipe/Recipe.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const sideFact: Record<Side, string> = {
   top: 'top sets the margin above the panel and leaves the one below at auto.',
@@ -69,7 +66,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...span(bannersSource, 'return <section', '</section>;')
+            ...carve.span(bannersSource, 'return <section', '</section>;')
           ]}/>
         </Codes>
       </Step>
@@ -82,7 +79,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(bannersSource, 'useEffect(() => {')
+            ...carve.unit(bannersSource, 'useEffect(() => {')
           ]}/>
         </Codes>
       </Step>
@@ -110,11 +107,11 @@ export const TopLayerRecipe: FC = () => {
             the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+          <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
-            ...span(bannersCss, '.banners {', 'padding: 0;'), gap,
-            ...unit(bannersCss, `.${side} {`), gap,
-            ...unit(alignSheet[align], `.${align} {`)
+            ...carve.span(bannersCss, '.banners {', 'padding: 0;'), gap,
+            ...carve.unit(bannersCss, `.${side} {`), gap,
+            ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>
         </Codes>
       </Step>
@@ -129,17 +126,17 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, '.news {'), gap,
-            ...unit(surfaceCss, '.field {'), gap,
-            ...unit(surfaceCss, '.rounded-corners {'), gap,
-            ...unit(surfaceCss, '.floating {'), gap,
-            ...unit(surfaceCss, '.alarm-ink {'), gap,
-            ...unit(surfaceCss, '.hairline-outline {'), gap,
-            ...unit(bannersCss, '.dismiss {'), gap,
-            ...unit(surfaceCss, '.borderless {'), gap,
-            ...unit(surfaceCss, '.unfilled {'), gap,
-            ...unit(typographyCss, '.glyph-icon {'), gap,
-            ...unit(surfaceCss, '.muted-ink {')
+            ...carve.unit(bannersCss, '.news {'), gap,
+            ...carve.unit(surfaceCss, '.field {'), gap,
+            ...carve.unit(surfaceCss, '.rounded-corners {'), gap,
+            ...carve.unit(surfaceCss, '.floating {'), gap,
+            ...carve.unit(surfaceCss, '.alarm-ink {'), gap,
+            ...carve.unit(surfaceCss, '.hairline-outline {'), gap,
+            ...carve.unit(bannersCss, '.dismiss {'), gap,
+            ...carve.unit(surfaceCss, '.borderless {'), gap,
+            ...carve.unit(surfaceCss, '.unfilled {'), gap,
+            ...carve.unit(typographyCss, '.glyph-icon {'), gap,
+            ...carve.unit(surfaceCss, '.muted-ink {')
           ]}/>
         </Codes>
       </Step>

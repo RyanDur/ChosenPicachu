@@ -4,19 +4,16 @@ import {World} from '../../params';
 import {Term} from '../Term';
 import {gap, sortableCss} from './sources';
 
-const {unit} = carve();
-const {plain} = lines();
-
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    plain('<table><thead><tr><th scope="col">window</th> ...'),
-    plain('<button className="grip" tabIndex={0} aria-label="move row 2"><Handle/></button>'),
-    plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
+    lines.plain('<table><thead><tr><th scope="col">window</th> ...'),
+    lines.plain('<button className="grip" tabIndex={0} aria-label="move row 2"><Handle/></button>'),
+    lines.plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    plain('<th scope="col" class="cell header-cell window">'),
-    plain('<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'),
-    plain('<button type="button" tabindex="0" data-resize-handle class="resize-handle" aria-label="resize trades"></button>')
+    lines.plain('<th scope="col" class="cell header-cell window">'),
+    lines.plain('<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'),
+    lines.plain('<button type="button" tabindex="0" data-resize-handle class="resize-handle" aria-label="resize trades"></button>')
   ]}/>
 };
 
@@ -47,8 +44,8 @@ export const CssShare: FC<{world: World}> = ({world}) =>
       <Codes>
         {shareMarkup[world]}
         <Snippet label="CSS" lines={[
-          ...unit(sortableCss, '.grabbable {'), gap,
-          ...unit(sortableCss, '.sortable {')
+          ...carve.unit(sortableCss, '.grabbable {'), gap,
+          ...carve.unit(sortableCss, '.sortable {')
         ]}/>
       </Codes>
     </Reveal>

@@ -5,9 +5,6 @@ import {World} from '../../params';
 import {arrowsSource, frameGrip, frameSettle, gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
     <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
@@ -26,16 +23,16 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(arrowsSource, 'export const columnArrows'), gap,
-              ...unit(headerSource, 'const walkedTo = '), gap,
-              ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
-              aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
+              ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+              ...carve.unit(headerSource, 'const walkedTo = '), gap,
+              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
+              lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(arrowsSource, 'export const columnArrows'), gap,
-              ...unit(buildSrc, 'const columnTo = '), gap,
-              ...unit(frameSettle, 'const untilSettled = '),
-              aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
+              ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+              ...carve.unit(buildSrc, 'const columnTo = '), gap,
+              ...carve.unit(frameSettle, 'const untilSettled = '),
+              lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>}
         </Codes>
       </Reveal>
@@ -55,16 +52,16 @@ export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> 
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(arrowsSource, 'export const columnArrows'), gap,
-            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
-            ...unit(headerSource, 'const walkedTo = '),
-            aside('// the whole walk; the marks land and clear at once, nothing to wait for')
+            ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+            ...carve.span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
+            ...carve.unit(headerSource, 'const walkedTo = '),
+            lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(arrowsSource, 'export const columnArrows'), gap,
-            ...unit(buildSrc, 'const columnTo = '), gap,
-            ...span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
-            aside('// the whole walk; the marks land and clear at once, nothing to wait for')
+            ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+            ...carve.unit(buildSrc, 'const columnTo = '), gap,
+            ...carve.span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
+            lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>}
       </Codes>
     </Reveal>
@@ -86,16 +83,16 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(rowSource, 'onKeyDown={rowArrows(', '})}/>'),
-            aside('// the grip handles its own arrows; the walk is shared')
+            ...carve.span(rowSource, 'onKeyDown={rowArrows(', '})}/>'),
+            lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameGrip, "grip.addEventListener('keydown'"), gap,
-            ...unit(buildSrc, 'const rowTo = '),
-            aside('// the grip handles its own arrows; the walk is shared')
+            ...carve.unit(frameGrip, "grip.addEventListener('keydown'"), gap,
+            ...carve.unit(buildSrc, 'const rowTo = '),
+            lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(arrowsSource, 'export const rowArrows')
+          ...carve.unit(arrowsSource, 'export const rowArrows')
         ]}/>
       </Codes>
     </Reveal>

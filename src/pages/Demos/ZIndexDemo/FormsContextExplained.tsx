@@ -8,10 +8,7 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@components/Tabs/Tabs.css?sample';
 import '../Runs.css';
 
-const {unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
@@ -35,7 +32,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
           display is grid. Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens
           on top.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.old-way-cards {')}/>
+        <Snippet label="CSS" lines={carve.unit(zIndexCss, '.old-way-cards {')}/>
       </li>
       <li className="run">
         <p className="paragraph">The list is placed
@@ -47,8 +44,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
           the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing
           between the list and the card is positioned.</p>
         <Snippet label="CSS" lines={[
-          ...unit(zIndexCss, '.old-way-card .button {'), gap,
-          ...unit(zIndexCss, '.sort-choices {\n        position-anchor')
+          ...carve.unit(zIndexCss, '.old-way-card .button {'), gap,
+          ...carve.unit(zIndexCss, '.sort-choices {\n        position-anchor')
         ]}/>
       </li>
       <li className="run">
@@ -58,13 +55,13 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
           with a z-index other than auto. Fixed, which pins an element to the window, and sticky are
           different. Each forms a context by itself. Sticky
           scrolls with the page until it reaches an edge and then stays there.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.positioned {')}/>
+        <Snippet label="CSS" lines={carve.unit(zIndexCss, '.positioned {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}outline`}><code className="monospaced">outline</code></a> is paint. An
           outline, a border, a background or a shadow changes how a box looks and not how it stacks, so none of them
           forms a context.</p>
-        <Snippet label="CSS" lines={unit(surfaceCss, '.outlined {')}/>
+        <Snippet label="CSS" lines={carve.unit(surfaceCss, '.outlined {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code className="monospaced">z-index:
@@ -72,20 +69,20 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
           context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item,
           a box laid out by a parent whose display is flex. The menu part’s card had position: relative as well, and
           either is enough. Card two, at 1 and later in the code, is painted over card one.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.forms-context {')}/>
+        <Snippet label="CSS" lines={carve.unit(zIndexCss, '.forms-context {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}opacity`}><code className="monospaced">opacity:
           0.9</code></a>, like any
           opacity below 1, forms a context because the card is drawn as one layer and then faded. A card that fades in
           traps its menu, and nothing in the style sheet says z-index.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.faded {')}/>
+        <Snippet label="CSS" lines={carve.unit(zIndexCss, '.faded {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}transform`}><code className="monospaced">transform: rotate(-1deg)</code></a> forms
           a context, as any transform does, even translate(0), for the same reason: the card becomes one layer. A card
           that slides in traps what it holds.</p>
-        <Snippet label="CSS" lines={unit(zIndexCss, '.turned {')}/>
+        <Snippet label="CSS" lines={carve.unit(zIndexCss, '.turned {')}/>
       </li>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code className="monospaced">isolation: isolate</code></a> forms
@@ -93,8 +90,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
           instead of as a side effect of opacity or a transform. I use it that way here: the tab’s panel wears it, in
           Tabs.css, so no z-index inside a tab is ever compared with one outside it.</p>
         <Snippet label="CSS" lines={[
-          ...unit(zIndexCss, '.isolated {'), gap,
-          ...unit(tabsCss, '.tabs ~ * {')
+          ...carve.unit(zIndexCss, '.isolated {'), gap,
+          ...carve.unit(tabsCss, '.tabs ~ * {')
         ]}/>
       </li>
     </ol>

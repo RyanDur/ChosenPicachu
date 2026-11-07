@@ -9,10 +9,7 @@ import providerSource from '@components/Banners/BannerProvider.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import '../../Recipe/Recipe.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const stackFact: Record<Stack, string> = {
   down: 'the stack grows downward, so the track is a row.',
@@ -82,11 +79,11 @@ const SettleStep: FC = () => (
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...unit(bannersSource, 'const settler = new ResizeObserver(')
+        ...carve.unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...unit(bannersCss, '@property --news-block-size {'), gap,
-        ...span(bannersCss, 'block-size: var(--news-block-size', 'transition: block-size 0.3s, padding 0.3s, border-width 0.3s;')
+        ...carve.unit(bannersCss, '@property --news-block-size {'), gap,
+        ...carve.span(bannersCss, 'block-size: var(--news-block-size', 'transition: block-size 0.3s, padding 0.3s, border-width 0.3s;')
       ]}/>
     </Codes>
   </Step>
@@ -116,7 +113,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(providerSource, 'const raise = useCallback(')
+            ...carve.unit(providerSource, 'const raise = useCallback(')
           ]}/>
         </Codes>
       </Step>
@@ -139,11 +136,11 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, '.trouble {'), gap,
-            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
-            ...span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
-            ...unit(bannersCss, '.news {'), gap,
-            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .news {`)
+            ...carve.unit(bannersCss, '.trouble {'), gap,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
+            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
+            ...carve.unit(bannersCss, '.news {'), gap,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .news {`)
           ]}/>
         </Codes>
       </Step>
@@ -159,8 +156,8 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, `&.from-${enter} {`), gap,
-            ...span(bannersCss, "/* the browser's own style sheet", 'overflow: visible;')
+            ...carve.unit(bannersCss, `&.from-${enter} {`), gap,
+            ...carve.span(bannersCss, "/* the browser's own style sheet", 'overflow: visible;')
           ]}/>
         </Codes>
       </Step>
@@ -173,12 +170,12 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, '.trouble.leaving {'), gap,
-            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`), gap,
-            ...unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving .news {`)
+            ...carve.unit(bannersCss, '.trouble.leaving {'), gap,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`), gap,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving .news {`)
           ]}/>
           <Snippet label="TS" lines={[
-            ...unit(bannersSource, 'const left = ')
+            ...carve.unit(bannersSource, 'const left = ')
           ]}/>
         </Codes>
       </Step>

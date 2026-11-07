@@ -4,8 +4,6 @@ import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, carve} from '../../../Recipe';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span} = carve();
-
 export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Arm the drag from its grip">
     <Words want="The browser will drag anything marked draggable, but marking the whole card turns every press into a lift and stops text selection inside it.">
@@ -26,7 +24,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(itemSource, '<li', 'draggable={dragging}>')
+        ...carve.span(itemSource, '<li', 'draggable={dragging}>')
       ]}/>
     </Codes>
   </Step>;

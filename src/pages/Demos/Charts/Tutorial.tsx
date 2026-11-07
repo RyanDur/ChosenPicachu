@@ -33,10 +33,7 @@ import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const PriceStory: FC = () =>
   <Story param="graph" id="price"
@@ -67,10 +64,10 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(coinbaseSource, 'export const subscribeTo'), gap,
-            ...unit(coinbaseSource, 'export const decodeTrade'), gap,
-            ...unit(liveTradesSource, 'export const LATEST_TRADES_CAP'), gap,
-            ...unit(demosSource, 'const tradesReducer')
+            ...carve.unit(coinbaseSource, 'export const subscribeTo'), gap,
+            ...carve.unit(coinbaseSource, 'export const decodeTrade'), gap,
+            ...carve.unit(liveTradesSource, 'export const LATEST_TRADES_CAP'), gap,
+            ...carve.unit(demosSource, 'const tradesReducer')
           ]}/>
         </Codes>
       </Step>
@@ -84,10 +81,10 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(historySource, 'export const periodCandles'), gap,
-            ...unit(demosSource, 'const candlesReducer'), gap,
-            ...unit(candlesHook, 'export const usePeriodCandles'), gap,
-            ...unit(shapesSource, 'export const mergeLive')
+            ...carve.unit(historySource, 'export const periodCandles'), gap,
+            ...carve.unit(demosSource, 'const candlesReducer'), gap,
+            ...carve.unit(candlesHook, 'export const usePeriodCandles'), gap,
+            ...carve.unit(shapesSource, 'export const mergeLive')
           ]}/>
         </Codes>
       </Step>
@@ -100,8 +97,8 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(shapesSource, 'const fold'), gap,
-            ...unit(shapesSource, 'export const bucketTrades')
+            ...carve.unit(shapesSource, 'const fold'), gap,
+            ...carve.unit(shapesSource, 'export const bucketTrades')
           ]}/>
         </Codes>
       </Step>
@@ -123,11 +120,11 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(periodSource, 'export const bucketMs'), gap,
-            ...unit(periodSource, 'export const periodCap')
+            ...carve.unit(periodSource, 'export const bucketMs'), gap,
+            ...carve.unit(periodSource, 'export const periodCap')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(priceSource, '{actions}', '</Menu>')
+            ...carve.span(priceSource, '{actions}', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -142,10 +139,10 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(sparklineSource, 'export const sparklinePoints')
+            ...carve.unit(sparklineSource, 'export const sparklinePoints')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(priceSource, '<svg className="sparkline"', '</svg>')
+            ...carve.span(priceSource, '<svg className="sparkline"', '</svg>')
           ]}/>
         </Codes>
       </Step>
@@ -158,7 +155,7 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(axesSource, 'export const Axes')
+            ...carve.unit(axesSource, 'export const Axes')
           ]}/>
         </Codes>
       </Step>
@@ -186,9 +183,9 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(shapesSource, 'const fold'), gap,
-            ...unit(shapesSource, 'export const bucketTrades'), gap,
-            ...unit(shapesSource, 'export const mergeLive')
+            ...carve.unit(shapesSource, 'const fold'), gap,
+            ...carve.unit(shapesSource, 'export const bucketTrades'), gap,
+            ...carve.unit(shapesSource, 'export const mergeLive')
           ]}/>
         </Codes>
       </Step>
@@ -212,19 +209,19 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(slotsSource, 'export const windowSlots'), gap,
-            ...unit(shapesSource, 'export const candleShapes')
+            ...carve.unit(slotsSource, 'export const windowSlots'), gap,
+            ...carve.unit(shapesSource, 'export const candleShapes')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(candlesSource, '<svg className="candlesticks"', '</svg>')
+            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(candlesCss, '.wick {'), gap,
-            ...unit(drawingCss, '.drawn {'), gap,
-            ...unit(drawingCss, '.buy-side {'), gap,
-            ...unit(drawingCss, '.sell-side {'), gap,
-            ...unit(drawingCss, '.side-face {'), gap,
-            ...unit(drawingCss, '.side-wall {')
+            ...carve.unit(candlesCss, '.wick {'), gap,
+            ...carve.unit(drawingCss, '.drawn {'), gap,
+            ...carve.unit(drawingCss, '.buy-side {'), gap,
+            ...carve.unit(drawingCss, '.sell-side {'), gap,
+            ...carve.unit(drawingCss, '.side-face {'), gap,
+            ...carve.unit(drawingCss, '.side-wall {')
           ]}/>
         </Codes>
       </Step>
@@ -241,16 +238,16 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(shapesSource, 'export const volumeShapes')
+            ...carve.unit(shapesSource, 'export const volumeShapes')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
+            ...carve.span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(candlesCss, '.volume,\n    .volume-wall {'), gap,
-            ...unit(drawingCss, '.volume-side {'), gap,
-            ...unit(drawingCss, '.side-face {'), gap,
-            ...unit(drawingCss, '.side-wall {')
+            ...carve.unit(candlesCss, '.volume,\n    .volume-wall {'), gap,
+            ...carve.unit(drawingCss, '.volume-side {'), gap,
+            ...carve.unit(drawingCss, '.side-face {'), gap,
+            ...carve.unit(drawingCss, '.side-wall {')
           ]}/>
         </Codes>
       </Step>
@@ -262,8 +259,8 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(candlesSource, 'const range = rangeOf(', '  );'), gap,
-            ...span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMs[period]}>')
+            ...carve.span(candlesSource, 'const range = rangeOf(', '  );'), gap,
+            ...carve.span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMs[period]}>')
           ]}/>
         </Codes>
       </Step>
@@ -292,10 +289,10 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(coinbaseSource, 'const MatchDecoder'), gap,
-            ...unit(coinbaseSource, 'export const takerBought'), gap,
-            ...unit(pressureSource, 'const fold'), gap,
-            ...unit(pressureSource, 'export const bucketPressure')
+            ...carve.unit(coinbaseSource, 'const MatchDecoder'), gap,
+            ...carve.unit(coinbaseSource, 'export const takerBought'), gap,
+            ...carve.unit(pressureSource, 'const fold'), gap,
+            ...carve.unit(pressureSource, 'export const bucketPressure')
           ]}/>
         </Codes>
       </Step>
@@ -307,9 +304,9 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(slotsSource, 'export const windowSlots'), gap,
-            ...unit(pressureSource, 'export const heaviestSide'), gap,
-            ...unit(pressureSource, 'export const pressureShapes')
+            ...carve.unit(slotsSource, 'export const windowSlots'), gap,
+            ...carve.unit(pressureSource, 'export const heaviestSide'), gap,
+            ...carve.unit(pressureSource, 'export const pressureShapes')
           ]}/>
         </Codes>
       </Step>
@@ -331,18 +328,18 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(pressureComponent, '<svg className="pressures"', '</svg>')
+            ...carve.span(pressureComponent, '<svg className="pressures"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(pressureCss, '.midline {'), gap,
-            ...unit(drawingCss, '.drawn {'), gap,
-            ...unit(drawingCss, '.buy-side {'), gap,
-            ...unit(drawingCss, '.sell-side {'), gap,
-            ...unit(drawingCss, '.side-face {'), gap,
-            ...unit(drawingCss, '.side-wall {')
+            ...carve.unit(pressureCss, '.midline {'), gap,
+            ...carve.unit(drawingCss, '.drawn {'), gap,
+            ...carve.unit(drawingCss, '.buy-side {'), gap,
+            ...carve.unit(drawingCss, '.sell-side {'), gap,
+            ...carve.unit(drawingCss, '.side-face {'), gap,
+            ...carve.unit(drawingCss, '.side-wall {')
           ]}/>
           <Snippet label="TS" lines={[
-            ...unit(moneySource, 'export const bitcoin')
+            ...carve.unit(moneySource, 'export const bitcoin')
           ]}/>
         </Codes>
       </Step>
@@ -367,8 +364,8 @@ const PieStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(coinbaseSource, 'export const takerBought'), gap,
-            ...unit(pieSource, 'export const sideTotals')
+            ...carve.unit(coinbaseSource, 'export const takerBought'), gap,
+            ...carve.unit(pieSource, 'export const sideTotals')
           ]}/>
         </Codes>
       </Step>
@@ -406,18 +403,18 @@ const PieStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(pieSource, 'export const slices'), gap,
-            ...unit(pieSource, 'export const sweepGates')
+            ...carve.unit(pieSource, 'export const slices'), gap,
+            ...carve.unit(pieSource, 'export const sweepGates')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
+            ...carve.span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(pieCss, '@property --explode-x {'), gap,
-            ...unit(pieCss, '@property --explode-y {'), gap,
-            ...unit(pieCss, '@property --turn {'), gap,
-            ...unit(pieCss, '@property --swing {'), gap,
-            ...unit(pieCss, '.slice {')
+            ...carve.unit(pieCss, '@property --explode-x {'), gap,
+            ...carve.unit(pieCss, '@property --explode-y {'), gap,
+            ...carve.unit(pieCss, '@property --turn {'), gap,
+            ...carve.unit(pieCss, '@property --swing {'), gap,
+            ...carve.unit(pieCss, '.slice {')
           ]}/>
         </Codes>
       </Step>
@@ -428,7 +425,7 @@ const PieStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, '<ul className="legend caption">', '</ul>')
+            ...carve.span(pieComponent, '<ul className="legend caption">', '</ul>')
           ]}/>
         </Codes>
       </Step>
@@ -466,12 +463,12 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(kindsSource, 'export const isChartKind'), gap,
-            ...unit(deskSource, 'export const dealt'), gap,
-            ...unit(deskSource, 'export const added')
+            ...carve.unit(kindsSource, 'export const isChartKind'), gap,
+            ...carve.unit(deskSource, 'export const dealt'), gap,
+            ...carve.unit(deskSource, 'export const added')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
+            ...carve.span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -492,13 +489,13 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(crossingSource, 'export const strayedTo'), gap,
-            ...unit(travelSource, 'const travel = (event'), gap,
-            ...unit(travelSource, 'const swap = (held')
+            ...carve.unit(crossingSource, 'export const strayedTo'), gap,
+            ...carve.unit(travelSource, 'const travel = (event'), gap,
+            ...carve.unit(travelSource, 'const swap = (held')
           ]}/>
           <AThirdFromThePointer/>
           <Snippet label="CSS" lines={[
-            ...unit(workspaceCss, '@keyframes chart-pushed')
+            ...carve.unit(workspaceCss, '@keyframes chart-pushed')
           ]}/>
         </Codes>
       </Step>
@@ -510,7 +507,7 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(travelSource, 'const keys')
+            ...carve.unit(travelSource, 'const keys')
           ]}/>
         </Codes>
       </Step>
@@ -521,8 +518,8 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(workspaceSource, 'const plural'), gap,
-            ...unit(workspaceSource, 'const actions')
+            ...carve.unit(workspaceSource, 'const plural'), gap,
+            ...carve.unit(workspaceSource, 'const actions')
           ]}/>
         </Codes>
       </Step>

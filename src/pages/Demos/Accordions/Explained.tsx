@@ -51,9 +51,6 @@ import {FoldMotion} from './fold-motion';
 import '../Runs.css';
 import './Explained.css';
 
-const {span, unit, withoutImports} = carve();
-const {plain} = lines();
-
 export type Contents = {
   measured: Record<FoldType, Fold[]>;
   known: Record<FoldType, Fold[]>;
@@ -64,15 +61,15 @@ export type Contents = {
 const exhibit = 'card rounded-corners lifted padded';
 
 const radioFold = [
-  plain('<li class="fold">'),
-  plain('  <input id="measured-fold-0-radio" class="info-toggle off-screen" type="radio" name="measured-group">'),
-  plain('  <label id="measured-fold-0-radio-label" class="info-label" for="measured-fold-0-radio">measured</label>'),
-  plain('  <section class="info-measured" aria-labelledby="measured-fold-0-radio-label">'),
-  plain('    <p class="info-paragraph">…</p>'),
-  plain('  </section>'),
-  plain('</li>')
+  lines.plain('<li class="fold">'),
+  lines.plain('  <input id="measured-fold-0-radio" class="info-toggle off-screen" type="radio" name="measured-group">'),
+  lines.plain('  <label id="measured-fold-0-radio-label" class="info-label" for="measured-fold-0-radio">measured</label>'),
+  lines.plain('  <section class="info-measured" aria-labelledby="measured-fold-0-radio-label">'),
+  lines.plain('    <p class="info-paragraph">…</p>'),
+  lines.plain('  </section>'),
+  lines.plain('</li>')
 ];
-const gap = plain(' ');
+const gap = lines.plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
 const toldRun = 'run card rounded-corners lifted padded';
 const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
@@ -93,13 +90,13 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: span(accordionsSource, '<li key={key} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: span(accordionsSource, '<li className="fold" key={key}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(accordionsSource, '<li key={key} className="fold">', '</li>')},
+  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(accordionsSource, '<li className="fold" key={key}>', '</li>')}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveToggleAccordion, sample: span(accordionsSource, '<details className="fold">', '</details>')},
-  exclusive: {Accordion: ExclusiveToggleAccordion, sample: span(accordionsSource, '<details className="fold" name=', '</details>')}
+  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.span(accordionsSource, '<details className="fold">', '</details>')},
+  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.span(accordionsSource, '<details className="fold" name=', '</details>')}
 };
 
 const measuredAccordions: Record<FoldType, FC<AccordionProps>> = {
@@ -162,7 +159,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ol className={runs}>
         <li className="run">
           <HtmlAlone/>
-          <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
+          <Snippet label="HTML" lines={carve.span(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
@@ -234,7 +231,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 other element on the page shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute
                 names the radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="HTML" lines={type === 'inclusive' ? span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
+            <Snippet label="HTML" lines={type === 'inclusive' ? carve.span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is checked.{' '}
@@ -245,7 +242,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               elements with the same parent. That is why the order is fixed: the style sheet can only look forward from
               the {input}.
               While it is not checked, this rule collapses the text. No script is involved.</p>
-            <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
+            <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
             <TheRuleMatchesTheBox/>
           </li>
         </ol>
@@ -261,15 +258,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its
           text. The bigger the guess, the worse the rush and the wait. A guess too small cut the text off.</p>
         <Snippet label="CSS" lines={[
-          plain('.info {'),
-          plain('  max-height: 0;'),
-          plain('  overflow: hidden;'),
-          plain('  transition: max-height .3s ease-in-out;'),
-          plain('}'),
+          lines.plain('.info {'),
+          lines.plain('  max-height: 0;'),
+          lines.plain('  overflow: hidden;'),
+          lines.plain('  transition: max-height .3s ease-in-out;'),
+          lines.plain('}'),
           gap,
-          plain('.info-toggle:checked ~ .info {'),
-          plain('  max-height: 1000px;'),
-          plain('}')
+          lines.plain('.info-toggle:checked ~ .info {'),
+          lines.plain('  max-height: 1000px;'),
+          lines.plain('}')
         ]}/>
         <OneGuessTwoFolds/>
       </section>
@@ -292,7 +289,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               ends, the script takes the number away, and the panel is auto again. A number left in place goes
               stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
               beside this run is the whole script, with no library.</p>
-            <Snippet label="TS" lines={withoutImports(foldSource)}/>
+            <Snippet label="TS" lines={carve.withoutImports(foldSource)}/>
           </li>
           <li className="run">
             <p className="paragraph">The script hands the height to the style sheet as a custom property
@@ -301,7 +298,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               class, <code className="monospaced">sized</code>. A class is a name an element wears so
               a rule can pick it out. While <code className="monospaced">sized</code> is on, a rule reads the
               number.</p>
-            <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
+            <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
           </li>
           <li className="run">
             <p className="paragraph">On a press that moves the panel, the script first pins where the slide starts. It
@@ -311,15 +308,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               browser apply the pinned start before it draws. Then it
               takes <code className="monospaced">unmoving</code> off and sets the end, and the
               style sheet slides between the two.</p>
-            <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+            <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
           </li>
           <li className="run">
             <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
               the checkbox and the style sheet own that, so if the script fails, a fold still opens and closes, at
               once.</p>
             <Snippet label="CSS" lines={[
-              ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
-              ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
+              ...carve.unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
+              ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
             ]}/>
           </li>
           <li className="part-depth">
@@ -341,8 +338,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     while it moves, first the height the motion starts from, then the height it ends at, and whether it
                     has started. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
                   <Snippet label="TS" lines={[
-                    ...unit(panelSource, 'type Motion ='), gap,
-                    ...span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
+                    ...carve.unit(panelSource, 'type Motion ='), gap,
+                    ...carve.span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
                   ]}/>
                 </li>
                 <li className="run">
@@ -350,10 +347,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     only to measure: the text’s height, the height the panel stands at, and whether the style sheet
                     gives the height a transition at all.</p>
                   <Snippet label="TS" lines={[
-                    ...span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
-                    ...unit(panelSource, 'const textHeight'), gap,
-                    ...unit(panelSource, 'const standing'), gap,
-                    ...unit(panelSource, 'const moves')
+                    ...carve.span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), gap,
+                    ...carve.unit(panelSource, 'const textHeight'), gap,
+                    ...carve.unit(panelSource, 'const standing'), gap,
+                    ...carve.unit(panelSource, 'const moves')
                   ]}/>
                 </li>
                 <li className="run">
@@ -362,9 +359,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     where the motion starts. The second, once that start is on the page, sets where it ends. So the
                     script measures the panel and pins its start with no frame showing in between.</p>
                   <Snippet label="TS" lines={[
-                    ...unit(panelSource, 'const pressed'), gap,
-                    ...span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), gap,
-                    ...unit(panelSource, 'const settled')
+                    ...carve.unit(panelSource, 'const pressed'), gap,
+                    ...carve.span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), gap,
+                    ...carve.unit(panelSource, 'const settled')
                   ]}/>
                 </li>
                 <li className="run">
@@ -373,13 +370,13 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     property with <code className="monospaced">@property</code>, a rule that tells the browser what kind
                     of value a custom property holds and what it is until something sets it: here a length or auto,
                     starting as auto.</p>
-                  <Snippet label="CSS" lines={unit(accordionsCss, '@property --measured-height {')}/>
+                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '@property --measured-height {')}/>
                 </li>
                 <li className="run">
                   <p className="paragraph">The React build marks the panel <code className="monospaced">sized</code> as
                     the plain one does. While <code className="monospaced">sized</code> is on, the panel’s height
                     reads <code className="monospaced unbroken">--measured-height</code>.</p>
-                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
+                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
                 </li>
                 <li className="run">
                   <p className="paragraph">Closing runs the other way: the script sets the open height as the start and
@@ -389,10 +386,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     So the script pins the start first, with <code className="monospaced">unmoving</code>, as the plain
                     script does.</p>
                   <Snippet label="TS" lines={[
-                    ...span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
-                    ...unit(panelSource, 'return <section ref={panel}')
+                    ...carve.span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
+                    ...carve.unit(panelSource, 'return <section ref={panel}')
                   ]}/>
-                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
                 </li>
                 <li className="run">
                   <p className="paragraph">A press while the panel moves
@@ -400,7 +397,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     panel turns around from where it is. If that end is where the panel already stands, no motion is
                     left to run, and the script takes the number away at once.</p>
                   <Snippet label="TS" lines={[
-                    ...unit(panelSource, 'const movingTo')
+                    ...carve.unit(panelSource, 'const movingTo')
                   ]}/>
                 </li>
                 {type === 'exclusive' && <li className="run">
@@ -409,15 +406,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     item around the radio handles it by recording its own key in React state as the open one, and the
                     fold whose key is no longer the open one closes from that state.</p>
                   <Snippet label="TS" lines={[
-                    ...span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
-                    ...span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
+                    ...carve.span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
+                    ...carve.span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
                   ]}/>
                 </li>}
                 <li className="run">
                   <p className="paragraph">This page lets its other folds move to auto, and this build turns that off
                     with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for browsers
                     that could only move between numbers.</p>
-                  <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
+                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-measured {')}/>
                 </li>
               </ol>
             </details>
@@ -460,7 +457,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   the fold. Focus is the element the keyboard will act on. Off screen, the {input} still
                   takes focus, still answers the space bar, and
                   is still named by its label.</p>
-                <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
+                <Snippet label="CSS" lines={carve.unit(placementCss, '.off-screen {')}/>
                 <OffScreenNotGone/>
               </li>
               <li className="run">
@@ -472,8 +469,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the
                   style sheet’s rule and then the shared class.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
-                  ...unit(surfaceCss, '.inverse-filled {')
+                  ...carve.unit(accordionsCss, '&:not(.close) .info-label {'), gap,
+                  ...carve.unit(surfaceCss, '.inverse-filled {')
                 ]}/>
               </li>
               <li className="run">
@@ -491,11 +488,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ? ' With static the turn has no transition, so the corner turns at once.'
                   : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
-                  ...unit(accordionsCss, '.opening-arrow::after {'), gap,
-                  ...unit(surfaceCss, '.corner-after::after {'), gap,
-                  ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
-                  ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
+                  ...carve.unit(accordionsCss, '&:not(.close) .info-label {'), gap,
+                  ...carve.unit(accordionsCss, '.opening-arrow::after {'), gap,
+                  ...carve.unit(surfaceCss, '.corner-after::after {'), gap,
+                  ...carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
+                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
                 ]}/>
                 <TwoBordersTurned/>
               </li>
@@ -511,8 +508,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   whose pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s borders
                   take the ink color with the words.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(surfaceCss, '@media (hover: hover) {\n  :hover ~ .prior-approached'), gap,
-                  ...unit(surfaceCss, ':focus-visible ~ .prior-approached {')
+                  ...carve.unit(surfaceCss, '@media (hover: hover) {\n  :hover ~ .prior-approached'), gap,
+                  ...carve.unit(surfaceCss, ':focus-visible ~ .prior-approached {')
                 ]}/>
                 <FocusOnTheBar/>
               </li>
@@ -526,12 +523,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
-                  ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
-                  ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'),
+                  ...carve.unit(accordionsCss, '.info,\n    .info-text {'), gap,
+                  ...carve.unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
+                  ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'),
                   ...{
-                    reveal: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
-                    drawer: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
+                    reveal: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
+                    drawer: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
                     static: []
                   }[motion]
                 ]}/>
@@ -548,14 +545,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   static: ''
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
-                  ...unit(accordionsCss, '.info-paragraph {'), gap,
-                  ...unit(surfaceCss, '.foot-shadowed {'),
+                  ...carve.unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
+                  ...carve.unit(accordionsCss, '.info-paragraph {'), gap,
+                  ...carve.unit(surfaceCss, '.foot-shadowed {'),
                   ...{
                     reveal: [],
                     drawer: [
-                      gap, ...unit(accordionsCss, '.drawer & .info {'), gap,
-                      ...unit(accordionsCss, '.drawer & .info-text {')
+                      gap, ...carve.unit(accordionsCss, '.drawer & .info {'), gap,
+                      ...carve.unit(accordionsCss, '.drawer & .info-text {')
                     ],
                     static: []
                   }[motion]
@@ -573,10 +570,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   static: ''
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(surfaceCss, '.focus-ringed {'),
+                  ...carve.unit(surfaceCss, '.focus-ringed {'),
                   ...{
-                    reveal: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
-                    drawer: [gap, ...unit(accordionsCss, '& .info {\n      transition: height')],
+                    reveal: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
+                    drawer: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
                     static: []
                   }[motion]
                 ]}/>
@@ -591,7 +588,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
-                <Snippet label="TS" lines={span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
+                <Snippet label="TS" lines={carve.span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
@@ -601,9 +598,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   text <code className="monospaced">field-ink</code>, two plain color classes with no hover or focus of
                   their own.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&.close {'), gap,
-                  ...unit(surfaceCss, '.field-inverse {'), gap,
-                  ...unit(surfaceCss, '.field-ink {')
+                  ...carve.unit(accordionsCss, '&.close {'), gap,
+                  ...carve.unit(surfaceCss, '.field-inverse {'), gap,
+                  ...carve.unit(surfaceCss, '.field-ink {')
                 ]}/>
               </li>}
               <li className="run">
@@ -647,10 +644,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   hairline that draws the line between one bar and the next. Summary takes focus and hover itself,
                   where the {input} build carried focus from the hidden {input} to the label.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), gap,
-                  ...unit(surfaceCss, '.inverse-filled {'), gap,
-                  ...unit(surfaceCss, '.attentive:where(:not(:disabled)) {'), gap,
-                  ...unit(surfaceCss, '.field-outlined {')
+                  ...carve.unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), gap,
+                  ...carve.unit(surfaceCss, '.inverse-filled {'), gap,
+                  ...carve.unit(surfaceCss, '.attentive:where(:not(:disabled)) {'), gap,
+                  ...carve.unit(surfaceCss, '.field-outlined {')
                 ]}/>
               </li>
               <li className="run">
@@ -665,7 +662,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   browser adds an open attribute to the details in the page it is showing, as if it were written in the
                   opening tag. <code className="monospaced">[open]</code> is a piece of a CSS rule that picks an element
                   with that attribute, and its rule turns the arrow down.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '&[open] > .info-label::after {')}/>
+                <Snippet label="CSS" lines={carve.unit(accordionsCss, '&[open] > .info-label::after {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">A pseudo-element is a part of an element
@@ -682,11 +679,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&::details-content {'), gap,
-                  ...unit(accordionsCss, '&[open]::details-content {'), gap,
-                  ...unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
-                  ...(motion === 'drawer' ? [...unit(accordionsCss, '.drawer &::details-content {'), gap, ...unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
-                  ...unit(resetCss, ':root {\n  interpolate-size')
+                  ...carve.unit(accordionsCss, '&::details-content {'), gap,
+                  ...carve.unit(accordionsCss, '&[open]::details-content {'), gap,
+                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
+                  ...(motion === 'drawer' ? [...carve.unit(accordionsCss, '.drawer &::details-content {'), gap, ...carve.unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
+                  ...carve.unit(resetCss, ':root {\n  interpolate-size')
                 ]}/>
                 <SizedToTheText/>
               </li>
@@ -708,7 +705,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
             known-height build. The name is only a name: pressing it does nothing. Only the control works the fold. What
             is new is the way the text opens, below.</p>
-          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
+          <Snippet label="TS" lines={carve.span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from
@@ -727,10 +724,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
             arrow keys move the choice and press as they go, so each move is written too.</p>
           <Snippet label="TS" lines={[
-            ...unit(accordionsSource, 'const openAfter'), gap,
-            ...unit(accordionsSource, 'const radioPressed'), gap,
-            ...unit(accordionsSource, 'const radioClicked'), gap,
-            ...span(accordionsSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
+            ...carve.unit(accordionsSource, 'const openAfter'), gap,
+            ...carve.unit(accordionsSource, 'const radioPressed'), gap,
+            ...carve.unit(accordionsSource, 'const radioClicked'), gap,
+            ...carve.span(accordionsSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
           ]}/>
           <WhatEachPromises/>
         </li>}
@@ -747,8 +744,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             always ends at the content’s own height, so nothing is guessed, nothing is measured by script, nothing is
             fixed, and no text has to scroll.</p>
           <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.fold-clip {'), gap,
-            ...unit(accordionsCss, '&:has(:checked) .fold-clip {')
+            ...carve.unit(accordionsCss, '.fold-clip {'), gap,
+            ...carve.unit(accordionsCss, '&:has(:checked) .fold-clip {')
           ]}/>
           <RowToItsContent/>
         </li>
@@ -768,17 +765,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   and <code className="monospaced">field-pressed</code>,
                   which gives it the page’s own ground and ink while it is pressed.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '&:has(:checked) .when-closed {'), gap,
-                  ...unit(accordionsCss, '&:not(:has(:checked)) .when-open {'), gap,
-                  ...unit(surfaceCss, '.hairline-outline {'), gap,
-                  ...unit(surfaceCss, '.field-pressed:active {')
+                  ...carve.unit(accordionsCss, '&:has(:checked) .when-closed {'), gap,
+                  ...carve.unit(accordionsCss, '&:not(:has(:checked)) .when-open {'), gap,
+                  ...carve.unit(surfaceCss, '.hairline-outline {'), gap,
+                  ...carve.unit(surfaceCss, '.field-pressed:active {')
                 ]}/>
               </li>
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
                   nothing with it, so no press reaches the list. So a handler on the list for keydown, the event a key
                   press sends, catches the space bar too, and closes the fold when the key lands on the open radio.</p>
-                <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
+                <Snippet label="TS" lines={carve.unit(accordionsSource, 'const spacePressed')}/>
               </li>}
               <li className="run">
                 {type === 'inclusive'
@@ -794,8 +791,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   every closed bar. If you let the fold’s own row move and the paragraph clip inside it,
                   the clip falls behind the row while it moves, and a blank band shows under the text.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '.fold-clip-item {'), gap,
-                  ...unit(accordionsCss, '.fold-text {\n      display: block;')
+                  ...carve.unit(accordionsCss, '.fold-clip-item {'), gap,
+                  ...carve.unit(accordionsCss, '.fold-text {\n      display: block;')
                 ]}/>
                 <PaddingInsideTheClip/>
               </li>
@@ -807,7 +804,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
                   static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes at once.'
                 }[motion]}</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
+                <Snippet label="CSS" lines={carve.unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
               </li>
               {motion === 'drawer' && <li className="run">
                 <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
@@ -818,7 +815,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   paragraph’s overflow hides the text above the fold. One transition moves it all, so no part can fall
                   behind another. The drawer works around no browser limit. I built it to show what grid alignment does
                   on its own.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
+                <Snippet label="CSS" lines={carve.unit(accordionsCss, '&.drawer .grid-fold {')}/>
                 <RidesTheEdge/>
               </li>}
             </ol>
@@ -844,7 +841,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             and turns smooth scrolling into a jump. The second names ::details-content, the part a
             details hides, which the universal selector cannot reach. The third sets view
             transitions, the browser’s moves from one page state to the next, to no animation at all.</p>
-          <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
+          <Snippet label="CSS" lines={carve.unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
         </li>
         <li className="run">
           <p className="paragraph">A fold’s transition has no delay, so with no duration it has no middle: the

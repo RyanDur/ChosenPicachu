@@ -18,62 +18,59 @@ import {TheImplementation} from './steps';
 import {whatACustomPropertyIs, whatTheDomIs} from './definitions';
 import '../../Recipe/Recipe.css';
 
-const {span, unit} = carve();
-const {aside, plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(sharesSource, 'export const measuredWidths'), gap,
-      ...unit(looksSource, 'export const headerNeeds')
+      ...carve.unit(sharesSource, 'export const measuredWidths'), gap,
+      ...carve.unit(looksSource, 'export const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(buildSource, 'className={classNames(', '...headerNeeds(travels, width)'), gap,
-      ...span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
+      ...carve.span(buildSource, 'className={classNames(', '...headerNeeds(travels, width)'), gap,
+      ...carve.span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[
-      ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
-      ...unit(widthsSource, '.fancy-table {')
+      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
+      ...carve.unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(sharesSource, 'export const measuredWidths'), gap,
-      ...unit(frameHandle, 'const awaken = ')
+      ...carve.unit(sharesSource, 'export const measuredWidths'), gap,
+      ...carve.unit(frameHandle, 'const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
-      ...unit(frameResize, 'const dressColumn = ')
+      ...carve.unit(frameResize, 'const dressColumn = ')
     ]}/>
     <Snippet label="CSS" lines={[
-      ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
-      ...unit(widthsSource, '.fancy-table {')
+      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
+      ...carve.unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>
 };
 
 const edgeMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(buildSource, 'return <th {...th}', '{children}')
+    ...carve.span(buildSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), gap,
-    ...span(tableSource, '</menu>', '</th>')
+    ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), gap,
+    ...carve.span(tableSource, '</menu>', '</th>')
   ]}/>
 };
 
 const SpokenLabel: FC = () =>
   <Snippet label="TS" lines={[
-    ...unit(sharesSource, 'export const resizeLabel')
+    ...carve.unit(sharesSource, 'export const resizeLabel')
   ]}/>;
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
+    ...carve.span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize window"></button>')
+    ...carve.span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize window"></button>')
   ]}/>
 };
 
@@ -117,25 +114,25 @@ const captureSays: Record<World, ReactNode> = {
 
 const GripWords: FC = () =>
   <Snippet label="TS" lines={[
-    ...unit(sharesSource, 'export const grippedAt'), gap,
-    ...unit(sharesSource, 'export const soughtTrade'), gap,
-    ...unit(stateSource, 'export const grip ='), gap,
-    ...unit(stateSource, 'export const dragHandle'),
-    aside('// both worlds seed the grip and fold the moves in the same store')
+    ...carve.unit(sharesSource, 'export const grippedAt'), gap,
+    ...carve.unit(sharesSource, 'export const soughtTrade'), gap,
+    ...carve.unit(stateSource, 'export const grip ='), gap,
+    ...carve.unit(stateSource, 'export const dragHandle'),
+    lines.aside('// both worlds seed the grip and fold the moves in the same store')
   ]}/>;
 
 const captureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(resizeSource, 'onPointerDown={(event'), gap,
-      ...unit(resizeSource, 'const followed')
+      ...carve.unit(resizeSource, 'onPointerDown={(event'), gap,
+      ...carve.unit(resizeSource, 'const followed')
     ]}/>
     <GripWords/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(frameHandle, "handle.addEventListener('pointerdown'"), gap,
-      ...unit(frameHandle, "handle.addEventListener('pointermove'")
+      ...carve.unit(frameHandle, "handle.addEventListener('pointerdown'"), gap,
+      ...carve.unit(frameHandle, "handle.addEventListener('pointermove'")
     ]}/>
     <GripWords/>
   </Codes>
@@ -144,19 +141,19 @@ const captureCodes: Record<World, ReactNode> = {
 const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
-      aside('// …the press measures; the bubbling stops here'), gap,
-      ...unit(sharesSource, 'export const resizeArrows'), gap,
-      ...span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
-      aside('// the column drag above never gets the press')
+      ...carve.span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
+      lines.aside('// …the press measures; the bubbling stops here'), gap,
+      ...carve.unit(sharesSource, 'export const resizeArrows'), gap,
+      ...carve.span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
+      lines.aside('// the column drag above never gets the press')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
-      aside('// …the press measures; the bubbling stops here'), gap,
-      ...unit(frameHandle, "handle.addEventListener('keydown'"),
-      aside('// the column drag above never gets the press')
+      ...carve.span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
+      lines.aside('// …the press measures; the bubbling stops here'), gap,
+      ...carve.unit(frameHandle, "handle.addEventListener('keydown'"),
+      lines.aside('// the column drag above never gets the press')
     ]}/>
   </Codes>
 };
@@ -257,11 +254,11 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             {handleMarkup[world]}
             <SpokenLabel/>
             <Snippet label="CSS" lines={[
-              ...unit(baseCss, '.resize-handle {'), gap,
-              ...unit(surfaceCss, '.borderless {'), gap,
-              ...unit(surfaceCss, '.unfilled {'), gap,
-              ...unit(surfaceCss, '.held-bar-after {'), gap,
-              ...unit(surfaceCss, '.focus-ringed {')
+              ...carve.unit(baseCss, '.resize-handle {'), gap,
+              ...carve.unit(surfaceCss, '.borderless {'), gap,
+              ...carve.unit(surfaceCss, '.unfilled {'), gap,
+              ...carve.unit(surfaceCss, '.held-bar-after {'), gap,
+              ...carve.unit(surfaceCss, '.focus-ringed {')
             ]}/>
           </Codes>
         </Reveal>
@@ -278,9 +275,9 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           </Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...unit(sharesSource, 'const SLIMMEST'), gap,
-              ...unit(sharesSource, 'const floorOf'), gap,
-              ...unit(sharesSource, 'export const traded')
+              ...carve.unit(sharesSource, 'const SLIMMEST'), gap,
+              ...carve.unit(sharesSource, 'const floorOf'), gap,
+              ...carve.unit(sharesSource, 'export const traded')
             ]}/>
           </Codes>
         </Reveal>

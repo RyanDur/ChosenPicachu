@@ -5,8 +5,6 @@ import {Term} from '../Term';
 import {gap, sessionSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-
 export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
     <Words want="You want the order to move as you drag; waiting for the drop hides the result until it is too late to change your mind.">
@@ -18,8 +16,8 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...unit(sessionSource, 'export const crossingOver'), gap,
-        ...span(listSource, 'onDragOver={crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
+        ...carve.unit(sessionSource, 'export const crossingOver'), gap,
+        ...carve.span(listSource, 'onDragOver={crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
       ]}/>
     </Codes>
   </Step>;
@@ -37,9 +35,9 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
-        ...span(listSource, 'onDragLeave={() => setLanding(nothing())}', 'onDragLeave={() => setLanding(nothing())}'), gap,
-        ...unit(listSource, 'const release')
+        ...carve.span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
+        ...carve.span(listSource, 'onDragLeave={() => setLanding(nothing())}', 'onDragLeave={() => setLanding(nothing())}'), gap,
+        ...carve.unit(listSource, 'const release')
       ]}/>
     </Codes>
   </Step>;

@@ -5,7 +5,7 @@ type Lines = {
   aside: (text: string) => Line;
 };
 
-export const lines = (): Lines => ({
+export const lines: Lines = {
   plain: text => ({text}),
   aside: text => ({text, dim: true})
-});
+};

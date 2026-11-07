@@ -7,8 +7,6 @@ import {World} from '../../params';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {whatTheDomIs} from '../definitions';
 
-const {withoutImports} = carve();
-
 const sourceOf = (world: World, path: string): string =>
   (world === 'react' ? directoryInRepository : fileInRepository)(`src/pages/Demos/Tables/${path}`);
 
@@ -23,8 +21,8 @@ export const TheWholeBuild: FC<{world: World; tableSource: Sample; buildSrc: Sam
   ({world, tableSource, buildSrc}) =>
     <Codes>
       {world === 'react'
-        ? <Snippet label="TS" lines={withoutImports(tableSource)}/>
-        : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
+        ? <Snippet label="TS" lines={carve.withoutImports(tableSource)}/>
+        : <Snippet label="TS" lines={carve.withoutImports(buildSrc)}/>}
     </Codes>;
 
 export const NamesInTheCode: FC = () =>

@@ -3,8 +3,6 @@ import {FC} from 'react';
 import {DemoTopics} from '../../../types';
 import {Codes, Says, Snippet, Step, Words, lines} from '../../../Recipe';
 
-const {aside} = lines();
-
 export const RoadEnd: FC = () =>
   <Step title="What drag and drop cannot give you">
     <Words want="You cannot change how the browser draws its drag image, its cursor or its cancel.">
@@ -16,8 +14,8 @@ export const RoadEnd: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        aside('// no API exists for these pixels; when they matter,'),
-        aside('// build the drag from pointer events')
+        lines.aside('// no API exists for these pixels; when they matter,'),
+        lines.aside('// build the drag from pointer events')
       ]}/>
     </Codes>
   </Step>;

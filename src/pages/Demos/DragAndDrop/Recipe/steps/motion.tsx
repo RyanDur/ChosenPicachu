@@ -4,9 +4,6 @@ import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Rec
 import {gap, glideSource, marksSource, sessionSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
   <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
@@ -21,12 +18,12 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...unit(marksSource, 'export const crossedMark'), gap,
-        ...span(listSource, 'setPushed(crossedMark(item, homeward));', 'setPushed(crossedMark(item, homeward));')
+        ...carve.unit(marksSource, 'export const crossedMark'), gap,
+        ...carve.span(listSource, 'setPushed(crossedMark(item, homeward));', 'setPushed(crossedMark(item, homeward));')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...unit(cssSource, '.sortable-list .pushed {'), gap,
-        ...unit(cssSource, '@keyframes pushed')
+        ...carve.unit(cssSource, '.sortable-list .pushed {'), gap,
+        ...carve.unit(cssSource, '@keyframes pushed')
       ]}/>
     </Codes>
   </Step>;
@@ -41,12 +38,12 @@ export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
+        ...carve.span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
       ]}/>
       <Snippet label="TS" lines={[
-        ...unit(sessionSource, 'export const glided'), gap,
-        ...span(listSource, 'landedOrder(aloft, landing, order).map(glided(setOrder));', 'landedOrder(aloft, landing, order).map(glided(setOrder));'), gap,
-        ...unit(glideSource, 'export const glide')
+        ...carve.unit(sessionSource, 'export const glided'), gap,
+        ...carve.span(listSource, 'landedOrder(aloft, landing, order).map(glided(setOrder));', 'landedOrder(aloft, landing, order).map(glided(setOrder));'), gap,
+        ...carve.unit(glideSource, 'export const glide')
       ]}/>
     </Codes>
   </Step>;
@@ -59,8 +56,8 @@ export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(listSource, 'onArranged={(after, walker) => {', '}}/>'),
-        aside('// nothing marked, nothing competing with the browser’s drag')
+        ...carve.span(listSource, 'onArranged={(after, walker) => {', '}}/>'),
+        lines.aside('// nothing marked, nothing competing with the browser’s drag')
       ]}/>
     </Codes>
   </Step>;

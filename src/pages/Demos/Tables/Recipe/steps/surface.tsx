@@ -5,9 +5,6 @@ import {Term} from '../Term';
 import {frameCarry, gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
@@ -43,17 +40,17 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(headerSource, 'onPointerMove={has(drag) ? pointerTravel(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'), gap,
-            ...unit(headerSource, 'const release = '),
-            aside('// a cancel, or a move with no buttons down, is the drop itself')
+            ...carve.span(headerSource, 'onPointerMove={has(drag) ? pointerTravel(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'), gap,
+            ...carve.unit(headerSource, 'const release = '),
+            lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameCarry, 'export const carrying = '),
-            aside('// a cancel, or a move with no buttons down, is the drop itself')
+            ...carve.unit(frameCarry, 'export const carrying = '),
+            lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(travelSource, 'export const pointerTravel'),
-          aside('// one move; each world moves and drops its own way; losing the capture is a move too')
+          ...carve.unit(travelSource, 'export const pointerTravel'),
+          lines.aside('// one move; each world moves and drops its own way; losing the capture is a move too')
         ]}/>
       </Codes>
     </Reveal>

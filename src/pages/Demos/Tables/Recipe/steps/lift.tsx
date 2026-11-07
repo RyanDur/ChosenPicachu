@@ -5,9 +5,6 @@ import {Term} from '../Term';
 import {gap, sortableCss, stateSource, liftSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
@@ -43,24 +40,24 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
-            ...unit(headerSource, 'const lift = '), gap,
-            ...unit(stateSource, 'export const dragOf'), gap,
-            ...unit(stateSource, 'export const lift = ')
+            ...carve.span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
+            ...carve.unit(headerSource, 'const lift = '), gap,
+            ...carve.unit(stateSource, 'export const dragOf'), gap,
+            ...carve.unit(stateSource, 'export const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, "th.addEventListener('pointerdown', columnLift",
+            ...carve.span(buildSrc, "th.addEventListener('pointerdown', columnLift",
               "th.addEventListener('pointerdown', columnLift"), gap,
-            ...unit(buildSrc, 'const lift = '), gap,
-            ...unit(stateSource, 'export const dragOf'), gap,
-            ...unit(stateSource, 'export const lift = ')
+            ...carve.unit(buildSrc, 'const lift = '), gap,
+            ...carve.unit(stateSource, 'export const dragOf'), gap,
+            ...carve.unit(stateSource, 'export const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(liftSource, 'export const columnLift'),
-          aside('// one lift; each world grabs in its own way')
+          ...carve.unit(liftSource, 'export const columnLift'),
+          lines.aside('// one lift; each world grabs in its own way')
         ]}/>
         <Snippet label="CSS" lines={[
-          ...unit(sortableCss, '.grabbable {')
+          ...carve.unit(sortableCss, '.grabbable {')
         ]}/>
       </Codes>
     </Reveal>

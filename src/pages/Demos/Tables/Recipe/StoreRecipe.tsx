@@ -17,10 +17,7 @@ import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?samp
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
 
-const {span, unit} = carve();
-const {aside, plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const OneState: FC<{world: World}> = ({world}) =>
   <Step title="Two states, two stores">
@@ -60,18 +57,18 @@ const OneState: FC<{world: World}> = ({world}) =>
           order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(demosSource, 'export type DemosState'), gap,
-          ...unit(stateSource, 'export type TableState'), gap,
-          ...unit(storeSource, 'export type Store'),
-          aside('// a value, a dispatch, a subscribe; the whole store, and the page only names its state')
+          ...carve.unit(demosSource, 'export type DemosState'), gap,
+          ...carve.unit(stateSource, 'export type TableState'), gap,
+          ...carve.unit(storeSource, 'export type Store'),
+          lines.aside('// a value, a dispatch, a subscribe; the whole store, and the page only names its state')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(demosSource, 'export const demosStore')
+            ...carve.unit(demosSource, 'export const demosStore')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'export const dragSortable = '), gap,
-            ...span(bootSource, 'const page = demosStore(', 'page.dispatch(feedRequested());')
+            ...carve.unit(buildSrc, 'export const dragSortable = '), gap,
+            ...carve.span(bootSource, 'const page = demosStore(', 'page.dispatch(feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -116,17 +113,17 @@ const ActionsAreData: FC = () =>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), gap,
-          ...unit(arrangementSource, 'export const columnMoved'), gap,
-          ...unit(actionsSource, 'export const columnMovedBeside'),
-          aside('// the record says what happened; the creator is named for the verb')
+          ...carve.span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), gap,
+          ...carve.unit(arrangementSource, 'export const columnMoved'), gap,
+          ...carve.unit(actionsSource, 'export const columnMovedBeside'),
+          lines.aside('// the record says what happened; the creator is named for the verb')
         ]}/>
         <Snippet label="TS" lines={[
-          ...unit(demosSource, 'export const demosSlice'), gap,
-          ...unit(storeSource, 'export type Slice'), gap,
-          ...unit(arrangementSource, 'const answering = '), gap,
-          ...unit(reducerSource, 'export const tableReducer'),
-          aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers read the type in turn')
+          ...carve.unit(demosSource, 'export const demosSlice'), gap,
+          ...carve.unit(storeSource, 'export type Slice'), gap,
+          ...carve.unit(arrangementSource, 'const answering = '), gap,
+          ...carve.unit(reducerSource, 'export const tableReducer'),
+          lines.aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers read the type in turn')
         ]}/>
       </Codes>
     </Reveal>
@@ -151,16 +148,16 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(contextSource, 'export const useTableSelector'), gap,
-          ...unit(selectorsSource, 'export const columnNamed'), gap,
-          ...unit(selectorsSource, 'export const positionOfRow'), gap,
-          ...unit(selectorsSource, 'export const columnTravels'),
-          aside('// the question is the name; the state stays in one file')
+          ...carve.unit(contextSource, 'export const useTableSelector'), gap,
+          ...carve.unit(selectorsSource, 'export const columnNamed'), gap,
+          ...carve.unit(selectorsSource, 'export const positionOfRow'), gap,
+          ...carve.unit(selectorsSource, 'export const columnTravels'),
+          lines.aside('// the question is the name; the state stays in one file')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(headerSource, 'const {sorted, data} = useTableSelector(columnNamed', 'const carried = useTableSelector(columnHeld'), gap,
-            ...span(headerSource, 'const travels = useTableSelector(columnTravels', 'const travels = useTableSelector(columnTravels')
+            ...carve.span(headerSource, 'const {sorted, data} = useTableSelector(columnNamed', 'const carried = useTableSelector(columnHeld'), gap,
+            ...carve.span(headerSource, 'const travels = useTableSelector(columnTravels', 'const travels = useTableSelector(columnTravels')
           ]}/>
           : undefined}
       </Codes>
@@ -201,16 +198,16 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
         </>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(storeSource, 'export type Middleware'), gap,
-          ...unit(exchangeSource, 'export const exchange'),
-          aside('// the socket lives in the middleware; the page and the mount ask for it with an action')
+          ...carve.unit(storeSource, 'export type Middleware'), gap,
+          ...carve.unit(exchangeSource, 'export const exchange'),
+          lines.aside('// the socket lives in the middleware; the page and the mount ask for it with an action')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(openingSource, 'export const useExchange')
+            ...carve.unit(openingSource, 'export const useExchange')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(bootSource, 'page.dispatch(feedRequested());', 'page.dispatch(feedRequested());')
+            ...carve.span(bootSource, 'page.dispatch(feedRequested());', 'page.dispatch(feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -255,11 +252,11 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(elementSource, 'export const useDragSortable')
+            ...carve.unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
-            ...span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
+            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), gap,
+            ...carve.span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
           ]}/>}
       </Codes>
     </Reveal>

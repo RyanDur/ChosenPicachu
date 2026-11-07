@@ -4,9 +4,6 @@ import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Rec
 import {gap, hideItemCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>
     <Words want="With the drag image under the pointer, the card it came from reads as a duplicate, but removing it can end the drag: some engines stop the drag when its source disappears.">
@@ -17,12 +14,12 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
-        ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
+        ...carve.span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
+        ...carve.span(itemSource, 'updateHide(false);', 'updateHide(false);')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...unit(hideItemCss, '.draggable.hide {'),
-        aside('/* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source */')
+        ...carve.unit(hideItemCss, '.draggable.hide {'),
+        lines.aside('/* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source */')
       ]}/>
     </Codes>
   </Step>;
@@ -36,8 +33,8 @@ export const KeepStanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(listSource, '<KeepItem key={item}', '<KeepItem key={item}'),
-        aside('{/* no hiding wiring exists in this list; nothing to erase */}')
+        ...carve.span(listSource, '<KeepItem key={item}', '<KeepItem key={item}'),
+        lines.aside('{/* no hiding wiring exists in this list; nothing to erase */}')
       ]}/>
     </Codes>
   </Step>;

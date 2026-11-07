@@ -5,9 +5,6 @@ import {World} from '../../params';
 import {frameSettle, gap, reducerSource, stateSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, cssSource, buildSrc}) =>
     <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
@@ -60,33 +57,33 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'), gap,
-              ...span(reducerSource, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
-              ...unit(stateSource, 'export const shoveColumns'), gap,
-              ...unit(stateSource, 'export const settle'),
-              aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
+              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'), gap,
+              ...carve.span(reducerSource, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
+              ...carve.unit(stateSource, 'export const shoveColumns'), gap,
+              ...carve.unit(stateSource, 'export const settle'),
+              lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(buildSrc, 'const columnShoving = '), gap,
-              ...unit(buildSrc, 'const columnTo = '), gap,
-              ...unit(buildSrc, 'const drop = '), gap,
-              ...unit(frameSettle, 'const untilSettled = '),
-              aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
+              ...carve.unit(buildSrc, 'const columnShoving = '), gap,
+              ...carve.unit(buildSrc, 'const columnTo = '), gap,
+              ...carve.unit(buildSrc, 'const drop = '), gap,
+              ...carve.unit(frameSettle, 'const untilSettled = '),
+              lines.aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...unit(surveySource, 'export const displacedBetween'), gap,
-            ...unit(surveySource, 'export const columnLeft'),
-            aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
+            ...carve.unit(surveySource, 'export const displacedBetween'), gap,
+            ...carve.unit(surveySource, 'export const columnLeft'),
+            lines.aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(cssSource, '.sortable.animated .settling {'), gap,
-            ...unit(cssSource, '.sortable.animated.hide .settling {'), gap,
-            ...unit(cssSource, '.sortable.animated .shoved-start {'), gap,
-            ...unit(cssSource, '@keyframes settle {'), gap,
-            ...unit(cssSource, '@keyframes settle-from-pointer {'), gap,
-            ...unit(cssSource, '@keyframes shoved-start {'), gap,
-            ...unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
-            aside('/* the only motion code there is; the table wears the word animated, and hide chooses where the settle starts */')
+            ...carve.unit(cssSource, '.sortable.animated .settling {'), gap,
+            ...carve.unit(cssSource, '.sortable.animated.hide .settling {'), gap,
+            ...carve.unit(cssSource, '.sortable.animated .shoved-start {'), gap,
+            ...carve.unit(cssSource, '@keyframes settle {'), gap,
+            ...carve.unit(cssSource, '@keyframes settle-from-pointer {'), gap,
+            ...carve.unit(cssSource, '@keyframes shoved-start {'), gap,
+            ...carve.unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
+            lines.aside('/* the only motion code there is; the table wears the word animated, and hide chooses where the settle starts */')
           ]}/>
         </Codes>
       </Reveal>
@@ -112,8 +109,8 @@ export const StaticMotion: FC<{world: World; cssSource: Sample}> = ({world, cssS
           pointer.</Says>}
       <Codes>
         <Snippet label="CSS" lines={[
-          ...unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
-          aside('/* the marks still land; the style sheet gives them no time */')
+          ...carve.unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
+          lines.aside('/* the marks still land; the style sheet gives them no time */')
         ]}/>
       </Codes>
     </Reveal>

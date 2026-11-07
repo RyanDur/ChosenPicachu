@@ -4,9 +4,6 @@ import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span} = carve();
-const {aside} = lines();
-
 export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Keep which item is held in state, not in the drag’s payload">
     <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in,
@@ -24,8 +21,8 @@ export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
-        aside('// the item passes its name up; the list keeps which one is held')
+        ...carve.span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
+        lines.aside('// the item passes its name up; the list keeps which one is held')
       ]}/>
     </Codes>
   </Step>;

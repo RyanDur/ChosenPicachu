@@ -4,8 +4,6 @@ import {SlotsFigure} from '../SlotsFigure';
 import {Term} from '../Term';
 import {gap, surveySource} from './sources';
 
-const {unit} = carve();
-
 export const DeadZone: FC = () =>
   <Step title="Find the neighbor under the pointer, with a dead zone" id="step-dead-zone">
     <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
@@ -28,9 +26,9 @@ export const DeadZone: FC = () =>
       <SlotsFigure/>
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(surveySource, 'const deadZone = '), gap,
-          ...unit(surveySource, 'const struckPast = '), gap,
-          ...unit(surveySource, 'export const columnUnder')
+          ...carve.unit(surveySource, 'const deadZone = '), gap,
+          ...carve.unit(surveySource, 'const struckPast = '), gap,
+          ...carve.unit(surveySource, 'export const columnUnder')
         ]}/>
       </Codes>
     </Reveal>

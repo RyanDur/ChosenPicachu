@@ -5,8 +5,6 @@ import sessionSource from '../../session.ts?sample';
 import hideItemCss from '../../items/HideItem.css?sample';
 import {lines} from '../../../Recipe';
 
-const {plain} = lines();
-
 export {crossingSource, glideSource, hideItemCss, marksSource, sessionSource};
 
-export const gap = plain(' ');
+export const gap = lines.plain(' ');

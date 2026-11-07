@@ -3,8 +3,6 @@ import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words, carve} from '../.
 import {gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {unit} = carve();
-
 export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
   <Story param="native" id="keyboard"
     can="The user can arrange the list from the keyboard"
@@ -20,8 +18,8 @@ export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(gripSource, 'const steps'), gap,
-            ...unit(gripSource, 'onKeyDown={event =>')
+            ...carve.unit(gripSource, 'const steps'), gap,
+            ...carve.unit(gripSource, 'onKeyDown={event =>')
           ]}/>
         </Codes>
       </Step>

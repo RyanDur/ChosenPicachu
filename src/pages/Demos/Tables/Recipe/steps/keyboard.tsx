@@ -4,9 +4,6 @@ import {World} from '../../params';
 import {frameColumns, gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
@@ -38,17 +35,17 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), gap,
-            ...span(gripSource, '<button', '</button>'),
-            aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
+            ...carve.span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), gap,
+            ...carve.span(gripSource, '<button', '</button>'),
+            lines.aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameColumns, 'export const markGrips = '),
-            aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
+            ...carve.unit(frameColumns, 'export const markGrips = '),
+            lines.aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[
-          ...unit(headerCss, '.sortable .header-cell {'), gap,
-          ...unit(surfaceCss, '.focus-ringed {')
+          ...carve.unit(headerCss, '.sortable .header-cell {'), gap,
+          ...carve.unit(surfaceCss, '.focus-ringed {')
         ]}/>
       </Codes>
     </Reveal>
@@ -72,15 +69,15 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Samp
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(headerSource, 'onKeyDown={travels')
+              ...carve.unit(headerSource, 'onKeyDown={travels')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(buildSrc, "th.addEventListener('keydown'")
+              ...carve.unit(buildSrc, "th.addEventListener('keydown'")
             ]}/>}
           <Snippet label="TS" lines={[
-            ...unit(surveySource, 'export const nudgedColumn'), gap,
-            ...unit(surveySource, 'export const nudgedRow'),
-            aside('// the anchors hold and the walk stops beside them; both worlds call the same walk')
+            ...carve.unit(surveySource, 'export const nudgedColumn'), gap,
+            ...carve.unit(surveySource, 'export const nudgedRow'),
+            lines.aside('// the anchors hold and the walk stops beside them; both worlds call the same walk')
           ]}/>
         </Codes>
       </Reveal>

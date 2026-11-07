@@ -8,10 +8,7 @@ import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 type Props = {
   cardOne: CardOne;
@@ -29,10 +26,10 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
           Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you
           cannot see it, under card two. The menu works. It is drawn in the wrong place.</p>
         <Snippet label="CSS" lines={[
-          ...unit(zIndexCss, '.sort-choices {'), gap,
-          ...unit(zIndexCss, '.old-way-card {'), gap,
-          ...unit(zIndexCss, '.positioned {'), gap,
-          ...unit(zIndexCss, '.forms-context {')
+          ...carve.unit(zIndexCss, '.sort-choices {'), gap,
+          ...carve.unit(zIndexCss, '.old-way-card {'), gap,
+          ...carve.unit(zIndexCss, '.positioned {'), gap,
+          ...carve.unit(zIndexCss, '.forms-context {')
         ]}/>
       </li>
       <li className="run">
@@ -57,7 +54,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
           panel’s context, where card two is, and there 9999 is the larger number. With the box checked again, the card
           forms its layer again, with the list inside it.</p>
         <Snippet label="HTML" lines={[
-          ...span(trappedSource, "<li className={classNames('old-way-card", '</label>')
+          ...carve.span(trappedSource, "<li className={classNames('old-way-card", '</label>')
         ]}/>
       </li>
     </ol>

@@ -6,9 +6,6 @@ import {Term} from '../Term';
 import {frameColumns, gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {unit} = carve();
-const {aside, plain} = lines();
-
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
     <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
@@ -41,26 +38,26 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(headerSource, 'const walkedTo = '), gap,
-              ...unit(headerSource, 'const beside = '), gap,
-              ...unit(headerSource, 'const moved = ')
+              ...carve.unit(headerSource, 'const walkedTo = '), gap,
+              ...carve.unit(headerSource, 'const beside = '), gap,
+              ...carve.unit(headerSource, 'const moved = ')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(buildSrc, 'const columnBeside = '), gap,
-              ...unit(buildSrc, 'const moved = ')
+              ...carve.unit(buildSrc, 'const columnBeside = '), gap,
+              ...carve.unit(buildSrc, 'const moved = ')
             ]}/>}
           {world === 'react'
             ? <Snippet label="HTML" lines={[
-              plain('<DraggableColumn column="trades">trades ...</DraggableColumn>'),
-              aside('{/* same key, new place: React moves the node, not a copy */}')
+              lines.plain('<DraggableColumn column="trades">trades ...</DraggableColumn>'),
+              lines.aside('{/* same key, new place: React moves the node, not a copy */}')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(frameColumns, 'const reconcileColumns = '),
-              aside('// the same cells, new places: the reconcile moves the node, not a copy')
+              ...carve.unit(frameColumns, 'const reconcileColumns = '),
+              lines.aside('// the same cells, new places: the reconcile moves the node, not a copy')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const eagerTravel'),
-            aside('// one shared travel; each world answers with its own settle')
+            ...carve.unit(travelSource, 'export const eagerTravel'),
+            lines.aside('// one shared travel; each world answers with its own settle')
           ]}/>
         </Codes>
       </Reveal>
@@ -92,18 +89,18 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(headerSource, 'const moved = '), gap,
-              ...unit(headerSource, 'const release = '), gap,
-              ...unit(paceSource, 'export const travelledColumn'), gap,
-              ...unit(paceSource, 'export const releasedColumn')
+              ...carve.unit(headerSource, 'const moved = '), gap,
+              ...carve.unit(headerSource, 'const release = '), gap,
+              ...carve.unit(paceSource, 'export const travelledColumn'), gap,
+              ...carve.unit(paceSource, 'export const releasedColumn')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(buildSrc, 'const moved = '), gap,
-              ...unit(buildSrc, 'const landed = ')
+              ...carve.unit(buildSrc, 'const moved = '), gap,
+              ...carve.unit(buildSrc, 'const landed = ')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const lazyTravel'),
-            aside('// one shared travel; the fold is its value, each world keeps it its own way')
+            ...carve.unit(travelSource, 'export const lazyTravel'),
+            lines.aside('// one shared travel; the fold is its value, each world keeps it its own way')
           ]}/>
         </Codes>
       </Reveal>

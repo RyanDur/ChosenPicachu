@@ -21,10 +21,7 @@ import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
@@ -107,27 +104,27 @@ const suppliedBy: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
+      ...carve.span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>'), gap,
-      ...span(dealSource, '</table>', '</DragSortable>')
+      ...carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>'), gap,
+      ...carve.span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[
-      ...unit(widthsSource, '.aggregations {')
+      ...carve.unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(headerSource, 'return <th {...th}', 'scope="col"'), gap,
-      ...span(cellSource, 'return <td {...td}', '</td>;')
+      ...carve.span(headerSource, 'return <th {...th}', 'scope="col"'), gap,
+      ...carve.span(cellSource, 'return <td {...td}', '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(tableSource, '<table class="fancy-table', '</th>'), gap,
-      ...span(tableSource, '<tbody class="body">', '</tr>')
+      ...carve.span(tableSource, '<table class="fancy-table', '</th>'), gap,
+      ...carve.span(tableSource, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[
-      ...unit(widthsSource, '.aggregations {')
+      ...carve.unit(widthsSource, '.aggregations {')
     ]}/>
   </Codes>
 };
@@ -150,15 +147,15 @@ const foldSays: Record<World, ReactNode> = {
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(foldSource, 'export const windows'), gap,
-      ...unit(foldSource, 'const aggregate = ')
+      ...carve.unit(foldSource, 'export const windows'), gap,
+      ...carve.unit(foldSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(foldSource, 'export const windows'), gap,
-      ...unit(buildSrc, 'const reconciled = '), gap,
-      ...unit(frameRows, 'export const writeCells = ')
+      ...carve.unit(foldSource, 'export const windows'), gap,
+      ...carve.unit(buildSrc, 'const reconciled = '), gap,
+      ...carve.unit(frameRows, 'export const writeCells = ')
     ]}/>
   </Codes>
 };
@@ -228,8 +225,8 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             already delivered, and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...unit(hydrateSource, 'export const recentTrades'), gap,
-              ...unit(hydrateSource, 'export const hydrated')
+              ...carve.unit(hydrateSource, 'export const recentTrades'), gap,
+              ...carve.unit(hydrateSource, 'export const hydrated')
             ]}/>
           </Codes>
         </Reveal>
@@ -248,8 +245,8 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...unit(exchangeSource, 'const stream = streaming('), gap,
-              ...unit(demosSource, 'const tradesReducer')
+              ...carve.unit(exchangeSource, 'const stream = streaming('), gap,
+              ...carve.unit(demosSource, 'const tradesReducer')
             ]}/>
           </Codes>
         </Reveal>

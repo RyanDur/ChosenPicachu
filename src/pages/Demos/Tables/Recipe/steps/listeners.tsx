@@ -5,9 +5,6 @@ import {World} from '../../params';
 import {gap, elementSource, storeSource, liftSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>,
@@ -46,17 +43,17 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
         where the moved column or row now sits.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(storeSource, 'export type Store'), gap,
-          ...span(liftSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
-          aside('// the order is a question the event asks, not a value the listener keeps')
+          ...carve.unit(storeSource, 'export type Store'), gap,
+          ...carve.span(liftSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
+          lines.aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(elementSource, 'export const useDragSortable')
+            ...carve.unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'export const dragSortable = '), gap,
-            ...span(buildSrc, 'hand.subscribe(', 'hand.subscribe(')
+            ...carve.unit(buildSrc, 'export const dragSortable = '), gap,
+            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe(')
           ]}/>}
       </Codes>
     </Reveal>

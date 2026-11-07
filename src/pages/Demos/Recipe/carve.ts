@@ -112,4 +112,4 @@ type Carve = {
   withoutImports: (sample: Sample) => Line[];
 };
 
-export const carve = (): Carve => ({unit, span, withoutImports});
+export const carve: Carve = {unit, span, withoutImports};

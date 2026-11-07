@@ -11,10 +11,7 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import '../Runs.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParamsOnceHydrated();
@@ -30,15 +27,15 @@ export const BannerExplained: FC = () => {
           two, later in the code with its own z-index of 1, passes over it. It is the old menu again, at the window’s
           edge.</p>
         <Snippet label="CSS" lines={[
-          ...unit(zIndexCss, '.old-banner {'), gap,
-          ...unit(zIndexCss, '.forms-context {')
+          ...carve.unit(zIndexCss, '.old-banner {'), gap,
+          ...carve.unit(zIndexCss, '.forms-context {')
         ]}/>
       </li>
       <li className="run">
         <p className="paragraph">The banner in the top layer is the site’s own banner. It is a popover shown in the top
           layer, so card one’s stacking context does not hold it. It stays at the window’s edge, over everything on the
           page, card two included.</p>
-        <Snippet label="TS" lines={span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+        <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"

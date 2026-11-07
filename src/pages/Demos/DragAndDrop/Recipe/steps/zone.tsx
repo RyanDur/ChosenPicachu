@@ -4,8 +4,6 @@ import {Term} from '../Term';
 import {crossingSource} from './sources';
 import {CrossingFigure} from '../CrossingFigure';
 
-const {unit} = carve();
-
 export const InnerHalf: FC = () =>
   <Step title="A swap counts once the pointer is a quarter of the way into a neighbor">
     <Words want="Swap at the first touch of a neighbor and the order flickers: at the boundary, every pixel of movement flips it back and forth.">
@@ -16,7 +14,7 @@ export const InnerHalf: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...unit(crossingSource, 'export const crossed')
+        ...carve.unit(crossingSource, 'export const crossed')
       ]}/>
       <CrossingFigure/>
     </Codes>

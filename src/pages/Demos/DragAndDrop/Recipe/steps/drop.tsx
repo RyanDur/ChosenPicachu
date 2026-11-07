@@ -3,8 +3,6 @@ import {Codes, Mdn, Says, Snippet, Step, Words, carve} from '../../../Recipe';
 import {gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span} = carve();
-
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step title="Accept the drop, or the platform takes it back">
     <Words want="By default nothing accepts a drop: release over the list and the browser plays the cancel, carrying the card back to where it came from, and you cannot stop it.">
@@ -23,8 +21,8 @@ export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({lis
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), gap,
-        ...span(itemSource, 'onDragOver={event => {', '}}')
+        ...carve.span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), gap,
+        ...carve.span(itemSource, 'onDragOver={event => {', '}}')
       ]}/>
     </Codes>
   </Step>;

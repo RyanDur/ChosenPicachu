@@ -5,9 +5,6 @@ import {Term} from '../Term';
 import {frameGrip, frameHtml, frameParts, gap, gripSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 
-const {span, unit} = carve();
-const {aside} = lines();
-
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
@@ -41,27 +38,27 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...span(gripSource, '<button', '</button>'),
-            aside('{/* focusable by birth; the keyboard track builds on it */}')
+            ...carve.span(gripSource, '<button', '</button>'),
+            lines.aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...span(frameHtml, '<button type="button" tabindex="0" data-row-grip', '</button>this minute'),
-            aside('<!-- focusable by birth; the keyboard track builds on it -->')
+            ...carve.span(frameHtml, '<button type="button" tabindex="0" data-row-grip', '</button>this minute'),
+            lines.aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(surveySource, 'export const rowUnder'), gap,
-            ...unit(rowSource, 'const beside = '), gap,
-            ...span(rowSource, 'onPointerDown={rowLift(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'),
-            aside('{/* the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it */}')
+            ...carve.unit(surveySource, 'export const rowUnder'), gap,
+            ...carve.unit(rowSource, 'const beside = '), gap,
+            ...carve.span(rowSource, 'onPointerDown={rowLift(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'),
+            lines.aside('{/* the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(surveySource, 'export const rowUnder'), gap,
-            ...unit(buildSrc, 'const rowBeside = '), gap,
-            ...unit(frameGrip, 'const gripping = '), gap,
-            ...unit(frameGrip, 'export const rowGrip = '), gap,
-            ...unit(frameParts, 'export const wireParts = '),
-            aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')
+            ...carve.unit(surveySource, 'export const rowUnder'), gap,
+            ...carve.unit(buildSrc, 'const rowBeside = '), gap,
+            ...carve.unit(frameGrip, 'const gripping = '), gap,
+            ...carve.unit(frameGrip, 'export const rowGrip = '), gap,
+            ...carve.unit(frameParts, 'export const wireParts = '),
+            lines.aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')
           ]}/>}
       </Codes>
     </Reveal>

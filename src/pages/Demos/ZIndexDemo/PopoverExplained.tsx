@@ -7,10 +7,7 @@ import menuCss from '@components/Menu/Menu.css?sample';
 import menuSource from '@components/Menu/Menu.tsx?sample';
 import '../Runs.css';
 
-const {span, unit} = carve();
-const {plain} = lines();
-
-const gap = plain(' ');
+const gap = lines.plain(' ');
 
 export const PopoverExplained: FC = () =>
   <section aria-labelledby={popoverWinsHeading} className="stacking-part">
@@ -47,7 +44,7 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide.</p>
-        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</Menu>')}/>
+        <Snippet label="HTML" lines={carve.span(topLayerSource, '<button type="button"', '</Menu>')}/>
       </li>
       <li className="run">
         <p className="paragraph">Menu, Entry and Item are this site’s components for a menu, and they write one element
@@ -55,7 +52,7 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes
           that set its look. I leave a menu’s look to the page that uses it, so the page
           passes <code className="monospaced">Menu</code> those classes, as the sample shows.</p>
-        <Snippet label="TS" lines={unit(menuSource, 'export const Item')}/>
+        <Snippet label="TS" lines={carve.unit(menuSource, 'export const Item')}/>
       </li>
       <li className="run">
         <p className="paragraph">The button that opens the menu carries a tabIndex of 0, as its sample shows, and so
@@ -64,7 +61,7 @@ export const PopoverExplained: FC = () =>
           React spells it. A tabindex of 0 asks the browser to stop on the element when
           Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
           fields and to elements that ask for it.</p>
-        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button" tabIndex={0} className="button primary', '</button>')}/>
+        <Snippet label="HTML" lines={carve.span(topLayerSource, '<button type="button" tabIndex={0} className="button primary', '</button>')}/>
       </li>
       <li className="run">
         <p className="paragraph">Script adds two things, and both wait for an event. An event is the browser telling the
@@ -88,8 +85,8 @@ export const PopoverExplained: FC = () =>
             forms a stacking context</cite></a> names
           its own anchor.</p>
         <Snippet label="CSS" lines={[
-          ...span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), gap,
-          ...unit(menuCss, '@supports not (position-area: block-end) {')
+          ...carve.span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), gap,
+          ...carve.unit(menuCss, '@supports not (position-area: block-end) {')
         ]}/>
       </li>
     </ol>
