@@ -9,7 +9,8 @@ import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
-import '../Tutorials.css';
+import {stationId} from '../Recipe';
+import './TutorialPage.css';
 
 const bodies: Record<Tutorial, FC> = {
   sort: DragSortTutorial,
@@ -24,17 +25,27 @@ export const TutorialPage: FC = () => {
   return useShownTutorial().either(tutorial => {
     const {number, of} = tableTutorials.placeOf(tutorial);
     const Body = bodies[tutorial];
-    return <section aria-labelledby={titled}>
-      <p className="caption">
-        <Link className="signpost" to={`${demoAddress(DemoTopics.tables)}${searchFromShown({})}`}>
-          {topicNames[DemoTopics.tables]}
-        </Link>
-        {` · tutorial ${number} of ${of}`}
-      </p>
-      <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
+    return <section aria-labelledby={titled} className="tutorial-page">
+      <hgroup>
+        <p className="caption">
+          <Link className="signpost" to={`${demoAddress(DemoTopics.tables)}${searchFromShown({})}`}>
+            {topicNames[DemoTopics.tables]}
+          </Link>
+          {` · tutorial ${number} of ${of}`}
+        </p>
+        <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
+      </hgroup>
       <Aggregations/>
       <WorldGlider/>
       <WorldNote/>
+      <p className="paragraph">
+        This tutorial adds one feature to the live table above. It starts where{' '}
+        <Link className="signpost"
+          to={{pathname: demoAddress(DemoTopics.tables), search: searchFromShown({}), hash: stationId(5)}}>
+          station 5 of the tables tab
+        </Link>{' '}
+        ends, with the table’s store and its dispatch, so read that station first if those are new to you.
+      </p>
       <Body/>
     </section>;
   }, () => null);
