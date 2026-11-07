@@ -44,9 +44,8 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
     <Reveal>
       {world === 'react'
         ? <Says><code className="monospaced">SortMenu</code> is the whole chooser: three buttons naming the three
-          choices, raising <code className="monospaced">onSorted</code> with which column asked for what. The page
-          dispatches it, and that is the whole answer. The rows cut to their ranked seats on the next frame, in the
-          animated table and the static one alike.</Says>
+          choices, raising <code className="monospaced">onSorted</code> with which column asked for what. The new
+          order shows on the next frame, in the animated table and the static one alike.</Says>
         : <>
           <Says>The toggle and its menu are the button and the menu the page writes,
             marked <code className="monospaced">data-sort-toggle</code> and <code className="monospaced">data-sort-menu</code>. When boot calls <code className="monospaced">dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
@@ -56,8 +55,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
             with; <code className="monospaced">choose</code> raises <code className="monospaced">sorted</code> to the
             page and writes the move report, the output that tells a screen reader what happened. The page
             dispatches the sort into its arrangement and calls <code className="monospaced">reconcile</code>, which
-            reseats the rows. The rows cut to their ranked seats, in the animated build and the static one
-            alike.</Says>
+            reseats the rows the same way in the animated build and the static one.</Says>
         </>}
       <Codes>
         {world === 'react'
