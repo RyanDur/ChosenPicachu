@@ -11,11 +11,19 @@ import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
 import {useGallery} from '@pages/Gallery/Context';
 
-type Answers = Partial<Record<Source, boolean>>;
+type Answer = 'awaited' | 'open' | 'closed';
+type Answers = Record<Source, Answer>;
 
-const openIn = (answers: Answers) => museums.all.filter(({param}) => answers[param] === true);
+const unanswered: Answers = {
+  [Source.AIC]: 'awaited',
+  [Source.HARVARD]: 'awaited',
+  [Source.VAM]: 'awaited',
+  [Source.CLEVELAND]: 'awaited'
+};
 
-const settledIn = (answers: Answers): boolean => museums.all.every(({param}) => has(answers[param]));
+const openIn = (answers: Answers) => museums.all.filter(({param}) => answers[param] === 'open');
+
+const settledIn = (answers: Answers): boolean => museums.all.every(({param}) => answers[param] !== 'awaited');
 
 type Shown =
   | {readonly shown: 'wall'}
@@ -34,10 +42,10 @@ const shownFor = (answers: Answers, tab?: Source): Shown => {
 
 const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) =>
   (answer: Result<boolean, HTTPError>): void =>
-    tell(known => ({...known, [museum]: answer.orElse(false)}));
+    tell(known => ({...known, [museum]: answer.map((open): Answer => open ? 'open' : 'closed').orElse('closed')}));
 
 export const ArtGalleryPage: FC = () => {
-  const [answers, updateAnswers] = useState<Answers>({});
+  const [answers, updateAnswers] = useState<Answers>(unanswered);
   const {tab, updateSearchParams, searchFromShown} = useGallery();
   const {pathname} = useLocation();
   const hydrated = useHydrated();
