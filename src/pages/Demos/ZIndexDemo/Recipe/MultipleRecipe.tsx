@@ -1,14 +1,16 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Entrance, Stack, enterParam, stackParam} from '@components/Banners/params';
-import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
-import {span, unit} from '../../Recipe/carve';
+import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {EntranceDial, StackDial} from '../../Controls';
 import {popoverWinsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import providerSource from '@components/Banners/BannerProvider.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import '../../Recipe/Recipe.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

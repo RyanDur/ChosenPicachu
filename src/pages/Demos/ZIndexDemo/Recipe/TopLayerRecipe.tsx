@@ -2,8 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject, useSearchParamsOnceHydrated} from '@components/search-params';
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
-import {span, unit} from '../../Recipe/carve';
+import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {Sample} from '../../Recipe/sample';
 import {storyOpenedIn} from '../../Recipe/Story';
 import {multipleStory, slideInStep} from './MultipleRecipe';
@@ -15,6 +14,9 @@ import placementCss from '../../../../styles/placement.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
 import typographyCss from '../../../../styles/typography.css?sample';
 import '../../Recipe/Recipe.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

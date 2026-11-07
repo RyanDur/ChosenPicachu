@@ -2,11 +2,12 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {directoryInRepository, fileInRepository} from '@pages/Paths';
 import {DemoTopics} from '../../../types';
-import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
-import {withoutImports} from '../../../Recipe/carve';
+import {Codes, Mdn, Snippet, Tell, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {whatTheDomIs} from '../definitions';
+
+const {withoutImports} = carve();
 
 const sourceOf = (world: World, path: string): string =>
   (world === 'react' ? directoryInRepository : fileInRepository)(`src/pages/Demos/Tables/${path}`);

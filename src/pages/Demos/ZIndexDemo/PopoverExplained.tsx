@@ -1,12 +1,14 @@
 import {FC} from 'react';
-import {Mdn, plain, Snippet} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {Mdn, Snippet, lines, carve} from '../Recipe';
 import {AboveThePage} from './Diagrams';
 import {popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import menuSource from '@components/Menu/Menu.tsx?sample';
 import '../Runs.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

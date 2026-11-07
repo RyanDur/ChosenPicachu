@@ -1,5 +1,7 @@
-import {span, unit} from '../carve';
+import {carve} from '../carve';
 import {aSample} from '../__test_support';
+
+const {span, unit} = carve();
 
 // language=TEXT
 const source = aSample(`const still = 0;

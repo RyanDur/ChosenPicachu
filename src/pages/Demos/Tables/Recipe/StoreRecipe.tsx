@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
-import {span, unit} from '../../Recipe/carve';
+import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, lines, carve} from '../../Recipe';
 import {World} from '../params';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/table-state.ts?sample';
@@ -17,6 +16,9 @@ import openingSource from '@pages/Demos/useExchange.ts?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
+
+const {span, unit} = carve();
+const {aside, plain} = lines();
 
 const gap = plain(' ');
 

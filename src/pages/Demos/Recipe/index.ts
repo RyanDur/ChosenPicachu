@@ -14,6 +14,7 @@ export {Defined} from './Defined';
 export {Clues, Design, Slices} from './Arc';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
-export {aside, plain} from './lines';
+export {lines} from './lines';
+export {carve} from './carve';
 export {Mdn} from './Mdn';
 export {Figure} from './Figure';

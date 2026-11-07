@@ -1,13 +1,15 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {aside, Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 import {Line} from '@pages/Demos/Recipe/Snippet';
 import {whatACustomPropertyIs} from '../definitions';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 const theSheetDeclaresSeatAndDrift = <>
   The style sheet declares the seat and the drift with <code className="monospaced">@property</code>, a rule that gives

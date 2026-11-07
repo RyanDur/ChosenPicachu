@@ -1,8 +1,9 @@
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
-import {span} from '../../../Recipe/carve';
+import {Codes, Mdn, Says, Snippet, Step, Words, carve} from '../../../Recipe';
 import {gap} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span} = carve();
 
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step title="Accept the drop, or the platform takes it back">

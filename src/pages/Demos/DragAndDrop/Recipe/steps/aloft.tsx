@@ -1,9 +1,11 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../../types';
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span} from '../../../Recipe/carve';
+import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span} = carve();
+const {aside} = lines();
 
 export const HoldTheAloft: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Keep which item is held in state, not in the drag’s payload">

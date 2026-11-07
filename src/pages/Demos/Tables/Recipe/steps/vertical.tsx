@@ -1,10 +1,12 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameGrip, frameHtml, frameParts, gap, gripSource, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">

@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@components/search-params';
-import {plain, Snippet} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {Snippet, lines, carve} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {fixedBannerLosesHeading} from './part-headings';
 import {storyAnchor} from '../Recipe/story-anchor';
@@ -11,6 +10,9 @@ import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import '../Runs.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

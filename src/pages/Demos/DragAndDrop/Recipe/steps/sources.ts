@@ -3,7 +3,9 @@ import glideSource from '@components/glide.ts?sample';
 import marksSource from '../../marks.ts?sample';
 import sessionSource from '../../session.ts?sample';
 import hideItemCss from '../../items/HideItem.css?sample';
-import {plain} from '../../../Recipe';
+import {lines} from '../../../Recipe';
+
+const {plain} = lines();
 
 export {crossingSource, glideSource, hideItemCss, marksSource, sessionSource};
 

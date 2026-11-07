@@ -2,8 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC, ReactNode, useId} from 'react';
 import {DemoTopics} from '../types';
 import {ChartKind} from './kinds';
-import {Codes, Mdn, plain, Says, Snippet, Step, Steps, Stories, Story, Tell, Words} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import {AThirdFromThePointer} from './Diagrams';
 import shapesSource from './Candles/shapes.ts?sample';
 import sparklineSource from './sparkline.ts?sample';
@@ -33,6 +32,9 @@ import kindsSource from './kinds.ts?sample';
 import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

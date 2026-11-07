@@ -1,10 +1,12 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameCarry, gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">

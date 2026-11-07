@@ -1,10 +1,12 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {arrangementSource, bootSource, frameRows, gap, headersSource, placingSource, rowSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
   ({world, tableSource, buildSrc}) =>

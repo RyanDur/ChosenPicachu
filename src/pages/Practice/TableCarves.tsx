@@ -2,9 +2,11 @@ import {FC} from 'react';
 import tableSource from '@pages/Demos/Tables/Frame/table.html?sample';
 import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import columnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
-import {aside, Snippet} from '@pages/Demos/Recipe';
-import {span} from '@pages/Demos/Recipe/carve';
+import {Snippet, lines, carve} from '@pages/Demos/Recipe';
 import './TableCarves.css';
+
+const {span} = carve();
+const {aside} = lines();
 
 const tableTag = span(tableSource, '<table class="fancy-table', '<table class="fancy-table');
 const tradesHeader = span(tableSource, '<th scope="col" class="cell header-cell trades', '</th>');

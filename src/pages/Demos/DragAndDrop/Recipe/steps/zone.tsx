@@ -1,9 +1,10 @@
 import {FC} from 'react';
-import {Codes, Says, Snippet, Step, Words} from '../../../Recipe';
+import {Codes, Says, Snippet, Step, Words, carve} from '../../../Recipe';
 import {Term} from '../Term';
-import {unit} from '../../../Recipe/carve';
 import {crossingSource} from './sources';
 import {CrossingFigure} from '../CrossingFigure';
+
+const {unit} = carve();
 
 export const InnerHalf: FC = () =>
   <Step title="A swap counts once the pointer is a quarter of the way into a neighbor">

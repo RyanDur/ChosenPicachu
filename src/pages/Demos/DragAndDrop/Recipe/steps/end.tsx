@@ -1,7 +1,9 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {DemoTopics} from '../../../types';
-import {Codes, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Says, Snippet, Step, Words, lines} from '../../../Recipe';
+
+const {aside} = lines();
 
 export const RoadEnd: FC = () =>
   <Step title="What drag and drop cannot give you">

@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {plain, Snippet} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {Snippet, lines, carve} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer, Where9999IsCompared} from './Diagrams';
 import {CardOne} from './card-one';
@@ -8,6 +7,9 @@ import {stillLosesHeading, whatElseFormsHeading} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

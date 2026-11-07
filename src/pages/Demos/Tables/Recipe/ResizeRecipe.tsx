@@ -1,7 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
-import {span, unit} from '../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
 import {tablesDials, World} from '../params';
 import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?sample';
@@ -18,6 +17,9 @@ import widthsSource from '../Aggregations.css?sample';
 import {TheImplementation} from './steps';
 import {whatACustomPropertyIs, whatTheDomIs} from './definitions';
 import '../../Recipe/Recipe.css';
+
+const {span, unit} = carve();
+const {aside, plain} = lines();
 
 const gap = plain(' ');
 

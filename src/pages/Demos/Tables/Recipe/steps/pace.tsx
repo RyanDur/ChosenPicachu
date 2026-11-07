@@ -1,11 +1,13 @@
 import {FC} from 'react';
 import {PaceDial} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
-import {unit} from '../../../Recipe/carve';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {frameColumns, gap, travelSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {unit} = carve();
+const {aside, plain} = lines();
 
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>

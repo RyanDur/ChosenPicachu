@@ -1,9 +1,11 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {frameColumns, gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Give focus a place to land">

@@ -43,7 +43,7 @@ const halfAStatement = (line: string): boolean => {
   return pending.length > 0 && !opensABlock(line, pending);
 };
 
-export const unit = (sample: Sample, anchor: string): Line[] => {
+const unit = (sample: Sample, anchor: string): Line[] => {
   const source = sample.text;
   const found = source.indexOf(anchor);
   if (found < 0) {
@@ -72,7 +72,7 @@ export const unit = (sample: Sample, anchor: string): Line[] => {
   return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample, lineAt(source, start));
 };
 
-export const span = (sample: Sample, from: string, to: string): Line[] => {
+const span = (sample: Sample, from: string, to: string): Line[] => {
   const source = sample.text;
   const first = source.indexOf(from);
   if (first < 0) {
@@ -91,7 +91,7 @@ export const span = (sample: Sample, from: string, to: string): Line[] => {
   return dedented(lines, sample, lineAt(source, start));
 };
 
-export const withoutImports = (sample: Sample): Line[] => {
+const withoutImports = (sample: Sample): Line[] => {
   const lines = sample.text.split('\n');
   const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
   const body = lines.slice(lastImport + 1);
@@ -105,3 +105,11 @@ export const withoutImports = (sample: Sample): Line[] => {
   }
   return dedented(body, sample, firstLine);
 };
+
+type Carve = {
+  unit: (sample: Sample, anchor: string) => Line[];
+  span: (sample: Sample, from: string, to: string) => Line[];
+  withoutImports: (sample: Sample) => Line[];
+};
+
+export const carve = (): Carve => ({unit, span, withoutImports});

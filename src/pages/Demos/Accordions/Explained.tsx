@@ -14,8 +14,7 @@ import {
   InclusiveMeasuredAccordion,
   InclusiveToggleAccordion
 } from './Accordions';
-import {Mdn, plain, Snippet} from '../Recipe';
-import {span, unit, withoutImports} from '../Recipe/carve';
+import {carve, lines, Mdn, Snippet} from '../Recipe';
 import {Sample} from '../Recipe/sample';
 import {Line} from '../Recipe/Snippet';
 import accordionsSource from './Accordions.tsx?sample';
@@ -51,6 +50,9 @@ import {FoldInput, FoldType} from './fold-type';
 import {FoldMotion} from './fold-motion';
 import '../Runs.css';
 import './Explained.css';
+
+const {span, unit, withoutImports} = carve();
+const {plain} = lines();
 
 export type Contents = {
   measured: Record<FoldType, Fold[]>;

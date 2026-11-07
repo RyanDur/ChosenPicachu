@@ -1,10 +1,12 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {Term} from '../Term';
-import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {gap, elementSource, storeSource, liftSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
   <Step title="Write each listener once, for both worlds">

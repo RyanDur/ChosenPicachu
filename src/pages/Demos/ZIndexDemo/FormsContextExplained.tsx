@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {plain, Snippet} from '../Recipe';
-import {unit} from '../Recipe/carve';
+import {Snippet, lines, carve} from '../Recipe';
 import {ContextChooser} from './ContextChooser';
 import {Worn} from './worn';
 import {whatElseFormsHeading} from './part-headings';
@@ -8,6 +7,9 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@components/Tabs/Tabs.css?sample';
 import '../Runs.css';
+
+const {unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 

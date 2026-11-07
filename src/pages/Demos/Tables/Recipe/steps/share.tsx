@@ -1,9 +1,11 @@
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, plain} from '../../../Recipe';
-import {unit} from '../../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {World} from '../../params';
 import {Term} from '../Term';
 import {gap, sortableCss} from './sources';
+
+const {unit} = carve();
+const {plain} = lines();
 
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[

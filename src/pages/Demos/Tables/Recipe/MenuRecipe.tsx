@@ -2,8 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../types';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
-import {span, unit} from '../../Recipe/carve';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
 import {World} from '../params';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
@@ -21,6 +20,9 @@ import {TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside, plain} = lines();
 
 const gap = plain(' ');
 

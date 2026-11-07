@@ -20,13 +20,15 @@ import headersSource from '@components/DragSortableTable/Headers.tsx?sample';
 import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
 import placingSource from '@components/DragSortableTable/placing.ts?sample';
 import looksSource from '@components/DragSortableTable/looks.ts?sample';
-import {plain} from '../../../Recipe';
+import {lines} from '../../../Recipe';
 import bootSource from '../../Frame/boot.ts?sample';
 import frameColumns from '../../Frame/table/columns.ts?sample';
 import frameRows from '../../Frame/table/rows.ts?sample';
 import frameGrip from '../../Frame/table/grip.ts?sample';
 import frameHandle from '../../Frame/table/handle.ts?sample';
 import frameParts from '../../Frame/table/parts.ts?sample';
+
+const {plain} = lines();
 
 export {
   surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource,

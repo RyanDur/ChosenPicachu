@@ -1,9 +1,11 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {gap, hideItemCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
+
+const {span, unit} = carve();
+const {aside} = lines();
 
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>

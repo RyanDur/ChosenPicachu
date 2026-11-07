@@ -1,9 +1,12 @@
 import {render} from '@testing-library/react';
 import {Snippet} from '../Snippet';
-import {aside, plain} from '../lines';
-import {span} from '../carve';
+import {lines} from '../lines';
+import {carve} from '../carve';
 import {aSample, codeSample} from '../__test_support';
 import {CodeFile} from '../sample';
+
+const {aside, plain} = lines();
+const {span} = carve();
 
 const store = aSample('export const store = 1;\nexport const more = 2;\n', 'src/pages/Demos/store.ts');
 const shared = aSample('export type Store = {};\n', 'src/components/store.ts');

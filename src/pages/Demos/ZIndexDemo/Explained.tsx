@@ -1,14 +1,16 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../types';
 import {FC} from 'react';
-import {plain, Snippet} from '../Recipe';
-import {span, unit} from '../Recipe/carve';
+import {Snippet, lines, carve} from '../Recipe';
 import {NaturalZIndex} from './NaturalZIndex';
 import {OneNumberLiftsOneCard, PileFromTheSide} from './Diagrams';
 import {RaisedCard} from './raised';
 import naturalSource from './NaturalZIndex.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
+
+const {span, unit} = carve();
+const {plain} = lines();
 
 const gap = plain(' ');
 
