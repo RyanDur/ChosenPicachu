@@ -2,7 +2,7 @@ import {ESLint, RuleTester} from 'eslint';
 import {join} from 'node:path';
 import {classes} from '../lint/classes.mjs';
 
-const fancyField = join(process.cwd(), 'src/components/FancyFormElements/Probe.tsx');
+const fancyField = join(process.cwd(), 'src/pages/Users/FancyFormElements/Probe.tsx');
 const banners = join(process.cwd(), 'src/frame/notices/Banners/Probe.tsx');
 const frameBuild = join(process.cwd(), 'src/pages/Demos/Tables/Frame/builds/Probe.ts');
 const candle = join(process.cwd(), 'src/pages/Demos/Charts/Candles/Probe.tsx');
@@ -53,7 +53,7 @@ describe('the class rules over html', () => {
     {files: ['**/*.html/*.htmlclasses'], plugins: {classes}, rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}}
   ]});
   const linted = async html => {
-    const [{messages}] = await eslint.lintText(html, {filePath: 'src/components/FancyFormElements/frame.html'});
+    const [{messages}] = await eslint.lintText(html, {filePath: 'src/pages/Users/FancyFormElements/frame.html'});
     return messages.map(({line, message}) => ({line, message}));
   };
 
