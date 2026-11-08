@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {drifted, eagerTravel, pointerTravel} from '../travel';
-import {columnArrows} from '../arrows';
+import {arrows} from '../arrows';
 
 const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
 
@@ -31,7 +31,7 @@ describe('the travel vocabulary', () => {
 
   it('column arrows answer only to left and right', () => {
     const arranged: {from: number; to: number}[] = [];
-    const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
+    const listener = arrows.column('trades', () => ['window', 'trades', 'buys', 'change'],
       ({from, to}) => arranged.push({from, to}));
 
     listener(pressed('ArrowRight'));
@@ -42,7 +42,7 @@ describe('the travel vocabulary', () => {
 
   it('a column arrow at the anchored edge arranges nothing', () => {
     const arranged: {from: number; to: number}[] = [];
-    const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
+    const listener = arrows.column('trades', () => ['window', 'trades', 'buys', 'change'],
       ({from, to}) => arranged.push({from, to}));
 
     listener(pressed('ArrowLeft'));

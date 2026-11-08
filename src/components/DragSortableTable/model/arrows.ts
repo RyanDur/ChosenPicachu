@@ -7,11 +7,17 @@ type ArrowKey = {
   currentTarget: EventTarget | null;
 };
 
-export const columnArrows = (
-  held: string,
-  order: () => readonly string[],
-  arrange: (nudge: {from: number; to: number; widths: PixelSizes}) => void
-) => (event: ArrowKey): void => {
+type ArrowListener = (event: ArrowKey) => void;
+type ColumnNudge = {from: number; to: number; widths: PixelSizes};
+export type RowNudge = {from: number; to: number; heights: PixelSizes};
+type RowMoves = {nudged: (nudge: RowNudge) => void; moved: (nudge: RowNudge) => void};
+
+type Arrows = {
+  column: (held: string, order: () => readonly string[], arrange: (nudge: ColumnNudge) => void) => ArrowListener;
+  row: (held: string, standing: () => readonly string[], moves: RowMoves) => ArrowListener;
+};
+
+const column: Arrows['column'] = (held, order, arrange) => event => {
   maybe(columnSteps[event.key]).map(toward => {
     event.preventDefault();
     const columns = order();
@@ -26,13 +32,7 @@ export const columnArrows = (
   });
 };
 
-export type RowNudge = {from: number; to: number; heights: PixelSizes};
-
-export const rowArrows = (
-  held: string,
-  standing: () => readonly string[],
-  {nudged, moved}: {nudged: (nudge: RowNudge) => void; moved: (nudge: RowNudge) => void}
-) => (event: ArrowKey): void => {
+const row: Arrows['row'] = (held, standing, {nudged, moved}) => event => {
   maybe(rowSteps[event.key]).map(toward => {
     event.preventDefault();
     const seats = standing();
@@ -45,3 +45,5 @@ export const rowArrows = (
     }
   });
 };
+
+export const arrows: Arrows = {column, row};

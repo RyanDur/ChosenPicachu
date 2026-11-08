@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, Grab, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, rowArrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLandingFound, rowLift, rowMarks, rowMovedBeside, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from '@components/DragSortableTable/model';
+import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, Grab, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, arrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLandingFound, rowLift, rowMarks, rowMovedBeside, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -65,7 +65,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
       onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-      onKeyDown={rowArrows(row, () => standing, {
+      onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)
       })}/>

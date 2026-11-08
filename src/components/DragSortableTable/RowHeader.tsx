@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, eagerTravel, Grab, lifted, motionStates, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, rowArrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLift, rowMarks, rowMovedBeside, rowUnder, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from './model';
+import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, eagerTravel, Grab, lifted, motionStates, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, arrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLift, rowMarks, rowMovedBeside, rowUnder, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
@@ -60,7 +60,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
       onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-      onKeyDown={rowArrows(row, () => standing, {
+      onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)
       })}/>

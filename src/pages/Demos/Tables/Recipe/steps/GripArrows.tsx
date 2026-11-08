@@ -20,7 +20,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(rowSource, 'onKeyDown={rowArrows(', '})}/>'),
+            ...carve.span(rowSource, 'onKeyDown={arrows.row(', '})}/>'),
             lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
@@ -29,7 +29,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
             lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...carve.unit(sources.arrows, 'export const rowArrows')
+          ...carve.unit(sources.arrows, 'const row: Arrows')
         ]}/>
       </Codes>
     </Reveal>

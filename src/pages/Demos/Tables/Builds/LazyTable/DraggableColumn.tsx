@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {columnArrows, columnDrag, ColumnDrag, columnHeld, columnLandingFound, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnWalkedTo, drifted, driftOfColumn, dropped, Grab, headerCell, headerNeeds, interior, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from '@components/DragSortableTable/model';
+import {arrows, columnDrag, ColumnDrag, columnHeld, columnLandingFound, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnWalkedTo, drifted, driftOfColumn, dropped, Grab, headerCell, headerNeeds, interior, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -62,7 +62,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onPointerUp={has(drag) ? release : undefined}
     onPointerCancel={has(drag) ? release : undefined}
     onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-    onKeyDown={travels ? columnArrows(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
+    onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(settled({axis: 'column', held: column}))}
     style={{
       '--share': shareWidth(width),

@@ -23,13 +23,13 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.unit(sources.arrows, 'export const columnArrows'), gap,
+              ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
               ...carve.unit(headerSource, 'const walkedTo = '), gap,
               ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(sources.arrows, 'export const columnArrows'), gap,
+              ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
               ...carve.unit(buildSrc, 'const columnTo = '), gap,
               ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')

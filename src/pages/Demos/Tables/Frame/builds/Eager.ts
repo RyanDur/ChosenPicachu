@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {columnArrows, columnLift, columnUnder, displacedBetween, eagerTravel, Grab, interior, Labelled, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn} from '@components/DragSortableTable/model';
+import {arrows, columnLift, columnUnder, displacedBetween, eagerTravel, Grab, interior, Labelled, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -159,7 +159,7 @@ const wired = (context: TableContext): void => {
     const held = columnOfHeader(th);
     th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carrying(th, context);
-    th.addEventListener('keydown', columnArrows(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
+    th.addEventListener('keydown', arrows.column(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
   });
 };
 
