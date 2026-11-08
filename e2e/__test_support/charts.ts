@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {boxOf} from './box';
 
 const tradeFrame = (id: number, price: number, at: number): string => JSON.stringify({
   type: 'match',
@@ -40,8 +41,10 @@ export const chartsPage = (page: Page) => {
   ): Promise<{height: number; pointerWhenTheyTrade: (step: number) => Promise<number>}> => {
     const chart = seat(region);
     await chart.hover();
-    const [box, grip] = await Promise.all([chart.boundingBox(), chart.getByRole('button', {name: 'move chart', exact: true}).boundingBox()]);
-    if (box === null || grip === null) throw new Error(`the ${region} chart has no grip`);
+    const noGrip = `the ${region} chart has no grip`;
+    const [box, grip] = await Promise.all([
+      boxOf(chart, noGrip), boxOf(chart.getByRole('button', {name: 'move chart', exact: true}), noGrip)
+    ]);
     const x = grip.x + grip.width / 2;
     let pointer = grip.y + grip.height / 2;
     await page.mouse.move(x, pointer);
@@ -62,8 +65,7 @@ export const chartsPage = (page: Page) => {
     const devtools = await page.context().newCDPSession(page);
     const grip = seat(region).getByRole('button', {name: 'move chart', exact: true});
     await grip.scrollIntoViewIfNeeded();
-    const box = await grip.boundingBox();
-    if (box === null) throw new Error(`the ${region} chart has no grip`);
+    const box = await boxOf(grip, `the ${region} chart has no grip`);
     await devtools.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: [{x: box.x + box.width / 2, y: box.y + box.height / 2}]});
     return {cancelled: async (): Promise<void> => {
       await devtools.send('Input.dispatchTouchEvent', {type: 'touchCancel', touchPoints: []});

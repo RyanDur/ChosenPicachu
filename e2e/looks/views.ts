@@ -1,5 +1,6 @@
 import type {Page} from '@playwright/test';
 import {pages, type SitePage} from '../pages';
+import {boxOf} from '../__test_support';
 
 export type View = {
   readonly name: string;
@@ -50,8 +51,7 @@ export const views: readonly View[] = [
     name: 'a tab pressed',
     page: named('demos'),
     into: async page => {
-      const box = await page.getByRole('navigation', {name: 'demos'}).getByRole('listitem').nth(1).boundingBox();
-      if (box === null) throw new Error('no tab to press');
+      const box = await boxOf(page.getByRole('navigation', {name: 'demos'}).getByRole('listitem').nth(1), 'no tab to press');
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.down();
     }

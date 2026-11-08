@@ -1,24 +1,25 @@
 import {http, HttpResponse, JsonBodyType} from 'msw';
-import {failure} from '@ryandur/sand';
+import {failure, maybe} from '@ryandur/sand';
+import * as schema from 'schemawax';
 import {server} from '@__test_support/server';
 import {HTTPError} from '@transport/types';
 import {sent} from '../github';
 
 type Asked = {query: string; variables: Record<string, string>};
 
+const askedShape = schema.object({required: {query: schema.unknown, variables: schema.record(schema.unknown)}});
+
 const asking = {endpoint: 'https://api.github.com/graphql', token: 'token'};
 
 const github = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
   const asked: Asked[] = [];
   server.use(http.post(asking.endpoint, async ({request}) => {
-    const body: unknown = await request.json();
-    const question = typeof body === 'object' && body !== null && 'query' in body && 'variables' in body
-      ? {
-        query: String(body.query),
-        variables: Object.fromEntries(Object.entries(Object(body.variables))
-          .map(([key, value]) => [key, String(value)]))
-      }
-      : {query: '', variables: {}};
+    const question: Asked = maybe(askedShape.decode(await request.json()))
+      .map(({query, variables}) => ({
+        query: String(query),
+        variables: Object.fromEntries(Object.entries(variables).map(([key, value]) => [key, String(value)]))
+      }))
+      .orElse({query: '', variables: {}});
     asked.push(question);
     return HttpResponse.json(answer(question), {status});
   }));

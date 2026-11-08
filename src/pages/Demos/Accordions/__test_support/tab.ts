@@ -1,3 +1,4 @@
+import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
@@ -10,7 +11,7 @@ export const accordionsTab = {
   choiceIn: (holder: HTMLElement, dial: string): HTMLElement => within(holder).getByRole('group', {name: dial}),
   choiceRow: async (dial: string): Promise<HTMLElement> => {
     await choice(dial);
-    const rows = screen.getAllByRole('listitem').filter(item => within(item).queryByRole('group', {name: dial}) !== null);
+    const rows = screen.getAllByRole('listitem').filter(item => is(within(item).queryByRole('group', {name: dial})));
     return rows[rows.length - 1];
   },
   option,

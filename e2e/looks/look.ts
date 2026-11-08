@@ -56,9 +56,9 @@ export const lookOf = (page: Page): Promise<Look> => page.evaluate(properties =>
   const look: Record<string, string> = {};
   const keyOf = (element: Element): string => {
     const steps: string[] = [];
-    for (let at: Element | null = element; at !== null && at !== document.documentElement; at = at.parentElement) {
+    for (let at: Element | null = element; at && at !== document.documentElement; at = at.parentElement) {
       const parent: Element | null = at.parentElement;
-      const sameTag = parent === null ? [at] : [...parent.children].filter(sibling => sibling.tagName === at?.tagName);
+      const sameTag = parent ? [...parent.children].filter(sibling => sibling.tagName === at?.tagName) : [at];
       steps.unshift(`${at.tagName.toLowerCase()}${at.id === '' ? '' : `#${at.id}`}${sameTag.length > 1 ? `[${sameTag.indexOf(at)}]` : ''}`);
       if (at.id !== '') break;
     }

@@ -1,5 +1,6 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
+import {boxOf, type Box} from './box';
 
 export type Stage = {name: string; at: string; table: (page: Page) => Locator | FrameLocator};
 
@@ -21,16 +22,6 @@ export const stages: readonly Stage[] = [
 
 export const stagesWith = (dials: string): readonly Stage[] =>
   stages.map(stage => ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`}));
-
-type Box = {x: number; y: number; width: number; height: number};
-
-const boxOf = async (locator: Locator): Promise<Box> => {
-  const box = await locator.boundingBox();
-  if (!box) {
-    throw new Error('the element never stood');
-  }
-  return box;
-};
 
 type Point = {x: number; y: number};
 

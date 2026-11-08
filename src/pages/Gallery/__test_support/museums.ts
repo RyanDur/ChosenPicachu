@@ -1,5 +1,5 @@
 import {http, HttpResponse} from 'msw';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@pages/Gallery/museums/aic/types';
 import {limits} from '@pages/Gallery/limits';
@@ -22,8 +22,7 @@ type Picked = (request: URL) => string | null;
 const notedOn = (moment: 'request:start' | 'response:mocked') => (picked: Picked): readonly string[] => {
   const notes: string[] = [];
   const note = ({request}: {request: Request}): void => {
-    const pick = picked(new URL(request.url));
-    if (pick !== null) notes.push(pick);
+    maybe(picked(new URL(request.url))).map(pick => notes.push(pick));
   };
   server.events.on(moment, note);
   onTestFinished(() => {

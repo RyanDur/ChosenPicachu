@@ -1,3 +1,4 @@
+import {is} from '@ryandur/sand';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
@@ -12,7 +13,7 @@ const Trouble: FC<{message: string}> = ({message}) => {
 const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);
 
 const troubleOf = (alert: HTMLElement, message: string): HTMLElement => {
-  const item = within(alert).getAllByRole('listitem').find(standing => within(standing).queryByText(message) !== null);
+  const item = within(alert).getAllByRole('listitem').find(standing => is(within(standing).queryByText(message)));
   if (!item) {
     throw new Error(`no standing trouble says "${message}"`);
   }

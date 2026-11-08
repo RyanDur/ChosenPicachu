@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 
@@ -30,5 +31,5 @@ export const demoPage = {
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
   sliceLinksLandingNowhere: (): string[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href') ?? '')
-    .filter(address => document.getElementById(address.replace(/^#/, '')) === null)
+    .filter(address => not(document.getElementById(address.replace(/^#/, ''))))
 };

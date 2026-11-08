@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {boxOf} from './box';
 import {fingertipMiss} from './finger';
 import {siteFrame} from './site';
 
@@ -19,16 +20,14 @@ export const sortableList = (page: Page) => {
   const gripFor = (item: string): Locator => seatOf(item).getByRole('button', {name: `grip for ${item}`});
   const middleOf = async (target: Locator): Promise<{x: number; y: number}> => {
     await list.scrollIntoViewIfNeeded();
-    const box = await target.boundingBox();
-    if (box === null) throw new Error('the list never stood');
+    const box = await boxOf(target, 'the list never stood');
     return {x: box.x + box.width / 2, y: box.y + box.height / 2};
   };
   // the middle of a seat is where the list decides whether a carried item has passed it, and engines round it either
   // way
   const pastTheMiddleOf = async (target: Locator, from: {x: number; y: number}): Promise<{x: number; y: number}> => {
     const middle = await middleOf(target);
-    const box = await target.boundingBox();
-    if (box === null) throw new Error('the list never stood');
+    const box = await boxOf(target, 'the list never stood');
     const along = (start: number, size: number, coming: number, centre: number): number =>
       start + size * (coming < centre ? 0.8 : 0.2);
     return Math.abs(middle.x - from.x) > Math.abs(middle.y - from.y)
@@ -42,8 +41,7 @@ export const sortableList = (page: Page) => {
     moveReport: page.getByRole('status', {name: 'move report'}),
     pressBesideAGripAndDropOnItsNeighbour: async (): Promise<void> => {
       const grip = items.first().getByRole('button', {name: /^grip for/});
-      const box = await grip.boundingBox();
-      if (box === null) throw new Error('the grip never stood');
+      const box = await boxOf(grip, 'the grip never stood');
       await grip.dragTo(items.nth(1),
         {force: true, sourcePosition: {x: box.width / 2 + fingertipMiss, y: box.height / 2}});
     },

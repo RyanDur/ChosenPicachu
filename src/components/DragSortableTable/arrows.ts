@@ -21,7 +21,7 @@ export const columnArrows = (
     const {from, to} = nudgedColumn(columns, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
     if (to !== from) {
-      arrange({from, to, widths: table === null ? {} : bounded(table, columns).columnWidths});
+      arrange({from, to, widths: maybe(table).map(held => bounded(held, columns).columnWidths).orElse({})});
     }
   });
 };
@@ -38,7 +38,7 @@ export const rowArrows = (
     const seats = standing();
     const {from, to} = nudgedRow(seats, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
-    const nudge = {from, to, heights: table === null ? {} : rowHeights(table, seats)};
+    const nudge = {from, to, heights: maybe(table).map(held => rowHeights(held, seats)).orElse({})};
     nudged(nudge);
     if (to !== from) {
       moved(nudge);

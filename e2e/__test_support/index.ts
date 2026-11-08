@@ -1,3 +1,4 @@
+export {boxOf} from './box';
 export {chartsPage, feedStillConnecting, scriptedMarket} from './charts';
 export {homePage} from './home';
 export {practicePage} from './practice';

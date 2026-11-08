@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -34,7 +35,7 @@ export const liveTable = {
   resizeHandleIn: (column: string): HTMLElement => within(header(column)).getByRole('button', {name: new RegExp(`resize ${column}`)}),
   columnsWithoutAResizeHandle: (): string[] => within(table()).getAllByRole('columnheader')
     .map(column => column.getAttribute('aria-label') ?? '')
-    .filter(column => within(header(column)).queryByRole('button', {name: new RegExp(`resize ${column}`)}) === null),
+    .filter(column => not(within(header(column)).queryByRole('button', {name: new RegExp(`resize ${column}`)}))),
   menuChoice,
   choose: async (column: string, choice: MenuChoice): Promise<void> => userEvent.click(menuChoice(column, choice)),
   focusColumn: (name: string): void => header(name).focus(),

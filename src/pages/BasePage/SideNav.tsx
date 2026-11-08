@@ -1,4 +1,5 @@
 import {createContext, FC, PropsWithChildren, useContext, useEffect} from 'react';
+import {is, not} from '@ryandur/sand';
 import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {demoAddress, DemoTopics} from '@pages/Demos';
@@ -22,7 +23,7 @@ type SectionLinkProps = PropsWithChildren<{readonly id: string; readonly page: s
 
 const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
   const pageUnknown = useContext(PageUnknown);
-  const onThePage = useMatch({path: page, end: false}) !== null && !pageUnknown;
+  const onThePage = is(useMatch({path: page, end: false})) && not(pageUnknown);
   return <Link id={id} className={railPath()} to={to} state={followedFromTheRail}
     aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
 };

@@ -132,10 +132,7 @@ test('keyboard reel', async ({browser}) => {
   await chipInto(page, frame);
   await shot(page, frame, `${mediaRoot}/keyboard/poster.png`);
 
-  const focused = () => page.evaluate(() => {
-    const active = document.activeElement;
-    return active === null ? '' : active.className;
-  });
+  const focused = () => page.evaluate(() => document.activeElement?.className ?? '');
   let walked = 0;
   while (!(await focused()).includes('trades') && walked < 60) {
     await page.keyboard.press('Tab');

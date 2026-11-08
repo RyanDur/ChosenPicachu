@@ -1,5 +1,5 @@
 import {screen, within} from '@testing-library/react';
-import {not} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
@@ -15,11 +15,11 @@ const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: 
 };
 
 const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
-  runWith(part, run => within(run).queryByText(words) !== null, `tells ${words}`);
+  runWith(part, run => is(within(run).queryByText(words)), `tells ${words}`);
 
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure')
-    .filter(figure => within(figure).queryByRole('code') === null && within(figure).queryAllByTitle(/./).length === 0);
+    .filter(figure => not(within(figure).queryByRole('code')) && within(figure).queryAllByTitle(/./).length === 0);
 
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
   within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));

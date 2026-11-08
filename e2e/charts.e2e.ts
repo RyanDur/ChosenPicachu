@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, desktop, feedStillConnecting, iPhone} from './__test_support';
+import {boxOf, chartsPage, desktop, feedStillConnecting, iPhone} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -28,8 +28,7 @@ const aPressOpensTheTutorial = async (page: Page, press: 'click' | 'tap', kind: 
   await page.goto(`demos/charts/?charts=${kind}`);
   const drawing = page.getByRole('region', {name: region, exact: true}).getByRole('figure');
   await drawing.scrollIntoViewIfNeeded();
-  const box = await drawing.boundingBox();
-  if (box === null) throw new Error(`the ${kind} drawing is not shown`);
+  const box = await boxOf(drawing, `the ${kind} drawing is not shown`);
 
   const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
   await (press === 'tap' ? page.touchscreen.tap(x, y) : page.mouse.click(x, y));

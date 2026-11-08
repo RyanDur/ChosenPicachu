@@ -1,4 +1,5 @@
 import {Page, expect} from '@playwright/test';
+import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
 import {type Card, stackingPile} from './__test_support';
 
@@ -8,11 +9,11 @@ test('the z-index cards start in a stack, the button spreads them, and pressing 
   const boxes = async () => [await layers.first().boundingBox(), await layers.last().boundingBox()];
   const stacked = async () => {
     const [first, last] = await boxes();
-    return first !== null && last !== null && first.y === last.y;
+    return maybe(first).and(maybe(last)).map(([top, bottom]) => top.y === bottom.y).orElse(false);
   };
   const spread = async () => {
     const [first, last] = await boxes();
-    return first !== null && last !== null && last.y >= first.y + first.height;
+    return maybe(first).and(maybe(last)).map(([top, bottom]) => bottom.y >= top.y + top.height).orElse(false);
   };
   await expect.poll(stacked).toBe(true);
 

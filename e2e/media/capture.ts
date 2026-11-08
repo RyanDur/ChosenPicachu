@@ -4,7 +4,8 @@ import {mkdir, readdir, rm} from 'node:fs/promises';
 import {homedir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {promisify} from 'node:util';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
+import {boxOf} from '../__test_support';
 
 const run = promisify(execFile);
 
@@ -115,11 +116,11 @@ export const recording = async (browser: Browser, url: string, keys = false): Pr
   return {
     page,
     finish: async (path, frame) => {
-      const video = page.video();
+      const recording = maybe(page.video());
       await context.close();
-      if (video === null) {
+      const video = recording.either(recorded => recorded, () => {
         throw new Error('no video was recorded');
-      }
+      });
       await mkdir(dirname(path), {recursive: true});
       const raw = `${path}.raw.webm`;
       await video.saveAs(raw);
@@ -147,14 +148,6 @@ export const livingCard = async (page: Page): Promise<Locator> => {
   });
   await page.waitForTimeout(400);
   return card;
-};
-
-const boxOf = async (target: Locator) => {
-  const box = await target.boundingBox();
-  if (box === null) {
-    throw new Error('the element never stood');
-  }
-  return box;
 };
 
 export const tableFrame = async (card: Locator): Promise<Box> => {

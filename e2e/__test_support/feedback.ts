@@ -1,21 +1,22 @@
 import type {Page, Route} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
+import * as schema from 'schemawax';
 
 type GitHub = {refuse?: string};
 
 export type Posted = {query: string; variables: Record<string, string>};
 
+const postedShape = schema.object({required: {query: schema.unknown, variables: schema.record(schema.unknown)}});
+
 export const github = async (page: Page, {refuse}: GitHub = {}): Promise<Posted[]> => {
   const posted: Posted[] = [];
   await page.route('**/feedback-graphql', async (route: Route) => {
-    const asked: unknown = route.request().postDataJSON();
-    const question: Posted = typeof asked === 'object' && asked !== null && 'query' in asked && 'variables' in asked
-      ? {
-        query: String(asked.query),
-        variables: Object.fromEntries(Object.entries(Object(asked.variables))
-          .map(([key, value]) => [key, String(value)]))
-      }
-      : {query: '', variables: {}};
+    const question: Posted = maybe(postedShape.decode(route.request().postDataJSON()))
+      .map(({query, variables}) => ({
+        query: String(query),
+        variables: Object.fromEntries(Object.entries(variables).map(([key, value]) => [key, String(value)]))
+      }))
+      .orElse({query: '', variables: {}});
     if (question.query.includes('search')) {
       await route.fallback();
       return;

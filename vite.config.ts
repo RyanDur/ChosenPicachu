@@ -29,7 +29,7 @@ const frameScript = (): Plugin => ({
   async resolveId(source, importer) {
     if (source.endsWith('.ts?frame')) {
       const resolved = await this.resolve(source.slice(0, -'?frame'.length), importer, {skipSelf: true});
-      if (resolved !== null) {
+      if (has(resolved)) {
         return '\0framejs' + resolved.id + '.js';
       }
     }
@@ -54,7 +54,7 @@ const rawCss = (): Plugin => ({
   async resolveId(source, importer) {
     if (source.endsWith('.css?raw')) {
       const resolved = await this.resolve(source.slice(0, -'?raw'.length), importer, {skipSelf: true});
-      if (resolved !== null) {
+      if (has(resolved)) {
         return '\0rawcss' + resolved.id + '.js';
       }
     }
@@ -88,7 +88,7 @@ const sample = (): Plugin => {
     async resolveId(source, importer) {
       if (source.endsWith('?sample')) {
         const resolved = await this.resolve(source.slice(0, -'?sample'.length), importer, {skipSelf: true});
-        if (resolved !== null) {
+        if (has(resolved)) {
           return '\0sample' + resolved.id + '.js';
         }
       }
@@ -114,7 +114,7 @@ const frameCss = (): Plugin => ({
   async resolveId(source, importer) {
     if (source.endsWith('.css?frame')) {
       const resolved = await this.resolve(source.slice(0, -'?frame'.length), importer, {skipSelf: true});
-      if (resolved !== null) {
+      if (has(resolved)) {
         return '\0framecss' + resolved.id + '.js';
       }
     }

@@ -1,3 +1,4 @@
+import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {itemHeadedBy} from '@__test_support/headed-item';
@@ -61,7 +62,7 @@ export const recordPage = {
     within(moment).getByRole('heading', {level: 4}).textContent
   ]),
   fullerStories: (): HTMLElement[] => within(screen.getByRole('list', {name: 'the timeline'})).getAllByRole('group')
-    .filter(fold => within(fold).queryByText('the fuller story') !== null),
+    .filter(fold => is(within(fold).queryByText('the fuller story'))),
   periodSample: (name: string): HTMLElement => screen.getByRole('group', {name}),
   tabStopsIn: async (story: string): Promise<Element[]> => {
     const told = itemHeadedBy('the timeline', story);

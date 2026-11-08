@@ -3,10 +3,11 @@ import {maybe, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 
 const fitsBeside = (row: Element): boolean => {
-  const [name, pills] = [row.querySelector('.axis'), row.querySelector('.pill-glider')];
   const gap = parseFloat(getComputedStyle(row).columnGap);
-  return name === null || pills === null
-    || name.getBoundingClientRect().width + gap + pills.getBoundingClientRect().width <= row.clientWidth;
+  return maybe(row.querySelector('.axis')).and(maybe(row.querySelector('.pill-glider')))
+    .map(([name, pills]) =>
+      name.getBoundingClientRect().width + gap + pills.getBoundingClientRect().width <= row.clientWidth)
+    .orElse(true);
 };
 
 export const DialGroup: FC<PropsWithChildren> = ({children}) => {

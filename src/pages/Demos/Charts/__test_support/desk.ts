@@ -1,3 +1,4 @@
+import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {feedStatus} from '@pages/Demos/__test_support';
@@ -23,7 +24,7 @@ const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> 
 };
 
 const slot = (chart: string): HTMLElement => {
-  const seat = screen.getAllByRole('listitem').find(item => within(item).queryByRole('link', {name: `${chart} tutorial`}) !== null);
+  const seat = screen.getAllByRole('listitem').find(item => is(within(item).queryByRole('link', {name: `${chart} tutorial`})));
   if (!seat) {
     throw new Error(`the ${chart} doorway sits in no seat`);
   }
@@ -63,7 +64,7 @@ const priceCard = (): HTMLElement => chart('live trades');
 const alert = (): HTMLElement => screen.getByRole('alert');
 
 const explainer = (name: string): HTMLElement => {
-  const [fold] = within(chart(name)).getAllByRole('group').filter(group => within(group).queryByText('what am I looking at?') !== null);
+  const [fold] = within(chart(name)).getAllByRole('group').filter(group => is(within(group).queryByText('what am I looking at?')));
   return fold;
 };
 

@@ -1,3 +1,5 @@
+import {maybe} from '@ryandur/sand';
+import * as schema from 'schemawax';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {FEED, feedLink, server} from '@__test_support/server';
 
@@ -38,13 +40,12 @@ export const nonTradeFrame = (price: number): string => JSON.stringify({
   time: new Date(1700000000000).toISOString()
 });
 
-const subscribesMatches = (raw: unknown): boolean => {
-  const frame: unknown = JSON.parse(String(raw));
-  return typeof frame === 'object' && frame !== null &&
-    Reflect.get(frame, 'type') === 'subscribe' &&
-    JSON.stringify(Reflect.get(frame, 'channels')).includes('matches') &&
-    JSON.stringify(Reflect.get(frame, 'channels')).includes('BTC-USD');
-};
+const subscription = schema.object({required: {type: schema.literal('subscribe'), channels: schema.unknown}});
+
+const subscribesMatches = (raw: unknown): boolean => maybe(subscription.decode(JSON.parse(String(raw))))
+  .map(({channels}) => JSON.stringify(channels))
+  .map(channels => channels.includes('matches') && channels.includes('BTC-USD'))
+  .orElse(false);
 
 export type Feed = {
   readonly url: string;

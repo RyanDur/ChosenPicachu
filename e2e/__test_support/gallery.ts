@@ -85,7 +85,7 @@ export const galleryPage = (page: Page) => {
         const named = (element: Element): boolean => element.getAttribute('aria-label') === 'loading gallery';
         const count = (): void => {
           counts.push([...document.querySelectorAll('progress')].filter(named).length);
-          if (document.querySelector('figure') === null) {
+          if (!document.querySelector('figure')) {
             requestAnimationFrame(count);
           }
         };

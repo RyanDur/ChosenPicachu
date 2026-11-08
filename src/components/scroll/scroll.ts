@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 
 export const gotoTopOfPage = (): void => {
   window.scrollTo(0, 0);
@@ -15,8 +15,9 @@ export type ReadersPlaces = {
 const keptUnder = 'the reader’s places';
 const placesByKey = schema.record(schema.number);
 
-const keyOf = (state: unknown): Maybe<string> =>
-  typeof state === 'object' && state !== null && 'key' in state && typeof state.key === 'string' ? some(state.key) : nothing();
+const keyed = schema.object({required: {key: schema.string}});
+
+const keyOf = (state: unknown): Maybe<string> => maybe(keyed.decode(state)).map(({key}) => key);
 
 const entryKey = (): Maybe<string> => keyOf(window.history.state);
 
