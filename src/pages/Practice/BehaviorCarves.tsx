@@ -18,7 +18,7 @@ import surfaceSheet from '../../styles/surface.css?sample';
 import accordionsSheet from '@pages/Demos/Accordions/Accordions.css?sample';
 import {Snippet, lines, carve, Line, CodeFile, Sample} from '@pages/Demos/Recipe';
 
-const reducerType = carve.span(reducersSource, 'export type Reducer', '(state, action) => reducersInOrder.reduce');
+const reducerType = carve.span(reducersSource, 'export type Reducer', 'export const reducers = {combined};');
 const lifted = carve.span(actionsSource, 'const lifted = ', 'const lifted = ');
 const dropped = carve.span(actionsSource, 'const dropped = ', 'const dropped = ');
 const tradeArrived = carve.span(marketActionsSource, 'tradeArrived: trade =>', 'tradeArrived: trade =>');
