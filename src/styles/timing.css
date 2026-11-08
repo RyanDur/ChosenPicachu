@@ -4,4 +4,5 @@
   --slide-curve: cubic-bezier(0.45, 0, 0.15, 1);
   --slide-duration: 0.6s;
   --fold-duration: 0.3s;
+  --label-float-duration: 0.3s;
 }

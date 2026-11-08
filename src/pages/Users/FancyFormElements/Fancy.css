@@ -11,7 +11,7 @@
     max-width: 80%;
     opacity: 0.6;
     z-index: 1;
-    transition: opacity 0.3s var(--curve), translate 0.3s var(--curve);
+    transition: opacity var(--label-float-duration) var(--curve), translate var(--label-float-duration) var(--curve);
   }
 
   &.fancy-select .fancy-title,
