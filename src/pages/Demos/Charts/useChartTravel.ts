@@ -8,7 +8,7 @@ type Pushed = Readonly<Record<number, 'up' | 'down'>>;
 type Travel = {
   seats: number;
   onSeated: (from: number, to: number, options?: {replace?: boolean}) => void;
-  onRemoved: (at: number) => void;
+  onRemoved: (at: number, from: Element) => void;
 };
 
 export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
@@ -83,7 +83,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     }
     if ((event.key === 'Delete' || event.key === 'Backspace') && seats > 1) {
       event.preventDefault();
-      onRemoved(at);
+      onRemoved(at, event.currentTarget);
     }
   };
 

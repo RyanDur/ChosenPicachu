@@ -1,7 +1,7 @@
 import {Entry, Item, Menu} from '@components/Menu';
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import {generatePath, Link} from 'react-router';
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {maybe, Maybe} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
 import {lampOf, statusCopy} from './live-trades';
@@ -9,7 +9,6 @@ import {classNames} from '@components/class-names';
 import {marketSelectors} from '../Market';
 import {useMarketSelector} from '../Market/Trading';
 import {useDesk} from './useDesk';
-import {seatAfterRemoval} from './desk';
 import {useChartTravel} from './useChartTravel';
 import {Grip} from './Grip';
 import {Dismissal} from './Dismissal';
@@ -28,7 +27,10 @@ const chartNames: Record<ChartKind, string> = {
 
 const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {kind});
 
-const doorwayId = (kind: ChartKind): string => `doorway-${kind}`;
+const doorwayAfterRemoval = (from: Element): Maybe<HTMLElement> =>
+  maybe(from.closest('li'))
+    .mBind(seat => maybe(seat.nextElementSibling ?? seat.previousElementSibling))
+    .mBind(neighbor => maybe(neighbor.querySelector<HTMLElement>(':scope > .doorway')));
 
 type Props = {
   product: string;
@@ -39,21 +41,12 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useMarketSelector(marketSelectors.feedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
-  const [removal, setRemoval] = useState<Maybe<{at: number; stood: number}>>(nothing());
   const nameAt = (at: number): string => chartNames[seats[at].kind];
-  const removed = (at: number): void => {
+  const removed = (at: number, from: Element): void => {
+    doorwayAfterRemoval(from).map(doorway => doorway.focus());
     remove(at);
     setReport(`${nameAt(at)} removed`);
-    setRemoval(some({at, stood: seats.length}));
   };
-  useEffect(() => {
-    removal.map(({at, stood}) => {
-      if (seats.length < stood) {
-        seatAfterRemoval(at, seats).map(seat => document.getElementById(doorwayId(seat.kind))?.focus());
-        setRemoval(nothing());
-      }
-    });
-  }, [removal, seats]);
   const {isArmed, arm, disarm, dress, lift, travel, release, keys, settled} =
     useChartTravel({
       seats: seats.length,
@@ -91,7 +84,7 @@ export const Workspace: FC<Props> = ({product}) => {
           </>}
     </header>
     <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-      const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
+      const actions = plural ? <Dismissal onRemoved={from => removed(at, from)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}
@@ -100,7 +93,7 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link id={doorwayId(kind)} className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
+        <Link className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}

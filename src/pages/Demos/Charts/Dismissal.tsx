@@ -1,9 +1,9 @@
 import {FC} from 'react';
 
 type Props = {
-  onRemoved: () => void;
+  onRemoved: (from: Element) => void;
 };
 
 export const Dismissal: FC<Props> = ({onRemoved}) =>
   <button type="button" className="remove-chart borderless unfilled glyph-icon muted-ink" aria-label="remove chart" tabIndex={-1}
-    onClick={onRemoved}>×</button>;
+    onClick={event => onRemoved(event.currentTarget)}>×</button>;
