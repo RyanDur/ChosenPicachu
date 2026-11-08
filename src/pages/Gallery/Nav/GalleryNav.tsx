@@ -40,8 +40,8 @@ export const GalleryNav: FC<Props> = ({id}) => {
     </>}
     {counted.map(({first, last, total}) =>
       <output className="info field" key="count">
-        <span>{first} - {last}</span>
-        <span>of</span>
+        <span>{first} - {last}</span>{' '}
+        <span>of</span>{' '}
         <span>{total}</span>
       </output>).orNull()}
     {hasNextPage && <>

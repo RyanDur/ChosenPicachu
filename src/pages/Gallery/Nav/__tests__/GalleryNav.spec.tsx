@@ -88,7 +88,7 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.count()).toHaveTextContent(`${1} - ${limit}of${total}`);
+    expect(galleryNav.count()).toHaveTextContent(`${1} - ${limit} of ${total}`);
   });
 
   test('before any page has arrived, no count is said', () => {
@@ -106,7 +106,7 @@ describe('Gallery Navigation', () => {
     });
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(galleryNav.count()).toHaveTextContent(/^0 - 0of0$/));
+    await waitFor(() => expect(galleryNav.count()).toHaveTextContent(/^0 - 0 of 0$/));
   });
 
   test('a museum that refuses leaves no count from the museum before it', async () => {
@@ -144,7 +144,7 @@ describe('Gallery Navigation', () => {
 
     expect(galleryNav.way('NEXT')).toBeInTheDocument();
     expect(galleryNav.way('LAST')).toBeInTheDocument();
-    expect(galleryNav.count()).toHaveTextContent(`${limit + 1} - ${limit * 2}of${total}`);
+    expect(galleryNav.count()).toHaveTextContent(`${limit + 1} - ${limit * 2} of ${total}`);
   });
 
   test('the way forward stays once the next page lands', async () => {

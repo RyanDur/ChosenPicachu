@@ -271,7 +271,7 @@ describe('The gallery.', () => {
     await galleryPage.nextPage();
 
     await galleryWall.loadingSignAppears();
-    expect(galleryPage.pagination()).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
+    expect(galleryPage.pagination()).toHaveTextContent(`of ${aicArtResponse.pagination.total}`);
 
     nextPageArrives();
 
@@ -300,6 +300,6 @@ describe('The gallery.', () => {
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryPage.pagination()).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
+    expect(galleryPage.pagination()).toHaveTextContent(`${1 + limit * (last - 1)} - ${total} of ${total}`);
   });
 });
