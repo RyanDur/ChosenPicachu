@@ -134,7 +134,7 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(sparklineSource, 'export const sparklinePoints')
+            ...carve.span(sparklineSource, 'const points = (', 'export const sparkline = {points};')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.span(priceSource, '<svg className="sparkline"', '</svg>')
@@ -190,7 +190,7 @@ const CandlesStory: FC = () =>
             the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a
             third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
-            lowest low at the bottom. Across the chart, <code className="monospaced">periodSlots</code> gives each candle an equal slot and makes the body
+            lowest low at the bottom. Across the chart, <code className="monospaced">periodSlots.of</code> gives each candle an equal slot and makes the body
             60% of the slot wide, so two candles never touch.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed
@@ -213,7 +213,7 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(slotsSource, 'export const periodSlots'), gap,
+            ...carve.span(slotsSource, 'const of = (', 'export const periodSlots = {of};'), gap,
             ...carve.unit(candleShapesSource, 'const drawn')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -313,7 +313,7 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(slotsSource, 'export const periodSlots'), gap,
+            ...carve.span(slotsSource, 'const of = (', 'export const periodSlots = {of};'), gap,
             ...carve.unit(pressureShapesSource, 'const heaviestSide'), gap,
             ...carve.unit(pressureShapesSource, 'const drawn')
           ]}/>

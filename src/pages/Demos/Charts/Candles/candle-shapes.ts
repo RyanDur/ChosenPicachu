@@ -33,7 +33,7 @@ const drawn = (
   const lowest = Math.min(...candles.map(candle => candle.low));
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  const slots = periodSlots(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
+  const slots = periodSlots.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const bodyTop = scaleY(Math.max(candle.open, candle.close));
     const bodyBottom = scaleY(Math.min(candle.open, candle.close));
@@ -60,7 +60,7 @@ const volumes = (
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
-  const slots = periodSlots(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
+  const slots = periodSlots.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const barHeight = heaviest === 0 ? 0 : (candle.volume / heaviest) * height;
     return {

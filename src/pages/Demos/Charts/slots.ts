@@ -6,7 +6,7 @@ export type Slot = {
   center: number;
 };
 
-export const periodSlots = (
+const of = (
   openings: readonly number[],
   width: number,
   bucketMilliseconds: number
@@ -23,3 +23,5 @@ export const periodSlots = (
     return {x: x + (slot - barWidth) / 2, width: barWidth, center: x + slot / 2};
   });
 };
+
+export const periodSlots = {of};

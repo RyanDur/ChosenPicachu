@@ -8,7 +8,7 @@ export type Point = {
   y: number;
 };
 
-export const sparklinePoints = (
+const points = (
   series: readonly TimedPrice[],
   width: number,
   height: number,
@@ -28,3 +28,5 @@ export const sparklinePoints = (
     shownMilliseconds === 0 ? width / 2 : ((at - from) / shownMilliseconds) * width;
   return series.map(timed => ({x: scaleX(timed.at), y: scaleY(timed.price)}));
 };
+
+export const sparkline = {points};

@@ -1,13 +1,13 @@
-import {sparklinePoints} from '../sparkline';
+import {sparkline} from '../sparkline';
 
-describe('sparklinePoints', () => {
+describe('sparkline.points', () => {
   test('fewer than two prices draw no line', () => {
-    expect(sparklinePoints([], 100, 40)).toEqual([]);
-    expect(sparklinePoints([{at: 0, price: 50000}], 100, 40)).toEqual([]);
+    expect(sparkline.points([], 100, 40)).toEqual([]);
+    expect(sparkline.points([{at: 0, price: 50000}], 100, 40)).toEqual([]);
   });
 
   test('points spread by time, not by index', () => {
-    expect(sparklinePoints([
+    expect(sparkline.points([
       {at: 0, price: 1},
       {at: 1000, price: 2},
       {at: 4000, price: 5}
@@ -19,7 +19,7 @@ describe('sparklinePoints', () => {
   });
 
   test('a flat series draws along the midline', () => {
-    expect(sparklinePoints([
+    expect(sparkline.points([
       {at: 0, price: 5},
       {at: 500, price: 5},
       {at: 1000, price: 5}
@@ -31,7 +31,7 @@ describe('sparklinePoints', () => {
   });
 
   test('with headroom the last point stops short of the right edge', () => {
-    const points = sparklinePoints([
+    const points = sparkline.points([
       {at: 0, price: 1},
       {at: 1000, price: 2}
     ], 100, 40, 1000);
