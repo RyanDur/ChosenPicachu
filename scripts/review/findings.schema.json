@@ -11,12 +11,12 @@
         "required": ["file", "line", "severity", "rubric", "summary", "failure_scenario"],
         "additionalProperties": false,
         "properties": {
-          "file": {"type": "string", "description": "The path from the repository root"},
+          "file": {"type": "string", "minLength": 1, "description": "The path from the repository root"},
           "line": {"type": "integer"},
           "severity": {"enum": ["violation", "concern", "note"]},
-          "rubric": {"type": "string", "description": "The file whose rule the finding answers to, or correctness"},
-          "summary": {"type": "string"},
-          "failure_scenario": {"type": "string"}
+          "rubric": {"type": "string", "minLength": 1, "description": "The file whose rule the finding answers to, or correctness"},
+          "summary": {"type": "string", "minLength": 1},
+          "failure_scenario": {"type": "string", "minLength": 1}
         }
       }
     }

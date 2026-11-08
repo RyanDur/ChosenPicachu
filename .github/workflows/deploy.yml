@@ -47,8 +47,8 @@ jobs:
             echo "::error::#$pull's head $head has no passing checks run to take the site from"
             exit 1
           fi
-          if ! gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts" -q '.artifacts[].name' | grep -qx site; then
-            echo "::error::#$pull changed documents alone, so its checks built no site; the site live now is the last one deployed"
+          if [ -z "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts?name=site" -q '.artifacts[] | select(.expired | not) | .id')" ]; then
+            echo "::error::#$pull changed documents alone, so its checks built no site, or the site has expired; the site live now is the last one deployed"
             exit 1
           fi
           echo "Deploying the site that run $run built for #$pull at $head" >> "$GITHUB_STEP_SUMMARY"

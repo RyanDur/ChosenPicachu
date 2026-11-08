@@ -1,4 +1,4 @@
-import {existsSync, readFileSync, realpathSync} from 'node:fs';
+import {existsSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {empty, has, not} from '@ryandur/sand';
 import {audited} from './audited.mjs';
@@ -82,7 +82,7 @@ export const summaryOf = pages => [
   ''
 ].join('\n');
 
-if (import.meta.filename === realpathSync(process.argv[1])) {
+if (import.meta.main) {
   const [, , reportsDir] = process.argv;
   const read = file => JSON.parse(readFileSync(file, 'utf8'));
   const rc = read('lighthouserc.json');
