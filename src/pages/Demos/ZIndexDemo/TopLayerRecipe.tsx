@@ -56,7 +56,7 @@ export const TopLayerRecipe: FC = () => {
             announces what arrives without being asked.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" lines={[
+          <Snippet label="HTML" lines={[
             ...carve.span(bannersSource, '<section id="banners"', '</section>;')
           ]}/>
         </Codes>
@@ -97,7 +97,7 @@ export const TopLayerRecipe: FC = () => {
             the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+          <Snippet label="HTML" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
             ...carve.span(bannersCss, '.banners {', 'z-index: 3;'), gap,
             ...carve.unit(bannersCss, `.${side} {`), gap,
