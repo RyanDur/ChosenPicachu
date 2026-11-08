@@ -1,9 +1,8 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components';
-import {shares} from '@components';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, survey, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
+import {arrangements, arrows, ColumnDrag, Grab, lifting, looks, Moving, PixelSizes, shares, Survey, survey, tableActions, tableSelectors, travel} from '@components/DragSortableTable/model';
 import {lazyDrop} from './lazyDrop';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';

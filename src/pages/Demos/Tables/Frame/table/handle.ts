@@ -1,6 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {shares} from '@components';
-import {TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
+import {shares, TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
 
 type Resizing = Pick<MountedTable, 'table' | 'store' | 'order' | 'report'>;
