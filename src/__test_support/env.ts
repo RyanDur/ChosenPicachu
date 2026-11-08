@@ -1,4 +1,4 @@
-window.__env = {
+window.__environment = {
   tradeFeed: import.meta.env.VITE_APP_TRADE_FEED,
   tradeProduct: import.meta.env.VITE_APP_TRADE_PRODUCT,
   tradeHistory: import.meta.env.VITE_APP_TRADE_HISTORY,
