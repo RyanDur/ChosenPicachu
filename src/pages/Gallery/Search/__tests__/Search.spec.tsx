@@ -1,11 +1,11 @@
 import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith, server} from '@__test_support/server';
-import {render, screen, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {Source} from '@pages/Gallery/museums/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {heldAICSuggestions, heldSearch} from '@pages/Gallery/__test_support';
+import {heldAICSuggestions} from '@pages/Gallery/__test_support';
+import {heldSearch, searchBar} from '@pages/Gallery/Search/__test_support';
 import {aicSuggestionsOf} from '@pages/Gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
 
@@ -18,57 +18,57 @@ describe('search', () => {
   it('the label reads the word searched for, 100% and all', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=100%25`}/>);
 
-    expect(await screen.findByRole('combobox', {name: 'Search For: 100%'})).toBeInTheDocument();
+    expect(await searchBar.queryNamedAppears('Search For: 100%')).toBeInTheDocument();
   });
 
   it('puts the searched word in the url', async () => {
     render(<TestApp at={Paths.artGallery}/>);
 
-    await userEvent.type(screen.getByLabelText(/Search For/), 'A');
-    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
+    await searchBar.type('A');
+    await searchBar.submit();
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('search=A'));
-    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
+    await waitFor(() => expect(searchBar.addressSearch()).toHaveTextContent('search=A'));
+    expect(searchBar.addressPath()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
   it('the keyboard walks from the query to reset, then submit', async () => {
     render(<TestApp at={Paths.artGallery}/>);
-    await userEvent.type(screen.getByLabelText(/Search For/), 'a');
+    await searchBar.type('a');
 
-    await userEvent.tab();
-    expect(screen.getByRole('button', {name: 'reset search'})).toHaveFocus();
+    await searchBar.focusMovesOn();
+    expect(searchBar.resetButton()).toHaveFocus();
 
-    await userEvent.tab();
-    expect(screen.getByRole('button', {name: 'submit search'})).toHaveFocus();
+    await searchBar.focusMovesOn();
+    expect(searchBar.submitButton()).toHaveFocus();
   });
 
   it('a search keeps the page and museum it was made on', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&tab=aic`}/>);
 
-    await userEvent.type(screen.getByLabelText(/Search For/), 'a');
-    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
+    await searchBar.type('a');
+    await searchBar.submit();
 
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?page=1&tab=aic&search=a');
+    expect(searchBar.addressSearch()).toHaveTextContent('?page=1&tab=aic&search=a');
   });
 
   it('should be able to reset the query', async () => {
     render(<TestApp at={`${Paths.artGallery}?search=cat&tab=aic`}/>);
 
-    await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
+    await searchBar.reset();
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('search'));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
+    await waitFor(() => expect(searchBar.addressSearch()).not.toHaveTextContent('search'));
+    expect(searchBar.addressSearch()).toHaveTextContent('tab=aic');
   });
 
   it('a reset empties the box, and the browser holds the empty box invalid', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
-    await userEvent.type(screen.getByLabelText(/Search For/), 'A');
-    expect(screen.getByLabelText(/Search For/)).toBeValid();
+    await searchBar.type('A');
+    expect(searchBar.query()).toBeValid();
 
-    await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
+    await searchBar.reset();
 
-    expect(screen.getByLabelText(/Search For/)).toHaveValue('');
-    expect(screen.getByLabelText(/Search For/)).toBeInvalid();
+    expect(searchBar.query()).toHaveValue('');
+    expect(searchBar.query()).toBeInvalid();
   });
 
   describe('with the clock held', () => {
