@@ -18,28 +18,6 @@ export const findingsIn = answer => {
   return listed.map(finding => ({...finding, severity: severities.includes(finding.severity) ? finding.severity : 'concern'}));
 };
 
-const opening = /^\*\*(\w+)\*\*(?:\s*\(([^)]*)\))?\s*/;
-
-const findingOf = ({path, line, body}) => {
-  const [first = '', named = '', rubric] = opening.exec(body) ?? [];
-  return {
-    file: path,
-    line,
-    severity: severities.includes(named) ? named : 'concern',
-    rubric: rubric ?? 'correctness',
-    summary: body.slice(first.length).trim()
-  };
-};
-
-/**
- * The review leaves its findings on the pull request's lines, each opening with its severity in bold.
- * @param {string} comments the pull request's line comments, as GitHub lists them
- * @param {string} commit the head under review
- */
-export const findingsOnThePull = (comments, commit) => JSON.parse(comments).flat()
-  .filter(({commit_id: on}) => on === commit)
-  .map(findingOf);
-
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
 
 const plural = (count, word) => `${count} ${count === 1 ? word : `${word}s`}`;
@@ -89,9 +67,8 @@ export const summaryOf = (findings, {commit, subject} = {}) => [
 export const verdictOf = findings => findings.some(({severity}) => severity === 'violation') ? 1 : 0;
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {GITHUB_REPOSITORY: repository, GITHUB_SHA: sha, REVIEW_SUBJECT: subject, REVIEW_AFTER: head} = process.env;
-  const read = readFileSync(process.stdin.fd, 'utf8');
-  const findings = empty(head) ? findingsIn(read) : findingsOnThePull(read, head);
+  const findings = findingsIn(readFileSync(process.stdin.fd, 'utf8'));
+  const {GITHUB_REPOSITORY: repository, GITHUB_SHA: sha, REVIEW_SUBJECT: subject} = process.env;
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(findings, {commit, subject});
   process.stdout.write(summary);

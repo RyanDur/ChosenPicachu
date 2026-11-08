@@ -30,7 +30,9 @@ export const askFor = ({before, after, pull, reviewers}) => [
   'AGENTS.md (the house rules), scripts/review/values.md and scripts/review/plain.md (how a finding is worded),',
   `${reviewers.map(({file, asks}) => `${file} (${asks})`).join('; ')}.`,
   'Give every finding two more fields: "severity", one of "violation" (a bug a reader meets, or a broken rule from',
-  'AGENTS.md or a rubric), "concern" or "note"; and "rubric", the file whose rule it answers to, or "correctness".'
+  'AGENTS.md or a rubric), "concern" or "note"; and "rubric", the file whose rule it answers to, or "correctness".',
+  ...(empty(pull) ? [] : ['After leaving them on the lines, end your answer with every finding you left as one fenced json',
+    'list, an empty list when there are none.'])
 ].join(' ');
 
 if (import.meta.url === `file://${process.argv[1]}`) {
