@@ -18,9 +18,9 @@ export const PlainFold: FC = () => {
 
   useEffect(() => {
     let standing = true;
-    void import('./assemble').then(({foldDocument}) => {
+    void import('./assemble').then(({foldAssembly}) => {
       if (standing) {
-        setDocument(foldDocument());
+        setDocument(foldAssembly.document());
       }
     }).catch(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')));
     return () => {

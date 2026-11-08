@@ -1,7 +1,6 @@
 {
   "one-export": [
     "src/pages/Demos/Accordions/Accordions.tsx",
-    "src/pages/Demos/Accordions/Diagrams.tsx",
-    "src/pages/Demos/Accordions/Plain/assemble.ts"
+    "src/pages/Demos/Accordions/Diagrams.tsx"
   ]
 }
