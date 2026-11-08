@@ -744,9 +744,10 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
           <WhatEachPromises/>
         </li>}
         <li className="run">
-          <p className="paragraph">Under the bar, the fold’s paragraph is a grid with one row, the same row the details
-            build opens. The row is 0fr while the fold is
-            closed. <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> is a piece of a CSS rule
+          <p className="paragraph">Under the bar, the fold’s paragraph is a grid, the CSS layout that sets a box out in
+            rows and columns, with one row. Its height is in fr, a grid unit for a share of the space: in a grid sized
+            to its content, a row of 1fr is as tall as the text needs and a row of 0fr has no height. The row is 0fr
+            while the fold is closed. <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> is a piece of a CSS rule
             that picks an element by what it contains, so <code className="monospaced">:has(:checked)</code> makes that
             row 1fr when the fold holds a checked input. The paragraph’s overflow hidden hides whatever its row does
             not hold.</p>
