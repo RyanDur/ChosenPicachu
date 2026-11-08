@@ -179,6 +179,9 @@ export const PresentationPractice: FC = () =>
       <li className="paragraph">a text measure, in ch, since it follows a line of text;</li>
       <li className="paragraph">the breakpoints, in pixels, since they follow the window.</li>
     </ul>
+    <p className="paragraph">The third token file, <a className="signpost" href={sheet('timing')}>timing.css</a>,
+      names the easing curve that transitions in three style sheets follow, and how long a gallery piece takes to rise
+      under the pointer or the keyboard’s focus: half a second.</p>
     <p className="paragraph">A few sizes belong to one component and sit in its own style sheet:</p>
     <ul className="practice-list">
       <li className="paragraph">its own breakpoints, in pixels, and its container queries, in rems, in pixels and one
@@ -187,9 +190,6 @@ export const PresentationPractice: FC = () =>
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
     </ul>
-    <p className="paragraph">The third token file, <a className="signpost" href={sheet('timing')}>timing.css</a>,
-      names the easing curve that transitions in three style sheets follow, and how long a gallery piece takes to rise
-      under the pointer or the keyboard’s focus: half a second.</p>
     <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in
       the column.</p>
     <p className="paragraph">I write inline only the values the code works out at runtime, mostly as{' '}
