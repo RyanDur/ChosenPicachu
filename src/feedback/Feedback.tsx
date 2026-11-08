@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, MouseEvent, ReactNode, SubmitEvent, SyntheticEvent, useContext} from 'react';
+import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useContext} from 'react';
 import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnvironment} from '@environment';
@@ -8,7 +8,6 @@ import {Paths} from '@navigation';
 import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
-import {Draft} from './feedbackDraft';
 import {drafting} from './drafting';
 import {classNames} from '@components';
 import {Modal, ModalOpener} from '@components/Modal';
@@ -30,7 +29,8 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const said = ({sending, sentTo}: Draft): ReactNode => {
+const NoteStatus: FC = () => {
+  const [{sending, sentTo}] = useContext(drafting);
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
@@ -39,7 +39,7 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
     case 'refused':
       return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
-  return '';
+  return null;
 };
 
 export const Feedback: FC = () => {
@@ -116,7 +116,7 @@ export const Feedback: FC = () => {
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
-          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
+          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}><NoteStatus/></output>
           <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>

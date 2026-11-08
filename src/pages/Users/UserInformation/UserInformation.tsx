@@ -1,4 +1,4 @@
-import {FC, ReactNode, useReducer, useState} from 'react';
+import {FC, useReducer, useState} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
 import {classNames} from '@components';
 import {NewUser, User} from '../profile';
@@ -25,7 +25,10 @@ const newUser = (avatar: string): NewUser => ({
   avatar
 });
 
-const buttonsFor = (open: Opened, hydrated: boolean, addInFlight: boolean): ReactNode => {
+const FormButtons: FC = () => {
+  const open = useOpened();
+  const hydrated = useHydrated();
+  const addInFlight = useUsersSelector(usersSelectors.addInFlight);
   const resetButton = <button type="reset" className="reset button secondary" disabled={not(hydrated)}>Reset</button>;
   switch (open.mode) {
     case 'adding':
@@ -141,7 +144,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(draftActions.detailsEdited(event.currentTarget.value))}/>
 
-    {buttonsFor(open, hydrated, addInFlight)}
+    <FormButtons/>
 
   </form>;
 };
