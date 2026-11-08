@@ -1,9 +1,6 @@
 import {findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
 
-const answered = findings => JSON.stringify({
-  type: 'result',
-  result: `I reviewed the range.\n\n\`\`\`json\n${JSON.stringify(findings)}\n\`\`\`\n\nThat is all.`
-});
+const answered = findings => JSON.stringify({type: 'result', structured_output: {findings}});
 
 const bug = {
   file: 'src/a.ts', line: 3, severity: 'violation', rubric: 'correctness',
@@ -17,6 +14,10 @@ const note = {
 describe('the findings Claude Code\'s review answers with', () => {
   test('should read the findings from the fenced JSON in its answer', () => {
     expect(findingsIn(answered([bug, note]))).toEqual([bug, note]);
+  });
+
+  test('should read the findings from the action\'s structured output', () => {
+    expect(findingsIn(JSON.stringify({findings: [bug]}))).toEqual([bug]);
   });
 
   test('should read the findings from the last answer in the action\'s execution file', () => {
@@ -36,6 +37,10 @@ describe('the findings Claude Code\'s review answers with', () => {
   test('should refuse an answer with no findings list', () => {
     expect(() => findingsIn(JSON.stringify({type: 'result', result: 'Looks good.'})))
       .toThrow('the review answered without a findings list');
+  });
+
+  test('should refuse a review that gave no structured output', () => {
+    expect(() => findingsIn('')).toThrow('the review answered without a findings list');
   });
 
   test('should count a finding with no severity as a concern', () => {

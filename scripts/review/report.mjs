@@ -3,19 +3,22 @@ import {empty, has, maybe, not} from '@ryandur/sand';
 
 const severities = ['violation', 'concern', 'note'];
 
-const fenced = /```json\s*\n([\s\S]*?)\n```/;
-
 const lastAnswer = parsed => Array.isArray(parsed)
   ? maybe(parsed.findLast(({type}) => type === 'result')).orElse({})
   : parsed;
 
+/**
+ * Reads the findings from the review's structured output: the action's `structured_output`, or the result message
+ * that `claude --print --output-format json` writes, which carries it as `structured_output`.
+ * @param {string} answer
+ */
 export const findingsIn = answer => {
-  const {result} = lastAnswer(JSON.parse(answer));
-  const listed = maybe(fenced.exec(result ?? '')).map(([, json]) => JSON.parse(json)).orElse(undefined);
-  if (not(Array.isArray(listed))) {
+  const output = empty(answer.trim()) ? {} : lastAnswer(JSON.parse(answer));
+  const {findings} = maybe(output.structured_output).orElse(output);
+  if (not(Array.isArray(findings))) {
     throw new Error('the review answered without a findings list');
   }
-  return listed.map(finding => ({...finding, severity: severities.includes(finding.severity) ? finding.severity : 'concern'}));
+  return findings.map(finding => ({...finding, severity: severities.includes(finding.severity) ? finding.severity : 'concern'}));
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
@@ -43,19 +46,19 @@ const verdictTold = findings => {
 };
 
 const findingTold = (finding, at, commit) => [
-  `#### ${at + 1}. ${named(finding.severity)} · ${asText(finding.rubric ?? 'correctness')}`,
+  `#### ${at + 1}. ${named(finding.severity)} · ${asText(finding.rubric)}`,
   '',
   `**Where.** ${placeOf(finding, commit)}`,
   '',
-  `**What.** ${told(finding.summary ?? '')}`,
+  `**What.** ${told(finding.summary)}`,
   '',
-  `**How it fails.** ${told(finding.failure_scenario ?? '')}`,
+  `**How it fails.** ${told(finding.failure_scenario)}`,
   ''
 ];
 
 /**
- * @param {{file: string, line: number, severity: string, rubric?: string, summary?: string,
- *   failure_scenario?: string}[]} findings
+ * @param {{file: string, line: number, severity: string, rubric: string, summary: string,
+ *   failure_scenario: string}[]} findings
  */
 export const summaryOf = (findings, {commit, subject} = {}) => [
   `## ${empty(subject) ? 'This push' : `“${told(subject)}”`} ${verdictTold(findings)}`,

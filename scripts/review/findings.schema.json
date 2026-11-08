@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "required": ["findings"],
+  "additionalProperties": false,
+  "properties": {
+    "findings": {
+      "description": "Every finding the review reports, an empty list when there are none",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "line", "severity", "rubric", "summary", "failure_scenario"],
+        "additionalProperties": false,
+        "properties": {
+          "file": {"type": "string", "description": "The path from the repository root"},
+          "line": {"type": "integer"},
+          "severity": {"enum": ["violation", "concern", "note"]},
+          "rubric": {"type": "string", "description": "The file whose rule the finding answers to, or correctness"},
+          "summary": {"type": "string"},
+          "failure_scenario": {"type": "string"}
+        }
+      }
+    }
+  }
+}
