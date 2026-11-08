@@ -3,7 +3,7 @@ import {test} from './__test_support/journey';
 import {dragSortTable, stagesWith} from './__test_support';
 
 const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
-const windowsAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
+const lookbacksAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 for (const {name, at, table} of stagesWith('pace=lazy')) {
   test.describe(`a lazy table, in ${name}`, () => {
@@ -46,7 +46,7 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
       const hold = await trades.holdRow(1);
       await hold.carryTo(trades.row(/last 15 minutes/));
 
-      expect(await trades.rowOrder()).toEqual(windowsAsDealt);
+      expect(await trades.rowOrder()).toEqual(lookbacksAsDealt);
 
       await hold.drop();
 
