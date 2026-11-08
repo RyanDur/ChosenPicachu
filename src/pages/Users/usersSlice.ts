@@ -1,4 +1,4 @@
-import {Slice, sliced} from '@components/store';
+import {Slice, slices} from '@components/store';
 import {Arrangement, arrangements} from '@components/DragSortableTable/model';
 import {User} from './profile';
 import {UsersAction} from './usersActions';
@@ -32,7 +32,7 @@ const reporting = (reports: FriendsReports, action: UsersAction): FriendsReports
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
   arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
 
-export const usersSlice: Slice<UsersState, UsersAction> = sliced<UsersState, UsersAction>({
+export const usersSlice: Slice<UsersState, UsersAction> = slices.combined<UsersState, UsersAction>({
   users: {initial: [], reduce: roster},
   arrangement: {initial: arrangements.of(userColumns.all.map(({name}) => name)), reduce: seating},
   friendsReports: {initial: {}, reduce: reporting}

@@ -10,7 +10,7 @@ import surfaceCss from '../../../../../styles/surface.css?sample';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
 import reducerSource from '@components/DragSortableTable/model/reducer.ts?sample';
 import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
-import storeSource from '@components/store.ts?sample';
+import storeSource from '@components/store/store.ts?sample';
 import frameSettle from '../../Frame/table/settle.ts?sample';
 import frameCarry from '../../Frame/table/carry.ts?sample';
 import selectorsSource from '@components/DragSortableTable/model/selectors.ts?sample';

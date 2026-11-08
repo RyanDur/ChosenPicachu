@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {Reducer, combined} from '@components/store';
+import {Reducer, reducers} from '@components/store';
 import {Foreign, TableAction, tableActions} from './actions';
 import {Landing, tableReports} from './report';
 import {survey} from './survey';
@@ -83,7 +83,7 @@ const widths = (state: TableState, action: TableAction): TableState => {
 const sorting = (state: TableState, action: TableAction): TableState =>
   action.type === 'sortChosen' ? {...state, report: {about: 'sort', name: action.column, direction: action.direction}} : state;
 
-const answering: (state: TableState, action: TableAction) => TableState = combined(motion, widths, dragging, sorting);
+const answering: Reducer<TableState, TableAction> = reducers.combined(motion, widths, dragging, sorting);
 
 export const tableReducer = (state: TableState, action: Foreign): TableState =>
   tableActions.recognizes(action) ? answering(state, action) : state;

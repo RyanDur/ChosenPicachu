@@ -1,4 +1,4 @@
-import {Middleware, Store, store} from '@components/store';
+import {Middleware, store, Store} from '@components/store';
 import {TableAction} from './actions';
 import {TableState, tableState} from './table-state';
 import {tableReducer} from './reducer';

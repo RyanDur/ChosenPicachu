@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {Reducer, Slice, sliced, store} from '../store';
+import {Reducer, Slice, slices, store} from '..';
 
 type Count = {readonly count: number};
 type Words = {readonly words: readonly string[]};
@@ -15,13 +15,13 @@ const saying: Slice<Words, Action> = {initial: {words: []}, reduce: say};
 
 describe('a store sliced by key', () => {
   it('starts from the slices’ own initial states', () => {
-    const page = store({slice: sliced<Page, Action>({counting, saying})});
+    const page = store({slice: slices.combined<Page, Action>({counting, saying})});
 
     expect(page.state).toEqual({counting: {count: 0}, saying: {words: []}});
   });
 
   it("routes each action to every slice and keeps each slice's own state", () => {
-    const page = store({slice: sliced<Page, Action>({counting, saying})});
+    const page = store({slice: slices.combined<Page, Action>({counting, saying})});
 
     page.dispatch({type: 'counted'});
     page.dispatch({type: 'said', word: 'hello'});
@@ -31,7 +31,7 @@ describe('a store sliced by key', () => {
   });
 
   it('a slice that ignores an action keeps its identity', () => {
-    const page = store({slice: sliced<Page, Action>({counting, saying})});
+    const page = store({slice: slices.combined<Page, Action>({counting, saying})});
     const before = page.state.saying;
 
     page.dispatch({type: 'counted'});

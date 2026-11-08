@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import storeSource from '@components/store.ts?sample';
+import storeSource from '@components/store/store.ts?sample';
+import reducersSource from '@components/store/reducers.ts?sample';
 import actionsSource from '@components/DragSortableTable/model/actions.ts?sample';
 import marketActionsSource from '@pages/Demos/Market/marketActions.ts?sample';
 import reducerSource from '@components/DragSortableTable/model/reducer.ts?sample';
@@ -17,7 +18,7 @@ import surfaceSheet from '../../styles/surface.css?sample';
 import accordionsSheet from '@pages/Demos/Accordions/Accordions.css?sample';
 import {Snippet, lines, carve, Line, CodeFile, Sample} from '@pages/Demos/Recipe';
 
-const reducerType = carve.span(storeSource, 'export type Reducer', '(state, action) => reducers.reduce');
+const reducerType = carve.span(reducersSource, 'export type Reducer', '(state, action) => reducersInOrder.reduce');
 const lifted = carve.span(actionsSource, 'const lifted = ', 'const lifted = ');
 const dropped = carve.span(actionsSource, 'const dropped = ', 'const dropped = ');
 const tradeArrived = carve.span(marketActionsSource, 'tradeArrived: trade =>', 'tradeArrived: trade =>');

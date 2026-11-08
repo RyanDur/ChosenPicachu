@@ -1,33 +1,4 @@
-export type Reducer<State, Action> = (state: State, action: Action) => State;
-
-export const combined = <State, Action>(...reducers: Reducer<State, Action>[]): Reducer<State, Action> =>
-  (state, action) => reducers.reduce((reduced, reducer) => reducer(reduced, action), state);
-
-export type Slice<State, Action> = {
-  readonly initial: State;
-  readonly reduce: Reducer<State, Action>;
-};
-
-export type Slices<State, Action> = {
-  readonly [Key in keyof State]-?: Slice<State[Key], Action>;
-};
-
-const keysOf = <State extends object, Action>(slices: Slices<State, Action>): readonly (keyof State)[] => {
-  const keys: (keyof State)[] = [];
-  for (const key in slices) {
-    keys.push(key);
-  }
-  return keys;
-};
-
-// a fold over the keys has no State to start from; the seed is the one value the compiler is told about
-const seed = <State>(): State => ({} as State);
-
-export const sliced = <State extends object, Action>(slices: Slices<State, Action>): Slice<State, Action> => ({
-  initial: keysOf(slices).reduce((state, key) => ({...state, [key]: slices[key].initial}), seed<State>()),
-  reduce: (state, action) =>
-    keysOf(slices).reduce((next, key) => ({...next, [key]: slices[key].reduce(state[key], action)}), state)
-});
+import {Slice} from './slices';
 
 export type Listener<State, Action> =
   (previous: State, current: () => State, dispatch: (action: Action) => void, action: Action) => void;

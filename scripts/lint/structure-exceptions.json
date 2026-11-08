@@ -1,7 +1,6 @@
 {
   "one-export": [
     "src/components/Menu/Menu.tsx",
-    "src/components/store.ts",
     "src/pages/Demos/Accordions/Accordions.tsx",
     "src/pages/Demos/Accordions/Diagrams.tsx",
     "src/pages/Demos/Accordions/Plain/assemble.ts",
@@ -165,7 +164,6 @@
     "src/pages/Demos/Market/marketActions.ts",
     "src/pages/Demos/Market/marketSelectors.ts",
     "src/pages/Demos/Market/marketSlice.ts",
-    "src/pages/Demos/Market/marketStore.ts",
     "src/pages/Demos/ZIndexDemo/BannerExplained.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/Tutorial.tsx",
@@ -191,8 +189,6 @@
     "src/pages/Record/route.tsx",
     "src/pages/Record/stories/PresentationStory.tsx",
     "src/pages/Record/storyAddress.ts",
-    "src/pages/Users/usersSlice.ts",
-    "src/pages/Users/usersStore.ts",
     "src/routes.ts"
   ]
 }
