@@ -215,10 +215,70 @@ jobs:
       - name: Read the scores in the run
         run: node --import ./scripts/node/imports-like-vite.mjs scripts/lighthouse/summary.mjs lighthouse-reports >> "$GITHUB_STEP_SUMMARY"
 
-  # the one check a merge waits for besides the review: the matrix jobs' names change with their shards and pages, so
-  # the ruleset names this job, which passes only when every check above passed or had nothing to check
+  # Claude Code reviews the pull request against the house rubrics once it builds and its unit tests pass, so a broken
+  # build costs no review; documents alone skip the build and go straight to it. Why: Ryan, 2026-11-08, "the devs are
+  # using branches and those branches can be merged into main via rebase, then they would have code reviews", and
+  # "can't review and checks live in the same yml? and only run after build and test?"
+  review:
+    needs: [changes, build_test]
+    if: >-
+      !cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success'
+      && contains(fromJSON('["success", "skipped"]'), needs.build_test.result)
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    env:
+      REVIEW_BEFORE: ${{ github.event.pull_request.base.sha }}
+      REVIEW_AFTER: ${{ github.event.pull_request.head.sha }}
+      REVIEW_PULL: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24.22.1'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Ask for the review
+        run: |
+          {
+            echo 'REVIEW_ASK<<ASKED'
+            node scripts/review/ask.mjs
+            echo
+            echo 'ASKED'
+            echo "REVIEW_SCHEMA=$(node -e "process.stdout.write(JSON.stringify(require('./scripts/review/findings.schema.json')))")"
+          } >> "$GITHUB_ENV"
+      - name: Claude Code reviews the pull request against the house rules
+        id: review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          use_sticky_comment: true
+          prompt: ${{ env.REVIEW_ASK }}
+          claude_args: |
+            --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
+            --max-turns 80
+            --json-schema '${{ env.REVIEW_SCHEMA }}'
+            --allowedTools "Agent,Read,Grep,Glob,Skill,Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),mcp__github_inline_comment__create_inline_comment"
+      - name: A violation stops the merge
+        env:
+          REVIEW_SUBJECT: ${{ github.event.pull_request.title }}
+          REVIEW_FINDINGS: ${{ steps.review.outputs.structured_output }}
+        run: printf '%s' "$REVIEW_FINDINGS" | node scripts/review/report.mjs >> "$GITHUB_STEP_SUMMARY"
+
+  # the one check a merge waits for: the matrix jobs' names change with their shards and pages, so the ruleset names
+  # this job, which passes only when every check above, the review included, passed or had nothing to check
   ready:
-    needs: [changes, build_test, journeys, lighthouse, lighthouse_scores]
+    needs: [changes, build_test, journeys, lighthouse, lighthouse_scores, review]
     if: always()
     runs-on: ubuntu-26.04
     steps:
