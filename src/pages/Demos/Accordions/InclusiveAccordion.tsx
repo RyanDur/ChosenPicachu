@@ -6,7 +6,7 @@ import './OldWayMotion.css';
 
 export const InclusiveAccordion: FC<AccordionProps> = ({
   className,
-  content,
+  folds,
   motion
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
   <hgroup>
@@ -16,13 +16,13 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion trim">
-      {content.map(({value, key}, id) =>
-        <li key={key} className="fold">
+      {folds.map(({title, text}, id) =>
+        <li key={title} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label id={`fold-${id}-checkbox-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-checkbox`}>{key}</label>
+          <label id={`fold-${id}-checkbox-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-checkbox`}>{title}</label>
           <div className="info">
             <section className="info-text foot-shadowed focus-ringed" tabIndex={0} aria-labelledby={`fold-${id}-checkbox-label`}>
-              <p className="info-paragraph">{value}</p>
+              <p className="info-paragraph">{text}</p>
             </section>
           </div>
         </li>)}

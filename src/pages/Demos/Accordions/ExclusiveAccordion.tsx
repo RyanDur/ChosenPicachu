@@ -6,7 +6,7 @@ import './OldWayMotion.css';
 
 export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
-  content,
+  folds,
   motion
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
   <hgroup>
@@ -20,13 +20,13 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
         <label className="info-label field-ink prior-approached" htmlFor="close-radio">Close</label>
       </li>
-      {content.map(({value, key}, id) =>
-        <li className="fold" key={key}>
+      {folds.map(({title, text}, id) =>
+        <li className="fold" key={title}>
           <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-          <label id={`fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-radio`}>{key}</label>
+          <label id={`fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`fold-${id}-radio`}>{title}</label>
           <div className="info">
             <section className="info-text foot-shadowed focus-ringed" tabIndex={0} aria-labelledby={`fold-${id}-radio-label`}>
-              <p className="info-paragraph">{value}</p>
+              <p className="info-paragraph">{text}</p>
             </section>
           </div>
         </li>)}

@@ -53,7 +53,7 @@ import {FoldMotion} from './fold-motion';
 import '../Runs.css';
 import './Explained.css';
 
-export type Contents = {
+export type FoldLists = {
   measured: Record<FoldType, Fold[]>;
   known: Record<FoldType, Fold[]>;
   platform: Record<FoldType, Fold[]>;
@@ -92,8 +92,8 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={key} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={key}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={title} className="fold">', '</li>')},
+  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={title}>', '</li>')}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
@@ -123,14 +123,14 @@ const motionReadings: Record<FoldMotion, string> = {
 };
 
 type Props = {
-  contents: Contents;
+  foldLists: FoldLists;
   type: FoldType;
   onTypeChosen: (type: FoldType) => void;
   motion: FoldMotion;
   onMotionChosen: (motion: FoldMotion) => void;
 };
 
-export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, motion, onMotionChosen}) => {
+export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, motion, onMotionChosen}) => {
   const input = inputOf[type];
   const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[type];
   const knownHeight = knownHeightBuilds[type];
@@ -328,7 +328,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 state are as they come. What changes is the shape. The plain script listens for the press; the React
                 build redraws the panel from what it holds, so the measuring runs in two steps React takes before the
                 browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-              <Measured className={exhibit} content={contents.measured[type]} motion={motion}/>
+              <Measured className={exhibit} folds={foldLists.measured[type]} motion={motion}/>
               <ol className="runs">
                 {type === 'exclusive' && <li className="run">
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes
@@ -405,11 +405,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 {type === 'exclusive' && <li className="run">
                   <p className="paragraph">A radio that loses its check gets no event at all. The change event the
                     pressed radio gets rises from it through the elements around it, which is called bubbling. The list
-                    item around the radio handles it by recording its own key in React state as the open one, and the
-                    fold whose key is no longer the open one closes from that state.</p>
+                    item around the radio handles it by recording its own title in React state as the open one, and the
+                    fold whose title is no longer the open one closes from that state.</p>
                   <Snippet label="TS" lines={[
                     ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
-                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
+                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => setOpen(title)}>', '<MeasuredPanel open={open === title}')
                   ]}/>
                 </li>}
                 <li className="run">
@@ -423,7 +423,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           </li>
         </ol>
       </section>
-      <KnownHeight className={exhibit} content={contents.known[type]} motion={motion}/>
+      <KnownHeight className={exhibit} folds={foldLists.known[type]} motion={motion}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
@@ -616,7 +616,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
-      <Platform className={exhibit} content={contents.platform[type]} motion={motion}/>
+      <Platform className={exhibit} folds={foldLists.platform[type]} motion={motion}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
@@ -709,7 +709,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h2 id="together-heading" className="title bold">A {input} and a grid row: the old control, the new slide</h2>
-      <GridRow className={exhibit} content={contents.gridRow[type]} motion={motion}/>
+      <GridRow className={exhibit} folds={foldLists.gridRow[type]} motion={motion}/>
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build keeps the checkbox from the old way, with no script, and takes
