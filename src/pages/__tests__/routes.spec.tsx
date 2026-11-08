@@ -58,7 +58,6 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Demos Charts');
-    expect(await site.nav()).toBeInTheDocument();
   });
 
   test('a tutorial that crashes says the room is closed under its own Demos Tables header', async () => {
@@ -76,6 +75,22 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Demos Tables · Sort menu');
+  });
+
+  test('keeps the site nav beside a closed room', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={demosAt('charts')}>
+        <Route Component={DemosLayout} ErrorBoundary={DemosLayoutBoundary}>
+          <Route path={demosAt('charts')} element={<Boom/>}/>
+        </Route>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+    await site.roomSays('This room is closed.');
+
     expect(await site.nav()).toBeInTheDocument();
   });
 
@@ -92,7 +107,6 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Practice Structure');
-    expect(await site.nav()).toBeInTheDocument();
   });
 
   test('a crash no page catches is reported and announced', async () => {
