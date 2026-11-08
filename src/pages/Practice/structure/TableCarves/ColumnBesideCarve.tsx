@@ -15,4 +15,6 @@ export const ColumnBesideCarve: FC = () =>
   <figure className="carves-beside">
     <Snippet label="HTML" lines={tradesHeader}/>
     <Snippet label="HTML" lines={tradesWritten}/>
+    <figcaption className="carves-caption caption">The plain header cell, then the lines in the React build that write
+      the same cell.</figcaption>
   </figure>;

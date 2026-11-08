@@ -8,4 +8,8 @@
     flex: 1 1 var(--measure-floor);
     min-width: 0;
   }
+
+  .carves-caption {
+    flex-basis: 100%;
+  }
 }
