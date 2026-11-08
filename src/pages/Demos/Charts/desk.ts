@@ -42,5 +42,5 @@ export const periodChosen = (kind: ChartKind, period: Period, seats: readonly Se
 export const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
   allChartKinds.filter(kind => !seats.some(seat => seat.kind === kind));
 
-export const seatAfterRemoval = (at: number, standing: number): Maybe<number> =>
+export const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
   maybe([at + 1, at - 1].find(seat => seat >= 0 && seat < standing));

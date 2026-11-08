@@ -9,7 +9,7 @@ import {classNames} from '@components/class-names';
 import {marketSelectors} from '../Market';
 import {useMarketSelector} from '../Market/Trading';
 import {useDesk} from './useDesk';
-import {seatAfterRemoval} from './desk';
+import {atAfterRemoval} from './desk';
 import {useChartTravel} from './useChartTravel';
 import {Grip} from './Grip';
 import {Dismissal} from './Dismissal';
@@ -28,9 +28,9 @@ const chartNames: Record<ChartKind, string> = {
 
 const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {kind});
 
-const doorwayAt = (seat: number, pressed: Element): Maybe<HTMLElement> =>
+const doorwayAt = (at: number, pressed: Element): Maybe<HTMLElement> =>
   maybe(pressed.closest('li'))
-    .mBind(removed => maybe(removed.parentElement?.children[seat]))
+    .mBind(removed => maybe(removed.parentElement?.children[at]))
     .mBind(neighbor => maybe(neighbor.querySelector<HTMLElement>(':scope > [data-doorway]')));
 
 type Props = {
@@ -44,7 +44,7 @@ export const Workspace: FC<Props> = ({product}) => {
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number, pressed: Element): void => {
-    seatAfterRemoval(at, seats.length).mBind(seat => doorwayAt(seat, pressed)).map(link => link.focus());
+    atAfterRemoval(at, seats.length).mBind(next => doorwayAt(next, pressed)).map(link => link.focus());
     remove(at);
     setReport(`${nameAt(at)} removed`);
   };
