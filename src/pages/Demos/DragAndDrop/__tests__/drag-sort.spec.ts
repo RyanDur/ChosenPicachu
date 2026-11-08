@@ -1,7 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {dragSort} from '../drag-sort';
 import {dragSortChange} from '../drag-sort-change';
-import {slideStarts} from '../slide-starts';
 
 describe('a landed drag', () => {
   const resting = dragSort.initial({items: ['A', 'B', 'C'], animated: false});
@@ -104,19 +103,19 @@ describe('a crossing', () => {
     expect(dragSort.reduce(reportedAgain, dragSortChange.crossed(2, false)).order).toEqual(['B', 'C', 'A']);
   });
 
-  it('a neighbour still sliding keeps its slide while the carried item crosses the next one', () => {
-    const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
-    const pastB = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
-    const pastC = dragSort.reduce(pastB, dragSortChange.crossed(2, false));
+  describe('with D sliding from a step, and a carried A crossing B', () => {
+    const steppedPast = dragSort.reduce(dragSort.initial({items: ['A', 'B', 'C', 'D'], animated: true}),
+      dragSortChange.stepped('C', 1));
+    const pastB = dragSort.reduce(dragSort.reduce(steppedPast, dragSortChange.lifted('A')), dragSortChange.crossed(1, false));
 
-    expect(slideStarts.of(pastC.slideStarts, 'B').isNothing).toBe(false);
-  });
+    it('the crossing leaves D sliding, so a step of D is ignored', () => {
+      expect(dragSort.reduce(pastB, dragSortChange.stepped('D', -1)).order).toEqual(['B', 'A', 'D', 'C']);
+    });
 
-  it('a slide that ends leaves the other slides running', () => {
-    const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
-    const pastB = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
-    const pastC = dragSort.reduce(pastB, dragSortChange.crossed(2, false));
+    it('the end of B\'s slide leaves D sliding, so a step of D is ignored', () => {
+      const bSettled = dragSort.reduce(pastB, dragSortChange.slid('B'));
 
-    expect(slideStarts.of(dragSort.reduce(pastC, dragSortChange.slid('C')).slideStarts, 'B').isNothing).toBe(false);
+      expect(dragSort.reduce(bSettled, dragSortChange.stepped('D', -1)).order).toEqual(['B', 'A', 'D', 'C']);
+    });
   });
 });
