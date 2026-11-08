@@ -249,6 +249,14 @@ describe('the users page', () => {
       await userForm.cancel();
       expect(appAddress.shown()).toContain('mode=view');
     });
+
+    test('canceling an edit shows the user as stored', async () => {
+      await userForm.typeInto('First Name', ' unsaved');
+
+      await userForm.cancel();
+
+      await waitFor(() => expect(userForm.field('First Name')).toHaveDisplayValue(kai.person.firstName));
+    });
   });
 
   test('editing a user with a work address shows that address', async () => {
