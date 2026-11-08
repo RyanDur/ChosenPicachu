@@ -21,11 +21,12 @@ const socketPlans: Record<World, string> = {
 };
 
 const foldSays: Record<World, ReactNode> = {
-  react: <Says>Every render folds the same trades into totals per lookback: counts, volume,
-    vwap, the change since the lookback opened. The fold runs over the same capped trades
+  react: <Says>Every render folds the same trades into totals per lookback, a stretch of time measured back from the
+    newest trade: counts, volume, vwap, the change since the lookback opened. The fold runs over the same capped trades
     each time, so the lookbacks always match the trades the page holds.</Says>,
-  vanilla: <Says>Every arrival refolds the same trades into totals per lookback. It is the same{' '}
-    <code className="monospaced">tradeTotals</code> module the React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the
+  vanilla: <Says>Every arrival refolds the same trades into totals per lookback, a stretch of time measured back from
+    the newest trade. It is the same <code className="monospaced">tradeTotals</code> module the React world runs.
+    What React did for you ends here: there is no render to catch the change, so the page refolds the
     trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and
     reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
