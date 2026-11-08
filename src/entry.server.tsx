@@ -3,7 +3,7 @@ import {renderToReadableStream} from 'react-dom/server';
 import {createStaticHandler, createStaticRouter, RouteObject, StaticRouterProvider} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
-import {HydrateFallback} from './root';
+import {FallbackPage} from './root';
 import {Site} from './Site';
 import {is, not} from '@ryandur/sand';
 import {lazily, siteOpenedBy} from './routes';
@@ -50,6 +50,6 @@ const page = async (path: string): Promise<{html: string; rooms: string[]}> => {
   return {html, rooms};
 };
 
-const fallback = (): Promise<string> => drawn([{id: 'root', path: '*', Component: HydrateFallback}], '/');
+const fallback = (): Promise<string> => drawn([{id: 'root', path: '*', Component: FallbackPage}], '/');
 
 export const prerender = {pages, page, fallback};

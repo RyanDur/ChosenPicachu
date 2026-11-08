@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
-import {Route} from 'react-router';
+import {createMemoryRouter, Route, RouterProvider} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
@@ -10,6 +10,9 @@ import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
 import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
 import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
+import {environment} from '@transport';
+import {SiteProviders} from '../../SiteProviders';
+import {FallbackPage} from '../../root';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -142,26 +145,18 @@ describe('a room still loading', () => {
     expect(site.closedRoomIfAny()).not.toBeInTheDocument();
   });
 
-  const anUnmarkedRail: null[] = Array.from({length: 8}, () => null);
-  const railMarksWhileLoadingAt = async (at: string): Promise<(string | null)[]> => {
-    loading(at);
-    return (await site.railLinks()).map(link => link.getAttribute('aria-current'));
-  };
+  test('marks the page whose room is still loading', async () => {
+    loading(demosAt('tables'));
 
-  test('leaves every page on the rail unmarked at Home', async () => {
-    expect(await railMarksWhileLoadingAt(Paths.home)).toEqual(anUnmarkedRail);
+    expect(await site.currentPages()).toEqual(['Demos']);
   });
 
-  test('leaves every page on the rail unmarked at a Demos tab', async () => {
-    expect(await railMarksWhileLoadingAt(demosAt('tables'))).toEqual(anUnmarkedRail);
-  });
+  test('the fallback page the server draws leaves every page on the rail unmarked', async () => {
+    render(<SiteProviders environment={environment}>
+      <RouterProvider router={createMemoryRouter([{path: '*', Component: FallbackPage}], {initialEntries: [Paths.games]})}/>
+    </SiteProviders>);
 
-  test('leaves every page on the rail unmarked at a Practice tab', async () => {
-    expect(await railMarksWhileLoadingAt(practiceAt('behavior'))).toEqual(anUnmarkedRail);
-  });
-
-  test('leaves every page on the rail unmarked at Games', async () => {
-    expect(await railMarksWhileLoadingAt(Paths.games)).toEqual(anUnmarkedRail);
+    expect((await site.railLinks()).filter(link => link.hasAttribute('aria-current'))).toEqual([]);
   });
 });
 
