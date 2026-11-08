@@ -122,12 +122,12 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <output className="off-screen"
       aria-label="avatar report">{drafts.avatarReport(draft)}</output>
 
-    <AddressFields title="Home Address" className="home-address" value={user.homeAddress}
+    <AddressFields title="Home Address" className="home-address" address={user.homeAddress}
       readOnly={readOnly} required={required}
       onEdited={address => dispatch(draftActions.homeAddressEdited(address))}/>
 
     <AddressFields title="Work Address" className="work-address"
-      value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
+      address={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
       disabled={draft.sameAsHome}
       onEdited={address => dispatch(draftActions.workAddressEdited(address))}>
       {not(readOnly) && <label className="same-as-home paragraph pill-cornered attentive">
