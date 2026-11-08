@@ -41,6 +41,7 @@ Carl Alexander, The importance of naming in programming: https://carlalexander.c
 - No abbreviations: "Saving a few characters isn't worth the confusion that an abbreviation might bring."
 - A module member reads as a phrase with its module, `travel.eager`. Dropping a word the module already says is right only when what is left still names the thing. `marks.style`, cut down from `pushedStyle`, says neither whose style it is nor what for, so it is a finding.
 - A comment that explains what a name means is a sign the name is wrong.
+- A function that returns JSX and is called as `name(arguments)`, or handed to `.map` by name, is a finding. AGENTS.md makes it a component, named in PascalCase and rendered as `<Name …/>`.
 
 ## How you report
 
