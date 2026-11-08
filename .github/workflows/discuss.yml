@@ -29,8 +29,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: refs/pull/${{ env.PULL }}/head
           fetch-depth: 0
+      - name: Fetch the pull request's head, to read and never run
+        run: git fetch --no-tags origin "+refs/pull/$PULL/head:refs/heads/pr-head"
       - name: Gather the thread, if a reviewer started it
         id: thread
         shell: bash
@@ -60,14 +61,14 @@ jobs:
           prompt: |
             discussion.json holds one review thread on pull request #${{ env.PULL }}, oldest comment first. The first comment is a finding by ${{ steps.thread.outputs.author }}; the last is a reply to it.
 
-            1. Read the code the finding is about, at the pull request's head, which is checked out here, and any commit the replies name (`git show`).
+            1. Read the code the finding is about at the pull request's head, the branch `pr-head`: `git show pr-head:<path>`, `git grep <pattern> pr-head`, and any commit the replies name (`git show <sha>`). The checkout is the default branch, so the files on disk are not the pull request's.
             2. If the finding cites a rule, read it in AGENTS.md or the rubric under its Reviewers section. If it cites none, as Copilot's do not, judge it by its own claim against the code.
             3. Answer the last reply. The verdict is "Agreed" if the reply names a fix and the code shows it, or its argument holds; otherwise "Not yet". The body says in a sentence or two what settled it, or what still needs doing and why, citing the code or the rule, written as scripts/review/plain.md asks.
             Change no file.
           claude_args: |
             --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
             --max-turns 40
-            --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*)"
+            --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(git grep:*)"
             --json-schema '{"type":"object","required":["verdict","body"],"additionalProperties":false,"properties":{"verdict":{"enum":["Agreed","Not yet"]},"body":{"type":"string","description":"What settled it, or what still needs doing and why, in a sentence or two"}}}'
       - name: Answer in the thread
         if: steps.thread.outputs.found
