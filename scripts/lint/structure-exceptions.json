@@ -34,7 +34,6 @@
     "src/pages/Demos/Market/fold.ts",
     "src/pages/Demos/Market/recent-trades.ts",
     "src/pages/Demos/Tables/Builds/LazyTable/travel.ts",
-    "src/pages/Demos/Tables/Frame/boot.ts",
     "src/pages/Demos/ZIndexDemo/Diagrams.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/part-headings.ts",

@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-export const pace = (): Pace => window.__frame?.pace ?? 'eager';
+const pace = (): Pace => window.__frame?.pace ?? 'eager';
 
 const fed = (table: HTMLTableElement, told: Pace): void => {
   const page = marketStore(exchange({...unconfigured, ...window.__env}, () => undefined));
@@ -28,7 +28,7 @@ const fed = (table: HTMLTableElement, told: Pace): void => {
   page.dispatch(marketActions.feedRequested());
 };
 
-export const feed = (document: Document, told: Pace): void =>
+const feed = (document: Document, told: Pace): void =>
   [...document.querySelectorAll('table[data-drag-sortable]')]
     .filter(table => table instanceof HTMLTableElement)
     .forEach(table => fed(table, told));
