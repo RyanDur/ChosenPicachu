@@ -112,10 +112,10 @@ for (const {reader, device} of handhelds) {
 test.describe('when the browser allows no service workers', () => {
   test.use({serviceWorkers: 'block'});
 
-  test('the users page still says the users could not be reached', async ({page}) => {
+  test('the users page still says the users server could not be reached', async ({page}) => {
     await page.goto('users');
 
-    await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
+    await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: 30_000});
   });
 });
 
@@ -130,11 +130,11 @@ test('a users page reloaded past its worker is taken back by it', async ({page, 
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
 });
 
-test('the users page gives up on a worker script that never answers and says the users could not be reached', async ({page, browserName}) => {
+test('the users page gives up on a worker script that never answers and says the users server could not be reached', async ({page, browserName}) => {
   test.skip(browserName !== 'webkit', 'only WebKit lets a route hold a worker script unanswered, so Chromium and Firefox hold no pin for the deadline on registration');
   await page.route(`**/${usersServer.script}`, () => new Promise(() => undefined));
 
   await page.goto('users', {waitUntil: 'commit'});
 
-  await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
+  await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: 30_000});
 });
