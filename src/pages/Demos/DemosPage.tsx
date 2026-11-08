@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {useSearchParamsObject} from '@frame/navigation/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
-import {Tabs} from '@components/Tabs';
+import {Tabs} from '@frame/navigation/tabs';
 import {demoAddress, DemoTopics, topicNames} from './types';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {

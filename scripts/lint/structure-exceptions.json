@@ -239,7 +239,7 @@
     "src/transport/validate.ts"
   ],
   "through-index": [
-    "src/components/Tabs/ToSavedTab.tsx",
+    "src/frame/navigation/tabs/ToSavedTab.tsx",
     "src/components/Users/FriendsList/FriendsList.tsx",
     "src/components/Users/FriendsList/focus.ts",
     "src/components/Users/FriendsList/report.ts",
