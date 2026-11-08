@@ -24,7 +24,7 @@ export const reviewersIn = markdown => {
 
 /** @param {{before: string, after: string, pull?: string, reviewers: {file: string, asks: string}[]}} range */
 export const askFor = ({before, after, pull, reviewers}) => [
-  `Review with the code-review skill: call the Skill tool with skill "code-review" and args "${empty(pull) ? `high ${before}..${after} --max-findings all` : `high --comment ${pull} --max-findings all`}".`,
+  `Review with the code-review skill: call the Skill tool with skill "code-review" and args "high ${empty(pull) ? `${before}..${after}` : `--comment ${pull}`} --max-findings all".`,
   'Hold the change to this project\'s own standards as well as to correctness. Read each of these whole before',
   'reviewing, and report a finding against one only where its rule holds:',
   'AGENTS.md (the house rules), scripts/review/values.md and scripts/review/plain.md (how a finding is worded),',
@@ -34,9 +34,10 @@ export const askFor = ({before, after, pull, reviewers}) => [
   'Answer with every finding in the structured output, an empty list when there are none.',
   ...empty(pull) ? [] : [
     'earlier-findings.json holds the conversations earlier reviews of this pull request started, each with its',
-    'replies and whether it is resolved. A finding one of them already raised gets no new inline comment. If its',
-    'conversation is resolved, it was fixed or settled, so leave it out of the structured output too, unless the code',
-    'at the head has undone the fix. If it is still open, keep it in the structured output.'
+    'replies and whether it is resolved. A finding one of them already raised gets no new inline comment. Judge it',
+    'by the code at the head: leave it out of the structured output when the code no longer has the problem, or when',
+    'its conversation ends with the reviewer\'s "Agreed." or a ruling from the repository\'s owner, RyanDur.',
+    'Otherwise keep it in, resolved or not.'
   ]
 ].join(' ');
 
