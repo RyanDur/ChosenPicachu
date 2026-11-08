@@ -14,12 +14,7 @@
     "src/pages/Demos/Charts/live-trades.ts",
     "src/pages/Demos/Charts/period.ts",
     "src/pages/Demos/types.ts",
-    "src/pages/Games/frame.tsx",
-    "src/pages/Practice/BehaviorCarves.tsx",
-    "src/pages/Practice/StructurePractice.tsx",
-    "src/pages/Practice/drawn.tsx",
-    "src/pages/Practice/practiceDrawings.ts",
-    "src/pages/Practice/types.ts"
+    "src/pages/Games/frame.tsx"
   ],
   "has-index": [
     "src/pages/Demos/Accordions/Accordions.tsx",
@@ -55,30 +50,13 @@
     "src/pages/Games/frame.tsx",
     "src/pages/Home/HomePage.tsx",
     "src/pages/Home/Opener.tsx",
-    "src/pages/Home/WhereThePageIsMade.tsx",
-    "src/pages/NoRoom/NoRoom.tsx",
-    "src/pages/Practice/BehaviorCarves.tsx",
-    "src/pages/Practice/BehaviorPractice.tsx",
-    "src/pages/Practice/ClassList.tsx",
-    "src/pages/Practice/LandmarkMap.tsx",
-    "src/pages/Practice/OneDirectionLoop.tsx",
-    "src/pages/Practice/PracticePage.tsx",
-    "src/pages/Practice/PresentationPractice.tsx",
-    "src/pages/Practice/StructurePractice.tsx",
-    "src/pages/Practice/TwoTracks.tsx",
-    "src/pages/Practice/WhereARuleLives.tsx",
-    "src/pages/Practice/drawn.tsx",
-    "src/pages/Practice/practiceDrawings.ts",
-    "src/pages/Practice/types.ts"
+    "src/pages/Home/WhereThePageIsMade.tsx"
   ],
   "through-index": [
-    "src/page/SideNav.tsx",
     "src/pages/Demos/Accordions/Explained.tsx",
     "src/pages/Demos/route.tsx",
     "src/pages/Gallery/Settings/GalleryAside.tsx",
     "src/pages/Gallery/Settings/GallerySettings.tsx",
-    "src/pages/Practice/route.tsx",
-    "src/pages/Record/stories/PresentationStory.tsx",
     "src/routes.ts"
   ]
 }

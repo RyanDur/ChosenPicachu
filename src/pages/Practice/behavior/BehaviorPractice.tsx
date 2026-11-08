@@ -22,11 +22,11 @@ import {
   TradeDecoderCarve,
   WalkCaseCarve,
   WalksCarve
-} from './BehaviorCarves';
+} from './carves';
 import {OneDirectionLoop} from './OneDirectionLoop';
 import {TwoTracks} from './TwoTracks';
-import {elementsPart} from './StructurePractice';
-import {practiceAddress} from './types';
+import {structureParts} from '../structure';
+import {practiceAddress} from '../practiceAddress';
 
 const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
 const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';
@@ -173,7 +173,7 @@ export const BehaviorPractice: FC = () =>
     <TableEventsCarve/>
     <h3 className="paragraph bold">The platform first</h3>
     <p className="paragraph">The platform comes first here too. The Structure tab’s
-      part <Link className="signpost" to={`${practiceAddress('Structure')}#${elementsPart}`}>From the content to the
+      part <Link className="signpost" to={`${practiceAddress.of('Structure')}#${structureParts.elements}`}>From the content to the
         element</Link> lists what the elements do on their own. A details opens and shuts, a modal dialog holds focus, a
       popover closes on Escape, and a form refuses an empty required field, so I don’t script any of it. The browser
       also provides the back button, scroll restoration and focus order. Rebuilding them in script means getting them

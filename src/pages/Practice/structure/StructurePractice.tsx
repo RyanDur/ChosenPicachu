@@ -6,13 +6,12 @@ import {demoAddress, DemoTopics} from '@pages/Demos';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
-import {practiceAddress} from './types';
+import {practiceAddress} from '../practiceAddress';
+import {structureParts} from './structureParts';
 
 const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
 const survey = 'https://webaim.org/projects/screenreadersurvey10/';
 const landmarkRegions = 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/';
-
-export const elementsPart = 'from-the-content-to-the-element';
 
 export const StructurePractice: FC = () =>
   <>
@@ -89,7 +88,7 @@ export const StructurePractice: FC = () =>
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
-    <h3 className="paragraph bold" id={elementsPart} tabIndex={-1}>From the content to the element</h3>
+    <h3 className="paragraph bold" id={structureParts.elements} tabIndex={-1}>From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a{' '}
     <a className="signpost"
@@ -149,7 +148,7 @@ export const StructurePractice: FC = () =>
       className="monospaced">row-moved</code> and <code className="monospaced">sorted</code>, custom
       events on the table itself, the way a platform element reports <code className="monospaced">change</code> or <code
       className="monospaced">toggle</code>. The page dispatches what happened to its store, and the state
-      decides what is true. That is the <Link className="signpost" to={practiceAddress('Behavior')}>Behavior
+      decides what is true. That is the <Link className="signpost" to={practiceAddress.of('Behavior')}>Behavior
         tab</Link>’s split, and the structure makes it possible: the element says what happened and does not decide
       what to do about it.</p>
     <p className="paragraph">In React, components write the same markup, each one a new element. Below, the plain

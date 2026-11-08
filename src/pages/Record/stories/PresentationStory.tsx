@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Quotation} from '@components/Quotation';
 import {Link} from 'react-router';
-import {practiceAddress} from '@pages/Practice/types';
+import {practiceAddress} from '@pages/Practice';
 
 export const PresentationStory: FC = () =>
   <>
@@ -98,5 +98,5 @@ export const PresentationStory: FC = () =>
       sheet, the reader’s and the browser’s combine, the settlement CSS1 opened with, and one document can be
       presented <a className="signpost" href="https://www.w3.org/TR/1998/REC-CSS2-19980512/">“to visual browsers, aural
         devices, printers, braille devices, handheld devices”</a>. At Wired News, Bowman found his
-      pages <a className="signpost" href="https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/">“dramatically more accessible, without much concentrated effort at making it so”</a>. So the rule: the look lives in the style sheet. <Link className="signpost" to={practiceAddress('Presentation')}>The Practice page’s Presentation tab</Link> says how this site keeps that rule: what sits beside a component and what is shared. What the rule costs is a look the style sheet cannot yet express without a workaround. The workaround stays beside the rule it stands in for, and goes when the platform catches up, as it has each time so far.</p>
+      pages <a className="signpost" href="https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/">“dramatically more accessible, without much concentrated effort at making it so”</a>. So the rule: the look lives in the style sheet. <Link className="signpost" to={practiceAddress.of('Presentation')}>The Practice page’s Presentation tab</Link> says how this site keeps that rule: what sits beside a component and what is shared. What the rule costs is a look the style sheet cannot yet express without a workaround. The workaround stays beside the rule it stands in for, and goes when the platform catches up, as it has each time so far.</p>
   </>;

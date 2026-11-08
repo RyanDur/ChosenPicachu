@@ -51,9 +51,9 @@ const testPlus = aPlus({rubric: 'tests'});
 describe('the review prompt', () => {
   test('a full review sends the reviewer to the practices on the Practice page and scopes them to the whole of src', () => {
     const prompt = promptFor({scope: 'full'});
-    expect(prompt).toContain('src/pages/Practice/StructurePractice.tsx');
-    expect(prompt).toContain('src/pages/Practice/PresentationPractice.tsx');
-    expect(prompt).toContain('src/pages/Practice/BehaviorPractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/structure/StructurePractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/presentation/PresentationPractice.tsx');
+    expect(prompt).toContain('src/pages/Practice/behavior/BehaviorPractice.tsx');
     expect(prompt).toContain('The scope is the whole of src/');
   });
 

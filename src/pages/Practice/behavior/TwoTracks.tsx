@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {Box, bottomMiddle, DrawnArrow, DrawnBox, leftMiddle, rightMiddle} from './drawn';
-import './PracticeDrawing.css';
+import {Box, DrawnArrow, DrawnBox, edges} from './drawn';
+import '../PracticeDrawing.css';
 
 const width = 90;
 const height = 36;
@@ -15,7 +15,7 @@ const reducer: Box = {label: 'reducer', x: 384, y: success - height / 2, width, 
 const edge: Box = {label: 'edge', x: 384, y: failure - height / 2, width, height};
 
 const Switch: FC<{step: Box}> = ({step}) => {
-  const from = bottomMiddle(step);
+  const from = edges.bottomMiddle(step);
   return <line className="drawn-line drawn" x1={from.x} y1={from.y} x2={from.x + landing} y2={failure}/>;
 };
 
@@ -29,12 +29,12 @@ export const TwoTracks: FC = () =>
       <DrawnBox box={trades} look="hollow drawn"/>
       <DrawnBox box={reducer} look="hollow drawn"/>
       <DrawnBox box={edge} look="hollow drawn"/>
-      <DrawnArrow from={rightMiddle(fetch)} to={leftMiddle(decode)}/>
-      <DrawnArrow from={rightMiddle(decode)} to={leftMiddle(trades)}/>
-      <DrawnArrow from={rightMiddle(trades)} to={leftMiddle(reducer)}/>
+      <DrawnArrow from={edges.rightMiddle(fetch)} to={edges.leftMiddle(decode)}/>
+      <DrawnArrow from={edges.rightMiddle(decode)} to={edges.leftMiddle(trades)}/>
+      <DrawnArrow from={edges.rightMiddle(trades)} to={edges.leftMiddle(reducer)}/>
       <Switch step={fetch}/>
       <Switch step={decode}/>
-      <DrawnArrow from={{x: 6, y: failure}} to={leftMiddle(edge)}/>
+      <DrawnArrow from={{x: 6, y: failure}} to={edges.leftMiddle(edge)}/>
     </svg>
     <figcaption className="caption"><strong className="bold">Two tracks.</strong> A result rides the success track to the
       reducer until a step fails. Then it rides the failure track to the edge, where the page decides what to say.
