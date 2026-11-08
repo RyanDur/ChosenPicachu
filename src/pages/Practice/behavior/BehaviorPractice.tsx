@@ -180,7 +180,7 @@ export const BehaviorPractice: FC = () =>
       right a second time, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what that
       cost when pages rebuilt the back button and scroll restoration by hand.</p>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
-      the feature. The feedback dialog holds the site’s one. Its <code className="monospaced">closedby</code>{' '}
+      the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code>{' '}
       attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
       buttons open and close it with invoker commands, which every major browser has shipped since December 2025, so
       they need no fallback.</p>
@@ -248,5 +248,7 @@ export const BehaviorPractice: FC = () =>
         measured size, when nothing else gives them, such as an event.”</a> Two files are on the list today, both for
       the second reason. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
       and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side. No
-      file needs the first: the feedback dialog opens and closes with invoker commands, so nothing holds it.</p>
+      file needs the first: the feedback dialog’s buttons open and close it with invoker commands, and the two scripts
+      that close it each find it from their own event, a click on the veil in a browser
+      without <code className="monospaced">closedby</code> and the form’s submit after a note is sent.</p>
   </>;
