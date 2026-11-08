@@ -2,7 +2,7 @@ export {carry} from './carry';
 export {frameColumns} from './columns';
 export type {TableContext} from './context';
 export {tell} from './events';
-export {announceSort} from './menus';
+export {sortMenus} from './menus';
 export {wireParts} from './parts';
 export {moveReportOf, report} from './report';
 export {dressWidths} from './resize';

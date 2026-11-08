@@ -1,7 +1,6 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
 import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting, tableReports} from '@components/DragSortableTable/model';
 import {
-  announceSort,
   dressWidths,
   Given,
   lanesOf,
@@ -21,7 +20,8 @@ import {
   writeCells,
   mountedTable,
   carry,
-  frameColumns
+  frameColumns,
+  sortMenus
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -133,7 +133,7 @@ const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled
   writeCells(context);
   reseatRows(context);
   carry.dress(context, context.store.state);
-  announceSort(context, before);
+  sortMenus.announceChanged(context, before);
 };
 
 const wired = (context: TableContext): void => {

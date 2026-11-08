@@ -60,7 +60,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(frameMenus, 'const choosing = '), gap,
-            ...carve.unit(frameMenus, 'export const choose = ')
+            ...carve.unit(frameMenus, 'const choose = ')
           ]}/>}
       </Codes>
     </Reveal>
@@ -206,8 +206,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
-                ...carve.unit(frameMenus, 'export const announceSort = '), gap,
-                ...carve.unit(frameMenus, 'export const announce = ')
+                ...carve.unit(frameMenus, 'const announceChanged = '), gap,
+                ...carve.unit(frameMenus, 'const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
               ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), gap,
