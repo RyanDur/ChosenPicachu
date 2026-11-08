@@ -158,7 +158,7 @@ describe('a list of charts', () => {
 
     await chartsDesk.keys('Price line', 'Delete');
 
-    await waitFor(() => expect(chartsDesk.doorway('Candles')).toHaveFocus());
+    expect(chartsDesk.doorway('Candles')).toHaveFocus();
   });
 
   test('the chart that takes the seat of a chart removed by its button takes the focus', async () => {
@@ -170,7 +170,7 @@ describe('a list of charts', () => {
 
     await chartsDesk.removeFirst();
 
-    await waitFor(() => expect(chartsDesk.doorway('Candles')).toHaveFocus());
+    expect(chartsDesk.doorway('Candles')).toHaveFocus();
   });
 
   test('the chart after a deleted middle chart takes the focus', async () => {
@@ -182,7 +182,7 @@ describe('a list of charts', () => {
 
     await chartsDesk.keys('Candles', 'Delete');
 
-    await waitFor(() => expect(chartsDesk.doorway('Pie')).toHaveFocus());
+    expect(chartsDesk.doorway('Pie')).toHaveFocus();
   });
 
   test('the chart that is now last takes the focus when the last chart is deleted', async () => {
@@ -194,7 +194,7 @@ describe('a list of charts', () => {
 
     await chartsDesk.keys('Candles', 'Delete');
 
-    await waitFor(() => expect(chartsDesk.doorway('Price line')).toHaveFocus());
+    expect(chartsDesk.doorway('Price line')).toHaveFocus();
   });
 
   test('the delete key leaves the last chart standing', async () => {
