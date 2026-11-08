@@ -8,7 +8,7 @@ import {drafts} from './drafts';
 import {avatars} from './avatars';
 import {Link} from 'react-router';
 import {isValid, parse} from 'date-fns';
-import {Maybe, maybe, not, some} from '@ryandur/sand';
+import {Maybe, maybe, not, nothing, some} from '@ryandur/sand';
 import {Opened, openings} from '../openings';
 import {useUsersDispatch} from '../useUsersDispatch';
 import {usersActions} from '../usersActions';
@@ -25,13 +25,14 @@ const newUser = (avatar: string): NewUser => ({
   avatar
 });
 
-const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
+const buttonsFor = (open: Opened, hydrated: boolean, addInFlight: boolean): ReactNode => {
   const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
   switch (open.mode) {
     case 'adding':
       return <>
         {resetButton}
-        <button type="submit" className="submit button primary" disabled={!hydrated}>Add</button>
+        <button type="submit" className="submit button primary" disabled={!hydrated}
+          aria-disabled={addInFlight}>Add</button>
       </>;
     case 'viewing':
       return <Link to={openings.at(open.user.id, 'edit')} className="edit button secondary">Edit</Link>;
@@ -56,7 +57,8 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
-  const [confirmedAddsResetFor, setConfirmedAddsResetFor] = useState(confirmedAdds);
+  const addInFlight = useUsersSelector(usersSelectors.addInFlight);
+  const [confirmedAddsWhenSent, setConfirmedAddsWhenSent] = useState<Maybe<number>>(nothing());
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
     started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
   const user = drafts.userIn(draft);
@@ -66,9 +68,9 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const reset = () =>
     dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
 
-  if (confirmedAddsResetFor !== confirmedAdds) {
-    setConfirmedAddsResetFor(confirmedAdds);
-    if (open.mode === 'adding') reset();
+  if (confirmedAddsWhenSent.map(whenSent => whenSent !== confirmedAdds).orElse(false)) {
+    setConfirmedAddsWhenSent(nothing());
+    reset();
   }
 
   return <form aria-labelledby="form-title"
@@ -81,6 +83,8 @@ const Draft: FC<{className?: string}> = ({className}) => {
         return;
       }
 
+      if (addInFlight) return;
+      setConfirmedAddsWhenSent(some(confirmedAdds));
       usersDispatch(usersActions.userAdded(user));
     }}
     onReset={() => reset()}>
@@ -137,7 +141,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(draftActions.detailsEdited(event.currentTarget.value))}/>
 
-    {buttonsFor(open, hydrated)}
+    {buttonsFor(open, hydrated, addInFlight)}
 
   </form>;
 };

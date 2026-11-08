@@ -202,6 +202,41 @@ describe('the users page', () => {
       expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} typed`);
     });
 
+    it('a clone under way survives another user\'s confirmed add', async () => {
+      const kai = aUser();
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([kai]);
+      const adds = userAddsHeld([kai, aiko]);
+      render(<TestApp at={Paths.users}/>);
+      await userForm.addWhoWorksFromHome(aiko);
+      await usersTable.clone(profile.fullName(kai));
+      await userForm.showing(kai);
+      await userForm.typeInto('First Name', ' typed');
+
+      adds.answer();
+
+      await usersTable.rowOf(profile.fullName(aiko));
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} typed`);
+    });
+
+    it('a clone added while another add is in flight keeps what the reader typed', async () => {
+      const kai = aUser();
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([kai]);
+      const adds = userAddsHeld([kai, aiko]);
+      render(<TestApp at={Paths.users}/>);
+      await userForm.addWhoWorksFromHome(aiko);
+      await usersTable.clone(profile.fullName(kai));
+      await userForm.showing(kai);
+      await userForm.typeInto('First Name', ' typed');
+      await userForm.add();
+
+      adds.answer();
+
+      await usersTable.rowOf(profile.fullName(aiko));
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} typed`);
+    });
+
     it('a reader who follows the Users link while adding keeps what they typed', async () => {
       setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);

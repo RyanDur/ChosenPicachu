@@ -107,6 +107,19 @@ describe('a user form', () => {
         expect(adds.heard()).toBe(1);
       });
 
+      it('Add says it is unavailable while an add is in flight', async () => {
+        const {form} = added();
+        const adds = userAddsHeld();
+        render(form);
+        await userForm.fillOut(filledIn);
+
+        await userForm.add();
+
+        await waitFor(() => expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true'));
+        adds.answer();
+        await waitFor(() => expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'false'));
+      });
+
       it('focus stays on Add after a confirmed add', async () => {
         render(added().form);
         await userForm.fillOut(filledIn);

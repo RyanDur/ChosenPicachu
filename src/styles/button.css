@@ -37,7 +37,7 @@
   box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
   border: var(--hairline) solid var(--primary-blue);
 
-  &:where(:not(:disabled)) {
+  &:where(:not(:disabled, [aria-disabled="true"])) {
     &:hover,
     &:focus {
       box-shadow: var(--drop-shadow);
@@ -54,7 +54,8 @@
     }
   }
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled="true"] {
     color: var(--field);
     background: var(--smoke);
     border-color: var(--smoke);
