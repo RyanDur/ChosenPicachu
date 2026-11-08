@@ -2,7 +2,7 @@ import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
 import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components/Table';
 import {Direction, Value} from './sorting';
-import {Drift, Moving, drifted, still} from './travel';
+import {Drift, Moving, travel} from './travel';
 import {Flight, Grab} from './lift';
 import {Survey, survey} from './survey';
 
@@ -174,7 +174,7 @@ const unsettle = (state: TableState, target: Carry, from: Settling): TableState 
     ? {...state, columnMarks: marked(state.columnMarks, target.held, {settlingFrom: from})}
     : {...state, rowMarks: marked(state.rowMarks, target.held, {settlingFrom: from})};
 
-const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: still});
+const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: travel.still});
 
 const settle = (state: TableState, target: Carry): TableState =>
   target.axis === 'column'
@@ -190,7 +190,7 @@ const shoveRows = (state: TableState, keys: readonly string[], shove: RowShove):
 const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
 
 const flying = (grab: Grab): Flying =>
-  ({survey: grab.survey, box: grab.box, origin: grab.at, drift: still});
+  ({survey: grab.survey, box: grab.box, origin: grab.at, drift: travel.still});
 
 const dragOf = (carry: Carry, grab: Grab): Drag =>
   ({...carry, ...flying(grab)});
@@ -199,7 +199,7 @@ const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
   ({...unmarked(state), drag: dragOf(carry, grab)});
 
 const drift = (state: TableState, moving: Moving): TableState =>
-  has(state.drag) ? {...state, drag: {...state.drag, drift: drifted(moving, state.drag.origin)}} : state;
+  has(state.drag) ? {...state, drag: {...state.drag, drift: travel.drifted(moving, state.drag.origin)}} : state;
 
 const landColumn = (state: TableState, landing?: string): TableState =>
   state.drag?.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;
@@ -227,7 +227,7 @@ const seatOffset = (
 };
 
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
-  ({seat: seatOffset(state, order, standing) ?? still, drift: state.drag?.drift ?? still});
+  ({seat: seatOffset(state, order, standing) ?? travel.still, drift: state.drag?.drift ?? travel.still});
 
 const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
   has(shove) ? `${shove.by}px` : undefined;

@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, columnLift, Grab, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey} from '@components/DragSortableTable/model';
+import {arrows, columnLift, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey, travel} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -107,10 +107,10 @@ const moved = (context: MountedTable, moving: Moving): void => {
   hand.dispatch(tableActions.drifted(moving));
   const {drag} = hand.state;
   if (drag?.axis === 'column') {
-    const landing = lazyTravel(survey.columnUnder(order(), drag.survey))(drag.held, moving, drag.landing);
+    const landing = travel.lazy(survey.columnUnder(order(), drag.survey))(drag.held, moving, drag.landing);
     hand.dispatch(tableActions.columnLandingFound(landing));
   } else if (drag?.axis === 'row') {
-    const landing = lazyTravel(survey.rowUnder(standing(), drag.survey))(drag.held, moving, drag.landing);
+    const landing = travel.lazy(survey.rowUnder(standing(), drag.survey))(drag.held, moving, drag.landing);
     hand.dispatch(tableActions.rowLandingFound(landing));
   }
 };

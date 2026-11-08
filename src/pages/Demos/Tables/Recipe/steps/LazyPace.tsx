@@ -42,7 +42,7 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
               ...carve.unit(buildSrc, 'const landed = ')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.travel, 'export const lazyTravel'),
+            ...carve.unit(sources.travel, 'const lazy'),
             lines.aside('// one shared travel; the fold is its value, each world keeps it its own way')
           ]}/>
         </Codes>

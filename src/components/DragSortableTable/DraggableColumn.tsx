@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, ColumnDrag, columnLift, eagerTravel, Grab, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey, looks} from './model';
+import {arrows, ColumnDrag, columnLift, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel} from './model';
 import './Header.css';
 import './motion.css';
 
@@ -37,7 +37,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    eagerTravel(survey.columnUnder(order, held.survey), column, neighbour => beside(neighbour, held.survey))(moving);
+    travel.eager(survey.columnUnder(order, held.survey), column, neighbour => beside(neighbour, held.survey))(moving);
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {
@@ -54,10 +54,10 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? columnLift(column, () => order, () => standing, lift) : undefined}
-    onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
     onPointerUp={has(drag) ? release : undefined}
     onPointerCancel={has(drag) ? release : undefined}
-    onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{

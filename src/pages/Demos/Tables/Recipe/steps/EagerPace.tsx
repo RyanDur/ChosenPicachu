@@ -56,7 +56,7 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
               lines.aside('// the same cells, new places: the reconcile moves the node, not a copy')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.travel, 'export const eagerTravel'),
+            ...carve.unit(sources.travel, 'const eager'),
             lines.aside('// one shared travel; each world answers with its own settle')
           ]}/>
         </Codes>

@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, columnLift, Grab, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey, looks} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, movedTo, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -60,10 +60,10 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? columnLift(column, () => order, () => standing, lift) : undefined}
-    onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
     onPointerUp={has(drag) ? release : undefined}
     onPointerCancel={has(drag) ? release : undefined}
-    onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{

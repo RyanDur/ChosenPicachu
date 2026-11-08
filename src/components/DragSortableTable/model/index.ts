@@ -19,4 +19,4 @@ export {survey} from './survey';
 export type {Carry, ColumnDrag, ColumnShove, Labelled, RowDrag, RowShove, Seated, Settling, TableColumn, TableState, TableView} from './table-state';
 export {tableState} from './table-state';
 export type {Moving} from './travel';
-export {eagerTravel, lazyTravel, pointerTravel, still} from './travel';
+export {travel} from './travel';

@@ -40,7 +40,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'onPointerMove={has(drag) ? pointerTravel(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'), gap,
+            ...carve.span(headerSource, 'onPointerMove={has(drag) ? travel.pointer(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'), gap,
             ...carve.unit(headerSource, 'const release = '),
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
@@ -49,7 +49,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...carve.unit(sources.travel, 'export const pointerTravel'),
+          ...carve.unit(sources.travel, 'const pointer'),
           lines.aside('// one move; each world moves and drops its own way; losing the capture is a move too')
         ]}/>
       </Codes>

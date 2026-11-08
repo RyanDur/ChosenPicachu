@@ -13,12 +13,12 @@ export type Moving = {
   readonly clientY: number;
 };
 
-export const still: Drift = {x: 0, y: 0};
+const still: Drift = {x: 0, y: 0};
 
-export const drifted = (moving: Moving, from: Drift): Drift =>
+const drifted = (moving: Moving, from: Drift): Drift =>
   ({x: moving.clientX - from.x, y: moving.clientY - from.y});
 
-export const eagerTravel = <Seat>(
+const eager = <Seat>(
   under: (x: number, y: number, held: Seat) => Seat | undefined,
   held: Seat,
   settle: (struck: Seat) => void
@@ -29,7 +29,7 @@ export const eagerTravel = <Seat>(
   }
 };
 
-export const lazyTravel = <Seat>(under: (x: number, y: number, held: Seat) => Seat | undefined) =>
+const lazy = <Seat>(under: (x: number, y: number, held: Seat) => Seat | undefined) =>
   (held: Seat, moving: Moving, landing: Seat | undefined): Seat | undefined => {
     const struck = under(moving.clientX, moving.clientY, held);
     if (!has(struck)) {
@@ -46,7 +46,7 @@ type MoveEvent = {
   currentTarget: EventTarget | null;
 };
 
-export const pointerTravel = (
+const pointer = (
   moved: (moving: Moving) => void,
   drop: () => void
 ) => (event: MoveEvent): void => {
@@ -62,4 +62,12 @@ export const pointerTravel = (
   if (holder instanceof Element) {
     queueMicrotask(() => holder.setPointerCapture(event.pointerId));
   }
+};
+
+export const travel = {
+  still,
+  drifted,
+  eager,
+  lazy,
+  pointer
 };

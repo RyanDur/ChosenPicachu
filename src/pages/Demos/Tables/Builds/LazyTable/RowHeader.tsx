@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {Grab, movedTo, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, looks} from '@components/DragSortableTable/model';
+import {Grab, movedTo, Moving, PixelSizes, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, looks, travel} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -63,10 +63,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     }}>
     <RowGrip position={position}
       onPointerDown={rowLift(() => order, () => standing, lift)}
-      onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+      onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
-      onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+      onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

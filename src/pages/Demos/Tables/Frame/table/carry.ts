@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {pointerTravel, still, TableState, tableState} from '@components/DragSortableTable/model';
+import {TableState, tableState, travel} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 import {columnCells, changeMotion} from './settle';
 import {TableContext} from './context';
@@ -19,8 +19,8 @@ export const dressCarried = (mounted: MountedTable, state: TableState): void => 
       ['--seat-x', '--seat-y', '--drift-x', '--drift-y'].forEach(property => cell.style.removeProperty(property));
     }
   });
-  const seat = tableState.seatOffset(state, mounted.order(), mounted.standing()) ?? still;
-  const drift = state.drag?.drift ?? still;
+  const seat = tableState.seatOffset(state, mounted.order(), mounted.standing()) ?? travel.still;
+  const drift = state.drag?.drift ?? travel.still;
   carriedCells(mounted, state).forEach(cell => {
     changeMotion(cell, {on: ['carried']});
     cell.style.setProperty('--seat-x', `${seat.x}px`);
@@ -34,6 +34,6 @@ type Carrier = Pick<TableContext, 'store' | 'moved' | 'dropped'>;
 
 export const carrying = (holder: HTMLElement, {store, moved, dropped}: Carrier): void => {
   (['pointermove', 'lostpointercapture'] as const).forEach(travelling => holder.addEventListener(travelling, event =>
-    has(store.state.drag) ? pointerTravel(moved, dropped)(event) : undefined));
+    has(store.state.drag) ? travel.pointer(moved, dropped)(event) : undefined));
   (['pointerup', 'pointercancel'] as const).forEach(ending => holder.addEventListener(ending, () => dropped()));
 };
