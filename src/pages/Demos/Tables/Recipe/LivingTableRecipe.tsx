@@ -1,9 +1,9 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../types';
 import {FC, ReactNode} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
-import {tablesDials, World} from '../params';
+import {useControls} from '../../Controls';
+import type {World} from '../../Controls';
 import {TheImplementation} from './steps';
 import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
@@ -265,14 +265,14 @@ const FlowStory: FC<{world: World}> = ({world}) =>
   </Story>;
 
 export const StillTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
+  const {world} = useControls();
   return <section aria-label="the still table" className="build-steps">
     <Stories><StillStory world={world}/></Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
-  const {world} = useSearchParamsObject({world: tablesDials.world}, tablesDials.defaults);
+  const {world} = useControls();
   return <section aria-label="the living table" className="build-steps">
     <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
   </section>;

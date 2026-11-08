@@ -3,7 +3,7 @@ import {DemoTopics} from '../../types';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
-import {World} from '../params';
+import type {World} from '../../Controls';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';

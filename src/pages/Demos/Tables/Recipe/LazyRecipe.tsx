@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Motion, Origin} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
-import type {Track, World} from '../params';
+import type {Track, World} from '../../Controls';
 import {
   AccessTrack,
   AgainstTheStream,

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
-import {World} from '../../params';
+import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';

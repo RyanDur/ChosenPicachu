@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {Term} from '../Term';
-import {World} from '../../params';
+import type {World} from '../../../Controls';
 import {gap, elementSource, storeSource, liftSource} from './sources';
 import {Sample} from '@pages/Demos/Recipe/sample';
 

@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
-import {World} from '../../params';
+import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {gap, sortableCss} from './sources';
 

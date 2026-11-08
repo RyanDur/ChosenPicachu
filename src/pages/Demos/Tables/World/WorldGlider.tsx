@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {useWorld} from './useWorld';
+import {useControls} from '../../Controls';
 
 export const WorldGlider: FC = () => {
-  const {world, updateSearchParams} = useWorld();
+  const {world, change} = useControls();
   return <PillGlider label="world"
     name="table-world"
     options={[
@@ -11,5 +11,5 @@ export const WorldGlider: FC = () => {
       {display: 'Vanilla', value: 'vanilla'}
     ]}
     chosen={world}
-    onChosen={next => updateSearchParams({world: next})}/>;
+    onChosen={next => change({world: next})}/>;
 };

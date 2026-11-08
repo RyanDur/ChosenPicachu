@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, lines, carve} from '../../Recipe';
-import {World} from '../params';
+import type {World} from '../../Controls';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/table-state.ts?sample';
 import arrangementSource from '@components/DragSortableTable/arrangement.ts?sample';
