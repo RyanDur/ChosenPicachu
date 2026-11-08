@@ -1,6 +1,6 @@
 import {FC, FocusEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
-import {useHydrated} from '@frame/page';
+import {useHydrated} from '@frame/state';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {tableActions, tableSelectors} from './model';

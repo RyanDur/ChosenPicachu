@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {EnvProvider} from '@frame/page';
+import {EnvProvider} from '@frame/state';
 import {OpeningFragmentProvider} from '@frame/navigation/arrival';
 import {Env} from '@env';
 

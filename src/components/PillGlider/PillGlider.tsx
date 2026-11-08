@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {useHydrated} from '@frame/page';
+import {useHydrated} from '@frame/state';
 import './PillGlider.css';
 
 type Option<T extends string> = {

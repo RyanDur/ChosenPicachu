@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useEnv} from '@frame/page';
+import {useEnv} from '@frame/state';
 import {ChartsIntroduction} from './Introduction';
 import {Workspace} from './Workspace';
 import {ChartsTutorial} from './Tutorial';
