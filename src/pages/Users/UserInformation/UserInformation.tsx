@@ -32,7 +32,7 @@ const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
         <button type="submit" className="submit button primary" disabled={!hydrated}>Add</button>
       </>;
     case 'viewing':
-      return <Link to={openings.at(open.user.id, 'edit')} className="reset button secondary">Edit</Link>;
+      return <Link to={openings.at(open.user.id, 'edit')} className="edit button secondary">Edit</Link>;
     case 'editing':
       return <>
         {resetButton}
