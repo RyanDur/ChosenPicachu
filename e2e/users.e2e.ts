@@ -62,6 +62,18 @@ test('a person in the roster drags to a new seat once the roster has arrived, an
   await expect.poll(() => roster.whatTheMoveReportSaid()).toEqual([`${first} moved to 3 of ${rest.length + 3}`]);
 });
 
+test('following View in a row\'s actions closes the actions and shows that person in the form', async ({page}) => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  const viewed = await users.names.first().textContent();
+
+  await users.viewTheFirstRow();
+
+  await expect(await users.actionsOf()).toBeHidden();
+  await expect.poll(() => users.shownName()).toBe(viewed);
+});
+
 const aFingerLandsOnTheStateChoice = async (page: Page, end: 'start' | 'end'): Promise<void> => {
   const users = usersPage(page);
   await page.goto('users');

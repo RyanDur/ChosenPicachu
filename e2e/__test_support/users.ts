@@ -25,6 +25,12 @@ export const usersPage = (page: Page) => {
     names,
     firstRowActions,
     actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),
+    viewTheFirstRow: async (): Promise<void> => {
+      await firstRowActions.click();
+      await page.getByLabel(`${await firstRowActions.getAttribute('aria-label')}, chosen`).getByRole('link', {name: 'View'}).click();
+    },
+    shownName: async (): Promise<string> =>
+      `${await form.getByLabel('First Name').inputValue()} ${await form.getByLabel('Last Name').inputValue()}`,
     homeState,
     tapTheHomeStateAt: async (end: 'start' | 'end'): Promise<void> => {
       await homeState.scrollIntoViewIfNeeded();
