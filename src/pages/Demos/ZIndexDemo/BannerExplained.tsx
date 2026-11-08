@@ -33,7 +33,7 @@ export const BannerExplained: FC = () => {
       </li>
       <li className="run">
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s
-          content, the area under the tabs that holds every card. The content wears{' '}
+          content. The content wears{' '}
         <code className="monospaced">isolation: isolate</code>, as{' '}
         <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
           context</cite></a> shows, so no card’s z-index is ever compared with the banner’s. The banner’s 3 is
