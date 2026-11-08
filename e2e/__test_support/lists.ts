@@ -1,4 +1,4 @@
-import type {Locator, Page} from '@playwright/test';
+import {expect, type Locator, type Page} from '@playwright/test';
 import {boxOf} from './box';
 import {fingertipMiss} from './finger';
 import {siteFrame} from './site';
@@ -40,7 +40,9 @@ export const sortableList = (page: Page) => {
     item: seatOf,
     moveReport: page.getByRole('status', {name: 'move report'}),
     stepByKey: async (item: string, key: 'ArrowLeft' | 'ArrowRight'): Promise<void> => {
-      await gripFor(item).focus();
+      const grip = gripFor(item);
+      await expect(grip).toBeEnabled();
+      await grip.focus();
       await page.keyboard.press(key);
     },
     runningSlides: (): Promise<number> => list.evaluate(holder => holder.getAnimations({subtree: true}).length),
