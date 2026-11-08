@@ -1,8 +1,5 @@
 import {describe, expect, it} from 'vitest';
 import {travel} from '../travel';
-import {arrows} from '../arrows';
-
-const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
 
 describe('the travel vocabulary', () => {
   it('measures the drift from the grab to the pointer', () => {
@@ -27,16 +24,5 @@ describe('the travel vocabulary', () => {
     listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: null});
 
     expect(happened).toEqual(['drop']);
-  });
-
-  it('column arrows answer only to left and right', () => {
-    const arranged: {from: number; to: number}[] = [];
-    const listener = arrows.column('trades', () => ['window', 'trades', 'buys', 'change'],
-      ({from, to}) => arranged.push({from, to}));
-
-    listener(pressed('ArrowRight'));
-    listener(pressed('Enter'));
-
-    expect(arranged).toEqual([{from: 1, to: 2}]);
   });
 });

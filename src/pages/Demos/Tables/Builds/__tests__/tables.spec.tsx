@@ -66,6 +66,15 @@ describe('columns by hand', () => {
     expect(liveTable.announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
+  test('a key that is no arrow leaves the columns where they stand', async () => {
+    seat(EagerTable, {origin: 'keep', motion: 'static'});
+
+    liveTable.focusColumn('trades');
+    await liveTable.press('{Enter}');
+
+    expect(liveTable.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+  });
+
   test('the lazy table says a column move', async () => {
     seat(LazyTable, {origin: 'keep', motion: 'static'});
 
