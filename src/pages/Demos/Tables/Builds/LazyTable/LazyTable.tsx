@@ -20,13 +20,33 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
       <caption className="off-screen">{caption}</caption>
       <thead>
         <Headers onColumnMoved={onColumnMoved} onSorted={onSorted}>
-          <Column column="window" className="window">window<ResizeHandle column="window"/></Column>
-          <DraggableColumn column="trades" className="trades">trades<SortMenu column="trades"/><ResizeHandle column="trades"/></DraggableColumn>
-          <DraggableColumn column="buys" className="buys">buys<SortMenu column="buys"/><ResizeHandle column="buys"/></DraggableColumn>
-          <DraggableColumn column="sells" className="sells">sells<SortMenu column="sells"/><ResizeHandle column="sells"/></DraggableColumn>
-          <DraggableColumn column="volume" className="volume">volume<SortMenu column="volume"/><ResizeHandle column="volume"/></DraggableColumn>
-          <DraggableColumn column="vwap" className="vwap">vwap<SortMenu column="vwap"/><ResizeHandle column="vwap"/></DraggableColumn>
-          <Column column="change" className="change">change<SortMenu column="change"/><ResizeHandle column="change"/></Column>
+          <Column column="window" className="window">window
+            <ResizeHandle column="window"/>
+          </Column>
+          <DraggableColumn column="trades" className="trades">trades
+            <SortMenu column="trades"/>
+            <ResizeHandle column="trades"/>
+          </DraggableColumn>
+          <DraggableColumn column="buys" className="buys">buys
+            <SortMenu column="buys"/>
+            <ResizeHandle column="buys"/>
+          </DraggableColumn>
+          <DraggableColumn column="sells" className="sells">sells
+            <SortMenu column="sells"/>
+            <ResizeHandle column="sells"/>
+          </DraggableColumn>
+          <DraggableColumn column="volume" className="volume">volume
+            <SortMenu column="volume"/>
+            <ResizeHandle column="volume"/>
+          </DraggableColumn>
+          <DraggableColumn column="vwap" className="vwap">vwap
+            <SortMenu column="vwap"/>
+            <ResizeHandle column="vwap"/>
+          </DraggableColumn>
+          <Column column="change" className="change">change
+            <SortMenu column="change"/>
+            <ResizeHandle column="change"/>
+          </Column>
         </Headers>
       </thead>
       <Body onRowMoved={onRowMoved}>

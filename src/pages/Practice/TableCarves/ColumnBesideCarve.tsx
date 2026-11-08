@@ -9,7 +9,7 @@ const tradesHeader = [
   lines.aside('        <!-- …ascending, descending and reset… -->'),
   ...carve.span(tableSource, '</menu>', '</th>')
 ];
-const tradesWritten = carve.span(eagerTableSource, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"');
+const tradesWritten = carve.span(eagerTableSource, '<DraggableColumn column="trades"', '</DraggableColumn>');
 
 export const ColumnBesideCarve: FC = () =>
   <div className="carves-beside">

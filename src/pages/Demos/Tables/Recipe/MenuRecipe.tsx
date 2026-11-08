@@ -317,8 +317,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(tableSrc, '<Column column="window"', '<Column column="window"'),
-                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
+                ...carve.span(tableSrc, '<Column column="window"', '</Column>'),
+                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '</DraggableColumn>'), gap,
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[
