@@ -89,7 +89,7 @@ export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) =
       id: 'root',
       children: [...routesAt(at, children), {path: '*', element: null}]
     } : siteRoute]
-  }], {initialEntries: [at]}));
+  }], {initialEntries: [at], hydrationData: {}}));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
     startTransition(() => setReported(errors => [...errors, described(error)]));

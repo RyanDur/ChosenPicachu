@@ -85,7 +85,7 @@ const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/
 
 const stillReachForThePage = [
   'src/components/OpeningFragment/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
-  'src/components/glide.ts', 'src/components/room.ts', 'src/components/scroll/scroll.ts', 'src/frame/page/SideNav.tsx',
+  'src/components/glide.ts', 'src/components/room.ts', 'src/frame/page/SideNav.tsx',
   'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
 ];
 

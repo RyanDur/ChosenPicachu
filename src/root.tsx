@@ -1,11 +1,10 @@
 import {BannerProvider, Banners} from '@frame/notices/banners';
-import {Links, NavigationType, Outlet, Scripts, useLocation, useNavigationType} from 'react-router';
-import {FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
+import {Links, Outlet, Scripts, ScrollRestoration} from 'react-router';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@frame/notices/feedback';
 import {Header, Page, PageError, PageNameProvider} from '@frame/page';
-import {gotoTopOfPage, placeKept, ReadersPlaces, readersPlaces} from '@components/scroll';
 import names from '@pages/names.json';
 import {env} from '@env';
 import {SiteProviders} from './SiteProviders';
@@ -39,38 +38,12 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
     </body>
   </html>;
 
-type Arrival = 'left alone' | 'at the top of the page' | 'where the reader left it';
-
-const arrivalOf = (hash: string, navigation: NavigationType, state: unknown): Arrival => {
-  if (navigation === NavigationType.Pop) return 'where the reader left it';
-  return hash === '' && state !== placeKept ? 'at the top of the page' : 'left alone';
-};
-
-const arrive = (arrival: Arrival, places: ReadersPlaces): void => ({
-  'left alone': () => undefined,
-  'at the top of the page': gotoTopOfPage,
-  'where the reader left it': places.returnTo
-})[arrival]();
-
-const Site: FC<{room: ReactNode}> = ({room}) => {
-  const {pathname, hash, state} = useLocation();
-  const navigation = useNavigationType();
-  const [places] = useState(readersPlaces);
-  const [place, setPlace] = useState<{pathname: string; hash: string; arrival: Arrival}>(
-    {pathname, hash, arrival: arrivalOf(hash, navigation, state)});
-  if (place.pathname !== pathname || place.hash !== hash) {
-    setPlace({pathname, hash, arrival: arrivalOf(hash, navigation, state)});
-  }
-  useEffect(() => places.keep(), [places]);
-  useEffect(() => {
-    arrive(place.arrival, places);
-  }, [place, places]);
-
-  return <BannerProvider><PageNameProvider><FeedbackProvider>
+const Site: FC<{room: ReactNode}> = ({room}) =>
+  <BannerProvider><PageNameProvider><FeedbackProvider>
     {room}
     <Banners/>
+    <ScrollRestoration/>
   </FeedbackProvider></PageNameProvider></BannerProvider>;
-};
 
 export const ErrorBoundary: FC = () =>
   <Site room={<Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}><PageError/></Page>}/>;

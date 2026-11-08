@@ -42,7 +42,7 @@ export const Search: FC<Props> = ({id, className}) => {
     void navigate({
       pathname: gallery,
       search: searchFromAddress({search: searchString})
-    });
+    }, {preventScrollReset: true});
   };
 
   const reset = () => {

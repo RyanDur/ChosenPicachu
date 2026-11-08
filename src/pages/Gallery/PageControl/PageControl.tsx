@@ -1,6 +1,5 @@
 import {SubmitEvent} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
-import {gotoTopOfPage} from '@components/scroll';
 import {numberParam} from '@components/search-params';
 import {useGallery} from '@pages/Gallery/Context';
 import './PageControl.css';
@@ -17,9 +16,9 @@ export const PageControl = () => {
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const typedIn = new FormData(event.currentTarget);
-    gotoTopOfPage();
     event.currentTarget.reset();
-    updateSearchParams({page: typed(typedIn, 'page').orElse(page), size: typed(typedIn, 'size').orElse(size)});
+    updateSearchParams({page: typed(typedIn, 'page').orElse(page), size: typed(typedIn, 'size').orElse(size)},
+      {preventScrollReset: false});
   };
 
   return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">

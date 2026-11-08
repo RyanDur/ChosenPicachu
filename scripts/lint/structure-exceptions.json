@@ -22,7 +22,6 @@
     "src/components/Users/UserInfo/user.ts",
     "src/components/Users/age.ts",
     "src/components/Users/resource/usersServer.ts",
-    "src/components/scroll/scroll.ts",
     "src/components/search-params/search-params.ts",
     "src/components/store.ts",
     "src/env.ts",

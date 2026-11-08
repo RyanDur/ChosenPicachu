@@ -1,5 +1,4 @@
 import {Link, useLocation} from 'react-router';
-import {gotoTopOfPage} from '@components/scroll';
 import {FC} from 'react';
 import {useGallery} from '@pages/Gallery/Context';
 import './GalleryNav.css';
@@ -29,11 +28,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   return <nav className="pagination backdrop field-before field-after" aria-label="pagination" id={id}>
     {hasPrevPage && <>
-      <Link to={`${path}${searchFromShown({page: firstPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: firstPage})}`}
         className="page first field attentive bold">
         FIRST
       </Link>{' '}
-      <Link to={`${path}${searchFromShown({page: prevPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: prevPage})}`}
         className="page prev field attentive bold">
         PREV
       </Link>{' '}
@@ -45,11 +44,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
         <span>{total}</span>
       </output>).orNull()}
     {hasNextPage && <>
-      {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`} onClick={gotoTopOfPage}
+      {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`}
         className="page next field attentive bold">
         NEXT
       </Link>{' '}
-      <Link to={`${path}${searchFromShown({page: lastPage})}`} onClick={gotoTopOfPage}
+      <Link to={`${path}${searchFromShown({page: lastPage})}`}
         className="page last field attentive bold">
         LAST
       </Link>

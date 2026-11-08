@@ -1,4 +1,4 @@
-import {SetURLSearchParams, useSearchParams} from 'react-router';
+import {NavigateOptions, SetURLSearchParams, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
@@ -10,6 +10,8 @@ const filterEmpty = (obj: {[p: string]: string | number}) =>
 export const numberParam: schema.Decoder<number> = schema.regex(/^-?\d+$/).andThen(Number);
 
 const noSearch = new URLSearchParams();
+
+const keepingThePlace: NavigateOptions = {preventScrollReset: true};
 
 // a page drawn at build time holds no search, so the dials apply once the script has taken the page over
 export const useSearchParamsOnceHydrated = (): [URLSearchParams, SetURLSearchParams] => {
@@ -32,7 +34,7 @@ const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown
 type Given<T, D> = Partial<T> & Required<Pick<T, keyof D & keyof T>>;
 
 type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
-  updateSearchParams: (params: Partial<T>, options?: {replace?: boolean}) => void;
+  updateSearchParams: (params: Partial<T>, options?: NavigateOptions) => void;
   removeSearchParams: (...params: string[]) => void;
   searchFromShown: (params: Partial<T>) => string;
   searchFromAddress: (params: Partial<T>) => string;
@@ -62,10 +64,11 @@ export function useSearchParamsObject<T extends Params>(
 
   const removeSearchParams = (...params: string[]) =>
     setSearchParams(Array.from(searchParams.entries())
-      .filter(([key]) => !params.includes(key)));
+      .filter(([key]) => !params.includes(key)), keepingThePlace);
 
-  const updateSearchParams = (params = {}, options?: {replace?: boolean}) =>
-    setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)}, options);
+  const updateSearchParams = (params = {}, options?: NavigateOptions) =>
+    setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)},
+      {...keepingThePlace, ...options});
 
   return {
     ...given,

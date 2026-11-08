@@ -10,6 +10,7 @@ export const useOpenStories = (param: string): OpenStories => {
   const [shown, setSearchParams] = useSearchParamsOnceHydrated();
   return {
     isOpen: id => storyKeys.openIn(shown, param).has(id),
-    toggle: id => setSearchParams(previous => storyKeys.toggledIn(previous, {param, id}), {replace: true})
+    toggle: id => setSearchParams(previous => storyKeys.toggledIn(previous, {param, id}),
+      {replace: true, preventScrollReset: true})
   };
 };
