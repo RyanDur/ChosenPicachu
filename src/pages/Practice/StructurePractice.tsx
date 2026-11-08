@@ -295,7 +295,7 @@ export const StructurePractice: FC = () =>
       </li>
       <li className="paragraph"><code className="monospaced">stylelint</code> refuses a selector on an obsolete element
         and prints{' '}
-      <a className="signpost" href={repository.file('stylelint.config.js')}>“obsolete element — this is a strict
+      <a className="signpost" href={repository.file('stylelint.config.cjs')}>“obsolete element — this is a strict
         html5 site”</a>.
       </li>
     </ul>

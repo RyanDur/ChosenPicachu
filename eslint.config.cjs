@@ -1,12 +1,12 @@
-import stylistic from '@stylistic/eslint-plugin';
-import parser from '@babel/eslint-parser';
-import testingLibrary from 'eslint-plugin-testing-library';
-import playwright from 'eslint-plugin-playwright';
-import {classes} from './scripts/lint/classes.mjs';
-import {structure} from './scripts/lint/structure.mjs';
-import {bareInlineCode} from './scripts/lint/inline-code.mjs';
-import {wrap} from './scripts/lint/wrap.mjs';
-import {page} from './scripts/lint/page.mjs';
+const stylistic = require('@stylistic/eslint-plugin');
+const parser = require('@babel/eslint-parser');
+const testingLibrary = require('eslint-plugin-testing-library');
+const playwright = require('eslint-plugin-playwright');
+const {classes} = require('./scripts/lint/classes.mjs');
+const {structure} = require('./scripts/lint/structure.mjs');
+const {bareInlineCode} = require('./scripts/lint/inline-code.mjs');
+const {wrap} = require('./scripts/lint/wrap.mjs');
+const {page} = require('./scripts/lint/page.mjs');
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -88,12 +88,12 @@ const refsWithAReason = [
 
 const stillMoveByScript = ['src/components/glide.ts'];
 
-export default [
+module.exports = [
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**', '.react-router/**']
+    ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**']
   },
   {
-    files: ['**/*.{js,mjs,ts}'],
+    files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: {
       parser,
       parserOptions: {requireConfigFile: false, babelOptions: {presets: ['@babel/preset-typescript']}},
@@ -154,7 +154,7 @@ export default [
   },
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
-    ignores: ['*.config.{js,mjs,ts}', '**/*.d.ts'],
+    ignores: ['**/*.d.ts'],
     rules: {'no-restricted-exports': ['error', {
       restrictDefaultExports: {direct: true, named: true, defaultFrom: true, namedFrom: true, namespaceFrom: true}
     }]}

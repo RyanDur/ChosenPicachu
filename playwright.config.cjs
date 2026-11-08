@@ -1,7 +1,7 @@
-import {defineConfig} from '@playwright/test';
-import {empty, has} from '@ryandur/sand';
-import {assertionPatience} from './e2e/__test_support/patience';
+const {defineConfig} = require('@playwright/test');
+const {empty, has} = require('@ryandur/sand');
 
+const {assertionPatience} = require('./e2e/__test_support/patience.json');
 const stage = `http://localhost:${process.env.STAGE_PORT ?? 4517}/ChosenPicachu/`;
 const smoke = '**/smoke.e2e.ts';
 // it reads served HTML through the request fixture and opens no browser, so one engine's run covers it
@@ -9,7 +9,7 @@ const browserless = '**/names.e2e.ts';
 // WebKit stalls the next page load after a worker has run every a11y page, so those pages get workers of their own
 const a11y = '**/a11y.e2e.ts';
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './e2e',
   testMatch: '**/*.e2e.ts',
   testIgnore: smoke,

@@ -1,9 +1,9 @@
-import {defineConfig} from '@playwright/test';
-import {has} from '@ryandur/sand';
+const {defineConfig} = require('@playwright/test');
+const {has} = require('@ryandur/sand');
 
 const smokeUrl = process.env.SMOKE_URL;
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './e2e/media',
   testMatch: '**/*.capture.ts',
   retries: 0,

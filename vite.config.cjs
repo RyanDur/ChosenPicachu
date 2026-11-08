@@ -1,29 +1,32 @@
-import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
-import {execSync} from 'node:child_process';
-import {relative} from 'node:path';
-import {defineConfig} from 'vitest/config';
-import type {Plugin} from 'vite';
-import {loadEnv} from 'vite';
-import {rolldown} from 'rolldown';
-import {fileURLToPath} from 'node:url';
-import {usersServerScript} from './src/components/Users/resource/usersServer.ts';
-import {practiceDrawings, squeezed} from './src/pages/Practice/practiceDrawings.ts';
-import {browserslistToTargets, transform} from 'lightningcss';
-import browserslist from 'browserslist';
-import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
-import {has} from '@ryandur/sand';
+const {mkdirSync, readFileSync, writeFileSync} = require('node:fs');
+const {execSync} = require('node:child_process');
+const {join, relative} = require('node:path');
+const {defineConfig} = require('vitest/config');
+const {loadEnv} = require('vite');
+const {rolldown} = require('rolldown');
+const {usersServerScript} = require('./src/components/Users/resource/usersServer.ts');
+const {practiceDrawings, squeezed} = require('./src/pages/Practice/practiceDrawings.ts');
+const {browserslistToTargets, transform} = require('lightningcss');
+const browserslist = require('browserslist');
+const react = require('@vitejs/plugin-react').default;
+const svgr = require('vite-plugin-svgr');
+const {has} = require('@ryandur/sand');
+const autoprefixer = require('autoprefixer');
+
+/** @param {string} path */
+const at = path => join(__dirname, path);
 
 const aliases = {
-  '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
-  '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
-  '@frame': fileURLToPath(new URL('./src/frame', import.meta.url)),
-  '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
-  '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
-  '@__test_support': fileURLToPath(new URL('./src/__test_support', import.meta.url))
+  '@env': at('./src/env.ts'),
+  '@pages': at('./src/pages'),
+  '@frame': at('./src/frame'),
+  '@components': at('./src/components'),
+  '@transport': at('./src/transport'),
+  '@__test_support': at('./src/__test_support')
 };
 
-const frameScript = (): Plugin => ({
+/** @returns {import('vite').Plugin} */
+const frameScript = () => ({
   name: 'frame-script',
   enforce: 'pre',
   async resolveId(source, importer) {
@@ -48,7 +51,8 @@ const frameScript = (): Plugin => ({
   }
 });
 
-const rawCss = (): Plugin => ({
+/** @returns {import('vite').Plugin} */
+const rawCss = () => ({
   name: 'raw-css',
   enforce: 'pre',
   async resolveId(source, importer) {
@@ -68,7 +72,7 @@ const rawCss = (): Plugin => ({
   }
 });
 
-const builtCommit = (): string => {
+const builtCommit = () => {
   try {
     return process.env.GITHUB_SHA ?? execSync('git rev-parse HEAD', {encoding: 'utf8'}).trim();
   } catch {
@@ -76,7 +80,8 @@ const builtCommit = (): string => {
   }
 };
 
-const sample = (): Plugin => {
+/** @returns {import('vite').Plugin} */
+const sample = () => {
   const commit = builtCommit();
   let root = process.cwd();
   return {
@@ -108,7 +113,8 @@ const sample = (): Plugin => {
   };
 };
 
-const frameCss = (): Plugin => ({
+/** @returns {import('vite').Plugin} */
+const frameCss = () => ({
   name: 'frame-css',
   enforce: 'pre',
   async resolveId(source, importer) {
@@ -132,14 +138,14 @@ const frameCss = (): Plugin => ({
 
 // a drawing loaded as an image cannot read the page's style sheets, so its frames are written as files carrying the
 // site's own
-const drawings = (): Plugin => {
-  const at = (path: string): string => fileURLToPath(new URL(path, import.meta.url));
+/** @returns {import('vite').Plugin} */
+const drawings = () => {
   const siteSheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
     './src/styles/drawing.css'].map(at);
   const drawn = Object.entries(practiceDrawings).map(([name, {sheet, frames}]) => ({name, sheet: at(`./${sheet}`), frames}));
   const sheets = [...siteSheets, ...drawn.map(({sheet}) => sheet)];
   const folder = at('./src/pages/Practice/drawings/');
-  const draw = (): void => {
+  const draw = () => {
     mkdirSync(folder, {recursive: true});
     drawn.forEach(({name, sheet, frames}) => {
       const {wide, stacked} = frames(squeezed([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
@@ -159,10 +165,11 @@ const drawings = (): Plugin => {
   };
 };
 
-const usersServerPlugin = (): Plugin => {
-  const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
+/** @returns {import('vite').Plugin} */
+const usersServerPlugin = () => {
+  const worker = at('./backend/users/worker.ts');
   const script = usersServerScript;
-  const built = async (): Promise<string> => {
+  const built = async () => {
     const bundle = await rolldown({input: worker, resolve: {alias: aliases}, logLevel: 'silent'});
     const {output} = await bundle.generate({format: 'iife'});
     return output[0].code;
@@ -185,7 +192,11 @@ const usersServerPlugin = (): Plugin => {
   };
 };
 
-const runtimeEnv = (env: Record<string, string>): Plugin => {
+/**
+ * @param {Record<string, string>} env
+ * @returns {import('vite').Plugin}
+ */
+const runtimeEnv = env => {
   const values = {
     tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
     tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
@@ -222,8 +233,11 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
 };
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => ({
+module.exports = defineConfig(({mode}) => ({
   base: '/ChosenPicachu/',
+  css: {
+    postcss: {plugins: [autoprefixer()]}
+  },
   resolve: {
     alias: aliases
   },

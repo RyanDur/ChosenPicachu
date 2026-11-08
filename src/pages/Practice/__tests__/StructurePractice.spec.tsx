@@ -81,11 +81,11 @@ describe('the Structure practice tab', () => {
       .toHaveAttribute('href', repository.file('src/__test_support/reading-order.ts'));
   });
 
-  test('should send the quotation of stylelint’s message on an obsolete element to stylelint.config.js', async () => {
+  test('should send the quotation of stylelint’s message on an obsolete element to stylelint.config.cjs', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', repository.file('stylelint.config.js'));
+    expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', repository.file('stylelint.config.cjs'));
   });
 
   test('should send the old-style banner to the z-index tab that raises it', async () => {

@@ -1,1 +1,3 @@
-export const assertionPatience = 5_000;
+import patience from './patience.json' with {type: 'json'};
+
+export const {assertionPatience} = patience;

@@ -14,7 +14,7 @@ const {
   meaningfulSequence, usingCssCustomProperties, hyatt
 } = presentation;
 const sheet = (file: string): string => repository.file(`src/styles/${file}.css`);
-const stylelintConfig = repository.file('stylelint.config.js');
+const stylelintConfig = repository.file('stylelint.config.cjs');
 const classLint = repository.file('scripts/lint/classes.mjs');
 const importList = repository.file('src/index.css');
 

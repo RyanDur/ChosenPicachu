@@ -1,6 +1,6 @@
-import {defineConfig} from '@playwright/test';
+const {defineConfig} = require('@playwright/test');
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './e2e',
   testMatch: '**/smoke.e2e.ts',
   retries: 2,

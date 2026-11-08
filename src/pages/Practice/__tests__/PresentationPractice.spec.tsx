@@ -19,7 +19,7 @@ describe('the Presentation practice tab', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linksInDefinitionOf('Place')).toEqual([
-      ['style sheet lint', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['style sheet lint', `${Paths.repo}/blob/main/stylelint.config.cjs`],
       ['class lint', `${Paths.repo}/blob/main/scripts/lint/classes.mjs`],
       ['folder per block', 'https://web.archive.org/web/20241224121848/https://en.bem.info/methodology/history/']
     ]);
@@ -30,7 +30,7 @@ describe('the Presentation practice tab', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linksInDefinitionOf('Value')).toEqual([
-      ['value lint', `${Paths.repo}/blob/main/stylelint.config.js`]
+      ['value lint', `${Paths.repo}/blob/main/stylelint.config.cjs`]
     ]);
   });
 
@@ -50,7 +50,7 @@ describe('the Presentation practice tab', () => {
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linksInDefinitionOf('Selector')).toEqual([
-      ['selector lint', `${Paths.repo}/blob/main/stylelint.config.js`],
+      ['selector lint', `${Paths.repo}/blob/main/stylelint.config.cjs`],
       ['“the part that matches the element being matched, rather than its ancestors”', 'https://web.archive.org/web/20120505043119/https://developer.mozilla.org/en/Writing_Efficient_CSS']
     ]);
   });
@@ -135,20 +135,20 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should send the tag rule’s quoted message to stylelint.config.js', async () => {
+  test('should send the tag rule’s quoted message to stylelint.config.cjs', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linkUnder('Where a rule lives', '“a tag is styled only in src/styles/reset.css; give the element a class”'))
-      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.js`);
+      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.cjs`);
   });
 
-  test('should send the look rule’s quoted message to stylelint.config.js', async () => {
+  test('should send the look rule’s quoted message to stylelint.config.cjs', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
     expect(practicePage.linkUnder('Where a rule lives', '“is a look; a component sheet holds structure, and a look is a word in src/styles that the element wears as a class”'))
-      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.js`);
+      .toHaveAttribute('href', `${Paths.repo}/blob/main/stylelint.config.cjs`);
   });
 
   test('should draw where a rule lives in the part it names, before what a class is named for', async () => {

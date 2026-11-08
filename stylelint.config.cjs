@@ -1,8 +1,5 @@
-import {dirname, join} from 'node:path';
-import {fileURLToPath} from 'node:url';
-import {motion} from './scripts/lint/motion.mjs';
-
-const root = dirname(fileURLToPath(import.meta.url));
+const {join} = require('node:path');
+const {motion} = require('./scripts/lint/motion.mjs');
 
 const structure = [
   'display', '/^grid/', '/^flex/', 'gap', 'row-gap', 'column-gap', 'order',
@@ -27,7 +24,7 @@ const stillMoveOnTheMainThread = [
   'src/pages/Demos/ZIndexDemo/ZIndexDemo.css', 'src/styles/drawing.css', 'src/styles/reset.css'
 ];
 
-export default {
+module.exports = {
   overrides: [
     {
       files: ['src/**/*.css'],
@@ -68,10 +65,10 @@ export default {
     'value-no-vendor-prefix': true,
     'csstools/value-no-unknown-custom-properties': [true, {
       importFrom: [
-        join(root, 'src', 'styles', 'colors.css'),
-        join(root, 'src', 'styles', 'spacing.css'),
-        join(root, 'src', 'styles', 'timing.css'),
-        join(root, 'src', 'styles', 'typography.css')
+        join(__dirname, 'src', 'styles', 'colors.css'),
+        join(__dirname, 'src', 'styles', 'spacing.css'),
+        join(__dirname, 'src', 'styles', 'timing.css'),
+        join(__dirname, 'src', 'styles', 'typography.css')
       ]
     }],
     'scale-unlimited/declaration-strict-value': [

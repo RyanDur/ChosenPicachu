@@ -17,7 +17,7 @@
     "lint:style": "eslint .",
     "format": "eslint . --fix",
     "lighthouse:record": "node scripts/lighthouse/record.mjs",
-    "media": "playwright test --config=playwright.media.config.ts",
+    "media": "playwright test --config=playwright.media.config.cjs",
     "postinstall": "patch-package"
   },
   "dependencies": {
@@ -40,7 +40,6 @@
     "@faker-js/faker": "10.5.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.1",
-    "@react-router/dev": "7.18.4",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@testing-library/jest-dom": "7.0.0",
     "@testing-library/react": "16.3.2",
@@ -73,9 +72,6 @@
     "ws": "^8.22.1"
   },
   "overrides": {
-    "@react-router/dev": {
-      "typescript": "$typescript"
-    },
     "@react-router/node": {
       "typescript": "$typescript"
     },

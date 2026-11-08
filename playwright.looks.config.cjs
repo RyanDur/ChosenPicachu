@@ -1,12 +1,12 @@
-import {defineConfig} from '@playwright/test';
+const {defineConfig} = require('@playwright/test');
 
-const unnamed = (): never => {
+const unnamed = () => {
   throw new Error('LOOKS_BEFORE names the build to compare against: node scripts/looks/before.mjs main');
 };
 
 const before = process.env.LOOKS_BEFORE ?? unnamed();
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: './e2e/looks',
   testMatch: '**/*.looks.ts',
   retries: 0,

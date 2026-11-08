@@ -238,7 +238,7 @@ export const BehaviorPractice: FC = () =>
     </ul>
     <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>,{' '}
       <code className="monospaced">createRef</code> and <code className="monospaced">forwardRef</code> in any file that
-      is not on <a className="signpost" href={repository.file('eslint.config.mjs')}>a list in its configuration</a>.
+      is not on <a className="signpost" href={repository.file('eslint.config.cjs')}>a list in its configuration</a>.
       A ref keeps a value outside the state, where no reducer sees it and no test reads it. A file joins the list for
       one of the two reasons AGENTS.md gives:{' '}
       <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is

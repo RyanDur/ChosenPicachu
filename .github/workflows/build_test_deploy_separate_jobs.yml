@@ -226,7 +226,7 @@ jobs:
       - name: Smoke the deployed site
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json
-        run: npx playwright test --config=playwright.smoke.config.ts --reporter=line,json
+        run: npx playwright test --config=playwright.smoke.config.cjs --reporter=line,json
       - name: Read the smoke in the run
         if: always() && hashFiles('smoke.json') != ''
         run: node scripts/playwright/summary.mjs smoke smoke.json >> "$GITHUB_STEP_SUMMARY"
