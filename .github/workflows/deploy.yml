@@ -1,0 +1,111 @@
+name: Deploy
+# main is never built: a commit reaches it only as a pull request merged by rebase, and the site its passing checks
+# built is the site that ships. Why: Ryan, 2026-11-08, "rebase onto main takes the built artifact from a passing PR and
+# then deploys it to pages and then smoke tests. no pushes to main"
+on:
+  push:
+    branches:
+      - main
+    # documents alone change no page, so there is nothing to deploy
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  # deploys main's head again, from the same pull request's site
+  workflow_dispatch:
+
+jobs:
+  passed:
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    outputs:
+      run: ${{ steps.passed.outputs.run }}
+    steps:
+      - name: Find the passing checks that built this commit's tree
+        id: passed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # GitHub links a commit to its pull request a moment after the merge, so the lookup waits for it
+          for wait in 0 10 20 40; do
+            sleep "$wait"
+            pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)][0].number // empty')
+            if [ -n "$pull" ]; then
+              break
+            fi
+          done
+          if [ -z "$pull" ]; then
+            echo "::error::$GITHUB_SHA came from no merged pull request, so no passing checks built it"
+            exit 1
+          fi
+          head=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$pull" -q .head.sha)
+          tree_of() { gh api "repos/$GITHUB_REPOSITORY/commits/$1" -q .commit.tree.sha; }
+          if [ "$(tree_of "$head")" != "$(tree_of "$GITHUB_SHA")" ]; then
+            echo "::error::#$pull's head $head holds a different tree from $GITHUB_SHA, so its site is not this commit's"
+            exit 1
+          fi
+          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$head" --status success --limit 1 \
+            --json databaseId -q '.[0].databaseId // empty')
+          if [ -z "$run" ]; then
+            echo "::error::#$pull's head $head has no passing checks run to take the site from"
+            exit 1
+          fi
+          echo "Deploying the site that run $run built for #$pull at $head" >> "$GITHUB_STEP_SUMMARY"
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+  pages:
+    needs: passed
+    runs-on: ubuntu-26.04
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+      actions: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Take the site the pull request's checks built
+        uses: actions/download-artifact@v7
+        with:
+          name: site
+          path: ./build/client
+          run-id: ${{ needs.passed.outputs.run }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./build/client
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+  smoke:
+    needs: pages
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24.22.1'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Smoke the deployed site
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json
+        run: npx playwright test --config=playwright.smoke.config.cjs --reporter=line,json
+      - name: Read the smoke in the run
+        if: always() && hashFiles('smoke.json') != ''
+        run: node scripts/playwright/summary.mjs smoke smoke.json >> "$GITHUB_STEP_SUMMARY"

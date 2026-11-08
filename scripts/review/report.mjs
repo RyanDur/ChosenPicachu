@@ -71,7 +71,7 @@ export const verdictOf = findings => findings.some(({severity}) => severity === 
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const findings = findingsIn(readFileSync(process.stdin.fd, 'utf8'));
-  const {GITHUB_REPOSITORY: repository, GITHUB_SHA: sha, REVIEW_SUBJECT: subject} = process.env;
+  const {GITHUB_REPOSITORY: repository, REVIEW_AFTER: sha, REVIEW_SUBJECT: subject} = process.env;
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(findings, {commit, subject});
   process.stdout.write(summary);

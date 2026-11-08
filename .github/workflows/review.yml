@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22'
+          node-version: '24.22.1'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
