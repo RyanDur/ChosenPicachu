@@ -52,7 +52,9 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      expect(pageControl.pageField()).toHaveAttribute('min', '1');
+      await pageControl.typePage('0');
+
+      expect(pageControl.pageField()).toBeInvalid();
     });
 
     it('the page field will not go past the last page the museum has', async () => {
@@ -60,18 +62,20 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      expect(pageControl.pageField()).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
+      await pageControl.typePage(`${aicArtResponse.pagination.total_pages + 1}`);
+
+      expect(pageControl.pageField()).toBeInvalid();
     });
 
     it('has no ceiling until the museum says where the end is', async () => {
       const artArrives = heldAICAllArtResponse(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
-
-      expect(pageControl.pageField()).not.toHaveAttribute('max');
+      await pageControl.typePage(`${aicArtResponse.pagination.total_pages + 1}`);
+      expect(pageControl.pageField()).toBeValid();
 
       artArrives();
 
-      await waitFor(() => expect(pageControl.pageField()).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`));
+      await waitFor(() => expect(pageControl.pageField()).toBeInvalid());
     });
 
     test('a page typed and then rubbed out leaves the page where the URL has it', async () => {
