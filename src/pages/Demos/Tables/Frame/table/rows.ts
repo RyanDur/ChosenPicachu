@@ -36,7 +36,7 @@ const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | '
         }
       })));
   next.forEach((row, position) =>
-    maybe(lanes.get(row)?.querySelector('button.grip')).map(button => {
+    maybe(lanes.get(row)?.querySelector('[data-row-grip]')).map(button => {
       const label = grip.label(position);
       if (button.getAttribute('aria-label') !== label) {
         button.setAttribute('aria-label', label);
