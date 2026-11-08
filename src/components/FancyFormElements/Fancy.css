@@ -1,7 +1,7 @@
 .fancy {
   min-height: var(--base-x-5);
   position: relative;
-  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.5s var(--curve);
 
   .fancy-title {
     pointer-events: none;
@@ -12,7 +12,7 @@
     max-width: 80%;
     opacity: 0.6;
     z-index: 1;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s var(--curve);
   }
 
   &.fancy-select .fancy-title,

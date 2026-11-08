@@ -162,7 +162,7 @@ export const PresentationPractice: FC = () =>
     <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
       elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
       datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
-    <p className="paragraph">Then two token files. A token is a named value, such as{' '}
+    <p className="paragraph">Then three token files. A token is a named value, such as{' '}
       <code className="monospaced">--light-box-shadow</code>, that the style sheet reads instead of writing the
       number.{' '}
       <a className="signpost" href={sheet('colors')}>colors.css</a> names
@@ -187,6 +187,8 @@ export const PresentationPractice: FC = () =>
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
     </ul>
+    <p className="paragraph"><a className="signpost" href={sheet('timing')}>timing.css</a> names the curve three style
+      sheets move along and how long a lift takes, half a second.</p>
     <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in
       the column.</p>
     <p className="paragraph">I write inline only the values the code works out at runtime, mostly as{' '}

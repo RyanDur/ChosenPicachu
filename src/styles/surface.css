@@ -303,7 +303,7 @@
   pointer-events: none;
   box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow);
   opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: opacity var(--lift-duration) var(--curve);
 }
 
 .liftable:is(:hover, :focus)::before { opacity: 1; }

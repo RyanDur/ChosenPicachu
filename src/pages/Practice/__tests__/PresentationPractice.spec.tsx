@@ -116,7 +116,7 @@ describe('the Presentation practice tab', () => {
     ]);
   });
 
-  test('should send each of the nine shared style sheets walked under where a rule lives to its file in the repository', async () => {
+  test('should send each of the ten shared style sheets walked under where a rule lives to its file in the repository', async () => {
     render(<TestApp at={practiceAt('presentation')}/>);
     await practicePage.arrivedOn('Presentation');
 
@@ -125,6 +125,7 @@ describe('the Presentation practice tab', () => {
       ['reset', `${Paths.repo}/blob/main/src/styles/reset.css`],
       ['colors.css', `${Paths.repo}/blob/main/src/styles/colors.css`],
       ['spacing.css', `${Paths.repo}/blob/main/src/styles/spacing.css`],
+      ['timing.css', `${Paths.repo}/blob/main/src/styles/timing.css`],
       ['button', `${Paths.repo}/blob/main/src/styles/button.css`],
       ['typography', `${Paths.repo}/blob/main/src/styles/typography.css`],
       ['surface', `${Paths.repo}/blob/main/src/styles/surface.css`],

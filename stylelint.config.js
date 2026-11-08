@@ -71,6 +71,7 @@ export default {
       importFrom: [
         join(root, 'src', 'styles', 'colors.css'),
         join(root, 'src', 'styles', 'spacing.css'),
+        join(root, 'src', 'styles', 'timing.css'),
         join(root, 'src', 'styles', 'typography.css')
       ]
     }],
