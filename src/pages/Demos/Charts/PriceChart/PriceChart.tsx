@@ -9,7 +9,7 @@ import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {periodDisplay} from '../period-display';
 import {sparklinePoints, TimedPrice} from '../sparkline';
-import {Axes, rangeOf} from '../Axes';
+import {Axes, range} from '../Axes';
 import '../chart-card.css';
 import './PriceChart.css';
 import {sideOf} from '../sides';
@@ -85,7 +85,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       </Menu>
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={view.mBind(({series, high, low}) => rangeOf(series.map(timed => timed.at), high, low))}
+      <Axes range={view.mBind(({series, high, low}) => range.of(series.map(timed => timed.at), high, low))}
         pattern={periodDisplay.timePattern[period]} tickEvery={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="sparkline" aria-hidden="true"

@@ -4,7 +4,6 @@ import {DemoTopics} from '../demo-topics';
 import {ChartKind} from './chart-kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import candleShapesSource from './Candles/candle-shapes.ts?sample';
-import volumeShapesSource from './Candles/volume-shapes.ts?sample';
 import candleSeriesSource from '@pages/Demos/Market/candles.ts?sample';
 import sparklineSource from './sparkline.ts?sample';
 import periodSource from '@pages/Demos/Market/periods.ts?sample';
@@ -187,9 +186,9 @@ const CandlesStory: FC = () =>
       </Step>
       <Step title="Draw each candle as a body, a wall and a wick">
         <Words want="Open, high, low, close: four numbers for each bucket, drawn as one mark.">
-          <Says>candleShapes turns each candle into two shapes. The body runs from the open to the close, and the wick,
-            a thin line through the body, runs from the high to the low. The chart adds a third, the wall: a copy of the
-            body moved 1 right and 1.5 down, which gives the body an edge.</Says>
+          <Says><code className="monospaced">candleShapes.drawn</code> turns each candle into two shapes. The body runs from the open to
+            the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a
+            third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, <code className="monospaced">periodSlots</code> gives each candle an equal slot and makes the body
             60% of the slot wide, so two candles never touch.</Says>
@@ -215,7 +214,7 @@ const CandlesStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(slotsSource, 'export const periodSlots'), gap,
-            ...carve.unit(candleShapesSource, 'export const candleShapes')
+            ...carve.unit(candleShapesSource, 'const drawn')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>')
@@ -233,8 +232,9 @@ const CandlesStory: FC = () =>
       </Step>
       <Step title="Draw the volume under each candle">
         <Words want="A price move on little trading and one on heavy trading mean different things. The trader reads both at once.">
-          <Says>volumeShapes draws a bar under each candle for how much was traded in that bucket. The tallest bar is
-            the busiest bucket on the chart, and every other bar is in proportion to it.</Says>
+          <Says><code className="monospaced">candleShapes.volumes</code> draws a bar under each candle for how much was traded in
+            that bucket. The tallest bar is the busiest bucket on the chart, and every other bar is in proportion to
+            it.</Says>
           <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its
             candle.</Says>
           <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
@@ -244,7 +244,7 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(volumeShapesSource, 'export const volumeShapes')
+            ...carve.unit(candleShapesSource, 'const volumes')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
@@ -265,7 +265,7 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(candlesSource, 'const range = rangeOf(', '  );'), gap,
+            ...carve.span(candlesSource, 'const priceRange = range.of(', '  );'), gap,
             ...carve.span(candlesSource, '<Axes range', 'headroomMilliseconds={2 * bucketMilliseconds}>')
           ]}/>
         </Codes>

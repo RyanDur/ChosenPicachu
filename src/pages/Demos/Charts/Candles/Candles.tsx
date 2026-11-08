@@ -3,12 +3,11 @@ import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {candles, Period, periodHistory, periods, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
-import {volumeShapes} from './volume-shapes';
 import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
-import {Axes, rangeOf} from '../Axes';
+import {Axes, range} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
 import {classNames} from '@components';
@@ -38,9 +37,9 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     candles.bucketTrades(trades, bucketMilliseconds),
     periods.candleCap[period]
   );
-  const bodies = candleShapes(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
-  const bars = volumeShapes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
-  const range = rangeOf(
+  const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
+  const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
+  const priceRange = range.of(
     shownCandles.map(candle => candle.openedAt),
     Math.max(...shownCandles.map(candle => candle.high)),
     Math.min(...shownCandles.map(candle => candle.low))
@@ -66,7 +65,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       </Menu>
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={range}
+      <Axes range={priceRange}
         pattern={periodDisplay.timePattern[period]}
         tickEvery={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>

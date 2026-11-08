@@ -63,21 +63,23 @@ describe('mergeLive', () => {
 
 describe('candleShapes', () => {
   test('a candle that closed under its open is drawn down', () => {
-    const [down] =
-      candleShapes([{openedAt: 0, open: 50002, high: 50003, low: 50000, close: 50001, volume: 1}], 100, 40, 60000);
+    const [down] = candleShapes.drawn([
+      {openedAt: 0, open: 50002, high: 50003, low: 50000, close: 50001, volume: 1}
+    ], 100, 40, 60000);
 
     expect(down.direction).toBe('down');
   });
 
   test('a candle that closed above its open is drawn up', () => {
-    const [up] =
-      candleShapes([{openedAt: 0, open: 50001, high: 50003, low: 50000, close: 50002, volume: 1}], 100, 40, 60000);
+    const [up] = candleShapes.drawn([
+      {openedAt: 0, open: 50001, high: 50003, low: 50000, close: 50002, volume: 1}
+    ], 100, 40, 60000);
 
     expect(up.direction).toBe('up');
   });
 
   test('a flat candle keeps a visible body of one pixel', () => {
-    const [flat] = candleShapes([
+    const [flat] = candleShapes.drawn([
       {openedAt: 0, open: 50001, high: 50003, low: 50000, close: 50001, volume: 1}
     ], 100, 40, 60000);
 
