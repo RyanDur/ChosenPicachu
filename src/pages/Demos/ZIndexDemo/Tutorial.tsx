@@ -46,8 +46,8 @@ export const TopLayerTutorial: FC = () => {
     <p className="overview paragraph">
       The user’s words above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a
       screen reader, the program that reads a page aloud, announces a new note without the reader going to look. ‘Do not
-      hide the note under the thing that broke’ means the banner is written last on the page, outside every card, so
-      no card is drawn over it.
+      hide the note under the thing that broke’ means the banner is written last on the page, outside every card,
+      with a z-index higher than theirs, so no card is drawn over it.
     </p>
     <p className="overview paragraph">
       Each phrase read that way is a clue: a line of what the user said, and what it commits the build to.
