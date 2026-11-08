@@ -12,6 +12,7 @@ export type UsersState = {
   readonly arrangement: Arrangement;
   readonly friendsReports: FriendsReports;
   readonly confirmedAdds: number;
+  readonly addInFlight: boolean;
 };
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
@@ -33,6 +34,18 @@ const reporting = (reports: FriendsReports, action: UsersAction): FriendsReports
 const confirming = (count: number, action: UsersAction): number =>
   action.type === 'userAddConfirmed' ? count + 1 : count;
 
+const awaitingAdd = (inFlight: boolean, action: UsersAction): boolean => {
+  switch (action.type) {
+    case 'userAdded':
+      return true;
+    case 'userAddConfirmed':
+    case 'userAddRefused':
+      return false;
+    default:
+      return inFlight;
+  }
+};
+
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
   arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
 
@@ -40,5 +53,6 @@ export const usersSlice: Slice<UsersState, UsersAction> = slices.combined<UsersS
   users: {initial: [], reduce: roster},
   arrangement: {initial: arrangements.of(userColumns.all.map(({name}) => name)), reduce: seating},
   friendsReports: {initial: {}, reduce: reporting},
-  confirmedAdds: {initial: 0, reduce: confirming}
+  confirmedAdds: {initial: 0, reduce: confirming},
+  addInFlight: {initial: false, reduce: awaitingAdd}
 });

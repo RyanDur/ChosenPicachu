@@ -17,6 +17,7 @@ type UsersSelectors = {
   withId: (id?: string) => (state: UsersState) => Maybe<User>;
   friendsReportOf: (userId: string) => (state: UsersState) => Maybe<Membership>;
   confirmedAdds: (state: UsersState) => number;
+  addInFlight: (state: UsersState) => boolean;
 };
 
 export const usersSelectors: UsersSelectors = {
@@ -28,5 +29,6 @@ export const usersSelectors: UsersSelectors = {
   })),
   withId: id => ({users}) => maybe(users.find(user => user.id === id)),
   friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
-  confirmedAdds: ({confirmedAdds}) => confirmedAdds
+  confirmedAdds: ({confirmedAdds}) => confirmedAdds,
+  addInFlight: ({addInFlight}) => addInFlight
 };

@@ -7,6 +7,7 @@ export type UsersAction =
   | {readonly type: 'usersArrived'; readonly users: readonly User[]}
   | {readonly type: 'userAdded'; readonly user: NewUser}
   | {readonly type: 'userAddConfirmed'}
+  | {readonly type: 'userAddRefused'}
   | {readonly type: 'userUpdated'; readonly edit: UserEdit}
   | {readonly type: 'userRemoved'; readonly user: User}
   | {readonly type: 'friendAdded'; readonly userId: string; readonly friendId: string}
@@ -17,6 +18,7 @@ type UsersActions = {
   usersArrived: (users: readonly User[]) => UsersAction;
   userAdded: (user: NewUser) => UsersAction;
   userAddConfirmed: () => UsersAction;
+  userAddRefused: () => UsersAction;
   userUpdated: (user: User) => UsersAction;
   userRemoved: (user: User) => UsersAction;
   friendAdded: (userId: string, friendId: string) => UsersAction;
@@ -28,6 +30,7 @@ export const usersActions: UsersActions = {
   usersArrived: users => ({type: 'usersArrived', users}),
   userAdded: user => ({type: 'userAdded', user}),
   userAddConfirmed: () => ({type: 'userAddConfirmed'}),
+  userAddRefused: () => ({type: 'userAddRefused'}),
   userUpdated: ({friends: _friends, ...edit}) => ({type: 'userUpdated', edit}),
   userRemoved: user => ({type: 'userRemoved', user}),
   friendAdded: (userId, friendId) => ({type: 'friendAdded', userId, friendId}),
