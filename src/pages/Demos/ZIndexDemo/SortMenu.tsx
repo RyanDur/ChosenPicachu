@@ -32,8 +32,8 @@ const buttonOf = (choice: HTMLElement): Maybe<HTMLElement> =>
 
 export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const [{open, chosen}, dispatch] = useReducer(sortMenu.reduce, sortMenu.initial);
-  const button = useId();
-  const list = useId();
+  const buttonId = useId();
+  const menuId = useId();
 
   const opens = (button: HTMLElement): void => {
     flushSync(() => dispatch(sortMenuChange.opened()));
@@ -70,13 +70,13 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const words = sortChoices.byWords(chosen);
 
   return <>
-    <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open}
-      aria-controls={open ? list : undefined}
+    <button id={buttonId} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open}
+      aria-controls={open ? menuId : undefined}
       aria-label={`${words}, the old way`}
       onMouseDown={event => event.preventDefault()}
       onClick={({currentTarget}) => open ? closesOnto(currentTarget) : opens(currentTarget)}
       onKeyDown={onButtonKey}>{words}</button>
-    {open && <Menu id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
+    {open && <Menu id={menuId} role="menu" aria-labelledby={buttonId} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
       {sortChoices.all.map((choice, at) =>
         <Entry key={choice} role="none">
           <Item role="menuitem" tabIndex={-1} className="sub-title reachable"

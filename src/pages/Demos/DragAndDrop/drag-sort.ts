@@ -39,7 +39,7 @@ const moved = (
     ...sort,
     order,
     lastMove: some({item, position: to}),
-    slideStarts: sort.animated ? slidesFor(order) : {}
+    slideStarts: sort.animated ? {...sort.slideStarts, ...slidesFor(order)} : {}
   };
 };
 
@@ -77,7 +77,7 @@ const reduce = (sort: DragSort, change: DragSortChange): DragSort => {
     case 'hovered': return {...sort, held: sort.held.map(held => ({...held, landing: some(change.at)}))};
     case 'left': return {...sort, held: sort.held.map(held => ({...held, landing: nothing()}))};
     case 'stepped': return stepped(sort, change.item, change.step);
-    case 'slid': return {...sort, slideStarts: {}};
+    case 'slid': return {...sort, slideStarts: slideStarts.ended(sort.slideStarts, change.item)};
     case 'gripped': return {...sort, gripped: some(change.item)};
     case 'letGo': return {...sort, gripped: nothing()};
   }

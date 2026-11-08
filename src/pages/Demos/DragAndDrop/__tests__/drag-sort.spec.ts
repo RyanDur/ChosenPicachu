@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {dragSort} from '../drag-sort';
 import {dragSortChange} from '../drag-sort-change';
+import {slideStarts} from '../slide-starts';
 
 describe('a landed drag', () => {
   const resting = dragSort.initial({items: ['A', 'B', 'C'], animated: false});
@@ -65,5 +66,21 @@ describe('a crossing', () => {
     const crossed = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
 
     expect(dragSort.reduce(crossed, dragSortChange.crossed(0, true)).order).toEqual(['B', 'A', 'C']);
+  });
+
+  it('a neighbour still sliding keeps its slide while the carried item crosses the next one', () => {
+    const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
+    const pastB = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
+    const pastC = dragSort.reduce(pastB, dragSortChange.crossed(2, false));
+
+    expect(slideStarts.of(pastC.slideStarts, 'B').isNothing).toBe(false);
+  });
+
+  it('a slide that ends leaves the other slides running', () => {
+    const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
+    const pastB = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
+    const pastC = dragSort.reduce(pastB, dragSortChange.crossed(2, false));
+
+    expect(slideStarts.of(dragSort.reduce(pastC, dragSortChange.slid('C')).slideStarts, 'B').isNothing).toBe(false);
   });
 });

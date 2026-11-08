@@ -4,7 +4,7 @@ type Crossed = {readonly type: 'crossed'; readonly at: number; readonly homeward
 type Hovered = {readonly type: 'hovered'; readonly at: number};
 type Left = {readonly type: 'left'};
 type Stepped = {readonly type: 'stepped'; readonly item: string; readonly step: 1 | -1};
-type Slid = {readonly type: 'slid'};
+type Slid = {readonly type: 'slid'; readonly item: string};
 type Gripped = {readonly type: 'gripped'; readonly item: string};
 type LetGo = {readonly type: 'letGo'};
 
@@ -17,7 +17,7 @@ export const dragSortChange = {
   hovered: (at: number): Hovered => ({type: 'hovered', at}),
   left: (): Left => ({type: 'left'}),
   stepped: (item: string, step: 1 | -1): Stepped => ({type: 'stepped', item, step}),
-  slid: (): Slid => ({type: 'slid'}),
+  slid: (item: string): Slid => ({type: 'slid', item}),
   gripped: (item: string): Gripped => ({type: 'gripped', item}),
   letGo: (): LetGo => ({type: 'letGo'})
 };
