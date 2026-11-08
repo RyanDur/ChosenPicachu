@@ -79,6 +79,10 @@ export const practicePage = {
     }
     return samples[0];
   },
+  sampleAfter: (sample: HTMLElement): HTMLElement => {
+    const figures = within(practice()).getAllByRole('figure');
+    return figures[figures.indexOf(sample) + 1];
+  },
   drawingsSeenIn: (figure: string | RegExp): string[] => drawnTexts(figure)
     .filter(text => !isInaccessible(text))
     .map(text => text.textContent),
