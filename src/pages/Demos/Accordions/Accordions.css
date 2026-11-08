@@ -5,26 +5,32 @@
 }
 
 .new-accordion {
+  .fold-text {
+    display: block;
+    padding: var(--base-x-2);
+  }
+
   .fold {
     &::details-content {
-      block-size: 0;
+      display: grid;
+      grid-template-rows: 0fr;
+      block-size: auto;
       overflow: hidden;
     }
 
     &[open]::details-content {
-      block-size: auto;
+      grid-template-rows: 1fr;
     }
 
     :is(.reveal, .drawer) &::details-content {
       transition:
-        block-size .3s ease-in-out,
+        grid-template-rows .3s ease-in-out,
         content-visibility .3s allow-discrete;
     }
 
     .drawer &::details-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      align-content: end;
+      align-items: end;
     }
 
     .info-label {
@@ -43,8 +49,7 @@
     }
 
     .info {
-      flex-shrink: 0;
-      padding: var(--base-x-2);
+      min-block-size: 0;
     }
   }
 
@@ -62,11 +67,6 @@
     .fold-clip-item {
       display: block;
       min-height: 0;
-    }
-
-    .fold-text {
-      display: block;
-      padding: var(--base-x-2);
     }
 
     &:has(:checked) .fold-clip {

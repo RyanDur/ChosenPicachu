@@ -626,8 +626,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             expanded.
           {type === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do.'}
           {type === 'exclusive' && ' Every details here shares a name, as the first accordion’s details do above. Pressing the open one closes it, so the list needs no Close bar.'} This build replaces the
-            three old ways: the max-height guess, the height measured by script, and the known height.
-          {motion !== 'static' && ' Today only Chromium slides the fold. Firefox and Safari open it at once, and it still works.'}</p>
+            three old ways: the max-height guess, the height measured by script, and the known height.</p>
           <Snippet label="TS" lines={platform.sample}/>
           <OneJobTwoWays input={input}/>
           <ThreeBecomeTwo/>
@@ -669,24 +668,35 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A pseudo-element is a part of an element
                   that CSS can style as if it were an element of its
                   own. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
-                  details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
-                  keyword, not a number, and a transition cannot move to a keyword on its
-                  own. <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> in the reset lets a size
-                  move to and from keywords like auto, and overflow hidden hides the text the size does not
-                  hold yet.
+                  details hides. Here it is a grid, the CSS layout that sets a box out in rows and columns, with
+                  one row. The fr is a grid unit for a share of the space. In a grid sized to its content, a row of
+                  1fr is exactly as tall as its content needs, and a row of 0fr has no height. The row is 0fr while
+                  the fold is closed and 1fr while it is open. A row in fr is a number, so 0fr to 1fr is a number
+                  growing, which a transition can move. The row always ends at the text’s own height, so nothing is
+                  guessed, measured or fixed. The reset gives every details’ hidden part a height of 0 while it is
+                  closed, so this one keeps its height at auto and leaves the closing to the row.
                 {{
-                  reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
-                  drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text has flex-shrink 0, so it keeps its height, and what the size does not hold yet is the text’s top. Its bottom stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
+                  reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
+                  drawer: ' With the drawer, the row moves on the same 300 milliseconds and sets the text at its bottom, so the text’s bottom edge stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
                   static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '&::details-content {'), gap,
                   ...carve.unit(accordionsCss, '&[open]::details-content {'), gap,
-                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
-                  ...(motion === 'drawer' ? [...carve.unit(accordionsCss, '.drawer &::details-content {'), gap, ...carve.unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
-                  ...carve.unit(resetCss, ':root {\n  interpolate-size')
+                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'),
+                  ...(motion === 'drawer' ? [gap, ...carve.unit(accordionsCss, '.drawer &::details-content {')] : [])
                 ]}/>
                 <SizedToTheText/>
+              </li>
+              <li className="run">
+                <p className="paragraph">A row closes only as far as its item can. The text has a minimum height of 0,
+                  so the row can shrink to nothing, and its padding sits on a span inside it, where it cannot hold the
+                  row open. With the padding on the text itself, every fold jumped open by the padding’s height before
+                  it began to slide.</p>
+                <Snippet label="CSS" lines={[
+                  ...carve.unit(accordionsCss, '.info {\n      min-block-size: 0;'), gap,
+                  ...carve.unit(accordionsCss, '.fold-text {')
+                ]}/>
               </li>
               <li className="run">
                 <p className="paragraph">There is no script here either.</p>
@@ -733,17 +743,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <WhatEachPromises/>
         </li>}
         <li className="run">
-          <p className="paragraph">Grid is the CSS layout that sets a box out in rows and columns. A grid row can slide
-            open to its content’s height in every browser today. Under the bar, the fold’s
-            paragraph is a grid with one row. The fr is a grid unit for a share of the space. In a
-            grid sized to its content, a row of 1fr is exactly as tall as its content needs. A row
-            of 0fr has no height. The row is 0fr while the fold is
+          <p className="paragraph">Under the bar, the fold’s paragraph is a grid with one row, the same row the details
+            build opens. The row is 0fr while the fold is
             closed. <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> is a piece of a CSS rule
             that picks an element by what it contains, so <code className="monospaced">:has(:checked)</code> makes that
-            row 1fr when the fold holds a checked input. A row in fr is a number, so 0fr to 1fr is a number growing,
-            which a transition can move. The paragraph’s overflow hidden hides whatever its row does not hold. The row
-            always ends at the content’s own height, so nothing is guessed, nothing is measured by script, nothing is
-            fixed, and no text has to scroll.</p>
+            row 1fr when the fold holds a checked input. The paragraph’s overflow hidden hides whatever its row does
+            not hold.</p>
           <Snippet label="CSS" lines={[
             ...carve.unit(accordionsCss, '.fold-clip {'), gap,
             ...carve.unit(accordionsCss, '&:has(:checked) .fold-clip {')
@@ -785,15 +790,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     one fold open. Only the second press that closes a fold is lost.</p>}
               </li>
               <li className="run">
-                <p className="paragraph">A row closes only as far as its item can. The paragraph’s item is a span with
-                  no minimum height, so the row can shrink to 0. The text’s padding sits on a span inside
-                  that one, where it cannot hold the row open. A paragraph may hold spans, so the text
-                  needs no other element. If you put the padding on the item, a strip of text shows under
-                  every closed bar. If you let the fold’s own row move and the paragraph clip inside it,
-                  the clip falls behind the row while it moves, and a blank band shows under the text.</p>
+                <p className="paragraph">Here the paragraph’s item is a span with no minimum height, and, as in the
+                  details build, the text’s padding sits on a span inside it, so the row can shrink to 0. A paragraph
+                  may hold spans, so the text needs no other element. If you let the fold’s own row move and the
+                  paragraph clip inside it, the clip falls behind the row while it moves, and a blank band shows under
+                  the text.</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '.fold-clip-item {'), gap,
-                  ...carve.unit(accordionsCss, '.fold-text {\n      display: block;')
+                  ...carve.unit(accordionsCss, '.fold-text {')
                 ]}/>
                 <PaddingInsideTheClip/>
               </li>

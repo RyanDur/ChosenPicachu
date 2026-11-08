@@ -16,7 +16,7 @@ export const InclusiveToggleAccordion: FC<AccordionProps> = ({
       <li key={key}>
         <details className="fold">
           <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{key}</summary>
-          <p className="info">{value}</p>
+          <p className="info"><span className="fold-text">{value}</span></p>
         </details>
       </li>)}
   </ul>
