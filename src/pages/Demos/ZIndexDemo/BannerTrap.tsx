@@ -1,4 +1,4 @@
-import {FC, useId, useState} from 'react';
+import {FC, MouseEvent, useState} from 'react';
 import {maybe} from '@ryandur/sand';
 import {decked, news} from '@components/fibs';
 import {bannerChange, useBannerDispatch} from '@components/Banners';
@@ -8,11 +8,12 @@ const nextNews = decked(news);
 
 export const BannerTrap: FC = () => {
   const [raised, updateRaised] = useState(false);
-  const raiser = useId();
   const dispatchBanner = useBannerDispatch();
-  const dismissed = (): void => {
+  const dismissed = ({currentTarget: pressed}: MouseEvent<HTMLButtonElement>): void => {
+    maybe(pressed.closest('li'))
+      .mBind(card => maybe(card.querySelector<HTMLElement>('[data-raiser]')))
+      .map(raiser => raiser.focus());
     updateRaised(false);
-    maybe(document.getElementById(raiser)).map(button => button.focus());
   };
 
   return <figure className="banner-trap card rounded-corners lifted padded">
@@ -28,7 +29,7 @@ export const BannerTrap: FC = () => {
         <ul className="trap-ways">
           <li className="trap-way">
             <p className="caption">The old way</p>
-            <button id={raiser} type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, the old way"
+            <button data-raiser type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, the old way"
               onClick={() => updateRaised(true)}>Raise a banner</button>
           </li>
           <li className="trap-way">
