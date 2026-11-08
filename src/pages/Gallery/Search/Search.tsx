@@ -10,7 +10,6 @@ import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
 
 type Props = {
-  id?: string;
   className?: string;
 };
 
@@ -27,7 +26,7 @@ const afterAPause = (ask: () => {cancel: () => void}): () => void => {
   };
 };
 
-export const Search: FC<Props> = ({id, className}) => {
+export const Search: FC<Props> = ({className}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
@@ -59,7 +58,7 @@ export const Search: FC<Props> = ({id, className}) => {
     removeSearchParams('search');
   };
 
-  return <search id={id} className={classNames('search', 'backdrop', className)}>
+  return <search className={classNames('search', 'backdrop', className)}>
     <form className="search-form" onSubmit={submitted} onReset={reset}>
       <label className="query-label field next-approached ellipsis" htmlFor={query}><span
         className="bold">Search For:</span> {search ?? ''}</label>

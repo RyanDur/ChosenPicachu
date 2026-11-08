@@ -21,7 +21,7 @@ const PieceHeader = () => {
     ? {title: easel.answer.title, listed: listingOf(easel.answer)}
     : {title: 'A piece', listed: names.gallery};
   return <Header title={title} listed={listed}>
-    <Search id="gallery-search" className="header-settings"/>
+    <Search className="header-settings"/>
   </Header>;
 };
 
