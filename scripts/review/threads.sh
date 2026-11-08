@@ -6,8 +6,8 @@ gh api graphql --paginate -F pull="$pull" -f owner="${GITHUB_REPOSITORY%/*}" -f 
     repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
       reviewThreads(first: 100, after: $endCursor) {
         nodes {
-          id isResolved path line
-          first: comments(first: 1) { nodes { databaseId author { __typename login } } }
+          id isResolved path line originalLine
+          first: comments(first: 1) { nodes { databaseId author { __typename login } body } }
           latest: comments(last: 20) { nodes { databaseId authorAssociation author { __typename login } body } }
         }
         pageInfo { hasNextPage endCursor } } } }

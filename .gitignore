@@ -33,6 +33,8 @@ playwright-report/
 .lighthouseci/
 
 review.json
+earlier-findings.json
+discussion.json
 review-comment.md
 journeys.json
 smoke.json

@@ -1,6 +1,4 @@
 #!/bin/bash
-# The one hook. Commits run nothing; a push runs the linters, since they take seconds and a lint error should never
-# cost a CI run. The pull request's checks run the rest (AGENTS.md, "Commits and pushes").
 # Activate per-clone: git config core.hooksPath scripts/git-hooks
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"

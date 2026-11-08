@@ -52,11 +52,20 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('args "high --comment 412 --max-findings all"');
   });
 
-  test('should hand a pull request\'s review the conversations earlier reviews started, and a range none', () => {
+  test('should hand a pull request\'s review the conversations earlier reviews started', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
     expect(onThePull).toContain('earlier-findings.json');
+  });
+
+  test('should hand a range\'s review no earlier conversations', () => {
     expect(asked).not.toContain('earlier-findings.json');
+  });
+
+  test('should keep a pull request\'s notes off its lines', () => {
+    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
+
+    expect(onThePull).toContain('Post an inline comment for a violation or a concern only');
   });
 
   test('should name every reviewer\'s rubric, to be read whole', () => {

@@ -33,11 +33,15 @@ export const askFor = ({before, after, pull, reviewers}) => [
   'AGENTS.md or a rubric), "concern" or "note"; and "rubric", the file whose rule it answers to, or "correctness".',
   'Answer with every finding in the structured output, an empty list when there are none.',
   ...empty(pull) ? [] : [
+    'Post an inline comment for a violation or a concern only. A note goes in the structured output and the summary,',
+    'never on a line, because every conversation on a line holds the merge until it is resolved.'
+  ],
+  ...empty(pull) ? [] : [
     'earlier-findings.json holds the conversations earlier reviews of this pull request started, each with its',
     'replies and whether it is resolved. A finding one of them already raised gets no new inline comment. Judge it',
-    'by the code at the head: leave it out of the structured output when the code no longer has the problem, or when',
-    'its conversation ends with the reviewer\'s "Agreed." or a ruling from the repository\'s owner, RyanDur.',
-    'Otherwise keep it in, resolved or not.'
+    'by the code at the head. Leave it out of the structured output when the code no longer has the problem, or when',
+    'its conversation ends with the reviewer\'s "Agreed." to an argument that the code is right as it stands and that',
+    'code is unchanged. Otherwise keep it in, resolved or not.'
   ]
 ].join(' ');
 
