@@ -1,5 +1,5 @@
 import {FC, useEffect, useReducer} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {asyncResult, has, maybe} from '@ryandur/sand';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {plainFold} from './plain-fold';
 import {PlainFoldChange, plainFoldChange} from './plain-fold-change';
@@ -16,17 +16,10 @@ export const PlainFold: FC = () => {
   const dispatchBanner = useBannerDispatch();
   const [{document, body, height}, dispatch] = useReducer(plainFold.reduce, plainFold.initial);
 
-  useEffect(() => {
-    let standing = true;
-    void import('./assemble').then(({foldAssembly}) => {
-      if (standing) {
-        dispatch(plainFoldChange.assembled(foldAssembly.document()));
-      }
-    }).catch(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')));
-    return () => {
-      standing = false;
-    };
-  }, [dispatchBanner]);
+  useEffect(() => asyncResult(import('./assemble'))
+    .onSuccess(({foldAssembly}) => dispatch(plainFoldChange.assembled(foldAssembly.document())))
+    .onFailure(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')))
+    .cancel, [dispatchBanner]);
 
   useEffect(() => maybe(body).map(watched => {
     const watcher = new ResizeObserver(() => measured(watched, dispatch));
