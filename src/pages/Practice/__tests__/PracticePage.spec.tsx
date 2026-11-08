@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
 const appContinuum = 'https://www.appcontinuum.io/';

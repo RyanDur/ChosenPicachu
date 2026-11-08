@@ -1,7 +1,7 @@
 import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {maybe, not} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
 const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'});

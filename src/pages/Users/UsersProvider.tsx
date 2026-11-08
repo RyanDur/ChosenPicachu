@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, useEffect, useState, useSyncExternalStore} from 'react';
 import {useNavigate} from 'react-router';
-import {Paths} from '@frame/navigation';
-import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
+import {Paths} from '@navigation';
+import {bannerChange, useBannerDispatch} from '@notices/Banners';
 import {trouble} from '@transport';
 import {usersApi} from './usersApi';
 import {syncing} from './syncing';

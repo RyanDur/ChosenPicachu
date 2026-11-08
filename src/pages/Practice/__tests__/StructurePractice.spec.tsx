@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths, repository} from '@frame/navigation';
+import {Paths, repository} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';

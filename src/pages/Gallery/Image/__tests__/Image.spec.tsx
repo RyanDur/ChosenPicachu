@@ -4,7 +4,7 @@ import {GalleryProviders} from '@pages/Gallery/Providers';
 import {render} from '@testing-library/react';
 import {Image} from '@pages/Gallery/Image';
 import {Source} from '@pages/Gallery/source';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {aPiece} from '@pages/Gallery/__test_support/fixtures';
 import {imageOf} from '@pages/Gallery/Image/__test_support';
 

@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render} from '@testing-library/react';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {homePage} from '@pages/Home/__test_support/home';
 
 describe('the home page', () => {

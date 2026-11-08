@@ -1,8 +1,8 @@
 import {ReactNode, StrictMode} from 'react';
 import {renderToReadableStream} from 'react-dom/server';
 import {createStaticHandler, createStaticRouter, RouteObject, StaticRouterProvider} from 'react-router';
-import {Paths} from '@frame/navigation';
-import names from '@frame/navigation/names.json';
+import {Paths} from '@navigation';
+import names from '@navigation/names.json';
 import {HydrateFallback, Layout} from './root';
 import {lazily, siteOpenedBy} from './routes';
 

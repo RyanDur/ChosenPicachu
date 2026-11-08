@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import type {Environment} from './environment';
+import type {Environment} from '@transport';
 import {envContext} from './envContext';
 
 type Props = PropsWithChildren<{readonly env: Environment}>;

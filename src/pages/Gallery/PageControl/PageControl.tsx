@@ -1,6 +1,6 @@
 import {SubmitEvent} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
-import {numberParam} from '@frame/navigation/search-params';
+import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
 import './PageControl.css';
 

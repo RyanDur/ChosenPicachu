@@ -2,7 +2,7 @@ import {FC, useEffect, useReducer} from 'react';
 import {useLocation} from 'react-router';
 import {useHydrated} from '@components';
 import {has, maybe, notEmpty} from '@ryandur/sand';
-import {Tabs} from '@frame/navigation/Tabs';
+import {Tabs} from '@navigation/Tabs';
 import {Loading} from '@components/Loading';
 import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';

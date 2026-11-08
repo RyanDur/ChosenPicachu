@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {UsersTable} from './UsersTable';
 import {UsersProvider} from './UsersProvider';
 import {UserInformation} from './UserInformation';

@@ -77,13 +77,13 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillReachForThePage = [
-  'src/frame/navigation/arrival/useArrival.ts',
-  'src/components/glide.ts', 'src/components/room.ts', 'src/frame/page/SideNav.tsx',
+  'src/navigation/arrival/useArrival.ts',
+  'src/components/glide.ts', 'src/components/room.ts', 'src/page/SideNav.tsx',
   'src/pages/Demos/ZIndexDemo/SortMenu.tsx'
 ];
 
 const refsWithAReason = [
-  'src/frame/notices/Feedback/Feedback.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
+  'src/notices/Feedback/Feedback.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
 const stillMoveByScript = ['src/components/glide.ts'];
@@ -162,7 +162,7 @@ module.exports = [
   {
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['**/__tests__/**', '**/__test_support/**', 'src/entry.client.tsx', 'src/hydrateTheSite.tsx',
-      'src/frame/state/env.ts', ...vanilla, ...stillReachForThePage],
+      'src/transport/env.ts', ...vanilla, ...stillReachForThePage],
     plugins: {page},
     rules: {'page/no-page-globals': 'error'}
   },

@@ -4,7 +4,7 @@ import {expect, test} from 'vitest';
 import {render} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 
 describe('The Demos page', () => {
   test('should mark Accordions as the current tab when it is the demo shown', async () => {

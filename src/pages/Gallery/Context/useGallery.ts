@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import * as schema from 'schemawax';
-import {numberParam, useSearchParamsObject} from '@frame/navigation/search-params';
+import {numberParam, useSearchParamsObject} from '@navigation/search-params';
 import {museumReply, sourceParam} from '@pages/Gallery/museums';
 import {opening} from '@pages/Gallery/opening';
 import {Wall} from './wall';

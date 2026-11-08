@@ -1,13 +1,12 @@
-import {BannerProvider, Banners} from '@frame/notices/Banners';
+import {BannerProvider, Banners} from '@notices/Banners';
 import {Location, Outlet, ScrollRestoration} from 'react-router';
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
-import {FeedbackProvider} from '@frame/notices/Feedback';
-import {Header, Page, PageError} from '@frame/page';
-import {PageNameProvider} from '@frame/state';
-import names from '@frame/navigation/names.json';
-import {env} from '@frame/state';
+import {FeedbackProvider} from '@notices/Feedback';
+import {env} from '@transport';
+import {Header, Page, PageError, PageNameProvider} from '@page';
+import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
 
 const base = import.meta.env.BASE_URL;

@@ -1,4 +1,4 @@
-import {useSearchParamsOnceHydrated} from '@frame/navigation/search-params';
+import {useSearchParamsOnceHydrated} from '@navigation/search-params';
 import {storyKeys} from './storyKeys';
 
 type OpenStories = {

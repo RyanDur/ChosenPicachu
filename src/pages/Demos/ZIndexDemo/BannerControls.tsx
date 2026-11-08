@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Align, Entrance, Side, Stack} from '@frame/notices/Banners';
+import {Align, Entrance, Side, Stack} from '@notices/Banners';
 import {DialGroup, DialRow} from '../Controls';
 
 type Copy = {

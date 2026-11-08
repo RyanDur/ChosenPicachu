@@ -1,6 +1,6 @@
 import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
+import {useSearchParamsObject} from '@navigation/search-params';
 import {ChartKind} from './kinds';
 import {Period} from './period';
 import {absent, added, dealt, periodChosen, seated, without} from './desk';

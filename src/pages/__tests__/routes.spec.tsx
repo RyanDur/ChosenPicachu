@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';

@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 import {render, waitFor} from '@testing-library/react';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {UserInformation} from '../index';
 import {UsersProvider} from '../../UsersProvider';

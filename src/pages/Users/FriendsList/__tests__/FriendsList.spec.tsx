@@ -1,5 +1,5 @@
 import {render, waitFor} from '@testing-library/react';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {profile, User} from '../../profile';
 import {aUser, setupUsersResponse, setupUserUpdatedResponse, userUpdatePending, usersTable} from '@pages/Users/__test_support';

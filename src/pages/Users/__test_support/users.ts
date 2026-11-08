@@ -1,5 +1,5 @@
 import {http, HttpResponse, JsonBodyType} from 'msw';
-import {env} from '@frame/state';
+import {env} from '@transport';
 import {User} from '../profile';
 import {server} from '@__test_support/server';
 
