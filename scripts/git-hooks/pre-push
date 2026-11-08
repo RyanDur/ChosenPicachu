@@ -1,21 +1,28 @@
 #!/bin/bash
+# The one hook. Commits run nothing; every push runs the linters first, since they take seconds and a lint error
+# should never cost a CI run. A push that only goes to verify/<name> branches stops there: CI runs the types, the
+# unit tests, the journeys and the review for it, so a dev never waits for the machine (AGENTS.md, "Commits and
+# pushes"). A push to main runs everything.
+# Activate per-clone: git config core.hooksPath scripts/git-hooks
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-# a push that only goes to verify/<issue> branches runs nothing here: CI runs the unit tests, journeys and review
-# for it, so a dev never waits for the machine or for the other dev's journeys (AGENTS.md, "Commits and pushes")
 only_verify=true
 while read -r _ _ remote_ref _; do
   [[ "$remote_ref" == refs/heads/verify/* ]] || only_verify=false
 done
+
+echo "pre-push: oxlint + stylelint + eslint stylistic..."
+npm run lint
+npm run lint:css
+npm run lint:style
+
 if [[ "$only_verify" == true ]]; then
-  echo "pre-push: verify branch, CI runs the gates."
+  echo "pre-push: verify branch, CI runs the rest."
   exit 0
 fi
 
-echo "pre-push: oxlint + stylelint + tsc + vitest + build..."
-npm run lint
-npm run lint:css
+echo "pre-push: tsc + vitest + build..."
 npx tsc -b
 npx vitest run --reporter=dot
 npm run build

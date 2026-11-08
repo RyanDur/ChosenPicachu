@@ -48,7 +48,6 @@ Activate the repo's quality gates once per clone:
 git config core.hooksPath scripts/git-hooks
 ```
 
-`pre-commit` runs lint, typecheck, and the unit suite in seconds;
-`pre-push` adds stylelint and the production build. CI audits the
-deployed site (smoke, axe, Lighthouse) — the hooks catch everything
-catchable before the round-trip.
+`pre-push` runs the linters on every push. A push to main also runs
+the typecheck, the unit tests, the production build and the journeys.
+CI audits the deployed site (smoke, axe, Lighthouse).
