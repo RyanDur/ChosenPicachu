@@ -30,8 +30,8 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
-          display is grid. Its list’s 9999 is compared with card two’s 1 in the tab content’s context, so the list opens
-          on top.</p>
+          display is grid. Its list’s 9999 is compared with card two’s 1 in the context the tab’s content forms, so the
+          list opens on top.</p>
         <Snippet label="CSS" lines={carve.unit(zIndexCss, '.old-way-cards {')}/>
       </li>
       <li className="run">

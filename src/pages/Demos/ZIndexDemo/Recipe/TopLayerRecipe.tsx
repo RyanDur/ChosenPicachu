@@ -52,7 +52,7 @@ export const TopLayerRecipe: FC = () => {
       a whole and with the frame around it, never with a card.</Tell>
     <Steps>
       <Step title="Write the panel last, at the page’s root">
-        <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit where none holds it.">
+        <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit in the page’s own context, beside the tab’s content, not inside it.">
           <Says>The panel is a section written once, at the root of the site, after the page itself. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
             announces what arrives without being asked.</Says>
