@@ -11,9 +11,6 @@ on:
         description: 'The id of the reply to answer'
         required: true
 
-concurrency:
-  group: discuss-${{ github.event.comment.in_reply_to_id || inputs.comment }}
-
 jobs:
   answer:
     if: >-
@@ -36,6 +33,7 @@ jobs:
           fetch-depth: 0
       - name: Gather the thread, if a reviewer started it
         id: thread
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -45,8 +43,9 @@ jobs:
             exit 0
           fi
           gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments" \
-            | jq --argjson first "$first" \
-              '[add[] | select(.id == $first or .in_reply_to_id == $first)
+            | jq --argjson first "$first" --argjson reply "$REPLY" \
+              '[add[] | select((.id == $first or .in_reply_to_id == $first) and .id <= $reply)
+                | select(.user.type == "Bot" or (.author_association | IN("OWNER", "MEMBER", "COLLABORATOR")))
                 | {author: .user.login, file: .path, line, commit: .commit_id, body}]' > discussion.json
           echo "first=$first" >> "$GITHUB_OUTPUT"
           echo "author=$(jq -r '.[0].author' discussion.json)" >> "$GITHUB_OUTPUT"
@@ -81,17 +80,13 @@ jobs:
             -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
       - name: Resolve the thread when the reviewer agrees
         if: steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FIRST: ${{ steps.thread.outputs.first }}
         run: |
-          thread=$(gh api graphql --paginate -F pull="$PULL" -f owner="${GITHUB_REPOSITORY%/*}" -f name="${GITHUB_REPOSITORY#*/}" -f query='
-            query($owner: String!, $name: String!, $pull: Int!, $endCursor: String) {
-              repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
-                reviewThreads(first: 100, after: $endCursor) {
-                  nodes { id comments(first: 1) { nodes { databaseId } } }
-                  pageInfo { hasNextPage endCursor } } } }
-            }' -q ".data.repository.pullRequest.reviewThreads.nodes[] | select(.comments.nodes[0].databaseId == $FIRST) | .id")
+          thread=$(scripts/review/threads.sh "$PULL" \
+            | jq -r --argjson first "$FIRST" '.[] | select(.first.nodes[0].databaseId == $first) | .id')
           if [ -z "$thread" ]; then
             echo "::error::No review thread on #$PULL starts with comment $FIRST"
             exit 1
