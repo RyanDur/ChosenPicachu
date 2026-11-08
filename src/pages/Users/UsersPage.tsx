@@ -7,7 +7,7 @@ import {UserInformation} from './UserInformation';
 import {useOpened} from './useOpened';
 import './UsersPage.css';
 
-const Roster: FC = () => {
+const FormAndRoster: FC = () => {
   const open = useOpened();
   return <>
     <UserInformation className="user-form users card rounded-corners lifted padded"/>
@@ -22,5 +22,5 @@ const Roster: FC = () => {
 };
 
 export const UsersPage: FC = () => <UsersProvider>
-  <Roster/>
+  <FormAndRoster/>
 </UsersProvider>;
