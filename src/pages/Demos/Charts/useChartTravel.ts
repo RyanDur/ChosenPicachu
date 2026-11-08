@@ -17,14 +17,14 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const [mark, setMark] = useState(0);
   const [pushed, setPushed] = useState<Pushed>({});
 
-  const isArmed = (at: number) => armed.map(seat => seat === at).orElse(false);
+  const isArmed = (at: number) => armed.map(gripped => gripped === at).orElse(false);
 
   const arm = (at: number) => setArmed(maybe(at));
 
   const disarm = () => setArmed(nothing());
 
   const dress = (at: number) => classNames('chart-slot', 'focal-ringed',
-    aloft.map(seat => seat === at).orElse(false) && 'hide',
+    aloft.map(held => held === at).orElse(false) && 'hide',
     pushed[at] && 'chart-pushed',
     pushed[at] === 'up' && 'upward',
     pushed[at] === 'down' && 'downward');
