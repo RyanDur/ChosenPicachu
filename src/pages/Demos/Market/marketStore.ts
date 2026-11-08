@@ -1,4 +1,4 @@
-import {Middleware, Store, store} from '@components/store';
+import {Middleware, store, Store} from '@components/store';
 import {MarketAction} from './marketActions';
 import {MarketState, marketSlice} from './marketSlice';
 

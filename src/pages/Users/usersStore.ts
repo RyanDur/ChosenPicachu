@@ -1,4 +1,4 @@
-import {Listener, Store, store} from '@components/store';
+import {Listener, store, Store} from '@components/store';
 import {UsersAction} from './usersActions';
 import {UsersState, usersSlice} from './usersSlice';
 

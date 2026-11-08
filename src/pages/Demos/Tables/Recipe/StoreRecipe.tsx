@@ -6,7 +6,8 @@ import stateSource from '@components/DragSortableTable/model/table-state.ts?samp
 import arrangementSource from '@components/DragSortableTable/model/arrangement.ts?sample';
 import actionsSource from '@components/DragSortableTable/model/actions.ts?sample';
 import reducerSource from '@components/DragSortableTable/model/reducer.ts?sample';
-import storeSource from '@components/store.ts?sample';
+import storeSource from '@components/store/store.ts?sample';
+import slicesSource from '@components/store/slices.ts?sample';
 import useTableSelectorSource from '@components/DragSortableTable/useTableSelector.ts?sample';
 import selectorsSource from '@components/DragSortableTable/model/selectors.ts?sample';
 import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
@@ -121,7 +122,7 @@ const ActionsAreData: FC = () =>
         ]}/>
         <Snippet label="TS" lines={[
           ...carve.unit(marketSliceSource, 'export const marketSlice'), gap,
-          ...carve.unit(storeSource, 'export type Slice'), gap,
+          ...carve.unit(slicesSource, 'export type Slice'), gap,
           ...carve.unit(arrangementSource, 'const answering = '), gap,
           ...carve.unit(reducerSource, 'export const tableReducer'),
           lines.aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers read the type in turn')
