@@ -68,11 +68,11 @@ describe('the top layer', () => {
     const controls = await zIndexTab.findBannerControls();
 
     const many = recipeFolds.story(await zIndexTab.findFeatureStories(), 'The user can have multiple banners');
-    expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
+    expect(many).toHaveTextContent('the stack grows downward, so the track is a row.');
 
     await zIndexTab.choose(controls, 'stack', 'Left');
 
-    expect(recipeFolds.stepTitles(many)).toContain('Change a banner’s height smoothly when its text rewraps');
+    expect(many).toHaveTextContent('the stack grows leftward, so the track is a column.');
   });
 
   test('the cards start stacked', async () => {
@@ -143,7 +143,7 @@ describe('the banner tutorial’s first story', () => {
 describe('the banner tutorial’s second story', () => {
   const story = 'The user can have multiple banners';
 
-  test('should head each step with what happens, with the height step only for a sideways stack', async () => {
+  test('should head each step with what happens', async () => {
     render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
     const many = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
 
@@ -151,16 +151,8 @@ describe('the banner tutorial’s second story', () => {
       'Skip a message that is already up',
       'Open a gap in the stack first',
       'Slide in from off screen',
-      'Slide out, then close the gap',
-      'Change a banner’s height smoothly when its text rewraps'
+      'Slide out, then close the gap'
     ]);
-  });
-
-  test('should leave out the height step for a stack that grows down', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=down')}/>);
-    const many = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
-
-    expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
   });
 
 });

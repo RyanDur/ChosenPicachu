@@ -31,10 +31,10 @@ const axisFact: Record<Axis, ReactNode> = {
 };
 
 const gapFact: Record<Stack, string> = {
-  down: 'The gap is a margin below every banner but the bottom one, the last child when the stack grows downward, and it opens over the same 0.3 seconds. The same rule carries the upward stack’s selector, where the bottom banner is the first child.',
-  up: 'The gap is a margin below every banner but the bottom one, the first child when the stack grows upward, and it opens over the same 0.3 seconds. The same rule carries the downward stack’s selector, where the bottom banner is the last child.',
-  right: 'The gap is a margin to the right of every banner but the one at the right, the last child when the stack grows rightward, and it opens over the same 0.3 seconds. The same rule carries the leftward stack’s selector, where the banner at the right is the first child.',
-  left: 'The gap is a margin to the right of every banner but the one at the right, the first child when the stack grows leftward, and it opens over the same 0.3 seconds. The same rule carries the rightward stack’s selector, where the banner at the right is the last child.'
+  down: 'The gap is a margin below every banner but the bottom one, the last child when the stack grows downward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the upward stack’s selector, where the bottom banner is the first child.',
+  up: 'The gap is a margin below every banner but the bottom one, the first child when the stack grows upward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the downward stack’s selector, where the bottom banner is the last child.',
+  right: 'The gap is a margin to the right of every banner but the one at the right, the last child when the stack grows rightward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the leftward stack’s selector, where the banner at the right is the first child.',
+  left: 'The gap is a margin to the right of every banner but the one at the right, the first child when the stack grows leftward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the rightward stack’s selector, where the banner at the right is the last child.'
 };
 
 const enterFact: Record<Entrance, string> = {
@@ -54,39 +54,9 @@ const axisSelector: Record<Axis, string> = {
 };
 
 const ownedGap: Record<Axis, string> = {
-  vertical: '&:where(.stack-down) .trouble:where(:not(:last-child)),',
-  sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)),'
+  vertical: '&:where(.stack-down) .trouble:where(:not(:last-child)) .news,',
+  sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)) .news,'
 };
-
-const SettleStep: FC = () => (
-  <Step title="Change a banner’s height smoothly when its text rewraps">
-    <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
-      <Says>A <code className="monospaced">ResizeObserver</code>, a browser object that calls back when an element
-        changes size, sets each message’s height to a measured number of pixels. The number travels in a custom property
-        named <code className="monospaced">--news-block-size</code>.</Says>
-      <Says>The style sheet declares it with <code className="monospaced">@property</code>, an at-rule: a rule that
-        starts with @ and sets something up for the style sheet without picking out elements. This one gives a custom
-        property a type and a starting value: a length or auto, starting as auto, so a message that has not been
-        measured keeps its own height. A rewrap then changes one number to another, and the transition
-        on <code className="monospaced">block-size</code>, the CSS name for
-        height on this page, runs between them.</Says>
-      <Says>Before it measures, the code removes the height it set last
-        time. <code className="monospaced">scrollHeight</code>, the height of everything inside the element even where
-        it overflows, is never less than the element’s own height, so a message measured with the old height still on it
-        could only grow.</Says>
-    </Words>
-    <Codes>
-      <Snippet label="TS" lines={[
-        ...carve.unit(bannersSource, 'const unsettled = '), gap,
-        ...carve.unit(bannersSource, 'const settler = new ResizeObserver(')
-      ]}/>
-      <Snippet label="CSS" lines={[
-        ...carve.unit(bannersCss, '@property --news-block-size {'), gap,
-        ...carve.span(bannersCss, 'block-size: var(--news-block-size', 'transition: block-size 0.3s, padding 0.3s, border-width 0.3s;')
-      ]}/>
-    </Codes>
-  </Step>
-);
 
 const multipleStory = {param: 'news', id: 'many'} as const;
 const slideInStep = 'step-slide-in';
@@ -128,10 +98,12 @@ export const MultipleRecipe: FC = () => {
             gap over 0.3 seconds.</Says>
           <Says>{axisFact[axisOf(stack)]}</Says>
           <Says>{gapFact[stack]}</Says>
-          <Says>A track closes only as far as what is inside it can shrink, so the message’s minimum size is 0 in both
-            directions, and on the stack’s axis its padding and border start at 0 as well.</Says>
-          <Says>The banner has one transition list, written once for all four stacks: both track sizes and both margins
-            over 0.3 seconds, and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in
+          <Says>A track closes only as far as what is inside it can shrink. The paragraph that fills the track,{' '}
+            <code className="monospaced">news-item</code>, has a minimum size of 0 in both directions. Its display is
+            flow-root, which keeps the message’s margin inside it. A margin that passed out of the paragraph would sit
+            outside the track and hold the gap open.</Says>
+          <Says>The banner has one transition list, written once for all four stacks: both track sizes over 0.3 seconds,
+            and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in
             it. A second transition declaration on the same element replaces the list; it does not add to it. So the
             arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list
             of its own.</Says>
@@ -141,8 +113,7 @@ export const MultipleRecipe: FC = () => {
             ...carve.unit(bannersCss, '.trouble {'), gap,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
             ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
-            ...carve.unit(bannersCss, '.news {'), gap,
-            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .news {`)
+            ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>
       </Step>
@@ -161,22 +132,20 @@ export const MultipleRecipe: FC = () => {
       <Step title="Slide out, then close the gap">
         <Words want="A dismissed banner should slide out first, and only then should the others close the gap.">
           <Says>Dismissing a banner gives it the class leaving. That rule sends the banner back the way it came at
-            once, and holds the track, the margin and the message’s padding and border for 0.6 seconds, the time the
-            slide takes, before closing them. The code takes the banner out of the list only when the track’s
-            transition has ended. Taken out any sooner, it would leave the others to jump into its place.</Says>
+            once, and holds the track for 0.6 seconds, the time the slide takes, before closing it over 0.3. The code
+            takes the banner out of the list only when the track’s transition has ended. Taken out any sooner, it
+            would leave the others to jump into its place.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
             ...carve.unit(bannersCss, '.trouble.leaving {'), gap,
-            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`), gap,
-            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving .news {`)
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`)
           ]}/>
           <Snippet label="TS" lines={[
             ...carve.unit(bannersSource, 'const left = ')
           ]}/>
         </Codes>
       </Step>
-      {sideways(stack) && <SettleStep/>}
     </Steps>
   </Story>;
 };
