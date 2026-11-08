@@ -95,7 +95,7 @@ jobs:
             exit 1
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
-      - name: Run the head's failed checks again, so the review reads the agreement
+      - name: Rerun the head's review job, so the review reads the agreement
         if: steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -104,4 +104,5 @@ jobs:
           run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then exit 0; fi
           gh run watch "$run" --interval 30 > /dev/null
-          if [ "$(gh run view "$run" --json conclusion -q .conclusion)" = failure ]; then gh run rerun "$run" --failed; fi
+          review=$(gh run view "$run" --json jobs -q '.jobs[] | select(.name == "review" and .conclusion == "failure") | .databaseId')
+          if [ -n "$review" ]; then gh run rerun --job "$review"; fi
