@@ -88,8 +88,8 @@ describe('a user form', () => {
 
         await userForm.add();
 
-        expect(userForm.field('First Name')).toHaveValue('');
-        await waitFor(() => expect(adds()).toHaveLength(1));
+        await waitFor(() => expect(userForm.field('First Name')).toHaveValue(''));
+        expect(adds()).toHaveLength(1);
       });
 
       it('the fresh form after adding wears a new avatar', async () => {
@@ -99,7 +99,7 @@ describe('a user form', () => {
 
         await userForm.add();
 
-        expect(userForm.avatarShown()).not.toEqual(submitted);
+        await waitFor(() => expect(userForm.avatarShown()).not.toEqual(submitted));
       });
     });
 

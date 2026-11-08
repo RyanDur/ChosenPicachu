@@ -16,6 +16,7 @@ type UsersSelectors = {
   columns: (state: UsersState) => readonly TableColumn<ColumnLabel>[];
   withId: (id?: string) => (state: UsersState) => Maybe<User>;
   friendsReportOf: (userId: string) => (state: UsersState) => Maybe<Membership>;
+  confirmedAdds: (state: UsersState) => number;
 };
 
 export const usersSelectors: UsersSelectors = {
@@ -26,5 +27,6 @@ export const usersSelectors: UsersSelectors = {
     sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   })),
   withId: id => ({users}) => maybe(users.find(user => user.id === id)),
-  friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId])
+  friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
+  confirmedAdds: ({confirmedAdds}) => confirmedAdds
 };

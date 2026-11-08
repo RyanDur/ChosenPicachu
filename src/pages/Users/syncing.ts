@@ -12,7 +12,10 @@ export const syncing = (usersApi: UsersAPI, saved: () => void, refused: (error: 
         usersApi.getAll().onSuccess(arrived => dispatch(usersActions.usersArrived(arrived))).onFailure(refused);
         return;
       case 'userAdded':
-        usersApi.add(action.user).onSuccess(arrived => dispatch(usersActions.usersArrived(arrived))).onFailure(refused);
+        usersApi.add(action.user)
+          .onSuccess(arrived => dispatch(usersActions.usersArrived(arrived)))
+          .onSuccess(() => dispatch(usersActions.userAddConfirmed()))
+          .onFailure(refused);
         return;
       case 'userUpdated':
         usersSelectors.withId(action.edit.id)(current()).map(known => usersApi.update({...known, ...action.edit})
