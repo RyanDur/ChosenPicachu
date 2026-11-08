@@ -3,7 +3,7 @@ import {NonIndexRouteObject, RouteObject} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
 import {GalleryPaths} from '@pages/Gallery';
-import {ClosedRoom, ErrorBoundary, HydrateFallback, Root} from './root';
+import {ClosedRoom, ErrorBoundary, Root, WaitingRoom} from './root';
 
 export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC};
 
@@ -34,8 +34,7 @@ export const siteHolding = (rooms: RouteObject[]): NonIndexRouteObject => ({
   path: '/',
   Component: Root,
   ErrorBoundary,
-  HydrateFallback,
-  children: [{ErrorBoundary: ClosedRoom, children: rooms}]
+  children: [{ErrorBoundary: ClosedRoom, HydrateFallback: WaitingRoom, children: rooms}]
 });
 
 export const roomsOpenedBy = (open: Opener): RouteObject[] => [
