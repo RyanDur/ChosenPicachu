@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components';
 import Handle from '@components/grip.svg';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 
 const steps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
 

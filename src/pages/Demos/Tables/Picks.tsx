@@ -1,5 +1,5 @@
 import {classNames} from '@components/class-names';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 import './Picks.css';
 
 type Option<T extends string> = {
