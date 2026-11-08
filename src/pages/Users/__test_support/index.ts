@@ -6,6 +6,7 @@ export {
   setupUsersResponse,
   setupUserUpdatedResponse,
   userAddsHeard,
+  userAddsHeld,
   userAddRefused,
   userRemovalRefused,
   userUpdatePending,

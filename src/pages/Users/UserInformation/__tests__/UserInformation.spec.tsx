@@ -5,7 +5,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {UserInformation} from '../index';
 import {UsersProvider} from '../../UsersProvider';
 import {userForm} from '../__test_support';
-import {setupUsersResponse, userAddsHeard} from '@pages/Users/__test_support';
+import {setupUsersResponse, userAddsHeard, userAddsHeld} from '@pages/Users/__test_support';
 import {Address, NewUser} from '../../profile';
 
 const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
@@ -90,6 +90,21 @@ describe('a user form', () => {
 
         await waitFor(() => expect(userForm.field('First Name')).toHaveValue(''));
         expect(adds()).toHaveLength(1);
+      });
+
+      it('a second press while an add is in flight adds the user once', async () => {
+        const {form} = added();
+        const adds = userAddsHeld();
+        render(form);
+        await userForm.fillOut(filledIn);
+        await userForm.add();
+        await waitFor(() => expect(adds.heard()).toBe(1));
+
+        await userForm.add();
+        adds.answer();
+
+        await waitFor(() => expect(userForm.field('First Name')).toHaveValue(''));
+        expect(adds.heard()).toBe(1);
       });
 
       it('focus stays on Add after a confirmed add', async () => {

@@ -20,6 +20,17 @@ export const usersPage = (page: Page) => {
   const columns = roster.getByRole('columnheader');
   const firstRowActions = page.getByRole('button', {name: /^Actions for /}).first();
   const homeState = home.getByLabel(/^State/);
+  const addButton = form.getByRole('button', {name: 'Add'});
+  const fillOut = async ({firstName, lastName, born, street, city, state, zip}: Person): Promise<void> => {
+    await form.getByLabel('First Name').fill(firstName);
+    await form.getByLabel('Last Name').fill(lastName);
+    await form.getByLabel('Date Of Birth').fill(born);
+    await home.getByLabel('Street', {exact: true}).fill(street);
+    await home.getByLabel('City').fill(city);
+    await home.getByLabel('State').selectOption(state);
+    await home.getByLabel('Postal / Zip code').fill(zip);
+    await form.getByRole('checkbox', {name: 'Same as Home'}).check();
+  };
   return {
     sameAsHome: form.getByRole('checkbox', {name: 'Same as Home'}),
     names,
@@ -45,16 +56,14 @@ export const usersPage = (page: Page) => {
     },
     rowOf: ({firstName, lastName}: Person) => page.getByRole('rowheader', {name: `${firstName} ${lastName}`}),
     firstName: form.getByLabel('First Name'),
-    add: async ({firstName, lastName, born, street, city, state, zip}: Person): Promise<void> => {
-      await form.getByLabel('First Name').fill(firstName);
-      await form.getByLabel('Last Name').fill(lastName);
-      await form.getByLabel('Date Of Birth').fill(born);
-      await home.getByLabel('Street', {exact: true}).fill(street);
-      await home.getByLabel('City').fill(city);
-      await home.getByLabel('State').selectOption(state);
-      await home.getByLabel('Postal / Zip code').fill(zip);
-      await form.getByRole('checkbox', {name: 'Same as Home'}).check();
-      await form.getByRole('button', {name: 'Add'}).click();
+    addButton,
+    add: async (person: Person): Promise<void> => {
+      await fillOut(person);
+      await addButton.click();
+    },
+    addByKey: async (person: Person): Promise<void> => {
+      await fillOut(person);
+      await addButton.press('Enter');
     },
     leaveAndComeBack: async (): Promise<void> => {
       await site.getByRole('link', {name: 'Home'}).click();

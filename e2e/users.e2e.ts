@@ -36,6 +36,18 @@ test('a person added on the users page still stands in the roster after leaving 
   await expect(users.rowOf(ada)).toBeVisible({timeout: 30_000});
 });
 
+test('focus stays on Add after a confirmed add', async ({page}) => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+
+  await users.addByKey(ada);
+
+  await expect(users.rowOf(ada)).toBeVisible();
+  await expect(users.firstName).toHaveValue('');
+  await expect(users.addButton).toBeFocused();
+});
+
 test('a refresh brings new people to the users page', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');

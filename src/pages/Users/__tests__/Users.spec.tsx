@@ -170,6 +170,20 @@ describe('the users page', () => {
       expect(userForm.field('First Name')).toHaveDisplayValue(aiko.person.firstName);
     });
 
+    it('after a refused add, Add sends the user again', async () => {
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([]);
+      userAddRefused();
+      render(<TestApp at={Paths.users}/>);
+      await userForm.addWhoWorksFromHome(aiko);
+      await usersPage.says('the users server is having trouble');
+      setupUserAddedResponse([aiko]);
+
+      await userForm.add();
+
+      expect(await usersTable.rowOf(profile.fullName(aiko))).toBeInTheDocument();
+    });
+
     it('a reader who follows the Users link while adding keeps what they typed', async () => {
       setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);
