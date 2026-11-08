@@ -1,4 +1,4 @@
-import {FC, useReducer, useState} from 'react';
+import {FC, useReducer} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
 import {classNames} from '@components';
 import {NewUser, User} from '../profile';
@@ -8,7 +8,7 @@ import {drafts} from './drafts';
 import {avatars} from './avatars';
 import {Link} from 'react-router';
 import {isValid, parse} from 'date-fns';
-import {Maybe, maybe, not, nothing, some} from '@ryandur/sand';
+import {Maybe, maybe, not, some} from '@ryandur/sand';
 import {Opened, openings} from '../openings';
 import {useUsersDispatch} from '../useUsersDispatch';
 import {usersActions} from '../usersActions';
@@ -61,7 +61,6 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const hydrated = useHydrated();
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
   const addInFlight = useUsersSelector(usersSelectors.addInFlight);
-  const [confirmedAddsWhenSent, setConfirmedAddsWhenSent] = useState<Maybe<number>>(nothing());
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
     started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
   const user = drafts.userIn(draft);
@@ -71,10 +70,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const reset = () =>
     dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
 
-  if (confirmedAddsWhenSent.map(whenSent => whenSent !== confirmedAdds).orElse(false)) {
-    setConfirmedAddsWhenSent(nothing());
-    reset();
-  }
+  if (drafts.sentAddConfirmed(draft, confirmedAdds)) reset();
 
   return <form aria-labelledby="form-title"
     className={classNames('user-information', className)}
@@ -87,7 +83,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
       }
 
       if (addInFlight) return;
-      setConfirmedAddsWhenSent(some(confirmedAdds));
+      dispatch(draftActions.addSent(confirmedAdds));
       usersDispatch(usersActions.userAdded(user));
     }}
     onReset={() => reset()}>
