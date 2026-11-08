@@ -107,10 +107,12 @@ export const MultipleRecipe: FC = () => {
             flow-root, which keeps the message’s margin inside it. A margin that passed out of the paragraph would sit
             outside the track and hold the gap open.</Says>
           <Says>The banner has one transition list, written once for all four stacks: both track sizes over 0.3 seconds,
-            and the slide over 0.6, starting after the gap’s 0.3. The slide in the next step is in
-            it. A second transition declaration on the same element replaces the list; it does not add to it. So the
-            arriving banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list
-            of its own.</Says>
+            and the slide over 0.6, starting after the gap’s 0.3. The slide follows{' '}
+          <code className="monospaced">--slide-curve</code>, named once in timing.css. It is a cubic-bezier, a curve
+            that sets how a move speeds up and slows down. This one starts slowly and eases into place at the end. The
+            slide in the next step is in it. A second transition declaration on the same element replaces the list; it
+            does not add to it. So the arriving banner’s transitions are all in this one list, and the leaving rule in
+            step 4 writes a whole list of its own.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
