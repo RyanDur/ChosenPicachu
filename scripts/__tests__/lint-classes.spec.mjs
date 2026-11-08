@@ -3,7 +3,7 @@ import {join} from 'node:path';
 import {classes} from '../lint/classes.mjs';
 
 const fancyField = join(process.cwd(), 'src/pages/Users/FancyFormElements/Probe.tsx');
-const banners = join(process.cwd(), 'src/notices/Banners/Probe.tsx');
+const banners = join(process.cwd(), 'src/banners/Probe.tsx');
 const frameBuild = join(process.cwd(), 'src/pages/Demos/Tables/Frame/builds/Probe.ts');
 const candle = join(process.cwd(), 'src/pages/Demos/Charts/Candles/Probe.tsx');
 

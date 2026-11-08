@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {bannerChange, useBannerDispatch} from '@notices/Banners';
+import {bannerChange, useBannerDispatch} from '@banners';
 import {useEnv} from '@page';
 import {trouble} from '@transport';
 import {exchange, FeedTrouble} from '../exchange';

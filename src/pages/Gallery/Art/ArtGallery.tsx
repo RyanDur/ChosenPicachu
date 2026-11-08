@@ -3,7 +3,7 @@ import {Loading} from '@components/Loading';
 import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {empty, maybe} from '@ryandur/sand';
-import {bannerChange, useBannerDispatch} from '@notices/Banners';
+import {bannerChange, useBannerDispatch} from '@banners';
 import {trouble} from '@transport';
 import {art as artResource, museumReply} from '@pages/Gallery/museums';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';

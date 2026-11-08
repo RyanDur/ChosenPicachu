@@ -4,10 +4,10 @@ import {join} from 'node:path';
 import {structure} from '../lint/structure.mjs';
 
 const at = path => join(process.cwd(), path);
-const withIndex = at('src/notices/Banners/Probe.ts');
+const withIndex = at('src/banners/Probe.ts');
 const withoutIndex = at('src/components/NoSuchDirectory/Probe.ts');
-const listedForOneExport = at('src/notices/Banners/Probe.ts');
-const ownList = {exceptions: {'one-export': ['src/notices/Banners/Probe.ts']}};
+const listedForOneExport = at('src/banners/Probe.ts');
+const ownList = {exceptions: {'one-export': ['src/banners/Probe.ts']}};
 const home = at('src/pages/Home/Probe.tsx');
 
 const tester = new RuleTester({languageOptions: {
@@ -36,11 +36,11 @@ tester.run('has-index', structure.rules['has-index'], {
 
 tester.run('through-index', structure.rules['through-index'], {
   valid: [
-    {name: 'should accept an import of the directory', code: "import {Banners} from '@notices/Banners';", filename: home},
+    {name: 'should accept an import of the directory', code: "import {Banners} from '@banners';", filename: home},
     {name: 'should accept an import of a file from inside its own directory', code: "import {sideParam} from './params';", filename: withIndex}
   ],
   invalid: [
-    {name: 'should refuse an import past another directory\'s index', code: "import {Banners} from '@notices/Banners/Banners';", filename: home, errors: 1}
+    {name: 'should refuse an import past another directory\'s index', code: "import {Banners} from '@banners/Banners';", filename: home, errors: 1}
   ]
 });
 
@@ -50,7 +50,7 @@ tester.run('index-top-level', structure.rules['index-top-level'], {
     {name: 'should count an import of a top-level directory by its bare alias, as src imports http from @transport', code: "export {http} from './http';", filename: at('src/transport/index.ts')}
   ],
   invalid: [
-    {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: at('src/notices/Banners/index.ts'), errors: [{messageId: 'broken'}]},
-    {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: at('src/notices/Banners/index.ts'), errors: 1}
+    {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: at('src/banners/index.ts'), errors: [{messageId: 'broken'}]},
+    {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: at('src/banners/index.ts'), errors: 1}
   ]
 });

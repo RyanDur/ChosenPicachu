@@ -6,7 +6,7 @@ import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {opening} from '@pages/Gallery/opening';
-import {bannerChange, useBannerDispatch} from '@notices/Banners';
+import {bannerChange, useBannerDispatch} from '@banners';
 import {trouble} from '@transport';
 import {art, museumReply} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';

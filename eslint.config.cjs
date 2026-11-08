@@ -83,7 +83,7 @@ const stillReachForThePage = [
 ];
 
 const refsWithAReason = [
-  'src/notices/Feedback/Feedback.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
+  'src/feedback/Feedback.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
 const stillMoveByScript = ['src/components/glide.ts'];
