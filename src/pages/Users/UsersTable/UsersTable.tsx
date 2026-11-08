@@ -8,7 +8,7 @@ import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Row, RowHead
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
-import {arrangements, tableReports} from '@components/DragSortableTable/model';
+import {arrangements, tableReports, tableSelectors} from '@components/DragSortableTable/model';
 import {fullNameOf} from '@components/Users/UserInfo/user';
 
 export const UsersTable: FC = () => {
@@ -55,6 +55,6 @@ export const UsersTable: FC = () => {
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(sortable)}</output>
+    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(tableSelectors.report(sortable))}</output>
   </DragSortable>;
 };

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Body, BodyEvents, Cell, Column, DragSortable, HeaderEvents, Headers, Motion, Origin, ResizeHandle, Row, SortMenu, useDragSortable} from '@components/DragSortableTable';
 import {Measured, Measures, seated} from '../../../Market';
-import {TableColumn, tableReports} from '@components/DragSortableTable/model';
+import {TableColumn, tableReports, tableSelectors} from '@components/DragSortableTable/model';
 import {DraggableColumn} from './DraggableColumn';
 import {RowHeader} from './RowHeader';
 
@@ -64,6 +64,6 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.of(sortable)}</output>
+    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.of(tableSelectors.report(sortable))}</output>
   </DragSortable>;
 };
