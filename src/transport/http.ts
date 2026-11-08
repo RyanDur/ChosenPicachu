@@ -8,7 +8,7 @@ const isOk = answered(200);
 const isCreated = answered(201);
 const isNoContent = answered(204);
 
-const refusals: Record<number, HTTPError> = {
+const refusals: Partial<Record<number, HTTPError>> = {
   401: HTTPError.FORBIDDEN,
   403: HTTPError.FORBIDDEN,
   404: HTTPError.NOT_FOUND,
