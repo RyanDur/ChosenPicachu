@@ -1,9 +1,11 @@
+import {asyncResult} from '@ryandur/sand';
+
 type Prefetch = {
   assembly: () => void;
 };
 
 export const prefetch: Prefetch = {
   assembly: () => {
-    void import('./assemble').catch(() => undefined);
+    asyncResult(import('./assemble'));
   }
 };

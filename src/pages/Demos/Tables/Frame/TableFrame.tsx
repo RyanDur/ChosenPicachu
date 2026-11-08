@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {asyncResult, has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useEnv} from '@frame/page';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
@@ -27,17 +27,11 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, 
   const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
 
-  useEffect(() => {
-    let standing = true;
-    void import('./assemble').then(({frameAssembly}) => {
-      if (standing) {
-        setDocument(frameAssembly.document({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}));
-      }
-    }).catch(() => dispatchBanner(bannerChange.raised('the table could not be assembled')));
-    return () => {
-      standing = false;
-    };
-  }, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
+  useEffect(() => asyncResult(import('./assemble'))
+    .onSuccess(({frameAssembly}) =>
+      setDocument(frameAssembly.document({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion})))
+    .onFailure(() => dispatchBanner(bannerChange.raised('the table could not be assembled')))
+    .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
   useEffect(() => {
     if (!has(frame)) {
