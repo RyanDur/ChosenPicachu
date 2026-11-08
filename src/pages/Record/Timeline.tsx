@@ -53,6 +53,10 @@ const TimelineMoment: FC<{moment: MomentKey}> = ({moment}) => {
   return <MomentComponent/>;
 };
 
+const momentCount = moments.inOrder.length;
+
+const momentCountInWords = spelled.out(momentCount).orElse(String(momentCount));
+
 const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}${title.slice(1)}`;
 
 const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
@@ -85,7 +89,7 @@ export const Timeline: FC = () =>
           momentsInTheYear={entry.momentsInTheYear} sharedYear={entry.sharedYear}/>)}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said {spelled.out(moments.inOrder.length)} ways. Someone
+      Read the titles again, top to bottom: it is one sentence said {momentCountInWords} ways. Someone
       needs something, the community answers, and the platform learns the answer. The concert below reads the moments
       together.
     </p>
