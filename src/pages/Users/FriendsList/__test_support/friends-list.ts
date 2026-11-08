@@ -14,6 +14,7 @@ export const friendsList = (row: HTMLElement) => {
     chooserIfAny: (): HTMLElement | null => inRow.queryByRole('combobox', {name: 'Add a friend'}),
     add: (name: string): Promise<void> => userEvent.selectOptions(chooser(), [name]),
 
+    removal,
     removalIfAny: (name: string): HTMLElement | null => inRow.queryByRole('button', {name: `remove ${name}`}),
     remove: (name: string): Promise<void> => userEvent.click(removal(name)),
     removeByKey: async (name: string, key: string): Promise<void> => {

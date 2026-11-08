@@ -360,7 +360,7 @@ describe('the users page', () => {
     await friendsList(zedsRow).remove(profile.fullName(amo));
 
     expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
-    expect(friendsList(zedsRow).removalIfAny(profile.fullName(amo))).toBeInTheDocument();
+    expect(friendsList(zedsRow).removal(profile.fullName(amo))).toBeInTheDocument();
   });
 
   test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
