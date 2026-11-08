@@ -1,5 +1,5 @@
 import {render, screen, within} from '@testing-library/react';
-import {pieShapes} from '@pages/Demos/Charts/Pie/shapes';
+import {pieShapes} from '@pages/Demos/Charts/Pie/pie-shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
 import {bought, sold} from '@pages/Demos/Charts/__test_support';
 
