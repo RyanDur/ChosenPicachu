@@ -2,7 +2,7 @@ import {FC, ReactNode} from 'react';
 import {Outlet, useLocation} from 'react-router';
 import {Maybe, maybe} from '@ryandur/sand';
 import {Header, Page, PageError} from '@page';
-import {Room as NoSuchRoom} from '@pages/NoRoom/route';
+import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';

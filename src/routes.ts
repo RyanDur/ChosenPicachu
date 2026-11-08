@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {NonIndexRouteObject} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
-import {GalleryPaths} from './pages/Gallery/GalleryPaths';
+import {GalleryPaths} from '@pages/Gallery';
 import {ErrorBoundary, HydrateFallback, Root} from './root';
 
 export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC};

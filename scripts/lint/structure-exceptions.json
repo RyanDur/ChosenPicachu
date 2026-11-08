@@ -47,8 +47,6 @@
     "src/pages/Demos/Charts/usePeriodCandles.ts"
   ],
   "through-index": [
-    "src/pages/Demos/Accordions/Explained.tsx",
-    "src/pages/Demos/route.tsx",
-    "src/routes.ts"
+    "src/pages/Demos/Accordions/Explained.tsx"
   ]
 }
