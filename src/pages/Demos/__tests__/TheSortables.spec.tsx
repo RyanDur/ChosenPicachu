@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test_support';
-import {render, waitFor, within} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {dragSortTab, listControls, sortableList} from '@pages/Demos/DragAndDrop/__test_support';
@@ -280,7 +280,7 @@ describe('the links to other tabs', () => {
 
     const slideStep = recipeFolds.stepHeaded(story, 'Slide the crossed item into place');
 
-    expect(within(slideStep).getByRole('link', {name: 'accordions tab'})).toHaveAttribute('href', `${Paths.demos}accordions/`);
+    expect(explanation.linkNamed(slideStep, 'accordions tab')).toHaveAttribute('href', `${Paths.demos}accordions/`);
   });
 
   test('should link each term it glosses, and each tab it names, to that tab', async () => {
