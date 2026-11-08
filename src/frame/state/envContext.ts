@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import type {Env} from './environment';
+import type {Environment} from './environment';
 import {unconfigured} from './unconfigured';
 
-export const envContext = createContext<Env>(unconfigured);
+export const envContext = createContext<Environment>(unconfigured);

@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import type {Env} from './environment';
+import type {Environment} from './environment';
 import {envContext} from './envContext';
 
-export const useEnv = (): Env => useContext(envContext);
+export const useEnv = (): Environment => useContext(envContext);

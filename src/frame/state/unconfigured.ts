@@ -1,6 +1,6 @@
-import type {Env} from './environment';
+import type {Environment} from './environment';
 
-export const unconfigured: Env = {
+export const unconfigured: Environment = {
   tradeFeed: '',
   tradeProduct: '',
   tradeHistory: '',

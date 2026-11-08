@@ -1,4 +1,4 @@
-export type Env = {
+export type Environment = {
   tradeFeed: string;
   tradeProduct: string;
   tradeHistory: string;
@@ -15,11 +15,11 @@ export type Env = {
 };
 
 declare global {
-  const __BUILT_ENV__: Env;
+  const __BUILT_ENV__: Environment;
 
   // augmenting Window only works through interface merging — a type alias cannot merge
   // oxlint-disable-next-line typescript/consistent-type-definitions
   interface Window {
-    __env?: Env;
+    __env?: Environment;
   }
 }
