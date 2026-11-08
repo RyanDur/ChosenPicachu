@@ -1,6 +1,6 @@
 import {http as handle, HttpResponse} from 'msw';
-import {HTTPError, HTTPMethod, HTTPStatus} from '../types';
-import {http} from '../http';
+import {HTTPError} from '../HTTPError';
+import {http, HTTPMethod} from '../http';
 import {faker} from '@faker-js/faker';
 import {failure, Result} from '@ryandur/sand';
 import {server} from '@__test_support/server';
@@ -47,13 +47,13 @@ describe('http', () => {
   });
 
   const handlers = {
-    [HTTPMethod.GET]: handle.get,
-    [HTTPMethod.POST]: handle.post,
-    [HTTPMethod.PUT]: handle.put,
-    [HTTPMethod.DELETE]: handle.delete
+    GET: handle.get,
+    POST: handle.post,
+    PUT: handle.put,
+    DELETE: handle.delete
   };
 
-  const respondWith = (method: HTTPMethod, status: HTTPStatus, body: string | null = null) =>
+  const respondWith = (method: HTTPMethod, status: number, body: string | null = null) =>
     server.use(handlers[method](endpoint, () => new HttpResponse(body, {status})));
 
   const networkFailsFor = (method: HTTPMethod) =>
@@ -65,49 +65,49 @@ describe('http', () => {
     const sent = () => http.get(endpoint);
 
     test('gives back the body the server answered OK with', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.OK, JSON.stringify(testObject));
+      respondWith('GET', 200, JSON.stringify(testObject));
 
       expect(await sent().orNull()).toEqual(testObject);
     });
 
     test('fails as forbidden when the server refuses', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
+      respondWith('GET', 403, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as forbidden when the server does not know who asked', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.UNAUTHORIZED, JSON.stringify(testObject));
+      respondWith('GET', 401, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as not found when the server has nothing at the address', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
+      respondWith('GET', 404, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NOT_FOUND).inspect());
     });
 
     test('fails as a network error when the network is down', async () => {
-      networkFailsFor(HTTPMethod.GET);
+      networkFailsFor('GET');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
     test('fails as a server error when the server breaks', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.SERVER_ERROR, '');
+      respondWith('GET', 500, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers[HTTPMethod.GET](endpoint, () => new HttpResponse(null, {status: 400})));
+      server.use(handlers.GET(endpoint, () => new HttpResponse(null, {status: 400})));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
 
     test('fails as a bad json body when the answer is not json', async () => {
-      respondWith(HTTPMethod.GET, HTTPStatus.OK, '');
+      respondWith('GET', 200, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.JSON_BODY_ERROR).inspect());
     });
@@ -117,55 +117,55 @@ describe('http', () => {
     const sent = () => http.post(endpoint, testObject);
 
     test('gives back the body the server answered OK with', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.OK, JSON.stringify(testObject));
+      respondWith('POST', 200, JSON.stringify(testObject));
 
       expect(await sent().orNull()).toEqual(testObject);
     });
 
     test('gives back the body the server answered created with', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.CREATED, JSON.stringify(testObject));
+      respondWith('POST', 201, JSON.stringify(testObject));
 
       expect(await sent().orNull()).toEqual(testObject);
     });
 
     test('fails as forbidden when the server refuses', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
+      respondWith('POST', 403, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as forbidden when the server does not know who asked', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.UNAUTHORIZED, JSON.stringify(testObject));
+      respondWith('POST', 401, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as not found when the server has nothing at the address', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
+      respondWith('POST', 404, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NOT_FOUND).inspect());
     });
 
     test('fails as a network error when the network is down', async () => {
-      networkFailsFor(HTTPMethod.POST);
+      networkFailsFor('POST');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
     test('fails as a server error when the server breaks', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.SERVER_ERROR, '');
+      respondWith('POST', 500, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers[HTTPMethod.POST](endpoint, () => new HttpResponse(null, {status: 400})));
+      server.use(handlers.POST(endpoint, () => new HttpResponse(null, {status: 400})));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
 
     test('fails as a bad json body when the answer is not json', async () => {
-      respondWith(HTTPMethod.POST, HTTPStatus.CREATED, '');
+      respondWith('POST', 201, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.JSON_BODY_ERROR).inspect());
     });
@@ -175,55 +175,55 @@ describe('http', () => {
     const sent = () => http.put(endpoint, testObject);
 
     test('gives back nothing when the server answers with no content', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.NO_CONTENT, null);
+      respondWith('PUT', 204, null);
 
       expect(await sent().orNull()).toEqual(undefined);
     });
 
     test('gives back the body the server answered created with', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.CREATED, JSON.stringify(testObject));
+      respondWith('PUT', 201, JSON.stringify(testObject));
 
       expect(await sent().orNull()).toEqual(testObject);
     });
 
     test('fails as forbidden when the server refuses', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
+      respondWith('PUT', 403, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as forbidden when the server does not know who asked', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.UNAUTHORIZED, JSON.stringify(testObject));
+      respondWith('PUT', 401, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as not found when the server has nothing at the address', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
+      respondWith('PUT', 404, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NOT_FOUND).inspect());
     });
 
     test('fails as a network error when the network is down', async () => {
-      networkFailsFor(HTTPMethod.PUT);
+      networkFailsFor('PUT');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
     test('fails as a server error when the server breaks', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.SERVER_ERROR, '');
+      respondWith('PUT', 500, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers[HTTPMethod.PUT](endpoint, () => new HttpResponse(null, {status: 400})));
+      server.use(handlers.PUT(endpoint, () => new HttpResponse(null, {status: 400})));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
 
     test('fails as a bad json body when the answer is not json', async () => {
-      respondWith(HTTPMethod.PUT, HTTPStatus.CREATED, '');
+      respondWith('PUT', 201, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.JSON_BODY_ERROR).inspect());
     });
@@ -233,43 +233,43 @@ describe('http', () => {
     const sent = () => http.delete(endpoint);
 
     test('gives back nothing when the server answers with no content', async () => {
-      respondWith(HTTPMethod.DELETE, HTTPStatus.NO_CONTENT, null);
+      respondWith('DELETE', 204, null);
 
       expect(await sent().orNull()).toEqual(undefined);
     });
 
     test('fails as forbidden when the server refuses', async () => {
-      respondWith(HTTPMethod.DELETE, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
+      respondWith('DELETE', 403, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as forbidden when the server does not know who asked', async () => {
-      respondWith(HTTPMethod.DELETE, HTTPStatus.UNAUTHORIZED, JSON.stringify(testObject));
+      respondWith('DELETE', 401, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
     test('fails as not found when the server has nothing at the address', async () => {
-      respondWith(HTTPMethod.DELETE, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
+      respondWith('DELETE', 404, JSON.stringify(testObject));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NOT_FOUND).inspect());
     });
 
     test('fails as a network error when the network is down', async () => {
-      networkFailsFor(HTTPMethod.DELETE);
+      networkFailsFor('DELETE');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
     test('fails as a server error when the server breaks', async () => {
-      respondWith(HTTPMethod.DELETE, HTTPStatus.SERVER_ERROR, '');
+      respondWith('DELETE', 500, '');
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers[HTTPMethod.DELETE](endpoint, () => new HttpResponse(null, {status: 400})));
+      server.use(handlers.DELETE(endpoint, () => new HttpResponse(null, {status: 400})));
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });

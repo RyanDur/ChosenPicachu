@@ -1,5 +1,5 @@
 import {NavigateOptions, useSearchParams} from 'react-router';
-import {toQueryString} from '@transport/url';
+import {toQueryString} from '@transport';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {useSearchParamsOnceHydrated} from './useSearchParamsOnceHydrated';

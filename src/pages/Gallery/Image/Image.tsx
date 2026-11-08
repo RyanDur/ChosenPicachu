@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
-import {toQueryString} from '@transport/url';
+import {toQueryString} from '@transport';
 import {useGallery} from '@pages/Gallery/Context';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';

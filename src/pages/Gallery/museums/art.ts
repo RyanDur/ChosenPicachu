@@ -2,7 +2,7 @@ import {Result} from '@ryandur/sand';
 import {Source} from '@pages/Gallery/source';
 import {GetAllArt, GetArt, SearchArt} from '@pages/Gallery/museums/requests';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {aic} from '@pages/Gallery/museums/aic';
 import {harvard} from '@pages/Gallery/museums/harvard';
 import {vam} from '@pages/Gallery/museums/vam';

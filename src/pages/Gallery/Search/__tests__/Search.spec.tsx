@@ -8,7 +8,7 @@ import {Paths} from '@frame/navigation';
 import {heldAICSuggestions, requestsAsked} from '@pages/Gallery/__test_support';
 import {heldSearch, searchBar} from '@pages/Gallery/Search/__test_support';
 import {aicSuggestionsOf} from '@pages/Gallery/__test_support/fixtures';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();

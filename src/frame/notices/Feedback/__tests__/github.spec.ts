@@ -2,7 +2,7 @@ import {http, HttpResponse, JsonBodyType} from 'msw';
 import {failure, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {server} from '@__test_support/server';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {github} from '../github';
 
 type Asked = {query: string; variables: Record<string, string>};

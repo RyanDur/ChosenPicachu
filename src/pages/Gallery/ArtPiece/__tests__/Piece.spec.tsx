@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {Paths} from '@frame/navigation';
 import {Source} from '@pages/Gallery/source';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@pages/Gallery/__test_support';

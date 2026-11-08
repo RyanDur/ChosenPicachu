@@ -1,4 +1,4 @@
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 
 export type Opened = {readonly type: 'opened'; readonly key: string};
 export type ThreadFound = {readonly type: 'threadFound'; readonly key: string; readonly url: string};

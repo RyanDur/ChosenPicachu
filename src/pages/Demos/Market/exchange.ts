@@ -1,5 +1,5 @@
 import {Maybe, has, maybe, streaming} from '@ryandur/sand';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {decodeTrade, subscribeTo} from '../Charts/coinbase';
 import {periodCandles, periodQuery} from '../Charts/coinbase/history';
 import {Period} from '../Charts/period';

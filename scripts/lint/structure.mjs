@@ -5,7 +5,7 @@ import {has, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
-const aliases = {'@components/': 'src/components/', '@frame/': 'src/frame/', '@pages/': 'src/pages/', '@transport/': 'src/transport/'};
+const aliases = {'@components': 'src/components', '@frame': 'src/frame', '@pages': 'src/pages', '@transport': 'src/transport'};
 const code = /\.(ts|tsx)$/;
 const indexNames = ['index.ts', 'index.tsx'];
 
@@ -33,7 +33,7 @@ const hasIndex = directory => indexNames.some(name => existsSync(join(directory,
  * @return {{directory?: string, file?: string}}
  */
 const resolved = (specifier, fromFile) => {
-  const prefix = Object.keys(aliases).find(alias => specifier.startsWith(alias));
+  const prefix = Object.keys(aliases).find(alias => specifier === alias || specifier.startsWith(`${alias}/`));
   const base = has(prefix) ? join(root, aliases[prefix], specifier.slice(prefix.length))
     : specifier.startsWith('.') ? join(dirname(fromFile), specifier) : '';
   if (specifier.includes('?') || base === '') return {};

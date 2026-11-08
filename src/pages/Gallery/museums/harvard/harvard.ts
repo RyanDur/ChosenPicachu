@@ -7,10 +7,10 @@ import {
 import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
 import {env} from '@frame/state/env';
-import {toQueryString} from '@transport/url';
+import {toQueryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {validate} from '@transport/validate';
-import {http} from '@transport/http';
+import {validate} from '@transport';
+import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
 

@@ -4,7 +4,7 @@ import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {empty, maybe} from '@ryandur/sand';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
-import {troubleWith} from '@transport/trouble';
+import {troubleWith} from '@transport';
 import {art as artResource, museumReply} from '@pages/Gallery/museums';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';

@@ -7,7 +7,7 @@ import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {opening} from '@pages/Gallery/opening';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
-import {troubleWith} from '@transport/trouble';
+import {troubleWith} from '@transport';
 import {art, museumReply} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';

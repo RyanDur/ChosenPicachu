@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useEffect, useState, useSyncExternalStore} from '
 import {useNavigate} from 'react-router';
 import {Paths} from '@frame/navigation';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
-import {troubleWith} from '@transport/trouble';
+import {troubleWith} from '@transport';
 import {usersApi} from './resource';
 import {syncing} from './syncing';
 import {usersActions} from './usersActions';

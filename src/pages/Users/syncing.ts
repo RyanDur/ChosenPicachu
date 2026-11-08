@@ -1,5 +1,5 @@
 import {UsersAPI} from './resource';
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {profile} from '@pages/Users/profile';
 import {UsersListener} from './usersStore';
 import {usersActions} from './usersActions';

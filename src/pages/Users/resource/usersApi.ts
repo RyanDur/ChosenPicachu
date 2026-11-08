@@ -2,9 +2,9 @@ import * as schema from 'schemawax';
 import {isValid} from 'date-fns';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {env} from '@frame/state/env';
-import {http} from '@transport/http';
-import {validate} from '@transport/validate';
-import {HTTPError} from '@transport/types';
+import {http} from '@transport';
+import {validate} from '@transport';
+import {HTTPError} from '@transport';
 import {NewUser, User} from '../profile';
 import {usersServer} from '../usersServer';
 

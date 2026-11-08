@@ -1,4 +1,4 @@
-import {HTTPError} from '@transport/types';
+import {HTTPError} from '@transport';
 import {feedbackChange} from '../feedbackChange';
 import {github} from '../github';
 import {feedbackDraft} from '../feedbackDraft';

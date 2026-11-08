@@ -4,7 +4,7 @@ import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType}
 import {Paths} from '@frame/navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
-import {toQueryString} from '@transport/url';
+import {toQueryString} from '@transport';
 import {opening} from '@pages/Gallery';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';

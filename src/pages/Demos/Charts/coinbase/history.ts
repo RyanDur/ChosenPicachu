@@ -1,8 +1,8 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
-import {http} from '@transport/http';
-import {validate} from '@transport/validate';
-import {HTTPError} from '@transport/types';
+import {http} from '@transport';
+import {validate} from '@transport';
+import {HTTPError} from '@transport';
 import {Candle} from '../Candles/shapes';
 import {granularitySeconds, Period, periodSpanMs} from '../period';
 

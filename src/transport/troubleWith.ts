@@ -1,4 +1,4 @@
-import {HTTPError} from './types';
+import {HTTPError} from './HTTPError';
 
 const phrases: Record<HTTPError, string> = {
   [HTTPError.NETWORK_ERROR]: 'could not be reached',
