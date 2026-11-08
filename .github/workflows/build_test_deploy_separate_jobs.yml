@@ -25,7 +25,39 @@ env:
   VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
 
 jobs:
+  # A branch, and a push to main that changes src, the tests or the scripts without a pull request, gets every check. A
+  # pull request merged by rebase ran them on its branch, so main only builds, deploys and audits it (Ryan, 2026-11-08:
+  # "we don't need the full check on main if we rebase from a PR, just need the things that aren't done in the PR", and
+  # "if its from main, and work that is done in tests or src, then it needs the full treatment")
+  scope:
+    runs-on: ubuntu-26.04
+    outputs:
+      full: ${{ steps.scope.outputs.full }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Decide whether this push needs every check
+        id: scope
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUSHED_FROM: ${{ github.event.before }}
+        run: |
+          if [ "$GITHUB_REF" != refs/heads/main ] || [ "$GITHUB_EVENT_NAME" != push ]; then
+            echo full=true >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length')
+          if [ "$merged" != 0 ]; then
+            echo full=false >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$PUSHED_FROM" "$GITHUB_SHA" | grep -qE '^(src|e2e|scripts)/'; then
+            echo full=true >> "$GITHUB_OUTPUT"
+          else
+            echo full=false >> "$GITHUB_OUTPUT"
+          fi
+
   build_test:
+    needs: scope
     runs-on: ubuntu-26.04
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
@@ -47,17 +79,14 @@ jobs:
         run: |
           npm ci
           npm run build
-      # the pull request's branch ran the linters, the unit tests and the journeys on this code, so main only builds,
-      # deploys and audits (Ryan, 2026-11-08: "we don't need the full check on main if we rebase from a PR, just need
-      # the things that aren't done in the PR")
       - name: Lint
-        if: github.ref != 'refs/heads/main'
+        if: needs.scope.outputs.full == 'true'
         run: |
           npm run lint
           npm run lint:css
           npm run lint:style
       - name: Test
-        if: github.ref != 'refs/heads/main'
+        if: needs.scope.outputs.full == 'true'
         run: npm test
       - name: Name the pages under a performance budget
         id: budgeted
@@ -71,8 +100,10 @@ jobs:
           path: ./build/client
 
   pages:
-    needs: build_test
-    if: github.ref == 'refs/heads/main'
+    needs: [build_test, journeys]
+    if: >-
+      always() && github.ref == 'refs/heads/main' && needs.build_test.result == 'success'
+      && contains(fromJSON('["success", "skipped"]'), needs.journeys.result)
     runs-on: ubuntu-26.04
     concurrency:
       group: github-pages
@@ -98,8 +129,8 @@ jobs:
         uses: actions/deploy-pages@v5
 
   journeys:
-    needs: build_test
-    if: github.ref != 'refs/heads/main'
+    needs: [scope, build_test]
+    if: needs.scope.outputs.full == 'true'
     runs-on: ubuntu-24.04
     # Playwright's image has the browsers and their system libraries in it, so no job installs from the runner's apt
     # mirror, which hung on one shard a run through 2026-10-07; its tag follows @playwright/test in package.json
