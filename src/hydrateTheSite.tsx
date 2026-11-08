@@ -1,5 +1,5 @@
-import {FC, PropsWithChildren, startTransition, StrictMode, useEffect} from 'react';
-import {hydrateRoot} from 'react-dom/client';
+import {ReactNode, startTransition, StrictMode} from 'react';
+import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
@@ -12,18 +12,21 @@ const keyTheEntry = (): void => maybe(keyed.decode(window.history.state)).either
   () => undefined,
   () => window.history.replaceState({...window.history.state, key: crypto.randomUUID()}, ''));
 
-// a sibling beside the router would move every useId under it away from the ids the build wrote, so it wraps it
-const Drawn: FC<PropsWithChildren<{then: () => void}>> = ({then, children}) => {
-  useEffect(then, [then]);
-  return children;
+const siteOn = (routerFor: () => DataRouter): ReactNode => {
+  keyTheEntry();
+  return <StrictMode><Layout>
+    <RouterProvider router={routerFor()} onError={error => console.error(error)}/>
+  </Layout></StrictMode>;
 };
 
-export const hydrateTheSite = (routerFor: () => DataRouter, drawn: () => void = () => undefined): void => {
-  keyTheEntry();
-  const router = routerFor();
-  startTransition(() => {
-    hydrateRoot(document, <StrictMode><Layout>
-      <Drawn then={drawn}><RouterProvider router={router} onError={error => console.error(error)}/></Drawn>
-    </Layout></StrictMode>);
-  });
+export const hydrateTheSite = {
+  overTheBuiltPage: (routerFor: () => DataRouter): void => {
+    const site = siteOn(routerFor);
+    startTransition(() => {
+      hydrateRoot(document, site);
+    });
+  },
+  afresh: (routerFor: () => DataRouter): void => {
+    createRoot(document).render(siteOn(routerFor));
+  }
 };

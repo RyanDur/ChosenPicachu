@@ -11,4 +11,4 @@ await Promise.all((matchRoutes([site], window.location, basename) ?? []).map(asy
   if (typeof lazy === 'function') Object.assign(route, {...await lazy(), lazy: undefined});
 }));
 
-hydrateTheSite(() => createBrowserRouter([site], {basename, hydrationData: {}}));
+hydrateTheSite.overTheBuiltPage(() => createBrowserRouter([site], {basename, hydrationData: {}}));
