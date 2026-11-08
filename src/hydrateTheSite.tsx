@@ -9,8 +9,8 @@ const keyed = schema.object({required: {key: schema.string}});
 
 // the router keys a document opened by its address as 'default', so every such document would share one scroll place
 const keyTheEntry = (): void => maybe(keyed.decode(window.history.state)).either(
-  () => window.history.replaceState({...window.history.state, key: crypto.randomUUID()}, ''),
-  () => undefined);
+  () => undefined,
+  () => window.history.replaceState({...window.history.state, key: crypto.randomUUID()}, ''));
 
 // a sibling beside the router would move every useId under it away from the ids the build wrote, so it wraps it
 const Drawn: FC<PropsWithChildren<{then: () => void}>> = ({then, children}) => {

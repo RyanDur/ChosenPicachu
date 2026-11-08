@@ -56,6 +56,29 @@ test('a page opened by its address after another opens at its top, not where the
   expect(await documentScrollY(page)).toBe(0);
 });
 
+test('Back into a page that had to load again returns the reader to where they were, not where they were on another page', async ({page}) => {
+  // a page that listens for unload is left out of the browser's back-forward cache, so Back loads it again
+  await page.addInitScript(() => addEventListener('unload', () => undefined));
+  await page.goto('record/');
+  await siteFrame(page).hydrated();
+  await page.mouse.wheel(0, 3000);
+  await expect.poll(() => documentScrollY(page)).toBeGreaterThan(300);
+  const onTheRecord = await settledScrollY(page);
+  await clickWhereItIs(page, page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Practice'}));
+  await expect(page).toHaveURL(/practice\//);
+  await page.goto('demos/tables/');
+  await siteFrame(page).hydrated();
+  await page.mouse.wheel(0, 1200);
+  await expect.poll(() => documentScrollY(page)).toBeGreaterThan(300);
+  await page.goBack();
+  await siteFrame(page).hydrated();
+
+  await page.goBack();
+
+  await expect(page).toHaveURL(/record\/$/);
+  await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheRecord)).toBeLessThanOrEqual(theSamePlace);
+});
+
 test('a reload returns the reader to where they were on the page', async ({page}) => {
   await page.goto('record/');
   await siteFrame(page).hydrated();
