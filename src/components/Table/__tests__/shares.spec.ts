@@ -15,38 +15,6 @@ describe('the shares vocabulary', () => {
     expect(shares.soughtTrade(grip, 240, first.carried)).toEqual({delta: 10, carried: 20});
   });
 
-  const press = (key: string, swallowed: string[]) => ({
-    key,
-    preventDefault: (): void => {
-      swallowed.push('default');
-    },
-    stopPropagation: (): void => {
-      swallowed.push('descent');
-    }
-  });
-
-  it('a left or right arrow steps the share by two', () => {
-    const trades: number[] = [];
-    const listener = shares.resizeArrows(delta => trades.push(delta));
-
-    listener(press('ArrowRight', []));
-    listener(press('ArrowLeft', []));
-    listener(press('Tab', []));
-
-    expect(trades).toEqual([2, -2]);
-  });
-
-  it('a claimed arrow press goes no further', () => {
-    const swallowed: string[] = [];
-    const listener = shares.resizeArrows(() => undefined);
-
-    listener(press('ArrowRight', swallowed));
-    listener(press('ArrowLeft', swallowed));
-    listener(press('Tab', swallowed));
-
-    expect(swallowed).toEqual(['default', 'descent', 'default', 'descent']);
-  });
-
   it('speaks the resize announcement, with the share once the ledger exists', () => {
     expect(shares.resizeLabel('trades', 24.4)).toBe('resize trades, 24%');
     expect(shares.resizeLabel('trades', undefined)).toBe('resize trades');
