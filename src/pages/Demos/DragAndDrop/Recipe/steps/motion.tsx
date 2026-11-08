@@ -16,11 +16,11 @@ export const SlideCrossed: FC<{cssSource: Sample}> = ({cssSource}) =>
         through, and the browser draws the frames between them. This one, <code className="monospaced">slide-in</code>,
         writes only its from, the starting state, so the browser draws the item where it used to be and slides it to its
         new place.</Says>
-      <Says>Where it used to be is data. It sits in a custom property, a value the style sheet can read, which the{' '}
-        <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> teaches.{' '}
+      <Says>Where it used to be is data. It sits in a custom property, a value the style sheet can read. The{' '}
+        <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> teaches custom properties.{' '}
         <code className="monospaced">--starts-places-right</code> says how many places to the right of its new place the
         item starts: 1 when it starts from the right, -1 when it starts from the left. The one keyframe reads the
-        number, so both directions share it.</Says>
+        number with <code className="monospaced">var()</code>, so both directions share it.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

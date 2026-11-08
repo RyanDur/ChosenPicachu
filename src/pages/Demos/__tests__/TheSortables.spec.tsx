@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@frame/navigation';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test_support';
-import {render, waitFor} from '@testing-library/react';
+import {render, waitFor, within} from '@testing-library/react';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {dragSortTab, listControls, sortableList} from '@pages/Demos/DragAndDrop/__test_support';
@@ -275,6 +275,14 @@ describe('the drag sort tab’s introduction', () => {
 });
 
 describe('the links to other tabs', () => {
+  test('should link the custom property in the slide step to the accordions tab', async () => {
+    const story = await recipeFolds.press(await nativeRecipe(), 'The user can arrange the list by hand');
+
+    const slideStep = recipeFolds.stepHeaded(story, 'Slide the crossed item into place');
+
+    expect(within(slideStep).getByRole('link', {name: 'accordions tab'})).toHaveAttribute('href', `${Paths.demos}accordions/`);
+  });
+
   test('should link each term it glosses, and each tab it names, to that tab', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 

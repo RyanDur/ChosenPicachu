@@ -43,7 +43,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
           compared in the nearest context that holds them both. Here that is the tab’s content, the area under the tabs
           that holds every card.{' '}
         <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
-          context</cite></a> shows what makes the tab’s content a stacking context.
+          context</cite></a> shows what makes the tab’s content one.
           In that context the browser compares card one and card two, 1 against 1, and a tie goes to the one later in
           the code, so card two is painted over card one, list and all. No number on the list can change that, because
           the list is never compared with card two.</p>
