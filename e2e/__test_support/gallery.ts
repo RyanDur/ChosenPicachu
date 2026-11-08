@@ -16,13 +16,13 @@ const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/
 
 export const galleryPage = (page: Page) => {
   const wall = page.getByRole('figure');
-  const searchField = page.getByLabel(/Search For/);
+  const searchField = page.getByRole('combobox', {name: /Search For/});
   return {
     doors: page.getByRole('navigation', {name: 'museums'}).getByRole('link'),
     wall,
     searchField,
-    pageNumber: page.getByLabel(/^Page #/),
-    pageSize: page.getByLabel(/Per Page$/),
+    pageNumber: page.getByRole('spinbutton', {name: /^Page #/}),
+    pageSize: page.getByRole('spinbutton', {name: /Per Page$/}),
     settings: page.getByRole('group', {name: 'gallery settings'}),
     openSettings: async (): Promise<void> => {
       if (await searchField.isHidden()) await page.getByRole('group', {name: 'gallery settings'}).getByText(/page \d+/).click();
@@ -35,7 +35,7 @@ export const galleryPage = (page: Page) => {
     go: page.getByRole('button', {name: 'Go', exact: true}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
     settingsPanel: page.getByRole('complementary', {name: 'gallery settings'}),
-    tapSearchLabel: (): Promise<void> => page.getByText('Search For:', {exact: true}).click(),
+    tapSearchLabel: (): Promise<void> => page.getByText('Search For:', {exact: true}).filter({visible: true}).click(),
     emptyWall: page.getByAltText('the museum answered with nothing'),
     firstPainting: wall.first().getByRole('link').first(),
     picturesNotShown: async (): Promise<string[]> => {
@@ -98,7 +98,7 @@ export const galleryPage = (page: Page) => {
       return Array.isArray(counts) ? counts.map(Number) : [];
     },
     searchFor: async (words: string): Promise<void> => {
-      await page.getByLabel(/Search For/).fill(words);
+      await page.getByRole('combobox', {name: /Search For/}).fill(words);
       await page.getByRole('button', {name: 'submit search'}).click();
     }
   };

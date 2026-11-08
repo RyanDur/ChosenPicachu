@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {Disclosure} from '@components/Disclosure';
-import {useRoomToStandOpen} from '@components';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
@@ -17,11 +16,10 @@ const Readout: FC = () => {
   </span>;
 };
 
-export const GallerySettings: FC = () => {
-  const room = useRoomToStandOpen();
-  if (room) return <Search id="gallery-search" className="header-settings"/>;
-  return <Disclosure label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
-    <Search id="gallery-search"/>
+export const GallerySettings: FC = () => <>
+  <Search id="gallery-search" className="header-settings settings-standing"/>
+  <Disclosure label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
+    <Search/>
     <PageControl/>
-  </Disclosure>;
-};
+  </Disclosure>
+</>;

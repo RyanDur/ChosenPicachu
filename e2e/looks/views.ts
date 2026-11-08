@@ -100,7 +100,7 @@ export const views: readonly View[] = [
     page: named('gallery'),
     into: async page => {
       await page.getByRole('link', {name: 'NEXT'}).waitFor();
-      await page.getByLabel(/^Page #/).focus();
+      await page.getByRole('spinbutton', {name: /^Page #/}).focus();
       await page.mouse.move(0, 0);
     }
   },

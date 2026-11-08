@@ -85,8 +85,7 @@ const stillCallComponents = [
 ];
 
 const stillReachForThePage = [
-  'src/navigation/arrival/useArrival.ts',
-  'src/components/room.ts', 'src/page/SideNav.tsx'
+  'src/navigation/arrival/useArrival.ts', 'src/page/SideNav.tsx'
 ];
 
 const refsWithAReason = [

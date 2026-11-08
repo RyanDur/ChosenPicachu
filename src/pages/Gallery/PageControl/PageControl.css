@@ -68,8 +68,10 @@
     --page-control-block: calc(var(--page-control-row) * 2 + var(--base));
   }
 
-  :root:has(.filter .page-control) {
-    --filter-block: var(--page-control-block);
+  @media (width > 600px) and (height > 600px) {
+    :root:has(.filter .page-control) {
+      --filter-block: var(--page-control-block);
+    }
   }
 
   .page-control {
