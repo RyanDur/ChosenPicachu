@@ -38,10 +38,6 @@
     "src/pages/Record/moments/moments.ts"
   ],
   "has-index": [
-    "src/components/arrays.ts",
-    "src/components/glide.ts",
-    "src/components/room.ts",
-    "src/components/store.ts",
     "src/pages/Demos/Accordions/Accordions.tsx",
     "src/pages/Demos/Accordions/Diagrams.tsx",
     "src/pages/Demos/Accordions/ExclusiveHtmlAlone.tsx",
@@ -164,11 +160,6 @@
     "src/pages/Demos/Charts/PriceChart/PriceChart.tsx",
     "src/pages/Demos/Charts/coinbase/history.ts",
     "src/pages/Demos/Charts/period-history.ts",
-    "src/pages/Demos/DragAndDrop/EagerHideAnimatedList/EagerHideAnimatedList.tsx",
-    "src/pages/Demos/DragAndDrop/EagerHideStaticList/EagerHideStaticList.tsx",
-    "src/pages/Demos/DragAndDrop/EagerKeepAnimatedList/EagerKeepAnimatedList.tsx",
-    "src/pages/Demos/DragAndDrop/EagerKeepStaticList/EagerKeepStaticList.tsx",
-    "src/pages/Demos/DragAndDrop/items/Grip.tsx",
     "src/pages/Demos/DragAndDrop/session.ts",
     "src/pages/Demos/Market/cells.ts",
     "src/pages/Demos/Market/exchange.ts",
@@ -204,6 +195,5 @@
     "src/pages/Users/usersSlice.ts",
     "src/pages/Users/usersStore.ts",
     "src/routes.ts"
-  ],
-  "index-top-level": []
+  ]
 }

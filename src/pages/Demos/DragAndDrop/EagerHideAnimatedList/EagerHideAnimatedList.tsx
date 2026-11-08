@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {array} from '@components/arrays';
+import {array} from '@components';
 import {classNames} from '@components/class-names';
 import {Moved, session} from '../session';
 import {SlideStarts, slideStarts} from '../slide-starts';

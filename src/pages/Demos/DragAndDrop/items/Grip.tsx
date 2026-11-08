@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {array} from '@components/arrays';
+import {array} from '@components';
 import Handle from '@components/grip.svg';
 import {useHydrated} from '@frame/state';
 

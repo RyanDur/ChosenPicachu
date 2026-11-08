@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {array} from '@components/arrays';
+import {array} from '@components';
 import {Moved, session} from '../session';
 import {HideItem, MoveReport} from '../items';
 import '../sortable-list.css';
