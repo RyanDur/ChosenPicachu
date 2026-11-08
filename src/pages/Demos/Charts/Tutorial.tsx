@@ -504,13 +504,18 @@ const WorkspaceStory: FC = () =>
           <Says>Each chart is a link, so Tab reaches it. With a chart in focus, the up and down arrows move it one
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
             Delete or Backspace removes it, unless it is the last chart. Focus then moves to the next chart’s link, or
-            to the one before when the removed chart was last, so the reader keeps their place.{' '}
-          <code className="monospaced">keys</code> passes up the element the key was pressed on, and the workspace walks
-            from it to that link.</Says>
+            to the one before when the removed chart was last, so the reader keeps their place.</Says>
+          <Says><code className="monospaced">keys</code> hands <code className="monospaced">onRemoved</code> the
+            chart’s position and the link the key was pressed on. Before the chart goes, the workspace
+            asks <code className="monospaced">atAfterRemoval</code> which position takes the focus, the one after or
+            else the one before. <code className="monospaced">doorwayAt</code> then walks from the pressed link up to
+            its list item, across to the item at that position, and down to that item’s link, and focuses it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(travelSource, 'const keys')
+            ...carve.unit(travelSource, 'const keys'), gap,
+            ...carve.unit(deskSource, 'export const atAfterRemoval'), gap,
+            ...carve.unit(workspaceSource, 'const doorwayAt')
           ]}/>
         </Codes>
       </Step>
