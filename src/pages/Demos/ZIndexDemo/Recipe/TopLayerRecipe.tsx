@@ -48,13 +48,13 @@ export const TopLayerRecipe: FC = () => {
       window, does not lift it out of that context,
       as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
         loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
-      I write the panel last on the page, outside the tab’s panel, where its z-index is compared with that panel as
+      I write the panel last on the page, outside the tab’s content, where its z-index is compared with that content as
       a whole and with the frame around it, never with a card.</Tell>
     <Steps>
       <Step title="Write the panel last, at the page’s root">
         <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit where none holds it.">
           <Says>The panel is a section written once, at the root of the site, after the page itself. There it sits
-            outside the tab’s panel, where every card is, so its z-index is never compared with a card’s,
+            outside the tab’s content, where every card is, so its z-index is never compared with a card’s,
             as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
               loses</cite></a> shows. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
