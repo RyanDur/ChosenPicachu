@@ -2,7 +2,8 @@ import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {useArrival} from '@navigation/arrival';
-import {demoAddress, DemoTopics, topicNames} from '../types';
+import {DemoTopics} from '../demo-topics';
+import {demoTab} from '../demo-tab';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
@@ -28,8 +29,8 @@ export const TutorialPage: FC = () => {
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>
         <p className="caption">
-          <Link className="signpost" to={`${demoAddress(DemoTopics.tables)}${searchFromShown({})}`}>
-            {topicNames[DemoTopics.tables]}
+          <Link className="signpost" to={`${demoTab.address(DemoTopics.tables)}${searchFromShown({})}`}>
+            {demoTab.names[DemoTopics.tables]}
           </Link>
           {` · tutorial ${number} of ${of}`}
         </p>
@@ -41,7 +42,7 @@ export const TutorialPage: FC = () => {
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where{' '}
         <Link className="signpost" to={{
-          pathname: demoAddress(DemoTopics.tables),
+          pathname: demoTab.address(DemoTopics.tables),
           search: searchFromShown({}),
           hash: stations.idOf(tableTutorials.startingStation)
         }}>

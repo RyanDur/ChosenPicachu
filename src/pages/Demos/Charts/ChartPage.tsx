@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
-import {DemoTopics, demoAddress} from '../types';
+import {DemoTopics} from '../demo-topics';
+import {demoTab} from '../demo-tab';
 import {TabLink} from '@pages/Demos/TabLink';
 import {marketSelectors} from '../Market';
 import {useMarketSelector} from '../Market/Trading';
@@ -113,5 +114,5 @@ export const ChartPage: FC = () => {
     candles: page('candles'),
     pressure: page('pressure'),
     pie: page('pie')
-  }).orElse(<Navigate to={demoAddress(DemoTopics.charts)} replace/>);
+  }).orElse(<Navigate to={demoTab.address(DemoTopics.charts)} replace/>);
 };

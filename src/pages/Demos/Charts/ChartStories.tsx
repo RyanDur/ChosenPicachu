@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, ReactNode} from 'react';
-import {DemoTopics} from '../types';
+import {DemoTopics} from '../demo-topics';
 import {ChartKind} from './chart-kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import candleShapesSource from './Candles/candle-shapes.ts?sample';

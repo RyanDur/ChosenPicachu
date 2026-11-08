@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '../../../types';
+import {DemoTopics} from '../../../demo-topics';
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, carve, Sample} from '../../../Recipe';
 

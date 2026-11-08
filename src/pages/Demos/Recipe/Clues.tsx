@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '@pages/Demos/types';
+import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
 
 type CluesProps = {

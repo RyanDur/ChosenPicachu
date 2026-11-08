@@ -1,6 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
-import {demoAddress, DemoTopics} from '../types';
+import {DemoTopics} from '../demo-topics';
+import {demoTab} from '../demo-tab';
 
 export type Tutorial = keyof typeof names.tables;
 
@@ -27,7 +28,7 @@ const named: Record<Tutorial, string> = {
   resize: 'Drag resize'
 };
 
-const addressOf = (tutorial: Tutorial): string => `${demoAddress(DemoTopics.tables)}${tutorial}/`;
+const addressOf = (tutorial: Tutorial): string => `${demoTab.address(DemoTopics.tables)}${tutorial}/`;
 
 export const tableTutorials: TableTutorials = {
   all: () => inOrder,

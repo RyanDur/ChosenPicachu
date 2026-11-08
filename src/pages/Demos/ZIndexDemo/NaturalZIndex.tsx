@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {not as toggle} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
-import {PropsWithClassName} from '../types';
+import {PropsWithClassName} from '../props-with-class-name';
 import {classNames} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {RaisedCard, raisedParam} from './raised';

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
 import {MomentLink} from '@pages/Record';
-import {demoAddress, DemoTopics} from '@pages/Demos';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {
   BuildsCarve,
   CarryCarve,
@@ -163,7 +163,7 @@ export const BehaviorPractice: FC = () =>
       path that state changes come in. Change the framework, or remove it, and only the shell changes.
       The <MomentLink to="frameworks">2010 moment</MomentLink> names four frameworks in six years; the core should
       outlast them.</p>
-    <p className="paragraph">The <Link className="signpost" to={demoAddress(DemoTopics.tables)}>tables demo</Link> shows
+    <p className="paragraph">The <Link className="signpost" to={demoTab.address(DemoTopics.tables)}>tables demo</Link> shows
       the split. Its React build and its plain-script build take the same table store, so the same reducer answers
       both:</p>
     <BuildsCarve/>

@@ -1,7 +1,7 @@
 import {ChangeEvent, FC, KeyboardEvent, MouseEvent, ReactNode, useState} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components';
-import {PropsWithClassName} from '../types';
+import {PropsWithClassName} from '../props-with-class-name';
 import {FoldMotion} from './fold-motion';
 import {MeasuredPanel} from './MeasuredPanel';
 import './Accordions.css';

@@ -2,7 +2,7 @@ import {createContext, FC, PropsWithChildren, useContext, useEffect} from 'react
 import {is, not} from '@ryandur/sand';
 import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType} from 'react-router';
 import {Paths} from '@navigation';
-import {demoAddress, DemoTopics} from '@pages/Demos';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
@@ -47,7 +47,7 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
-    <SectionLink id="navigate-demos" page={Paths.demos} to={demoAddress(DemoTopics.accordions)}>Demos</SectionLink>
+    <SectionLink id="navigate-demos" page={Paths.demos} to={demoTab.address(DemoTopics.accordions)}>Demos</SectionLink>
     <RailLink id="navigate-users" to={Paths.users}>Users</RailLink>
     <RailLink id="navigate-form"
       to={`${Paths.artGallery}${queryString.from({
