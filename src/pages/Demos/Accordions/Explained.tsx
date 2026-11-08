@@ -588,7 +588,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
-                <Snippet label="TS" lines={carve.span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
+                <Snippet label="HTML" lines={carve.span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
@@ -705,7 +705,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
             known-height build. The name is only a name: pressing it does nothing. Only the control works the fold. What
             is new is the way the text opens, below.</p>
-          <Snippet label="TS" lines={carve.span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
+          <Snippet label="HTML" lines={carve.span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from

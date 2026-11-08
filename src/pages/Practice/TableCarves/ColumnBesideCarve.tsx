@@ -14,5 +14,5 @@ const tradesWritten = carve.span(eagerTableSource, '<DraggableColumn column="tra
 export const ColumnBesideCarve: FC = () =>
   <div className="carves-beside">
     <Snippet label="HTML" lines={tradesHeader}/>
-    <Snippet label="TS" lines={tradesWritten}/>
+    <Snippet label="HTML" lines={tradesWritten}/>
   </div>;
