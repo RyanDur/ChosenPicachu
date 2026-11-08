@@ -12,8 +12,6 @@ import candlesHook from './usePeriodCandles.ts?sample';
 import priceSource from './PriceChart/PriceChart.tsx?sample';
 import candlesSource from './Candles/Candles.tsx?sample';
 import candlesCss from './Candles/Candles.css?sample';
-import bucketPressureSource from './Pressure/bucket-pressure.ts?sample';
-import heaviestSideSource from './Pressure/heaviest-side.ts?sample';
 import pressureShapesSource from './Pressure/pressure-shapes.ts?sample';
 import pressureComponent from './Pressure/Pressure.tsx?sample';
 import pressureCss from './Pressure/Pressure.css?sample';
@@ -204,15 +202,15 @@ const CandlesStory: FC = () =>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>The body and the wall each start as a square one unit on a side. The markup gives every shape four
-            custom properties: where the shape starts across, where its foot sits, how wide it is and how tall. A custom
-            property is a value set by name on an element and read back in the style sheet
-            with <code className="monospaced">var()</code>, as
+          <Says>The body and the wall each start as a square one unit on a side, and the wick as a line one unit tall.
+            The markup gives every shape four custom properties: where the shape starts across, where its foot sits, how
+            wide it is and how tall. A custom property is a value set by name on an element and read back in the style
+            sheet with <code className="monospaced">var()</code>, as
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The chart’s style sheet reads all
-            four in one transform that moves the square into place and stretches it to size. I move things only by
+            four in one transform that moves the shape into place and stretches it to size. I move things only by
             transform and opacity, which spare the browser a new layout on every frame, so a shape takes its size from
-            the stretch, not from its width and height. When a candle’s prices change, the four numbers change, and the
-            shape moves to them over 300 milliseconds.</Says>
+            the stretch, not from its width and height. When a candle’s prices change, the four numbers change, and its
+            body, wall and wick move to them together over 300 milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -293,29 +291,31 @@ const PressureStory: FC = () =>
             was waiting, so <code className="monospaced">takerSideOf</code> flips the mark to the side of the trader who
             took the trade: a mark of sell means a buyer took it. Every Trade keeps that as{' '}
           <code className="monospaced">takerSide</code>.</Says>
-          <Says><code className="monospaced">bucketPressure</code> groups the trades into minutes the way the candles are grouped, and keeps two sums for
-            each minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes.</Says>
+          <Says><code className="monospaced">pressureShapes.buckets</code> groups the trades into minutes and keeps two
+            sums for each minute: the size buyers took and the size sellers took. The chart shows up to 60
+            minutes.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), gap,
             ...carve.unit(coinbaseSource, 'const takerSideOf'), gap,
-            ...carve.unit(bucketPressureSource, 'const fold'), gap,
-            ...carve.unit(bucketPressureSource, 'export const bucketPressure')
+            ...carve.unit(pressureShapesSource, 'const fold'), gap,
+            ...carve.unit(pressureShapesSource, 'const buckets')
           ]}/>
         </Codes>
       </Step>
       <Step title="Scale both sides by the larger one">
         <Words want="The two sides can only be compared on one scale. A taller bar has to mean more size and nothing else.">
-          <Says>heaviestSide finds the largest single side of any minute on the chart, and that sets the scale. Bought
+          <Says><code className="monospaced">pressureShapes.heaviestSide</code> finds the largest single side of any
+            minute on the chart, and that sets the scale. Bought
             rises from the middle line and sold falls from it. A minute that bought four and sold two shows bars in that
             proportion.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(slotsSource, 'export const periodSlots'), gap,
-            ...carve.unit(heaviestSideSource, 'export const heaviestSide'), gap,
-            ...carve.unit(pressureShapesSource, 'export const pressureShapes')
+            ...carve.unit(pressureShapesSource, 'const heaviestSide'), gap,
+            ...carve.unit(pressureShapesSource, 'const drawn')
           ]}/>
         </Codes>
       </Step>
@@ -331,7 +331,10 @@ const PressureStory: FC = () =>
             values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
             reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
             wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>The bars are placed the way the candle bodies are, by four custom properties and one transform, so when
+          <Says>Each bar and the wall behind it start as a square one unit on a side. The markup gives each one four
+            custom properties of its own: where it starts across, where its foot sits, how wide it is and how tall. The
+            chart’s style sheet reads all four in one transform that moves the square into place and stretches it to
+            size. I move things only by transform and opacity, which spare the browser a new layout on every frame. When
             a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars.
             The caption says how many minutes are on show, up to the last 1,500 trades.</Says>
@@ -361,10 +364,10 @@ const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>The pressure chart sums each minute on its own. The pie sums up to the last 1,500 trades as
-      a whole: one slice for the size buyers took and one for the size sellers took.</Tell>
-    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only
-      what has arrived since the page opened.</Tell>
+    <Tell>The pie sums up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size
+      sellers took.</Tell>
+    <Tell>It counts only the trades that arrive while the page is open. The fetched past is candles, and a candle
+      doesn’t say who took a trade.</Tell>
     <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that
       only ever rotate, and a share is how far they have turned into view.</Tell>
     <Steps>
@@ -405,7 +408,9 @@ const PieStory: FC = () =>
           <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
           <Says>The markup passes each number to the style sheet as a custom property, such
-            as <code className="monospaced">--turn</code>, as the candles do. The style sheet declares each one
+            as <code className="monospaced">--turn</code>. A custom property is a value set by name on an element and
+            read back in the style sheet with <code className="monospaced">var()</code>, as
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The style sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a
             starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before
             the markup sets them, a slice sits unturned at the center.</Says>
