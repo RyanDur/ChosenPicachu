@@ -3,11 +3,12 @@ import stylelint from 'stylelint';
 const name = 'chosen/compositor-motion';
 const composited = new Set(['transform', 'translate', 'rotate', 'scale', 'opacity', 'filter']);
 const discrete = new Set(['visibility', 'content-visibility', 'display', 'overlay']);
+const tracks = new Set(['grid-template-rows', 'grid-template-columns']);
 const notAProperty = /^(\d|\.|-?\d|cubic-bezier|steps|linear|ease|step-|allow-discrete|normal|none|initial|inherit|unset)/;
 
 const messages = stylelint.utils.ruleMessages(name, {
   /** @param {string} property */
-  moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites`
+  moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites, or a grid track opening from 0fr to 1fr`
 });
 
 /** @param {string} value a transition's value, whose functions hold no nested parentheses */
@@ -20,7 +21,7 @@ const items = value => {
 const propertyIn = item => item.split(/\s+/).find(word => !notAProperty.test(word)) ?? 'all';
 
 /** @param {string} property */
-const allowed = property => property === 'none' || composited.has(property) || discrete.has(property);
+const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
 
 /** @type {import('stylelint').Rule} */
 const rule = primary => (root, result) => {
