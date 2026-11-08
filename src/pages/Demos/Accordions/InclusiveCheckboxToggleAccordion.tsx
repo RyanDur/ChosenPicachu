@@ -5,7 +5,7 @@ import './Accordions.css';
 
 export const InclusiveCheckboxToggleAccordion: FC<AccordionProps> = ({
   className,
-  content,
+  folds,
   motion
 }) => <article className={classNames('toggle-accordion', motion, className)}>
   <header>
@@ -15,17 +15,17 @@ export const InclusiveCheckboxToggleAccordion: FC<AccordionProps> = ({
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="new-accordion">
-      {content.map(({value, key}) =>
-        <li key={key} className="grid-fold">
+      {folds.map(({title, text}) =>
+        <li key={title} className="grid-fold">
           <header className="fold-bar field-inverse field-ink field-outlined">
-            <span className="sub-title bold">{key}</span>
+            <span className="sub-title bold">{title}</span>
             <label className="fold-control inverse-filled attentive hairline-outline field-pressed">
               <input type="checkbox" className="off-screen"/>
               <span className="when-closed">Open</span><span className="when-open">Close</span>
-              <span className="off-screen">{key}</span>
+              <span className="off-screen">{title}</span>
             </label>
           </header>
-          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{text}</span></span></p>
         </li>)}
     </ul>
   </fieldset>

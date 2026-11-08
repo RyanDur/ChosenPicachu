@@ -7,7 +7,7 @@ import './OldWayMotion.css';
 
 export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,
-  content,
+  folds,
   motion
 }) => {
   const [open, setOpen] = useState<string>();
@@ -23,12 +23,12 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
           <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
           <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
         </li>
-        {content.map(({value, key}, id) =>
-          <li className="fold" key={key} onChange={() => setOpen(key)}>
+        {folds.map(({title, text}, id) =>
+          <li className="fold" key={title} onChange={() => setOpen(title)}>
             <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
-            <label id={`measured-fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
-            <MeasuredPanel open={open === key} namedBy={`measured-fold-${id}-radio-label`}>
-              <p className="info-paragraph">{value}</p>
+            <label id={`measured-fold-${id}-radio-label`} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{title}</label>
+            <MeasuredPanel open={open === title} namedBy={`measured-fold-${id}-radio-label`}>
+              <p className="info-paragraph">{text}</p>
             </MeasuredPanel>
           </li>)}
       </ul>
