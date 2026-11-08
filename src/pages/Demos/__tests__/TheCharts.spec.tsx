@@ -173,6 +173,18 @@ describe('a list of charts', () => {
     await waitFor(() => expect(chartsDesk.doorway('Candles')).toHaveFocus());
   });
 
+  test('the chart after a deleted middle chart takes the focus', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('candles');
+
+    await chartsDesk.keys('Candles', 'Delete');
+
+    await waitFor(() => expect(chartsDesk.doorway('Pie')).toHaveFocus());
+  });
+
   test('the chart that is now last takes the focus when the last chart is deleted', async () => {
     const feed = await listeningFeed();
 

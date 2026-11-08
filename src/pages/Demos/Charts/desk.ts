@@ -1,4 +1,4 @@
-import {has, Maybe, nothing, some} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {allChartKinds, ChartKind, isChartKind} from './kinds';
 import {Period} from './period';
 
@@ -41,3 +41,6 @@ export const periodChosen = (kind: ChartKind, period: Period, seats: readonly Se
 
 export const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
   allChartKinds.filter(kind => !seats.some(seat => seat.kind === kind));
+
+export const seatAfterRemoval = (at: number, seated: number): Maybe<number> =>
+  maybe([at + 1, at - 1].find(seat => seat >= 0 && seat < seated));
