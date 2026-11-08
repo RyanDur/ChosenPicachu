@@ -13,6 +13,4 @@ const ChartsHeader = () => {
 
 export const ErrorBoundary: FC = () => <Page header={<ChartsHeader/>}><PageError/></Page>;
 
-const Room: FC = () => <Page header={<ChartsHeader/>}><Trading><ChartPage/></Trading></Page>;
-
-export default Room;
+export const Room: FC = () => <Page header={<ChartsHeader/>}><Trading><ChartPage/></Trading></Page>;

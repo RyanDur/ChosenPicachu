@@ -14,10 +14,8 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {SiteProviders} from '../SiteProviders';
-import * as root from '../root';
-import rooms from '../routes';
+import {Opener, RoomModule, siteOpenedBy} from '../routes';
 import {Env, env} from '@env';
-import {RouteConfigEntry} from '@react-router/dev/routes';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
@@ -42,22 +40,14 @@ const Probes: FC = () => {
   </>;
 };
 
-type RouteModule = {readonly default: FC; readonly ErrorBoundary?: FC};
+const modules = import.meta.glob<RoomModule>('../pages/**/{route,tab}.tsx', {eager: true});
 
-const modules = import.meta.glob<RouteModule>('../pages/**/{route,tab}.tsx', {eager: true});
-
-const roomOf = ({path, file, children}: RouteConfigEntry): RouteObject => {
-  const {default: Component, ErrorBoundary} = modules[`../${file}`];
-  return {path, Component, ErrorBoundary, children: children?.map(roomOf)};
+const eagerly: Opener = file => {
+  const {Room, ErrorBoundary} = modules[`../${file}`];
+  return {Component: Room, ErrorBoundary};
 };
 
-const siteRoute = {
-  path: '/',
-  Component: root.default,
-  ErrorBoundary: root.ErrorBoundary,
-  HydrateFallback: root.HydrateFallback,
-  children: rooms.map(roomOf)
-};
+const siteRoute = siteOpenedBy(eagerly);
 
 const described = (error: unknown): string => error instanceof Error ? error.message : String(error);
 
@@ -70,7 +60,7 @@ const everyRoom = (rooms: RouteObject[]): RouteObject[] =>
   rooms.flatMap(room => [room, ...everyRoom(room.children ?? [])]);
 
 const roomAt = (at: string): RouteObject | undefined =>
-  everyRoom(siteRoute.children).find(room => room.path === pathOf(at));
+  everyRoom(siteRoute.children ?? []).find(room => room.path === pathOf(at));
 
 const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)

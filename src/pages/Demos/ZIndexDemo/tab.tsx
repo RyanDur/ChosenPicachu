@@ -22,7 +22,7 @@ const usePlacingTheBanners = (): void => {
   useEffect(() => () => dispatchBanner(bannerChange.unplaced()), [dispatchBanner]);
 };
 
-const ZIndexTab: FC = () => {
+export const Room: FC = () => {
   const {raised, 'card-one': cardOne, wears, updateSearchParams} = useSearchParamsObject(
     {raised: raisedParam, 'card-one': cardOneParam, wears: wornParam},
     {raised: 'none', 'card-one': 'contained', wears: 'nothing'});
@@ -38,5 +38,3 @@ const ZIndexTab: FC = () => {
     <TopLayerTutorial/>
   </>;
 };
-
-export default ZIndexTab;

@@ -7,9 +7,9 @@
     "defaults"
   ],
   "scripts": {
-    "dev": "react-router dev",
+    "dev": "vite",
     "test": "vitest",
-    "build": "tsc -b && react-router build && node scripts/site-for-pages.mjs",
+    "build": "tsc -b && vite build && vite build --ssr src/entry.server.tsx --outDir build/server && node scripts/prerender.mjs",
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
     "tsc": "tsc -b",

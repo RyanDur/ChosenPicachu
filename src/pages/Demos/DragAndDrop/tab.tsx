@@ -22,7 +22,7 @@ const lists = {
   }
 };
 
-const DragSortTab: FC = () => {
+export const Room: FC = () => {
   const {pace, origin, motion} = useControls();
   const List = lists[pace][origin][motion];
 
@@ -32,5 +32,3 @@ const DragSortTab: FC = () => {
     <ListTutorials/>
   </>;
 };
-
-export default DragSortTab;

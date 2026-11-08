@@ -1,5 +1,5 @@
 import {BannerProvider, Banners} from '@frame/notices/Banners';
-import {Links, Outlet, Scripts, ScrollRestoration} from 'react-router';
+import {Outlet, ScrollRestoration} from 'react-router';
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
@@ -22,7 +22,6 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
       <link rel="preconnect" href="https://api.vam.ac.uk"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <script src={`${base}env.js`}/>
-      <Links/>
     </head>
     <body>
       <div id="root" className="backdrop">
@@ -34,7 +33,6 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
           site’s <a href="https://github.com/RyanDur/ChosenPicachu/discussions">Discussions page on GitHub</a>.
         </p>
       </noscript>
-      <Scripts/>
     </body>
   </html>;
 
@@ -56,6 +54,4 @@ export const HydrateFallback: FC = () =>
     </noscript>
   </Page>}/>;
 
-const Root: FC = () => <Site room={<Outlet/>}/>;
-
-export default Root;
+export const Root: FC = () => <Site room={<Outlet/>}/>;

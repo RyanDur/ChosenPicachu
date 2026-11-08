@@ -11,8 +11,6 @@ const TabContents: FC = () => <>
   <Tutorials/>
 </>;
 
-const TablesTab: FC = () => useShownTutorial().either(
+export const Room: FC = () => useShownTutorial().either(
   () => <TutorialPage/>,
   () => <TabContents/>);
-
-export default TablesTab;

@@ -11,7 +11,6 @@ import {practiceDrawings, squeezed} from './src/pages/Practice/practiceDrawings.
 import {browserslistToTargets, transform} from 'lightningcss';
 import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
-import {reactRouter} from '@react-router/dev/vite';
 import svgr from 'vite-plugin-svgr';
 import {has} from '@ryandur/sand';
 
@@ -229,11 +228,14 @@ export default defineConfig(({mode}) => ({
     alias: aliases
   },
   build: {
-    cssCodeSplit: false
+    cssCodeSplit: false,
+    manifest: true,
+    outDir: 'build/client',
+    rolldownOptions: {input: ['src/entry.client.tsx', 'src/entry.fallback.tsx']}
   },
   plugins: [
     drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(),
-    runtimeEnv(loadEnv(mode, process.cwd())), has(process.env.VITEST) ? react() : reactRouter(), svgr({
+    runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
       svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
       include: '**/*.svg'

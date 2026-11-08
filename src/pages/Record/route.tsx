@@ -8,6 +8,4 @@ const header = <Header title="The record" listed={recordListing(inOrder.length)}
 
 export const ErrorBoundary: FC = () => <Page header={header}><PageError/></Page>;
 
-const Room: FC = () => <Page header={header}><RecordPage/></Page>;
-
-export default Room;
+export const Room: FC = () => <Page header={header}><RecordPage/></Page>;

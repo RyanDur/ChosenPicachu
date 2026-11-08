@@ -27,9 +27,7 @@ const PieceHeader = () => {
 
 export const ErrorBoundary = GalleryError;
 
-const Room: FC = () =>
+export const Room: FC = () =>
   <GalleryProviders gallery={Paths.artGallery}>
     <Page header={<PieceHeader/>}><ArtGalleryPiecePage/></Page>
   </GalleryProviders>;
-
-export default Room;

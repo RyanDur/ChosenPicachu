@@ -2,7 +2,7 @@ import {FC, ReactNode} from 'react';
 import {Outlet, useLocation} from 'react-router';
 import {Maybe, maybe} from '@ryandur/sand';
 import {Header, Page, PageError} from '@frame/page';
-import NoSuchRoom from '@pages/NoRoom/route';
+import {Room as NoSuchRoom} from '@pages/NoRoom/route';
 import names from '@frame/navigation/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';
@@ -32,8 +32,6 @@ export const ErrorBoundary: FC = () => {
   return <Page header={header}><PageError/></Page>;
 };
 
-const Room: FC = () => useDemo().either(
+export const Room: FC = () => useDemo().either(
   ({topic, header}) => <Page header={header}><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Page>,
   () => <NoSuchRoom/>);
-
-export default Room;

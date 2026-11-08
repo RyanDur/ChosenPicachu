@@ -5,6 +5,4 @@ import {gamesHeader, GamesError} from './frame';
 
 export const ErrorBoundary = GamesError;
 
-const Room: FC = () => <Page header={gamesHeader}><GamesPage/></Page>;
-
-export default Room;
+export const Room: FC = () => <Page header={gamesHeader}><GamesPage/></Page>;

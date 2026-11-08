@@ -3,7 +3,7 @@ import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Page, PageError} from '@frame/page';
 import {Concern} from '@pages/Record/moments/concerns';
-import NoSuchRoom from '@pages/NoRoom/route';
+import {Room as NoSuchRoom} from '@pages/NoRoom/route';
 import names from '@frame/navigation/names.json';
 import {PracticePage} from './PracticePage';
 import {concernAt} from './types';
@@ -23,8 +23,6 @@ export const ErrorBoundary: FC = () => {
   return <Page header={header}><PageError/></Page>;
 };
 
-const Room: FC = () => useConcern().either(
+export const Room: FC = () => useConcern().either(
   concern => <Page header={headerOf(concern)}><PracticePage concern={concern}/></Page>,
   () => <NoSuchRoom/>);
-
-export default Room;

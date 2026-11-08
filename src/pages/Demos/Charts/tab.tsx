@@ -4,7 +4,7 @@ import {ChartsIntroduction} from './Introduction';
 import {Workspace} from './Workspace';
 import {ChartsTutorial} from './Tutorial';
 
-const ChartsTab: FC = () => {
+export const Room: FC = () => {
   const {tradeProduct} = useEnv();
 
   return <>
@@ -13,5 +13,3 @@ const ChartsTab: FC = () => {
     <ChartsTutorial/>
   </>;
 };
-
-export default ChartsTab;

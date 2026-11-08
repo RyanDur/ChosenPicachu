@@ -10,11 +10,9 @@ import {GalleryHeader} from './GalleryHeader';
 
 export const ErrorBoundary = GalleryError;
 
-const Room: FC = () =>
+export const Room: FC = () =>
   <GalleryProviders gallery={Paths.artGallery}>
     <Page header={<GalleryHeader/>} filters={<GalleryAside/>} footer={<GalleryNav id="gallery-nav"/>}>
       <ArtGalleryPage/>
     </Page>
   </GalleryProviders>;
-
-export default Room;

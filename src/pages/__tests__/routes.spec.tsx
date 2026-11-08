@@ -8,7 +8,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
-import DemosLayout, {ErrorBoundary as DemosLayoutBoundary} from '@pages/Demos/route';
+import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {

@@ -22,7 +22,7 @@ const contents = {
   gridRow: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
-const AccordionsTab: FC = () => {
+export const Room: FC = () => {
   const {type, style, updateSearchParams} =
     useSearchParamsObject({type: foldTypeParam, style: foldMotionParam}, {type: 'exclusive', style: 'reveal'});
 
@@ -30,5 +30,3 @@ const AccordionsTab: FC = () => {
     onTypeChosen={next => updateSearchParams({type: next})}
     motion={style} onMotionChosen={next => updateSearchParams({style: next})}/>;
 };
-
-export default AccordionsTab;
