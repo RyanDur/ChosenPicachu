@@ -17,6 +17,7 @@ import {SiteProviders} from '../SiteProviders';
 import * as root from '../root';
 import rooms from '../routes';
 import {Env, env} from '@env';
+import {RouteConfigEntry} from '@react-router/dev/routes';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
@@ -45,9 +46,7 @@ type RouteModule = {readonly default: FC; readonly ErrorBoundary?: FC};
 
 const modules = import.meta.glob<RouteModule>('../pages/**/{route,tab}.tsx', {eager: true});
 
-type Room = {path?: string; file: string; children?: Room[]};
-
-const roomOf = ({path, file, children}: Room): RouteObject => {
+const roomOf = ({path, file, children}: RouteConfigEntry): RouteObject => {
   const {default: Component, ErrorBoundary} = modules[`../${file}`];
   return {path, Component, ErrorBoundary, children: children?.map(roomOf)};
 };

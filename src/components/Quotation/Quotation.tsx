@@ -1,12 +1,11 @@
-import {FC, ReactNode} from 'react';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import {classNames} from '@components/class-names';
 import './Quotation.css';
 
-type QuotationProps = {
+type QuotationProps = PropsWithChildren<{
   voice: 'paragraph' | 'sub-title';
   source: ReactNode;
-  children: ReactNode;
-};
+}>;
 
 export const Quotation: FC<QuotationProps> = ({voice, source, children}) =>
   <figure className="quotation">

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 
 const heading = {layer: 'the layer', askedFor: 'asked for by', mouse: 'by mouse', keyboard: 'by keyboard'};
 
@@ -11,7 +11,7 @@ const layers: Layer[] = [
   {layer: 'Widen a column', askedFor: 'precision they can actually read', mouse: 'drag the edge', keyboard: 'arrows on the handle'}
 ];
 
-const CellHeading: FC<{children: string}> = ({children}) =>
+const CellHeading: FC<PropsWithChildren> = ({children}) =>
   <span className="cell-heading caption uppercase">{children}</span>;
 
 export const LayerMap: FC = () =>

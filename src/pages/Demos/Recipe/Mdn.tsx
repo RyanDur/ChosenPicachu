@@ -1,9 +1,8 @@
-import {FC, ReactNode} from 'react';
+import {FC, PropsWithChildren} from 'react';
 
-type Props = {
+type Props = PropsWithChildren<{
   path: string;
-  children: ReactNode;
-};
+}>;
 
 export const Mdn: FC<Props> = ({path, children}) =>
   <a className="signpost"
