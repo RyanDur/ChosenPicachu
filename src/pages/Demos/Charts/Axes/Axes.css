@@ -1,38 +1,29 @@
-.axes {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    'y chart'
-    '. x';
-  column-gap: var(--base);
+.y-labels {
+  grid-column: 1;
+  min-width: var(--base-x-8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
 
-  .y-labels {
-    grid-area: y;
-    min-width: var(--base-x-8);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
+.chart-area {
+  grid-column: 2;
+  min-width: 0;
+}
 
-  .chart-area {
-    grid-area: chart;
-    min-width: 0;
-  }
+.x-labels {
+  grid-column: 2;
+  position: relative;
+  height: var(--base-x-2);
+  margin-top: var(--base-x-0_25);
 
-  .x-labels {
-    grid-area: x;
-    position: relative;
-    height: var(--base-x-2);
-    margin-top: var(--base-x-0_25);
+  .tick {
+    --along: 0;
 
-    .tick {
-      --along: 0;
-
-      left: var(--along);
-      position: absolute;
-      transform: translateX(-50%);
-      white-space: nowrap;
-    }
+    left: var(--along);
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
   }
 }
