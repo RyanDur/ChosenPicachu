@@ -3,7 +3,8 @@ import {useSearchParamsObject} from '@navigation/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@navigation/Tabs';
-import {demoAddress, DemoTopics, topicNames} from './types';
+import {DemoTopics} from './demo-topics';
+import {demoTab} from './demo-tab';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
   const {searchFromShown} = useSearchParamsObject({});
@@ -19,8 +20,8 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       JavaScript are new to you, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" current={topic}
-      values={Object.values(DemoTopics).map(param => ({display: topicNames[param], param, to: `${demoAddress(param)}${searchFromShown({})}`}))}/>
-    <section id="about" aria-label={topicNames[topic]} className="about">
+      values={Object.values(DemoTopics).map(param => ({display: demoTab.names[param], param, to: `${demoTab.address(param)}${searchFromShown({})}`}))}/>
+    <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}
     </section>
   </>;

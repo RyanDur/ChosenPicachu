@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '../../types';
+import {DemoTopics} from '../../demo-topics';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';

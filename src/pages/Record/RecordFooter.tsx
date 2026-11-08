@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@navigation';
-import {DemoTopics, demoAddress} from '@pages/Demos';
+import {DemoTopics, demoTab} from '@pages/Demos';
 
 export const RecordFooter: FC<PropsWithChildren> = ({children}) =>
   <footer className="record-footer">
@@ -14,7 +14,7 @@ export const RecordFooter: FC<PropsWithChildren> = ({children}) =>
     </p>
     <p className="sub-title">
       <Link className="signpost" to={Paths.demos}>The Demos</Link> run from simple to
-      expert, <Link className="signpost" to={demoAddress(DemoTopics.accordions)}>the accordions</Link> first.
+      expert, <Link className="signpost" to={demoTab.address(DemoTopics.accordions)}>the accordions</Link> first.
       A reader new to HTML, CSS and JavaScript starts there; a reader who came with a bug goes to its tab. Every tab
       opens by saying what the thing is, the bug most of us have met with it, and the page’s view, before anything is
       built. The first tabs compare the trick used before the platform could do the job with what it does now; the later

@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, useId} from 'react';
-import {DemoTopics} from '../types';
+import {DemoTopics} from '../demo-topics';
 import {Codes, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import {AThirdFromThePointer} from './Diagrams';
 import workspaceSource from './Workspace.tsx?sample';

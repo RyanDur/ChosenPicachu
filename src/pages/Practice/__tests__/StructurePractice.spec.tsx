@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths, repository} from '@navigation';
-import {demoAddress, DemoTopics} from '@pages/Demos';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {recordAddress} from '@pages/Record';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
@@ -92,7 +92,7 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demoAddress(DemoTopics.zIndex));
+    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demoTab.address(DemoTopics.zIndex));
   });
 
   test('should send Disclosure, the counter-case, to its source', async () => {
@@ -113,7 +113,7 @@ describe('the Structure practice tab', () => {
       ['ResizeHandle', `${Paths.repo}/blob/main/src/components/DragSortableTable/ResizeHandle.tsx`],
       ['SortMenu', `${Paths.repo}/blob/main/src/components/DragSortableTable/SortMenu.tsx`],
       ['DraggableColumn', `${Paths.repo}/blob/main/src/components/DragSortableTable/DraggableColumn.tsx`],
-      ['z-index tab', demoAddress(DemoTopics.zIndex)]
+      ['z-index tab', demoTab.address(DemoTopics.zIndex)]
     ]));
   });
 
@@ -177,7 +177,7 @@ describe('the Structure practice tab', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
-      ['z-index tab', demoAddress(DemoTopics.zIndex)]
+      ['z-index tab', demoTab.address(DemoTopics.zIndex)]
     ]));
   });
 

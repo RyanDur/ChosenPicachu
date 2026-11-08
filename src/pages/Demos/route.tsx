@@ -4,7 +4,8 @@ import {Maybe, maybe} from '@ryandur/sand';
 import {Header, Listing, Page, PageError} from '@page';
 import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
-import {demoAddress, DemoTopics, topicNames} from './types';
+import {DemoTopics} from './demo-topics';
+import {demoTab} from './demo-tab';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';
 import {tableTutorials} from './Tables';
@@ -14,11 +15,11 @@ type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};
 const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pathname)
   .map((tutorial): ShownDemo => ({
     topic: DemoTopics.tables,
-    title: `Demos ${topicNames[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
+    title: `Demos ${demoTab.names[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
     listed: names.tables[tutorial]
   }))
-  .or(() => maybe(Object.values(DemoTopics).find(topic => pathname === demoAddress(topic)))
-    .map((topic): ShownDemo => ({topic, title: `Demos ${topicNames[topic]}`, listed: names.demos[topic]})));
+  .or(() => maybe(Object.values(DemoTopics).find(topic => pathname === demoTab.address(topic)))
+    .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));
 
 const useShownDemo = (): Maybe<ShownDemo> => shownDemoAt(useLocation().pathname);
 

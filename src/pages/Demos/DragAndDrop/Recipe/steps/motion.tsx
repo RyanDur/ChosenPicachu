@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '../../../types';
+import {DemoTopics} from '../../../demo-topics';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';

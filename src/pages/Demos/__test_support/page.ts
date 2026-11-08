@@ -1,10 +1,11 @@
 import {not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
-import {demoAddress, DemoTopics} from '@pages/Demos/types';
+import {DemoTopics} from '@pages/Demos/demo-topics';
+import {demoTab} from '@pages/Demos/demo-tab';
 
 const untilTheTabMounts = {timeout: 5000};
 
-const tabAddresses = Object.values(DemoTopics).map(demoAddress);
+const tabAddresses = Object.values(DemoTopics).map(demoTab.address);
 
 const linksToTabsIn = (holder: HTMLElement): string[][] => within(holder).getAllByRole('link')
   .map(link => [link.textContent ?? '', link.getAttribute('href') ?? ''])

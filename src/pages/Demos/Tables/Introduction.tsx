@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {DemoTopics} from '../types';
+import {DemoTopics} from '../demo-topics';
 
 export const TablesIntroduction: FC = () =>
   <header className="tab-introduction">

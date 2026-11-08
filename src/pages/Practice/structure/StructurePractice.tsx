@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
 import {MomentLink, recordAddress} from '@pages/Record';
-import {demoAddress, DemoTopics} from '@pages/Demos';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
@@ -85,7 +85,7 @@ export const StructurePractice: FC = () =>
       the role alert, because there is no alert element to reach for. The role makes the section a live region, a
       part of the page whose changes a screen reader reads out.
       The{' '}
-    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
+    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
     <h3 className="paragraph bold" id={structureParts.elements} tabIndex={-1}>From the content to the element</h3>
@@ -185,7 +185,7 @@ export const StructurePractice: FC = () =>
     <a className="signpost"
       href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
       carries a column. The menu is three components that write one element each, as the{' '}
-    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
+    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
       that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
       same way, one element per meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
@@ -226,7 +226,7 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
       minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner
       the{' '}
-    <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
+    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
       same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
       the platform now does for free, is a menu element holding a list of buttons, with role{' '}
     <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role{' '}

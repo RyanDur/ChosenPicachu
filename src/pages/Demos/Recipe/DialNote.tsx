@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '../types';
+import {DemoTopics} from '../demo-topics';
 import {FC} from 'react';
 
 export const DialNote: FC<{reads: string}> = ({reads}) =>
