@@ -1,9 +1,18 @@
 .pill-glider {
   width: fit-content;
   position: relative;
+  isolation: isolate;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
 
   @supports (anchor-name: --chosen) {
     &::before {

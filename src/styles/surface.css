@@ -361,23 +361,14 @@
 
 .veiled-rule-below { border-block-end: var(--hairline) solid var(--charcoal-veil); }
 
-/* WebKit ends a background-color transition to transparent on black, so the veil fades a number, not a color */
-@property --veil-alpha {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 0;
+.hover-veiled::after {
+  border-radius: inherit;
+  background: var(--charcoal-veil);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.hover-veiled {
-  --hover-veil: rgb(from var(--charcoal) r g b / var(--veil-alpha));
-
-  background: var(--hover-veil);
-  transition: --veil-alpha 0.3s;
-
-  &:hover {
-    --veil-alpha: var(--veil-opacity);
-  }
-}
+.hover-veiled:hover::after { opacity: 1; }
 
 .hover-approached:hover { background: var(--approach); }
 

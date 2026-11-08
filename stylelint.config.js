@@ -22,10 +22,10 @@ const structure = [
 
 const stillMoveOnTheMainThread = [
   'src/components/Banners/Banners.css',
-  'src/components/FancyFormElements/Fancy.css', 'src/components/PillGlider/PillGlider.css',
+  'src/components/PillGlider/PillGlider.css',
   'src/pages/Demos/Accordions/Accordions.css', 'src/pages/Demos/Charts/Candles/Candles.css',
   'src/pages/Demos/Charts/Pressure/Pressure.css', 'src/pages/Demos/Charts/PriceChart/PriceChart.css',
-  'src/pages/Demos/ZIndexDemo/ZIndexDemo.css', 'src/styles/drawing.css', 'src/styles/reset.css', 'src/styles/surface.css'
+  'src/pages/Demos/ZIndexDemo/ZIndexDemo.css', 'src/styles/drawing.css', 'src/styles/reset.css'
 ];
 
 export default {

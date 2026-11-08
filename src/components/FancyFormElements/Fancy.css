@@ -1,7 +1,6 @@
 .fancy {
   min-height: var(--base-x-5);
   position: relative;
-  transition: all 0.5s var(--curve);
 
   .fancy-title {
     pointer-events: none;
@@ -12,7 +11,7 @@
     max-width: 80%;
     opacity: 0.6;
     z-index: 1;
-    transition: all 0.3s var(--curve);
+    transition: opacity 0.3s var(--curve), translate 0.3s var(--curve);
   }
 
   &.fancy-select .fancy-title,
@@ -21,7 +20,7 @@
   &:has(.fancy-text[type='date']:valid) .fancy-title,
   &:has(.fancy-text[placeholder]:not(:placeholder-shown)) .fancy-title {
     opacity: 1;
-    top: calc(-1 * var(--base-x-1_25));
+    translate: 0 calc(-2 * var(--base-x-1_25));
   }
 
   .fancy-text {
