@@ -17,8 +17,8 @@ const tester = new RuleTester({languageOptions: {
 
 tester.run('one-export', structure.rules['one-export'], {
   valid: [
-    {name: 'should accept one module function', code: 'export const banners = () => ({});', filename: withIndex},
-    {name: 'should accept a module function and its types', code: 'export const banners = () => ({}); export type Side = string;', filename: withIndex}
+    {name: 'should accept one module', code: 'export const banners = {};', filename: withIndex},
+    {name: 'should accept a module built by a function, and its types', code: 'export const banners = () => ({}); export type Side = string;', filename: withIndex}
   ],
   invalid: [
     {name: 'should refuse a second exported value', code: 'export const one = 1; export const two = 2;', filename: withIndex, errors: 1},
