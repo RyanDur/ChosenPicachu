@@ -126,9 +126,8 @@ module.exports = [
   },
   {
     files: ['src/**/*.tsx'],
-    ignores: [...stillCallComponents],
     plugins: {components},
-    rules: {'components/rendered-as-jsx': 'error'}
+    rules: {'components/rendered-as-jsx': ['error', {still: stillCallComponents}]}
   },
   {
     files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],
