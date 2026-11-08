@@ -7,11 +7,11 @@ describe('the plain fold’s assembly', () => {
     expect(names).toContain('Accordions.css');
   });
 
-  it('fills every slot in its document, the script included', () => {
-    const document = foldAssembly.document();
-    expect(document).not.toContain('/* the cascade */');
-    expect(document).not.toContain('/* the script */');
-    expect(document).toContain('.info-measured');
-    expect(document).toMatch(/addEventListener\(["']transitionend["']/);
+  it('fills every gap in its markup, the script included', () => {
+    const markup = foldAssembly.markup();
+    expect(markup).not.toContain('/* the cascade */');
+    expect(markup).not.toContain('/* the script */');
+    expect(markup).toContain('.info-measured');
+    expect(markup).toMatch(/addEventListener\(["']transitionend["']/);
   });
 });

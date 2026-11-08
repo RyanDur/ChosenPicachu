@@ -11,4 +11,4 @@ const assembled = (): string => scaffold
   .replace('/* the cascade */', () => sheets.map(({css}) => css).join('\n'))
   .replace('/* the script */', () => foldJs);
 
-export const foldAssembly = {sheets, document: assembled};
+export const foldAssembly = {sheets, markup: assembled};
