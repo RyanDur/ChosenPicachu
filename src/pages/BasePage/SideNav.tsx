@@ -27,7 +27,8 @@ const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
     aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
 };
 
-// React Router mounts each route's page anew, and the followed link goes with the page it was on
+// React Router mounts each route's page anew, and the followed link goes with the page it was on.
+// React's autoFocus focuses only form controls, and the platform's autofocus runs once per document.
 const useFocusFollowsTheRail = (): void => {
   const {key, state} = useLocation();
   const navigation = useNavigationType();
