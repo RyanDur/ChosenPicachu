@@ -7,7 +7,7 @@ export const TablesIntroduction: FC = () =>
     <p className="paragraph">A table of live trades is the hardest thing on this site: its rows change while you read
       them, and this one also lets you drag a column or a row to a new place, resize a column, and sort by one.</p>
     <p className="paragraph">This tab assumes the <TabLink to={DemoTopics.charts}>charts tab</TabLink>’s live feed,
-      its trades and its Maybe, the{' '}
+      trades and Maybe, the{' '}
     <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s drag, the <TabLink to={DemoTopics.zIndex}>z-index
       tab</TabLink>’s popover, top layer and React with its
       component, state and event, and a class and a dial from the <TabLink to={DemoTopics.accordions}>accordions
