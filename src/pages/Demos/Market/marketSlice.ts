@@ -4,8 +4,8 @@ import {Trade} from '../Charts/coinbase';
 import {LATEST_TRADES_CAP, LiveTradesState, opening} from '../Charts/live-trades';
 import {Period} from '../Charts/period';
 import {PeriodHistory, loading, unavailable} from '../Charts/period-history';
-import {measures} from '../Tables/Aggregations/cells';
-import {windows} from '../Tables/Aggregations/fold';
+import {measures} from './cells';
+import {windows} from './fold';
 import {MarketAction} from './marketActions';
 
 export type TradesState = LiveTradesState & {

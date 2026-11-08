@@ -486,7 +486,7 @@ const WorkspaceStory: FC = () =>
             from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the slot is on the page and gives nothing when
             it isn’t. Its answer is a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
             there is one. With nothing, <code className="monospaced">travel</code> skips the measuring and the swap. It has already told the
-            browser that a drop is allowed here, as every dragover handler must.</Says>
+            browser that a drop is allowed here, as the dragover handler of every drop target must.</Says>
           <Says>The neighbor’s slide is the{' '}
             <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot

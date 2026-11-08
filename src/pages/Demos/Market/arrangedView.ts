@@ -1,6 +1,6 @@
 import {Arrangement, standingOf} from '@components/DragSortableTable/arrangement';
 import {TableColumn} from '@components/DragSortableTable/table-state';
-import {Measured, Measures, seated} from '../Tables/Aggregations/cells';
+import {Measured, Measures, seated} from './cells';
 
 type ArrangedView = {
   columnsOf: (arrangement: Arrangement) => readonly TableColumn<Measured>[];

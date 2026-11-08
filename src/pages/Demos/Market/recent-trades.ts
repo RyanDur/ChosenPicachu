@@ -3,7 +3,7 @@ import {Result} from '@ryandur/sand';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
-import {Trade} from '../../Charts/coinbase';
+import {Trade} from '../Charts/coinbase';
 
 const RecentTradesDecoder = schema.array(schema.object({
   required: {

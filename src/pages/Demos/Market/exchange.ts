@@ -3,7 +3,7 @@ import {HTTPError} from '@transport/types';
 import {decodeTrade, subscribeTo} from '../Charts/coinbase';
 import {periodCandles, periodQuery} from '../Charts/coinbase/history';
 import {Period} from '../Charts/period';
-import {recentTrades} from '../Tables/Aggregations/recent-trades';
+import {recentTrades} from './recent-trades';
 import {MarketAction, marketActions} from './marketActions';
 import {MarketMiddleware} from './marketStore';
 

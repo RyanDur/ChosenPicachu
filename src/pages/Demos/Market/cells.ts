@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Labelled, Seated} from '@components/DragSortableTable/table-state';
-import {cents, deltaLabel} from '../../Charts/money';
+import {cents, deltaLabel} from '../Charts/money';
 import {Traded, WindowAggregate} from './fold';
 
 const moved = (traded?: Traded): Measure =>

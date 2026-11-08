@@ -87,7 +87,7 @@ const stillReachForThePage = [
   'src/components/Feedback/Feedback.tsx',
   'src/components/OpeningFragment/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
   'src/components/glide.ts', 'src/components/room.ts', 'src/components/scroll/scroll.ts', 'src/pages/BasePage/SideNav.tsx',
-  'src/pages/Demos/Tables/Aggregations/fold.ts',
+  'src/pages/Demos/Market/fold.ts',
   'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
 ];
 

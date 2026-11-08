@@ -1,4 +1,4 @@
-import {Trade, takerBought} from '../../Charts/coinbase';
+import {Trade, takerBought} from '../Charts/coinbase';
 import {maybe} from '@ryandur/sand';
 
 export type Traded = {

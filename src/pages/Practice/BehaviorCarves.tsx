@@ -8,7 +8,7 @@ import reportSource from '@components/DragSortableTable/report.ts?sample';
 import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import basePageSheet from '../../BasePage.css?sample';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
-import recentTradesSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?sample';
+import recentTradesSource from '@pages/Demos/Market/recent-trades.ts?sample';
 import coinbaseSource from '@pages/Demos/Charts/coinbase/index.ts?sample';
 import useDragSortableSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';

@@ -1,6 +1,6 @@
 import {FC, useReducer} from 'react';
 import {render} from '@testing-library/react';
-import {Measured, Measures, measures} from '../../Aggregations/cells';
+import {Measured, Measures, measures} from '../../../Market/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';

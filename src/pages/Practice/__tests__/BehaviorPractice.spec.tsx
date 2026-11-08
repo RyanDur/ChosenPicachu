@@ -111,7 +111,7 @@ describe('the Behavior practice tab', () => {
 
     expect(outOfReadingOrder([
       practicePage.figure(twoTracks),
-      practicePage.figure('Aggregations/recent-trades.ts on GitHub')
+      practicePage.figure('Market/recent-trades.ts on GitHub')
     ])).toEqual([]);
   });
 

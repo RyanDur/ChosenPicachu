@@ -3,9 +3,9 @@ import {Trade} from '../Charts/coinbase';
 import {LiveTradesState} from '../Charts/live-trades';
 import {Period} from '../Charts/period';
 import {PeriodHistory, loading} from '../Charts/period-history';
-import {Measured, Measures, cells} from '../Tables/Aggregations/cells';
-import {windowedAggregates} from '../Tables/Aggregations/fold';
-import {hydrated} from '../Tables/Aggregations/recent-trades';
+import {Measured, Measures, cells} from './cells';
+import {windowedAggregates} from './fold';
+import {hydrated} from './recent-trades';
 import {arrangedView} from './arrangedView';
 import {MarketState, TradesState} from './marketSlice';
 

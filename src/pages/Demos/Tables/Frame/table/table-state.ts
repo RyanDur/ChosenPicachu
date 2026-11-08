@@ -2,7 +2,7 @@ import {maybe} from '@ryandur/sand';
 import {TableStore} from '@components/DragSortableTable/store';
 import {Report} from '@components/DragSortableTable/report';
 import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
-import {Measures} from '@pages/Demos/Tables/Aggregations/cells';
+import {Measures} from '@pages/Demos/Market';
 
 export type {TableState, Carry} from '@components/DragSortableTable/table-state';
 export type {Report} from '@components/DragSortableTable/report';

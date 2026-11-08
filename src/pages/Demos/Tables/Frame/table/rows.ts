@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
 import {gripLabel} from '@components/DragSortableTable/survey';
-import {isMeasure} from '@pages/Demos/Tables/Aggregations/cells';
+import {isMeasure} from '@pages/Demos/Market';
 import {changed, MountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {columnsShown, sortableOf} from './columns';

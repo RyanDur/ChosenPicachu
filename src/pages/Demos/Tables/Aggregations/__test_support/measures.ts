@@ -1,4 +1,4 @@
-import {Measures} from '../cells';
+import {Measures} from '../../../Market';
 
 export const measuresFor = (window: string, trades: number): Measures => ({
   window: {display: window},

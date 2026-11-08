@@ -1,6 +1,6 @@
 import {render, within} from '@testing-library/react';
-import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
-import {cells, measures} from '@pages/Demos/Tables/Aggregations/cells';
+import {windowedAggregates} from '@pages/Demos/Market/fold';
+import {cells, measures} from '@pages/Demos/Market/cells';
 import {EagerTable} from '../../Builds/EagerTable';
 import {vanillaFrame} from '../__test_support';
 
