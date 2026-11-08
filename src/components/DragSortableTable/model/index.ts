@@ -11,7 +11,7 @@ export type {Report} from './report';
 export {landingReport, moveReport} from './report';
 export {tableSelectors} from './selectors';
 export type {Direction} from './sorting';
-export {choices, directionOf} from './sorting';
+export {sorting} from './sorting';
 export type {TableStore} from './store';
 export {tableStore} from './store';
 export type {PixelSizes, Survey} from './survey';

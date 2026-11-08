@@ -1,6 +1,6 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
-import {choices, tableActions} from './model';
+import {tableActions, sorting} from './model';
 import {useHeaderEvents, useTableDispatch} from './context';
 import {useHydrated} from '@frame/page';
 
@@ -16,7 +16,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
       aria-label={`sort ${column}`}/>
     <Menu id={`sort-${column}`} tabIndex={-1} popover="auto" className="card rounded-corners lifted" aria-label={`sort ${column} by`}
       onPointerDown={event => event.stopPropagation()}>
-      {choices.map(({display, direction}) =>
+      {sorting.choices.map(({display, direction}) =>
         <Entry key={display}>
           <Item tabIndex={0} className="sub-title"
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"

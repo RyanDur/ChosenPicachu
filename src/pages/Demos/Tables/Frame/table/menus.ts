@@ -1,5 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {Direction, directionOf, Labelled, TableColumn} from '@components/DragSortableTable/model';
+import {Direction, Labelled, TableColumn, sorting} from '@components/DragSortableTable/model';
 import {columnOfHeader, MountedTable} from './table-state';
 import {tell} from './events';
 
@@ -28,7 +28,7 @@ export const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, 
 };
 
 const choosing = (context: Pick<MountedTable, 'table' | 'report'>, column: string, item: Element): void => {
-  item.addEventListener('click', () => choose(context, column, directionOf((item.textContent ?? '').trim())));
+  item.addEventListener('click', () => choose(context, column, sorting.directionOf((item.textContent ?? '').trim())));
 };
 
 const keepingTheColumnStill = (chrome: Element): void => {

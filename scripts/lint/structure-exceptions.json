@@ -4,7 +4,6 @@
     "src/components/DragSortableTable/context.ts",
     "src/components/DragSortableTable/model/lift.ts",
     "src/components/DragSortableTable/model/report.ts",
-    "src/components/DragSortableTable/model/sorting.ts",
     "src/components/DragSortableTable/useDragSortable.ts",
     "src/components/Menu/Menu.tsx",
     "src/components/Table/shares.ts",

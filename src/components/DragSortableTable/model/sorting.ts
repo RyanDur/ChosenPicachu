@@ -9,18 +9,18 @@ type Choice = {
   direction?: Direction;
 };
 
-export const choices: readonly Choice[] = [
+const choices: readonly Choice[] = [
   {display: 'ascending', direction: 'ascending'},
   {display: 'descending', direction: 'descending'},
   {display: 'reset'}
 ];
 
-export const directionOf = (label: string): Direction | undefined => {
+const directionOf = (label: string): Direction | undefined => {
   const choice = choices.find(({display}) => display === label);
   return has(choice) ? choice.direction : undefined;
 };
 
-export const ranked = <Seat>(
+const ranked = <Seat>(
   seats: readonly Seat[],
   valueOf: (seat: Seat) => Value | undefined,
   direction: Direction
@@ -33,3 +33,9 @@ export const ranked = <Seat>(
       : (first ?? Number.NEGATIVE_INFINITY) - (second ?? Number.NEGATIVE_INFINITY);
     return direction === 'ascending' ? gap : -gap;
   });
+
+export const sorting = {
+  choices,
+  directionOf,
+  ranked
+};

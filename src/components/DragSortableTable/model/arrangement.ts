@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Direction, Value, ranked} from './sorting';
+import {Direction, Value, sorting} from './sorting';
 import {Sort} from './table-state';
 
 export type Arrangement = {
@@ -33,7 +33,7 @@ export const standingOf = (
   {rows, sort}: Arrangement,
   valueOf: (row: string, column: string) => Value | undefined
 ): readonly string[] =>
-  has(sort) ? ranked(rows, row => valueOf(row, sort.column), sort.direction) : rows;
+  has(sort) ? sorting.ranked(rows, row => valueOf(row, sort.column), sort.direction) : rows;
 
 const unsorted = ({sort: _sort, ...arrangement}: Arrangement): Arrangement => arrangement;
 

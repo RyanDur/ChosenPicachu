@@ -242,7 +242,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             sorted.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(sortingSource, 'export const ranked'), gap,
+              ...carve.unit(sortingSource, 'const ranked'), gap,
               ...carve.unit(arrangementSource, 'export const standingOf'), gap,
               ...carve.unit(arrangedViewSource, '  rowsOf: (arrangement, aggregates) =>'),
               lines.aside('// both worlds ask the arrangement the same question')
