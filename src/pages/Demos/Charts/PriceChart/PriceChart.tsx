@@ -95,10 +95,8 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
             x1={0} y1={points[0].y}
             x2={CHART_WIDTH} y2={points[0].y}/>}
           <polyline className="trend side-line line-shadowed" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-          {notEmpty(points) && <circle className="marker side-dot"
-            cx={points[points.length - 1].x}
-            cy={points[points.length - 1].y}
-            r={3}/>}
+          {notEmpty(points) && <circle className="marker side-dot" r={3}
+            style={{translate: `${points[points.length - 1].x}px ${points[points.length - 1].y}px`}}/>}
         </svg>
       </Axes>
       <p className="headline monospaced">{view.map(({first, last}) => <>
