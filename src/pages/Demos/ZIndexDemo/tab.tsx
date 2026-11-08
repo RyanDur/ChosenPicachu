@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
 import {useControls} from '../Controls';
 import {BannerExplained} from './BannerExplained';

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {seeded} from '@components/fibs';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {AccordionsExplained} from './Explained';
 import {foldMotionParam} from './fold-motion';
 import {foldTypeParam} from './fold-type';

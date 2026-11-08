@@ -1,23 +1,13 @@
-import {NavigateOptions, SetURLSearchParams, useSearchParams} from 'react-router';
+import {NavigateOptions, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
-import {useHydrated} from '@frame/page';
+import {useSearchParamsOnceHydrated} from './useSearchParamsOnceHydrated';
 
 const filterEmpty = (obj: {[p: string]: string | number}) =>
   Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
 
-export const numberParam: schema.Decoder<number> = schema.regex(/^-?\d+$/).andThen(Number);
-
-const noSearch = new URLSearchParams();
-
 const keepingThePlace: NavigateOptions = {preventScrollReset: true};
-
-// a page drawn at build time holds no search, so the dials apply once the script has taken the page over
-export const useSearchParamsOnceHydrated = (): [URLSearchParams, SetURLSearchParams] => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  return [useHydrated() ? searchParams : noSearch, setSearchParams];
-};
 
 type ParamDecoders<T> = {[K in keyof T]: schema.Decoder<T[K]>};
 

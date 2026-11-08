@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsOnceHydrated} from '@components/search-params';
+import {useSearchParamsOnceHydrated} from '@frame/navigation/search-params';
 import {Snippet, lines, carve} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {fixedBannerLosesHeading} from './part-headings';

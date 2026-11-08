@@ -1,6 +1,6 @@
 import {FC, useEffect, useState, useSyncExternalStore} from 'react';
 import {Link, useNavigate} from 'react-router';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
 import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';

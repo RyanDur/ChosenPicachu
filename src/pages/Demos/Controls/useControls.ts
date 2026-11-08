@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement} from '@frame/notices/banners';
 

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {Route} from 'react-router';
 import * as schema from 'schemawax';
 import {Tabs} from '@components/Tabs';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {TestApp} from '../TestApp';
 
 const doors = [{display: 'First', param: 'first', to: '?tab=first'}, {display: 'Second', param: 'second', to: '?tab=second'}];

@@ -1,6 +1,6 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {DesignAsk, FlowTableRecipe, LayerMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
 import {useArrival} from '@frame/navigation/arrival';

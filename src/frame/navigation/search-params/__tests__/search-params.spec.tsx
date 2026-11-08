@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {FC} from 'react';
 import {render, screen} from '@testing-library/react';
 import * as schema from 'schemawax';
-import {numberParam, useSearchParamsObject} from '@components/search-params';
+import {numberParam, useSearchParamsObject} from '@frame/navigation/search-params';
 
 const Probe: FC = () => {
   const {page, tab} = useSearchParamsObject({page: numberParam, tab: schema.string}, {page: 1, tab: 'aic'});

@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
+import {useSearchParamsObject} from '@frame/navigation/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
