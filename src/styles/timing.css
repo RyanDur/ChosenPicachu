@@ -2,4 +2,6 @@
   --curve: cubic-bezier(0.25, 0.8, 0.25, 1);
   --lift-duration: 0.5s;
   --slide-curve: cubic-bezier(0.45, 0, 0.15, 1);
+  --slide-duration: 0.6s;
+  --fold-duration: 0.3s;
 }

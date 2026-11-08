@@ -31,9 +31,9 @@
   .trouble {
     display: grid;
     transition:
-      translate 0.6s var(--slide-curve) 0.3s,
-      grid-template-rows 0.3s,
-      grid-template-columns 0.3s;
+      translate var(--slide-duration) var(--slide-curve) var(--fold-duration),
+      grid-template-rows var(--fold-duration),
+      grid-template-columns var(--fold-duration);
 
     @starting-style {
       translate: var(--arrive);
@@ -86,15 +86,15 @@
   &:where(.stack-down, .stack-up) .trouble.leaving {
     grid-template-rows: 0fr;
     transition:
-      translate 0.6s var(--slide-curve),
-      grid-template-rows 0.3s 0.6s;
+      translate var(--slide-duration) var(--slide-curve),
+      grid-template-rows var(--fold-duration) var(--slide-duration);
   }
 
   &:where(.stack-left, .stack-right) .trouble.leaving {
     grid-template-columns: 0fr;
     transition:
-      translate 0.6s var(--slide-curve),
-      grid-template-columns 0.3s 0.6s;
+      translate var(--slide-duration) var(--slide-curve),
+      grid-template-columns var(--fold-duration) var(--slide-duration);
   }
 
   &.from-above { --arrive: 0 -100dvh; }

@@ -114,7 +114,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.span(timingCss, '--slide-curve:', '--slide-curve:'), gap,
+            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), gap,
             ...carve.unit(bannersCss, '.trouble {'), gap,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
             ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
