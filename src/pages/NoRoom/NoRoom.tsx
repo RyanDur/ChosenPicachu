@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@frame/navigation';
-import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 
 const noRoom = 'There is no room at this address.';
 

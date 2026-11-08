@@ -5,7 +5,7 @@ import {Worn} from './worn';
 import {whatElseFormsHeading} from './part-headings';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
-import tabsCss from '@frame/navigation/tabs/Tabs.css?sample';
+import tabsCss from '@frame/navigation/Tabs/Tabs.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');

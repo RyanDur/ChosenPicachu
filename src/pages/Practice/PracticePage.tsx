@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useArrival} from '@frame/navigation/arrival';
-import {Tabs} from '@frame/navigation/tabs';
+import {Tabs} from '@frame/navigation/Tabs';
 import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
 import {practiceAddress} from './types';
 import {StructurePractice} from './StructurePractice';

@@ -1,7 +1,7 @@
 import {FC, MouseEvent, useState} from 'react';
 import {maybe} from '@ryandur/sand';
 import {decked, news} from '@components/fibs';
-import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import './ZIndexDemo.css';
 
 const nextNews = decked(news);

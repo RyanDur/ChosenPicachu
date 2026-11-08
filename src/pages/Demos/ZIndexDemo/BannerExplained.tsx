@@ -7,8 +7,8 @@ import {fixedBannerLosesHeading} from './part-headings';
 import {storyKeys} from '../Recipe';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
-import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
-import bannersCss from '@frame/notices/banners/Banners.css?sample';
+import bannersSource from '@frame/notices/Banners/Banners.tsx?sample';
+import bannersCss from '@frame/notices/Banners/Banners.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');

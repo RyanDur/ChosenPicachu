@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import './PlainFold.css';
 
 const measured = (body: HTMLElement, grown: (height: number) => void): void => {

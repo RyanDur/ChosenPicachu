@@ -2,7 +2,7 @@ import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
 import {TestApp} from '@__test_support/TestApp';
-import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 
 const Trouble: FC<{message: string}> = ({message}) => {
   const dispatchBanner = useBannerDispatch();

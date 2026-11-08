@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {Align, Side} from '@frame/notices/banners';
+import {Align, Side} from '@frame/notices/Banners';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {Sample} from '../../Recipe/sample';
 import {AlignDial, SideDial, useControls} from '../../Controls';
 import {fixedBannerLosesHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
-import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
-import providerSource from '@frame/notices/banners/BannerProvider.tsx?sample';
-import bannersCss from '@frame/notices/banners/Banners.css?sample';
+import bannersSource from '@frame/notices/Banners/Banners.tsx?sample';
+import providerSource from '@frame/notices/Banners/BannerProvider.tsx?sample';
+import bannersCss from '@frame/notices/Banners/Banners.css?sample';
 import placementCss from '../../../../styles/placement.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
 import typographyCss from '../../../../styles/typography.css?sample';
