@@ -46,8 +46,11 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           <Says>The toggle and its menu are the button and the menu the page writes,
             marked <code className="monospaced">data-sort-toggle</code> and <code className="monospaced">data-sort-menu</code>. When boot calls <code className="monospaced">dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
           <Says>When the reader chooses a direction, the handler <code className="monospaced">dragSortable</code> wired
-            to that button calls <code className="monospaced">sortMenus.choose</code>. The handler
-            passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code>{' '}
+            to that button reads the button’s <code className="monospaced">value</code> attribute and looks it up
+            with <code className="monospaced">sorting.choiceOf</code>. The answer is a Maybe, as
+            the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: it holds a choice or nothing,
+            and <code className="monospaced">map</code> calls <code className="monospaced">sortMenus.choose</code> only
+            when it holds one. The handler passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code>{' '}
             gave it: what the table knows about itself and the functions the table answers with. <code className="monospaced">sortMenus.choose</code> raises <code className="monospaced">sorted</code> to the
             page and writes the move report, the output that tells a screen reader what happened. The page
             dispatches the sort into its arrangement and calls <code className="monospaced">reconcile</code>, which
