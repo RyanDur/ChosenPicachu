@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 import {readFileSync, readdirSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -112,7 +113,7 @@ const firstWorn = node => {
 
 const classPositions = visit => ({
   JSXAttribute: node => {
-    if (node.name.name !== 'className' || node.value === null) return;
+    if (node.name.name !== 'className' || empty(node.value)) return;
     visit(node.value.type === 'JSXExpressionContainer' ? node.value.expression : node.value);
   },
   CallExpression: node => {

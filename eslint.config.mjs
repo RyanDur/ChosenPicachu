@@ -6,6 +6,7 @@ import {classes} from './scripts/lint/classes.mjs';
 import {structure} from './scripts/lint/structure.mjs';
 import {bareInlineCode} from './scripts/lint/inline-code.mjs';
 import {wrap} from './scripts/lint/wrap.mjs';
+import {page} from './scripts/lint/page.mjs';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -170,10 +171,8 @@ export default [
   {
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['**/__tests__/**', '**/__test_support/**', 'src/entry.client.tsx', 'src/env.ts', ...vanilla, ...stillReachForThePage],
-    rules: {'no-restricted-globals': ['error',
-      {name: 'document', message: 'React code never reaches for the document; a vanilla build lives in its own directory'},
-      {name: 'window', message: 'React code never reaches for the window; a vanilla build lives in its own directory'}
-    ]}
+    plugins: {page},
+    rules: {'page/no-page-globals': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}'],

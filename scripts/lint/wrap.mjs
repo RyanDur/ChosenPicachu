@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 const limit = 120;
 
 /** A value wrapped onto its own line after `=` that would fit on the line before it. */
@@ -15,7 +16,7 @@ const needlessWrap = {
      * @param {import('estree').Node} value
      */
     const check = (operator, value) => {
-      if (operator === null) return;
+      if (empty(operator)) return;
       const before = operator.loc.end.line;
       const at = value.loc.start.line;
       if (at === before || value.loc.end.line !== at) return;
