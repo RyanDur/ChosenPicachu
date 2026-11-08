@@ -5,12 +5,12 @@ import {
   AICSearchResponse,
   aicSchema
 } from '@pages/Gallery/museums/aic/types';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {maybe} from '@ryandur/sand';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@frame/state/env';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
@@ -23,14 +23,14 @@ const aSundayOnLaGrandeJatte = '2d484387-2509-5e8e-2c43-22f9981972eb';
 
 export const aic = {
   allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
-    .get(`${env.aicDomain}/search${toQueryString({
+    .get(`${env.aicDomain}/search${queryString.from({
       q: search,
       'query[exists][field]': 'image_id',
       fields,
       page,
       limit: size
     })}`, {cache: 'force-cache'})
-    .mBind(validate(aicSchema.allArt))
+    .mBind(decoded.by(aicSchema.allArt))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
         total: pagination.total,
@@ -43,17 +43,17 @@ export const aic = {
   open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
 
   art: (id: string) => http
-    .get(`${env.aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
-    .mBind(validate(aicSchema.art))
+    .get(`${env.aicDomain}/${id}${queryString.from({fields})}`, {cache: 'force-cache'})
+    .mBind(decoded.by(aicSchema.art))
     .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
   searchOptions: (search: string) => http
-    .get(`${env.aicDomain}/search${toQueryString({
+    .get(`${env.aicDomain}/search${queryString.from({
       'query[term][title]': search,
       fields: 'suggest_autocomplete_all',
       limit: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(aicSchema.search))
+    .mBind(decoded.by(aicSchema.search))
     .map(({data}: AICSearchResponse): SearchOptions => data
       .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
       .flatMap(option => option.input))

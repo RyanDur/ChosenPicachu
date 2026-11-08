@@ -7,9 +7,9 @@ import {
 import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
 import {env} from '@frame/state/env';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
@@ -22,12 +22,12 @@ const withImages = (search?: string) =>
   [has(search) && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
 const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
-  .get(`${env.harvardDomain}${toQueryString({
+  .get(`${env.harvardDomain}${queryString.from({
     q: withImages(search),
     page,
     size, ...baseQueryString
   })}`, {cache: 'force-cache'})
-  .mBind(validate(harvardSchema.allArt));
+  .mBind(decoded.by(harvardSchema.allArt));
 
 export const harvard = {
   allArt: (request: GetAllArtRequest) => searched(request)
@@ -43,18 +43,18 @@ export const harvard = {
   open: () => searched({page: 1}).map(({records}): Door => records.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
-    .get(`${env.harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})
-    .mBind(validate(harvardSchema.art))
+    .get(`${env.harvardDomain}/${id}${queryString.from(baseQueryString)}`, {cache: 'force-cache'})
+    .mBind(decoded.by(harvardSchema.art))
     .map(harvardArtToArt),
 
   searchOptions: (search: string) => http
-    .get(`${env.harvardDomain}${toQueryString({
+    .get(`${env.harvardDomain}${queryString.from({
       title: search,
       fields: 'title',
       apikey: env.harvardAPIKey,
       size: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(harvardSchema.search))
+    .mBind(decoded.by(harvardSchema.search))
     .map(({records}: HarvardSearchResponse): SearchOptions =>
       records.map(({title}) => title))
 };

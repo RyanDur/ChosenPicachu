@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useEffect, useState, useSyncExternalStore} from '
 import {useNavigate} from 'react-router';
 import {Paths} from '@frame/navigation';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
-import {troubleWith} from '@transport';
+import {trouble} from '@transport';
 import {usersApi} from './resource';
 import {syncing} from './syncing';
 import {usersActions} from './usersActions';
@@ -16,7 +16,7 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
   const [store] = useState(() => usersStore(syncing(
     usersApi,
     () => navigate(Paths.users),
-    error => dispatchBanner(bannerChange.raised(troubleWith('the users')(error)))
+    error => dispatchBanner(bannerChange.raised(trouble.with('the users')(error)))
   )));
   const state = useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial);
 

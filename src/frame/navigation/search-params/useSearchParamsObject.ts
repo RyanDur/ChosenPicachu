@@ -1,5 +1,5 @@
 import {NavigateOptions, useSearchParams} from 'react-router';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {useSearchParamsOnceHydrated} from './useSearchParamsOnceHydrated';
@@ -47,10 +47,10 @@ export function useSearchParamsObject<T extends Params>(
   const given: Partial<T> = {...defaults, ...decodeParams(decoders, Object.fromEntries(shown.entries()))};
 
   const searchFromShown = (params = {}): string =>
-    toQueryString({...Object.fromEntries(shown.entries()), ...filterEmpty(params)});
+    queryString.from({...Object.fromEntries(shown.entries()), ...filterEmpty(params)});
 
   const searchFromAddress = (params = {}): string =>
-    toQueryString({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
+    queryString.from({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
   const removeSearchParams = (...params: string[]) =>
     setSearchParams(Array.from(searchParams.entries())

@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
 import {http} from '@transport';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {HTTPError} from '@transport';
 import {Candle} from '../Candles/shapes';
 import {granularitySeconds, Period, periodSpanMs} from '../period';
@@ -34,5 +34,5 @@ export const periodCandles = (
   query: string
 ): Result.Async<readonly Candle[], HTTPError> =>
   http.get(`${base}/products/${product}/candles?${query}`)
-    .mBind(validate(HistoryRowsDecoder))
+    .mBind(decoded.by(HistoryRowsDecoder))
     .map(toCandles);

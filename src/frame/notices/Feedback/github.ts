@@ -2,7 +2,7 @@ import {asyncFailure, Maybe, maybe, Result} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {http} from '@transport';
 import {HTTPError} from '@transport';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 
 const repositoryId = 'MDEwOlJlcG9zaXRvcnkzNzY2NzE1OTU=';
 const feedbackCategoryId = 'DIC_kwDOFnONa84DGhfO';
@@ -33,7 +33,7 @@ const asked = <T>(
   http.post<unknown>(endpoint, {query, variables}, {headers: {authorization: `bearer ${token}`}})
     .mBind(reply => maybe(refusal.decode(reply))
       .map(refused => asyncFailure<HTTPError, T>(failureIn(refused)))
-      .orElse(validate(answered(data))(reply).map(answer => answer.data)));
+      .orElse(decoded.by(answered(data))(reply).map(answer => answer.data)));
 
 const titleOf = ({key, name}: Page): string => `Feedback: ${name} (${key})`;
 

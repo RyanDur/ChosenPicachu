@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
 import {http} from '@transport';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {HTTPError} from '@transport';
 import {Trade} from '../Charts/coinbase';
 
@@ -28,7 +28,7 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
 
 export const recentTrades = (base: string, product: string): Result.Async<readonly Trade[], HTTPError> =>
   http.get(`${base}/products/${product}/trades?limit=1000`)
-    .mBind(validate(RecentTradesDecoder))
+    .mBind(decoded.by(RecentTradesDecoder))
     .map(toTrades);
 
 export const hydrated = (history: readonly Trade[], streamed: readonly Trade[]): readonly Trade[] => {

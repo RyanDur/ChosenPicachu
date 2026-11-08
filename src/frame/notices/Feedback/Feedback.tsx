@@ -3,7 +3,7 @@ import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv, useHydrated, usePageName} from '@frame/state';
 import {Paths} from '@frame/navigation';
-import {troubleWith} from '@transport';
+import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
 import {Draft} from './feedbackDraft';
@@ -53,7 +53,7 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
     case 'sent':
       return <>Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></>;
     case 'refused':
-      return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
+      return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
   return '';
 };

@@ -10,5 +10,10 @@ const phrases: Record<HTTPError, string> = {
   [HTTPError.UNKNOWN]: 'failed'
 };
 
-export const troubleWith = (subject: string) => (error: HTTPError): string =>
-  `${subject} ${phrases[error]}`;
+type Trouble = {
+  with: (subject: string) => (error: HTTPError) => string;
+};
+
+export const trouble: Trouble = {
+  with: subject => error => `${subject} ${phrases[error]}`
+};

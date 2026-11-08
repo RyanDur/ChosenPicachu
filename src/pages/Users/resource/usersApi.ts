@@ -3,7 +3,7 @@ import {isValid} from 'date-fns';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {env} from '@frame/state/env';
 import {http} from '@transport';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {HTTPError} from '@transport';
 import {NewUser, User} from '../profile';
 import {usersServer} from '../usersServer';
@@ -62,12 +62,12 @@ const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T,
     .mBind(asked);
 
 const getAll = (): Result.Async<User[], HTTPError> =>
-  whenServed(() => http.get(usersDomain)).mBind(validate(schema.array(UserDecoder)));
+  whenServed(() => http.get(usersDomain)).mBind(decoded.by(schema.array(UserDecoder)));
 
 export const usersApi: UsersAPI = {
   getAll,
-  get: id => whenServed(() => http.get(`${usersDomain}/${id}`)).mBind(validate(UserDecoder)),
-  add: user => whenServed(() => http.post(usersDomain, user)).mBind(validate(schema.array(UserDecoder))),
+  get: id => whenServed(() => http.get(`${usersDomain}/${id}`)).mBind(decoded.by(UserDecoder)),
+  add: user => whenServed(() => http.post(usersDomain, user)).mBind(decoded.by(schema.array(UserDecoder))),
   update: user => whenServed(() => http.put(`${usersDomain}/${user.id}`, user)).mBind(getAll),
   delete: user => whenServed(() => http.delete(`${usersDomain}/${user.id}`)).mBind(getAll)
 };

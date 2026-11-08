@@ -101,7 +101,7 @@ describe('http', () => {
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers.GET(endpoint, () => new HttpResponse(null, {status: 400})));
+      respondWith('GET', 400);
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
@@ -159,7 +159,7 @@ describe('http', () => {
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers.POST(endpoint, () => new HttpResponse(null, {status: 400})));
+      respondWith('POST', 400);
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
@@ -217,7 +217,7 @@ describe('http', () => {
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers.PUT(endpoint, () => new HttpResponse(null, {status: 400})));
+      respondWith('PUT', 400);
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });
@@ -269,7 +269,7 @@ describe('http', () => {
     });
 
     test('fails as unknown when the server answers with a status it has no name for', async () => {
-      server.use(handlers.DELETE(endpoint, () => new HttpResponse(null, {status: 400})));
+      respondWith('DELETE', 400);
 
       expect(await outcomeOf(sent())).toEqual(failure(HTTPError.UNKNOWN).inspect());
     });

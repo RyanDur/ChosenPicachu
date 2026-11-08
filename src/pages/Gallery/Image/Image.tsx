@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {useGallery} from '@pages/Gallery/Context';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';
@@ -37,7 +37,7 @@ export const Image: FC<ImageProps> = (
   const [arrival, arrived] = useState<Arrival>('arriving');
   const {tab} = useGallery();
   const {gallery} = useContext(GalleryLinks);
-  const link = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
+  const link = maybe(linkEnabled ? `${gallery}${piece.id}${queryString.from({tab})}` : undefined);
 
   return arrival === 'missing' ?
     <StandIn alt={`${piece.title} would not load`}

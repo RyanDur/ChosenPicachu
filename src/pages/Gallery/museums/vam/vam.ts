@@ -7,9 +7,9 @@ import {
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@frame/state/env';
 import {maybe} from '@ryandur/sand';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
@@ -33,13 +33,13 @@ const tipuSultan = '2009BY1329';
 
 export const vam = {
   allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
-    .get(`${env.vamDomain}/objects/search${toQueryString({
+    .get(`${env.vamDomain}/objects/search${queryString.from({
       q: search,
       page,
       page_size: size,
       images_exist: true
     })}`, {cache: 'force-cache'})
-    .mBind(validate(vamSchema.allArt))
+    .mBind(decoded.by(vamSchema.allArt))
     .map(({info, records}: VAMAllArtResponse): AllArt => ({
       pagination: {
         total: info.record_count,
@@ -53,7 +53,7 @@ export const vam = {
 
   art: (id: string) => http
     .get(`${env.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
-    .mBind(validate(vamSchema.art))
+    .mBind(decoded.by(vamSchema.art))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
@@ -63,10 +63,10 @@ export const vam = {
     })),
 
   searchOptions: (search: string) => http
-    .get(`${env.vamDomain}/objects/search${toQueryString({
+    .get(`${env.vamDomain}/objects/search${queryString.from({
       q: search,
       page_size: limits.search
     })}`, {cache: 'force-cache'})
-    .mBind(validate(vamSchema.allArt))
+    .mBind(decoded.by(vamSchema.allArt))
     .map(({records}: VAMAllArtResponse): SearchOptions => records.map(({_primaryTitle}) => _primaryTitle))
 };

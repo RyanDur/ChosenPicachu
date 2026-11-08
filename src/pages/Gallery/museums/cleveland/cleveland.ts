@@ -9,9 +9,9 @@ import {
 } from './types';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@frame/state/env';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {validate} from '@transport';
+import {decoded} from '@transport';
 import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
@@ -39,14 +39,14 @@ const toPiece = (record: ClevelandRecord): Art => ({
 });
 
 const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
-  .get(`${env.clevelandDomain}/${toQueryString({
+  .get(`${env.clevelandDomain}/${queryString.from({
     q: search,
     skip: (page - 1) * size,
     limit: size,
     has_image: 1,
     fields: clevelandFields
   })}`, {cache: 'force-cache'})
-  .mBind(validate(clevelandSchema.allArt));
+  .mBind(decoded.by(clevelandSchema.allArt));
 
 export const cleveland = {
   allArt: (request: GetAllArtRequest) => searched(request)
@@ -65,17 +65,17 @@ export const cleveland = {
   open: () => searched({page: 1}).map(({data}): Door => data.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
-    .get(`${env.clevelandDomain}/${id}${toQueryString({fields: clevelandFields})}`, {cache: 'force-cache'})
-    .mBind(validate(clevelandSchema.art))
+    .get(`${env.clevelandDomain}/${id}${queryString.from({fields: clevelandFields})}`, {cache: 'force-cache'})
+    .mBind(decoded.by(clevelandSchema.art))
     .map(({data}: ClevelandArtResponse): Art => toPiece(data)),
 
   searchOptions: (search: string) => http
-    .get(`${env.clevelandDomain}/${toQueryString({
+    .get(`${env.clevelandDomain}/${queryString.from({
       q: search,
       limit: limits.search,
       has_image: 1,
       fields: 'title'
     })}`, {cache: 'force-cache'})
-    .mBind(validate(clevelandSchema.search))
+    .mBind(decoded.by(clevelandSchema.search))
     .map(({data}: ClevelandSearchResponse): SearchOptions => data.map(({title}) => title))
 };

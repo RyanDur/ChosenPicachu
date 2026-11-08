@@ -1,21 +1,21 @@
 import {useEffect, useState} from 'react';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import {useEnv} from '@frame/state';
-import {troubleWith} from '@transport';
+import {trouble} from '@transport';
 import {exchange, FeedTrouble} from '../exchange';
 import {marketActions} from '../marketActions';
 import {MarketStore, marketStore} from '../marketStore';
 
-const said = (trouble: FeedTrouble): string => {
-  switch (trouble.type) {
+const said = (feedTrouble: FeedTrouble): string => {
+  switch (feedTrouble.type) {
     case 'handshakeRefused':
       return 'the live feed refused the handshake';
     case 'hungUp':
       return 'the live feed hung up mid-stream';
     case 'historyRefused':
-      return troubleWith('the trade history')(trouble.cause);
+      return trouble.with('the trade history')(feedTrouble.cause);
     case 'candlesRefused':
-      return troubleWith('the candle history')(trouble.cause);
+      return trouble.with('the candle history')(feedTrouble.cause);
   }
 };
 

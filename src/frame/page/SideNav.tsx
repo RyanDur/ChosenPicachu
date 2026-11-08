@@ -4,7 +4,7 @@ import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType}
 import {Paths} from '@frame/navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
-import {toQueryString} from '@transport';
+import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
@@ -50,7 +50,7 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
     <SectionLink id="navigate-demos" page={Paths.demos} to={demoAddress(DemoTopics.accordions)}>Demos</SectionLink>
     <RailLink id="navigate-users" to={Paths.users}>Users</RailLink>
     <RailLink id="navigate-form"
-      to={`${Paths.artGallery}${toQueryString({
+      to={`${Paths.artGallery}${queryString.from({
         page: opening.page,
         size: opening.size,
         tab: opening.museum

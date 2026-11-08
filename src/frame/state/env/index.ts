@@ -1,2 +1,3 @@
-export {env, type Env} from './env';
+export {env} from './env';
+export type {Env} from './environment';
 export {unconfigured} from './unconfigured';
