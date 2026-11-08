@@ -43,8 +43,8 @@ const Probes: FC = () => {
 const modules = import.meta.glob<RoomModule>('../pages/**/{route,tab}.tsx', {eager: true});
 
 const eagerly: Opener = file => {
-  const {Room, ErrorBoundary} = modules[`../${file}`];
-  return {Component: Room, ErrorBoundary};
+  const {Room, ErrorBoundary, loader} = modules[`../${file}`];
+  return {Component: Room, ErrorBoundary, loader};
 };
 
 const siteRoute = siteOpenedBy(eagerly);

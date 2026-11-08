@@ -1,13 +1,13 @@
 import {FC} from 'react';
-import {NonIndexRouteObject} from 'react-router';
+import {LoaderFunction, NonIndexRouteObject} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
 import {GalleryPaths} from '@pages/Gallery';
 import {ErrorBoundary, HydrateFallback, Root} from './root';
 
-export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC};
+export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC; readonly loader?: LoaderFunction};
 
-type Opened = Pick<NonIndexRouteObject, 'lazy' | 'Component' | 'ErrorBoundary'>;
+type Opened = Pick<NonIndexRouteObject, 'lazy' | 'Component' | 'ErrorBoundary' | 'loader'>;
 
 export type Opener = (file: string) => Opened;
 
@@ -16,8 +16,8 @@ const modules = import.meta.glob<RoomModule>('./pages/**/{route,tab}.tsx');
 export const lazily = (opened: (file: string) => void = () => undefined): Opener => file => ({
   lazy: async () => {
     opened(file);
-    const {Room, ErrorBoundary} = await modules[`./${file}`]();
-    return {Component: Room, ErrorBoundary};
+    const {Room, ErrorBoundary, loader} = await modules[`./${file}`]();
+    return {Component: Room, ErrorBoundary, loader};
   }
 });
 
