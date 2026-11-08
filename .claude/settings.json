@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -z \"$CLAUDE_ENV_FILE\" ] || { command -v direnv >/dev/null || { echo \"direnv not found, so Node is not pinned to .nvmrc\" >&2; exit 0; }; direnv export bash >> \"$CLAUDE_ENV_FILE\"; }"
+            "command": "[ -z \"$CLAUDE_ENV_FILE\" ] || { command -v direnv >/dev/null || { echo \"direnv not found, so Node is not pinned to .nvmrc; run commands as direnv exec . <command> once direnv is installed\"; exit 0; }; direnv export bash >> \"$CLAUDE_ENV_FILE\"; }"
           }
         ]
       }
