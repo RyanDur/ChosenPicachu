@@ -26,7 +26,7 @@ Dan North, Introducing BDD: https://dannorth.net/blog/introducing-bdd/
 
 Kent Beck, Desirable Unit Tests: https://newsletter.kentbeck.com/p/desirable-unit-tests
 
-Isolated, so order and neighbors cannot change the result. Composable, so tests combine without interference. Deterministic, so the same code gives the same answer every run. Specific, so a failure points at one cause. Behavioral, so a change in behavior changes the result. Structure-insensitive, so a change in structure does not. Fast. Writable, so pinning a behavior is cheap. Readable. Automated. Predictive, so green means the code works. Inspiring, so a passing run gives real confidence.
+A unit spec that needs a longer wait to pass is asking where it belongs, never for the wait (Ryan, 2026-10-25, "the unit tests should be quick"). Isolated, so order and neighbors cannot change the result. Composable, so tests combine without interference. Deterministic, so the same code gives the same answer every run. Specific, so a failure points at one cause. Behavioral, so a change in behavior changes the result. Structure-insensitive, so a change in structure does not. Fast. Writable, so pinning a behavior is cheap. Readable. Automated. Predictive, so green means the code works. Inspiring, so a passing run gives real confidence.
 
 A seeded draw is still a gamble; distinctness needs a deck. A test that passes only in one order, or only on a fast machine, fails Deterministic whatever the reporter says.
 
