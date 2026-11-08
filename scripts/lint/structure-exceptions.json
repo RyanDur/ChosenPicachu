@@ -47,10 +47,7 @@
     "src/pages/Demos/Charts/useDesk.ts",
     "src/pages/Demos/Charts/usePeriodCandles.ts",
     "src/pages/Games/GamesPage.tsx",
-    "src/pages/Games/frame.tsx",
-    "src/pages/Home/HomePage.tsx",
-    "src/pages/Home/Opener.tsx",
-    "src/pages/Home/WhereThePageIsMade.tsx"
+    "src/pages/Games/frame.tsx"
   ],
   "through-index": [
     "src/pages/Demos/Accordions/Explained.tsx",
