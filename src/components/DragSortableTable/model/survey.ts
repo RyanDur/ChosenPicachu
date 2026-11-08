@@ -60,13 +60,13 @@ const struckPast = <Identity>(
   return struck?.holds;
 };
 
-const columnUnder = (order: readonly string[], survey: Bounds) =>
+const columnUnder = (order: readonly string[], bounds: Bounds) =>
   (x: number, y: number, aloft: string): string | undefined => {
-    if (y >= survey.top && y <= survey.top + survey.height) {
-      let edge = survey.left;
-      const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
+    if (y >= bounds.top && y <= bounds.top + bounds.height) {
+      let edge = bounds.left;
+      const total = order.reduce((sum, name) => sum + (bounds.columnWidths[name] ?? 0), 0) || 1;
       const slots = order.map((column, at) => {
-        const size = (survey.columnWidths[column] ?? 0) / total * survey.width;
+        const size = (bounds.columnWidths[column] ?? 0) / total * bounds.width;
         edge += size;
         return {holds: column, at, size, start: edge - size, end: edge};
       });
@@ -75,22 +75,22 @@ const columnUnder = (order: readonly string[], survey: Bounds) =>
     return undefined;
   };
 
-const columnLeft = (order: readonly string[], survey: Bounds) => (column: string): number => {
-  const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
-  const before = order.slice(0, order.indexOf(column)).reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0);
-  return survey.left + before / total * survey.width;
+const columnLeft = (order: readonly string[], bounds: Bounds) => (column: string): number => {
+  const total = order.reduce((sum, name) => sum + (bounds.columnWidths[name] ?? 0), 0) || 1;
+  const before = order.slice(0, order.indexOf(column)).reduce((sum, name) => sum + (bounds.columnWidths[name] ?? 0), 0);
+  return bounds.left + before / total * bounds.width;
 };
 
-const rowTop = (seats: readonly string[], survey: Survey) => (seat: string): number => {
-  const all = seats.reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
-  const before = seats.slice(0, seats.indexOf(seat)).reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
-  return survey.top + survey.height - all + before;
+const rowTop = (seats: readonly string[], bounds: Survey) => (seat: string): number => {
+  const all = seats.reduce((sum, row) => sum + (bounds.rowHeights[row] ?? 0), 0);
+  const before = seats.slice(0, seats.indexOf(seat)).reduce((sum, row) => sum + (bounds.rowHeights[row] ?? 0), 0);
+  return bounds.top + bounds.height - all + before;
 };
 
-const rowUnder = (seats: readonly string[], survey: Survey) =>
+const rowUnder = (seats: readonly string[], bounds: Survey) =>
   (x: number, y: number, aloft: string): string | undefined => {
-    if (x >= survey.left && x <= survey.left + survey.width) {
-      const {top, height, rowHeights} = survey;
+    if (x >= bounds.left && x <= bounds.left + bounds.width) {
+      const {top, height, rowHeights} = bounds;
       let edge = top + height -
                 seats.reduce((total, row) => total + rowHeights[row], 0);
       const slots = seats.map((row, at) => {
