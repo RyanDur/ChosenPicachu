@@ -4,7 +4,7 @@ import {NewUser, User} from '@pages/Users/profile';
 import {FancyInput} from '../FancyFormElements/FancyInput';
 import {FancyTextarea} from '../FancyFormElements/FancyTextarea';
 import {draftActions} from './draftActions';
-import {Address} from './Address';
+import {AddressFields} from './AddressFields';
 import {drafts} from './drafts';
 import {avatars} from './avatars';
 import {Link} from 'react-router';
@@ -19,7 +19,7 @@ import {useHydrated} from '@frame/state';
 import './UserInformation.css';
 
 const newUser = (avatar: string): NewUser => ({
-  info: {firstName: '', lastName: '', email: ''},
+  person: {firstName: '', lastName: '', email: ''},
   friends: [],
   homeAddress: {city: '', state: '', streetAddress: '', zip: ''},
   avatar
@@ -44,7 +44,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const reset = () =>
     dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
 
-  return <form id="user-info-form"
+  return <form id="user-form"
     aria-labelledby="form-title"
     className={classNames('user-information', className)}
     onSubmit={event => {
@@ -58,21 +58,21 @@ const Draft: FC<{className?: string}> = ({className}) => {
     onReset={() => reset()}>
     <h2 id="form-title" className="form-title title bold">User Information</h2>
     <FancyInput id="first-name-cell" className="first-name" inputId="first-name" required={required}
-      value={user.info.firstName} readOnly={readOnly}
+      value={user.person.firstName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.firstNameEdited(event.currentTarget.value))}>
       First Name
     </FancyInput>
     <FancyInput id="last-name-cell" className="last-name" inputId="last-name" required={required}
-      value={user.info.lastName} readOnly={readOnly}
+      value={user.person.lastName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.lastNameEdited(event.currentTarget.value))}>
       Last Name
     </FancyInput>
-    <FancyInput id="email-cell" className="email" inputId="email" value={user.info.email}
+    <FancyInput id="email-cell" className="email" inputId="email" value={user.person.email}
       type="email" readOnly={readOnly}
       onChange={event => dispatch(draftActions.emailEdited(event.currentTarget.value))}>
       Email
     </FancyInput>
-    <FancyDateInput id="dob-cell" className="dob" inputId="dob" value={user.info.dob}
+    <FancyDateInput id="date-of-birth-cell" className="date-of-birth" inputId="date-of-birth" value={user.person.dateOfBirth}
       readOnly={readOnly} required={required}
       onChange={event => {
         const born = parse(event.currentTarget.value, 'yyyy-MM-dd', new Date());
@@ -91,11 +91,11 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <output className="off-screen"
       aria-label="avatar report">{drafts.avatarReport(draft)}</output>
 
-    <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress}
+    <AddressFields id="home-address" title="Home Address" className="home-address" value={user.homeAddress}
       readOnly={readOnly} required={required}
       onEdited={address => dispatch(draftActions.homeAddressEdited(address))}/>
 
-    <Address id="work-address" title="Work Address" className="work-address"
+    <AddressFields id="work-address" title="Work Address" className="work-address"
       value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
       disabled={draft.sameAsHome}
       onEdited={address => dispatch(draftActions.workAddressEdited(address))}>
@@ -104,7 +104,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
         <input id="same-as-home" className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
           onChange={event => dispatch(draftActions.sameAsHomeChosen(event.currentTarget.checked))}/>
       </label>}
-    </Address>
+    </AddressFields>
 
     <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(draftActions.detailsEdited(event.currentTarget.value))}/>

@@ -60,7 +60,7 @@ describe('the users store', () => {
     store.dispatch(usersActions.userAdded(newcomer));
 
     await vi.waitFor(() => expect(usersSelectors.withId('newcomer')(store.state).isNothing).toBe(false));
-    expect(sent()).toMatchObject({info: {firstName: newcomer.info.firstName}, homeAddress: newcomer.homeAddress});
+    expect(sent()).toMatchObject({person: {firstName: newcomer.person.firstName}, homeAddress: newcomer.homeAddress});
   });
 
   it('a user is found by id in the roster', async () => {
@@ -119,8 +119,8 @@ describe('the users store', () => {
       expect(usersSelectors.withId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
     const sent = setupUserUpdatedResponse(first.id, [befriended, ...someUsers.slice(1)]);
 
-    store.dispatch(usersActions.userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
+    store.dispatch(usersActions.userUpdated({...first, person: {...first.person, firstName: 'Renamed'}}));
 
-    await vi.waitFor(() => expect(sent()).toMatchObject({info: {firstName: 'Renamed'}, friends: [second.id]}));
+    await vi.waitFor(() => expect(sent()).toMatchObject({person: {firstName: 'Renamed'}, friends: [second.id]}));
   });
 });

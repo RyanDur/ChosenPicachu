@@ -1,9 +1,9 @@
 import {nanoid} from 'nanoid';
 import {startOfDay} from 'date-fns';
 import {AvatarGenerator} from 'random-avatar-generator';
-import {AddressInfo, NewUser, User} from '@pages/Users/profile';
+import {Address, NewUser, User} from '@pages/Users/profile';
 
-type UserInfo = NewUser['info'];
+type Person = NewUser['person'];
 import {
   rand,
   randBetweenDate,
@@ -47,17 +47,17 @@ const generator = new AvatarGenerator();
 const createDetails = (num = 10) =>
   Array.from({length: randomNumberFromRange(2, num)}, () => randSentence()).join(' ');
 
-export const createUserInfo = (): UserInfo => ({
+export const createPerson = (): Person => ({
   firstName: randFirstName(),
   lastName: randLastName(),
   email: randEmail(),
-  dob: startOfDay(randBetweenDate({
+  dateOfBirth: startOfDay(randBetweenDate({
     from: new Date(1946, 0, 1),
     to: new Date(2006, 0, 1)
   }))
 });
 
-export const createAddress = (): AddressInfo => ({
+export const createAddress = (): Address => ({
   city: randCity(),
   state: randStateAbbr(),
   streetAddress: randStreetName(),
@@ -67,13 +67,13 @@ export const createAddress = (): AddressInfo => ({
 
 export const createUser = (
   worksFromHome = false,
-  address: () => AddressInfo = createAddress,
-  info: () => UserInfo = createUserInfo
+  address: () => Address = createAddress,
+  person: () => Person = createPerson
 ): User => {
   const homeAddress = address();
   return ({
     id: nanoid(),
-    info: info(),
+    person: person(),
     friends: [],
     homeAddress,
     work: worksFromHome ? 'home' : address(),

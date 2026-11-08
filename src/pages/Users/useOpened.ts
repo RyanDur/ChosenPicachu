@@ -4,7 +4,7 @@ import {Opened, openings} from './openings';
 import {usersSelectors} from './usersSelectors';
 import {useUsersSelector} from './useUsersSelector';
 
-const address = {id: schema.string, mode: openings.param};
+const address = {id: schema.string, mode: openings.modeInAddress};
 
 export const useOpened = (): Opened => {
   const {id, mode} = useSearchParamsObject(address);

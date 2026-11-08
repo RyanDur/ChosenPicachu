@@ -42,18 +42,18 @@ describe('the users page', () => {
 
     it('a person without a birthday shows no age', async () => {
       const ageless = aUser();
-      setupUsersResponse([{...ageless, info: {...ageless.info, dob: undefined}}]);
+      setupUsersResponse([{...ageless, person: {...ageless.person, dateOfBirth: undefined}}]);
       render(<TestApp at={Paths.users}/>);
 
       expect(await usersTable.rowOf(profile.fullName(ageless))).not.toHaveTextContent(/old/);
     });
 
     it('a birthday the backend cannot spell shows no age', async () => {
-      const person = aUser();
-      setupUsersAnswering([{...person, info: {...person.info, dob: 'yesterday'}}]);
+      const user = aUser();
+      setupUsersAnswering([{...user, person: {...user.person, dateOfBirth: 'yesterday'}}]);
       render(<TestApp at={Paths.users}/>);
 
-      expect(await usersTable.rowOf(profile.fullName(person))).not.toHaveTextContent(/old/);
+      expect(await usersTable.rowOf(profile.fullName(user))).not.toHaveTextContent(/old/);
     });
 
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
@@ -128,7 +128,7 @@ describe('the users page', () => {
       await usersTable.clone(profile.fullName(kai));
 
       expect(userForm.addButton()).toBeVisible();
-      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.person.firstName);
     });
 
     it('adding a user who works from home sends the backend home as their work', async () => {
@@ -157,7 +157,7 @@ describe('the users page', () => {
   });
 
   describe('viewing a user', () => {
-    const jo = aUser({dob: new Date(1984, 5, 2)});
+    const jo = aUser({dateOfBirth: new Date(1984, 5, 2)});
 
     beforeEach(async () => {
       setupUsersResponse([jo]);
@@ -166,7 +166,7 @@ describe('the users page', () => {
     });
 
     test('viewing a user shows their details in the form', () => {
-      expect(userForm.field('Last Name')).toHaveDisplayValue(jo.info.lastName);
+      expect(userForm.field('Last Name')).toHaveDisplayValue(jo.person.lastName);
     });
 
     test('a user born on a day shows that day', () => {
@@ -201,7 +201,7 @@ describe('the users page', () => {
   });
 
   describe('editing a user', () => {
-    const kai = aUser({work: 'home', dob: new Date(1984, 5, 2)});
+    const kai = aUser({work: 'home', dateOfBirth: new Date(1984, 5, 2)});
 
     beforeEach(async () => {
       setupUsersResponse([kai]);
@@ -210,8 +210,8 @@ describe('the users page', () => {
     });
 
     it('should populate the form', () => {
-      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
-      expect(userForm.field('Last Name')).toHaveDisplayValue(kai.info.lastName);
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.person.firstName);
+      expect(userForm.field('Last Name')).toHaveDisplayValue(kai.person.lastName);
     });
 
     test('editing a user offers no door to add another', () => {
@@ -237,11 +237,11 @@ describe('the users page', () => {
     it('should be able to reset the form to the original information', async () => {
       await userForm.typeInto('First Name', ' with more text');
 
-      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.info.firstName} with more text`);
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} with more text`);
 
       await userForm.reset();
 
-      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.person.firstName);
     });
 
     it('canceling an edit returns to viewing the user', async () => {
@@ -275,16 +275,16 @@ describe('the users page', () => {
   });
 
   test('an updated user shows their new name in the roster', async () => {
-    const person = aUser();
-    setupUsersResponse([person]);
-    setupUserUpdatedResponse(person.id, [{...person, info: {...person.info, lastName: `${person.info.lastName} Jr`}}]);
-    render(<TestApp at={openings.at(person.id, 'edit')}/>);
-    await userForm.showing(person);
+    const user = aUser();
+    setupUsersResponse([user]);
+    setupUserUpdatedResponse(user.id, [{...user, person: {...user.person, lastName: `${user.person.lastName} Jr`}}]);
+    render(<TestApp at={openings.at(user.id, 'edit')}/>);
+    await userForm.showing(user);
 
     await userForm.typeInto('Last Name', ' Jr');
     await userForm.update();
 
-    expect(await usersTable.rowOf(`${profile.fullName(person)} Jr`)).toBeInTheDocument();
+    expect(await usersTable.rowOf(`${profile.fullName(user)} Jr`)).toBeInTheDocument();
   });
 
   test('a removed user leaves the roster', async () => {

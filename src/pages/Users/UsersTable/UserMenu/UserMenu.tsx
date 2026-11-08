@@ -4,13 +4,13 @@ import {maybe} from '@ryandur/sand';
 import {User} from '@pages/Users/profile';
 import {openings} from '../../openings';
 
-type Props = {
+type UserMenuAttributes = {
   user: User;
   name: string;
   onRemoved: () => void;
 };
 
-export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
+export const UserMenu: FC<UserMenuAttributes> = ({user, name, onRemoved}) => {
   const id = `menu-${user.id}`;
   const dismissed = ({currentTarget: followed}: MouseEvent<HTMLAnchorElement>): void => {
     maybe(followed.closest<HTMLElement>(':popover-open')).map(menu => menu.hidePopover());

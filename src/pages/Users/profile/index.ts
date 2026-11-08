@@ -1,2 +1,2 @@
 export {profile} from './profile';
-export type {AddressInfo, NewUser, User, UserEdit} from './profile';
+export type {Address, NewUser, User, UserEdit} from './profile';

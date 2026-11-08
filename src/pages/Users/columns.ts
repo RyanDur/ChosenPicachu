@@ -23,7 +23,7 @@ export const userColumns: UserColumns = {
   seated: users => users.map(user => ({
     key: user.id,
     values: {
-      age: has(user.info.dob) ? -user.info.dob.getTime() : undefined,
+      age: has(user.person.dateOfBirth) ? -user.person.dateOfBirth.getTime() : undefined,
       'works-from-home': worksFromHome(user)
     }
   })),

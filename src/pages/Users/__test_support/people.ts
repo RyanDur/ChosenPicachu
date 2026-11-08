@@ -1,16 +1,16 @@
 import {faker} from '@faker-js/faker';
 import {startOfDay} from 'date-fns';
-import {AddressInfo, User} from '@pages/Users/profile';
+import {Address, User} from '@pages/Users/profile';
 
 type Traits = {
   readonly id?: string;
   readonly firstName?: string;
-  readonly dob?: Date;
-  readonly work?: 'home' | AddressInfo;
+  readonly dateOfBirth?: Date;
+  readonly work?: 'home' | Address;
   readonly friends?: readonly string[];
 };
 
-export const anAddress = (): AddressInfo => ({
+export const anAddress = (): Address => ({
   streetAddress: faker.location.streetAddress(),
   streetAddressTwo: faker.location.secondaryAddress(),
   city: faker.location.city(),
@@ -21,12 +21,12 @@ export const anAddress = (): AddressInfo => ({
 export const aUser = ({
   id = faker.string.nanoid(),
   firstName = faker.person.firstName(),
-  dob = startOfDay(faker.date.birthdate()),
+  dateOfBirth = startOfDay(faker.date.birthdate()),
   work = anAddress(),
   friends = []
 }: Traits = {}): User => ({
   id,
-  info: {firstName, lastName: faker.person.lastName(), email: faker.internet.email({firstName}), dob},
+  person: {firstName, lastName: faker.person.lastName(), email: faker.internet.email({firstName}), dateOfBirth},
   friends: [...friends],
   homeAddress: anAddress(),
   work,

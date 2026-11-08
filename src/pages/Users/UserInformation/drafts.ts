@@ -1,4 +1,4 @@
-import {AddressInfo, NewUser, User} from '@pages/Users/profile';
+import {Address, NewUser, User} from '@pages/Users/profile';
 import {maybe} from '@ryandur/sand';
 import {DraftAction} from './draftActions';
 
@@ -7,7 +7,7 @@ type Without<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
 export type Draft = {
   user: Without<NewUser | User, 'work'>;
   sameAsHome: boolean;
-  typedWork?: AddressInfo;
+  typedWork?: Address;
   avatarsDrawn: number;
 };
 
@@ -31,13 +31,13 @@ const reduce = (draft: Draft, action: DraftAction): Draft => {
   const {user} = draft;
   switch (action.type) {
     case 'firstNameEdited':
-      return edited(draft, {...user, info: {...user.info, firstName: action.firstName}});
+      return edited(draft, {...user, person: {...user.person, firstName: action.firstName}});
     case 'lastNameEdited':
-      return edited(draft, {...user, info: {...user.info, lastName: action.lastName}});
+      return edited(draft, {...user, person: {...user.person, lastName: action.lastName}});
     case 'emailEdited':
-      return edited(draft, {...user, info: {...user.info, email: action.email}});
+      return edited(draft, {...user, person: {...user.person, email: action.email}});
     case 'dateOfBirthEdited':
-      return edited(draft, {...user, info: {...user.info, dob: action.dob}});
+      return edited(draft, {...user, person: {...user.person, dateOfBirth: action.dateOfBirth}});
     case 'homeAddressEdited':
       return edited(draft, {...user, homeAddress: action.homeAddress});
     case 'workAddressEdited':
