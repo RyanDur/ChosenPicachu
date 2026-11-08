@@ -71,8 +71,7 @@ export const TopLayerRecipe: FC = () => {
             banners from the context and is written only while there is at least one, so no code shows or hides
             it.</Says>
           <Says><code className="monospaced">has</code> comes from sand, a small library of helpers the site uses for
-            values that may be missing. Given the list of banners, it answers whether there is any news to show, so the
-            panel is drawn only when there is.</Says>
+            values that may be missing. Given the list of banners, it answers whether the list holds any.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
