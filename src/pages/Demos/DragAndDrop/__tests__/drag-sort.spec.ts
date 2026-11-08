@@ -26,6 +26,20 @@ describe('a landed drag', () => {
   });
 });
 
+describe('a drop', () => {
+  const resting = dragSort.initial({items: ['A', 'B', 'C'], animated: true});
+
+  it('a drop that moves items still sliding is ignored', () => {
+    const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
+    const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
+    const dropped = dragSort.reduce(hovered, dragSortChange.released());
+    const liftedAgain = dragSort.reduce(dropped, dragSortChange.lifted('B'));
+    const hoveredAgain = dragSort.reduce(liftedAgain, dragSortChange.hovered(2));
+
+    expect(dragSort.reduce(hoveredAgain, dragSortChange.released()).order).toEqual(['B', 'C', 'A']);
+  });
+});
+
 describe('a drag that leaves', () => {
   const resting = dragSort.initial({items: ['A', 'B', 'C'], animated: false});
 
