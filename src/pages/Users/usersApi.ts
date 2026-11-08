@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {isValid} from 'date-fns';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {env, http} from '@transport';
+import {environment, http} from '@transport';
 import {decoded} from '@transport';
 import {HTTPError} from '@transport';
 import {NewUser, User} from './profile';
@@ -36,7 +36,7 @@ const UserDecoder = schema.object({
   optional: {work: schema.oneOf(schema.literal('home'), AddressDecoder), details: schema.string}
 });
 
-const {usersDomain} = env;
+const {usersDomain} = environment;
 const usersServerUrl = `${import.meta.env.BASE_URL}${usersServer.script}`;
 const patience = 10_000;
 

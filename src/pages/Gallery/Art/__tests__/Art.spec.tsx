@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {anyRequestFailsToConnect} from '@__test_support/server';
-import {env} from '@transport';
+import {environment} from '@transport';
 import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';
@@ -13,7 +13,7 @@ import {heldAICAllArtResponse, requestsAnswered, setupAICAllArtResponse, gallery
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
-    const wallsAsked = requestsAnswered(answered => answered.href.startsWith(`${env.aicDomain}/search`) ? answered.href : null);
+    const wallsAsked = requestsAnswered(answered => answered.href.startsWith(`${environment.aicDomain}/search`) ? answered.href : null);
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 

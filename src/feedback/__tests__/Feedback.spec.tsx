@@ -54,7 +54,7 @@ describe('Feedback in a browser without invoker commands', () => {
 
 describe('Feedback without a token', () => {
   test('should offer no Feedback button when the site has no token', async () => {
-    render(<TestApp at="/" env={{feedbackToken: ''}}/>);
+    render(<TestApp at="/" environment={{feedbackToken: ''}}/>);
     await site.pageTitled();
 
     expect(feedback.offeredIfAny()).not.toBeInTheDocument();

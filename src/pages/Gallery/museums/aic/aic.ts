@@ -5,7 +5,7 @@ import {
   AICSearchResponse,
   aicSchema
 } from '@pages/Gallery/museums/aic/types';
-import {env, queryString} from '@transport';
+import {environment, queryString} from '@transport';
 import {maybe} from '@ryandur/sand';
 import {limits} from '@pages/Gallery/limits';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
@@ -16,13 +16,13 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 
 const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
-const iiif = (imageId: string) => `${env.aicPictures}/${imageId}`;
+const iiif = (imageId: string) => `${environment.aicPictures}/${imageId}`;
 
 const aSundayOnLaGrandeJatte = '2d484387-2509-5e8e-2c43-22f9981972eb';
 
 export const aic = {
   allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
-    .get(`${env.aicDomain}/search${queryString.from({
+    .get(`${environment.aicDomain}/search${queryString.from({
       q: search,
       'query[exists][field]': 'image_id',
       fields,
@@ -42,12 +42,12 @@ export const aic = {
   open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
 
   art: (id: string) => http
-    .get(`${env.aicDomain}/${id}${queryString.from({fields})}`, {cache: 'force-cache'})
+    .get(`${environment.aicDomain}/${id}${queryString.from({fields})}`, {cache: 'force-cache'})
     .mBind(decoded.by(aicSchema.art))
     .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
   searchOptions: (search: string) => http
-    .get(`${env.aicDomain}/search${queryString.from({
+    .get(`${environment.aicDomain}/search${queryString.from({
       'query[term][title]': search,
       fields: 'suggest_autocomplete_all',
       limit: limits.search

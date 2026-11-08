@@ -1,6 +1,6 @@
 import {setupServer} from 'msw/node';
 import {http, HttpResponse, ws} from 'msw';
-import {env} from '@transport';
+import {environment} from '@transport';
 
 export const FEED = 'wss://feed.test';
 export const HISTORY = 'https://history.test';
@@ -10,14 +10,14 @@ export const feedLink = ws.link(`${FEED}/*`);
 export const server = setupServer(
   feedLink.addEventListener('connection', () => undefined),
   http.all(`${HISTORY}/*`, () => HttpResponse.json([])),
-  http.get(`${env.aicDomain}/search`, () => HttpResponse.error()),
-  http.get(env.harvardDomain, () => HttpResponse.error()),
-  http.get(`${env.vamDomain}/objects/search`, () => HttpResponse.error()),
-  http.get(`${env.clevelandDomain}/`, () => HttpResponse.error()),
-  http.all(env.usersDomain, () => HttpResponse.error()),
-  http.all(`${env.usersDomain}/*`, () => HttpResponse.error()),
-  http.get(`${env.aicPictures}/:image/info.json`, () => HttpResponse.json({})),
-  http.get(`${env.vamPictures}/:image/info.json`, () => HttpResponse.json({}))
+  http.get(`${environment.aicDomain}/search`, () => HttpResponse.error()),
+  http.get(environment.harvardDomain, () => HttpResponse.error()),
+  http.get(`${environment.vamDomain}/objects/search`, () => HttpResponse.error()),
+  http.get(`${environment.clevelandDomain}/`, () => HttpResponse.error()),
+  http.all(environment.usersDomain, () => HttpResponse.error()),
+  http.all(`${environment.usersDomain}/*`, () => HttpResponse.error()),
+  http.get(`${environment.aicPictures}/:image/info.json`, () => HttpResponse.json({})),
+  http.get(`${environment.vamPictures}/:image/info.json`, () => HttpResponse.json({}))
 );
 
 export const anyRequestRespondsWith = (body: string, status = 200) =>
@@ -26,7 +26,7 @@ export const anyRequestRespondsWith = (body: string, status = 200) =>
 export const anyRequestFailsToConnect = () =>
   server.use(http.all('*', () => HttpResponse.error()));
 
-const tradeHistory = `${HISTORY}/products/${env.tradeProduct}/trades`;
+const tradeHistory = `${HISTORY}/products/${environment.tradeProduct}/trades`;
 
 export const tradeHistoryAnswers = (rows: readonly unknown[]) =>
   server.use(http.get(tradeHistory, () => HttpResponse.json(rows)));

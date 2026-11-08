@@ -8,6 +8,8 @@
       "@banners/*": ["./src/banners/*"],
       "@feedback": ["./src/feedback"],
       "@page": ["./src/page"],
+      "@page-name": ["./src/page-name"],
+      "@environment": ["./src/environment"],
       "@components": ["./src/components"],
       "@components/*": ["./src/components/*"],
       "@transport": ["./src/transport"],

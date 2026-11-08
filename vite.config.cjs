@@ -22,6 +22,8 @@ const aliases = {
   '@banners': at('./src/banners'),
   '@feedback': at('./src/feedback'),
   '@page': at('./src/page'),
+  '@page-name': at('./src/page-name'),
+  '@environment': at('./src/environment'),
   '@components': at('./src/components'),
   '@transport': at('./src/transport'),
   '@__test_support': at('./src/__test_support')

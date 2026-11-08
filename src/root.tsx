@@ -4,8 +4,9 @@ import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@feedback';
-import {env} from '@transport';
-import {Header, Page, PageError, PageNameProvider} from '@page';
+import {environment} from '@transport';
+import {Header, Page, PageError} from '@page';
+import {PageNameProvider} from '@page-name';
 import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
 
@@ -25,7 +26,7 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
     </head>
     <body>
       <div id="root" className="backdrop">
-        <SiteProviders env={env}>{children}</SiteProviders>
+        <SiteProviders environment={environment}>{children}</SiteProviders>
       </div>
       <noscript>
         <p>

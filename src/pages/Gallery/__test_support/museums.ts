@@ -3,7 +3,7 @@ import {has, maybe} from '@ryandur/sand';
 import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@pages/Gallery/museums/aic/types';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@transport';
+import {environment} from '@transport';
 import {HarvardAllArtResponse} from '@pages/Gallery/museums/harvard/types';
 import {VAMAllArtResponse} from '@pages/Gallery/museums/vam/types';
 import {ClevelandAllArtResponse} from '@pages/Gallery/museums/cleveland/types';
@@ -60,7 +60,7 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: All
   limit: limits.record,
   page: 1
 }) =>
-  server.use(http.get(`${env.aicDomain}/search`, ({request}) =>
+  server.use(http.get(`${environment.aicDomain}/search`, ({request}) =>
     paramsMatch(request, allArtParams(options)) ? HttpResponse.json(response) : undefined));
 
 export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {
@@ -68,7 +68,7 @@ export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllA
   page: 1
 }): () => void => {
   const {held, release} = holding();
-  server.use(http.get(`${env.aicDomain}/search`, async ({request}) => {
+  server.use(http.get(`${environment.aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, allArtParams(options))) return undefined;
     await held;
     return HttpResponse.json(response);
@@ -77,7 +77,7 @@ export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllA
 };
 
 export const setupAICEveryPage = (response: AICAllArtResponse) =>
-  server.use(http.get(`${env.aicDomain}/search`, () => HttpResponse.json(response)));
+  server.use(http.get(`${environment.aicDomain}/search`, () => HttpResponse.json(response)));
 
 type HeldAnswer = {
   arrives: () => void;
@@ -90,7 +90,7 @@ export const heldAICSuggestions = (word: string, response: AICSearchResponse): H
   const served = new Promise<{aborted: boolean}>(resolve => {
     serve = resolve;
   });
-  server.use(http.get(`${env.aicDomain}/search`, async ({request}) => {
+  server.use(http.get(`${environment.aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'})) return undefined;
     await held;
     serve({aborted: request.signal.aborted});
@@ -100,24 +100,24 @@ export const heldAICSuggestions = (word: string, response: AICSearchResponse): H
 };
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = limits.record) =>
-  server.use(http.get(env.harvardDomain, ({request}) =>
+  server.use(http.get(environment.harvardDomain, ({request}) =>
     paramsMatch(request, {
       q: 'imagepermissionlevel:0 AND _exists_:primaryimageurl',
       page: '1',
       size: String(limit),
       fields: harvardFields,
-      apikey: env.harvardAPIKey
+      apikey: environment.harvardAPIKey
     }) ? HttpResponse.json(response) : undefined));
 
 export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =>
-  server.use(http.get(`${env.aicDomain}/:id`, ({request, params}) =>
+  server.use(http.get(`${environment.aicDomain}/:id`, ({request, params}) =>
     params.id === String(id) && paramsMatch(request, {fields: aicFields})
       ? HttpResponse.json(response)
       : undefined));
 
 export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): () => void => {
   const {held, release} = holding();
-  server.use(http.get(`${env.aicDomain}/:id`, async ({request, params}) => {
+  server.use(http.get(`${environment.aicDomain}/:id`, async ({request, params}) => {
     if (params.id !== String(id) || !paramsMatch(request, {fields: aicFields})) return undefined;
     await held;
     return HttpResponse.json(response);
@@ -126,14 +126,14 @@ export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): (
 };
 
 export const refuseAICPictures = () =>
-  server.use(http.get(`${env.aicPictures}/:image/info.json`, () => HttpResponse.error()));
+  server.use(http.get(`${environment.aicPictures}/:image/info.json`, () => HttpResponse.error()));
 
 export const refuseVAMPictures = () =>
-  server.use(http.get(`${env.vamPictures}/:image/info.json`, () => HttpResponse.error()));
+  server.use(http.get(`${environment.vamPictures}/:image/info.json`, () => HttpResponse.error()));
 
 export const heldAICPictures = (): () => void => {
   const {held, release} = holding();
-  server.use(http.get(`${env.aicPictures}/:image/info.json`, async () => {
+  server.use(http.get(`${environment.aicPictures}/:image/info.json`, async () => {
     await held;
     return HttpResponse.json({});
   }));
@@ -142,7 +142,7 @@ export const heldAICPictures = (): () => void => {
 
 export const heldVAMPictures = (): () => void => {
   const {held, release} = holding();
-  server.use(http.get(`${env.vamPictures}/:image/info.json`, async () => {
+  server.use(http.get(`${environment.vamPictures}/:image/info.json`, async () => {
     await held;
     return HttpResponse.json({});
   }));
@@ -153,7 +153,7 @@ export const setupClevelandAllArtResponse = (
   response: ClevelandAllArtResponse,
   {limit, page, search}: AllArt = {limit: limits.record, page: 1}
 ) =>
-  server.use(http.get(`${env.clevelandDomain}/`, ({request}) =>
+  server.use(http.get(`${environment.clevelandDomain}/`, ({request}) =>
     paramsMatch(request, {
       skip: String((page - 1) * limit),
       limit: String(limit),
@@ -165,7 +165,7 @@ export const setupVAMAllArtResponse = (
   response: VAMAllArtResponse,
   {limit, page, search}: AllArt = {limit: limits.record, page: 1}
 ) =>
-  server.use(http.get(`${env.vamDomain}/objects/search`, ({request}) =>
+  server.use(http.get(`${environment.vamDomain}/objects/search`, ({request}) =>
     paramsMatch(request, {
       page: String(page),
       page_size: String(limit),
@@ -178,7 +178,7 @@ export const heldVAMAllArtResponse = (
   {limit, page}: AllArt = {limit: limits.record, page: 1}
 ): () => void => {
   const {held, release} = holding();
-  server.use(http.get(`${env.vamDomain}/objects/search`, async ({request}) => {
+  server.use(http.get(`${environment.vamDomain}/objects/search`, async ({request}) => {
     if (!paramsMatch(request, {page: String(page), page_size: String(limit), images_exist: 'true'})) return undefined;
     await held;
     return HttpResponse.json(response);
@@ -187,4 +187,4 @@ export const heldVAMAllArtResponse = (
 };
 
 export const harvardNeverAnswers = () =>
-  server.use(http.get(env.harvardDomain, () => new Promise<never>(() => undefined)));
+  server.use(http.get(environment.harvardDomain, () => new Promise<never>(() => undefined)));

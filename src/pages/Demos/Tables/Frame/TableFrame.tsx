@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {asyncResult, has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
-import {useEnv} from '@page';
+import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {Dials} from '../../Controls';
 import './TableFrame.css';
@@ -21,7 +21,7 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
 };
 
 export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, onStood = () => undefined}) => {
-  const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
+  const {tradeFeed, tradeHistory, tradeProduct} = useEnvironment();
   const dispatchBanner = useBannerDispatch();
   const [document, setDocument] = useState<string>();
   const [frame, setFrame] = useState<HTMLIFrameElement>();
