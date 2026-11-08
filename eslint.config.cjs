@@ -78,7 +78,6 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillCallComponents = [
-  'src/pages/Demos/route.tsx',
   'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx'
 ];
 

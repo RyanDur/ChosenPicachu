@@ -1,37 +1,32 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {Outlet, useLocation} from 'react-router';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe, maybe, some} from '@ryandur/sand';
 import {Header, Page, PageError} from '@page';
 import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';
-import {Tutorial, tableTutorials} from './Tables';
+import {tableTutorials} from './Tables';
 
-const tabHeader = (topic: DemoTopics) => <Header title={`Demos ${topicNames[topic]}`} listed={names.demos[topic]}/>;
+const topicAt = (pathname: string): Maybe<DemoTopics> => tableTutorials.at(pathname).either(
+  () => some(DemoTopics.tables),
+  () => maybe(Object.values(DemoTopics).find(topic => pathname === demoAddress(topic))));
 
-const tutorialHeader = (tutorial: Tutorial) =>
-  <Header title={`Demos ${topicNames[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`} listed={names.tables[tutorial]}/>;
+const useTopic = (): Maybe<DemoTopics> => topicAt(useLocation().pathname);
 
-type Shown = {topic: DemoTopics; header: ReactNode};
-
-const tabAt = (pathname: string): Maybe<Shown> =>
-  maybe(Object.values(DemoTopics).find(topic => pathname === demoAddress(topic)))
-    .map(topic => ({topic, header: tabHeader(topic)}));
-
-const useDemo = (): Maybe<Shown> => {
+const DemoHeader: FC = () => {
   const {pathname} = useLocation();
   return tableTutorials.at(pathname).either(
-    tutorial => maybe({topic: DemoTopics.tables, header: tutorialHeader(tutorial)}),
-    () => tabAt(pathname));
+    tutorial => <Header title={`Demos ${topicNames[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`}
+      listed={names.tables[tutorial]}/>,
+    () => topicAt(pathname).either(
+      topic => <Header title={`Demos ${topicNames[topic]}`} listed={names.demos[topic]}/>,
+      () => null));
 };
 
-export const ErrorBoundary: FC = () => {
-  const header = useDemo().map(({header}) => header).orElse(null);
-  return <Page header={header}><PageError/></Page>;
-};
+export const ErrorBoundary: FC = () => <Page header={<DemoHeader/>}><PageError/></Page>;
 
-export const Room: FC = () => useDemo().either(
-  ({topic, header}) => <Page header={header}><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Page>,
+export const Room: FC = () => useTopic().either(
+  topic => <Page header={<DemoHeader/>}><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Page>,
   () => <NoSuchRoom/>);
