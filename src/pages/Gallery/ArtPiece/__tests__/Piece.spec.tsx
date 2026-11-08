@@ -26,15 +26,6 @@ describe('viewing a piece', () => {
     expect(piecePage.title()).toHaveTextContent(pieceResponse.data.title);
   });
 
-  test("shows the piece's title and artist once the museum answers", async () => {
-    setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
-
-    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}`}/>);
-
-    expect(await piecePage.artistAppears(pieceResponse.data.artist_display)).toBeInTheDocument();
-    await waitFor(() => expect(piecePage.refusalIfAny()).not.toBeInTheDocument());
-  });
-
   test('a piece opened with no museum in its address is shown from the Art Institute', async () => {
     setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
 

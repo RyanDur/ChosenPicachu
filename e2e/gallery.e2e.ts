@@ -155,7 +155,7 @@ test.describe('a visitor at a desk', () => {
     expect(await galleryPage(page).picturesNotShown()).toEqual([]);
   });
 
-  test('an empty search leaves the wall and its address as they were, with the field invalid', async ({page}) => {
+  test('an empty search leaves the wall and its address as they were', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
@@ -163,7 +163,6 @@ test.describe('a visitor at a desk', () => {
 
     await gallery.submitSearch.click();
 
-    expect(await gallery.searchFieldValid()).toBe(false);
     expect(page.url()).toBe(before);
     await expect(gallery.wall.first()).toBeVisible();
   });

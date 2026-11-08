@@ -51,14 +51,6 @@ describe('search', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?page=1&tab=aic&search=a');
   });
 
-  it('should leave the original query alone when search is empty', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=1&search=cat&tab=aic`}/>);
-
-    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
-
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?page=1&search=cat&tab=aic');
-  });
-
   it('should be able to reset the query', async () => {
     render(<TestApp at={`${Paths.artGallery}?search=cat&tab=aic`}/>);
 

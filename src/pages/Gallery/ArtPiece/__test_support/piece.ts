@@ -10,7 +10,6 @@ export const piecePage = {
   artistAppears: (artist: string): Promise<HTMLElement> => screen.findByText(artist),
   artist: (artist: string): HTMLElement => screen.getByText(artist),
   refusalAppears: (): Promise<HTMLElement> => screen.findByAltText(refusal),
-  refusalIfAny: (): HTMLElement | null => screen.queryByAltText(refusal),
   easelIfAny: (): HTMLElement | null => screen.queryByRole('figure'),
   troubleSaid: (words: string): HTMLElement => within(screen.getByRole('alert', {hidden: true})).getByText(words)
 };
