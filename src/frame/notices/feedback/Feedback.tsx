@@ -1,7 +1,8 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode, RefObject, SubmitEvent, SyntheticEvent, useContext, useEffect, useRef} from 'react';
-import {useLocation, useSearchParams} from 'react-router';
+import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv, useHydrated, usePageName} from '@frame/page';
+import {Paths} from '@frame/navigation';
 import {troubleWith} from '@transport/trouble';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
@@ -60,7 +61,9 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
 export const Feedback: FC = () => {
   const hydrated = useHydrated();
   const {feedbackToken, feedbackEndpoint} = useEnv();
-  const {pathname} = useLocation();
+  const location = useLocation();
+  const {pathname} = location;
+  const sentFrom = `${Paths.site}${useHref(location)}`;
   const [params] = useSearchParams();
   const pageName = usePageName();
   const [draft, dispatch] = useContext(drafting);
@@ -96,11 +99,10 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
-    const from = event.currentTarget.ownerDocument.URL;
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
-      {page: {key: draft.key, name: pageName}, words, from, ...(empty(reach) ? {} : {reach})}
+      {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
       .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));

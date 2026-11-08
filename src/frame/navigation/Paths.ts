@@ -9,5 +9,6 @@ export enum Paths {
   practice = '/practice/',
   practiceTab = '/practice/:concern/',
   development = '/development/',
-  repo = 'https://github.com/RyanDur/ChosenPicachu'
+  repo = 'https://github.com/RyanDur/ChosenPicachu',
+  site = 'https://ryandur.github.io'
 }

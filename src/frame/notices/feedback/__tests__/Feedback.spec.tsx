@@ -76,6 +76,18 @@ describe('Feedback while a note is on its way', () => {
     expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
   });
 
+  test('should say in the note the live page it was sent from', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at="/record/?moment=concert"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The timeline skips.{Enter}');
+
+    await waitFor(() => expect(github.notes).toHaveLength(1));
+    expect(github.notes[0]).toContain('Sent from https://ryandur.github.io/record/?moment=concert');
+  });
+
   test('should send a note once however often Enter is pressed before GitHub answers', async () => {
     const github = githubHoldingItsAnswer();
     const words = await opened();
