@@ -184,14 +184,14 @@
   #root {
     grid-template-columns: 1fr auto;
     grid-template-rows:
-      var(--header-block)
       var(--base-x-6)
+      var(--header-block)
       var(--filter-block)
       1fr
       var(--base);
     grid-template-areas:
-      'header header'
       'nav    feedback'
+      'header header'
       'filter filter'
       'main   main'
       'footer footer';
@@ -265,13 +265,13 @@
 
   #root:not(:has(.app-footer)) {
     grid-template-rows:
-      var(--header-block)
       var(--base-x-6)
+      var(--header-block)
       var(--filter-block)
       1fr;
     grid-template-areas:
-      'header header'
       'nav    feedback'
+      'header header'
       'filter filter'
       'main   main';
   }
@@ -480,8 +480,11 @@
   @media (601px <= width <= 1100px) and (height > 600px) {
     #root {
       .rail {
-        top: calc(var(--header-block) + var(--base));
         z-index: 2;
+      }
+
+      .app-header {
+        top: calc(var(--base-x-6) + var(--base));
       }
 
       .filter {
