@@ -46,9 +46,7 @@ export const UsersTable: FC = () => {
             <Cell column="home-city" row={user.id}>{user.homeAddress.city}</Cell>
             <Cell column="age" row={user.id}>{maybe(user.info.dob).map(age.of).map(age.worded).orElse('')}</Cell>
             <Cell column="friends" row={user.id}>
-              <FriendsList user={user} users={users}
-                onFriendAdded={friend => dispatch(usersActions.friendAdded(user.id, friend))}
-                onFriendRemoved={friend => dispatch(usersActions.friendRemoved(user.id, friend))}/>
+              <FriendsList userId={user.id}/>
             </Cell>
             <Cell column="works-from-home" row={user.id} className="last-column">
               {userColumns.worksFromHome(user)}
