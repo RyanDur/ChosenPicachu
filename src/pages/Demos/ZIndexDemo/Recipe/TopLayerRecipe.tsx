@@ -71,8 +71,9 @@ export const TopLayerRecipe: FC = () => {
             nothing to do with the stacking contexts above; the two only share the word.</Says>
           <Says>To dispatch is to hand the context an action, a record of what happened. A component raises a banner by
             dispatching one that says a message arrived. The dismiss button dispatches one that marks the banner
-            leaving, and the panel lowers it once it has slid away. The panel reads the banners from the context and is
-            written only while there is at least one, so no code shows or hides it.</Says>
+            leaving, and the panel lowers it once it has slid away and the gap it left has closed. The panel reads the
+            banners from the context and is written only while there is at least one, so no code shows or hides
+            it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
