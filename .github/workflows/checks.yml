@@ -243,6 +243,19 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
+      - name: Gather the conversations earlier reviews started
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql --paginate -F pull="$REVIEW_PULL" -f owner="${GITHUB_REPOSITORY%/*}" -f name="${GITHUB_REPOSITORY#*/}" -f query='
+            query($owner: String!, $name: String!, $pull: Int!, $endCursor: String) {
+              repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
+                reviewThreads(first: 100, after: $endCursor) {
+                  nodes { isResolved path line comments(first: 20) { nodes { author { login } body } } }
+                  pageInfo { hasNextPage endCursor } } } }
+            }' | jq -s '[.[].data.repository.pullRequest.reviewThreads.nodes[]
+              | {resolved: .isResolved, file: .path, line, comments: [.comments.nodes[] | {author: .author.login, body}]}]' \
+            > earlier-findings.json
       - name: Ask for the review
         run: |
           {
