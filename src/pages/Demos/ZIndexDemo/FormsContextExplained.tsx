@@ -30,7 +30,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       </li>
       <li className="run">
         <p className="paragraph">With nothing on it, card one is a plain grid item, a box laid out by a parent whose
-          display is grid. Its list’s 9999 is compared with card two’s 1 in the tab panel’s context, so the list opens
+          display is grid. Its list’s 9999 is compared with card two’s 1 in the tab content’s context, so the list opens
           on top.</p>
         <Snippet label="CSS" lines={carve.unit(zIndexCss, '.old-way-cards {')}/>
       </li>
@@ -87,7 +87,7 @@ export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
       <li className="run">
         <p className="paragraph"><a className="signpost" href={`${mdn}isolation`}><code className="monospaced">isolation: isolate</code></a> forms
           a context and does nothing more. Use it to keep the z-indexes of one part of the page inside it on purpose,
-          instead of as a side effect of opacity or a transform. I use it that way here: the tab’s panel wears it, in
+          instead of as a side effect of opacity or a transform. I use it that way here: the tab’s content wears it, in
           Tabs.css, so no z-index inside a tab is ever compared with one outside it.</p>
         <Snippet label="CSS" lines={[
           ...carve.unit(zIndexCss, '.isolated {'), gap,
