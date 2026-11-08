@@ -35,7 +35,9 @@ jobs:
       - name: Check out the pull request's head
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git checkout --quiet "$(gh pr view "$PULL" -R "$GITHUB_REPOSITORY" --json headRefOid -q .headRefOid)"
+        run: |
+          git fetch --quiet origin "refs/pull/$PULL/head"
+          git checkout --quiet FETCH_HEAD
       - name: Claude Code answers the reply in its thread
         uses: anthropics/claude-code-action@v1
         with:
@@ -54,3 +56,18 @@ jobs:
             --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
             --max-turns 40
             --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(gh api:*),Bash(gh pr view:*),Bash(gh pr diff:*)"
+      - name: Resolve the thread when the reviewer agrees
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          first=$(gh api "repos/$GITHUB_REPOSITORY/pulls/comments/$REPLY" -q '.in_reply_to_id // .id')
+          last=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments" --paginate \
+            -q "[.[] | select(.id == $first or .in_reply_to_id == $first)] | last | select(.user.type == \"Bot\") | .body")
+          if [[ "$last" == Agreed.* ]]; then
+            thread=$(gh api graphql -F pull="$PULL" -f owner="${GITHUB_REPOSITORY%/*}" -f name="${GITHUB_REPOSITORY#*/}" -f query='
+              query($owner: String!, $name: String!, $pull: Int!) {
+                repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
+                  reviewThreads(first: 100) { nodes { id comments(first: 1) { nodes { databaseId } } } } } }
+              }' -q ".data.repository.pullRequest.reviewThreads.nodes[] | select(.comments.nodes[0].databaseId == $first) | .id")
+            gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }'
+          fi

@@ -34,7 +34,7 @@ export const askFor = ({before, after, pull, reviewers}) => [
   'Answer with every finding in the structured output, an empty list when there are none.'
 ].join(' ');
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.filename === process.argv[1]) {
   const {REVIEW_BEFORE: before, REVIEW_AFTER: after = 'HEAD', REVIEW_PULL: pull} = process.env;
   if (empty(before)) {
     throw new Error('REVIEW_BEFORE names no commit to review from');
