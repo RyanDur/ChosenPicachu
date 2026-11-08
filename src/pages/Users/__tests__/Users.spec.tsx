@@ -18,6 +18,7 @@ import {
   usersUnreachable
 } from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
+import {friendsList} from '../FriendsList/__test_support';
 import {usersPage, usersTable} from '../__test_support';
 import {openings} from '../openings';
 
@@ -343,7 +344,7 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const vicsRow = await usersTable.rowOf(profile.fullName(vic));
 
-    await usersTable.unfriend(vicsRow, profile.fullName(wen));
+    await friendsList(vicsRow).remove(profile.fullName(wen));
 
     await waitFor(() => expect(sent()).toMatchObject({id: vic.id, friends: []}));
   });
@@ -356,10 +357,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const zedsRow = await usersTable.rowOf(profile.fullName(zed));
 
-    await usersTable.unfriend(zedsRow, profile.fullName(amo));
+    await friendsList(zedsRow).remove(profile.fullName(amo));
 
     expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-    expect(usersTable.friendRemoval(zedsRow, profile.fullName(amo))).toBeInTheDocument();
+    expect(friendsList(zedsRow).removalIfAny(profile.fullName(amo))).toBeInTheDocument();
   });
 
   test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
@@ -370,10 +371,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const xiasRow = await usersTable.rowOf(profile.fullName(xia));
 
-    await usersTable.befriend(xiasRow, profile.fullName(yul));
+    await friendsList(xiasRow).add(profile.fullName(yul));
 
     expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-    expect(usersTable.friendRemovalIfAny(xiasRow, profile.fullName(yul))).not.toBeInTheDocument();
+    expect(friendsList(xiasRow).removalIfAny(profile.fullName(yul))).not.toBeInTheDocument();
   });
 
   test("choosing a friend in a person's row sends the backend that person with the friend added", async () => {
@@ -384,7 +385,7 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     const tamsRow = await usersTable.rowOf(profile.fullName(tam));
 
-    await usersTable.befriend(tamsRow, profile.fullName(uma));
+    await friendsList(tamsRow).add(profile.fullName(uma));
 
     await waitFor(() => expect(sent()).toMatchObject({id: tam.id, friends: [uma.id]}));
   });
