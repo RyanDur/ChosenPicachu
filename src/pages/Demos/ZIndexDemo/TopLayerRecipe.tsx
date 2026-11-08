@@ -57,7 +57,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(bannersSource, 'return has(banners)', '</section>;')
+            ...carve.span(bannersSource, '<section id="banners"', '</section>;')
           ]}/>
         </Codes>
       </Step>
@@ -70,6 +70,9 @@ export const TopLayerRecipe: FC = () => {
             leaving, and the panel lowers it once it has slid away and the gap it left has closed. The panel reads the
             banners from the context and is written only while there is at least one, so no code shows or hides
             it.</Says>
+          <Says><code className="monospaced">has</code> comes from sand, a small library of helpers the site uses for
+            values that may be missing. Given the list of banners, it answers whether there is any news to show, so the
+            panel is drawn only when there is.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
