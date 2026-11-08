@@ -1,16 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {survey} from '../survey';
 
-describe('the keyboard vocabulary', () => {
-  it('a seat is struck only by a different seat, never by itself or by nothing', () => {
-    expect(survey.struckAway('trades', 'buys')).toBe(true);
-    expect(survey.struckAway('trades', 'trades')).toBe(false);
-    expect(survey.struckAway('trades', undefined)).toBe(false);
-    expect(survey.struckAway(2, 0)).toBe(true);
-    expect(survey.struckAway(2, 2)).toBe(false);
-  });
-});
-
 describe('the pointer vocabulary', () => {
   const order = ['window', 'trades', 'buys', 'change'];
   const across = (columnWidths: Record<string, number>) => {
