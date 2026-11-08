@@ -132,6 +132,28 @@ describe('The gallery.', () => {
     expect(galleryPage.museumIfAny('The Art Institute of Chicago')).not.toBeInTheDocument();
   });
 
+  test('a museum whose search finds no works has no door: Harvard', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    setupHarvardAllArtResponse({...harvardArtResponse, records: []});
+
+    render(<TestApp at={Paths.artGallery}/>);
+    await galleryPage.museumsAppear();
+
+    expect(galleryPage.museum('The Art Institute of Chicago')).toBeInTheDocument();
+    expect(galleryPage.museumIfAny('Harvard Art Museums')).not.toBeInTheDocument();
+  });
+
+  test('a museum whose search finds no works has no door: Cleveland', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    setupClevelandAllArtResponse({...clevelandArtResponse, data: []});
+
+    render(<TestApp at={Paths.artGallery}/>);
+    await galleryPage.museumsAppear();
+
+    expect(galleryPage.museum('The Art Institute of Chicago')).toBeInTheDocument();
+    expect(galleryPage.museumIfAny('The Cleveland Museum of Art')).not.toBeInTheDocument();
+  });
+
   test('the gallery opens at the first museum that answers', async () => {
     setupAICAllArtResponse(aicArtResponse);
     refuseAICPictures();
