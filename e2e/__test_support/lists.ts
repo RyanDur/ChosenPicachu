@@ -1,4 +1,4 @@
-import {expect, type Locator, type Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 import {boxOf} from './box';
 import {fingertipMiss} from './finger';
 import {siteFrame} from './site';
@@ -18,6 +18,8 @@ export const sortableList = (page: Page) => {
   const gripNamed = (item: string): Locator => page.getByRole('button', {name: `grip for ${item}`});
   const seatOf = (item: string): Locator => items.filter({has: gripNamed(item)});
   const gripFor = (item: string): Locator => seatOf(item).getByRole('button', {name: `grip for ${item}`});
+  const enabledGripFor = (item: string): Locator =>
+    seatOf(item).getByRole('button', {name: `grip for ${item}`, disabled: false});
   const middleOf = async (target: Locator): Promise<{x: number; y: number}> => {
     await list.scrollIntoViewIfNeeded();
     const box = await boxOf(target, 'the list never stood');
@@ -40,9 +42,7 @@ export const sortableList = (page: Page) => {
     item: seatOf,
     moveReport: page.getByRole('status', {name: 'move report'}),
     stepByKey: async (item: string, key: 'ArrowLeft' | 'ArrowRight'): Promise<void> => {
-      const grip = gripFor(item);
-      await expect(grip).toBeEnabled();
-      await grip.focus();
+      await enabledGripFor(item).focus();
       await page.keyboard.press(key);
     },
     runningSlides: (): Promise<number> => list.evaluate(holder => holder.getAnimations({subtree: true}).length),
