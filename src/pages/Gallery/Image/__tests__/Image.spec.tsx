@@ -1,3 +1,4 @@
+import {appAddress} from '@__test_support/address';
 import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {render} from '@testing-library/react';
@@ -23,7 +24,7 @@ describe('the image', () => {
 
     await image.open();
 
-    expect(image.urlPath()).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
+    expect(appAddress.path()).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
   });
 
   test('a piece links to itself without a museum when the address names none it knows', () => {

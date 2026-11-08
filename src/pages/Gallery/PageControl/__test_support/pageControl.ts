@@ -11,7 +11,5 @@ export const pageControl = {
   rubOutPage: (): Promise<void> => userEvent.clear(pageField()),
   typeSize: (size: string): Promise<void> => userEvent.type(sizeField(), size),
   go: (): Promise<void> => userEvent.click(screen.getByRole('button', {name: 'Go'})),
-  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'NEXT'})),
-  addressSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
-  addressSearchAppears: (): Promise<HTMLElement> => screen.findByRole('status', {name: 'url search'})
+  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'NEXT'}))
 };

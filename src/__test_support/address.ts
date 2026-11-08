@@ -1,10 +1,14 @@
 import {screen, waitFor} from '@testing-library/react';
 
-const shown = (): string =>
-  `${screen.getByRole('status', {name: 'url path'}).textContent}${screen.getByRole('status', {name: 'url search'}).textContent}`;
+const path = (): HTMLElement => screen.getByRole('status', {name: 'url path'});
+const search = (): HTMLElement => screen.getByRole('status', {name: 'url search'});
+
+const shown = (): string => `${path().textContent}${search().textContent}`;
 
 export const appAddress = {
   shown,
+  path,
+  search,
   fragment: (): string => screen.getByRole('status', {name: 'url fragment'}).textContent,
   drawn: async (): Promise<string> => {
     await screen.findByRole('status', {name: 'url path'});

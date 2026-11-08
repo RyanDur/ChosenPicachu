@@ -1,3 +1,4 @@
+import {appAddress} from '@__test_support/address';
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
@@ -15,7 +16,7 @@ describe('The page controls', () => {
       await pageControl.typePage('3');
       await pageControl.go();
 
-      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=3'));
+      await waitFor(() => expect(appAddress.search()).toHaveTextContent('page=3'));
       expect(pageControl.pageField()).toHaveValue(null);
     });
 
@@ -42,8 +43,8 @@ describe('The page controls', () => {
       await pageControl.typeSize('45');
       await pageControl.go();
 
-      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('size=45'));
-      expect(pageControl.addressSearch()).toHaveTextContent('page=3');
+      await waitFor(() => expect(appAddress.search()).toHaveTextContent('size=45'));
+      expect(appAddress.search()).toHaveTextContent('page=3');
     });
 
     it('the page field will not go before the first', async () => {
@@ -82,8 +83,8 @@ describe('The page controls', () => {
       await pageControl.rubOutPage();
       await pageControl.go();
 
-      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=4'));
-      expect(pageControl.addressSearch()).not.toHaveTextContent('page=7');
+      await waitFor(() => expect(appAddress.search()).toHaveTextContent('page=4'));
+      expect(appAddress.search()).not.toHaveTextContent('page=7');
     });
   });
 
@@ -96,7 +97,7 @@ describe('The page controls', () => {
       await pageControl.typeSize('45');
       await pageControl.go();
 
-      expect(await pageControl.addressSearchAppears()).toHaveTextContent('size=45');
+      await waitFor(() => expect(appAddress.search()).toHaveTextContent('size=45'));
     });
   });
 });

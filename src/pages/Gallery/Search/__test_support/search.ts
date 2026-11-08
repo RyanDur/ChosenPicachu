@@ -14,9 +14,7 @@ const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
     submit: (): Promise<void> => user.click(submitButton()),
     reset: (): Promise<void> => user.click(resetButton()),
     focusMovesOn: (): Promise<void> => user.tab(),
-    suggestions: (): HTMLElement => screen.getByRole('listbox', {hidden: true}),
-    addressSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
-    addressPath: (): HTMLElement => screen.getByRole('status', {name: 'url path'})
+    suggestions: (): HTMLElement => screen.getByRole('listbox', {hidden: true})
   };
 };
 

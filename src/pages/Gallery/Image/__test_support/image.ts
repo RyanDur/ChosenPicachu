@@ -15,7 +15,6 @@ export const imageOf = ({title, altText}: Shown) => {
     linkIfAny: (): HTMLElement | null => screen.queryByRole('link', {name: title}),
     standInIfAny: (): HTMLElement | null => screen.queryByAltText(/would not load|has nothing to show/),
     nothingToShow: (): HTMLElement => screen.getByAltText(`${title} has nothing to show`),
-    open: (): Promise<void> => userEvent.click(link()),
-    urlPath: (): HTMLElement => screen.getByRole('status', {name: 'url path'})
+    open: (): Promise<void> => userEvent.click(link())
   };
 };

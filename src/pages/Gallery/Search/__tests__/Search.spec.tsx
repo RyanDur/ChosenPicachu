@@ -1,3 +1,4 @@
+import {appAddress} from '@__test_support/address';
 import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
@@ -27,8 +28,8 @@ describe('search', () => {
     await searchBar.type('A');
     await searchBar.submit();
 
-    await waitFor(() => expect(searchBar.addressSearch()).toHaveTextContent('search=A'));
-    expect(searchBar.addressPath()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('search=A'));
+    expect(appAddress.path()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
   it('the keyboard walks from the query to reset, then submit', async () => {
@@ -48,7 +49,7 @@ describe('search', () => {
     await searchBar.type('a');
     await searchBar.submit();
 
-    expect(searchBar.addressSearch()).toHaveTextContent('?page=1&tab=aic&search=a');
+    expect(appAddress.search()).toHaveTextContent('?page=1&tab=aic&search=a');
   });
 
   it('should be able to reset the query', async () => {
@@ -56,8 +57,8 @@ describe('search', () => {
 
     await searchBar.reset();
 
-    await waitFor(() => expect(searchBar.addressSearch()).not.toHaveTextContent('search'));
-    expect(searchBar.addressSearch()).toHaveTextContent('tab=aic');
+    await waitFor(() => expect(appAddress.search()).not.toHaveTextContent('search'));
+    expect(appAddress.search()).toHaveTextContent('tab=aic');
   });
 
   it('a reset empties the box, and the browser holds the empty box invalid', async () => {
