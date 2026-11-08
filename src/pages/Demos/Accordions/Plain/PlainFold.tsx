@@ -14,10 +14,10 @@ const measured = (body: HTMLElement, dispatch: (change: PlainFoldChange) => void
 
 export const PlainFold: FC = () => {
   const dispatchBanner = useBannerDispatch();
-  const [{document, body, height}, dispatch] = useReducer(plainFold.reduce, plainFold.initial);
+  const [{foldMarkup, body, height}, dispatch] = useReducer(plainFold.reduce, plainFold.initial);
 
   useEffect(() => asyncResult(import('./assemble'))
-    .onSuccess(({foldAssembly}) => dispatch(plainFoldChange.assembled(foldAssembly.document())))
+    .onSuccess(({foldAssembly}) => dispatch(plainFoldChange.assembled(foldAssembly.markup())))
     .onFailure(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')))
     .cancel, [dispatchBanner]);
 
@@ -33,5 +33,5 @@ export const PlainFold: FC = () => {
       dispatch(plainFoldChange.loaded(loaded));
       measured(loaded, dispatch);
     })}
-    srcDoc={document}/>;
+    srcDoc={foldMarkup}/>;
 };
