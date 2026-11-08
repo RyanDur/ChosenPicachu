@@ -413,6 +413,10 @@
 
   @media (601px <= width <= 1100px) and (height > 600px) {
     :root {
+      --frame-reach: calc(var(--header-block) + var(--filter-block) + var(--base) * 2);
+    }
+
+    :root:has(.feedback-item) {
       --frame-reach: calc(var(--header-block) + var(--base-x-6) + var(--filter-block) + var(--base) * 3);
     }
   }
@@ -485,13 +489,19 @@
       }
 
       .filter {
-        top: calc(var(--header-block) + var(--base-x-6) + var(--base) * 2);
+        top: calc(var(--header-block) + var(--base));
         z-index: 2;
       }
     }
 
-    #root:has(.feedback-item) .app-header {
-      top: calc(var(--base-x-6) + var(--base));
+    #root:has(.feedback-item) {
+      .app-header {
+        top: calc(var(--base-x-6) + var(--base));
+      }
+
+      .filter {
+        top: calc(var(--header-block) + var(--base-x-6) + var(--base) * 2);
+      }
     }
   }
 }
