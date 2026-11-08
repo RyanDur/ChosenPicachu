@@ -1,22 +1,12 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample, Line} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
 import {whatACustomPropertyIs} from '../definitions';
-
-const theSheetDeclaresSeatAndDrift = <>
-  The style sheet declares the seat and the drift with <code className="monospaced">@property</code>, a rule that gives
-  a custom property a type and a starting value: each is a length that starts at 0px
-</>;
-
-const carriedProperties = (cssSource: Sample): Line[] => [
-  ...carve.unit(cssSource, '@property --seat-x {'), gap,
-  ...carve.unit(cssSource, '@property --seat-y {'), gap,
-  ...carve.unit(cssSource, '@property --drift-x {'), gap,
-  ...carve.unit(cssSource, '@property --drift-y {'), gap
-];
+import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
+import {carriedProperties} from './carriedProperties';
 
 export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, cssSource, buildSrc}) =>
@@ -40,7 +30,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
           other way, so the carried
           cells stay under the pointer. The style sheet adds the two and does
           the moving, but only when the table wears hide. Under keep the same cells wear the same numbers
-          and never leave their place. {theSheetDeclaresSeatAndDrift}, so a carried cell with no numbers on it
+          and never leave their place. <SheetDeclaresSeatAndDrift/>, so a carried cell with no numbers on it
           yet stays in its place.</Says>
         {world === 'react'
           ? <>
@@ -105,57 +95,3 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         </Codes>
       </Reveal>
     </Step>;
-
-export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSource}) =>
-  <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
-    <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
-      <Says>Keeping the origin should be the style sheet’s decision, not a second table: the
-        carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and when the
-        table wears keep the style sheet never adds them up. {theSheetDeclaresSeatAndDrift}.</Says>
-    </Words>
-    <Reveal>
-      {world === 'react'
-        ? <>
-          <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
-            What follows the hand is the order: the neighbors move around it as it is struck, or
-            at the drop. The table dispatches the same drift and the cells wear the same numbers;
-            the table wears the word keep, and no rule in the style sheet translates a carried cell
-            under it.</Says>
-          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s
-            shared style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the
-            cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
-          <Says>Under keep the carried cells stay put, and the style sheet raises them with
-            a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and a table cell takes one only once it is positioned, given
-            a <code className="monospaced">position</code> other than static,
-            which is why the carried cell is also <code className="monospaced">position: relative</code>. So the
-            neighbors slide beneath the carried cells, and the paper keeps either from showing through the
-            other.</Says>
-        </>
-        : <>
-          <Says>The lifted column stays exactly where it stands and the cursor says grabbing.
-            What follows the hand is the order: the neighbors move around it as it is struck, or
-            at the drop. The build dispatches the same drift and marks the same cells; the table
-            wears the word keep, and no rule in the style sheet translates a carried cell under it.</Says>
-          <Says>A cell wears <code className="monospaced">paper-in-motion</code>, a shared class, a look from the site’s
-            shared style sheet that an element wears by name, while it is carried, settling or shoved: it grounds the
-            cell in the page’s paper, so a cell in motion is opaque and shows nothing through it.</Says>
-          <Says>Under keep the carried cells stay put, and the style sheet raises them with
-            a <Mdn path="Web/CSS/z-index">z-index</Mdn> of 1: z-index orders boxes that overlap, the higher on top,
-            and a table cell takes one only once it is positioned, given
-            a <code className="monospaced">position</code> other than static,
-            which is why the carried cell is also <code className="monospaced">position: relative</code>. So the
-            neighbors slide beneath the carried cells, and the paper keeps either from showing through the
-            other.</Says>
-        </>}
-      <Codes>
-        <Snippet label="CSS" lines={[
-          ...carriedProperties(cssSource),
-          ...carve.unit(cssSource, '.sortable .carried {'), gap,
-          ...carve.unit(cssSource, '.sortable.hide .carried {'), gap,
-          ...carve.unit(surfaceCss, '.paper-in-motion {'),
-          lines.aside('/* the carried cell rises above its neighbors in every table; only under hide does it move */')
-        ]}/>
-      </Codes>
-    </Reveal>
-  </Step>;
