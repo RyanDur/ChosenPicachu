@@ -28,8 +28,8 @@ const placed = (
   headroomMilliseconds: number
 ): readonly {at: number; along: number}[] => {
   const from = times[0];
-  const shown = times[times.length - 1] - from + headroomMilliseconds;
-  return ticks.map(at => ({at, along: shown === 0 ? 50 : ((at - from) / shown) * 100}));
+  const shownMilliseconds = times[times.length - 1] - from + headroomMilliseconds;
+  return ticks.map(at => ({at, along: shownMilliseconds === 0 ? 50 : ((at - from) / shownMilliseconds) * 100}));
 };
 
 export const Axes: FC<Props> = ({

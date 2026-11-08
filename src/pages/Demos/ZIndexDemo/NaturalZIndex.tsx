@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {not as toggle, not} from '@ryandur/sand';
+import {not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../props-with-class-name';
 import {classNames} from '@components';
@@ -17,7 +17,7 @@ const cardsToRaise = [
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const {raised, updateSearchParams} = useSearchParamsObject({raised: raisedParam}, {raised: 'none'});
   const [isCollapsed, updateCollapsed] = useState(true);
-  const onClick = () => updateCollapsed(toggle(isCollapsed));
+  const onClick = () => updateCollapsed(not(isCollapsed));
   const layer = (card: RaisedCard) => classNames('layer card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
   return <figure className={classNames('natural-z-index', className)}>
