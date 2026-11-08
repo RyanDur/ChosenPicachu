@@ -5,7 +5,7 @@ import {UsersAction} from './usersActions';
 import {userColumns} from './columns';
 import {Membership} from './memberships';
 
-export type FriendsReports = Readonly<Record<string, Membership>>;
+export type FriendsReports = Readonly<Partial<Record<string, Membership>>>;
 
 export type UsersState = {
   readonly users: readonly User[];
