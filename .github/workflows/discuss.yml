@@ -1,0 +1,56 @@
+name: Discuss
+on:
+  pull_request_review_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pull:
+        description: 'The pull request the reply is on'
+        required: true
+      comment:
+        description: 'The id of the reply to answer'
+        required: true
+
+concurrency:
+  group: discuss-${{ github.event.comment.id || inputs.comment }}
+
+jobs:
+  answer:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (github.event.pull_request.state == 'open' && github.event.comment.in_reply_to_id
+          && github.event.comment.user.type != 'Bot')
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    env:
+      PULL: ${{ github.event.pull_request.number || inputs.pull }}
+      REPLY: ${{ github.event.comment.id || inputs.comment }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Check out the pull request's head
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git checkout --quiet "$(gh pr view "$PULL" -R "$GITHUB_REPOSITORY" --json headRefOid -q .headRefOid)"
+      - name: Claude Code answers the reply in its thread
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You reviewed pull request #${{ env.PULL }} in ${{ github.repository }} against this project's rules, and someone has replied to one of your findings: review comment ${{ env.REPLY }}.
+
+            1. Read the thread: `gh api repos/${{ github.repository }}/pulls/comments/${{ env.REPLY }}` gives the reply and its in_reply_to_id, the thread's first comment, which is your finding. `gh api repos/${{ github.repository }}/pulls/${{ env.PULL }}/comments --paginate` holds every reply to that first comment.
+            2. Read what the thread is about: the code at the pull request's head, which is checked out here, the commits the reply names (`git show`), and the rule your finding cited, in AGENTS.md or the rubric under its Reviewers section. A pull request merged since has its later fixes on origin/main.
+            3. Answer once, in the thread: `gh api repos/${{ github.repository }}/pulls/${{ env.PULL }}/comments/<the first comment's id>/replies -f body=...`.
+               - If the reply names a fix and the code shows it, or its argument holds against the rule, start with "Agreed." and say in a sentence or two what settled it.
+               - If not, start with "Not yet." and say plainly what still needs to be done and why, citing the code or the rule.
+            Write as scripts/review/plain.md asks. Change no file.
+          claude_args: |
+            --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
+            --max-turns 40
+            --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(gh api:*),Bash(gh pr view:*),Bash(gh pr diff:*)"

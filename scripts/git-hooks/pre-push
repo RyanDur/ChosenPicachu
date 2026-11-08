@@ -1,35 +1,12 @@
 #!/bin/bash
-# The one hook. Commits run nothing; every push runs the linters first, since they take seconds and a lint error
-# should never cost a CI run. A push that only goes to verify/<name> branches stops there: CI runs the types, the
-# unit tests, the journeys and the review for it, so a dev never waits for the machine (AGENTS.md, "Commits and
-# pushes"). A push to main runs everything.
+# The one hook. Commits run nothing; a push runs the linters, since they take seconds and a lint error should never
+# cost a CI run. The pull request's checks run the rest (AGENTS.md, "Commits and pushes").
 # Activate per-clone: git config core.hooksPath scripts/git-hooks
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
-
-only_verify=true
-while read -r _ _ remote_ref _; do
-  [[ "$remote_ref" == refs/heads/verify/* ]] || only_verify=false
-done
 
 echo "pre-push: oxlint + stylelint + eslint stylistic..."
 npm run lint
 npm run lint:css
 npm run lint:style
-
-if [[ "$only_verify" == true ]]; then
-  echo "pre-push: verify branch, CI runs the rest."
-  exit 0
-fi
-
-echo "pre-push: tsc + vitest + build..."
-npx tsc -b
-npx vitest run --reporter=dot
-npm run build
-
-# one engine at a time, as CI runs them: a local WebKit worker stalls on its 90th browser context
-for engine in chromium firefox webkit; do
-  echo "pre-push: the journeys in ${engine}, on the stub stage..."
-  npx playwright test --project="${engine}*" --reporter=line
-done
-echo "pre-push: clean."
+echo "pre-push: clean. The pull request's checks run the rest."

@@ -1,27 +1,12 @@
 name: Checks
-# every check runs on the pull request, and main only deploys what passed here (deploy.yml); nothing is pushed to main
-# directly. Why: Ryan, 2026-11-08, "build_test review lighthose and journeys happen on PR's, rebase onto main takes the
-# built artifact from a passing PR and then deploys it to pages and then smoke tests. no pushes to main"
 on:
   pull_request:
     branches:
       - main
   workflow_dispatch:
-# a new push to a pull request stops its older run
 concurrency:
   group: checks-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
-env:
-  VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
-  VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
-  VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
-  VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
-  VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
-  VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
-  VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
-  VITE_APP_USERS_API: /api/users
-  VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
-
 jobs:
   changes:
     runs-on: ubuntu-26.04
@@ -37,8 +22,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL: ${{ github.event.pull_request.number }}
         run: |
-          # documents alone change nothing a page imports, so they get the review and no build; anything else, or a
-          # failed lookup, gets every check
           site=true
           if [ -n "$PULL" ] && files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only); then
             if [ -n "$files" ] && ! grep -qvE '^docs/|\.md$' <<< "$files"; then
@@ -51,6 +34,16 @@ jobs:
     needs: changes
     if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-26.04
+    env:
+      VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
+      VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+      VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
+      VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
+      VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
+      VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
+      VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
+      VITE_APP_USERS_API: /api/users
+      VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
     steps:
@@ -118,6 +111,8 @@ jobs:
           - {browser: webkit, shard: 4/4}
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
@@ -159,6 +154,8 @@ jobs:
     name: lighthouse (${{ matrix.page }})
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
@@ -197,6 +194,8 @@ jobs:
     name: lighthouse scores
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
@@ -215,10 +214,6 @@ jobs:
       - name: Read the scores in the run
         run: node --import ./scripts/node/imports-like-vite.mjs scripts/lighthouse/summary.mjs lighthouse-reports >> "$GITHUB_STEP_SUMMARY"
 
-  # Claude Code reviews the pull request against the house rubrics once it builds and its unit tests pass, so a broken
-  # build costs no review; documents alone skip the build and go straight to it. Why: Ryan, 2026-11-08, "the devs are
-  # using branches and those branches can be merged into main via rebase, then they would have code reviews", and
-  # "can't review and checks live in the same yml? and only run after build and test?"
   review:
     needs: [changes, build_test]
     if: >-
@@ -236,6 +231,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -275,8 +271,6 @@ jobs:
           REVIEW_FINDINGS: ${{ steps.review.outputs.structured_output }}
         run: printf '%s' "$REVIEW_FINDINGS" | node scripts/review/report.mjs >> "$GITHUB_STEP_SUMMARY"
 
-  # the one check a merge waits for: the matrix jobs' names change with their shards and pages, so the ruleset names
-  # this job, which passes only when every check above, the review included, passed or had nothing to check
   ready:
     needs: [changes, build_test, journeys, lighthouse, lighthouse_scores, review]
     if: always()

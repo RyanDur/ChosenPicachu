@@ -1,3 +1,5 @@
+import {join} from 'node:path';
+import {readFileSync} from 'node:fs';
 import {findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
 
 const answered = findings => JSON.stringify({type: 'result', structured_output: {findings}});
@@ -12,22 +14,12 @@ const note = {
 };
 
 describe('the findings Claude Code\'s review answers with', () => {
-  test('should read the findings from the fenced JSON in its answer', () => {
+  test('should read the findings from the result a local run writes', () => {
     expect(findingsIn(answered([bug, note]))).toEqual([bug, note]);
   });
 
   test('should read the findings from the action\'s structured output', () => {
     expect(findingsIn(JSON.stringify({findings: [bug]}))).toEqual([bug]);
-  });
-
-  test('should read the findings from the last answer in the action\'s execution file', () => {
-    const execution = JSON.stringify([
-      {type: 'system', subtype: 'init'},
-      {type: 'assistant', message: {content: []}},
-      JSON.parse(answered([bug]))
-    ]);
-
-    expect(findingsIn(execution)).toEqual([bug]);
   });
 
   test('should read no findings from an empty list', () => {
@@ -43,10 +35,15 @@ describe('the findings Claude Code\'s review answers with', () => {
     expect(() => findingsIn('')).toThrow('the review answered without a findings list');
   });
 
-  test('should count a finding with no severity as a concern', () => {
-    const {severity: _, ...unsorted} = bug;
+  test('should refuse a finding that has no summary', () => {
+    const {summary: _, ...unsaid} = bug;
 
-    expect(findingsIn(answered([unsorted]))[0].severity).toBe('concern');
+    expect(() => findingsIn(answered([unsaid]))).toThrow('the review answered with a finding that has no summary');
+  });
+
+  test('should refuse a severity the schema does not name', () => {
+    expect(() => findingsIn(answered([{...bug, severity: 'blocker'}])))
+      .toThrow('the review answered with a severity of "blocker"');
   });
 });
 
@@ -83,5 +80,13 @@ describe('the comment', () => {
     const markup = {...note, summary: 'Use <dialog> here.'};
 
     expect(summaryOf([markup], {commit})).toContain('Use &lt;dialog&gt; here.');
+  });
+});
+
+describe('the shape the review answers in', () => {
+  test('should hold no apostrophe, since the workflow hands it to Claude Code inside single quotes', () => {
+    const schema = readFileSync(join(import.meta.dirname, '../review/findings.schema.json'), 'utf8');
+
+    expect(schema).not.toContain('\'');
   });
 });

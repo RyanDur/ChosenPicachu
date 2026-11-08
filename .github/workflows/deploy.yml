@@ -1,16 +1,11 @@
 name: Deploy
-# main is never built: a commit reaches it only as a pull request merged by rebase, and the site its passing checks
-# built is the site that ships. Why: Ryan, 2026-11-08, "rebase onto main takes the built artifact from a passing PR and
-# then deploys it to pages and then smoke tests. no pushes to main"
 on:
   push:
     branches:
       - main
-    # documents alone change no page, so there is nothing to deploy
     paths-ignore:
       - 'docs/**'
       - '**/*.md'
-  # deploys main's head again, from the same pull request's site
   workflow_dispatch:
 
 jobs:
@@ -31,7 +26,7 @@ jobs:
           # GitHub links a commit to its pull request a moment after the merge, so the lookup waits for it
           for wait in 0 10 20 40; do
             sleep "$wait"
-            pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)][0].number // empty')
+            pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty')
             if [ -n "$pull" ]; then
               break
             fi
@@ -50,6 +45,10 @@ jobs:
             --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then
             echo "::error::#$pull's head $head has no passing checks run to take the site from"
+            exit 1
+          fi
+          if ! gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts" -q '.artifacts[].name' | grep -qx site; then
+            echo "::error::#$pull changed documents alone, so its checks built no site; the site live now is the last one deployed"
             exit 1
           fi
           echo "Deploying the site that run $run built for #$pull at $head" >> "$GITHUB_STEP_SUMMARY"
