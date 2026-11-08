@@ -48,9 +48,14 @@ const inlineAction = {
   message: 'Dispatch what an action creator returns, as Feedback and UserInformation do, never an object written here.'
 };
 
-const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction]};
+const childrenInProps = {
+  selector: 'TSPropertySignature[key.name="children"]',
+  message: 'Take children through PropsWithChildren<Props>, never as a key of the props type.'
+};
 
-const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction]};
+const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction, childrenInProps]};
+
+const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction, childrenInProps]};
 
 const specs = Object.fromEntries([
   'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
