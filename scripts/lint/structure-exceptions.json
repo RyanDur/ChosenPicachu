@@ -1,6 +1,5 @@
 {
   "one-export": [
-    "src/components/Menu/Menu.tsx",
     "src/pages/Demos/Accordions/Accordions.tsx",
     "src/pages/Demos/Accordions/Diagrams.tsx",
     "src/pages/Demos/Accordions/Plain/assemble.ts",
