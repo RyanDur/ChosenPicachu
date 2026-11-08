@@ -3,7 +3,7 @@ import {Outlet, useLocation} from 'react-router';
 import {Maybe, maybe} from '@ryandur/sand';
 import {Header, Page, PageError} from '@frame/page';
 import NoSuchRoom from '@pages/NoRoom/route';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';

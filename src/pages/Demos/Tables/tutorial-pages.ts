@@ -1,5 +1,5 @@
 import {Maybe, maybe} from '@ryandur/sand';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {demoAddress, DemoTopics} from '../types';
 
 export type Tutorial = keyof typeof names.tables;

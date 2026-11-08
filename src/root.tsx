@@ -5,7 +5,7 @@ import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@frame/notices/feedback';
 import {Header, Page, PageError, PageNameProvider} from '@frame/page';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {env} from '@env';
 import {SiteProviders} from './SiteProviders';
 

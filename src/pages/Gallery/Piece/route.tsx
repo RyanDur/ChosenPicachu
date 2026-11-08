@@ -5,7 +5,7 @@ import {Header, Listing, Page} from '@frame/page';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {ArtGalleryPiecePage} from '../ArtGalleryPiecePage';
 import {GalleryError} from '../GalleryError';
 import {Art} from '@pages/Gallery/museums';

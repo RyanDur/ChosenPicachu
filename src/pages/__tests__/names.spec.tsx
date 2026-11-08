@@ -4,7 +4,7 @@ import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {chartPage} from '@pages/Demos/Charts/__test_support';
 import {Route} from 'react-router';
 import {Paths} from '@frame/navigation';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {practiceAt} from '@pages/Practice/__test_support/practice';
 import {aicArtResponse, anAICPieceResponse} from '@pages/Gallery/__test_support/fixtures';

@@ -1,4 +1,4 @@
-import names from '../names.json';
+import names from '@frame/navigation/names.json';
 import type {Listing} from '@frame/page';
 import {spelledOut} from './moments/spelled-out';
 

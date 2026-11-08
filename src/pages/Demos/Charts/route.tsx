@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useParams} from 'react-router';
 import {Header, Page, PageError} from '@frame/page';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {isChartKind} from './kinds';
 import {Trading} from '../Market/Trading';
 import {ChartPage} from './ChartPage';

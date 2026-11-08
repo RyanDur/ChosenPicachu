@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import names from '../src/pages/names.json' with {type: 'json'};
+import names from '../src/frame/navigation/names.json' with {type: 'json'};
 
 const headOf = (html: string) => ({
   title: html.match(/<title>([^<]*)<\/title>/)?.[1],

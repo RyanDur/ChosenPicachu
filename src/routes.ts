@@ -2,7 +2,7 @@ import {layout, route, RouteConfig} from '@react-router/dev/routes';
 // React Router loads this file before Vite's aliases apply, so its imports stay relative
 import {Paths} from './frame/navigation';
 import {GalleryPaths} from './pages/Gallery/GalleryPaths';
-import names from './pages/names.json' with {type: 'json'};
+import names from './frame/navigation/names.json' with {type: 'json'};
 
 const demoTabs: Record<keyof typeof names.demos, string> = {
   accordions: 'pages/Demos/Accordions/tab.tsx',

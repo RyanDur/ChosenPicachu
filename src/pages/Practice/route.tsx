@@ -4,7 +4,7 @@ import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Page, PageError} from '@frame/page';
 import {Concern} from '@pages/Record/moments/concerns';
 import NoSuchRoom from '@pages/NoRoom/route';
-import names from '@pages/names.json';
+import names from '@frame/navigation/names.json';
 import {PracticePage} from './PracticePage';
 import {concernAt} from './types';
 

@@ -4,7 +4,7 @@ The home page states what the site is for and what each language does; the recor
 
 ## What you can and cannot read
 
-You read the words as they stand in the components and the data they draw from (`src/pages/**/*.tsx`, `src/pages/names.json`, the moments and stories under `src/pages/Record`). You have no web tool, so you never judge whether a quotation is on its page or whether a claim about the field is true; those are the record rubric's and the designer's. You judge how the prose reads.
+You read the words as they stand in the components and the data they draw from (`src/pages/**/*.tsx`, `src/frame/navigation/names.json`, the moments and stories under `src/pages/Record`). You have no web tool, so you never judge whether a quotation is on its page or whether a claim about the field is true; those are the record rubric's and the designer's. You judge how the prose reads.
 
 ## Seven questions, in order
 
