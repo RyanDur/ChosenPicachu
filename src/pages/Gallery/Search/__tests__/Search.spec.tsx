@@ -4,7 +4,7 @@ import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
 import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {heldAICSuggestions, requestsAsked} from '@pages/Gallery/__test_support';
 import {heldSearch, searchBar} from '@pages/Gallery/Search/__test_support';
 import {aicSuggestionsOf} from '@pages/Gallery/__test_support/fixtures';

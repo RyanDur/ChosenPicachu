@@ -1,8 +1,8 @@
 import {FC, useEffect, useState} from 'react';
 import {asyncResult, has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
-import {useEnv} from '@frame/state';
-import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
+import {useEnv} from '@page';
+import {bannerChange, useBannerDispatch} from '@notices/Banners';
 import {Dials} from '../../Controls';
 import './TableFrame.css';
 

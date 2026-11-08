@@ -1,4 +1,4 @@
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {allChartKinds} from '@pages/Demos/Charts/kinds';
 import {practiceAddress} from '@pages/Practice/types';

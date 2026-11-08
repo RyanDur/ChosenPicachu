@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Clues, Design, Slices} from '../Recipe';
 import {DialNote, Exercise, Station} from '../Recipe';
-import {useArrival} from '@frame/navigation/arrival';
+import {useArrival} from '@navigation/arrival';
 import {ListControls} from './ListControls';
 import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';

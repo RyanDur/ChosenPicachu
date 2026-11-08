@@ -1,9 +1,9 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode, RefObject, SubmitEvent, SyntheticEvent, useContext, useEffect, useRef} from 'react';
 import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
-import {useEnv, usePageName} from '@frame/state';
+import {useEnv, usePageName} from '@page';
 import {useHydrated} from '@components';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';

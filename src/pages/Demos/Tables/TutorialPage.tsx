@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
-import {useArrival} from '@frame/navigation/arrival';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {useArrival} from '@navigation/arrival';
 import {demoAddress, DemoTopics, topicNames} from '../types';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';

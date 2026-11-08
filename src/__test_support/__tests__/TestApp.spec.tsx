@@ -2,8 +2,8 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Route} from 'react-router';
 import * as schema from 'schemawax';
-import {Tabs} from '@frame/navigation/Tabs';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
+import {Tabs} from '@navigation/Tabs';
+import {useSearchParamsObject} from '@navigation/search-params';
 import {TestApp} from '../TestApp';
 
 const doors = [{display: 'First', param: 'first', to: '?tab=first'}, {display: 'Second', param: 'second', to: '?tab=second'}];

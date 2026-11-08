@@ -1,7 +1,7 @@
 import {createSearchParams} from 'react-router';
 import * as schema from 'schemawax';
 import {Maybe} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {User} from './profile';
 
 export type Opened =

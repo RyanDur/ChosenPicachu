@@ -1,13 +1,13 @@
 import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {anyRequestFailsToConnect} from '@__test_support/server';
-import {env} from '@frame/state';
+import {env} from '@transport';
 import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {test} from 'vitest';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {site} from '@pages/__test_support';
 import {heldAICAllArtResponse, requestsAnswered, setupAICAllArtResponse, galleryWall} from '@pages/Gallery/__test_support';
 

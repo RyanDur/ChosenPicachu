@@ -1,10 +1,10 @@
 import {FC} from 'react';
 import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
-import {Header, Listing, Page, PageError} from '@frame/page';
+import {Header, Listing, Page, PageError} from '@page';
 import {Concern} from '@pages/Record/moments/concerns';
 import {Room as NoSuchRoom} from '@pages/NoRoom/route';
-import names from '@frame/navigation/names.json';
+import names from '@navigation/names.json';
 import {PracticePage} from './PracticePage';
 import {concernAt} from './types';
 

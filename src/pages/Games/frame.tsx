@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {Header, Page, PageError} from '@frame/page';
-import names from '@frame/navigation/names.json';
+import {Header, Page, PageError} from '@page';
+import names from '@navigation/names.json';
 
 export const gamesHeader = <Header title="Play Games" listed={names.games}/>;
 

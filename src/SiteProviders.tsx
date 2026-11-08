@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
-import {EnvProvider} from '@frame/state';
-import {OpeningFragmentProvider} from '@frame/navigation/arrival';
-import {Environment} from '@frame/state';
+import {Environment} from '@transport';
+import {EnvProvider} from '@page';
+import {OpeningFragmentProvider} from '@navigation/arrival';
 
 type Props = PropsWithChildren<{readonly env: Environment}>;
 

@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import {repository} from '@frame/navigation';
+import {repository} from '@navigation';
 
 const oneDirection = /^One direction\./;
 const twoTracks = /^Two tracks\./;

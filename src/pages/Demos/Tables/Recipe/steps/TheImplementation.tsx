@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {repository} from '@frame/navigation';
+import {repository} from '@navigation';
 import {Tell} from '../../../Recipe';
 import type {World} from '../../../Controls';
 

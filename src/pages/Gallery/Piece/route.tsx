@@ -1,11 +1,11 @@
 import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
-import {Header, Listing, Page} from '@frame/page';
+import {Paths} from '@navigation';
+import {Header, Listing, Page} from '@page';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';
-import names from '@frame/navigation/names.json';
+import names from '@navigation/names.json';
 import {ArtGalleryPiecePage} from '../ArtGalleryPiecePage';
 import {GalleryError} from '../GalleryError';
 import {Art} from '@pages/Gallery/museums';

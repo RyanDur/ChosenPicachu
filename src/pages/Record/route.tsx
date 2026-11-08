@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Header, Page, PageError} from '@frame/page';
+import {Header, Page, PageError} from '@page';
 import {RecordPage} from './RecordPage';
 import {recordListing} from './listing';
 import {inOrder} from './moments/moments';

@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Link} from 'react-router';
-import {Paths} from '@frame/navigation';
-import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
+import {Paths} from '@navigation';
+import {bannerChange, useBannerDispatch} from '@notices/Banners';
 
 const closed = 'This room is closed.';
 

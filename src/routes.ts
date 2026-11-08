@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {NonIndexRouteObject} from 'react-router';
-import {Paths} from '@frame/navigation';
-import names from '@frame/navigation/names.json';
+import {Paths} from '@navigation';
+import names from '@navigation/names.json';
 import {GalleryPaths} from './pages/Gallery/GalleryPaths';
 import {ErrorBoundary, HydrateFallback, Root} from './root';
 

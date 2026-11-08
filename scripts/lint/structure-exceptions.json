@@ -155,7 +155,7 @@
     "src/pages/Record/storyAddress.ts"
   ],
   "through-index": [
-    "src/frame/page/SideNav.tsx",
+    "src/page/SideNav.tsx",
     "src/pages/Demos/Accordions/Explained.tsx",
     "src/pages/Demos/Charts/PriceChart/PriceChart.tsx",
     "src/pages/Demos/Charts/coinbase/history.ts",

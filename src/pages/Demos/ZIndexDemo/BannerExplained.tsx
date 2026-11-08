@@ -1,14 +1,14 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsOnceHydrated} from '@frame/navigation/search-params';
+import {useSearchParamsOnceHydrated} from '@navigation/search-params';
 import {Snippet, lines, carve} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {fixedBannerLosesHeading, whatElseFormsHeading} from './part-headings';
 import {storyKeys} from '../Recipe';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
-import bannersSource from '@frame/notices/Banners/Banners.tsx?sample';
-import bannersCss from '@frame/notices/Banners/Banners.css?sample';
+import bannersSource from '@notices/Banners/Banners.tsx?sample';
+import bannersCss from '@notices/Banners/Banners.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');

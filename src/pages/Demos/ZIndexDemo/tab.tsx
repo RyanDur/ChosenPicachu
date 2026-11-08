@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
-import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {bannerChange, useBannerDispatch} from '@notices/Banners';
 import {useControls} from '../Controls';
 import {BannerExplained} from './BannerExplained';
 import {cardOneParam} from './card-one';

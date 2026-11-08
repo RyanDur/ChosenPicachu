@@ -1,5 +1,5 @@
 import {Maybe, maybe} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 
 export enum DemoTopics {
   accordions = 'accordions',

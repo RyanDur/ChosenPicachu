@@ -1,6 +1,6 @@
 import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
 import {Maybe, maybe} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 
 export const practiceAddress = (concern: Concern): string => `${Paths.practice}${concernId(concern)}/`;
 

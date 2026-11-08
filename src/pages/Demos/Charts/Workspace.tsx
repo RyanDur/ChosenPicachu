@@ -2,7 +2,7 @@ import {Entry, Item, Menu} from '@components/Menu';
 import {FC, useState} from 'react';
 import {generatePath, Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {ChartKind, matchChartKind} from './kinds';
 import {lampOf, statusCopy} from './live-trades';
 import {classNames} from '@components';

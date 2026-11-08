@@ -1,5 +1,5 @@
-import names from '@frame/navigation/names.json';
-import type {Listing} from '@frame/page';
+import names from '@navigation/names.json';
+import type {Listing} from '@page';
 import {spelledOut} from './moments/spelled-out';
 
 export const recordListing = (count: number): Listing => ({

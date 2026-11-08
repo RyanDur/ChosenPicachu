@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
+import {useSearchParamsObject} from '@navigation/search-params';
 import {Opened, openings} from './openings';
 import {usersSelectors} from './usersSelectors';
 import {useUsersSelector} from './useUsersSelector';

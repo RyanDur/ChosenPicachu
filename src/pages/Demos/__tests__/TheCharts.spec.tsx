@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {

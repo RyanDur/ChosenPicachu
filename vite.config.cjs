@@ -18,7 +18,9 @@ const at = path => join(__dirname, path);
 
 const aliases = {
   '@pages': at('./src/pages'),
-  '@frame': at('./src/frame'),
+  '@navigation': at('./src/navigation'),
+  '@notices': at('./src/notices'),
+  '@page': at('./src/page'),
   '@components': at('./src/components'),
   '@transport': at('./src/transport'),
   '@__test_support': at('./src/__test_support')

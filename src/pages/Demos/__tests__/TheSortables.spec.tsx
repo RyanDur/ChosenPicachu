@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@frame/navigation';
+import {Paths} from '@navigation';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test_support';
 import {render, waitFor, within} from '@testing-library/react';
