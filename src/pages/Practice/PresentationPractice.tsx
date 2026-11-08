@@ -187,8 +187,9 @@ export const PresentationPractice: FC = () =>
         their widest values, a touch header’s two 44px controls, a box that scrolls itself so the page does not;</li>
       <li className="paragraph">a drawing’s width, in pixels, to match its view box.</li>
     </ul>
-    <p className="paragraph"><a className="signpost" href={sheet('timing')}>timing.css</a> names the curve three style
-      sheets move along and how long a lift takes, half a second.</p>
+    <p className="paragraph">The third token file, <a className="signpost" href={sheet('timing')}>timing.css</a>,
+      names the easing curve that transitions in three style sheets follow, and how long a gallery piece takes to rise
+      under the pointer or the keyboard’s focus: half a second.</p>
     <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in
       the column.</p>
     <p className="paragraph">I write inline only the values the code works out at runtime, mostly as{' '}
