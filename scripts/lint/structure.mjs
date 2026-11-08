@@ -150,14 +150,14 @@ const valuesExportedBy = node => {
   return node.specifiers.filter(specifier => specifier.exportKind !== 'type').length;
 };
 
-const oneExport = ruleWith('one-export', 'a file exports one module function or one component, and its types', (file, report) => {
+const oneExport = ruleWith('one-export', 'a file exports one module or one component, and its types', (file, report) => {
   if (isIndex(file) || routeModules.has(file)) return {};
   let count = 0;
   return {
     'ExportNamedDeclaration, ExportDefaultDeclaration, ExportAllDeclaration': node => {
       const values = valuesExportedBy(node);
       count += values;
-      if (count > 1 && values > 0) report(node, 'a file exports one module function or one component, and this is a second (AGENTS.md, Code style)');
+      if (count > 1 && values > 0) report(node, 'a file exports one module or one component, and this is a second (AGENTS.md, Code style)');
     }
   };
 });
