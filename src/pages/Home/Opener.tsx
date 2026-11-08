@@ -23,9 +23,8 @@ export const Opener: FC = () =>
       the browser and the standards it follows. The platform keeps getting better, too, because the people who write the
       standards listen to developers, watch what they build, and adopt what proves itself across the browsers. Putting
       the job where it belongs lets each language do what it already does.</p>
-    <p className="thesis paragraph"><Link className="signpost" to={Paths.record}>The Record</Link> tells each
-      language’s full history in three
-      stories: <Link className="signpost" to={storyAddress('Structure')}>the Structure
+    <p className="thesis paragraph"><Link className="signpost" to={Paths.record}>The Record</Link> tells how
+      each language came to its job in three stories: <Link className="signpost" to={storyAddress('Structure')}>the Structure
         story</Link>, <Link className="signpost" to={storyAddress('Presentation')}>the Presentation
           story</Link> and <Link className="signpost" to={storyAddress('Behavior')}>the Behavior story</Link>. Then
       it sets out every moment in order, reads the three languages together, and names the pattern they follow, which
