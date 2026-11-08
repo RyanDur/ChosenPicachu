@@ -94,7 +94,8 @@
     }
   }
 
-  .reset {
+  .reset,
+  .edit {
     grid-area: reset;
   }
 
