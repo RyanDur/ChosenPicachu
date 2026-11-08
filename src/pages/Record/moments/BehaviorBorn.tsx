@@ -2,71 +2,71 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
-const interview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
-const popularity = 'https://brendaneich.com/2008/04/popularity/';
-const infoworld = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
-const keith = 'https://adactio.com/journal/1595';
+const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
+const eichPopularity = 'https://brendaneich.com/2008/04/popularity/';
+const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
+const hamToHamster = 'https://adactio.com/journal/1595';
 
 export const BehaviorBorn: FC = () =>
-  <Moment of={moments.behaviorBorn}
-    tells={<>Brendan Eich <a className="signpost" href={interview}>wrote the interpreter in about ten days</a> in May
-      1995, for a scripting language that could <a className="signpost" href={interview}>“touch elements of the page,
-        change their properties, and respond to events”</a>: a <a className="signpost" href={interview}>glue
+  <Moment heading={moments.headings.behaviorBorn}
+    summary={<>Brendan Eich <a className="signpost" href={computerworldInterview}>wrote the interpreter in about ten days</a> in May
+      1995, for a scripting language that could <a className="signpost" href={computerworldInterview}>“touch elements of the page,
+        change their properties, and respond to events”</a>: a <a className="signpost" href={computerworldInterview}>glue
           language</a> for web designers and part-time programmers, beside Java for the components.</>}>
     <p className="paragraph muted-ink hyphenated">Eich states the need in one
-      sentence: <a className="signpost" href={interview}>“The lack of programmability of Web pages made them static,
+      sentence: <a className="signpost" href={computerworldInterview}>“The lack of programmability of Web pages made them static,
         text-heavy, with at best images in tables or floating on the right or left.”</a> With a language that could
-      touch the page, <a className="signpost" href={interview}>“we envisioned a much livelier Web consisting of
+      touch the page, <a className="signpost" href={computerworldInterview}>“we envisioned a much livelier Web consisting of
         pages that acted more like applications”</a>. The belief, his and Marc Andreessen’s with Bill Joy of Sun,
-      was that HTML needed a scripting language, <a className="signpost" href={interview}>“a programming
+      was that HTML needed a scripting language, <a className="signpost" href={computerworldInterview}>“a programming
         language that was easy to use by amateurs and novices, where the code could be written directly in
         source form as part of the Web page markup”</a>. He calls it
-      a <a className="signpost" href={interview}>“glue
-        language”</a> for <a className="signpost" href={interview}>“the Web designers and part time
+      a <a className="signpost" href={computerworldInterview}>“glue
+        language”</a> for <a className="signpost" href={computerworldInterview}>“the Web designers and part time
           programmers who were building Web content from components such as images, plugins, and Java
-          applets”</a>, with Java as the <a className="signpost" href={interview}>“component
+          applets”</a>, with Java as the <a className="signpost" href={computerworldInterview}>“component
             language”</a>.</p>
     <p className="paragraph muted-ink hyphenated">Eich joined Netscape on 4 April 1995 to
-      put <a className="signpost" href={interview}>“the Scheme programming language, or something like it”</a> into the
-      browser; <a className="signpost" href={popularity}>“Scheme was the bait”</a>, he wrote later. Netscape was
+      put <a className="signpost" href={computerworldInterview}>“the Scheme programming language, or something like it”</a> into the
+      browser; <a className="signpost" href={eichPopularity}>“Scheme was the bait”</a>, he wrote later. Netscape was
       negotiating with Sun to put Java in Navigator, so the debate inside the company became why two languages at
       all. The answer was two audiences: component authors writing C++ or Java, and the
-      scripters, <a className="signpost" href={popularity}>“amateur or pro, who would write code directly embedded
+      scripters, <a className="signpost" href={eichPopularity}>“amateur or pro, who would write code directly embedded
         in HTML”</a>. Upper engineering management ruled that the language
-      must <a className="signpost" href={popularity}>“look like Java”</a>, which ruled out Perl, Python and Tcl,
+      must <a className="signpost" href={eichPopularity}>“look like Java”</a>, which ruled out Perl, Python and Tcl,
       and Scheme with them.</p>
-    <p className="paragraph muted-ink hyphenated">He spent <a className="signpost" href={interview}>“about ten days in
+    <p className="paragraph muted-ink hyphenated">He spent <a className="signpost" href={computerworldInterview}>“about ten days in
       May 1995 developing the interpreter, including the built-in objects except for the Date class”</a>, which Ken
-      Smith wrote by translating Java’s java.util.Date to C, <a className="signpost" href={interview}>“unintentionally
+      Smith wrote by translating Java’s java.util.Date to C, <a className="signpost" href={computerworldInterview}>“unintentionally
         inheriting java.util.Date’s Y2K bugs in the process”</a>. The design was
-      then <a className="signpost" href={interview}>“frozen by necessity”</a>. Eich spent the rest of 1995
+      then <a className="signpost" href={computerworldInterview}>“frozen by necessity”</a>. Eich spent the rest of 1995
       embedding the engine in the browser and writing what became DOM level 0, the objects a script uses to
       reach windows, documents, forms, links and images and to respond to events. He
-      was <a className="signpost" href={interview}>“the lone JS developer at Netscape until mid-1996”</a>. He
-      names the ingredients himself, <a className="signpost" href={popularity}>“Scheme-ish first-class
+      was <a className="signpost" href={computerworldInterview}>“the lone JS developer at Netscape until mid-1996”</a>. He
+      names the ingredients himself, <a className="signpost" href={eichPopularity}>“Scheme-ish first-class
         functions and Self-ish (albeit singular) prototypes”</a>, and calls the Java influences, the Date bugs
       and the split between primitives and objects among
-      them, <a className="signpost" href={popularity}>“unfortunate”</a>.</p>
+      them, <a className="signpost" href={eichPopularity}>“unfortunate”</a>.</p>
     <p className="paragraph muted-ink hyphenated">The name took longer than the language. Mocha was Andreessen’s code
-      name. Netscape marketing <a className="signpost" href={interview}>“saw potential trademark conflicts”</a> and
-      had <a className="signpost" href={interview}>“a ‘live’ meme going in their naming”</a>, so the betas said
+      name. Netscape marketing <a className="signpost" href={computerworldInterview}>“saw potential trademark conflicts”</a> and
+      had <a className="signpost" href={computerworldInterview}>“a ‘live’ meme going in their naming”</a>, so the betas said
       LiveScript. In early December 1995 Netscape and Sun signed a license agreement and it became
-      JavaScript, <a className="signpost" href={infoworld}>“a complementary scripting language to go with Java”</a>,
-      pushed, in Eich’s words, <a className="signpost" href={infoworld}>“as a little brother to Java, as a
+      JavaScript, <a className="signpost" href={infoworldInterview}>“a complementary scripting language to go with Java”</a>,
+      pushed, in Eich’s words, <a className="signpost" href={infoworldInterview}>“as a little brother to Java, as a
         complementary language like Visual Basic was to C++”</a>. The audience
-      was <a className="signpost" href={infoworld}>“Web designers, people who may or may not have much
-        programming training”</a>, writing <a className="signpost" href={infoworld}>“a little snippet you
+      was <a className="signpost" href={infoworldInterview}>“Web designers, people who may or may not have much
+        programming training”</a>, writing <a className="signpost" href={infoworldInterview}>“a little snippet you
           could write, you could copy somebody else’s, you could learn as you went”</a>; you could, he
-      said, <a className="signpost" href={infoworld}>“buy it by the yard”</a>. Jeremy Keith’s line for
-      the family relationship stands: <a className="signpost" href={keith}>“Java is to JavaScript as
+      said, <a className="signpost" href={infoworldInterview}>“buy it by the yard”</a>. Jeremy Keith’s line for
+      the family relationship stands: <a className="signpost" href={hamToHamster}>“Java is to JavaScript as
         ham is to hamster.”</a></p>
-    <p className="paragraph muted-ink hyphenated">Some early adopters, <a className="signpost" href={interview}>“even in
+    <p className="paragraph muted-ink hyphenated">Some early adopters, <a className="signpost" href={computerworldInterview}>“even in
       late 1995 (Netscape 2’s beta period), built advanced Web apps using JS and frames in framesets, prefiguring the
       ‘Ajax’ or ‘Web 2.0’ style of development”</a>, the pattern the 2005 moment names. Then,
-      though, <a className="signpost" href={interview}>“the means to communicate with servers generally involved
+      though, <a className="signpost" href={computerworldInterview}>“the means to communicate with servers generally involved
         reloading whole Web pages”</a>. Eich counts himself among those who curse the
-      language, <a className="signpost" href={popularity}>“a quickie love-child of C and Self”</a>, and borrows
-      words he credits to Dr. Johnson: <a className="signpost" href={popularity}>“the part that is good is not
+      language, <a className="signpost" href={eichPopularity}>“a quickie love-child of C and Self”</a>, and borrows
+      words he credits to Dr. Johnson: <a className="signpost" href={eichPopularity}>“the part that is good is not
         original, and the part that is original is not good.”</a> And
-      still: <a className="signpost" href={popularity}>“JS beat Java on the client”</a>.</p>
+      still: <a className="signpost" href={eichPopularity}>“JS beat Java on the client”</a>.</p>
   </Moment>;

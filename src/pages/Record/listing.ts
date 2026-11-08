@@ -1,8 +1,10 @@
 import names from '@navigation/names.json';
 import type {Listing} from '@page';
-import {spelledOut} from './moments/spelled-out';
+import {spelled} from './moments';
 
-export const recordListing = (count: number): Listing => ({
+const ofRecord = (count: number): Listing => ({
   title: names.record.title,
-  description: names.record.descriptionTemplate.replace('{moments}', spelledOut(count))
+  description: names.record.descriptionTemplate.replace('{moments}', spelled.out(count))
 });
+
+export const listing = {ofRecord};

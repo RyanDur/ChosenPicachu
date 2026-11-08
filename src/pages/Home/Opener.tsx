@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@navigation';
-import {storyAddress} from '@pages/Record/storyAddress';
+import {recordAddress} from '@pages/Record';
 
 export const Opener: FC = () =>
   <header className="opening">
@@ -24,9 +24,9 @@ export const Opener: FC = () =>
       standards listen to developers, watch what they build, and adopt what proves itself across the browsers. Putting
       the job where it belongs lets each language do what it already does.</p>
     <p className="thesis paragraph"><Link className="signpost" to={Paths.record}>The Record</Link> tells how
-      each language came to its job in three stories: <Link className="signpost" to={storyAddress('Structure')}>the Structure
-        story</Link>, <Link className="signpost" to={storyAddress('Presentation')}>the Presentation
-          story</Link> and <Link className="signpost" to={storyAddress('Behavior')}>the Behavior story</Link>. Then
+      each language came to its job in three stories: <Link className="signpost" to={recordAddress.ofStory('Structure')}>the Structure
+        story</Link>, <Link className="signpost" to={recordAddress.ofStory('Presentation')}>the Presentation
+          story</Link> and <Link className="signpost" to={recordAddress.ofStory('Behavior')}>the Behavior story</Link>. Then
       it sets out every moment in order, reads the three languages together, and names the pattern they follow, which
       HTML’s own design principles wrote down in 2007. <Link className="signpost"
       to={Paths.practice}>Practice</Link> shows how I organize each language, with a tab for each.</p>

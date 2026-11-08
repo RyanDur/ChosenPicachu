@@ -1,8 +1,6 @@
 import {maybe} from '@ryandur/sand';
 
-const ordered = <const Keys extends readonly string[]>(keys: Keys): Keys => keys;
-
-export const inOrder = ordered([
+const inOrder = [
   'need',
   'structureArrives',
   'webGoesPublic',
@@ -27,7 +25,7 @@ export const inOrder = ordered([
   'documentComesBack',
   'constantsNeedHome',
   'elementsArrive'
-]);
+] as const;
 
 export type MomentKey = typeof inOrder[number];
 
@@ -38,27 +36,27 @@ export type MomentDate =
   | {readonly kind: 'month'; readonly year: string; readonly month: Month}
   | {readonly kind: 'day'; readonly year: string; readonly month: Month; readonly day: number};
 
-export type Dated = Exclude<MomentDate, {kind: 'year'}>;
+export type DateWithMonth = Exclude<MomentDate, {kind: 'year'}>;
 
 export type MomentHeading = {date: MomentDate; title: string; id: string};
 
-export type Written =
+export type AuthoredDate =
   | {readonly year: string; readonly month?: never; readonly day?: never}
   | {readonly year: string; readonly month: Month; readonly day?: never}
   | {readonly year: string; readonly month: Month; readonly day: number};
 
-const dateOf = ({year, month, day}: Written): MomentDate => maybe(month).either(
+const dateOf = ({year, month, day}: AuthoredDate): MomentDate => maybe(month).either(
   (inMonth): MomentDate => maybe(day).either(
     (onDay): MomentDate => ({kind: 'day', year, month: inMonth, day: onDay}),
     (): MomentDate => ({kind: 'month', year, month: inMonth})),
   (): MomentDate => ({kind: 'year', year}));
 
-const named = (written: Written, title: string): MomentHeading =>
-  ({date: dateOf(written), title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
+const named = (authored: AuthoredDate, title: string): MomentHeading =>
+  ({date: dateOf(authored), title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
 
 const twoDigits = (part: number): string => String(part).padStart(2, '0');
 
-export const writtenAs = (date: MomentDate): string => {
+const isoDateOf = (date: MomentDate): string => {
   switch (date.kind) {
     case 'year': return date.year;
     case 'month': return `${date.year}-${twoDigits(date.month)}`;
@@ -68,9 +66,9 @@ export const writtenAs = (date: MomentDate): string => {
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export const monthOf = (date: Dated): string => months[date.month - 1];
+const monthOf = (date: DateWithMonth): string => months[date.month - 1];
 
-export const moments: Record<MomentKey, MomentHeading> = {
+const headings: Record<MomentKey, MomentHeading> = {
   need: named({year: '1989'}, 'CERN needs to share what it knows'),
   structureArrives: named({year: '1990'}, 'The information needs one interface'),
   webGoesPublic: named({year: '1991'}, 'The web needs collaborators'),
@@ -97,18 +95,20 @@ export const moments: Record<MomentKey, MomentHeading> = {
   elementsArrive: named({year: '2025'}, 'The elements need to arrive')
 };
 
-export type YearOfTwo = {
-  readonly tells: string;
+export type SharedYear = {
+  readonly summary: string;
 };
 
-export const yearsOfTwo: Partial<Record<string, YearOfTwo>> = {
+const sharedYears: Partial<Record<string, SharedYear>> = {
   '1995': {
-    tells: 'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
+    summary: 'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },
   '1996': {
-    tells: 'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4, which came the next year, CSS itself ran as JavaScript. In December 1996 CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.'
+    summary: 'Two concerns moved in 1996. Markup still carried presentation because nothing else could, Netscape’s tags multiplied the dialects, and in Navigator 4, which came the next year, CSS itself ran as JavaScript. In December 1996 CSS level 1 became a W3C Recommendation, the first standard for the look, ahead of every browser and set to stay ahead for years.'
   },
   '2014': {
-    tells: 'Two concerns moved in 2014. In July Flux’s code went public. Flux is a pattern in which data moves one way through a page instead of binding both ways. In October HTML5 became a W3C Recommendation, and the rules the browsers had been following were written down.'
+    summary: 'Two concerns moved in 2014. In July Flux’s code went public. Flux is a pattern in which data moves one way through a page instead of binding both ways. In October HTML5 became a W3C Recommendation, and the rules the browsers had been following were written down.'
   }
 };
+
+export const moments = {inOrder, headings, sharedYears, isoDateOf, monthOf};

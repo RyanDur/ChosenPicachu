@@ -2,49 +2,49 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
-const release = 'https://www.w3.org/2011/05/css-pr.html.en';
-const roadmap = 'https://www.w3.org/TR/2001/WD-css3-roadmap-20010523/';
-const color = 'https://www.w3.org/TR/2011/REC-css3-color-20110607/';
-const selectors = 'https://www.w3.org/TR/2011/REC-css3-selectors-20110929/';
-const namespaces = 'https://www.w3.org/TR/2011/REC-css3-namespace-20110929/';
+const cssInteroperability = 'https://www.w3.org/2011/05/css-pr.html.en';
+const css3Roadmap = 'https://www.w3.org/TR/2001/WD-css3-roadmap-20010523/';
+const cssColor3 = 'https://www.w3.org/TR/2011/REC-css3-color-20110607/';
+const selectors3 = 'https://www.w3.org/TR/2011/REC-css3-selectors-20110929/';
+const cssNamespaces = 'https://www.w3.org/TR/2011/REC-css3-namespace-20110929/';
 const mediaQueries = 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/';
 
 export const CssTwoOne: FC = () =>
-  <Moment of={moments.cssTwoOne}
-    tells={<>CSS 2.1, the correction of 1998’s CSS 2, became a Recommendation on 7 June 2011, with more than nine
-      thousand tests behind it, after what the W3C called <a className="signpost" href={release}>“many years for
+  <Moment heading={moments.headings.cssTwoOne}
+    summary={<>CSS 2.1, the correction of 1998’s CSS 2, became a Recommendation on 7 June 2011, with more than nine
+      thousand tests behind it, after what the W3C called <a className="signpost" href={cssInteroperability}>“many years for
         implementations and the specification to converge”</a>. From then on CSS has grown by modules, each advancing at
       its own pace.</>}>
     <p className="paragraph muted-ink hyphenated">W3C’s announcement of 7 June 2011 is
-      headed <a className="signpost" href={release}>“Cascading Style Sheets Standard Boasts Unprecedented
+      headed <a className="signpost" href={cssInteroperability}>“Cascading Style Sheets Standard Boasts Unprecedented
         Interoperability”</a>. Interoperability means the same style sheet produces the same page in different browsers,
       the thing CSS1 could not deliver in 1996, and the release says why the
-      wait: <a className="signpost" href={release}>“it took many years for implementations and the specification to
-        converge”</a>. It gives the number: <a className="signpost" href={release}>“More than 9000 CSS tests have
+      wait: <a className="signpost" href={cssInteroperability}>“it took many years for implementations and the specification to
+        converge”</a>. It gives the number: <a className="signpost" href={cssInteroperability}>“More than 9000 CSS tests have
           made it easier for designers to create style sheets that work across browsers, and across
           devices.”</a> Daniel Glazman, co-chair of the working group, answers the question he says people had
-      asked, <a className="signpost" href={release}>“Why is CSS 2.1 taking so long?”</a> His
-      answer: <a className="signpost" href={release}>“CSS 2.1 is a really large collection of formatting
+      asked, <a className="signpost" href={cssInteroperability}>“Why is CSS 2.1 taking so long?”</a> His
+      answer: <a className="signpost" href={cssInteroperability}>“CSS 2.1 is a really large collection of formatting
         features, and we had to not only carefully review and specify all the potential interactions between
         them, but also learn from existing implementations and of course tests. Time ensured quality and
         interoperability.”</a> Thirteen years between CSS 2 and its finished revision.</p>
-    <p className="paragraph muted-ink hyphenated">The same day W3C published <a className="signpost" href={color}>CSS
+    <p className="paragraph muted-ink hyphenated">The same day W3C published <a className="signpost" href={cssColor3}>CSS
       Color Module Level 3</a> as a Recommendation, and by June 2012 three more modules had
-      followed: <a className="signpost" href={selectors}>Selectors Level
-        3</a> and <a className="signpost" href={namespaces}>Namespaces</a> on 29 September 2011,
+      followed: <a className="signpost" href={selectors3}>Selectors Level
+        3</a> and <a className="signpost" href={cssNamespaces}>Namespaces</a> on 29 September 2011,
       and <a className="signpost" href={mediaQueries}>Media Queries</a> on 19 June 2012. The release says
-      W3C <a className="signpost" href={release}>“expects future additions to CSS to be organized as independent
+      W3C <a className="signpost" href={cssInteroperability}>“expects future additions to CSS to be organized as independent
         modules, allowing smaller, more focused feature sets to progress and stabilize at their own pace”</a>.
-      Peter Linss, the other co-chair, says the group <a className="signpost" href={release}>“can focus its
+      Peter Linss, the other co-chair, says the group <a className="signpost" href={cssInteroperability}>“can focus its
         efforts on rapidly advancing CSS with new modules”</a>. The reasoning had been set out in the
-      working group’s 2001 roadmap: <a className="signpost" href={roadmap}>“Rather than attempting to
+      working group’s 2001 roadmap: <a className="signpost" href={css3Roadmap}>“Rather than attempting to
         shove dozens of updates into a single monolithic specification, it will be much easier and more
         efficient to be able to update individual pieces of the specification”</a>. For small devices,
-      it adds, <a className="signpost" href={roadmap}>“it may be impractical to support all of
+      it adds, <a className="signpost" href={css3Roadmap}>“it may be impractical to support all of
         CSS”</a>. A module is one piece of the language with its own specification and its own
       tests.</p>
     <p className="paragraph muted-ink hyphenated">This is the shape CSS has had since: modules at levels, each
-      progressing, in the release’s words, <a className="signpost" href={release}>“at their own pace”</a>. CSS 1 was
+      progressing, in the release’s words, <a className="signpost" href={cssInteroperability}>“at their own pace”</a>. CSS 1 was
       declared finished while no browser rendered all of it. CSS 2.1 was declared finished with more than nine
       thousand tests behind it.</p>
   </Moment>;

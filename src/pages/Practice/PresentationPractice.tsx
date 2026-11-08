@@ -1,9 +1,8 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {styleInScriptAddress} from '@pages/Record/concertAddress';
+import {MomentLink, recordAddress} from '@pages/Record';
 import {repository} from '@navigation';
-import {presentation} from '@pages/Record/sources/presentation';
-import {MomentLink} from '@pages/Record/MomentLink';
+import {presentation} from '@pages/Record/sources';
 import {ColumnHeaderClassList} from './ClassList';
 import {WhereARuleLives} from './WhereARuleLives';
 
@@ -300,6 +299,6 @@ export const PresentationPractice: FC = () =>
       what it needs, in the names the design uses, the style sheet has become a pile of overrides. This test guards
       isolation: one component’s rules reach no other. Isolation is the last of the seven problems with CSS at scale
       that Christopher Chedeau listed in a 2014 talk. The
-      Record’s <Link className="signpost" to={styleInScriptAddress}>concert</Link> quotes his
+      Record’s <Link className="signpost" to={recordAddress.styleInScript}>concert</Link> quotes his
       list.</p>
   </>;

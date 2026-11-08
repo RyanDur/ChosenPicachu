@@ -1,35 +1,13 @@
 import {FC} from 'react';
 import {maybe, some} from '@ryandur/sand';
-import {Need} from './moments/Need';
-import {StructureArrives} from './moments/StructureArrives';
-import {PresentationLeavesHome} from './moments/PresentationLeavesHome';
-import {BehaviorBorn} from './moments/BehaviorBorn';
-import {NeedOutrunsStandards} from './moments/NeedOutrunsStandards';
-import {BrowsersAgree} from './moments/BrowsersAgree';
-import {ZenGarden} from './moments/ZenGarden';
-import {BrowsersTakePen} from './moments/BrowsersTakePen';
-import {PageBecomesApplication} from './moments/PageBecomesApplication';
-import {SomeoneNeedsComponents} from './moments/SomeoneNeedsComponents';
-import {Html5SaysIt} from './moments/Html5SaysIt';
-import {OneDirection} from './moments/OneDirection';
-import {DocumentComesBack} from './moments/DocumentComesBack';
-import {WebGoesPublic} from './moments/WebGoesPublic';
-import {HtmlTwo} from './moments/HtmlTwo';
-import {CssOne} from './moments/CssOne';
-import {WiredRedesign} from './moments/WiredRedesign';
-import {CssTwoOne} from './moments/CssTwoOne';
-import {EcmaScript} from './moments/EcmaScript';
-import {EsFive} from './moments/EsFive';
-import {DefaultsAgree} from './moments/DefaultsAgree';
-import {ConstantsNeedHome} from './moments/ConstantsNeedHome';
-import {ElementsArrive} from './moments/ElementsArrive';
-import {Frameworks} from './moments/Frameworks';
-import {inOrder, MomentKey, moments, YearOfTwo, yearsOfTwo} from './moments/moments';
-import {concernsOf} from './moments/concerns';
-import {ConcernsInTheYear} from './moments/Moment';
-import {spelledOut} from './moments/spelled-out';
+import {
+  Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
+  BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
+  WebGoesPublic, HtmlTwo, CssOne, WiredRedesign, CssTwoOne, EcmaScript, EsFive, DefaultsAgree, ConstantsNeedHome,
+  ElementsArrive, Frameworks, concerns, ConcernsInTheYear, MomentKey, moments, SharedYear, spelled
+} from './moments';
 
-const stories: Record<MomentKey, FC> = {
+const momentComponents: Record<MomentKey, FC> = {
   need: Need,
   structureArrives: StructureArrives,
   webGoesPublic: WebGoesPublic,
@@ -56,35 +34,42 @@ const stories: Record<MomentKey, FC> = {
   elementsArrive: ElementsArrive
 };
 
-type Entry = {readonly kind: 'moment'; readonly key: MomentKey} | {readonly kind: 'year'; readonly year: string; readonly of: readonly MomentKey[]; readonly told: YearOfTwo};
+type Entry = {readonly kind: 'moment'; readonly key: MomentKey}
+  | {readonly kind: 'year'; readonly year: string; readonly moments: readonly MomentKey[]; readonly sharedYear: SharedYear};
 
-const entries = inOrder.reduce<readonly Entry[]>((told, key) => {
-  const {year} = moments[key].date;
-  return maybe(yearsOfTwo[year]).either(
-    (ofTwo): readonly Entry[] => told.some(entry => entry.kind === 'year' && entry.year === year) ? told : [...told, {kind: 'year', year, of: inOrder.filter(other => moments[other].date.year === year), told: ofTwo}],
-    (): readonly Entry[] => [...told, {kind: 'moment', key}]);
+const entries = moments.inOrder.reduce<readonly Entry[]>((entriesSoFar, key) => {
+  const {year} = moments.headings[key].date;
+  return maybe(moments.sharedYears[year]).either(
+    (sharedYear): readonly Entry[] => entriesSoFar.some(entry => entry.kind === 'year' && entry.year === year)
+      ? entriesSoFar
+      : [...entriesSoFar, {
+        kind: 'year', year, moments: moments.inOrder.filter(other => moments.headings[other].date.year === year), sharedYear
+      }],
+    (): readonly Entry[] => [...entriesSoFar, {kind: 'moment', key}]);
 }, []);
 
-const Story: FC<{of: MomentKey}> = ({of}) => {
-  const Told = stories[of];
-  return <Told/>;
+const Story: FC<{moment: MomentKey}> = ({moment}) => {
+  const MomentComponent = momentComponents[moment];
+  return <MomentComponent/>;
 };
 
 const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}${title.slice(1)}`;
 
 const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
 
-const Year: FC<{year: string; of: readonly MomentKey[]; told: YearOfTwo}> = ({year, of, told: {tells}}) =>
+const Year: FC<{year: string; moments: readonly MomentKey[]; sharedYear: SharedYear}> = ({
+  year, moments: inTheYear, sharedYear: {summary}
+}) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
-    <h3 className="beat-title sub-title void-dot-before">{joinedTitle(of.map(key => moments[key].title))}</h3>
-    <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
+    <h3 className="moment-title sub-title void-dot-before">{joinedTitle(inTheYear.map(key => moments.headings[key].title))}</h3>
+    <p className="moment-summary paragraph muted-ink hyphenated">{summary}</p>
     <details className="fuller-story" name="record">
       <summary className="prompt caption">the fuller story</summary>
       <ol className="moments-of-a-year timeline" aria-label={year}>
-        {of.map(key =>
-          <ConcernsInTheYear.Provider key={key} value={some(concernsOf(key))}>
-            <Story of={key}/>
+        {inTheYear.map(key =>
+          <ConcernsInTheYear.Provider key={key} value={some(concerns.ofMoment(key))}>
+            <Story moment={key}/>
           </ConcernsInTheYear.Provider>)}
       </ol>
     </details>
@@ -95,12 +80,12 @@ export const Timeline: FC = () =>
     <h2 className="record-title title" id="the-record">How the web got its languages</h2>
     <ol className="timeline" aria-label="the timeline">
       {entries.map(entry => entry.kind === 'moment'
-        ? <Story key={entry.key} of={entry.key}/>
-        : <Year key={entry.year} year={entry.year} of={entry.of} told={entry.told}/>)}
+        ? <Story key={entry.key} moment={entry.key}/>
+        : <Year key={entry.year} year={entry.year} moments={entry.moments} sharedYear={entry.sharedYear}/>)}
     </ol>
     <p className="sub-title">
-      Read the titles again, top to bottom: it is one sentence said {spelledOut(inOrder.length)} ways. Someone needs
-      something, the community answers, and the platform learns the answer. The concert below reads the moments
+      Read the titles again, top to bottom: it is one sentence said {spelled.out(moments.inOrder.length)} ways. Someone
+      needs something, the community answers, and the platform learns the answer. The concert below reads the moments
       together.
     </p>
   </section>;

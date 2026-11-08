@@ -2,13 +2,13 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
 import {moments} from './moments';
-import {presentation} from '../sources/presentation';
+import {presentation} from '../sources';
 
 const {resetReasoning, resetReloaded, resetCss, aboutNormalizeCss, normalizeTags} = presentation;
 
 export const DefaultsAgree: FC = () =>
-  <Moment of={moments.defaultsAgree}
-    tells={<>Every browser shipped its own defaults for margins, line heights and headings, and no two agreed, so the
+  <Moment heading={moments.headings.defaultsAgree}
+    summary={<>Every browser shipped its own defaults for margins, line heights and headings, and no two agreed, so the
       same style sheet drew a different page in each. Authors answered with a reset, a style sheet that zeroed the
       defaults before their own began; the platform answered later, with tests of its own.</>}>
     <p className="paragraph muted-ink hyphenated">Eric Meyer gave the reason in April
@@ -26,7 +26,7 @@ export const DefaultsAgree: FC = () =>
       that would <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather
         than erasing them”</a> and fix only what differed between browsers.</p>
     <p className="paragraph muted-ink hyphenated">The browsers were tested against one another in the end, which
-      is <Link className="signpost" to={`#${moments.cssTwoOne.id}`}>the 2011 moment</Link>: more than nine thousand
+      is <Link className="signpost" to={`#${moments.headings.cssTwoOne.id}`}>the 2011 moment</Link>: more than nine thousand
       tests behind CSS 2.1, and the same style sheet drawing the same page. A reset is still the first file this
       site’s style sheets import. The site keeps it for the few defaults that still differ and the ones it wants
       gone.</p>

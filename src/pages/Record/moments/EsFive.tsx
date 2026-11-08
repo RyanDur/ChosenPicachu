@@ -2,47 +2,47 @@ import {FC} from 'react';
 import {Moment} from './Moment';
 import {moments} from './moments';
 
-const editions = 'https://ecma-international.org/publications-and-standards/standards/ecma-262/';
+const ecma262Editions = 'https://ecma-international.org/publications-and-standards/standards/ecma-262/';
 const fifthEdition = 'https://262.ecma-international.org/5.1/';
 const versionHistory = 'https://en.wikipedia.org/wiki/ECMAScript_version_history';
-const harmony = 'https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html';
-const process = 'https://tc39.es/process-document/';
+const eichHarmony = 'https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html';
+const tc39Process = 'https://tc39.es/process-document/';
 const actionScript = 'https://en.wikipedia.org/wiki/ActionScript';
-const tamarin = 'https://en.wikipedia.org/wiki/Tamarin_(software)';
+const tamarinEngine = 'https://en.wikipedia.org/wiki/Tamarin_(software)';
 const flashPlayer = 'https://en.wikipedia.org/wiki/Adobe_Flash_Player';
-const popularity = 'https://brendaneich.com/2008/04/popularity/';
+const eichPopularity = 'https://brendaneich.com/2008/04/popularity/';
 
 export const EsFive: FC = () =>
-  <Moment of={moments.esFive}
-    tells={<>Ten years after the third edition, the language’s standard moved. The fourth edition was never published as
-      a standard; a draft of it had already shipped in Flash as ActionScript 3, and the committee set it aside in 2008.
-      The fifth, published on 3 December 2009, was the smaller step: strict mode, JSON, accessor properties. From 2015
-      an edition has come every year.</>}>
+  <Moment heading={moments.headings.esFive}
+    summary={<>Ten years after the third edition, the language’s standard moved. The fourth edition was never published
+      as a standard; a draft of it had already shipped in Flash as ActionScript 3, and the committee set it aside in
+      2008. The fifth, published on 3 December 2009, was the smaller step: strict mode, JSON, accessor properties. From
+      2015 an edition has come every year.</>}>
     <p className="paragraph muted-ink hyphenated">Ecma never published a fourth edition. Its own page records that the
-      number <a className="signpost" href={editions}>“was reserved but not used in the Ecma publication process”</a>,
-      and that <a className="signpost" href={editions}>“Therefore ‘ECMA-262 Edition 4’ as an Ecma International
+      number <a className="signpost" href={ecma262Editions}>“was reserved but not used in the Ecma publication process”</a>,
+      and that <a className="signpost" href={ecma262Editions}>“Therefore ‘ECMA-262 Edition 4’ as an Ecma International
         publication does not exist”</a>. Eich told the es-discuss list in August 2008 what had happened. The
-      committee <a className="signpost" href={harmony}>“has been split for over a year, with some members favoring
+      committee <a className="signpost" href={eichHarmony}>“has been split for over a year, with some members favoring
         ES4, a major fourth edition to ECMA-262, and others advocating ES3.1 based on the existing ECMA-262
         Edition 3 (ES3) specification”</a>. At a meeting in Oslo at the end of July the split ended, in a result
-      he labeled Harmony. The committee would <a className="signpost" href={harmony}>“Focus work on ES3.1 with
+      he labeled Harmony. The committee would <a className="signpost" href={eichHarmony}>“Focus work on ES3.1 with
         full collaboration of all parties, and target two interoperable implementations by early next
-        year”</a>. The step after it would <a className="signpost" href={harmony}>“be more modest than ES4 in
-          both semantic and syntactic innovation”</a>. And <a className="signpost" href={harmony}>“Some ES4
+        year”</a>. The step after it would <a className="signpost" href={eichHarmony}>“be more modest than ES4 in
+          both semantic and syntactic innovation”</a>. And <a className="signpost" href={eichHarmony}>“Some ES4
             proposals have been deemed unsound for the Web, and are off the table for good: packages,
             namespaces and early binding.”</a> His reason is one
-      sentence: <a className="signpost" href={harmony}>“A split committee is good for no one and
+      sentence: <a className="signpost" href={eichHarmony}>“A split committee is good for no one and
         nothing, least of all any language specs that might come out of it.”</a></p>
     <p className="paragraph muted-ink hyphenated">The fourth edition did not vanish; a draft of it shipped under another
       name. Adobe’s ActionScript 3, released in <a className="signpost" href={actionScript}>June 2006</a> with Flash
       Player 9, was a <a className="signpost" href={actionScript}>“Completely conforming implementation of the
-        ECMAScript fourth edition draft specification”</a>, and on <a className="signpost" href={tamarin}>7 November
+        ECMAScript fourth edition draft specification”</a>, and on <a className="signpost" href={tamarinEngine}>7 November
           2006</a> Adobe gave its ActionScript engine to Mozilla as Tamarin, meant to carry the fourth edition into
       the browsers. Eich says it in the same announcement: the
-      ideas <a className="signpost" href={harmony}>“going back to the first ES4 proposals in 1999, implemented
+      ideas <a className="signpost" href={eichHarmony}>“going back to the first ES4 proposals in 1999, implemented
         variously in JScript.NET and ActionScript, won’t make it into any ES standard”</a>. That language ran in
       the browsers through the Flash plugin. Eich’s own tally in 2008 was
-      that <a className="signpost" href={popularity}>“JS beat Java on the client, rivaled only by Flash,
+      that <a className="signpost" href={eichPopularity}>“JS beat Java on the client, rivaled only by Flash,
         which supports an offspring of JS,
         ActionScript.”</a> In <a className="signpost" href={flashPlayer}>April 2010</a> Steve Jobs published
       an open letter explaining why Apple would not support Flash on the iPhone, iPod Touch and iPad,
@@ -63,13 +63,13 @@ export const EsFive: FC = () =>
             enhanced error checking and program security”</a>. An accessor property is a property that runs
       a function when read or written. JSON is a format for sending objects as text. Strict mode is
       a stricter dialect a script opts into with one line.</p>
-    <p className="paragraph muted-ink hyphenated">The <a className="signpost" href={editions}>sixth edition, in June
+    <p className="paragraph muted-ink hyphenated">The <a className="signpost" href={ecma262Editions}>sixth edition, in June
       2015</a>, added classes and modules, defined <a className="signpost" href={versionHistory}>“in the same terms as
         ECMAScript 5 strict mode”</a>, with iterators and generators, arrow functions, let and const, promises and
       template literals. Since then an edition has shipped every year, the seventeenth in 2026. TC39, Ecma’s
       committee for the language, admits a feature to the standard at its last stage only
-      with <a className="signpost" href={process}>“Two compatible implementations which pass the Test262 acceptance
-        tests”</a>, and gathers the year’s finished features into <a className="signpost" href={process}>“a yearly
+      with <a className="signpost" href={tc39Process}>“Two compatible implementations which pass the Test262 acceptance
+        tests”</a>, and gathers the year’s finished features into <a className="signpost" href={tc39Process}>“a yearly
           standard publication”</a>. A standard that had stalled for ten years over one large change now ships what
       two engines have already proved, every year.</p>
   </Moment>;

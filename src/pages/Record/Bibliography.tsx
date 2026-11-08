@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {presentation} from './sources/presentation';
+import {presentation} from './sources';
 
 export const Bibliography: FC = () =>
   <section className="bibliography" aria-labelledby="the-research">

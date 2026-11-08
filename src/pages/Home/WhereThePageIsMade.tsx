@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {storyAddress} from '@pages/Record/storyAddress';
+import {recordAddress} from '@pages/Record';
 
 export const WhereThePageIsMade: FC = () =>
   <section className="closing trim-rule-above" aria-labelledby="where-the-page-is-made">
@@ -13,7 +13,7 @@ export const WhereThePageIsMade: FC = () =>
       the app’s, done by hand or designed around. This site is one, and it also renders each page ahead of time
       when it is built: GitHub Pages serves it as plain files, and it talks to GitHub’s APIs and the browser
       directly. How the web moved between the two, and back,
-      is <Link className="signpost" to={storyAddress('Behavior')}>the Behavior
+      is <Link className="signpost" to={recordAddress.ofStory('Behavior')}>the Behavior
         story</Link> on the Record. Knowing what HTML, CSS and the
       browser already do is what makes the trade visible: which jobs come free, which take work, and which are
       worth leaning into.</p>

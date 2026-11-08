@@ -1,16 +1,18 @@
 import {MomentKey} from './moments';
 
-export const concernsInOrder = ['Structure', 'Presentation', 'Behavior'] as const;
+const inOrder = ['Structure', 'Presentation', 'Behavior'] as const;
 
-export type Concern = typeof concernsInOrder[number];
+export type Concern = typeof inOrder[number];
 
-export const fromTheRecord: Record<Concern, readonly MomentKey[]> = {
+const momentsByConcern: Record<Concern, readonly MomentKey[]> = {
   'Structure': ['need', 'structureArrives', 'webGoesPublic', 'htmlTwo', 'needOutrunsStandards', 'browsersTakePen', 'someoneNeedsComponents', 'html5SaysIt', 'documentComesBack', 'elementsArrive'],
   'Presentation': ['presentationLeavesHome', 'needOutrunsStandards', 'cssOne', 'browsersAgree', 'wiredRedesign', 'zenGarden', 'defaultsAgree', 'cssTwoOne', 'someoneNeedsComponents', 'constantsNeedHome'],
   'Behavior': ['behaviorBorn', 'ecmaScript', 'pageBecomesApplication', 'esFive', 'frameworks', 'someoneNeedsComponents', 'oneDirection', 'documentComesBack']
 };
 
-export const concernsOf = (key: MomentKey): string =>
-  concernsInOrder.filter(concern => fromTheRecord[concern].includes(key)).join(', ');
+const ofMoment = (key: MomentKey): string =>
+  inOrder.filter(concern => momentsByConcern[concern].includes(key)).join(', ');
 
-export const concernId = (concern: Concern): string => concern.toLowerCase().split(' ').join('-');
+const idOf = (concern: Concern): string => concern.toLowerCase().split(' ').join('-');
+
+export const concerns = {inOrder, momentsByConcern, ofMoment, idOf};

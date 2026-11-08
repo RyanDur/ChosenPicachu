@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
-import {momentAddress} from '@pages/Record/MomentLink';
+import {recordAddress} from '@pages/Record';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {repository} from '@navigation';
 
@@ -13,7 +13,7 @@ describe('the Behavior practice tab', () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.link('July 2014 moment')).toHaveAttribute('href', momentAddress('oneDirection'));
+    expect(practicePage.link('July 2014 moment')).toHaveAttribute('href', recordAddress.ofMoment('oneDirection'));
   });
 
   test('should open the Behavior tab from its address', async () => {

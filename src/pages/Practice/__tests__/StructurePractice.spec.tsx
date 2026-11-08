@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths, repository} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
-import {momentAddress} from '@pages/Record/MomentLink';
+import {recordAddress} from '@pages/Record';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
 const tableOfContents = 'The page’s table of contents. Each landmark, with its element and, where it has one, its name.';
@@ -30,7 +30,7 @@ describe('the Structure practice tab', () => {
       ['search', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search'],
       ['progress', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress'],
       ['output', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output'],
-      ['October 2014 moment', momentAddress('html5SaysIt')]
+      ['October 2014 moment', recordAddress.ofMoment('html5SaysIt')]
     ]));
   });
 
@@ -168,7 +168,7 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
       ['Authoring Practices', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
       ['“If a specific landmark role is used more than once on a page, provide each instance of that landmark with a unique label.”', 'https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/'],
-      ['2004 moment', momentAddress('browsersTakePen')]
+      ['2004 moment', recordAddress.ofMoment('browsersTakePen')]
     ]));
   });
 

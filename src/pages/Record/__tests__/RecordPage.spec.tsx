@@ -582,7 +582,7 @@ describe('the record', () => {
     expect(recordPage.bridgeLink('the accordions')).toHaveAttribute('href', `${Paths.demos}accordions/`);
   });
 
-  test('should tell the concert after the timeline closes and before the tee-up', () => {
+  test('should tell the concert after the timeline closes and before the Record’s footer', () => {
     expect(outOfReadingOrder([
       recordPage.paragraphOpening(/^Read the titles again/),
       recordPage.concert(),

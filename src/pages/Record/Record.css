@@ -78,7 +78,7 @@
     padding-inline-start: var(--base-x-2);
   }
 
-  .beat-title::before {
+  .moment-title::before {
     content: '';
     position: absolute;
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--base-x-0_5));
@@ -114,7 +114,7 @@
     padding-inline-start: 0;
   }
 
-  .beat-heading {
+  .moment-heading {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -139,24 +139,24 @@
       padding-inline-start: 0;
     }
 
-    .moments-of-a-year .beat-heading {
+    .moments-of-a-year .moment-heading {
       flex-direction: column;
       align-items: start;
     }
 
-    .moments-of-a-year .beat-title::before,
+    .moments-of-a-year .moment-title::before,
     .moments-of-a-year .moment::after {
       content: none;
     }
   }
 
-  .beat-title {
+  .moment-title {
     align-self: baseline;
     margin: 0;
     text-wrap: balance;
   }
 
-  .beat-tells {
+  .moment-summary {
     margin: 0;
   }
 
@@ -208,7 +208,7 @@
     margin-inline-start: var(--base);
   }
 
-  .tee-up {
+  .record-footer {
     display: grid;
     gap: var(--base-x-1_5);
 
