@@ -2,25 +2,25 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {cellNeeds, columnHeld, driftOfColumn, driftOfRow, eagerTravel, Grab, motionStates, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, arrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLift, rowMarks, rowUnder, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn, shoveDistance, Survey, tableActions} from './model';
+import {cellNeeds, eagerTravel, Grab, motionStates, Moving, pixels, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, rowUnder, shoveDistance, Survey, tableActions, tableSelectors} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
   const {onRowMoved} = useBodyEvents();
-  const order = useTableSelector(selectOrder);
-  const columnCarried = useTableSelector(columnHeld(column));
-  const carried = useTableSelector(rowHeld(row));
-  const {settlingFrom, shoved} = useTableSelector(rowMarks(row));
-  const standing = useTableSelector(selectStanding);
-  const position = useTableSelector(positionOfRow(row));
-  const drag = useTableSelector(rowDrag(row));
-  const columnSeat = useTableSelector(seatOfColumn(column));
-  const rowSeat = useTableSelector(seatOfRow(row));
-  const columnDrift = useTableSelector(driftOfColumn(column));
-  const rowDrift = useTableSelector(driftOfRow(row));
-  const settling = useTableSelector(settlingOfRowIn(row, standing));
+  const order = useTableSelector(tableSelectors.selectOrder);
+  const columnCarried = useTableSelector(tableSelectors.columnHeld(column));
+  const carried = useTableSelector(tableSelectors.rowHeld(row));
+  const {settlingFrom, shoved} = useTableSelector(tableSelectors.rowMarks(row));
+  const standing = useTableSelector(tableSelectors.selectStanding);
+  const position = useTableSelector(tableSelectors.positionOfRow(row));
+  const drag = useTableSelector(tableSelectors.rowDrag(row));
+  const columnSeat = useTableSelector(tableSelectors.seatOfColumn(column));
+  const rowSeat = useTableSelector(tableSelectors.seatOfRow(row));
+  const columnDrift = useTableSelector(tableSelectors.driftOfColumn(column));
+  const rowDrift = useTableSelector(tableSelectors.driftOfRow(row));
+  const settling = useTableSelector(tableSelectors.settlingOfRowIn(row, standing));
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 

@@ -217,7 +217,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             ]}/>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(source, 'const {sorted, data} = useTableSelector(columnNamed', 'const {sorted, data} = useTableSelector(columnNamed'), gap,
+                ...carve.span(source, 'const {sorted, data} = useTableSelector(tableSelectors.columnNamed', '.orElse(tableSelectors.unknownColumn'), gap,
                 ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[

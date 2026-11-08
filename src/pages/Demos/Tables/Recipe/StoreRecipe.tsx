@@ -150,15 +150,15 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
       <Codes>
         <Snippet label="TS" lines={[
           ...carve.unit(contextSource, 'export const useTableSelector'), gap,
-          ...carve.unit(selectorsSource, 'export const columnNamed'), gap,
-          ...carve.unit(selectorsSource, 'export const positionOfRow'), gap,
-          ...carve.unit(selectorsSource, 'export const columnTravels'),
+          ...carve.unit(selectorsSource, 'const columnNamed'), gap,
+          ...carve.unit(selectorsSource, 'const positionOfRow'), gap,
+          ...carve.unit(selectorsSource, 'const columnTravels'),
           lines.aside('// the question is the name; the state stays in one file')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'const {sorted, data} = useTableSelector(columnNamed', 'const carried = useTableSelector(columnHeld'), gap,
-            ...carve.span(headerSource, 'const travels = useTableSelector(columnTravels', 'const travels = useTableSelector(columnTravels')
+            ...carve.span(headerSource, 'const {sorted, data} = useTableSelector(tableSelectors.columnNamed', 'const carried = useTableSelector(tableSelectors.columnHeld'), gap,
+            ...carve.span(headerSource, 'const travels = useTableSelector(tableSelectors.columnTravels', 'const travels = useTableSelector(tableSelectors.columnTravels')
           ]}/>
           : undefined}
       </Codes>

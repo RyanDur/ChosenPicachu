@@ -5,7 +5,6 @@
     "src/components/DragSortableTable/model/lift.ts",
     "src/components/DragSortableTable/model/looks.ts",
     "src/components/DragSortableTable/model/report.ts",
-    "src/components/DragSortableTable/model/selectors.ts",
     "src/components/DragSortableTable/model/sorting.ts",
     "src/components/DragSortableTable/model/survey.ts",
     "src/components/DragSortableTable/model/table-state.ts",

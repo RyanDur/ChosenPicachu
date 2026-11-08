@@ -3,7 +3,7 @@ import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@frame/page';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
-import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder, tableActions} from './model';
+import {tableActions, tableSelectors} from './model';
 import {
   grippedAt,
   measuredFloors,
@@ -15,10 +15,10 @@ import {
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
-  const order = useTableSelector(selectOrder);
-  const neighbour = useTableSelector(neighbourOfColumn(column));
-  const namedShare = useTableSelector(namedShareOfColumn(column));
-  const held = useTableSelector(columnGripped(column));
+  const order = useTableSelector(tableSelectors.selectOrder);
+  const neighbour = useTableSelector(tableSelectors.neighbourOfColumn(column));
+  const namedShare = useTableSelector(tableSelectors.namedShareOfColumn(column));
+  const held = useTableSelector(tableSelectors.columnGripped(column));
   const hydrated = useHydrated();
 
   const awaken = (table: HTMLTableElement): void =>

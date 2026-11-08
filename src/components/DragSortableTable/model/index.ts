@@ -9,7 +9,7 @@ export {columnLift, rowLift} from './lift';
 export {cellNeeds, headerCell, headerNeeds, motionStates, rowHeaderCell} from './looks';
 export type {Report} from './report';
 export {landingReport, moveReport} from './report';
-export {columnDrag, columnGripped, columnHeld, columnMarks, columnNamed, columnTravels, driftOfColumn, driftOfRow, namedShareOfColumn, neighbourOfColumn, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectColumnCount, selectOrder, selectReport, selectStanding, settlingOfColumnIn, settlingOfRowIn, unknownColumn, widthOfColumn} from './selectors';
+export {tableSelectors} from './selectors';
 export type {Direction} from './sorting';
 export {choices, directionOf} from './sorting';
 export type {TableStore} from './store';

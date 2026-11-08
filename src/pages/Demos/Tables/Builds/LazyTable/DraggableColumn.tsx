@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, columnDrag, ColumnDrag, columnHeld, columnLift, columnMarks, columnNamed, columnTravels, driftOfColumn, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn, tableActions} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, shoveDistance, Survey, tableActions, tableSelectors} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -11,18 +11,19 @@ import '@components/DragSortableTable/motion.css';
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
   const {onColumnMoved} = useHeaderEvents();
-  const order = useTableSelector(selectOrder);
-  const standing = useTableSelector(selectStanding);
-  const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
-  const width = useTableSelector(widthOfColumn(column));
-  const {settlingFrom, shoved} = useTableSelector(columnMarks(column));
-  const carried = useTableSelector(columnHeld(column));
-  const drag = useTableSelector(columnDrag(column));
-  const seat = useTableSelector(seatOfColumn(column));
-  const drift = useTableSelector(driftOfColumn(column));
+  const order = useTableSelector(tableSelectors.selectOrder);
+  const standing = useTableSelector(tableSelectors.selectStanding);
+  const {sorted, data} = useTableSelector(tableSelectors.columnNamed(column))
+    .orElse(tableSelectors.unknownColumn(column));
+  const width = useTableSelector(tableSelectors.widthOfColumn(column));
+  const {settlingFrom, shoved} = useTableSelector(tableSelectors.columnMarks(column));
+  const carried = useTableSelector(tableSelectors.columnHeld(column));
+  const drag = useTableSelector(tableSelectors.columnDrag(column));
+  const seat = useTableSelector(tableSelectors.seatOfColumn(column));
+  const drift = useTableSelector(tableSelectors.driftOfColumn(column));
   const view = useTableSelector(whole => whole);
-  const count = useTableSelector(selectColumnCount);
-  const travels = useTableSelector(columnTravels(column));
+  const count = useTableSelector(tableSelectors.selectColumnCount);
+  const travels = useTableSelector(tableSelectors.columnTravels(column));
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));
@@ -42,7 +43,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? interior(order.indexOf(drag.landing), count) : order.indexOf(column);
-      const settling = settlingOfColumnIn(column, movedTo(order, column, to))(view);
+      const settling = tableSelectors.settlingOfColumnIn(column, movedTo(order, column, to))(view);
       releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
         dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: movedTo(order, column, to)}));

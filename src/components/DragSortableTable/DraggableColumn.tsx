@@ -3,25 +3,26 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, columnDrag, ColumnDrag, columnHeld, columnLift, columnMarks, columnNamed, columnTravels, columnUnder, driftOfColumn, eagerTravel, Grab, headerCell, headerNeeds, interior, motionStates, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn, tableActions} from './model';
+import {arrows, ColumnDrag, columnLift, columnUnder, eagerTravel, Grab, headerCell, headerNeeds, interior, motionStates, Moving, pixels, PixelSizes, pointerTravel, shoveDistance, Survey, tableActions, tableSelectors} from './model';
 import './Header.css';
 import './motion.css';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
   const {onColumnMoved} = useHeaderEvents();
-  const order = useTableSelector(selectOrder);
-  const standing = useTableSelector(selectStanding);
-  const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
-  const width = useTableSelector(widthOfColumn(column));
-  const {settlingFrom, shoved} = useTableSelector(columnMarks(column));
-  const carried = useTableSelector(columnHeld(column));
-  const drag = useTableSelector(columnDrag(column));
-  const seat = useTableSelector(seatOfColumn(column));
-  const drift = useTableSelector(driftOfColumn(column));
-  const settling = useTableSelector(settlingOfColumnIn(column, order));
-  const count = useTableSelector(selectColumnCount);
-  const travels = useTableSelector(columnTravels(column));
+  const order = useTableSelector(tableSelectors.selectOrder);
+  const standing = useTableSelector(tableSelectors.selectStanding);
+  const {sorted, data} = useTableSelector(tableSelectors.columnNamed(column))
+    .orElse(tableSelectors.unknownColumn(column));
+  const width = useTableSelector(tableSelectors.widthOfColumn(column));
+  const {settlingFrom, shoved} = useTableSelector(tableSelectors.columnMarks(column));
+  const carried = useTableSelector(tableSelectors.columnHeld(column));
+  const drag = useTableSelector(tableSelectors.columnDrag(column));
+  const seat = useTableSelector(tableSelectors.seatOfColumn(column));
+  const drift = useTableSelector(tableSelectors.driftOfColumn(column));
+  const settling = useTableSelector(tableSelectors.settlingOfColumnIn(column, order));
+  const count = useTableSelector(tableSelectors.selectColumnCount);
+  const travels = useTableSelector(tableSelectors.columnTravels(column));
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));

@@ -82,8 +82,8 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
           <Snippet label="TS" lines={[
             ...carve.unit(sources.state, 'export const drift'), gap,
             ...carve.unit(sources.state, 'export const seatOffset'), gap,
-            ...carve.unit(sources.selectors, 'export const seatOfColumn'), gap,
-            ...carve.unit(sources.selectors, 'export const driftOfColumn'),
+            ...carve.unit(sources.selectors, 'const seatOfColumn'), gap,
+            ...carve.unit(sources.selectors, 'const driftOfColumn'),
             lines.aside('// the drift is carried in the drag; the seat is a selector over it and the order')
           ]}/>
           <Snippet label="CSS" lines={[
