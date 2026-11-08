@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useArrival} from '@components/OpeningFragment';
+import {useArrival} from '@frame/navigation/arrival';
 import {Tabs} from '@components/Tabs';
 import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
 import {practiceAddress} from './types';

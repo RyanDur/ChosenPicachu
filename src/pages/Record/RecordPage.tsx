@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useArrival} from '@components/OpeningFragment';
+import {useArrival} from '@frame/navigation/arrival';
 import {Quotation} from '@components/Quotation';
 import {Timeline} from './Timeline';
 import {Stories} from './Stories';

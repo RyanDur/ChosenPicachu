@@ -6,14 +6,16 @@ const framesBeforeLandingAnyway = 120;
 export type Measured = {readonly top: number; readonly pageHeight: number; readonly visible: boolean};
 export type Watch = {readonly last?: Measured; readonly held: number; readonly waited: number};
 
-export const watching: Watch = {held: 0, waited: 0};
+const watching: Watch = {held: 0, waited: 0};
 
 const unmoved = (now: Measured, last?: Measured): boolean =>
   last?.top === now.top && last.pageHeight === now.pageHeight;
 
-export const watched = (watch: Watch, now: Measured): Watch | 'land' => {
+const watched = (watch: Watch, now: Measured): Watch | 'land' => {
   const held = now.visible && unmoved(now, watch.last) ? watch.held + 1 : 0;
   return held >= framesHeldStill || watch.waited >= framesBeforeLandingAnyway
     ? 'land'
     : {last: now, held, waited: watch.waited + 1};
 };
+
+export const landing = {watching, watched};

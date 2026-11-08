@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import {DesignAsk, FlowTableRecipe, LayerMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
-import {useArrival} from '@components/OpeningFragment';
+import {useArrival} from '@frame/navigation/arrival';
 import {tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
 import '../Tutorials.css';

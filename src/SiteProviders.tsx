@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {EnvProvider} from '@frame/page';
-import {OpeningFragmentProvider} from '@components/OpeningFragment';
+import {OpeningFragmentProvider} from '@frame/navigation/arrival';
 import {Env} from '@env';
 
 type Props = PropsWithChildren<{readonly env: Env}>;

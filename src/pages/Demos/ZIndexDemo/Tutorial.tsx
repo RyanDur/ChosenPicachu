@@ -3,7 +3,7 @@ import {DemoTopics} from '../types';
 import {FC, useId} from 'react';
 import {Stories} from '../Recipe';
 import {useControls} from '../Controls';
-import {useArrival} from '@components/OpeningFragment';
+import {useArrival} from '@frame/navigation/arrival';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
 import {MultipleRecipe} from './Recipe/MultipleRecipe';

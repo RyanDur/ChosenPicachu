@@ -14,8 +14,6 @@
     "src/components/DragSortableTable/model/travel.ts",
     "src/components/DragSortableTable/useDragSortable.ts",
     "src/components/Menu/Menu.tsx",
-    "src/components/OpeningFragment/OpeningFragmentProvider.tsx",
-    "src/components/OpeningFragment/landing.ts",
     "src/components/Table/shares.ts",
     "src/components/Users/FriendsList/focus.ts",
     "src/components/Users/FriendsList/report.ts",

@@ -1,9 +1,9 @@
-import {Measured, Watch, watched, watching} from '../landing';
+import {landing, Measured, Watch} from '../landing';
 
 const at = (top: number, pageHeight: number, visible = true): Measured => ({top, pageHeight, visible});
 
 const after = (frames: readonly Measured[]): Watch | 'land' =>
-  frames.reduce<Watch | 'land'>((watch, frame) => watch === 'land' ? watch : watched(watch, frame), watching);
+  frames.reduce<Watch | 'land'>((watch, frame) => watch === 'land' ? watch : landing.watched(watch, frame), landing.watching);
 
 describe('the landing on a fragment', () => {
   test('should land once the target has held its place on the page for two frames', () => {

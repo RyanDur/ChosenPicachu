@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {NavigationType, useLocation, useNavigationType} from 'react-router';
 import {maybe, notEmpty} from '@ryandur/sand';
-import {useOpeningFragment} from './OpeningFragmentProvider';
-import {Measured, Watch, watched, watching} from './landing';
+import {useOpeningFragment} from './useOpeningFragment';
+import {landing, Measured, Watch} from './landing';
 
 const measured = (target: Element): Measured => ({
   top: target.getBoundingClientRect().top + window.scrollY,
@@ -10,9 +10,9 @@ const measured = (target: Element): Measured => ({
   visible: target.checkVisibility()
 });
 
-const whenItHoldsStill = (target: Element, land: () => void, watch: Watch = watching): void => {
+const whenItHoldsStill = (target: Element, land: () => void, watch: Watch = landing.watching): void => {
   requestAnimationFrame(() => {
-    const next = watched(watch, measured(target));
+    const next = landing.watched(watch, measured(target));
     if (next === 'land') {
       land();
     } else {
