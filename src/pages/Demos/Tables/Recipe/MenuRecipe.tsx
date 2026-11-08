@@ -48,7 +48,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           <Says>When the reader chooses a direction, the handler <code className="monospaced">dragSortable</code> wired
             to that button reads the button’s <code className="monospaced">value</code> attribute.{' '}
           <code className="monospaced">sorting.choiceOf</code> looks the value up and answers with a Maybe, as
-            the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: it holds a choice or nothing.{' '}
+            the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: the Maybe holds a choice or nothing.{' '}
           <code className="monospaced">map</code> calls <code className="monospaced">sortMenus.choose</code> only
             when it holds one.</Says>
           <Says>The handler passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code>{' '}
