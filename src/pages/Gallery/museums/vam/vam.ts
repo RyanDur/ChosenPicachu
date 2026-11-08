@@ -5,7 +5,7 @@ import {
   vamSchema
 } from '@pages/Gallery/museums/vam/types';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@env';
+import {env} from '@frame/state/env';
 import {maybe} from '@ryandur/sand';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';

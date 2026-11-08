@@ -11,7 +11,7 @@ import {
 import {art} from '@pages/Gallery/museums';
 import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
-import {env} from '@env';
+import {env} from '@frame/state/env';
 
 describe('Harvard as a source of art', () => {
   describe('a page of works', () => {

@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {anyRequestFailsToConnect} from '@__test_support/server';
-import {env} from '@env';
+import {env} from '@frame/state/env';
 import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';

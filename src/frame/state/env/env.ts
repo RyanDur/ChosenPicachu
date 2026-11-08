@@ -1,3 +1,5 @@
+import {unconfigured} from './unconfigured';
+
 export type Env = {
   tradeFeed: string;
   tradeProduct: string;
@@ -23,22 +25,6 @@ declare global {
     __env?: Env;
   }
 }
-
-export const unconfigured: Env = {
-  tradeFeed: '',
-  tradeProduct: '',
-  tradeHistory: '',
-  aicDomain: '',
-  aicPictures: '',
-  harvardDomain: '',
-  harvardAPIKey: '',
-  vamDomain: '',
-  vamPictures: '',
-  clevelandDomain: '',
-  usersDomain: '',
-  feedbackToken: '',
-  feedbackEndpoint: ''
-};
 
 // the build pre-renders the pages in Node, where there is no env.js, so they are drawn from the values env.js is built
 // from

@@ -15,7 +15,7 @@ import {
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, siteOpenedBy} from '../routes';
-import {Env, env} from '@env';
+import {Env, env} from '@frame/state/env';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{

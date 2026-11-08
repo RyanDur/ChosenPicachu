@@ -17,7 +17,6 @@ const autoprefixer = require('autoprefixer');
 const at = path => join(__dirname, path);
 
 const aliases = {
-  '@env': at('./src/env.ts'),
   '@pages': at('./src/pages'),
   '@frame': at('./src/frame'),
   '@components': at('./src/components'),

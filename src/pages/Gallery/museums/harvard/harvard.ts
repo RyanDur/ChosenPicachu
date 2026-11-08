@@ -6,7 +6,7 @@ import {
 } from '@pages/Gallery/museums/harvard/types';
 import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
-import {env} from '@env';
+import {env} from '@frame/state/env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';

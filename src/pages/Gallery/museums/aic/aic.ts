@@ -8,7 +8,7 @@ import {
 import {toQueryString} from '@transport/url';
 import {maybe} from '@ryandur/sand';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@env';
+import {env} from '@frame/state/env';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
