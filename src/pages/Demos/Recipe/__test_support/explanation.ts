@@ -47,7 +47,6 @@ export const explanation = {
     .map(fold => within(fold).getAllByText(/\S/)[0].textContent),
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),
-  linksNamed: (part: HTMLElement, name: string | RegExp): HTMLElement[] => within(part).getAllByRole('link', {name}),
   drawingNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),

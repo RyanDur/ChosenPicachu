@@ -53,10 +53,7 @@ export const TopLayerRecipe: FC = () => {
     <Steps>
       <Step title="Write the panel last, at the page’s root">
         <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit where none holds it.">
-          <Says>The panel is a section written once, at the root of the site, after the page itself. There it sits
-            outside the tab’s content, where every card is, so its z-index is never compared with a card’s,
-            as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
-              loses</cite></a> shows. Its role
+          <Says>The panel is a section written once, at the root of the site, after the page itself. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
             announces what arrives without being asked.</Says>
         </Words>
