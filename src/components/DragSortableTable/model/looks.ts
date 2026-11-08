@@ -1,5 +1,13 @@
 import {has} from '@ryandur/sand';
-import {ColumnShove, RowShove, Settling, tableState} from './table-state';
+import {ColumnShove, RowShove, Settling} from './table-state';
+
+const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
+
+const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
+  has(shove) ? `${shove.by}px` : undefined;
+
+const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
+  has(shove) && `shoved-${shove.toward}`;
 
 const rowHeaderCell = ['cell', 'row-header'] as const;
 
@@ -23,10 +31,13 @@ const motionStates = (
   (carried || has(settlingFrom) || has(shove)) && 'paper-in-motion',
   carried && 'carried',
   has(settlingFrom) && 'settling',
-  tableState.shovedClass(shove)
+  shovedClass(shove)
 ];
 
 export const looks = {
+  pixels,
+  shoveDistance,
+  shovedClass,
   rowHeaderCell,
   headerCell,
   headerNeeds,

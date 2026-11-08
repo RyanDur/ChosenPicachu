@@ -4,6 +4,7 @@ export type {Arrangement, ArrangementAction} from './arrangement';
 export {arrangements} from './arrangement';
 export type {RowNudge} from './arrows';
 export {arrows} from './arrows';
+export {grip} from './grip';
 export type {Grab} from './lift';
 export {lifting} from './lift';
 export {looks} from './looks';

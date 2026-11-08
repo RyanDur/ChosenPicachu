@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import Handle from '@components/grip.svg';
-import {survey} from './model';
+import {grip} from './model';
 import {useHydrated} from '@frame/state';
 import './RowGrip.css';
 
@@ -10,6 +10,6 @@ export const RowGrip: FC<ComponentProps<'button'> & {position: number}> = ({posi
     tabIndex={0}
     disabled={!useHydrated()}
     className="grip grabbable borderless unfilled focus-ringed"
-    aria-label={survey.gripLabel(position)}>
+    aria-label={grip.label(position)}>
     <Handle aria-hidden/>
   </button>;

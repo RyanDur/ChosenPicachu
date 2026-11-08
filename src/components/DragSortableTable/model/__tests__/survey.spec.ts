@@ -23,11 +23,6 @@ describe('the keyboard vocabulary', () => {
     expect(survey.struckAway(2, 0)).toBe(true);
     expect(survey.struckAway(2, 2)).toBe(false);
   });
-
-  it('speaks the grip label from the displayed position', () => {
-    expect(survey.gripLabel(0)).toBe('move row 1');
-    expect(survey.gripLabel(4)).toBe('move row 5');
-  });
 });
 
 describe('the pointer vocabulary', () => {

@@ -187,8 +187,6 @@ const shoveColumns = (state: TableState, names: readonly string[], shove: Column
 const shoveRows = (state: TableState, keys: readonly string[], shove: RowShove): TableState =>
   ({...state, rowMarks: keys.reduce((marks, key) => marked(marks, key, {shoved: shove}), state.rowMarks)});
 
-const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
-
 const flying = (grab: Grab): Flying =>
   ({survey: grab.survey, box: grab.box, origin: grab.at, drift: travel.still});
 
@@ -229,12 +227,6 @@ const seatOffset = (
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
   ({seat: seatOffset(state, order, standing) ?? travel.still, drift: state.drag?.drift ?? travel.still});
 
-const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
-  has(shove) ? `${shove.by}px` : undefined;
-
-const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
-  has(shove) && `shoved-${shove.toward}`;
-
 export type TableView = {
   readonly state: TableState;
   readonly columns: readonly TableColumn<Labelled>[];
@@ -260,7 +252,6 @@ export const tableState = {
   settle,
   shoveColumns,
   shoveRows,
-  pixels,
   dragOf,
   lift,
   drift,
@@ -269,7 +260,5 @@ export const tableState = {
   orderAtLift,
   ground,
   seatOffset,
-  settlingAt,
-  shoveDistance,
-  shovedClass
+  settlingAt
 };

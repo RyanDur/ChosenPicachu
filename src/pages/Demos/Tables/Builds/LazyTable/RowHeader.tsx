@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, tableState, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
+import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -55,11 +55,11 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       ...looks.rowHeaderCell, className, ...looks.cellNeeds,
       ...looks.motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{
-      '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
-      '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),
-      '--settle-x': tableState.pixels(settlingFrom?.seat.x), '--settle-y': tableState.pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': tableState.pixels(settlingFrom?.drift.x), '--settle-drift-y': tableState.pixels(settlingFrom?.drift.y),
-      '--shoved-by': tableState.shoveDistance(shoved)
+      '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
+      '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
+      '--settle-x': looks.pixels(settlingFrom?.seat.x), '--settle-y': looks.pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x), '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
+      '--shoved-by': looks.shoveDistance(shoved)
     }}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}

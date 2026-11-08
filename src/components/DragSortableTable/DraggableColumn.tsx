@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel, lifting} from './model';
+import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, survey, looks, travel, lifting} from './model';
 import './Header.css';
 import './motion.css';
 
@@ -62,11 +62,11 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': shareWidth(width),
-      '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
-      '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),
-      '--settle-x': tableState.pixels(settlingFrom?.seat.x), '--settle-y': tableState.pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': tableState.pixels(settlingFrom?.drift.x), '--settle-drift-y': tableState.pixels(settlingFrom?.drift.y),
-      '--shoved-by': tableState.shoveDistance(shoved)
+      '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
+      '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
+      '--settle-x': looks.pixels(settlingFrom?.seat.x), '--settle-y': looks.pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x), '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
+      '--shoved-by': looks.shoveDistance(shoved)
     }}>
     {children}
   </th>;

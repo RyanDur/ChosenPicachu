@@ -116,10 +116,6 @@ const spanCrossed = <Seat extends string | number>(
 const anchored = (position: number, count: number): boolean =>
   position === 0 || position === count - 1;
 
-const columnSteps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
-
-const rowSteps: Record<string, 1 | -1> = {ArrowDown: 1, ArrowUp: -1};
-
 const nudgedColumn = (order: readonly string[], held: string, toward: number): {from: number; to: number} => {
   const from = order.indexOf(held);
   return {from, to: interior(from + toward, order.length)};
@@ -132,8 +128,6 @@ const nudgedRow = (seats: readonly string[], held: string, toward: number): {fro
 
 const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
   has(struck) && struck !== held;
-
-const gripLabel = (position: number): string => `move row ${position + 1}`;
 
 const interior = (at: number, count: number): number =>
   Math.min(Math.max(at, 1), count - 2);
@@ -149,11 +143,8 @@ export const survey = {
   displacedBetween,
   spanCrossed,
   anchored,
-  columnSteps,
-  rowSteps,
   nudgedColumn,
   nudgedRow,
   struckAway,
-  gripLabel,
   interior
 };

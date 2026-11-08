@@ -70,7 +70,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
               ...carve.unit(headerSource, 'const moved = '), gap,
               ...carve.span(headerSource, 'className={classNames(', '...looks.motionStates(carried'), gap,
               ...carve.unit(sources.looks, 'const motionStates'), gap,
-              ...carve.span(headerSource, "'--seat-x': tableState.pixels(seat?.x)", "'--drift-x': tableState.pixels(drift?.x)")
+              ...carve.span(headerSource, "'--seat-x': looks.pixels(seat?.x)", "'--drift-x': looks.pixels(drift?.x)")
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const moved = '), gap,
