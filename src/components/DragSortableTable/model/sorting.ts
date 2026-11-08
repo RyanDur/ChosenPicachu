@@ -8,7 +8,7 @@ export type Choice = Direction | 'reset';
 
 const choices: readonly Choice[] = ['ascending', 'descending', 'reset'];
 
-const choiceOf = (label: string): Maybe<Choice> => maybe(choices.find(choice => choice === label));
+const choiceOf = (value: string): Maybe<Choice> => maybe(choices.find(choice => choice === value));
 
 const directionOf = (choice: Choice): Direction | undefined => choice === 'reset' ? undefined : choice;
 

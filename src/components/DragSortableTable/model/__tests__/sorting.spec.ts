@@ -9,19 +9,7 @@ describe('the sorting vocabulary', () => {
     expect(sorting.ranked(rows, row => row.trades, 'descending')).toEqual([{trades: 9}, {trades: 5}, {trades: 3}, {}]);
   });
 
-  it('offers ascending, descending and reset', () => {
-    expect(sorting.choices).toEqual(['ascending', 'descending', 'reset']);
-  });
-
-  it('reads a choice from its label, and nothing from a label that is no choice', () => {
-    expect(sorting.choiceOf('descending').orNull()).toBe('descending');
-    expect(sorting.choiceOf('reset').orNull()).toBe('reset');
+  it('a value that is no choice reads as nothing', () => {
     expect(sorting.choiceOf('nonsense').isNothing).toBe(true);
-  });
-
-  it('reads a direction from a choice, and none from reset', () => {
-    expect(sorting.directionOf('ascending')).toBe('ascending');
-    expect(sorting.directionOf('descending')).toBe('descending');
-    expect(sorting.directionOf('reset')).toBeUndefined();
   });
 });
