@@ -11,7 +11,7 @@ import './Image.css';
 import {StandIn} from '@pages/Gallery/StandIn';
 import {Art} from '@pages/Gallery/museums';
 
-type Picture = 'arriving' | 'shown' | 'missing';
+type Arrival = 'arriving' | 'shown' | 'missing';
 
 type ImageProps = {
   piece: Art;
@@ -34,21 +34,21 @@ export const Image: FC<ImageProps> = (
     priority = false,
     lazy = false
   }) => {
-  const [picture, pictured] = useState<Picture>('arriving');
+  const [arrival, arrived] = useState<Arrival>('arriving');
   const {tab} = useGallery();
   const {gallery} = useContext(GalleryLinks);
   const link = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
 
-  return picture === 'missing' ?
+  return arrival === 'missing' ?
     <StandIn alt={`${piece.title} would not load`}
       className="image"
       src={noImage}/> : maybe(piece.picture).either(({src, srcSet}) =>
       <>
         <Framed link={link} title={piece.title}>
-          <img className={classNames('image', className, picture === 'arriving' && 'arriving')}
+          <img className={classNames('image', className, arrival === 'arriving' && 'arriving')}
             referrerPolicy="no-referrer"
-            onError={() => pictured('missing')}
-            onLoad={() => pictured('shown')}
+            onError={() => arrived('missing')}
+            onLoad={() => arrived('shown')}
             fetchPriority={priority ? 'high' : 'auto'}
             loading={lazy ? 'lazy' : undefined}
             srcSet={srcSet}
@@ -56,7 +56,7 @@ export const Image: FC<ImageProps> = (
             alt={piece.altText} title={piece.title}
             src={src}/>
         </Framed>
-        {picture === 'arriving' && <Loading/>}
+        {arrival === 'arriving' && <Loading/>}
       </>, () =>
       <StandIn alt={`${piece.title} has nothing to show`}
         className="image"
