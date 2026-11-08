@@ -158,10 +158,11 @@ test.describe('the fold measured by plain script', () => {
       await assembly.promise;
       await route.continue();
     });
+    const fold = plainFold(page);
+    await fold.countsFrameLoads();
     await page.goto('demos/z-index/');
     await siteFrame(page).hydrated();
     await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}).click();
-    const fold = plainFold(page);
     await expect.poll(fold.frameLoaded).toBe(true);
     assembly.resolve();
 
