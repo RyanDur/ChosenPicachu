@@ -1,18 +1,24 @@
 name: Build Test
 on:
+  # a dev's branch reaches main as a pull request: the build, the unit tests and the journeys run on the pull request,
+  # whatever files it changes, because the merge waits for them by name (Ryan, 2026-11-08: "require the checks before
+  # merging"), and review.yml reviews it; Lighthouse, pages and smoke run from main only
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-      # a dev pushes a branch to verify/<name> and opens a pull request into main: the unit tests and the journeys run
-      # here, and review.yml reviews the pull request;
-      # Lighthouse, pages and smoke run from main only
-      - 'verify/**'
-    # a push of documents alone runs nothing: no build or page imports a Markdown file, and the next code push's run and
-    # review cover them (Ryan, 2026-11-08: "the ci should probably not run on doc updates")
+    # a push of documents alone to main runs nothing: no build or page imports a Markdown file (Ryan, 2026-11-08: "the
+    # ci should probably not run on doc updates")
     paths-ignore:
       - 'docs/**'
       - '**/*.md'
   workflow_dispatch:
+# a new push to a pull request stops its older run; runs on main are never stopped
+concurrency:
+  group: build-test-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
@@ -40,9 +46,11 @@ jobs:
         run: |
           full=true
           if [ "$GITHUB_REF" = refs/heads/main ] && [ "$GITHUB_EVENT_NAME" = push ]; then
-            merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length' || echo 0)
-            if [ "$merged" != 0 ]; then
-              full=false
+            # a failed lookup leaves full=true: gh prints the error's body and exits non-zero
+            if merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length'); then
+              if [ "$merged" != 0 ]; then
+                full=false
+              fi
             fi
           fi
           echo "full=$full" >> "$GITHUB_OUTPUT"
