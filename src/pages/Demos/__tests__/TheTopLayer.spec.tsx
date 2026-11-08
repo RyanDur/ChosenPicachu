@@ -262,7 +262,8 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(tab)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['dials', `${Paths.demos}accordions/`]
+      ['dials', `${Paths.demos}accordions/`],
+      ['custom property', `${Paths.demos}accordions/`]
     ]);
   });
 });

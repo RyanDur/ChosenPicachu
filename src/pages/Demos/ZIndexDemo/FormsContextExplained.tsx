@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {ContextChooser} from './ContextChooser';
-import {Worn} from './worn';
-import {whatElseFormsHeading} from './part-headings';
+import {partHeadings} from './part-headings';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
@@ -12,15 +11,10 @@ const gap = lines.plain(' ');
 
 const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
-type Props = {
-  worn: Worn;
-  onWornChosen: (worn: Worn) => void;
-};
-
-export const FormsContextExplained: FC<Props> = ({worn, onWornChosen}) =>
-  <section aria-labelledby={whatElseFormsHeading} className="stacking-part">
-    <h2 id={whatElseFormsHeading} className="title bold">What else forms a stacking context</h2>
-    <ContextChooser worn={worn} onWornChosen={onWornChosen}/>
+export const FormsContextExplained: FC = () =>
+  <section aria-labelledby={partHeadings.whatElseForms} className="stacking-part">
+    <h2 id={partHeadings.whatElseForms} className="title bold">What else forms a stacking context</h2>
+    <ContextChooser/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">More properties than z-index form a stacking context. MDN, Mozilla’s web reference,

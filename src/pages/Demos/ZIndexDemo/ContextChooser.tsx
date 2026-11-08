@@ -3,7 +3,8 @@ import {useHydrated} from '@components';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
-import {Worn} from './worn';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {Worn, wornParam} from './worn';
 
 const inOrder: readonly Worn[] = ['nothing', 'position', 'outline', 'z-index', 'opacity', 'transform', 'isolation'];
 
@@ -36,12 +37,8 @@ const whatItFormed: Record<Worn, string> = {
   isolation: 'The list opened under card two. isolation: isolate formed a stacking context.'
 };
 
-type Props = {
-  worn: Worn;
-  onWornChosen: (worn: Worn) => void;
-};
-
-export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
+export const ContextChooser: FC = () => {
+  const {wears: worn, updateSearchParams} = useSearchParamsObject({wears: wornParam}, {wears: 'nothing'});
   const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Worn>>(nothing());
   const openedAsWorn = opened.mBind(wearing => wearing === worn ? some(wearing) : nothing());
@@ -59,7 +56,7 @@ export const ContextChooser: FC<Props> = ({worn, onWornChosen}) => {
           <input type="radio" name="card-one-wears" checked={worn === choice} disabled={!hydrated}
             onChange={() => {
               updateOpened(nothing());
-              onWornChosen(choice);
+              updateSearchParams({wears: choice});
             }}/>
           {choice === 'nothing' ? property[choice] : <code className="monospaced">{property[choice]}</code>}
         </label>)}

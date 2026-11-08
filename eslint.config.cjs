@@ -78,8 +78,7 @@ const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/
 
 const stillReachForThePage = [
   'src/navigation/arrival/useArrival.ts',
-  'src/components/room.ts', 'src/page/SideNav.tsx',
-  'src/pages/Demos/ZIndexDemo/SortMenu.tsx'
+  'src/components/room.ts', 'src/page/SideNav.tsx'
 ];
 
 const refsWithAReason = [

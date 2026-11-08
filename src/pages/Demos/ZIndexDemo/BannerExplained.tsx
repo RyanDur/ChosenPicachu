@@ -3,9 +3,9 @@ import {Link} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
 import {Snippet, lines, carve} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
-import {fixedBannerLosesHeading, whatElseFormsHeading} from './part-headings';
+import {partHeadings} from './part-headings';
 import {storyKeys} from '../Recipe';
-import {topLayerStory} from './Recipe/TopLayerRecipe';
+import {topLayerStory} from './top-layer-story';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
@@ -16,8 +16,8 @@ const gap = lines.plain(' ');
 export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParamsOnceHydrated();
 
-  return <section aria-labelledby={fixedBannerLosesHeading} className="stacking-part">
-    <h2 id={fixedBannerLosesHeading} className="title bold">Why a fixed banner still loses</h2>
+  return <section aria-labelledby={partHeadings.fixedBannerLoses} className="stacking-part">
+    <h2 id={partHeadings.fixedBannerLoses} className="title bold">Why a fixed banner still loses</h2>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
@@ -35,7 +35,7 @@ export const BannerExplained: FC = () => {
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s
           content. The content wears{' '}
         <code className="monospaced">isolation: isolate</code>, as{' '}
-        <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
+        <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
           context</cite></a> shows, so no card’s z-index is ever compared with the banner’s. The banner’s 3 is
           compared with the content and with the header, the footer, the site’s navigation and the tabs, none of them
           higher than 2. It stays at the window’s edge, over every card on the page, card two included.</p>

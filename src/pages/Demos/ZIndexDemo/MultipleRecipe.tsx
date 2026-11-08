@@ -1,13 +1,15 @@
 import {FC, ReactNode} from 'react';
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '../types';
 import {Entrance, Stack} from '@banners';
-import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
-import {EntranceDial, StackDial, useControls} from '../../Controls';
+import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../Recipe';
+import {EntranceDial, StackDial, useControls} from '../Controls';
 import bannersSource from '@banners/Banners.tsx?sample';
 import changeSource from '@banners/bannerChange.ts?sample';
 import newsSource from '@banners/bannerNews.ts?sample';
 import bannersCss from '@banners/Banners.css?sample';
-import timingCss from '../../../../styles/timing.css?sample';
-import '../../Recipe/Recipe.css';
+import timingCss from '../../../styles/timing.css?sample';
+import '../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
 
@@ -129,8 +131,10 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Slide in from off screen" id={slideInStep} dial={<EntranceDial name="journey-entrance"/>}>
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
-          <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
-            read back with var(). The starting style reads it to place the banner before the slide, and the leaving
+          <Says>{enterFact[enter]} The distance is a{' '}
+            <TabLink to={DemoTopics.accordions}>custom property</TabLink>, here{' '}
+            <code className="monospaced">--arrive</code>, read back with <code className="monospaced">var()</code>. The
+            starting style reads it to place the banner before the slide, and the leaving
             rule reads it again to send the banner back.</Says>
         </Words>
         <Codes>

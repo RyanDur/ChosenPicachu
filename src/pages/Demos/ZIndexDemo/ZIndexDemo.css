@@ -24,7 +24,6 @@
             width: 100%;
             padding: var(--base-x-2_5);
             position: relative;
-            transition: bottom 0.3s;
         }
 
         .closed {

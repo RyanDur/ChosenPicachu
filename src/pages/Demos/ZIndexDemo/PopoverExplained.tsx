@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Mdn, Snippet, lines, carve} from '../Recipe';
-import {AboveThePage} from './Diagrams';
-import {popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from './part-headings';
+import {AboveThePage} from './AboveThePage';
+import {partHeadings} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import menuSource from '@components/Menu/Menu.tsx?sample';
@@ -10,12 +10,12 @@ import '../Runs.css';
 const gap = lines.plain(' ');
 
 export const PopoverExplained: FC = () =>
-  <section aria-labelledby={popoverWinsHeading} className="stacking-part">
-    <h2 id={popoverWinsHeading} className="title bold">Why the popover wins</h2>
+  <section aria-labelledby={partHeadings.popoverWins} className="stacking-part">
+    <h2 id={partHeadings.popoverWins} className="title bold">Why the popover wins</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The top-layer Sort by in{' '}
-          <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a> opens over
+          <a className="signpost" href={`#${partHeadings.stillLoses}`}><cite>Why 9999 still loses</cite></a> opens over
           everything around it every time, with the box checked or not. It is a popover. A popover is shown in
           the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen.</p>
@@ -81,7 +81,7 @@ export const PopoverExplained: FC = () =>
           In the style sheet the placement sits under <code className="monospaced">&amp;[popover]</code>, which reads as
           a menu that is also a popover. The placement is measured from an anchor, and a popover’s anchor is the button
           that opened it. A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves
-          that menu out. Card one’s list in <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else
+          that menu out. Card one’s list in <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else
             forms a stacking context</cite></a> names
           its own anchor.</p>
         <Snippet label="CSS" lines={[

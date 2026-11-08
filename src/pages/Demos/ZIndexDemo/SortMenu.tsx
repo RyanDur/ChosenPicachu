@@ -1,7 +1,10 @@
 import {Entry, Item, Menu} from '@components/Menu';
-import {FC, FocusEvent, KeyboardEvent, useEffect, useId, useState} from 'react';
+import {FC, FocusEvent, KeyboardEvent, useId, useReducer} from 'react';
+import {flushSync} from 'react-dom';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
-import {SortChoice, sortChoices, sortByWords} from './sort-choices';
+import {sortChoices} from './sort-choices';
+import {sortMenu} from './sort-menu';
+import {sortMenuChange} from './sort-menu-change';
 
 const steps: Partial<Record<string, (at: number, count: number) => number>> = {
   ArrowDown: (at, count) => (at + 1) % count,
@@ -15,74 +18,72 @@ const nextChoice = (key: string, at: number, count: number): Maybe<number> =>
 
 const focusOn = (element: HTMLElement): void => element.focus();
 
-const elementWithId = (id: string): Maybe<HTMLElement> => maybe(document.getElementById(id));
+const choicesBeside = (choice: HTMLElement): HTMLElement[] =>
+  maybe(choice.closest('[role="menu"]'))
+    .map(menu => [...menu.querySelectorAll<HTMLElement>('[role="menuitem"]')])
+    .orElse([]);
 
-const choiceAt = (list: string, at: number): Maybe<HTMLElement> => elementWithId(list).mBind(menu => {
-  const choice = menu.querySelectorAll('[role="menuitem"]').item(at);
-  return choice instanceof HTMLElement ? some(choice) : nothing();
-});
+const firstChoiceAfter = (button: HTMLElement): Maybe<HTMLElement> =>
+  maybe(button.nextElementSibling?.querySelector<HTMLElement>('[role="menuitem"]'));
 
-const within = (target: EventTarget | null, id: string): boolean => target instanceof Node &&
-  elementWithId(id).map(part => part.contains(target)).orElse(false);
+const buttonOf = (choice: HTMLElement): Maybe<HTMLElement> =>
+  maybe(choice.closest('[role="menu"]')?.previousElementSibling)
+    .mBind(button => button instanceof HTMLElement ? some(button) : nothing());
 
 export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
-  const [open, updateOpen] = useState(false);
-  const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
+  const [{open, chosen}, dispatch] = useReducer(sortMenu.reduce, sortMenu.initial);
   const button = useId();
   const list = useId();
 
-  useEffect(() => {
-    if (open) {
-      choiceAt(list, 0).map(focusOn);
-    }
-  }, [open, list]);
-
-  const opens = (): void => {
-    updateOpen(true);
+  const opens = (button: HTMLElement): void => {
+    flushSync(() => dispatch(sortMenuChange.opened()));
+    firstChoiceAfter(button).map(focusOn);
     onOpened();
   };
-  const closeToButton = (): void => {
-    updateOpen(false);
-    elementWithId(button).map(focusOn);
+  const closesOnto = (button: HTMLElement): void => {
+    focusOn(button);
+    dispatch(sortMenuChange.closed());
   };
   const onButtonKey = (event: KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-      opens();
+      opens(event.currentTarget);
     }
   };
   const onChoiceKey = (at: number) => (event: KeyboardEvent<HTMLButtonElement>): void => {
+    const choice = event.currentTarget;
     if (event.key === 'Escape') {
-      closeToButton();
+      buttonOf(choice).map(closesOnto);
       return;
     }
-    nextChoice(event.key, at, sortChoices.length).map(next => {
+    nextChoice(event.key, at, sortChoices.all.length).map(next => {
       event.preventDefault();
-      choiceAt(list, next).map(focusOn);
+      maybe(choicesBeside(choice)[next]).map(focusOn);
     });
   };
-  const onListBlur = ({relatedTarget}: FocusEvent<HTMLMenuElement>): void => {
-    if (!within(relatedTarget, list)) {
-      updateOpen(false);
+  const onListBlur = ({currentTarget, relatedTarget}: FocusEvent<HTMLMenuElement>): void => {
+    if (!(relatedTarget instanceof Node && currentTarget.contains(relatedTarget))) {
+      dispatch(sortMenuChange.closed());
     }
   };
 
-  const words = sortByWords(chosen);
+  const words = sortChoices.byWords(chosen);
 
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open}
       aria-controls={open ? list : undefined}
       aria-label={`${words}, the old way`}
-      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()}
+      onMouseDown={event => event.preventDefault()}
+      onClick={({currentTarget}) => open ? closesOnto(currentTarget) : opens(currentTarget)}
       onKeyDown={onButtonKey}>{words}</button>
     {open && <Menu id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
-      {sortChoices.map((choice, at) =>
+      {sortChoices.all.map((choice, at) =>
         <Entry key={choice} role="none">
           <Item role="menuitem" tabIndex={-1} className="sub-title reachable"
             aria-current={chosen.map(picked => picked === choice).orElse(false)}
-            onClick={() => {
-              updateChosen(some(choice));
-              closeToButton();
+            onClick={({currentTarget}) => {
+              buttonOf(currentTarget).map(focusOn);
+              dispatch(sortMenuChange.chosen(choice));
             }}
             onKeyDown={onChoiceKey(at)}>{choice}</Item>
         </Entry>)}

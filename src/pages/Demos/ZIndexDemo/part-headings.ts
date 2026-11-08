@@ -1,4 +1,8 @@
-export const stillLosesHeading = '9999-still-loses-heading';
-export const popoverWinsHeading = 'popover-wins-heading';
-export const whatElseFormsHeading = 'what-else-forms-heading';
-export const fixedBannerLosesHeading = 'fixed-banner-loses-heading';
+const stillLoses = '9999-still-loses-heading';
+const popoverWins = 'popover-wins-heading';
+const whatElseForms = 'what-else-forms-heading';
+const fixedBannerLoses = 'fixed-banner-loses-heading';
+
+type PartHeadings = {stillLoses: string; popoverWins: string; whatElseForms: string; fixedBannerLoses: string};
+
+export const partHeadings: PartHeadings = {stillLoses, popoverWins, whatElseForms, fixedBannerLoses};

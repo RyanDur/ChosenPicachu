@@ -3,23 +3,18 @@ import {DemoTopics} from '../types';
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {NaturalZIndex} from './NaturalZIndex';
-import {OneNumberLiftsOneCard, PileFromTheSide} from './Diagrams';
-import {RaisedCard} from './raised';
+import {OneNumberLiftsOneCard} from './OneNumberLiftsOneCard';
+import {PileFromTheSide} from './PileFromTheSide';
 import naturalSource from './NaturalZIndex.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
 
-type Props = {
-  raised: RaisedCard;
-  onRaised: (card: RaisedCard) => void;
-};
-
-export const StackingExplained: FC<Props> = ({raised, onRaised}) =>
+export const StackingExplained: FC = () =>
   <section aria-labelledby="third-on-top-heading" className="stacking-part">
     <h2 id="third-on-top-heading" className="title bold">Why Third is on top</h2>
-    <NaturalZIndex className="card rounded-corners lifted padded" raised={raised} onRaised={onRaised}/>
+    <NaturalZIndex className="card rounded-corners lifted padded"/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The pile is a list of three cards, First, Second and Third, in that order in the

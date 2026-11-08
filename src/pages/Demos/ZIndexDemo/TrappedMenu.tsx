@@ -4,7 +4,8 @@ import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
-import {CardOne} from './card-one';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {CardOne, cardOneParam} from './card-one';
 
 type Opened = CardOne | 'top layer';
 
@@ -14,12 +15,8 @@ const whereItOpened: Record<Opened, string> = {
   'top layer': 'The list opened over everything around it. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.'
 };
 
-type Props = {
-  cardOne: CardOne;
-  onCardOneChosen: (cardOne: CardOne) => void;
-};
-
-export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
+export const TrappedMenu: FC = () => {
+  const {'card-one': cardOne, updateSearchParams} = useSearchParamsObject({'card-one': cardOneParam}, {'card-one': 'contained'});
   const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
   const openedAsTheCardsAre = opened.mBind(place => place === 'top layer' || place === cardOne ? some(place) : nothing());
@@ -36,7 +33,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
           <input type="checkbox" checked={cardOne === 'contained'} disabled={!hydrated}
             onChange={({currentTarget}) => {
               updateOpened(nothing());
-              onCardOneChosen(currentTarget.checked ? 'contained' : 'free');
+              updateSearchParams({'card-one': currentTarget.checked ? 'contained' : 'free'});
             }}/>
           Card one has z-index: 1
         </label>

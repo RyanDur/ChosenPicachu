@@ -1,16 +1,16 @@
 import {FC} from 'react';
 import {Align, Side} from '@banners';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
-import {Sample} from '../../Recipe/sample';
-import {AlignDial, SideDial, useControls} from '../../Controls';
-import {fixedBannerLosesHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
+import {Codes, Mdn, Says, Sample, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../Recipe';
+import {AlignDial, SideDial, useControls} from '../Controls';
+import {partHeadings} from './part-headings';
+import {topLayerStory} from './top-layer-story';
 import bannersSource from '@banners/Banners.tsx?sample';
 import providerSource from '@banners/BannerProvider.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
-import placementCss from '../../../../styles/placement.css?sample';
-import surfaceCss from '../../../../styles/surface.css?sample';
-import typographyCss from '../../../../styles/typography.css?sample';
-import '../../Recipe/Recipe.css';
+import placementCss from '../../../styles/placement.css?sample';
+import surfaceCss from '../../../styles/surface.css?sample';
+import typographyCss from '../../../styles/typography.css?sample';
+import '../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
 
@@ -32,8 +32,6 @@ const alignSheet: Record<Align, Sample> = {
   right: bannersCss
 };
 
-export const topLayerStory = {param: 'news', id: 'top'} as const;
-
 export const TopLayerRecipe: FC = () => {
   const {side, align} = useControls();
 
@@ -41,12 +39,12 @@ export const TopLayerRecipe: FC = () => {
     can="The user sees the news over the page"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
-      term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>.
+      term taught above in <a className="signpost" href={`#${partHeadings.stillLoses}`}><cite>Why 9999 still loses</cite></a>.
       An element around the banner forms a stacking context by the ways{' '}
-    <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
+    <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
       context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the
       window, does not lift it out of that context,
-      as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
+      as <a className="signpost" href={`#${partHeadings.fixedBannerLoses}`}><cite>Why a fixed banner still
         loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
       I write the panel last on the page, outside the tab’s content, where its z-index is compared with that content as
       a whole and with the frame around it, never with a card.</Tell>

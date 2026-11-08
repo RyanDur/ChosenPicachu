@@ -1,24 +1,19 @@
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
-import {ANumberInsideALayer, Where9999IsCompared} from './Diagrams';
-import {CardOne} from './card-one';
-import {stillLosesHeading, whatElseFormsHeading} from './part-headings';
+import {ANumberInsideALayer} from './ANumberInsideALayer';
+import {Where9999IsCompared} from './Where9999IsCompared';
+import {partHeadings} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
 
-type Props = {
-  cardOne: CardOne;
-  onCardOneChosen: (cardOne: CardOne) => void;
-};
-
-export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
-  <section aria-labelledby={stillLosesHeading} className="stacking-part">
-    <h2 id={stillLosesHeading} className="title bold">Why 9999 still loses</h2>
-    <TrappedMenu cardOne={cardOne} onCardOneChosen={onCardOneChosen}/>
+export const MenuExplained: FC = () =>
+  <section aria-labelledby={partHeadings.stillLoses} className="stacking-part">
+    <h2 id={partHeadings.stillLoses} className="title bold">Why 9999 still loses</h2>
+    <TrappedMenu/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The list has a z-index of 9999, and card two has a z-index of 1, yet the list
@@ -42,7 +37,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
         <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are
           compared in the nearest context that holds them both. Here that is the tab’s content, the area under the tabs
           that holds every card.{' '}
-        <a className="signpost" href={`#${whatElseFormsHeading}`}><cite>What else forms a stacking
+        <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
           context</cite></a> shows what makes the tab’s content one.
           In that context the browser compares card one and card two, 1 against 1, and a tie goes to the one later in
           the code, so card two is painted over card one, list and all. No number on the list can change that, because

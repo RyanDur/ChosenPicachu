@@ -3,7 +3,8 @@ import {not as toggle} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
 import {classNames} from '@components';
-import {RaisedCard} from './raised';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {RaisedCard, raisedParam} from './raised';
 import './ZIndexDemo.css';
 
 const cardsToRaise = [
@@ -13,12 +14,8 @@ const cardsToRaise = [
   {display: 'Third', value: 'third'}
 ] as const;
 
-type Props = PropsWithClassName & {
-  raised: RaisedCard;
-  onRaised: (card: RaisedCard) => void;
-};
-
-export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
+export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
+  const {raised, updateSearchParams} = useSearchParamsObject({raised: raisedParam}, {raised: 'none'});
   const [isCollapsed, updateCollapsed] = useState(true);
   const onClick = () => updateCollapsed(toggle(isCollapsed));
   const layer = (card: RaisedCard) => classNames('layer card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
@@ -26,7 +23,7 @@ export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
   return <figure className={classNames('natural-z-index', className)}>
     <button type="button" className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
-    <PillGlider label="card raised" name="card-raised" options={cardsToRaise} chosen={raised} onChosen={onRaised}/>
+    <PillGlider label="card raised" name="card-raised" options={cardsToRaise} chosen={raised} onChosen={next => updateSearchParams({raised: next})}/>
     <ol id="z-index-layers" className="demo-container">
       <li className={layer('first')}>First</li>
       <li className={layer('second')}>Second</li>
