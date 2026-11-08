@@ -21,7 +21,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
   const Practice = practices[concern];
 
   return <>
-    <div className="practice-opening">
+    <header className="practice-opening">
       <p className="paragraph">Each tab below is one of the three concerns and says how I organize it: the rules I keep,
         the moments in the Record that taught them, and the test that tells me a rule holds. The demos show the rules at
         work. One principle runs through all three, and it is worth saying once before the tabs apply it.</p>
@@ -37,7 +37,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
         to organizing an application as it grows, lays files out that way. It ranks the work
         plainly: <a className="signpost" href={appContinuum}>“Naming, organizing, and reducing circular dependencies are
           the three most important things you’ll ever do as a programmer”</a>.</p>
-    </div>
+    </header>
     <Tabs label="practice" current={concerns.idOf(concern)}
       values={concerns.inOrder.map(shown => ({
         display: shown, param: concerns.idOf(shown), to: practiceAddress.of(shown)
