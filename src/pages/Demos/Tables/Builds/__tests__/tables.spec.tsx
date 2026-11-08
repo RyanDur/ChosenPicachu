@@ -78,7 +78,7 @@ describe('columns by hand', () => {
   test.each([['eager', EagerTable], ['lazy', LazyTable]])('every header of the %s table reads its column’s name and nothing more', (_, Table) => {
     seat(Table, {origin: 'keep', motion: 'static'});
 
-    expect(liveTable.columnTitles()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(liveTable.columnsNotReadingTheirName()).toEqual([]);
   });
 
   test('a menu appears only where the column asks for one', () => {

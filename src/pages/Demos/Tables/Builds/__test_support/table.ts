@@ -27,8 +27,9 @@ export const liveTable = {
   header,
   grip,
   columnOrder: (): string[] => within(table()).getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? ''),
-  columnTitles: (): string[] => within(table()).getAllByRole('columnheader')
-    .map(column => [...column.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent).join('')),
+  columnsNotReadingTheirName: (): string[] => within(table()).getAllByRole('columnheader')
+    .map(column => column.getAttribute('aria-label') ?? '')
+    .filter(column => within(header(column)).queryByText(column) !== header(column)),
   windowNames: (): string[] => lanes().map(lane => ownText(lane.cells[0])),
   announced: (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== ''),
   moveReports: (): HTMLElement[] => screen.getAllByRole('status', {name: 'move report'}),
