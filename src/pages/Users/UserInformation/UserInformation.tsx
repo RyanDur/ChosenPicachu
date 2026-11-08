@@ -1,4 +1,4 @@
-import {FC, useReducer} from 'react';
+import {FC, ReactNode, useReducer} from 'react';
 import {classNames} from '@components/class-names';
 import {NewUser, User} from '@pages/Users/profile';
 import {FancyInput} from '../FancyFormElements/FancyInput';
@@ -25,6 +25,25 @@ const newUser = (avatar: string): NewUser => ({
   avatar
 });
 
+const buttonsFor = (open: Opened, hydrated: boolean, reset: () => void): ReactNode => {
+  const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
+  switch (open.mode) {
+    case 'adding':
+      return <>
+        {resetButton}
+        <button type="submit" className="submit button primary" disabled={!hydrated}>Add</button>
+      </>;
+    case 'viewing':
+      return <Link to={openings.at(open.user.id, 'edit')} className="reset button secondary">Edit</Link>;
+    case 'editing':
+      return <>
+        {resetButton}
+        <Link to={openings.at(open.user.id, 'view')} className="cancel button secondary" onClick={reset}>Cancel</Link>
+        <button type="submit" className="submit button primary" disabled={!hydrated}>Update</button>
+      </>;
+  }
+};
+
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
 export const UserInformation: FC<{className?: string}> = ({className}) =>
@@ -32,47 +51,45 @@ export const UserInformation: FC<{className?: string}> = ({className}) =>
 
 const Draft: FC<{className?: string}> = ({className}) => {
   const open = useOpened();
-  const users = useUsersDispatch();
+  const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
     started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
   const user = drafts.userIn(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
-  const editing = open.mode === 'editing';
 
   const reset = () =>
     dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
 
-  return <form id="user-form"
-    aria-labelledby="form-title"
+  return <form aria-labelledby="form-title"
     className={classNames('user-information', className)}
     onSubmit={event => {
       event.preventDefault();
 
-      if (open.mode === 'editing') users(usersActions.userUpdated({...open.user, ...user}));
-      else users(usersActions.userAdded(user));
+      if (open.mode === 'editing') usersDispatch(usersActions.userUpdated({...open.user, ...user}));
+      else usersDispatch(usersActions.userAdded(user));
 
       reset();
     }}
     onReset={() => reset()}>
     <h2 id="form-title" className="form-title title bold">User Information</h2>
-    <FancyInput id="first-name-cell" className="first-name" inputId="first-name" required={required}
+    <FancyInput className="first-name" inputId="first-name" required={required}
       value={user.person.firstName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.firstNameEdited(event.currentTarget.value))}>
       First Name
     </FancyInput>
-    <FancyInput id="last-name-cell" className="last-name" inputId="last-name" required={required}
+    <FancyInput className="last-name" inputId="last-name" required={required}
       value={user.person.lastName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.lastNameEdited(event.currentTarget.value))}>
       Last Name
     </FancyInput>
-    <FancyInput id="email-cell" className="email" inputId="email" value={user.person.email}
+    <FancyInput className="email" inputId="email" value={user.person.email}
       type="email" readOnly={readOnly}
       onChange={event => dispatch(draftActions.emailEdited(event.currentTarget.value))}>
       Email
     </FancyInput>
-    <FancyDateInput id="date-of-birth-cell" className="date-of-birth" inputId="date-of-birth" value={user.person.dateOfBirth}
+    <FancyDateInput className="date-of-birth" inputId="date-of-birth" value={user.person.dateOfBirth}
       readOnly={readOnly} required={required}
       onChange={event => {
         const born = parse(event.currentTarget.value, 'yyyy-MM-dd', new Date());
@@ -81,12 +98,12 @@ const Draft: FC<{className?: string}> = ({className}) => {
       Date Of Birth
     </FancyDateInput>
 
-    <button type="button" id="avatar-cell"
+    <button type="button"
       aria-label="Draw a new avatar"
       className="avatar borderless rounded-corners accent raisable"
       disabled={readOnly || !hydrated}
       onClick={() => dispatch(draftActions.avatarDrawn(avatars.drawn()))}>
-      <img id="avatar" className="portrait" src={user.avatar} width="264" height="280" fetchPriority="high" alt="avatar"/>
+      <img className="portrait" src={user.avatar} width="264" height="280" fetchPriority="high" alt="avatar"/>
     </button>
     <output className="off-screen"
       aria-label="avatar report">{drafts.avatarReport(draft)}</output>
@@ -109,15 +126,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(draftActions.detailsEdited(event.currentTarget.value))}/>
 
-    {!readOnly &&
-        <button id="reset-form" type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>}
-    {open.mode === 'viewing' && <Link id="reset-form" to={openings.at(open.user.id, 'edit')}
-      className="reset button secondary">Edit</Link>}
-    {!editing && !readOnly &&
-        <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Add</button>}
-    {open.mode === 'editing' && <Link id="cancel" to={openings.at(open.user.id, 'view')}
-      className="cancel button secondary" onClick={reset}>Cancel</Link>}
-    {editing && <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Update</button>}
+    {buttonsFor(open, hydrated, reset)}
 
   </form>;
 };

@@ -1,6 +1,5 @@
 import {ReactNode} from 'react';
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@frame/navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {UserInformation} from '../index';
@@ -48,11 +47,11 @@ describe('a user form', () => {
     it('resetting empties a filled-out form', async () => {
       render(added().form);
       await userForm.fillOut(filledIn);
-      await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
+      await userForm.typeDetails(filledIn.details);
 
-      await userEvent.click(screen.getByRole('button', {name: 'Reset'}));
+      await userForm.reset();
 
-      expect(screen.getByLabelText('First Name')).toHaveValue('');
+      expect(userForm.field('First Name')).toHaveValue('');
     });
 
     it('an empty form adds nobody', async () => {
@@ -60,8 +59,12 @@ describe('a user form', () => {
       render(form);
 
       await userForm.add();
+      await userForm.fillOut(filledIn);
+      await userForm.typeDetails(filledIn.details);
+      const avatar = userForm.avatarShown();
+      await userForm.add();
 
-      expect(adds()).toEqual([]);
+      await waitFor(() => expect(adds()).toEqual([asSent({...filledIn, friends: [], avatar})]));
     });
 
     describe('when adding a user', () => {
@@ -71,7 +74,7 @@ describe('a user form', () => {
         render(form);
 
         await userForm.fillOut(filledIn);
-        await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
+        await userForm.typeDetails(filledIn.details);
         const avatar = userForm.avatarShown();
         await userForm.add();
 
@@ -85,7 +88,7 @@ describe('a user form', () => {
 
         await userForm.add();
 
-        expect(screen.getByLabelText('First Name')).toHaveValue('');
+        expect(userForm.field('First Name')).toHaveValue('');
         await waitFor(() => expect(adds()).toHaveLength(1));
       });
 
@@ -105,7 +108,7 @@ describe('a user form', () => {
         const {form} = added();
         render(form);
 
-        expect(within(screen.getByRole('group', {name: 'Work Address'})).getByRole('checkbox', {name: 'Same as Home'})).toBeInTheDocument();
+        expect(userForm.sameAsHomeInWorkAddress()).toBeInTheDocument();
       });
 
       test('should allow the user to auto copy the home address', async () => {
@@ -113,7 +116,7 @@ describe('a user form', () => {
         render(form);
 
         await userForm.fillOut(filledIn);
-        await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
+        await userForm.typeDetails(filledIn.details);
         await userForm.tickSameAsHome();
         const avatar = userForm.avatarShown();
         await userForm.add();
@@ -171,9 +174,9 @@ describe('a user form', () => {
     it('a user cannot be added without a name, a birthday and a home address', () => {
       render(added().form);
 
-      expect(screen.getByLabelText('First Name')).not.toBeValid();
-      expect(screen.getByLabelText('Last Name')).not.toBeValid();
-      expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
+      expect(userForm.field('First Name')).not.toBeValid();
+      expect(userForm.field('Last Name')).not.toBeValid();
+      expect(userForm.field('Date Of Birth')).not.toBeValid();
       expect(userForm.addressField('home', 'Street')).not.toBeValid();
       expect(userForm.addressField('home', 'City')).not.toBeValid();
       expect(userForm.addressField('home', 'State')).not.toBeValid();
@@ -182,12 +185,12 @@ describe('a user form', () => {
 
     test('clearing the date of birth leaves it empty and wanting', async () => {
       render(added().form);
-      await userEvent.type(screen.getByLabelText('Date Of Birth'), '1984-06-02');
+      await userForm.typeInto('Date Of Birth', '1984-06-02');
 
-      await userEvent.clear(screen.getByLabelText('Date Of Birth'));
+      await userForm.clear('Date Of Birth');
 
-      expect(screen.getByLabelText('Date Of Birth')).toHaveValue('');
-      expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
+      expect(userForm.field('Date Of Birth')).toHaveValue('');
+      expect(userForm.field('Date Of Birth')).not.toBeValid();
     });
 
     describe('for a zip code', () => {
@@ -196,7 +199,7 @@ describe('a user form', () => {
       test('a letter in the zip leaves it invalid', async () => {
         render(added().form);
 
-        await userEvent.type(homeZip(), 'a');
+        await userForm.typeIntoAddress('home', 'Postal / Zip code', 'a');
 
         expect(homeZip()).toHaveDisplayValue('a');
         expect(homeZip()).not.toBeValid();
@@ -205,7 +208,7 @@ describe('a user form', () => {
       test('one digit is not yet a zip', async () => {
         render(added().form);
 
-        await userEvent.type(homeZip(), '1');
+        await userForm.typeIntoAddress('home', 'Postal / Zip code', '1');
 
         expect(homeZip()).toHaveDisplayValue('1');
         expect(homeZip()).not.toBeValid();
@@ -214,7 +217,7 @@ describe('a user form', () => {
       test('five digits are a zip', async () => {
         render(added().form);
 
-        await userEvent.type(homeZip(), '60012');
+        await userForm.typeIntoAddress('home', 'Postal / Zip code', '60012');
 
         expect(homeZip()).toHaveDisplayValue('60012');
         expect(homeZip()).toBeValid();
@@ -223,7 +226,7 @@ describe('a user form', () => {
       test('five digits, a dash and four more are a zip', async () => {
         render(added().form);
 
-        await userEvent.type(homeZip(), '12345-1234');
+        await userForm.typeIntoAddress('home', 'Postal / Zip code', '12345-1234');
 
         expect(homeZip()).toHaveDisplayValue('12345-1234');
         expect(homeZip()).toBeValid();
@@ -248,54 +251,41 @@ describe('the first face', () => {
 describe('the avatar control plays fair with the keyboard', () => {
   test('enter draws a new avatar, like a click does', async () => {
     render(added().form);
-    const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
-    const before = screen.getByAltText<HTMLImageElement>('avatar').src;
-    avatar.focus();
+    const before = userForm.avatarShown();
 
-    await userEvent.keyboard('{enter}');
+    await userForm.drawAvatarByKey('{enter}');
 
-    expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
+    expect(userForm.avatarShown()).not.toEqual(before);
   });
 
   test('space draws a new avatar, like a click does', async () => {
     render(added().form);
-    const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
-    const before = screen.getByAltText<HTMLImageElement>('avatar').src;
-    avatar.focus();
+    const before = userForm.avatarShown();
 
-    await userEvent.keyboard(' ');
+    await userForm.drawAvatarByKey(' ');
 
-    expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
+    expect(userForm.avatarShown()).not.toEqual(before);
   });
 
   test('every new avatar is announced', async () => {
     render(added().form);
-    expect(screen.getByRole('status', {name: 'avatar report'})).toBeEmptyDOMElement();
+    expect(userForm.avatarReport()).toBeEmptyDOMElement();
 
-    await userEvent.click(screen.getByRole('button', {name: 'Draw a new avatar'}));
-    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('1 new avatar drawn.');
+    await userForm.drawAvatar();
+    expect(userForm.avatarReport()).toHaveTextContent('1 new avatar drawn.');
 
-    await userEvent.click(screen.getByRole('button', {name: 'Draw a new avatar'}));
-    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('2 new avatars drawn.');
+    await userForm.drawAvatar();
+    expect(userForm.avatarReport()).toHaveTextContent('2 new avatars drawn.');
   });
 });
 
 describe('the keyboard walks the whole form', () => {
   test('tab visits each control once and always gets out the other side', async () => {
     render(added().form);
-    const form = screen.getByRole('form', {name: 'User Information'});
-    await userEvent.click(screen.getByLabelText('First Name'));
+    const {visited, escaped} = await userForm.tabbedFromFirstName();
 
-    const visited: Element[] = [];
-    let guard = 0;
-    while (document.activeElement && form.contains(document.activeElement) && guard < 50) {
-      expect(visited, 'tab revisited a control — a trap').not.toContain(document.activeElement);
-      visited.push(document.activeElement);
-      await userEvent.tab();
-      guard += 1;
-    }
-
-    expect(form.contains(document.activeElement), 'tab never escaped the form').toBe(false);
+    expect(new Set(visited).size, 'tab revisited a control, a trap').toBe(visited.length);
+    expect(escaped, 'tab never escaped the form').toBe(true);
     expect(visited.length).toBeGreaterThanOrEqual(10);
   });
 });

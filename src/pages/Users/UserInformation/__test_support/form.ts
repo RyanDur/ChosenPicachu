@@ -47,6 +47,37 @@ export const userForm = {
 
   avatarShown: (): string => screen.getByAltText<HTMLImageElement>('avatar').src,
 
+  avatarReport: (): HTMLElement => screen.getByRole('status', {name: 'avatar report'}),
+
+  drawAvatar: (): Promise<void> => userEvent.click(screen.getByRole('button', {name: 'Draw a new avatar'})),
+
+  drawAvatarByKey: async (key: string): Promise<void> => {
+    screen.getByRole('button', {name: 'Draw a new avatar'}).focus();
+    await userEvent.keyboard(key);
+  },
+
+  sameAsHomeInWorkAddress: (): HTMLElement =>
+    within(screen.getByRole('group', {name: 'Work Address'})).getByRole('checkbox', {name: 'Same as Home'}),
+
+  typeDetails: (text: string): Promise<void> => userEvent.type(field('Details'), text),
+
+  typeIntoAddress: (kind: string, label: string, text: string): Promise<void> =>
+    userEvent.type(addressField(kind, label), text),
+
+  clear: (label: string): Promise<void> => userEvent.clear(field(label)),
+
+  tabbedFromFirstName: async (): Promise<{visited: Element[]; escaped: boolean}> => {
+    await userEvent.click(field('First Name'));
+    const visited: Element[] = [];
+    while (document.activeElement && form().contains(document.activeElement) && visited.length < 50) {
+      const revisited = visited.includes(document.activeElement);
+      visited.push(document.activeElement);
+      if (revisited) break;
+      await userEvent.tab();
+    }
+    return {visited, escaped: !form().contains(document.activeElement)};
+  },
+
   editLink: (): HTMLElement => within(form()).getByRole('link', {name: 'Edit'}),
 
   typeInto: (label: string, text: string): Promise<void> => userEvent.type(field(label), text),
