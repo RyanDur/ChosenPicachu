@@ -74,22 +74,22 @@ const Draft: FC<{className?: string}> = ({className}) => {
     }}
     onReset={() => reset()}>
     <h2 id="form-title" className="form-title title bold">User Information</h2>
-    <FancyInput className="first-name" inputId="first-name" required={required}
+    <FancyInput className="first-name" required={required}
       value={user.person.firstName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.firstNameEdited(event.currentTarget.value))}>
       First Name
     </FancyInput>
-    <FancyInput className="last-name" inputId="last-name" required={required}
+    <FancyInput className="last-name" required={required}
       value={user.person.lastName} readOnly={readOnly}
       onChange={event => dispatch(draftActions.lastNameEdited(event.currentTarget.value))}>
       Last Name
     </FancyInput>
-    <FancyInput className="email" inputId="email" value={user.person.email}
+    <FancyInput className="email" value={user.person.email}
       type="email" readOnly={readOnly}
       onChange={event => dispatch(draftActions.emailEdited(event.currentTarget.value))}>
       Email
     </FancyInput>
-    <FancyDateInput className="date-of-birth" inputId="date-of-birth" value={user.person.dateOfBirth}
+    <FancyDateInput className="date-of-birth" value={user.person.dateOfBirth}
       readOnly={readOnly} required={required}
       onChange={event => {
         const born = parse(event.currentTarget.value, 'yyyy-MM-dd', new Date());
@@ -118,7 +118,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
       onEdited={address => dispatch(draftActions.workAddressEdited(address))}>
       {!readOnly && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
-        <input id="same-as-home" className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
+        <input className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
           onChange={event => dispatch(draftActions.sameAsHomeChosen(event.currentTarget.checked))}/>
       </label>}
     </AddressFields>

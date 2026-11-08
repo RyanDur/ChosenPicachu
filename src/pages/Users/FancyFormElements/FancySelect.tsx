@@ -5,7 +5,6 @@ import {Consumer} from '@ryandur/sand';
 import './Fancy.css';
 
 type FancySelectProps = {
-  selectId: string;
   optionValues: Set<string>;
   onChange: Consumer<ChangeEvent<HTMLSelectElement>>;
   value?: string;
@@ -24,17 +23,17 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
     optionValues,
     className,
     onChange,
-    selectId,
     required = false,
     disabled = false,
     readOnly = false
   }
 ) => (readOnly || disabled)
-  ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled}
-    inputId={selectId}>{children}</FancyInput> :
+  ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled}>
+    {children}
+  </FancyInput> :
   <label id={id} className={classNames('fancy-select', 'fancy', 'soft-cornered', className)}>
     <span className={classNames('fancy-title', 'bold', 'card-banded', required && 'alarm-starred')}>{children}</span>
-    <select id={selectId}
+    <select
       className={classNames('fancy-text', 'bare', 'writable', 'soft-cornered', 'chevroned', 'lifted', 'raisable')}
       {...(value ? {value} : {defaultValue: ''})}
       required={required}
