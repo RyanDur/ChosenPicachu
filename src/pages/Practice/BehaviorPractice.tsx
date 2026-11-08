@@ -138,7 +138,7 @@ export const BehaviorPractice: FC = () =>
     <code className="monospaced">map</code> and <code className="monospaced">mBind</code> work on a success and let
       a failure pass.</p>
     <TwoTracks/>
-    <p className="paragraph">Here is the request for recent trades. <code className="monospaced">recentTrades</code>
+    <p className="paragraph">Here is the request for recent trades. <code className="monospaced">recentTrades</code>{' '}
       fetches the response, checks it against its decoder and turns it into trades. If a step fails, the steps after it
       do not run:</p>
     <RecentTradesCarve/>
