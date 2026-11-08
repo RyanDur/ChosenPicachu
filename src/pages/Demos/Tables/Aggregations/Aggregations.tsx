@@ -3,7 +3,7 @@ import {FC, useEffect, useState} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials, useControls} from '../../Controls';
-import {TableFrame, warmed} from '../Frame';
+import {prefetch, TableFrame} from '../Frame';
 import {marketSelectors} from '../../Market';
 import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
@@ -31,7 +31,7 @@ const VanillaStage: FC<Dials> = dials => {
 export const Aggregations: FC = () => {
   const {pace, origin, motion, world} = useControls();
   const dials = {pace, origin, motion};
-  useEffect(warmed, []);
+  useEffect(() => prefetch.assembly(), []);
 
   return <section aria-label="live aggregations" className="aggregations card rounded-corners lifted padded contained">
     {world === 'vanilla'

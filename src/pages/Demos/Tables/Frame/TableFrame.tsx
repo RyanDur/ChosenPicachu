@@ -11,10 +11,6 @@ type Props = Dials & {
   onStood?: () => void;
 };
 
-export const warmed = (): void => {
-  void import('./assemble').catch(() => undefined);
-};
-
 const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
   maybe(frame.contentDocument).map(inner => {
     const height = Math.ceil(inner.body.getBoundingClientRect().height);
@@ -33,9 +29,9 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, 
 
   useEffect(() => {
     let standing = true;
-    void import('./assemble').then(({frameDocument}) => {
+    void import('./assemble').then(({frameAssembly}) => {
       if (standing) {
-        setDocument(frameDocument({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}));
+        setDocument(frameAssembly.document({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}));
       }
     }).catch(() => dispatchBanner(bannerChange.raised('the table could not be assembled')));
     return () => {

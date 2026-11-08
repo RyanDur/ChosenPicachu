@@ -4,7 +4,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} fr
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
-import {whatACustomPropertyIs} from '../definitions';
+import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
 
@@ -22,7 +22,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         <Says>The <Term word="drift">drift</Term> is a field of the drag, written by the dragging reducer’s drifted
           case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the
           pointer has moved since. Every move dispatches the pointer. Two selectors turn the drag
-          into two numbers, and every carried cell wears them as custom properties: {whatACustomPropertyIs}. The first
+          into two numbers, and every carried cell wears them as custom properties: <WhatACustomPropertyIs/>. The first
           is the seat, where the grab box sits against where the column rests in the order as it stands now. The second
           is the drift. That
           subtraction is why a settle mid-drag never makes the carried column jump: the order

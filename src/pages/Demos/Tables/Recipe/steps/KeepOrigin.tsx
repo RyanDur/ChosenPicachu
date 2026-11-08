@@ -3,7 +3,7 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {gap, surfaceCss} from './sources';
-import {whatACustomPropertyIs} from '../definitions';
+import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
 
@@ -11,7 +11,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
   <Step title="Keep the origin in place and let only the order move" dial={<OriginDial name="step-origin"/>}>
     <Words want="A moving column can disorient; some traders want the table to hold its shape while they decide, and only the order to answer.">
       <Says>Keeping the origin should be the style sheet’s decision, not a second table: the
-        carried cells still wear their seat and their drift as custom properties, {whatACustomPropertyIs}, and when the
+        carried cells still wear their seat and their drift as custom properties, <WhatACustomPropertyIs/>, and when the
         table wears keep the style sheet never adds them up. <SheetDeclaresSeatAndDrift/>.</Says>
     </Words>
     <Reveal>

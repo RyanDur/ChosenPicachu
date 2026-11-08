@@ -2,7 +2,8 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {FlowTableRecipe, StillTableRecipe} from '../LivingTableRecipe';
+import {FlowTableRecipe} from '../FlowTableRecipe';
+import {StillTableRecipe} from '../StillTableRecipe';
 
 describe('the still and living table recipes', () => {
   test('should hold their stories in the still table and the living table', async () => {

@@ -1,4 +1,4 @@
-import {frameDocument, sheets} from '../assemble';
+import {frameAssembly} from '../assemble';
 import indexCss from '../../../../../index.css?raw';
 
 const styleSheets = import.meta.glob<string>('../../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
@@ -9,25 +9,25 @@ describe('the frame assembly', () => {
   const manifest = [...indexCss.matchAll(/@import "styles\/(.+?)";/g)].map(([, name]) => name);
 
   it('no sheet rides the cascade twice', () => {
-    const names = sheets.map(({name}) => name);
+    const names = frameAssembly.sheets.map(({name}) => name);
     expect(new Set(names).size).toBe(names.length);
-    const everything = sheets.map(({css}) => css).join('\n');
+    const everything = frameAssembly.sheets.map(({css}) => css).join('\n');
     expect(everything.match(/\.off-screen\s*\{/g)).toHaveLength(1);
   });
 
   it('the frame\'s sheets carry the prefixes the site\'s browsers need, as the site\'s own do', () => {
-    const everything = sheets.map(({css}) => css).join('\n');
+    const everything = frameAssembly.sheets.map(({css}) => css).join('\n');
     expect(everything).toContain('-webkit-user-select: none');
   });
 
   it('no import survives into the frame', () => {
-    const everything = sheets.map(({css}) => css).join('\n');
+    const everything = frameAssembly.sheets.map(({css}) => css).join('\n');
     expect(everything.match(/@import/g)).toBeNull();
   });
 
   it('the cascade follows index.css into the frame', () => {
     expect(manifest.length).toBeGreaterThan(0);
-    manifest.forEach(name => expect(sheets.map(({name: sheetName}) => sheetName)).toContain(name));
+    manifest.forEach(name => expect(frameAssembly.sheets.map(({name: sheetName}) => sheetName)).toContain(name));
   });
 
   it('no sheet in styles/ is orphaned from the cascade', () => {
@@ -35,18 +35,18 @@ describe('the frame assembly', () => {
   });
 
   const document = () =>
-    frameDocument(
+    frameAssembly.document(
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'hide', motion: 'animated'});
 
   it('the document carries the whole cascade', () => {
-    sheets.forEach(({css}) => expect(document()).toContain(css));
+    frameAssembly.sheets.forEach(({css}) => expect(document()).toContain(css));
     expect(document()).toContain('::view-transition-group(*)');
     expect(document()).not.toContain('@import');
   });
 
   it('the document carries the starting table dressed by the dials', () => {
-    const dressed = frameDocument(
+    const dressed = frameAssembly.document(
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'keep', motion: 'static'});
 

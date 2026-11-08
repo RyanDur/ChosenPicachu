@@ -4,7 +4,7 @@ import {demoPage} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Recipe} from '../Recipe';
-import {FlowTableRecipe} from '../LivingTableRecipe';
+import {FlowTableRecipe} from '../FlowTableRecipe';
 import {TableControls} from '../../TableControls';
 
 describe('the drag sort recipe', () => {

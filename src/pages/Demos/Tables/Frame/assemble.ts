@@ -12,7 +12,7 @@ import frameJs from './frame.main.ts?frame';
 import {startingTable} from './starting';
 import {Sheet, siteSheets} from '../../Stage';
 
-export const sheets: Sheet[] = [
+const sheets: Sheet[] = [
   ...siteSheets,
   {name: 'Table.css', css: tableCss},
   {name: 'Header.css', css: headerCss},
@@ -23,7 +23,7 @@ export const sheets: Sheet[] = [
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
-export const frameDocument = (env: Exchange, frame: Dials): string => {
+const assembled = (env: Exchange, frame: Dials): string => {
   const cascade = sheets.map(({css}) => css).join('\n');
   return scaffold
     .replace('/* the cascade */', () => cascade)
@@ -31,3 +31,10 @@ export const frameDocument = (env: Exchange, frame: Dials): string => {
     .replace('/* the environment */', () => `window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};`)
     .replace('/* the shell */', () => frameJs);
 };
+
+type FrameAssembly = {
+  sheets: Sheet[];
+  document: (env: Exchange, frame: Dials) => string;
+};
+
+export const frameAssembly: FrameAssembly = {sheets, document: assembled};

@@ -1,1 +1,2 @@
-export {TableFrame, warmed} from './TableFrame';
+export {prefetch} from './prefetch';
+export {TableFrame} from './TableFrame';

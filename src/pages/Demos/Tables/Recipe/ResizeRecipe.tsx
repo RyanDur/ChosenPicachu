@@ -15,7 +15,8 @@ import frameResize from '../Frame/table/resize.ts?sample';
 import frameHandle from '../Frame/table/handle.ts?sample';
 import widthsSource from '../Aggregations.css?sample';
 import {TheImplementation} from './steps';
-import {whatACustomPropertyIs, whatTheDomIs} from './definitions';
+import {WhatACustomPropertyIs} from './WhatACustomPropertyIs';
+import {WhatTheDomIs} from './WhatTheDomIs';
 import '../../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
@@ -196,7 +197,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             wears <code className="monospaced">shared</code> takes its
             width from its share. The header’s share is written as a custom
             property, <code className="monospaced">--share</code>, one of
-            the {whatACustomPropertyIs}.</Says>
+            the <WhatACustomPropertyIs/>.</Says>
           <Says>In <code className="monospaced">Aggregations.css</code>, beside the opening widths, three declarations
             in the table’s rule size it: a width, a minimum width and a table
             layout. <code className="monospaced">width: 100%</code> fills its container.
@@ -283,7 +284,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
         </Reveal>
       </Step>
       <Step title="Capture the pointer, measure once">
-        <Words want={<>Pointer positions arrive in pixels while the ledger holds shares. {whatTheDomIs} Asking it for
+        <Words want={<>Pointer positions arrive in pixels while the ledger holds shares. <WhatTheDomIs/> Asking it for
           the table’s width on every move forces a layout each time, since every move changes a width.</>}>
           <Says>Capture on the handle, which is safe here because unlike the sort’s cells the
             handle never moves in the DOM, and measure the table once: pixels per share, the

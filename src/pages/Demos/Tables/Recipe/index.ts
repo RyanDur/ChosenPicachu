@@ -5,4 +5,5 @@ export {LayerMap} from './LayerMap';
 export {StoryClues} from './StoryClues';
 export {DesignAsk} from './DesignAsk';
 export {StorySlices} from './StorySlices';
-export {FlowTableRecipe, StillTableRecipe} from './LivingTableRecipe';
+export {FlowTableRecipe} from './FlowTableRecipe';
+export {StillTableRecipe} from './StillTableRecipe';
