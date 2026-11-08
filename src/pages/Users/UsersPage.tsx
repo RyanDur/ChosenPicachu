@@ -1,35 +1,16 @@
-import {FC, useEffect, useState, useSyncExternalStore} from 'react';
-import {Link, useNavigate} from 'react-router';
-import {useSearchParamsObject} from '@frame/navigation/search-params';
-import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
-import {troubleWith} from '@transport/trouble';
-import * as schema from 'schemawax';
-import {usersApi} from './resource';
+import {FC} from 'react';
+import {Link} from 'react-router';
 import {Paths} from '@frame/navigation';
 import {UsersTable} from './UsersTable';
-import {UsersProvider} from './Provider';
-import {syncing} from './syncing';
-import {opened, usersSlice, usersStore, userWithId} from './store';
+import {UsersProvider} from './UsersProvider';
 import {UserInformation} from './UserInformation';
-import {modeParam, openedOn} from './mode';
+import {useOpened} from './useOpened';
 import './UsersPage.css';
 
-export const UsersPage: FC = () => {
-  const navigate = useNavigate();
-  const dispatchBanner = useBannerDispatch();
-  const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: modeParam});
-  const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => dispatchBanner(bannerChange.raised(troubleWith('the users')(error))))));
-  const open = openedOn(
-    userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial)),
-    param
-  );
-
-  useEffect(() => {
-    store.dispatch(opened());
-  }, [store]);
-
-  return <UsersProvider store={store}>
-    <UserInformation open={open} className="user-info users card rounded-corners lifted padded"/>
+const Roster: FC = () => {
+  const open = useOpened();
+  return <>
+    <UserInformation className="user-info users card rounded-corners lifted padded"/>
 
     <section id="user-candidates" aria-labelledby="roster-title" className="user-candidates users card rounded-corners lifted padded contained">
       <h2 id="roster-title" className="roster-title title bold">User Candidates</h2>
@@ -37,5 +18,9 @@ export const UsersPage: FC = () => {
           <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
       <UsersTable/>
     </section>
-  </UsersProvider>;
+  </>;
 };
+
+export const UsersPage: FC = () => <UsersProvider>
+  <Roster/>
+</UsersProvider>;

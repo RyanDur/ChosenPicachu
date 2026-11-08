@@ -2,7 +2,7 @@ import {Entry, Item, ItemLink, Menu} from '@components/Menu';
 import {FC, MouseEvent} from 'react';
 import {maybe} from '@ryandur/sand';
 import {User} from '@pages/Users/profile';
-import {copyingAt, userAt} from '../../mode';
+import {openings} from '../../openings';
 
 type Props = {
   user: User;
@@ -22,11 +22,11 @@ export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
       aria-label={`Actions for ${name}`}/>
     <Menu id={id} tabIndex={-1} popover="auto" className="card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
       <Entry>
-        <ItemLink to={userAt(user.id, 'view')}
+        <ItemLink to={openings.at(user.id, 'view')}
           onClick={dismissed} className="sub-title">View</ItemLink>
       </Entry>
       <Entry>
-        <ItemLink to={userAt(user.id, 'edit')}
+        <ItemLink to={openings.at(user.id, 'edit')}
           onClick={dismissed} className="sub-title">Edit</ItemLink>
       </Entry>
       <Entry>
@@ -35,7 +35,7 @@ export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
           onClick={onRemoved}>Remove</Item>
       </Entry>
       <Entry>
-        <ItemLink to={copyingAt(user.id)}
+        <ItemLink to={openings.copying(user.id)}
           onClick={dismissed} className="sub-title">Clone</ItemLink>
       </Entry>
     </Menu>

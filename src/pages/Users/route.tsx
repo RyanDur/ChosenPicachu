@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Header, Page, PageError} from '@frame/page';
-import {UsersPage} from '@pages/Users/UsersPage';
+import {UsersPage} from './UsersPage';
 import names from '@frame/navigation/names.json';
 
 const header = <Header title="Users" listed={names.users}/>;

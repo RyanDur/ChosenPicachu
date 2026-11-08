@@ -37,6 +37,15 @@ export const setupUserAddedResponse = (rosterAfter: readonly User[]): () => unkn
   return () => sent;
 };
 
+export const userAddsHeard = (): () => readonly unknown[] => {
+  const sent: unknown[] = [];
+  server.use(http.post(usersDomain, async ({request}) => {
+    sent.push(await request.json());
+    return HttpResponse.json([], {status: 201});
+  }));
+  return () => sent;
+};
+
 export const setupUserUpdatedResponse = (id: string, rosterAfter: readonly User[]): () => unknown => {
   let sent: unknown;
   server.use(http.put(`${usersDomain}/${id}`, async ({request}) => {

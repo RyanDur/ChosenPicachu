@@ -22,9 +22,10 @@ import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
 import {Maybe, maybe, not, some} from '@ryandur/sand';
-import {Opened, userAt} from '../mode';
-import {useUsersDispatch} from '../Provider';
-import {userAdded, userUpdated} from '../store';
+import {Opened, openings} from '../openings';
+import {useUsersDispatch} from '../useUsersDispatch';
+import {usersActions} from '../usersActions';
+import {useOpened} from '../useOpened';
 import {useHydrated} from '@frame/state';
 import './UserInformation.css';
 
@@ -37,10 +38,11 @@ const newUser = (avatar: string): NewUser => ({
 
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
-export const UserInformation: FC<{open?: Opened; className?: string}> = ({open = {mode: 'adding'}, className}) =>
-  <Draft key={shown(open).map(({id}) => id).orNull()} open={open} className={className}/>;
+export const UserInformation: FC<{className?: string}> = ({className}) =>
+  <Draft key={shown(useOpened()).map(({id}) => id).orNull()} className={className}/>;
 
-const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
+const Draft: FC<{className?: string}> = ({className}) => {
+  const open = useOpened();
   const users = useUsersDispatch();
   const hydrated = useHydrated();
   const [draft, dispatch] = useReducer(formReducer, shown(open),
@@ -58,8 +60,8 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
     onSubmit={event => {
       event.preventDefault();
 
-      if (open.mode === 'editing') users(userUpdated({...open.user, ...user}));
-      else users(userAdded(user));
+      if (open.mode === 'editing') users(usersActions.userUpdated({...open.user, ...user}));
+      else users(usersActions.userAdded(user));
 
       reset();
     }}
@@ -119,11 +121,11 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
 
     {!readOnly &&
         <button id="reset-form" type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>}
-    {open.mode === 'viewing' && <Link id="reset-form" to={userAt(open.user.id, 'edit')}
+    {open.mode === 'viewing' && <Link id="reset-form" to={openings.at(open.user.id, 'edit')}
       className="reset button secondary">Edit</Link>}
     {!editing && !readOnly &&
         <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Add</button>}
-    {open.mode === 'editing' && <Link id="cancel" to={userAt(open.user.id, 'view')}
+    {open.mode === 'editing' && <Link id="cancel" to={openings.at(open.user.id, 'view')}
       className="cancel button secondary" onClick={reset}>Cancel</Link>}
     {editing && <button id="submit" type="submit" className="submit button primary" disabled={!hydrated}>Update</button>}
 

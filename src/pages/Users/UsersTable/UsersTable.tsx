@@ -1,23 +1,25 @@
 import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
-import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
-import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age} from '../age';
 import {FriendsList} from '../FriendsList';
 import {UserMenu} from './UserMenu';
-import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
-import {useUsersDispatch, useUsersSelector} from '../Provider';
-import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
-import {seated, worksFromHome} from '../columns';
+import {
+  Body, Cell, Column, DraggableColumn, DragSortable, Headers, ResizeHandle, Row, RowHeader, SortMenu, useDragSortable
+} from '@components/DragSortableTable';
+import {useUsersDispatch} from '../useUsersDispatch';
+import {useUsersSelector} from '../useUsersSelector';
+import {usersActions} from '../usersActions';
+import {usersSelectors} from '../usersSelectors';
+import {userColumns} from '../columns';
 import {arrangements, tableReports, tableSelectors} from '@components/DragSortableTable/model';
 import {profile} from '@pages/Users/profile';
 
 export const UsersTable: FC = () => {
   const dispatch = useUsersDispatch();
-  const users = useUsersSelector(selectUsers);
-  const columns = useUsersSelector(selectColumns);
+  const users = useUsersSelector(usersSelectors.users);
+  const columns = useUsersSelector(usersSelectors.columns);
 
-  const sortable = useDragSortable(columns, seated(users), {origin: 'hide', motion: 'animated'});
+  const sortable = useDragSortable(columns, userColumns.seated(users), {origin: 'hide', motion: 'animated'});
 
   return <DragSortable value={sortable}>
     <table id="users-table" className={sortable.className}>
@@ -45,12 +47,12 @@ export const UsersTable: FC = () => {
             <Cell column="age" row={user.id}>{maybe(user.info.dob).map(age.of).map(age.worded).orElse('')}</Cell>
             <Cell column="friends" row={user.id}>
               <FriendsList user={user} users={users}
-                onFriendAdded={friend => dispatch(friendAdded(user.id, friend))}
-                onFriendRemoved={friend => dispatch(friendRemoved(user.id, friend))}/>
+                onFriendAdded={friend => dispatch(usersActions.friendAdded(user.id, friend))}
+                onFriendRemoved={friend => dispatch(usersActions.friendRemoved(user.id, friend))}/>
             </Cell>
             <Cell column="works-from-home" row={user.id} className="last-column">
-              {worksFromHome(user)}
-              <UserMenu user={user} name={name} onRemoved={() => dispatch(userRemoved(user))}/>
+              {userColumns.worksFromHome(user)}
+              <UserMenu user={user} name={name} onRemoved={() => dispatch(usersActions.userRemoved(user))}/>
             </Cell>
           </Row>;
         })}
