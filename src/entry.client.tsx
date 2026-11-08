@@ -20,4 +20,4 @@ foldAll(
   maybe(matchRoutes([site], window.location, basename)).orElse([]).map(({route}) => opened(route)),
   () => asyncSuccess(undefined),
   asyncSuccess(undefined)
-).onSuccess(() => hydrateTheSite.overTheBuiltPage(() => createBrowserRouter([site], {basename, hydrationData: {}})));
+).onSuccess(() => hydrateTheSite.overTheBuiltPage(createBrowserRouter([site], {basename, hydrationData: {}})));

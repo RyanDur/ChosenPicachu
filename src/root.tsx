@@ -1,5 +1,5 @@
 import {BannerProvider, Banners} from '@frame/notices/Banners';
-import {Outlet, ScrollRestoration} from 'react-router';
+import {Location, Outlet, ScrollRestoration} from 'react-router';
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
@@ -37,11 +37,14 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
     </body>
   </html>;
 
+// the router keys every entry opened by its address 'default', so those entries would all share one scroll place
+const placeOf = ({key, pathname, search}: Location): string => key === 'default' ? pathname + search : key;
+
 const Site: FC<{room: ReactNode}> = ({room}) =>
   <BannerProvider><PageNameProvider><FeedbackProvider>
     {room}
     <Banners/>
-    <ScrollRestoration/>
+    <ScrollRestoration getKey={placeOf}/>
   </FeedbackProvider></PageNameProvider></BannerProvider>;
 
 export const ErrorBoundary: FC = () =>
