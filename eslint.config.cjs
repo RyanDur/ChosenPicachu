@@ -7,6 +7,7 @@ const {structure} = require('./scripts/lint/structure.mjs');
 const {bareInlineCode} = require('./scripts/lint/inline-code.mjs');
 const {wrap} = require('./scripts/lint/wrap.mjs');
 const {page} = require('./scripts/lint/page.mjs');
+const {components} = require('./scripts/lint/components.mjs');
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -76,6 +77,15 @@ const journeys = Object.fromEntries([
 
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
+const stillCallComponents = [
+  'src/hydrateTheSite.tsx',
+  'src/feedback/Feedback.tsx',
+  'src/pages/Demos/route.tsx',
+  'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx',
+  'src/pages/Practice/route.tsx',
+  'src/pages/Users/UserInformation/UserInformation.tsx'
+];
+
 const stillReachForThePage = [
   'src/navigation/arrival/useArrival.ts',
   'src/components/room.ts', 'src/page/SideNav.tsx'
@@ -113,6 +123,12 @@ module.exports = [
     },
     plugins: {'@stylistic': stylistic, wrap},
     rules: {...shape, ...markup}
+  },
+  {
+    files: ['src/**/*.tsx'],
+    ignores: [...stillCallComponents],
+    plugins: {components},
+    rules: {'components/rendered-as-jsx': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],
