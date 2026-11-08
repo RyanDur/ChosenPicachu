@@ -19,7 +19,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
       onPointerDown={event => event.stopPropagation()}>
       {sorting.choices.map(choice =>
         <Entry key={choice}>
-          <Item tabIndex={0} className="sub-title"
+          <Item tabIndex={0} className="sub-title" value={choice}
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               const direction = sorting.directionOf(choice);

@@ -45,6 +45,15 @@ describe('the frame table', () => {
     expect(vanillaFrame.moveReport()).toHaveTextContent('buys sorted descending');
   });
 
+  it('should sort by a menu button’s value when its words say something else', async () => {
+    vanillaFrame.standWithASortChoiceWorded('buys', 'descending', 'most first');
+
+    await vanillaFrame.chooseWorded('buys', 'most first');
+
+    expect(vanillaFrame.header('buys')).toHaveAttribute('aria-sort', 'descending');
+    expect(vanillaFrame.moveReport()).toHaveTextContent('buys sorted descending');
+  });
+
   afterEach(() => {
     document.body.innerHTML = '';
     hangUpEveryFeed();

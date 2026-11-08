@@ -21,6 +21,8 @@ const row = (window: string): HTMLElement => screen.getByRole('row', {name: new 
 const numberedGrip = (rowNumber: number): HTMLElement => screen.getByRole('button', {name: `move row ${rowNumber}`});
 const grip = (window: string): HTMLElement => within(row(window)).getByRole('button', {name: /move row/});
 const columnOrder = (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? '');
+const menuItem = (column: string, words: string): HTMLElement =>
+  within(screen.getByLabelText(`sort ${column} by`)).getByRole('button', {name: words, hidden: true});
 const press = async (...keys: string[]): Promise<void> => {
   for (const key of keys) {
     await userEvent.keyboard(key);
@@ -44,6 +46,13 @@ export const vanillaFrame = {
     header(column).removeAttribute('data-column');
     boot(document);
   },
+  standWithASortChoiceWorded: (column: string, choice: MenuChoice, words: string): void => {
+    window.__env = {...env, tradeFeed: ''};
+    window.__frame = {pace: 'eager', origin: 'hide', motion: 'animated'};
+    document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
+    menuItem(column, choice).textContent = words;
+    boot(document);
+  },
   table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),
   header,
   row,
@@ -53,8 +62,8 @@ export const vanillaFrame = {
   columnOrder,
   windowNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
-  choose: async (column: string, choice: MenuChoice): Promise<void> =>
-    userEvent.click(within(screen.getByLabelText(`sort ${column} by`)).getByRole('button', {name: choice, hidden: true})),
+  choose: async (column: string, choice: MenuChoice): Promise<void> => userEvent.click(menuItem(column, choice)),
+  chooseWorded: async (column: string, words: string): Promise<void> => userEvent.click(menuItem(column, words)),
   liftAndLetGo: async (rowNumber: number): Promise<void> => {
     const held = numberedGrip(rowNumber);
     await userEvent.pointer([{keys: '[MouseLeft>]', target: held}, {keys: '[/MouseLeft]', target: held}]);

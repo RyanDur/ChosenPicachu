@@ -27,8 +27,8 @@ const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, column:
   report({about: 'sort', name: column, direction});
 };
 
-const choosing = (context: Pick<MountedTable, 'table' | 'report'>, column: string, item: Element): void => {
-  item.addEventListener('click', () => sorting.choiceOf((item.textContent ?? '').trim())
+const choosing = (context: Pick<MountedTable, 'table' | 'report'>, column: string, item: HTMLButtonElement): void => {
+  item.addEventListener('click', () => sorting.choiceOf(item.value)
     .map(choice => choose(context, column, sorting.directionOf(choice))));
 };
 
