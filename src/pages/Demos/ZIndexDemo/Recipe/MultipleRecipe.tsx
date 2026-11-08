@@ -6,6 +6,7 @@ import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
 import changeSource from '@frame/notices/banners/bannerChange.ts?sample';
 import newsSource from '@frame/notices/banners/bannerNews.ts?sample';
 import bannersCss from '@frame/notices/banners/Banners.css?sample';
+import timingCss from '../../../../styles/timing.css?sample';
 import '../../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
@@ -112,6 +113,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
+            ...carve.span(timingCss, '--slide-curve:', '--slide-curve:'), gap,
             ...carve.unit(bannersCss, '.trouble {'), gap,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
             ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
