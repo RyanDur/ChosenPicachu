@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
-import {frameCarry, gap, travelSource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">
@@ -44,11 +45,11 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(frameCarry, 'export const carrying = '),
+            ...carve.unit(sources.frameCarry, 'export const carrying = '),
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...carve.unit(travelSource, 'export const pointerTravel'),
+          ...carve.unit(sources.travel, 'export const pointerTravel'),
           lines.aside('// one move; each world moves and drops its own way; losing the capture is a move too')
         ]}/>
       </Codes>

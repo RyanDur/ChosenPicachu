@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
-import {arrowsSource, gap} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
@@ -18,13 +19,13 @@ export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> 
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+            ...carve.unit(sources.arrows, 'export const columnArrows'), gap,
             ...carve.span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
             ...carve.unit(headerSource, 'const walkedTo = '),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(arrowsSource, 'export const columnArrows'), gap,
+            ...carve.unit(sources.arrows, 'export const columnArrows'), gap,
             ...carve.unit(buildSrc, 'const columnTo = '), gap,
             ...carve.span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')

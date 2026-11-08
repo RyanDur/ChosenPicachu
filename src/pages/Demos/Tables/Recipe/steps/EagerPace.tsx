@@ -3,7 +3,8 @@ import {PaceDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
-import {frameColumns, gap, travelSource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
@@ -51,11 +52,11 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
               lines.aside('{/* same key, new place: React moves the node, not a copy */}')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(frameColumns, 'const reconcileColumns = '),
+              ...carve.unit(sources.frameColumns, 'const reconcileColumns = '),
               lines.aside('// the same cells, new places: the reconcile moves the node, not a copy')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(travelSource, 'export const eagerTravel'),
+            ...carve.unit(sources.travel, 'export const eagerTravel'),
             lines.aside('// one shared travel; each world answers with its own settle')
           ]}/>
         </Codes>

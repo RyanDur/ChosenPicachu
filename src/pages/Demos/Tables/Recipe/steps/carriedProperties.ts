@@ -1,5 +1,5 @@
 import {carve, Line, Sample} from '../../../Recipe';
-import {gap} from './sources';
+import {gap} from './gap';
 
 export const carriedProperties = (cssSource: Sample): Line[] => [
   ...carve.unit(cssSource, '@property --seat-x {'), gap,

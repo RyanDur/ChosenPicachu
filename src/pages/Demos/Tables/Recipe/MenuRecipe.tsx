@@ -14,8 +14,8 @@ import arrangedViewSource from '@pages/Demos/Market/arrangedView.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
 import frameColumns from '../Frame/table/columns.ts?sample';
 import {buildSources} from './buildSources';
-import {headerSources, rowSources, tableSources} from './sources';
-import {menuSource, surfaceCss, TheImplementation} from './steps';
+import {paceSources} from './sources';
+import {sources, TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 
@@ -326,10 +326,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>}
             <Snippet label="CSS" lines={[
               ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle {'), gap,
-              ...carve.unit(surfaceCss, '.borderless {'), gap,
-              ...carve.unit(surfaceCss, '.unfilled {'), gap,
-              ...carve.unit(surfaceCss, '.muted-ink {'), gap,
-              ...carve.unit(surfaceCss, '.attentive:where(')
+              ...carve.unit(sources.surfaceCss, '.borderless {'), gap,
+              ...carve.unit(sources.surfaceCss, '.unfilled {'), gap,
+              ...carve.unit(sources.surfaceCss, '.muted-ink {'), gap,
+              ...carve.unit(sources.surfaceCss, '.attentive:where(')
             ]}/>
           </Codes>
         </Reveal>
@@ -342,10 +342,10 @@ export const MenuRecipe: FC = () => {
   const {pace, world} = useControls();
   const build: Build = {
     world,
-    source: headerSources[pace],
-    menuSrc: menuSource,
-    tableSrc: tableSources[pace],
-    rowSrc: rowSources[pace],
+    source: paceSources.header[pace],
+    menuSrc: sources.menu,
+    tableSrc: paceSources.table[pace],
+    rowSrc: paceSources.row[pace],
     buildSrc: buildSources[pace]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">

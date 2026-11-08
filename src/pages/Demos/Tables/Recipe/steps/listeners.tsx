@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import type {World} from '../../../Controls';
-import {gap, elementSource, storeSource, liftSource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
   <Step title="Write each listener once, for both worlds">
@@ -42,13 +43,13 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
         where the moved column or row now sits.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(storeSource, 'export type Store'), gap,
-          ...carve.span(liftSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
+          ...carve.unit(sources.store, 'export type Store'), gap,
+          ...carve.span(sources.lift, 'export const columnLift', ') => (event: GrabEvent): void => {'),
           lines.aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.unit(elementSource, 'export const useDragSortable')
+            ...carve.unit(sources.element, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(buildSrc, 'export const dragSortable = '), gap,

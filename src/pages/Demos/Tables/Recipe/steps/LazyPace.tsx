@@ -3,7 +3,8 @@ import {PaceDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
-import {gap, travelSource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, paceSource, buildSrc}) =>
@@ -41,7 +42,7 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
               ...carve.unit(buildSrc, 'const landed = ')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(travelSource, 'export const lazyTravel'),
+            ...carve.unit(sources.travel, 'export const lazyTravel'),
             lines.aside('// one shared travel; the fold is its value, each world keeps it its own way')
           ]}/>
         </Codes>

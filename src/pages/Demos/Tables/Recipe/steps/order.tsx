@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
-import {arrangementSource, bootSource, frameRows, gap, headersSource, placingSource, rowSource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 import {elidedHeaders} from '../elidedHeaders';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
@@ -36,7 +37,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
         {world === 'react'
           ? <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(arrangementSource, 'export type Arrangement')
+              ...carve.unit(sources.arrangement, 'export type Arrangement')
             ]}/>
             <Snippet label="TS" lines={[
               ...carve.span(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
@@ -46,19 +47,19 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
               ...carve.span(tableSource, '<Body onRowMoved', '</Body>')
             ]}/>
             <Snippet label="TS" lines={[
-              ...carve.unit(headersSource, 'export const Headers'), gap,
-              ...carve.unit(rowSource, 'export const Row'), gap,
-              ...carve.unit(placingSource, 'export const placed')
+              ...carve.unit(sources.headers, 'export const Headers'), gap,
+              ...carve.unit(sources.row, 'export const Row'), gap,
+              ...carve.unit(sources.placing, 'export const placed')
             ]}/>
           </Codes>
           : <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(arrangementSource, 'export type Arrangement'), gap,
+              ...carve.unit(sources.arrangement, 'export type Arrangement'), gap,
               ...carve.span(buildSrc, 'order: () => columns().map', 'standing: () => rows().map'), gap,
-              ...carve.unit(bootSource, 'const fed = ')
+              ...carve.unit(sources.boot, 'const fed = ')
             ]}/>
             <Snippet label="TS" lines={[
-              ...carve.span(frameRows, 'export const reseatRows = ',
+              ...carve.span(sources.frameRows, 'export const reseatRows = ',
                 'body.insertBefore(desired, body.children[position] ?? null);'),
               lines.aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
             ]}/>

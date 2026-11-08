@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
-import {frameSettle, gap, reducerSource, stateSource, surveySource} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, cssSource, buildSrc}) =>
@@ -57,21 +58,21 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
           {world === 'react'
             ? <Snippet label="TS" lines={[
               ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'), gap,
-              ...carve.span(reducerSource, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
-              ...carve.unit(stateSource, 'export const shoveColumns'), gap,
-              ...carve.unit(stateSource, 'export const settle'),
+              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
+              ...carve.unit(sources.state, 'export const shoveColumns'), gap,
+              ...carve.unit(sources.state, 'export const settle'),
               lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const columnShoving = '), gap,
               ...carve.unit(buildSrc, 'const columnTo = '), gap,
               ...carve.unit(buildSrc, 'const drop = '), gap,
-              ...carve.unit(frameSettle, 'const untilSettled = '),
+              ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(surveySource, 'export const displacedBetween'), gap,
-            ...carve.unit(surveySource, 'export const columnLeft'),
+            ...carve.unit(sources.survey, 'export const displacedBetween'), gap,
+            ...carve.unit(sources.survey, 'export const columnLeft'),
             lines.aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
           ]}/>
           <Snippet label="CSS" lines={[

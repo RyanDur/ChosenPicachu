@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
-import {gap, surfaceCss} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
@@ -54,7 +55,7 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
           ...carriedProperties(cssSource),
           ...carve.unit(cssSource, '.sortable .carried {'), gap,
           ...carve.unit(cssSource, '.sortable.hide .carried {'), gap,
-          ...carve.unit(surfaceCss, '.paper-in-motion {'),
+          ...carve.unit(sources.surfaceCss, '.paper-in-motion {'),
           lines.aside('/* the carried cell rises above its neighbors in every table; only under hide does it move */')
         ]}/>
       </Codes>

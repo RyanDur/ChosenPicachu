@@ -8,8 +8,10 @@ import eagerRow from '@components/DragSortableTable/RowHeader.tsx?sample';
 import lazyHeader from '../Builds/LazyTable/DraggableColumn.tsx?sample';
 import lazyRow from '../Builds/LazyTable/RowHeader.tsx?sample';
 
-export const tableSources: Record<Pace, Sample> = {eager: eagerTable, lazy: lazyTable};
+const table: Record<Pace, Sample> = {eager: eagerTable, lazy: lazyTable};
 
-export const headerSources: Record<Pace, Sample> = {eager: eagerHeader, lazy: lazyHeader};
+const header: Record<Pace, Sample> = {eager: eagerHeader, lazy: lazyHeader};
 
-export const rowSources: Record<Pace, Sample> = {eager: eagerRow, lazy: lazyRow};
+const row: Record<Pace, Sample> = {eager: eagerRow, lazy: lazyRow};
+
+export const paceSources = {table, header, row};

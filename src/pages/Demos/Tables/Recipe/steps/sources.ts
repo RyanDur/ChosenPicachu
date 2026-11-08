@@ -20,7 +20,6 @@ import headersSource from '@components/DragSortableTable/Headers.tsx?sample';
 import arrangementSource from '@components/DragSortableTable/model/arrangement.ts?sample';
 import placingSource from '@components/DragSortableTable/placing.ts?sample';
 import looksSource from '@components/DragSortableTable/model/looks.ts?sample';
-import {lines} from '../../../Recipe';
 import bootSource from '../../Frame/boot.ts?sample';
 import frameColumns from '../../Frame/table/columns.ts?sample';
 import frameRows from '../../Frame/table/rows.ts?sample';
@@ -28,11 +27,33 @@ import frameGrip from '../../Frame/table/grip.ts?sample';
 import frameHandle from '../../Frame/table/handle.ts?sample';
 import frameParts from '../../Frame/table/parts.ts?sample';
 
-export {
-  surveySource, gripSource, sortableCss, headerCss, frameHtml, surfaceCss, stateSource, reducerSource, selectorsSource,
-  frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource,
-  headersSource, arrangementSource, placingSource, looksSource, bootSource, frameColumns, frameRows, frameGrip,
-  frameHandle, frameParts
+export const sources = {
+  survey: surveySource,
+  grip: gripSource,
+  sortableCss,
+  headerCss,
+  frameHtml,
+  surfaceCss,
+  state: stateSource,
+  reducer: reducerSource,
+  selectors: selectorsSource,
+  frameCarry,
+  frameSettle,
+  travel: travelSource,
+  lift: liftSource,
+  arrows: arrowsSource,
+  element: elementSource,
+  store: storeSource,
+  menu: menuSource,
+  row: rowSource,
+  headers: headersSource,
+  arrangement: arrangementSource,
+  placing: placingSource,
+  looks: looksSource,
+  boot: bootSource,
+  frameColumns,
+  frameRows,
+  frameGrip,
+  frameHandle,
+  frameParts
 };
-
-export const gap = lines.plain(' ');

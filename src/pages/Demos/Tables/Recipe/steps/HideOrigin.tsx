@@ -3,7 +3,8 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
-import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
+import {sources} from './sources';
+import {gap} from './gap';
 import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
@@ -68,28 +69,28 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
             ? <Snippet label="TS" lines={[
               ...carve.unit(headerSource, 'const moved = '), gap,
               ...carve.span(headerSource, 'className={classNames(', '...motionStates(carried'), gap,
-              ...carve.unit(looksSource, 'export const motionStates'), gap,
+              ...carve.unit(sources.looks, 'export const motionStates'), gap,
               ...carve.span(headerSource, "'--seat-x': pixels(seat?.x)", "'--drift-x': pixels(drift?.x)")
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const moved = '), gap,
-              ...carve.unit(frameCarry, 'export const dressCarried'), gap,
-              ...carve.span(frameSettle, 'type Toward', 'const motions'), gap,
-              ...carve.unit(frameSettle, 'export const changeMotion'),
+              ...carve.unit(sources.frameCarry, 'export const dressCarried'), gap,
+              ...carve.span(sources.frameSettle, 'type Toward', 'const motions'), gap,
+              ...carve.unit(sources.frameSettle, 'export const changeMotion'),
               lines.aside('// the reconcile sets the carried cells’ classes; the style sheet moves them')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(stateSource, 'export const drift'), gap,
-            ...carve.unit(stateSource, 'export const seatOffset'), gap,
-            ...carve.unit(selectorsSource, 'export const seatOfColumn'), gap,
-            ...carve.unit(selectorsSource, 'export const driftOfColumn'),
+            ...carve.unit(sources.state, 'export const drift'), gap,
+            ...carve.unit(sources.state, 'export const seatOffset'), gap,
+            ...carve.unit(sources.selectors, 'export const seatOfColumn'), gap,
+            ...carve.unit(sources.selectors, 'export const driftOfColumn'),
             lines.aside('// the drift is carried in the drag; the seat is a selector over it and the order')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carriedProperties(cssSource),
             ...carve.unit(cssSource, '.sortable .carried {'), gap,
             ...carve.unit(cssSource, '.sortable.hide .carried {'), gap,
-            ...carve.unit(surfaceCss, '.paper-in-motion {'),
+            ...carve.unit(sources.surfaceCss, '.paper-in-motion {'),
             lines.aside('/* the real cells move with the pointer; their layout box stays as the gap; the style sheet adds seat and drift */')
           ]}/>
         </Codes>
