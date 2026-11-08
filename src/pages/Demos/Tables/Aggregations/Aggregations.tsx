@@ -38,11 +38,10 @@ export const Aggregations: FC = () => {
       ? <VanillaStage {...dials}/>
       : <LiveTable {...dials}/>}
     <Explainer>
-      The stream folded into fixed lookbacks, one column per measure: how many
-      trades arrived, the split of buys and sells, the bitcoin traded, the
-      volume-weighted average price paid, and how far the price moved. Every
-      lookback is measured from the newest trade, and every cell updates as
-      trades land. The grid never grows: no row or column is added or removed. Only the numbers change,
+      The stream folded into lookbacks, stretches of time measured back from the newest trade, one column per
+      measure: how many trades arrived, the split of buys and sells, the bitcoin traded, the volume-weighted average
+      price paid, and how far the price moved. Every cell updates as trades land. The grid never grows: no row or
+      column is added or removed. Only the numbers change,
       and while a column is sorted, the rows reseat as their numbers do.
     </Explainer>
   </section>;
