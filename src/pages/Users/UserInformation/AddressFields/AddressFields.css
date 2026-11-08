@@ -1,16 +1,8 @@
 .address {
   container-type: inline-size;
-}
-
-.address-fields {
   display: grid;
-  column-gap: var(--base-x-2);
-  row-gap: var(--base-x-2);
+  gap: var(--base-x-2);
   grid-template-columns: 1fr var(--base-x-13) 1fr;
-  grid-template-areas:
-    "street_address street_address street_address"
-    "street_address_2 street_address_2 street_address_2"
-    "city state zip";
 }
 
 .address-title {
@@ -19,33 +11,26 @@
   gap: var(--base-x-2);
 }
 
-.address .street {
-  grid-area: street_address;
-}
-
+.address .street,
 .address .street-2 {
-  grid-area: street_address_2;
+  grid-column: 1 / -1;
 }
 
 .address .city {
-  grid-area: city;
+  grid-column: 1;
 }
 
 .address .state {
-  grid-area: state;
+  grid-column: 2;
 }
 
 .address .zip {
-  grid-area: zip;
+  grid-column: 3;
 }
 
 @container (width <= 45.6rem) {
-  .address-fields {
-    grid-template-areas:
-      "street_address street_address street_address"
-      "street_address_2 street_address_2 street_address_2"
-      "city city city"
-      ". state . "
-      "zip zip zip";
+  .address .city,
+  .address .zip {
+    grid-column: 1 / -1;
   }
 }
