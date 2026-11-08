@@ -149,7 +149,7 @@ describe('a list of charts', () => {
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
-  test("the chart that takes the removed one's seat takes the focus", async () => {
+  test('the chart that takes the seat of a chart deleted by its key takes the focus', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
