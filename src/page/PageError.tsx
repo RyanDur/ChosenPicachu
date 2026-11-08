@@ -7,7 +7,11 @@ const closed = 'This room is closed.';
 
 export const PageError: FC = () => {
   const dispatchBanner = useBannerDispatch();
-  useEffect(() => dispatchBanner(bannerChange.raised(closed)), [dispatchBanner]);
+  useEffect(() => {
+    const raised = bannerChange.raised(closed);
+    dispatchBanner(raised);
+    return () => dispatchBanner(bannerChange.lowered(raised.banner.id));
+  }, [dispatchBanner]);
 
   return <section className="prose" aria-labelledby="closed-room">
     <h2 id="closed-room" className="title bold">{closed}</h2>

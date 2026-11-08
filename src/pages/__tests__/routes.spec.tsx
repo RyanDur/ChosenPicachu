@@ -128,6 +128,47 @@ describe('page error boundaries', () => {
     expect(site.announced('This room is closed.')).toBeInTheDocument();
   });
 
+  test('takes the closed room\'s banner down once the reader leaves the room by the rail', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={Paths.games}>
+        <Route path={Paths.home} element={<p>home</p>}/>
+        <Route path={Paths.games} element={<Boom/>}/>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+    await site.roomSays('This room is closed.');
+
+    await site.followRail('Home');
+
+    await waitFor(() => expect(site.railLink('Home')).toHaveAttribute('aria-current', 'page'));
+    expect(site.announcedIfAny('This room is closed.')).not.toBeInTheDocument();
+  });
+
+  test('announces a second crash after the reader leaves the first closed room', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={Paths.games}>
+        <Route path={Paths.home} element={<p>home</p>}/>
+        <Route path={Paths.games} element={<Boom/>}/>
+        <Route path={Paths.record} element={<Boom/>}/>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+    await site.roomSays('This room is closed.');
+    await site.followRail('Home');
+    await waitFor(() => expect(site.railLink('Home')).toHaveAttribute('aria-current', 'page'));
+
+    await site.followRail('Record');
+
+    await site.roomSays('This room is closed.');
+    expect(site.announced('This room is closed.')).toBeInTheDocument();
+  });
+
   test('an address the site does not know says so, inside the site', async () => {
     render(<TestApp at="/nowhere/"/>);
 
