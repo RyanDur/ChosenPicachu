@@ -41,7 +41,7 @@ const column = (
   const box = th.getBoundingClientRect();
   maybe(th.closest('table')).map(table =>
     grabbed({
-      survey: survey.surveyed(table, columns, standing()),
+      survey: survey.of(table, columns, standing()),
       box: {x: box.x, y: box.y, width: box.width},
       at: {x: event.clientX, y: event.clientY}
     }));
@@ -63,7 +63,7 @@ const row = (
     .orElse(grounded);
   maybe(grip.closest('table')).map(table =>
     grabbed({
-      survey: survey.surveyed(table, order(), standing()),
+      survey: survey.of(table, order(), standing()),
       box,
       at: {x: event.clientX, y: event.clientY}
     }));

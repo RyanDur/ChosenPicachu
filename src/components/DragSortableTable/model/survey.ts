@@ -34,7 +34,7 @@ const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): PixelS
   }), {});
 };
 
-const surveyed = (
+const of = (
   surface: HTMLTableElement,
   order: readonly string[],
   seats: readonly string[]
@@ -141,7 +141,7 @@ const interior = (at: number, count: number): number =>
 export const survey = {
   bounded,
   rowHeights,
-  surveyed,
+  of,
   columnUnder,
   columnLeft,
   rowTop,
