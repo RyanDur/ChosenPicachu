@@ -78,8 +78,12 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
               '--shape-width': bodies[at].width,
               '--shape-height': bodies[at].bodyHeight
             }}/>
-            <line className="wick drawn" x1={bodies[at].center} y1={bodies[at].wickTop}
-              x2={bodies[at].center} y2={bodies[at].wickBottom}/>
+            <line className="wick drawn" y1={-1} y2={0} style={{
+              '--shape-x': `${bodies[at].center}px`,
+              '--shape-base': `${bodies[at].wickBottom}px`,
+              '--shape-width': 1,
+              '--shape-height': bodies[at].wickBottom - bodies[at].wickTop
+            }}/>
             <rect className="body side-face" y={-1} width={1} height={1} style={{
               '--shape-x': `${bodies[at].x}px`,
               '--shape-base': `${bodies[at].bodyTop + bodies[at].bodyHeight}px`,
