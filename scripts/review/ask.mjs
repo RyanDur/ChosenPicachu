@@ -24,7 +24,7 @@ export const reviewersIn = markdown => {
 
 /** @param {{before: string, after: string, pull?: string, reviewers: {file: string, asks: string}[]}} range */
 export const askFor = ({before, after, pull, reviewers}) => [
-  `Review with the code-review skill: call the Skill tool with skill "code-review" and args "${empty(pull) ? `high ${before}..${after}` : `high --comment ${pull}`}".`,
+  `Review with the code-review skill: call the Skill tool with skill "code-review" and args "${empty(pull) ? `high ${before}..${after} --max-findings all` : `high --comment ${pull} --max-findings all`}".`,
   'Hold the change to this project\'s own standards as well as to correctness. Read each of these whole before',
   'reviewing, and report a finding against one only where its rule holds:',
   'AGENTS.md (the house rules), scripts/review/values.md and scripts/review/plain.md (how a finding is worded),',
