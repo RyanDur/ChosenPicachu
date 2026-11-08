@@ -201,8 +201,10 @@ export const gapUnder = async (around: Locator, inside: Locator): Promise<number
   return Math.abs((outer?.y ?? 0) + (outer?.height ?? 0) - (inner?.y ?? Infinity) - (inner?.height ?? 0));
 };
 
+const plainFoldTitle = 'A fold measured by plain script';
+
 export const plainFold = (page: Page) => {
-  const frame = page.getByTitle('A fold measured by plain script');
+  const frame = page.getByTitle(plainFoldTitle);
   const inside = frame.contentFrame();
   const bar = inside.getByText('measured', {exact: true});
   const panel = inside.getByRole('region', {name: 'measured', includeHidden: true});
@@ -210,8 +212,16 @@ export const plainFold = (page: Page) => {
   return {
     bar,
     text,
-    frameLoaded: (): Promise<boolean> =>
-      frame.evaluate(holder => holder instanceof HTMLIFrameElement && holder.contentDocument?.readyState === 'complete'),
+    countsFrameLoads: async (): Promise<void> => {
+      await page.addInitScript(title => {
+        document.addEventListener('load', event => {
+          if (event.target instanceof HTMLIFrameElement && event.target.title === title) {
+            Reflect.set(window, 'plainFoldLoads', Number(Reflect.get(window, 'plainFoldLoads') ?? 0) + 1);
+          }
+        }, true);
+      }, plainFoldTitle);
+    },
+    frameLoaded: (): Promise<boolean> => page.evaluate(() => Number(Reflect.get(window, 'plainFoldLoads') ?? 0) > 0),
     goTo: async (): Promise<void> => {
       await page.goto('demos/accordions/');
       await panel.evaluate(() => new Promise<void>(loaded => {
