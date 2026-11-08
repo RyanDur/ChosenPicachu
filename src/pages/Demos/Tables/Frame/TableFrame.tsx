@@ -1,9 +1,11 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useReducer} from 'react';
 import {asyncResult, has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {Dials} from '../../Controls';
+import {tableFrame} from './table-frame';
+import {tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
 
 type Props = Dials & {
@@ -23,33 +25,32 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
 export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, onStood = () => undefined}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnvironment();
   const dispatchBanner = useBannerDispatch();
-  const [document, setDocument] = useState<string>();
-  const [frame, setFrame] = useState<HTMLIFrameElement>();
-  const [height, setHeight] = useState<number>();
+  const [{frameMarkup, frame, height}, dispatch] = useReducer(tableFrame.reduce, tableFrame.initial);
 
   useEffect(() => asyncResult(import('./assemble'))
     .onSuccess(({frameAssembly}) =>
-      setDocument(frameAssembly.document({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion})))
+      dispatch(tableFrameChange.assembled(
+        frameAssembly.document({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}))))
     .onFailure(() => dispatchBanner(bannerChange.raised('the table could not be assembled')))
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
   useEffect(() => {
     if (frame) {
-      const watcher = new ResizeObserver(() => measured(frame, setHeight));
+      const watcher = new ResizeObserver(() => measured(frame, to => dispatch(tableFrameChange.grown(to))));
       watcher.observe(frame);
       return () => watcher.disconnect();
     }
   }, [frame]);
 
-  return has(document)
+  return has(frameMarkup)
     ? <iframe className={classNames('table-frame', concealed && 'concealed')}
       title="the living table, in vanilla"
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
-        setFrame(event.currentTarget);
-        measured(event.currentTarget, setHeight);
+        dispatch(tableFrameChange.loaded(event.currentTarget));
+        measured(event.currentTarget, to => dispatch(tableFrameChange.grown(to)));
         onStood();
       }}
-      srcDoc={document}/>
+      srcDoc={frameMarkup}/>
     : null;
 };
