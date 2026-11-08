@@ -60,6 +60,10 @@
     background: var(--smoke);
     border-color: var(--smoke);
   }
+
+  &[aria-disabled="true"]:focus-visible {
+    outline: var(--hairline-x-2) solid var(--ring);
+  }
 }
 
 :where(.button.primary, .button.secondary) {
