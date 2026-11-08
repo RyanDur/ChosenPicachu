@@ -1,5 +1,5 @@
 export {env} from './env';
-export type {Env} from './environment';
+export type {Environment} from './environment';
 export {EnvProvider} from './EnvProvider';
 export {PageNameProvider} from './PageNameProvider';
 export {useEnv} from './useEnv';
