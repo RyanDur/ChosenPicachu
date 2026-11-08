@@ -76,7 +76,8 @@ summary {
   cursor: pointer;
 }
 
-button:disabled {
+button:disabled,
+button[aria-disabled="true"] {
   cursor: revert;
 }
 
