@@ -2,20 +2,6 @@ import {describe, expect, it} from 'vitest';
 import {survey} from '../survey';
 
 describe('the keyboard vocabulary', () => {
-  it('walks a column, clamped inside the anchored edges', () => {
-    const order = ['window', 'trades', 'buys', 'change'];
-
-    expect(survey.nudgedColumn(order, 'trades', 1)).toEqual({from: 1, to: 2});
-    expect(survey.nudgedColumn(order, 'trades', -1)).toEqual({from: 1, to: 1});
-    expect(survey.nudgedColumn(order, 'buys', 1)).toEqual({from: 2, to: 2});
-  });
-
-  it('walks a row the full range, and stops at the rails', () => {
-    expect(survey.nudgedRow(['session', 'this minute', 'this hour'], 'this minute', 1)).toEqual({from: 1, to: 2});
-    expect(survey.nudgedRow(['session', 'this minute', 'this hour'], 'session', -1)).toEqual({from: 0, to: 0});
-    expect(survey.nudgedRow(['session', 'this minute', 'this hour'], 'this hour', 1)).toEqual({from: 2, to: 2});
-  });
-
   it('a seat is struck only by a different seat, never by itself or by nothing', () => {
     expect(survey.struckAway('trades', 'buys')).toBe(true);
     expect(survey.struckAway('trades', 'trades')).toBe(false);

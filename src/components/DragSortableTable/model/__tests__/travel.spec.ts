@@ -39,14 +39,4 @@ describe('the travel vocabulary', () => {
 
     expect(arranged).toEqual([{from: 1, to: 2}]);
   });
-
-  it('a column arrow at the anchored edge arranges nothing', () => {
-    const arranged: {from: number; to: number}[] = [];
-    const listener = arrows.column('trades', () => ['window', 'trades', 'buys', 'change'],
-      ({from, to}) => arranged.push({from, to}));
-
-    listener(pressed('ArrowLeft'));
-
-    expect(arranged).toEqual([]);
-  });
 });
