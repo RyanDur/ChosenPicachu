@@ -61,6 +61,13 @@ describe('a code sample', () => {
     expect(codeSample.fileNames()).toEqual([]);
   });
 
+  test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
+    const survey = aSample('export const survey = 1;\n', 'src/components/DragSortableTable/model/survey.ts');
+    render(<Snippet label="TS" lines={carve.span(survey, 'export const survey', 'export const survey')}/>);
+
+    expect(codeSample.fileLink('DragSortableTable/model/survey.ts on GitHub')).toBeInTheDocument();
+  });
+
   test('should show a file directly under src with its folder', () => {
     const sheet = aSample('.x {}\n', 'src/index.css');
     render(<Snippet label="CSS" lines={carve.span(sheet, '.x {', '.x {')}/>);

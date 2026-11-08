@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Kind, highlight} from './highlight';
 import {CodeFile} from './sample';
@@ -32,7 +32,13 @@ const sourcesOf = (lines: readonly Line[]): Source[] =>
     return sources;
   }, []);
 
-const shortName = (path: string): string => path.split('/').slice(-2).join('/');
+const roots = ['src', 'lib'];
+
+const shortName = (path: string): string => {
+  const [file, folder, parent] = path.split('/').reverse();
+  const insideAComponent = /^[a-z]/.test(folder) && has(parent) && not(roots.includes(parent));
+  return (insideAComponent ? [parent, folder, file] : [folder, file]).join('/');
+};
 
 const nameOf = (path: string, owner?: string): string => has(owner) ? `${owner}’s ${shortName(path)}` : shortName(path);
 
