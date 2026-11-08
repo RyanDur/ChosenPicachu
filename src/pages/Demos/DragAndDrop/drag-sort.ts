@@ -32,16 +32,13 @@ const moved = (
   sort: DragSort,
   item: string,
   to: number,
-  slidesFor: (after: readonly string[]) => SlideStarts
-): DragSort => {
-  const order = array.moveToIndex(to, item, sort.order);
-  return {
-    ...sort,
-    order,
-    lastMove: some({item, position: to}),
-    slideStarts: sort.animated ? {...sort.slideStarts, ...slidesFor(order)} : {}
-  };
-};
+  starts: SlideStarts
+): DragSort => ({
+  ...sort,
+  order: array.moveToIndex(to, item, sort.order),
+  lastMove: some({item, position: to}),
+  slideStarts: sort.animated ? {...sort.slideStarts, ...starts} : {}
+});
 
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
@@ -49,7 +46,7 @@ const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
   sliding(sort, sort.order[at])
     ? sort
     : sort.held
-      .map(({item}) => moved(sort, item, at, () => slideStarts.afterCrossing(sort.order[at], homeward)))
+      .map(({item}) => moved(sort, item, at, slideStarts.afterCrossing(sort.order[at], homeward)))
       .orElse(sort);
 
 const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
@@ -62,7 +59,7 @@ const settled = (sort: DragSort): DragSort => {
       const starts = slideStarts.afterSettle(sort.order, array.moveToIndex(at, item, sort.order));
       return at === sort.order.indexOf(item) || anySliding(sort, starts)
         ? withNothingHeld
-        : moved(withNothingHeld, item, at, () => starts);
+        : moved(withNothingHeld, item, at, starts);
     }))
     .orElse(withNothingHeld);
 };
@@ -72,7 +69,7 @@ const stepped = (sort: DragSort, item: string, step: 1 | -1): DragSort => {
   const to = Math.min(Math.max(from + step, 0), sort.order.length - 1);
   return to === from || sliding(sort, item) || sliding(sort, sort.order[to])
     ? sort
-    : moved(sort, item, to, () => slideStarts.afterKeyboardStep(sort.order, item, step));
+    : moved(sort, item, to, slideStarts.afterKeyboardStep(sort.order, item, step));
 };
 
 const reduce = (sort: DragSort, change: DragSortChange): DragSort => {
