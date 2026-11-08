@@ -25,6 +25,9 @@
 
   .chart-stage {
     position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--base);
 
     &:has(> .chart-loading)::before {
       content: '';
@@ -39,4 +42,8 @@
     margin: auto;
   }
 
+}
+
+:where(.chart-stage) > * {
+  grid-column: 1 / -1;
 }

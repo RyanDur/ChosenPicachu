@@ -35,7 +35,7 @@ const placed = (
 export const Axes: FC<Props> = ({
   extent, pattern, tickEvery, headroomMilliseconds = 0,
   label = value => money.dollars.format(value), children
-}) => <div className="axes">
+}) => <>
   <p className="y-labels caption">{extent.map(({high, low}) => <>
     <data value={high}>{label(high)}</data>
     <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
@@ -48,4 +48,4 @@ export const Axes: FC<Props> = ({
       dateTime={new Date(tick.at).toISOString()}
       style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
   )).orNull()}</p>
-</div>;
+</>;
