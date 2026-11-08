@@ -13,7 +13,7 @@ export type MarketAction =
   | {readonly type: 'historyArrived'; readonly trades: readonly Trade[]}
   | {readonly type: 'candlesAsked'; readonly period: Period}
   | {readonly type: 'candlesArrived'; readonly period: Period; readonly candles: readonly Candle[]}
-  | {readonly type: 'candlesRefused'; readonly period: Period};;
+  | {readonly type: 'candlesRefused'; readonly period: Period};
 
 type MarketActions = {
   feedRequested: () => MarketAction;

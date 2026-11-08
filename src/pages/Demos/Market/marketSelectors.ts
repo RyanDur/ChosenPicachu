@@ -13,7 +13,6 @@ const folded = ({history, trades}: TradesState): Measures[] =>
   windowedAggregates(hydrated(history, trades)).map(cells);
 
 type MarketSelectors = {
-  measures: (state: MarketState) => readonly Measures[];
   columns: (state: MarketState) => readonly TableColumn<Measured>[];
   rows: (state: MarketState) => readonly Measures[];
   liveTrades: (state: MarketState) => readonly Trade[];
@@ -22,7 +21,6 @@ type MarketSelectors = {
 };
 
 export const marketSelectors: MarketSelectors = {
-  measures: ({trades}) => folded(trades),
   columns: ({arrangement}) => arrangedView.columnsOf(arrangement),
   rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, folded(trades)),
   liveTrades: ({trades}) => trades.trades,

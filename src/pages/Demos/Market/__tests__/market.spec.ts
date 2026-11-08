@@ -8,13 +8,13 @@ const trade = (id: number, price: number): Trade =>
 describe('the market store', () => {
   it('a trade arriving keeps it in the trades and folds it into the measures', () => {
     const store = marketStore();
-    const before = marketSelectors.measures(store.state).map(row => row.trades?.display);
+    const before = marketSelectors.rows(store.state).map(row => row.trades?.display);
 
     store.dispatch(marketActions.tradeArrived(trade(1, 100)));
 
     expect(marketSelectors.liveTrades(store.state)).toHaveLength(1);
-    expect(marketSelectors.measures(store.state).map(row => row.trades?.display)).not.toEqual(before);
-    expect(marketSelectors.measures(store.state)[0]?.trades?.display).toBe('1');
+    expect(marketSelectors.rows(store.state).map(row => row.trades?.display)).not.toEqual(before);
+    expect(marketSelectors.rows(store.state)[0]?.trades?.display).toBe('1');
   });
 
   it('history arriving folds into the measures too', () => {
@@ -22,7 +22,7 @@ describe('the market store', () => {
 
     store.dispatch(marketActions.historyArrived([trade(1, 100)]));
 
-    expect(marketSelectors.measures(store.state)[0]?.trades?.display).toBe('1');
+    expect(marketSelectors.rows(store.state)[0]?.trades?.display).toBe('1');
   });
 
   it('past the newest 1500 trades the oldest fall off the front', () => {
