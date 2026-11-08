@@ -92,6 +92,16 @@ describe('a user form', () => {
         expect(adds()).toHaveLength(1);
       });
 
+      it('focus stays on Add after a confirmed add', async () => {
+        render(added().form);
+        await userForm.fillOut(filledIn);
+
+        await userForm.add();
+
+        await waitFor(() => expect(userForm.field('First Name')).toHaveValue(''));
+        expect(userForm.addButton()).toHaveFocus();
+      });
+
       it('the fresh form after adding wears a new avatar', async () => {
         render(added().form);
         await userForm.fillOut(filledIn);
@@ -163,7 +173,7 @@ describe('a user form', () => {
 
         await userForm.add();
 
-        expect(userForm.sameAsHome()).not.toBeChecked();
+        await waitFor(() => expect(userForm.sameAsHome()).not.toBeChecked());
         expect(userForm.addressField('work', 'Street')).toBeEnabled();
         expect(userForm.addressField('work', 'Street')).toHaveValue('');
       });
