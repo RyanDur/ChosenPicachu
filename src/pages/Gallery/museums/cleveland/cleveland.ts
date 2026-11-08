@@ -10,7 +10,7 @@ import {
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
-import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
@@ -62,7 +62,7 @@ export const cleveland = {
       };
     }),
 
-  open: () => searched({page: 1}).map(({data}) => data.length > 0),
+  open: () => searched({page: 1}).map(({data}): Door => data.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
     .get(`${env.clevelandDomain}/${id}${toQueryString({fields: clevelandFields})}`, {cache: 'force-cache'})

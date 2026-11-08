@@ -8,7 +8,7 @@ import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
 import {maybe} from '@ryandur/sand';
 import {toQueryString} from '@transport/url';
-import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
@@ -49,7 +49,7 @@ export const vam = {
       pieces: records.map(vamRecordToArt)
     })),
 
-  open: () => http.get(`${env.vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map(() => true),
+  open: () => http.get(`${env.vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
 
   art: (id: string) => http
     .get(`${env.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})

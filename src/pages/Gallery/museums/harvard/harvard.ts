@@ -8,7 +8,7 @@ import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
-import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
@@ -40,7 +40,7 @@ export const harvard = {
       pieces: records.map(harvardArtToArt)
     })),
 
-  open: () => searched({page: 1}).map(({records}) => records.length > 0),
+  open: () => searched({page: 1}).map(({records}): Door => records.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
     .get(`${env.harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})

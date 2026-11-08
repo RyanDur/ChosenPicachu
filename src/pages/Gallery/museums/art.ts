@@ -1,7 +1,7 @@
 import {Result} from '@ryandur/sand';
 import {Source} from '@pages/Gallery/source';
 import {GetAllArt, GetArt, SearchArt} from '@pages/Gallery/museums/requests';
-import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {HTTPError} from '@transport/types';
 import {aic} from '@pages/Gallery/museums/aic';
 import {harvard} from '@pages/Gallery/museums/harvard';
@@ -25,7 +25,7 @@ export const art = {
   get: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
     fromSource(source, resource => resource.art(id)),
 
-  open: (source: Source): Result.Async<boolean, HTTPError> =>
+  open: (source: Source): Result.Async<Door, HTTPError> =>
     fromSource(source, resource => resource.open()),
 
   search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>

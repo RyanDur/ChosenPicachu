@@ -9,7 +9,7 @@ import {toQueryString} from '@transport/url';
 import {maybe} from '@ryandur/sand';
 import {limits} from '@pages/Gallery/limits';
 import {env} from '@env';
-import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
@@ -40,7 +40,7 @@ export const aic = {
       pieces: data.map(aicToPiece(800))
     })),
 
-  open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map(() => true),
+  open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
 
   art: (id: string) => http
     .get(`${env.aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})

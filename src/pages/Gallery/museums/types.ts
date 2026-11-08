@@ -17,6 +17,8 @@ export type Art = {
   artistInfo?: string;
 };
 
+export type Door = 'open' | 'closed';
+
 export type AllArt = {
   pagination: Pagination;
   pieces: Art[];

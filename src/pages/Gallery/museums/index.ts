@@ -1,5 +1,5 @@
 export {art} from '@pages/Gallery/museums/art';
-export type {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
+export type {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 export type {MuseumReply} from '@pages/Gallery/museums/reply';
 export {museumReply} from '@pages/Gallery/museums/reply';
 export {sourceParam} from '@pages/Gallery/museums/sourceParam';
