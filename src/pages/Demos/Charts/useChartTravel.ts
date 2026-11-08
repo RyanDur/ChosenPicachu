@@ -52,7 +52,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     aloft.map(held => {
-      const slots = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot');
+      const slots = event.currentTarget.parentElement?.children;
       const seat = boundsOf(slots?.item(held));
       if (!seat) {
         return;

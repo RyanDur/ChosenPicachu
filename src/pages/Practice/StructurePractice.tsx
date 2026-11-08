@@ -21,7 +21,7 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">I choose the element for what the thing is, and when no element does the job I make one,
       for the one behavior it adds. A data attribute attaches behavior, a class dresses, and an id locates. Those are
       the rules I hold the markup to, and the rest of this tab says what keeps each. I don’t keep them everywhere yet:
-      in the banners, the tables, the charts and the dials a script still finds an element by its class. The plain
+      in the banners, the tables and the dials a script still finds an element by its class. The plain
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
       it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On
