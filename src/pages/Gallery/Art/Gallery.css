@@ -12,6 +12,8 @@
   }
 
   .frame {
+    --rise: var(--base);
+
     position: relative;
 
     .loading {
@@ -32,7 +34,7 @@
       width: auto;
       height: auto;
 
-      &::before { inset: calc(var(--base) * -1) 0 var(--base); }
+      &::before { inset: calc(var(--rise) * -1) 0 var(--rise); }
     }
 
     .piece {
@@ -44,7 +46,7 @@
 
     .scrim:focus .piece,
     .scrim:hover .piece {
-      transform: translateY(calc(var(--base) * -1));
+      transform: translateY(calc(var(--rise) * -1));
     }
 
     .placard {
