@@ -1,8 +1,8 @@
 import {FC, PropsWithChildren} from 'react';
 
-type Props = PropsWithChildren<{
+type Props = Required<PropsWithChildren<{
   path: string;
-}>;
+}>>;
 
 export const Mdn: FC<Props> = ({path, children}) =>
   <a className="signpost"
