@@ -4,7 +4,6 @@ import {render} from '@testing-library/react';
 import {Image} from '@pages/Gallery/Image';
 import {Source} from '@pages/Gallery/museums/source';
 import {Paths} from '@pages/Paths';
-import {scrolling} from '@components/__test_support/scrolling';
 import {aPiece} from '@pages/Gallery/__test_support/fixtures';
 import {imageOf} from '@pages/Gallery/Image/__test_support';
 
@@ -15,7 +14,7 @@ describe('the image', () => {
   test('shows a loading sign while the picture is on its way', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece}/></GalleryProviders></TestApp>);
 
-    expect(image.loadingIfAny()).toBeInTheDocument();
+    expect(image.loading()).toBeInTheDocument();
     expect(image.standInIfAny()).not.toBeInTheDocument();
   });
 
@@ -41,14 +40,9 @@ describe('the image', () => {
     expect(image.pictureIfAny()).not.toBeInTheDocument();
   });
 
-  test('a picture with its link off goes nowhere when clicked', async () => {
+  test('a picture with its link off offers no way to open the piece', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
 
-    const landings = scrolling.recordLandings();
-
-    await image.open();
-
-    expect(image.urlPath()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
-    expect(landings).toEqual([]);
+    expect(image.linkIfAny()).not.toBeInTheDocument();
   });
 });
