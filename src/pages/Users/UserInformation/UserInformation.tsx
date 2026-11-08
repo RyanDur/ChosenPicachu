@@ -67,9 +67,12 @@ const Draft: FC<{className?: string}> = ({className}) => {
     onSubmit={event => {
       event.preventDefault();
 
-      if (open.mode === 'editing') usersDispatch(usersActions.userUpdated({...open.user, ...user}));
-      else usersDispatch(usersActions.userAdded(user));
+      if (open.mode === 'editing') {
+        usersDispatch(usersActions.userUpdated({...open.user, ...user}));
+        return;
+      }
 
+      usersDispatch(usersActions.userAdded(user));
       reset();
     }}
     onReset={() => reset()}>

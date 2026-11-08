@@ -257,6 +257,16 @@ describe('the users page', () => {
 
       await waitFor(() => expect(userForm.field('First Name')).toHaveDisplayValue(kai.person.firstName));
     });
+
+    test('a refused update keeps what the reader typed', async () => {
+      userUpdateRefused(kai.id);
+      await userForm.typeInto('First Name', ' typed');
+
+      await userForm.update();
+
+      expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} typed`);
+    });
   });
 
   test('editing a user with a work address shows that address', async () => {
