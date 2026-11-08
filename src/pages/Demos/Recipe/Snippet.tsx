@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {has, not} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {Kind, highlight} from './highlight';
 import {CodeFile} from './sample';
 import './Snippet.css';

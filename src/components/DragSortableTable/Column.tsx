@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '@components/class-names';
-import {shares} from '@components/Table';
+import {classNames} from '../classNames';
+import {shares} from '../shares';
 import {useTableSelector} from './useTableSelector';
 import {tableSelectors, looks} from './model';
 import './Header.css';

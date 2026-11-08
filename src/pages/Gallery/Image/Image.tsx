@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {Loading} from '@components/Loading';
 import {queryString} from '@transport';
 import {useGallery} from '@pages/Gallery/Context';

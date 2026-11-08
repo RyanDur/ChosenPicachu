@@ -1,4 +1,4 @@
-import {Address, NewUser, User} from '@pages/Users/profile';
+import {Address, NewUser, User} from '../profile';
 import {maybe} from '@ryandur/sand';
 import {DraftAction} from './draftActions';
 

@@ -1,6 +1,6 @@
 import {DragEvent, KeyboardEvent, useState} from 'react';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {crossing} from '../DragAndDrop';
 
 type Pushed = Readonly<Record<number, 'up' | 'down'>>;

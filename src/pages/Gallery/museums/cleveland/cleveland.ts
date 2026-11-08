@@ -8,7 +8,7 @@ import {
   clevelandSchema
 } from './types';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@frame/state/env';
+import {env} from '@frame/state';
 import {queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {decoded} from '@transport';

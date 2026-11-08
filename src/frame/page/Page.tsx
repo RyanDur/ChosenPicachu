@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import {has} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {Feedback} from '@frame/notices/Feedback';
 import {SideNav} from './SideNav';
 

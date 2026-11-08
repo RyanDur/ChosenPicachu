@@ -12,7 +12,7 @@ import {usersActions} from '../usersActions';
 import {usersSelectors} from '../usersSelectors';
 import {userColumns} from '../columns';
 import {arrangements, tableReports, tableSelectors} from '@components/DragSortableTable/model';
-import {profile} from '@pages/Users/profile';
+import {profile} from '../profile';
 
 export const UsersTable: FC = () => {
   const dispatch = useUsersDispatch();

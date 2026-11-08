@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import './StandIn.css';
 
 export const StandIn: FC<ComponentProps<'img'> & {alt: string}> = ({alt, className, ...img}) =>

@@ -1,8 +1,8 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
-import {classNames} from '@components/class-names';
-import {FancyInput} from '../FancyInput';
+import {classNames} from '@components';
+import {FancyInput} from './FancyInput';
 import {Consumer} from '@ryandur/sand';
-import '../Fancy.css';
+import './Fancy.css';
 
 type FancySelectProps = {
   selectId: string;

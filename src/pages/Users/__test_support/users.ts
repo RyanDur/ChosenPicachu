@@ -1,6 +1,6 @@
 import {http, HttpResponse, JsonBodyType} from 'msw';
-import {env} from '@frame/state/env';
-import {User} from '@pages/Users/profile';
+import {env} from '@frame/state';
+import {User} from '../profile';
 import {server} from '@__test_support/server';
 
 const {usersDomain} = env;

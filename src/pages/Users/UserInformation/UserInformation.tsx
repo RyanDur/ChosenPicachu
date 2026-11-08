@@ -1,14 +1,12 @@
 import {FC, ReactNode, useReducer} from 'react';
-import {classNames} from '@components/class-names';
-import {NewUser, User} from '@pages/Users/profile';
-import {FancyInput} from '../FancyFormElements/FancyInput';
-import {FancyTextarea} from '../FancyFormElements/FancyTextarea';
+import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
+import {classNames} from '@components';
+import {NewUser, User} from '../profile';
 import {draftActions} from './draftActions';
 import {AddressFields} from './AddressFields';
 import {drafts} from './drafts';
 import {avatars} from './avatars';
 import {Link} from 'react-router';
-import {FancyDateInput} from '../FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
 import {Maybe, maybe, not, some} from '@ryandur/sand';
 import {Opened, openings} from '../openings';

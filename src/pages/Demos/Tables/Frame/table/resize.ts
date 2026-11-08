@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
 import {tableState} from '@components/DragSortableTable/model';
-import {shares} from '@components/Table';
+import {shares} from '@components';
 import {MountedTable} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {

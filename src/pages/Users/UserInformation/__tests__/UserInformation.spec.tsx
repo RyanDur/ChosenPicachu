@@ -6,7 +6,7 @@ import {UserInformation} from '../index';
 import {UsersProvider} from '../../UsersProvider';
 import {userForm} from '../__test_support';
 import {setupUsersResponse, userAddsHeard} from '@pages/Users/__test_support';
-import {Address, NewUser} from '@pages/Users/profile';
+import {Address, NewUser} from '../../profile';
 
 const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
   setupUsersResponse([]);

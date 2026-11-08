@@ -3,7 +3,7 @@ import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {Trade} from '../coinbase';
 import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';

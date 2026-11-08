@@ -1,4 +1,4 @@
-import {Address, NewUser, User} from '@pages/Users/profile';
+import {Address, NewUser, User} from '../profile';
 
 export type DraftAction =
   | {readonly type: 'firstNameEdited'; readonly firstName: string}

@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {Link} from 'react-router';
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import './Menu.css';
 
 const itemLooks = ['unfilled', 'borderless', 'muted-rule-below', 'shadow-ringed', 'soft-press-glowing'] as const;

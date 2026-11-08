@@ -1,1 +1,0 @@
-export {age} from './age';

@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router';
 import {Paths} from '@frame/navigation';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import {trouble} from '@transport';
-import {usersApi} from './resource';
+import {usersApi} from './usersApi';
 import {syncing} from './syncing';
 import {usersActions} from './usersActions';
 import {usersSlice} from './usersSlice';

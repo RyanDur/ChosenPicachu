@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useEffect, useRef, useState} from 'react';
 import {maybe, not} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 
 const fitsBeside = (row: Element): boolean => {
   const gap = parseFloat(getComputedStyle(row).columnGap);

@@ -1,7 +1,7 @@
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {FC, ChangeEvent} from 'react';
 import {Consumer} from '@ryandur/sand';
-import '../Fancy.css';
+import './Fancy.css';
 
 type FancyTextareaProps = {
   onChange: Consumer<ChangeEvent<HTMLTextAreaElement>>;

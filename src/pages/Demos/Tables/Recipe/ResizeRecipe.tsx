@@ -3,7 +3,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {Term} from './Term';
-import sharesSource from '@components/Table/shares.ts?sample';
+import sharesSource from '@components/shares.ts?sample';
 import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
 import baseCss from '@components/DragSortableTable/Table.css?sample';

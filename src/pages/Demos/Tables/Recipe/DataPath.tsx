@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import './DataPath.css';
 
 type Station = {name: string; does: string; ground: 'field' | 'faded-mint'};

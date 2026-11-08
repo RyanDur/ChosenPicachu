@@ -1,6 +1,6 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {Trade} from '../coinbase';
 import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
 import '../chart-card.css';

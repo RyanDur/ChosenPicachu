@@ -1,9 +1,8 @@
 import {FC, PropsWithChildren} from 'react';
-import {classNames} from '@components/class-names';
-import {FancyInput} from '../../FancyFormElements/FancyInput';
-import {FancySelect} from '../../FancyFormElements/FancySelect';
+import {FancyInput, FancySelect} from '../../FancyFormElements';
+import {classNames} from '@components';
 import {stateAbbreviations} from './states';
-import {Address} from '@pages/Users/profile';
+import {Address} from '../../profile';
 import './AddressFields.css';
 
 type AddressFieldsAttributes = {

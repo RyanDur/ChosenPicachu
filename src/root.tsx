@@ -7,7 +7,7 @@ import {FeedbackProvider} from '@frame/notices/Feedback';
 import {Header, Page, PageError} from '@frame/page';
 import {PageNameProvider} from '@frame/state';
 import names from '@frame/navigation/names.json';
-import {env} from '@frame/state/env';
+import {env} from '@frame/state';
 import {SiteProviders} from './SiteProviders';
 
 const base = import.meta.env.BASE_URL;

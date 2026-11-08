@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './RecipeFigure.css';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 
 type Props = PropsWithChildren<{viewBox: string; title: string; says: ReactNode; className?: string}>;
 

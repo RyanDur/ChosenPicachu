@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
-import {shares} from '@components/Table';
+import {classNames} from '../classNames';
+import {shares} from '../shares';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
 import {useTableSelector} from './useTableSelector';

@@ -1,4 +1,4 @@
-import {usersApi} from '@pages/Users/resource';
+import {usersApi} from '../usersApi';
 import {
   setupUserAddedResponse,
   setupUserRemovedResponse,
@@ -11,7 +11,7 @@ import {usersActions} from '../usersActions';
 import {usersSelectors} from '../usersSelectors';
 import {usersStore} from '../usersStore';
 import {arrangements} from '@components/DragSortableTable/model';
-import {User} from '@pages/Users/profile';
+import {User} from '../profile';
 
 describe('the users store', () => {
   const [first, second, third] = someUsers;
