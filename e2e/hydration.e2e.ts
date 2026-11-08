@@ -1,7 +1,7 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {pages} from './pages';
-import {siteFrame, twoFramesLater} from './__test_support';
+import {accordionsTab, siteFrame, twoFramesLater} from './__test_support';
 
 const addressesBesideThePages = ['gallery/?page=1&size=8&tab=aic', 'gallery/O9138?tab=vam', 'games/colorGame'];
 
@@ -13,6 +13,18 @@ for (const path of [...pages.map(({path}) => path), ...addressesBesideThePages])
     await twoFramesLater(page);
   });
 }
+
+test('a reader whose room fails to load keeps the built page, its words, its folds and its links', async ({page}) => {
+  await page.route(/\/assets\/(route|tab)-[^/]+\.js$/, route => route.abort());
+  await page.goto('demos/accordions/');
+  const fold = accordionsTab(page).htmlAloneFold('basalt');
+
+  await expect(page.getByRole('heading', {name: 'An accordion in HTML alone'})).toBeVisible();
+  await fold.open();
+  expect(await fold.showsText()).toBe(true);
+  await siteFrame(page).nav.getByRole('link', {name: 'Record'}).click();
+  await expect(siteFrame(page).title).toHaveText('The record');
+});
 
 const theSiteNameBeforeTheScript = async (page: Page, path: string): Promise<void> => {
   await page.route('**/*.js', route => route.abort());
