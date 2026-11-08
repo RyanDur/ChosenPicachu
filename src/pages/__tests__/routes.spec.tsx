@@ -55,6 +55,7 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Demos Charts');
+    expect(await site.nav()).toBeInTheDocument();
   });
 
   test('a tutorial that crashes says the room is closed under its own Demos Tables header', async () => {
@@ -72,6 +73,7 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Demos Tables · Sort menu');
+    expect(await site.nav()).toBeInTheDocument();
   });
 
   test('a Practice tab that crashes says the room is closed under its own Practice header', async () => {
@@ -87,6 +89,7 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Practice Structure');
+    expect(await site.nav()).toBeInTheDocument();
   });
 
   test('a crash no page catches is reported and announced', async () => {
