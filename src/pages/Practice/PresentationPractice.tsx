@@ -183,9 +183,9 @@ export const PresentationPractice: FC = () =>
       names the site’s easing curves and how long its motions take. A transition is a change of style over time, and
       its easing curve sets how it speeds up and slows down. <code className="monospaced">--curve</code> is the curve
       three style sheets’ transitions follow, and <code className="monospaced">--slide-curve</code> is the one the
-      site’s banners slide on. The file also names how long a gallery piece takes to rise under the pointer or the
-      keyboard’s focus, half a second, how long a banner takes to slide, 0.6 seconds, and how long the gap it leaves
-      takes to close, 0.3.</p>
+      site’s banners slide on. The file also names how long the site’s motions take: a gallery piece rises in 0.5
+      seconds under the pointer or the keyboard’s focus, a banner slides in 0.6, and the gap it leaves closes in
+      0.3.</p>
     <p className="paragraph">A few sizes belong to one component and sit in its own style sheet:</p>
     <ul className="practice-list">
       <li className="paragraph">its own breakpoints, in pixels, and its container queries, in rems, in pixels and one

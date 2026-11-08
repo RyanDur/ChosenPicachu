@@ -125,7 +125,9 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
 
     expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why 9999 still loses'));
-    expect(explanation.linkNamed(news, 'Why a fixed banner still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why a fixed banner still loses'));
+    const fixedBannerLoses = zIndexTab.fragmentOf('Why a fixed banner still loses');
+    expect(explanation.linksNamed(news, 'Why a fixed banner still loses').map(link => link.getAttribute('href')))
+      .toEqual([fixedBannerLoses, fixedBannerLoses]);
     expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 
