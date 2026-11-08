@@ -69,7 +69,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
 
   if (resetForAdds !== confirmedAdds) {
     setResetForAdds(confirmedAdds);
-    reset();
+    if (open.mode === 'adding') reset();
   }
 
   return <form aria-labelledby="form-title"

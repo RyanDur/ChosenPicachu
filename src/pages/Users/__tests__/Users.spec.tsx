@@ -14,6 +14,7 @@ import {
   setupUsersResponse,
   setupUserUpdatedResponse,
   userAddRefused,
+  userAddsHeld,
   userRemovalRefused,
   userUpdateRefused,
   usersUnreachable
@@ -182,6 +183,23 @@ describe('the users page', () => {
       await userForm.add();
 
       expect(await usersTable.rowOf(profile.fullName(aiko))).toBeInTheDocument();
+    });
+
+    it('an edit under way survives another user\'s confirmed add', async () => {
+      const kai = aUser();
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([kai]);
+      const adds = userAddsHeld([kai, aiko]);
+      render(<TestApp at={Paths.users}/>);
+      await userForm.addWhoWorksFromHome(aiko);
+      await usersTable.edit(profile.fullName(kai));
+      await userForm.showing(kai);
+      await userForm.typeInto('First Name', ' typed');
+
+      adds.answer();
+
+      await usersTable.rowOf(profile.fullName(aiko));
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.person.firstName} typed`);
     });
 
     it('a reader who follows the Users link while adding keeps what they typed', async () => {
