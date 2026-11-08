@@ -31,12 +31,12 @@ const initial = ({items, animated}: Start): DragSort =>
 const moved = (
   sort: DragSort,
   item: string,
-  to: number,
+  order: readonly string[],
   starts: SlideStarts
 ): DragSort => ({
   ...sort,
-  order: array.moveToIndex(to, item, sort.order),
-  lastMove: some({item, position: to}),
+  order,
+  lastMove: some({item, position: order.indexOf(item)}),
   slideStarts: sort.animated ? {...sort.slideStarts, ...starts} : {}
 });
 
@@ -46,7 +46,7 @@ const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
   sort.held
     .map(({item}) => sliding(sort, item) || sliding(sort, sort.order[at])
       ? sort
-      : moved(sort, item, at, slideStarts.afterCrossing(sort.order[at], homeward)))
+      : moved(sort, item, array.moveToIndex(at, item, sort.order), slideStarts.afterCrossing(sort.order[at], homeward)))
     .orElse(sort);
 
 const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
@@ -56,10 +56,11 @@ const settled = (sort: DragSort): DragSort => {
   const withNothingHeld: DragSort = {...sort, held: nothing(), gripped: nothing()};
   return sort.held
     .mBind(({item, landing}) => landing.map(at => {
-      const starts = slideStarts.afterSettle(sort.order, array.moveToIndex(at, item, sort.order));
+      const order = array.moveToIndex(at, item, sort.order);
+      const starts = slideStarts.afterSettle(sort.order, order);
       return at === sort.order.indexOf(item) || anySliding(sort, starts)
         ? withNothingHeld
-        : moved(withNothingHeld, item, at, starts);
+        : moved(withNothingHeld, item, order, starts);
     }))
     .orElse(withNothingHeld);
 };
@@ -69,7 +70,7 @@ const stepped = (sort: DragSort, item: string, step: 1 | -1): DragSort => {
   const to = Math.min(Math.max(from + step, 0), sort.order.length - 1);
   return to === from || sliding(sort, item) || sliding(sort, sort.order[to])
     ? sort
-    : moved(sort, item, to, slideStarts.afterKeyboardStep(sort.order, item, step));
+    : moved(sort, item, array.moveToIndex(to, item, sort.order), slideStarts.afterKeyboardStep(sort.order, item, step));
 };
 
 const reduce = (sort: DragSort, change: DragSortChange): DragSort => {
