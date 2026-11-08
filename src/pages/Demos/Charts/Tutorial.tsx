@@ -482,10 +482,10 @@ const WorkspaceStory: FC = () =>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
-          <Says><code className="monospaced">travel</code> is the code that runs on each dragover. It takes the held
-            chart’s height from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the
-            slot is on the page and gives nothing when it isn’t. With nothing, <code className="monospaced">travel</code>{' '}
-            does nothing.</Says>
+          <Says><code className="monospaced">travel</code> is the code that runs on each dragover. It takes the held chart’s height
+            from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the slot is on the page and gives nothing when
+            it isn’t. Its answer is a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
+            there is one. With nothing, <code className="monospaced">travel</code> does nothing.</Says>
           <Says>The neighbor’s slide is the{' '}
             <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot
@@ -509,17 +509,22 @@ const WorkspaceStory: FC = () =>
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
             Delete or Backspace removes it, unless it is the last chart. Focus then moves to the next chart’s link, or
             to the one before when the removed chart was last, so the reader keeps their place.</Says>
-          <Says><code className="monospaced">keys</code> hands <code className="monospaced">onRemoved</code> the
-            chart’s position and the link the key was pressed on. Before the chart goes, the workspace
-            asks <code className="monospaced">atAfterRemoval</code> which position takes the focus, the one after or
-            else the one before. <code className="monospaced">doorwayAt</code> then walks from the pressed link up to
-            its list item, across to the item at that position, and down to that item’s link, and focuses it.</Says>
+          <Says><code className="monospaced">keys</code> hands <code className="monospaced">onRemoved</code> the chart’s position and the link the key was pressed on.
+            Before the chart goes, the workspace’s <code className="monospaced">removed</code> asks <code className="monospaced">atAfterRemoval</code> which position takes the
+            focus, the one after or else the one before. <code className="monospaced">doorwayAt</code> walks from the pressed link up to its list
+            item, across to the item at that position, and down to that item’s link. <code className="monospaced">removed</code> focuses that
+            link, then removes the chart.</Says>
+          <Says>Each step of that walk may find nothing. <code className="monospaced">maybe</code> turns a value that may be missing into a Maybe,
+            and <code className="monospaced">mBind</code> runs the next step only when the last one found something, so the walk stops at the first
+            missing piece and nothing is focused. The chart’s link carries a <code className="monospaced">data-doorway</code> attribute for the
+            walk to find, and its class only dresses it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(travelSource, 'const keys'), gap,
             ...carve.unit(deskSource, 'export const atAfterRemoval'), gap,
-            ...carve.unit(workspaceSource, 'const doorwayAt')
+            ...carve.unit(workspaceSource, 'const doorwayAt'), gap,
+            ...carve.unit(workspaceSource, '  const removed')
           ]}/>
         </Codes>
       </Step>
