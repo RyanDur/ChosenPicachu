@@ -1,6 +1,6 @@
 import {empty} from '@ryandur/sand';
 
-export type Slot = {
+export type BucketPlace = {
   x: number;
   width: number;
   center: number;
@@ -10,7 +10,7 @@ const of = (
   openings: readonly number[],
   width: number,
   bucketMilliseconds: number
-): readonly Slot[] => {
+): readonly BucketPlace[] => {
   if (empty(openings)) {
     return [];
   }
