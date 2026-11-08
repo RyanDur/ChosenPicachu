@@ -28,7 +28,8 @@ export const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, 
 };
 
 const choosing = (context: Pick<MountedTable, 'table' | 'report'>, column: string, item: Element): void => {
-  item.addEventListener('click', () => choose(context, column, sorting.directionOf((item.textContent ?? '').trim())));
+  item.addEventListener('click', () => sorting.choiceOf((item.textContent ?? '').trim())
+    .map(choice => choose(context, column, sorting.directionOf(choice))));
 };
 
 const keepingTheColumnStill = (chrome: Element): void => {

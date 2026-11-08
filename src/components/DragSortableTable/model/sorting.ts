@@ -1,24 +1,16 @@
-import {has} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 
 export type Direction = 'ascending' | 'descending';
 
 export type Value = number | string;
 
-type Choice = {
-  display: string;
-  direction?: Direction;
-};
+export type Choice = Direction | 'reset';
 
-const choices: readonly Choice[] = [
-  {display: 'ascending', direction: 'ascending'},
-  {display: 'descending', direction: 'descending'},
-  {display: 'reset'}
-];
+const choices: readonly Choice[] = ['ascending', 'descending', 'reset'];
 
-const directionOf = (label: string): Direction | undefined => {
-  const choice = choices.find(({display}) => display === label);
-  return has(choice) ? choice.direction : undefined;
-};
+const choiceOf = (label: string): Maybe<Choice> => maybe(choices.find(choice => choice === label));
+
+const directionOf = (choice: Choice): Direction | undefined => choice === 'reset' ? undefined : choice;
 
 const ranked = <Seat>(
   seats: readonly Seat[],
@@ -36,6 +28,7 @@ const ranked = <Seat>(
 
 export const sorting = {
   choices,
+  choiceOf,
   directionOf,
   ranked
 };

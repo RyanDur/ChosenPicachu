@@ -16,14 +16,15 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
       aria-label={`sort ${column}`}/>
     <Menu id={`sort-${column}`} tabIndex={-1} popover="auto" className="card rounded-corners lifted" aria-label={`sort ${column} by`}
       onPointerDown={event => event.stopPropagation()}>
-      {sorting.choices.map(({display, direction}) =>
-        <Entry key={display}>
+      {sorting.choices.map(choice =>
+        <Entry key={choice}>
           <Item tabIndex={0} className="sub-title"
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
+              const direction = sorting.directionOf(choice);
               onSorted?.({column, direction});
               dispatch(tableActions.sortChosen(column, direction));
-            }}>{display}</Item>
+            }}>{choice}</Item>
         </Entry>)}
     </Menu>
   </>;

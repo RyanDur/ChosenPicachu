@@ -10,13 +10,18 @@ describe('the sorting vocabulary', () => {
   });
 
   it('offers ascending, descending and reset', () => {
-    expect(sorting.choices.map(({display}) => display)).toEqual(['ascending', 'descending', 'reset']);
+    expect(sorting.choices).toEqual(['ascending', 'descending', 'reset']);
   });
 
-  it('reads a direction from a choice, and none from reset or nonsense', () => {
+  it('reads a choice from its label, and nothing from a label that is no choice', () => {
+    expect(sorting.choiceOf('descending').orNull()).toBe('descending');
+    expect(sorting.choiceOf('reset').orNull()).toBe('reset');
+    expect(sorting.choiceOf('nonsense').isNothing).toBe(true);
+  });
+
+  it('reads a direction from a choice, and none from reset', () => {
     expect(sorting.directionOf('ascending')).toBe('ascending');
     expect(sorting.directionOf('descending')).toBe('descending');
     expect(sorting.directionOf('reset')).toBeUndefined();
-    expect(sorting.directionOf('nonsense')).toBeUndefined();
   });
 });
