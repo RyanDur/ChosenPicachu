@@ -322,7 +322,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...carve.unit(frameColumns, 'export const sortableOf = ')
+                ...carve.unit(frameColumns, 'const sortable = ')
               ]}/>}
             <Snippet label="CSS" lines={[
               ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle {'), gap,

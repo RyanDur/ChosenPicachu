@@ -2,12 +2,9 @@ import {has, maybe, Maybe} from '@ryandur/sand';
 import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting, tableReports} from '@components/DragSortableTable/model';
 import {
   announceSort,
-  arrangeColumns,
   dressWidths,
   Given,
-  headersOf,
   lanesOf,
-  markGrips,
   MountedTable,
   moveReportOf,
   Reconcile,
@@ -23,7 +20,8 @@ import {
   wireParts,
   writeCells,
   mountedTable,
-  carry
+  carry,
+  frameColumns
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -141,7 +139,7 @@ const withVerbs = (parts: MountedTable): TableContext => {
 };
 
 const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
-  arrangeColumns(context);
+  frameColumns.arrange(context);
   writeCells(context);
   reseatRows(context);
   carry.dress(context, context.store.state);
@@ -151,9 +149,9 @@ const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled
 const wired = (context: TableContext): void => {
   const {table, store: hand, order, standing} = context;
   hand.subscribe((previous, current) => dress(context, previous, current()));
-  markGrips(table);
+  frameColumns.markGrips(table);
   wireParts(context);
-  headersOf(table).forEach(th => {
+  frameColumns.headers(table).forEach(th => {
     const held = mountedTable.columnOfHeader(th);
     th.addEventListener('pointerdown', lifting.column(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carry.follow(th, context);

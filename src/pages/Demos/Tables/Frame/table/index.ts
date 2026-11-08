@@ -1,5 +1,5 @@
 export {carry} from './carry';
-export {arrangeColumns, headersOf, markGrips} from './columns';
+export {frameColumns} from './columns';
 export type {TableContext} from './context';
 export {tell} from './events';
 export {announceSort} from './menus';

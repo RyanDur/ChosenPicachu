@@ -40,7 +40,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
             lines.aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(sources.frameColumns, 'export const markGrips = '),
+            ...carve.unit(sources.frameColumns, 'const markGrips = '),
             lines.aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[

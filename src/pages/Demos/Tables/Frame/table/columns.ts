@@ -4,18 +4,18 @@ import {MountedTable, mountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {dressWidths} from './resize';
 
-export const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
+const headers = (table: HTMLTableElement): HTMLTableCellElement[] =>
   [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
 
-export const columnsShown = (table: HTMLTableElement): string[] => headersOf(table).map(mountedTable.columnOfHeader);
+const shown = (table: HTMLTableElement): string[] => headers(table).map(mountedTable.columnOfHeader);
 
-export const sortableOf = (table: HTMLTableElement): string[] =>
-  columnsShown(table).filter(column => is(table.querySelector(`#sort-${column}`)));
+const sortable = (table: HTMLTableElement): string[] =>
+  shown(table).filter(column => is(table.querySelector(`#sort-${column}`)));
 
-export const markGrips = (table: HTMLTableElement): void => {
-  const headers = headersOf(table);
-  headers.forEach((th, at) => {
-    if (survey.anchored(at, headers.length)) {
+const markGrips = (table: HTMLTableElement): void => {
+  const all = headers(table);
+  all.forEach((th, at) => {
+    if (survey.anchored(at, all.length)) {
       th.classList.remove('grabbable');
       th.removeAttribute('tabindex');
     } else {
@@ -37,12 +37,20 @@ const reconcileColumns = (table: HTMLTableElement, shown: readonly string[], ord
   });
 };
 
-export const arrangeColumns = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
+const arrange = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
   const {table, order} = context;
-  const shown = columnsShown(table);
-  if (mountedTable.changed(shown, order())) {
-    keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, shown, order()));
+  const onPage = shown(table);
+  if (mountedTable.changed(onPage, order())) {
+    keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, onPage, order()));
     markGrips(table);
     dressWidths(context);
   }
+};
+
+export const frameColumns = {
+  headers,
+  shown,
+  sortable,
+  markGrips,
+  arrange
 };

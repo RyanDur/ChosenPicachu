@@ -3,7 +3,7 @@ import {grip} from '@components/DragSortableTable/model';
 import {isMeasure} from '@pages/Demos/Market';
 import {MountedTable, mountedTable} from './table-state';
 import {keepingFocus} from './focus';
-import {columnsShown, sortableOf} from './columns';
+import {frameColumns} from './columns';
 
 export const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
 
@@ -11,10 +11,10 @@ export const lanesOf = (body: HTMLTableSectionElement): ReadonlyMap<string, HTML
   new Map([...body.rows].map(lane => [rowOf(lane), lane]));
 
 export const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
-  const order = columnsShown(table);
+  const order = frameColumns.shown(table);
   rows().forEach(row =>
     maybe(lanes.get(row.window.display)).map(lane =>
-      sortableOf(table).forEach(measure => {
+      frameColumns.sortable(table).forEach(measure => {
         const text = isMeasure(measure) ? row[measure].display : '';
         const cell = lane.cells[order.indexOf(measure)];
         if (cell.textContent !== text) {
