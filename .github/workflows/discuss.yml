@@ -21,11 +21,12 @@ jobs:
           && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-26.04
     permissions:
-      # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
-      contents: write
+      contents: read
       pull-requests: write
-      actions: write
       id-token: write
+    outputs:
+      first: ${{ steps.thread.outputs.first }}
+      verdict: ${{ steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict }}
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
       REPLY: ${{ github.event.comment.id || inputs.comment }}
@@ -83,12 +84,27 @@ jobs:
         run: |
           gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments/$FIRST/replies" \
             -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
-      - name: Resolve the thread when the reviewer agrees
-        if: steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
+
+  settle:
+    needs: answer
+    if: needs.answer.outputs.verdict == 'Agreed'
+    runs-on: ubuntu-26.04
+    permissions:
+      # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
+      # The model never runs in this job, so the write scope never reaches it.
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      PULL: ${{ github.event.pull_request.number || inputs.pull }}
+      FIRST: ${{ needs.answer.outputs.first }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Resolve the thread the reviewer agrees on
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FIRST: ${{ steps.thread.outputs.first }}
         run: |
           thread=$(scripts/review/threads.sh "$PULL" \
             | jq -r --argjson first "$FIRST" '.[] | select(.first.nodes[0].databaseId == $first) | .id')
@@ -98,9 +114,6 @@ jobs:
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
       - name: Rerun the head's review job, so the review reads the agreement
-        if: steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
           run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
