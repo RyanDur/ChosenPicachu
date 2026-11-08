@@ -11,13 +11,7 @@
     "src/pages/Demos/Accordions/Explained.tsx",
     "src/pages/Demos/Accordions/InclusiveHtmlAlone.tsx",
     "src/pages/Demos/Accordions/MeasuredPanel.tsx",
-    "src/pages/Demos/Accordions/Plain/PlainFold.tsx",
-    "src/pages/Demos/Accordions/Plain/assemble.ts",
-    "src/pages/Demos/Accordions/Plain/fold.main.ts",
     "src/pages/Demos/Accordions/fold-motion.ts",
     "src/pages/Demos/Accordions/fold-type.ts"
-  ],
-  "through-index": [
-    "src/pages/Demos/Accordions/Explained.tsx"
   ]
 }

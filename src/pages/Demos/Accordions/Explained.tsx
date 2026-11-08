@@ -14,15 +14,13 @@ import {
   InclusiveMeasuredAccordion,
   InclusiveToggleAccordion
 } from './Accordions';
-import {carve, lines, Mdn, Snippet} from '../Recipe';
-import {Sample} from '../Recipe/sample';
-import {Line} from '../Recipe/Snippet';
+import {carve, Line, lines, Mdn, Sample, Snippet} from '../Recipe';
 import accordionsSource from './Accordions.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
 import foldHtmlSource from './Plain/fold.html?sample';
-import {PlainFold} from './Plain/PlainFold';
+import {PlainFold} from './Plain';
 import inclusiveHtmlAloneSource from './InclusiveHtmlAlone.tsx?sample';
 import exclusiveHtmlAloneSource from './ExclusiveHtmlAlone.tsx?sample';
 import {InclusiveHtmlAloneAccordion} from './InclusiveHtmlAlone';
