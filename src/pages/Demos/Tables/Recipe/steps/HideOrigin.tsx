@@ -60,7 +60,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
               given a <code className="monospaced">position</code> other than static, so the style sheet gives the
               carried cell <code className="monospaced">position: relative</code> as well. Raised, the carried cells
               pass over whatever they cross, and the paper keeps what is beneath from showing through.</Says>
-            <Says>Every motion class changes through <code className="monospaced">changeMotion</code>, which adds or
+            <Says>Every motion class changes through <code className="monospaced">settle.changeMotion</code>, which adds or
               removes the class and keeps <code className="monospaced">paper-in-motion</code> on while any motion class
               is present.</Says>
           </>}
