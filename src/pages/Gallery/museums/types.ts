@@ -4,11 +4,15 @@ export type Pagination = {
   totalPages: number;
 };
 
+export type Picture = {
+  src: string;
+  srcSet?: string;
+};
+
 export type Art = {
   id: string;
   title: string;
-  image?: string;
-  srcSet?: string;
+  picture?: Picture;
   altText: string;
   artistInfo?: string;
 };

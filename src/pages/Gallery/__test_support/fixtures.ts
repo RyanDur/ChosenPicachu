@@ -54,8 +54,10 @@ export const anAICPieceResponse = (piece: AICArt = anAICPiece()): AICArtResponse
 export const fromAICPiece = ({data}: AICArtResponse): Art => ({
   id: String(data.id),
   title: data.title,
-  image: `${env.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
-  srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
+  picture: {
+    src: `${env.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
+    srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
+  },
   altText: data.thumbnail?.alt_text ?? '',
   artistInfo: data.artist_display
 });
@@ -68,7 +70,7 @@ export const aicSuggestionsOf = (words: readonly string[]): AICSearchResponse =>
 export const aPiece = (): Art => ({
   id: faker.lorem.word(),
   title: faker.lorem.words(),
-  image: faker.image.url(),
+  picture: {src: faker.image.url()},
   altText: faker.lorem.sentence(),
   artistInfo: faker.lorem.sentence()
 });
@@ -96,7 +98,7 @@ export const harvardPieceResponse = harvardToPieceResponse(undefined, faker.numb
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
   title: maybe(harvardPieceResponse.title).orElse('Untitled'),
-  image: harvardPieceResponse.primaryimageurl,
+  picture: {src: harvardPieceResponse.primaryimageurl},
   altText: maybe(harvardPieceResponse.title).orElse('Untitled'),
   artistInfo: harvardPieceResponse.people?.[0].displayname ?? ''
 };
@@ -129,8 +131,10 @@ export const fromVAMArt: AllArt = {
   pieces: vamSearchRecords.map(record => ({
     id: record.systemNumber,
     title: record._primaryTitle || 'Untitled',
-    image: `${record._images._iiif_image_base_url}full/!800,800/0/default.jpg`,
-    srcSet: [400, 800, 1200].map(size => `${record._images._iiif_image_base_url}full/!${size},${size}/0/default.jpg ${size}w`).join(', '),
+    picture: {
+      src: `${record._images._iiif_image_base_url}full/!800,800/0/default.jpg`,
+      srcSet: [400, 800, 1200].map(size => `${record._images._iiif_image_base_url}full/!${size},${size}/0/default.jpg ${size}w`).join(', ')
+    },
     artistInfo: record._primaryMaker.name,
     altText: record._primaryTitle || 'Untitled'
   }))
@@ -146,7 +150,7 @@ export const vamPieceResponse: VAMArtResponse = {record: vamPieceRecord};
 export const fromVAMToPiece: Art = {
   id: vamPieceRecord.systemNumber,
   title: vamPieceRecord.titles[0].title,
-  image: `https://framemark.vam.ac.uk/collections/${vamPieceRecord.images[0]}/full/!2000,2000/0/default.jpg`,
+  picture: {src: `https://framemark.vam.ac.uk/collections/${vamPieceRecord.images[0]}/full/!2000,2000/0/default.jpg`},
   artistInfo: vamPieceRecord.artistMakerPerson[0].name.text,
   altText: vamPieceRecord.titles[0].title
 };
@@ -165,8 +169,10 @@ export const fromAICArt: AllArt = {
   pieces: aicArtResponse.data.map(piece => ({
     id: String(piece.id),
     title: piece.title,
-    image: `${env.aicPictures}/${piece.image_id}/full/800,/0/default.jpg`,
-    srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
+    picture: {
+      src: `${env.aicPictures}/${piece.image_id}/full/800,/0/default.jpg`,
+      srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
+    },
     artistInfo: piece.artist_display,
     altText: piece.term_titles.join(' ')
   }))
@@ -180,7 +186,7 @@ export const fromHarvardArt: AllArt = {
   pieces: harvardRecords.map(piece => ({
     id: String(piece.id),
     title: maybe(piece.title).orElse('Untitled'),
-    image: piece.primaryimageurl,
+    picture: {src: piece.primaryimageurl},
     artistInfo: piece.people?.[0].displayname ?? '',
     altText: maybe(piece.title).orElse('Untitled')
   }))
@@ -202,8 +208,7 @@ export const fromClevelandArt: AllArt = {
   pieces: clevelandRecords.map(record => ({
     id: String(record.id),
     title: record.title,
-    image: record.images.web.url,
-    srcSet: `${record.images.web.url} 630w, ${record.images.print.url} 2398w`,
+    picture: {src: record.images.web.url, srcSet: `${record.images.web.url} 630w, ${record.images.print.url} 2398w`},
     artistInfo: record.creators[0].description,
     altText: record.title
   }))
@@ -219,8 +224,7 @@ export const clevelandPieceResponse: ClevelandArtResponse = {data: clevelandPiec
 export const fromClevelandToPiece: Art = {
   id: '94979',
   title: clevelandPieceRecord.title,
-  image: clevelandPieceRecord.images.web.url,
-  srcSet: `${clevelandPieceRecord.images.web.url} 600w`,
+  picture: {src: clevelandPieceRecord.images.web.url, srcSet: `${clevelandPieceRecord.images.web.url} 600w`},
   artistInfo: clevelandPieceRecord.tombstone,
   altText: clevelandPieceRecord.title
 };

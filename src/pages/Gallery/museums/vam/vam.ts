@@ -23,8 +23,7 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
   ...maybe(record._images).map(({_iiif_image_base_url: base}) => ({
-    image: iiifImage(base, 800),
-    srcSet: iiifSrcSet(base)
+    picture: {src: iiifImage(base, 800), srcSet: iiifSrcSet(base)}
   })).orElse({}),
   ...artFields.attributed(record._primaryMaker?.name),
   altText: record._primaryTitle || 'Untitled'
@@ -58,7 +57,7 @@ export const vam = {
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
-      ...maybe(record.images?.[0]).map(first => ({image: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)})).orElse({}),
+      ...maybe(record.images?.[0]).map(first => ({picture: {src: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)}})).orElse({}),
       ...artFields.attributed(record.artistMakerPerson?.[0]?.name.text),
       altText: maybe(record.titles?.[0]?.title).orElse(record.objectType)
     })),

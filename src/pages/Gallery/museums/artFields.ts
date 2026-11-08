@@ -4,10 +4,10 @@ import {Art} from '@pages/Gallery/museums/types';
 type MuseumField = string | null | undefined;
 type ArtFields = {
   readonly attributed: (artist: MuseumField) => Pick<Art, 'artistInfo'>;
-  readonly pictured: (image: MuseumField) => Pick<Art, 'image'>;
+  readonly pictured: (src: MuseumField) => Pick<Art, 'picture'>;
 };
 
 export const artFields: ArtFields = {
   attributed: artist => has(artist) ? {artistInfo: artist} : {},
-  pictured: image => has(image) ? {image} : {}
+  pictured: src => has(src) ? {picture: {src}} : {}
 };

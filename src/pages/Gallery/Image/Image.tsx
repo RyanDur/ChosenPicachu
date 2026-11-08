@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router';
-import {empty, maybe, Maybe} from '@ryandur/sand';
+import {maybe, Maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
 import {toQueryString} from '@transport/url';
@@ -42,11 +42,8 @@ export const Image: FC<ImageProps> = (
   return picture === 'missing' ?
     <StandIn alt={`${piece.title} would not load`}
       className="image"
-      src={noImage}/> : empty(piece.image) ?
-      <StandIn alt={`${piece.title} has nothing to show`}
-        className="image"
-        src={noImage}/> :
-      (<>
+      src={noImage}/> : maybe(piece.picture).either(({src, srcSet}) =>
+      <>
         <Framed link={link} title={piece.title}>
           <img className={classNames('image', className, picture === 'arriving' && 'arriving')}
             referrerPolicy="no-referrer"
@@ -54,11 +51,14 @@ export const Image: FC<ImageProps> = (
             onLoad={() => pictured('shown')}
             fetchPriority={priority ? 'high' : 'auto'}
             loading={lazy ? 'lazy' : undefined}
-            srcSet={piece.srcSet}
+            srcSet={srcSet}
             sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
             alt={piece.altText} title={piece.title}
-            src={piece.image}/>
+            src={src}/>
         </Framed>
         {picture === 'arriving' && <Loading/>}
-      </>);
+      </>, () =>
+      <StandIn alt={`${piece.title} has nothing to show`}
+        className="image"
+        src={noImage}/>);
 };

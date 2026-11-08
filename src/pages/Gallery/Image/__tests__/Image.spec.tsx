@@ -33,7 +33,7 @@ describe('the image', () => {
   });
 
   test('shows a stand-in when the piece has no picture', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><Image piece={{...piece, image: undefined}}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><Image piece={{...piece, picture: undefined}}/></GalleryProviders></TestApp>);
 
     expect(image.nothingToShow()).toBeInTheDocument();
     expect(image.loadingIfAny()).not.toBeInTheDocument();

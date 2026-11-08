@@ -48,8 +48,7 @@ describe('AIC as a source of art', () => {
 
       const actual = await art.get({id: String(withoutImage.data.id), source: Source.AIC}).orNull();
 
-      expect(actual?.image).toBeUndefined();
-      expect(actual?.srcSet).toBeUndefined();
+      expect(actual?.picture).toBeUndefined();
     });
   });
 

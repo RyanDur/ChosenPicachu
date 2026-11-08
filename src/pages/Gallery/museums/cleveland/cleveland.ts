@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {
   ClevelandAllArtResponse,
   ClevelandArtResponse,
@@ -32,8 +32,7 @@ const artistOf = (record: ClevelandRecord): string | null | undefined =>
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
-  image: record.images?.web?.url,
-  srcSet: srcSetOf(record),
+  ...maybe(record.images?.web).map(web => ({picture: {src: web.url, srcSet: srcSetOf(record)}})).orElse({}),
   ...artFields.attributed(artistOf(record)),
   altText: record.title
 });
