@@ -20,7 +20,7 @@ export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({lis
         nothing today and keeps the list safe the day a payload is added.</Says>
     </Words>
     <Codes>
-      <Snippet label="HTML" lines={[
+      <Snippet label="TS" lines={[
         ...carve.span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), gap,
         ...carve.span(itemSource, 'onDragOver={event => {', '}}')
       ]}/>

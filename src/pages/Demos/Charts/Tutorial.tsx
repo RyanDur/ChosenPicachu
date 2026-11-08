@@ -258,7 +258,7 @@ const CandlesStory: FC = () =>
           <Says>Axes does one job, so every chart that has that job uses it.</Says>
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={[
+          <Snippet label="TS" lines={[
             ...carve.span(candlesSource, 'const range = rangeOf(', '  );'), gap,
             ...carve.span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMs[period]}>')
           ]}/>
@@ -406,7 +406,7 @@ const PieStory: FC = () =>
             ...carve.unit(pieSource, 'export const slices'), gap,
             ...carve.unit(pieSource, 'export const sweepGates')
           ]}/>
-          <Snippet label="HTML" lines={[
+          <Snippet label="TS" lines={[
             ...carve.span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
           ]}/>
           <Snippet label="CSS" lines={[

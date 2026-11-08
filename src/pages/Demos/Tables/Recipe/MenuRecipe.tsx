@@ -216,7 +216,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               lines.aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'
-              ? <Snippet label="HTML" lines={[
+              ? <Snippet label="TS" lines={[
                 ...carve.span(source, 'const {sorted, data} = useTableSelector(columnNamed', 'const {sorted, data} = useTableSelector(columnNamed'), gap,
                 ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
