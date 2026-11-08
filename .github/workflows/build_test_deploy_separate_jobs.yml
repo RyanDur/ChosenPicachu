@@ -93,7 +93,7 @@ jobs:
   pages:
     needs: [build_test, journeys]
     if: >-
-      always() && github.ref == 'refs/heads/main' && needs.build_test.result == 'success'
+      !cancelled() && github.ref == 'refs/heads/main' && needs.build_test.result == 'success'
       && contains(fromJSON('["success", "skipped"]'), needs.journeys.result)
     runs-on: ubuntu-26.04
     concurrency:
@@ -177,7 +177,7 @@ jobs:
 
   smoke:
     needs: pages
-    if: always() && needs.pages.result == 'success'
+    if: ${{ !cancelled() && needs.pages.result == 'success' }}
     runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble
