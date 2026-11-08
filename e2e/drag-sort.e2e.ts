@@ -1,7 +1,6 @@
 import {expect} from '@playwright/test';
-import {not} from '@ryandur/sand';
 import {test} from './__test_support/journey';
-import {assertionPatience, iPhone, sortableList} from './__test_support';
+import {iPhone, sortableList} from './__test_support';
 
 test.afterEach(async ({page}, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
@@ -25,14 +24,11 @@ test('an arrow key walks an item in an animated list past its neighbour, and bac
 
   await list.stepByKey('A', 'ArrowRight');
   await expect.poll(list.seats).toEqual(['B', 'A', 'C']);
+  await expect.poll(list.atRest).toBe(true);
 
-  await expect(async () => {
-    const [first] = await list.seats();
-    if (not(first === 'A')) {
-      await list.stepByKey('A', 'ArrowLeft');
-    }
-    expect(await list.seats()).toEqual(['A', 'B', 'C']);
-  }).toPass({timeout: assertionPatience});
+  await list.stepByKey('A', 'ArrowLeft');
+
+  await expect.poll(list.seats).toEqual(['A', 'B', 'C']);
 });
 
 test('a lazy list holds its order while an item is carried, and takes the new order when it is dropped', async ({page}) => {

@@ -26,4 +26,3 @@ export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
 export {definedTerm, timesShut, whatHappened} from './terms';
 export {tutorialTable, type TutorialTableName} from './tutorial-tables';
-export {assertionPatience} from './patience';
