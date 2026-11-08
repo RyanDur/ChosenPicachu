@@ -2,7 +2,7 @@
 
 The code is organized by what it's about, never by what kind of file it is. Each context below is a domain in Fowler's sense of a [bounded context](https://martinfowler.com/bliki/BoundedContext.html). A context can hold subdomains, and a subdomain follows the same rules as a context. Inside a context, every `.ts` file is one module: an object named for what it does, or a function that builds one when it needs something to be built from (`AGENTS.md`, Code style). A module's behaviors serve its own context. Another context calls them as methods on the module's name, and never imports a loose helper out of it.
 
-The map was made from the code on `main` at 82efb32b. For each shared file, it counts which contexts import it. Today's directories split some contexts by kind: `src/components/art-gallery` and `src/pages/Gallery` are one context, and `src/components/Users` and `src/pages/Users` are another. The table at the end says where each misplaced file belongs. Files move there in the debt pass, one context per slice (Ryan, 2026-11-07: "we will then stop feature work to address the technical debt").
+The map was made from the code on `main` at 82efb32b. For each shared file, it counts which contexts import it. Today's directories split some contexts by kind: `src/components/Users` and `src/pages/Users` are one context. The gallery's two halves were joined in `src/pages/Gallery` by its debt slice (3023a27c). The table at the end says where each misplaced file belongs. Files move there in the debt pass, one context per slice (Ryan, 2026-11-07: "we will then stop feature work to address the technical debt").
 
 ## Contexts and their subdomains
 
@@ -20,9 +20,9 @@ The map was made from the code on `main` at 82efb32b. For each shared file, it c
   - *Course*: what every tab shares. `Recipe`, `Controls` (the dials), `Stage`, `SavedTab`, `TabLink.tsx`, `components/Explainer`, `components/fibs`.
   - *Market*: the live trades the charts and tables read, in `Demos/Market`: its actions, slice, store, selectors, the arranged view and the exchange. `Market/Trading` holds what only the React build uses: `Trading`, the provider and the hooks. The plain-script frame imports `Market` alone, so React stays out of its bundle.
   - *Accordions*, *Z-index* (`ZIndexDemo`), *Drag sort* (`DragAndDrop`, with `components/glide.ts`), *Charts*, *Tables*: one subdomain per tab. Each holds its own route, as 734456f7 arranged.
-- **Gallery**: `pages/Gallery` and `components/art-gallery`, with `components/room.ts`.
-  - *Museums*: one subdomain per collection: `aic`, `cleveland`, `harvard`, `vam`.
-  - *Settings*: search and page control.
+- **Gallery**: `pages/Gallery`, with `components/room.ts` still outside it. `source.ts` names the museum a tab shows, and `opening.ts` the page the rail's Gallery link opens.
+  - *Museums*: `pages/Gallery/museums`, one subdomain per collection: `aic`, `cleveland`, `harvard`, `vam`.
+  - *Settings*: `Settings`, `Search` and `PageControl`.
 - **Users**: `pages/Users`, `components/Users` and `components/FancyFormElements`.
   - *Resource*: the users' service worker and its API.
 - **Games**: `pages/Games`.
@@ -38,7 +38,6 @@ The map was made from the code on `main` at 82efb32b. For each shared file, it c
 | `components/fibs` | Z-index and the demos' tab routes | Demos › Course |
 | `components/Explainer` | Charts and Tables | Demos › Course |
 | `components/FancyFormElements` | Users only | Users |
-| `components/art-gallery` | `pages/Gallery`, BasePage | Gallery, with `pages/Gallery` |
 | `components/Users` | `pages/Users` | Users, with `pages/Users` |
 | `components/Quotation` | Home and Record (Record only after #311) | Record |
 | `components/Banners`, `Feedback`, `PageName`, `Env`, `Tabs`, `OpeningFragment`, `hydrated.ts` | the frame and every page | Frame |
