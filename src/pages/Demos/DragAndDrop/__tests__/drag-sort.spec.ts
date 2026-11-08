@@ -9,19 +9,19 @@ describe('a landed drag', () => {
     const lifted = dragSort.reduce(resting, dragSortChange.lifted('B'));
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(1));
 
-    expect(dragSort.reduce(hovered, dragSortChange.released()).lastMove.orNull()).toBeNull();
+    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toBeNull();
   });
 
   it('a release with nothing landed is not a move', () => {
     const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
 
-    expect(dragSort.reduce(lifted, dragSortChange.released()).lastMove.orNull()).toBeNull();
+    expect(dragSort.reduce(lifted, dragSortChange.released()).report.orNull()).toBeNull();
   });
 
   it('a release with nothing lifted is not a move', () => {
     const hovered = dragSort.reduce(resting, dragSortChange.hovered(2));
 
-    expect(dragSort.reduce(hovered, dragSortChange.released()).lastMove.orNull()).toBeNull();
+    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toBeNull();
   });
 });
 
@@ -45,6 +45,14 @@ describe('a drop', () => {
 
     expect(dragSort.reduce(hovered, dragSortChange.released()).order).toEqual(['A', 'C', 'B']);
   });
+
+  it('a drop ignored while a neighbour slides says the item stays where it is', () => {
+    const stepped = dragSort.reduce(resting, dragSortChange.stepped('B', 1));
+    const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
+    const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
+
+    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toEqual({item: 'A', position: 0, stayed: true});
+  });
 });
 
 describe('a drag that leaves', () => {
@@ -55,7 +63,7 @@ describe('a drag that leaves', () => {
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
     const left = dragSort.reduce(hovered, dragSortChange.left());
 
-    expect(dragSort.reduce(left, dragSortChange.released()).lastMove.orNull()).toBeNull();
+    expect(dragSort.reduce(left, dragSortChange.released()).report.orNull()).toBeNull();
   });
 });
 

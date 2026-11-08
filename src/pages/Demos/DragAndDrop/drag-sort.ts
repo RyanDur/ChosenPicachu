@@ -1,16 +1,16 @@
-import {Maybe, nothing, some, not} from '@ryandur/sand';
+import {Maybe, not, nothing, some} from '@ryandur/sand';
 import {array} from '@components';
 import {DragSortChange} from './drag-sort-change';
 import {SlideStarts, slideStarts} from './slide-starts';
 
-export type Moved = {readonly item: string; readonly position: number};
+export type Report = {readonly item: string; readonly position: number; readonly stayed: boolean};
 
 export type Held = {readonly item: string; readonly landing: Maybe<number>};
 
 export type DragSort = {
   readonly order: readonly string[];
   readonly held: Maybe<Held>;
-  readonly lastMove: Maybe<Moved>;
+  readonly report: Maybe<Report>;
   readonly slideStarts: SlideStarts;
   readonly gripped: Maybe<string>;
   readonly animated: boolean;
@@ -22,7 +22,7 @@ const initial = ({items, animated}: Start): DragSort =>
   ({
     order: [...items],
     held: nothing(),
-    lastMove: nothing(),
+    report: nothing(),
     slideStarts: {},
     gripped: nothing(),
     animated
@@ -36,9 +36,12 @@ const moved = (
 ): DragSort => ({
   ...sort,
   order,
-  lastMove: some({item, position: order.indexOf(item)}),
+  report: some({item, position: order.indexOf(item), stayed: false}),
   slideStarts: sort.animated ? {...sort.slideStarts, ...starts} : {}
 });
+
+const stayed = (sort: DragSort, item: string): DragSort =>
+  ({...sort, report: some({item, position: sort.order.indexOf(item), stayed: true})});
 
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
@@ -60,9 +63,8 @@ const settled = (sort: DragSort): DragSort => {
     .mBind(({item, landing}) => landing.map(at => {
       const order = array.moveToIndex(at, item, sort.order);
       const starts = slideStarts.afterSettle(sort.order, order);
-      return at === sort.order.indexOf(item) || anySliding(sort, starts)
-        ? withNothingHeld
-        : moved(withNothingHeld, item, order, starts);
+      if (at === sort.order.indexOf(item)) return withNothingHeld;
+      return anySliding(sort, starts) ? stayed(withNothingHeld, item) : moved(withNothingHeld, item, order, starts);
     }))
     .orElse(withNothingHeld);
 };
@@ -70,8 +72,9 @@ const settled = (sort: DragSort): DragSort => {
 const stepped = (sort: DragSort, item: string, step: 1 | -1): DragSort => {
   const from = sort.order.indexOf(item);
   const to = Math.min(Math.max(from + step, 0), sort.order.length - 1);
-  return to === from || sliding(sort, item) || sliding(sort, sort.order[to])
-    ? sort
+  if (to === from) return sort;
+  return sliding(sort, item) || sliding(sort, sort.order[to])
+    ? stayed(sort, item)
     : moved(sort, item, array.moveToIndex(to, item, sort.order), slideStarts.afterKeyboardStep(sort.order, item, step));
 };
 
