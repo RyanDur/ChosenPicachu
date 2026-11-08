@@ -34,8 +34,8 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
             ? <Snippet label="TS" lines={[
               ...carve.unit(headerSource, 'const moved = '), gap,
               ...carve.unit(headerSource, 'const release = '), gap,
-              ...carve.unit(paceSource, 'export const travelledColumn'), gap,
-              ...carve.unit(paceSource, 'export const releasedColumn')
+              ...carve.unit(paceSource, 'const column'), gap,
+              ...carve.unit(paceSource, 'const released')
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const moved = '), gap,

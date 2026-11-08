@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
 import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
-import {releasedRow, travelledRow} from './travel';
+import {lazyDrop} from './lazyDrop';
 import '@components/DragSortableTable/motion.css';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
@@ -36,13 +36,13 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    dispatch(tableActions.rowLandingFound(travelledRow(standing, moving)(held)));
+    dispatch(tableActions.rowLandingFound(lazyDrop.row(standing, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? standing.indexOf(drag.landing) : standing.indexOf(row);
       const settling = tableSelectors.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
-      releasedRow(drag, neighbour => beside(neighbour, drag.survey));
+      lazyDrop.released(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
         dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: arrangements.movedTo(standing, row, to)}));
       }

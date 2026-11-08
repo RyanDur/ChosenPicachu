@@ -4,7 +4,7 @@ import {classNames} from '@components/class-names';
 import {shares} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
 import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, survey, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
-import {releasedColumn, travelledColumn} from './travel';
+import {lazyDrop} from './lazyDrop';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
 
@@ -38,13 +38,13 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    dispatch(tableActions.columnLandingFound(travelledColumn(order, moving)(held)));
+    dispatch(tableActions.columnLandingFound(lazyDrop.column(order, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? survey.interior(order.indexOf(drag.landing), count) : order.indexOf(column);
       const settling = tableSelectors.settlingOfColumnIn(column, arrangements.movedTo(order, column, to))(view);
-      releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
+      lazyDrop.released(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
         dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: arrangements.movedTo(order, column, to)}));
       }

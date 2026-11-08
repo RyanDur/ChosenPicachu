@@ -35,7 +35,7 @@ import buildSrc from '../Frame/builds/Lazy.ts?sample';
 import tableSource from '../Builds/LazyTable/LazyTable.tsx?sample';
 import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?sample';
 import rowSource from '../Builds/LazyTable/RowHeader.tsx?sample';
-import paceSource from '../Builds/LazyTable/travel.ts?sample';
+import paceSource from '../Builds/LazyTable/lazyDrop.ts?sample';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
 type Props = {track: Track; world: World; origin: Origin; motion: Motion};
