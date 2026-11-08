@@ -485,9 +485,12 @@ const WorkspaceStory: FC = () =>
           <Says><code className="monospaced">travel</code> is the code that runs on each dragover. It takes the held chart’s height
             from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the slot is on the page and gives nothing when
             it isn’t. <code className="monospaced">boundsOf</code> answers with a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
-            there is one. With nothing, <code className="monospaced">travel</code> skips the measuring and the swap. It has already told the
-            browser that a drop is allowed here. Every element that accepts a drop must say so each time a dragover
-            event reaches it.</Says>
+            there is one. With nothing, <code className="monospaced">travel</code> neither compares the pointer with the mark
+            nor swaps.</Says>
+          <Says>Before any of this, <code className="monospaced">travel</code> tells the browser that a drop is allowed
+            here: it calls <code className="monospaced">event.preventDefault()</code> and
+            sets <code className="monospaced">dropEffect</code> to <code className="monospaced">'move'</code>. An element
+            that accepts a drop has to say so on every dragover event that reaches it.</Says>
           <Says>The neighbor’s slide is the{' '}
             <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot
@@ -511,8 +514,8 @@ const WorkspaceStory: FC = () =>
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
             Delete or Backspace removes it, unless it is the last chart. Focus then moves to the next chart’s link, or
             to the one before when the removed chart was last, so the reader keeps their place.</Says>
-          <Says><code className="monospaced">onRemoved</code> is the function the workspace gives <code className="monospaced">useChartTravel</code> to call when a key
-            removes a chart. The workspace passes its own function, <code className="monospaced">removed</code>. <code className="monospaced">keys</code> calls it with the chart’s position and the link
+          <Says><code className="monospaced">onRemoved</code> is the function the workspace gives <code className="monospaced">useChartTravel</code> to call when the
+            reader asks to remove a chart. The workspace passes its own function, <code className="monospaced">removed</code>. <code className="monospaced">keys</code> calls it with the chart’s position and the link
             the key was pressed on. Before the chart goes, <code className="monospaced">removed</code> asks <code className="monospaced">atAfterRemoval</code> which position
             takes the focus, the one after or else the one before. <code className="monospaced">doorwayAt</code> walks from the pressed link up to its list
             item, across to the item at that position, and down to that item’s link. <code className="monospaced">removed</code> focuses that
