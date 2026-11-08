@@ -70,7 +70,8 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const words = sortByWords(chosen);
 
   return <>
-    <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
+    <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open}
+      aria-controls={open ? list : undefined}
       aria-label={`${words}, the old way`}
       onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()}
       onKeyDown={onButtonKey}>{words}</button>

@@ -111,7 +111,8 @@ export const Feedback: FC = () => {
   return <>
     <p className={classNames('feedback-item', 'field', !hydrated && 'gap-filled')}>
       <button type="button" className="feedback-open path rail-aside bold attentive field borderless reachable"
-        inert={!hydrated} commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
+        inert={!hydrated} commandfor={hydrated ? 'feedback' : undefined} command="show-modal"
+        onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
     {hydrated && <dialog ref={dialog} id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
