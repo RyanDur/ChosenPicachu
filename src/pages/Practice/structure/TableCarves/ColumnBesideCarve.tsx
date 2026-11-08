@@ -12,7 +12,7 @@ const tradesHeader = [
 const tradesWritten = carve.span(eagerTableSource, '<DraggableColumn column="trades"', '</DraggableColumn>');
 
 export const ColumnBesideCarve: FC = () =>
-  <div className="carves-beside">
+  <figure className="carves-beside">
     <Snippet label="HTML" lines={tradesHeader}/>
     <Snippet label="HTML" lines={tradesWritten}/>
-  </div>;
+  </figure>;
