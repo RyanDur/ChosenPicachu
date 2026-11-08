@@ -1,4 +1,4 @@
-import {act, screen} from '@testing-library/react';
+import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 type HeldSearch = {
@@ -12,9 +12,9 @@ export const heldSearch = (): HeldSearch => {
   const user = userEvent.setup({advanceTimers: vi.advanceTimersByTime});
   return {
     type: async (word: string): Promise<void> => user.type(screen.getByLabelText(/Search For/), word),
-    pauseEnds: async (): Promise<void> => act(async () => {
+    pauseEnds: async (): Promise<void> => {
       await vi.advanceTimersByTimeAsync(60_000);
-    }),
+    },
     suggestions: (): HTMLElement => screen.getByRole('listbox', {hidden: true})
   };
 };
