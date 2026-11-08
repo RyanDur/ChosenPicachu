@@ -15,11 +15,13 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
         keyframe animation that names only the state the item starts in, and the browser draws the frames from there to
         its place. Every moved item slides home together, and the item the reader let go of slides from the place it was
         lifted from.</Says>
+      <Says>A drop is ignored when an item it would move is still sliding from the drop before. The list keeps its order
+        and lets go of the item, so no slide jumps partway through.</Says>
       <Says>A reader who asks for less motion gets the new order with no slide.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'const slideStart = slideStarts.of(', "style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}"), gap,
+        ...carve.span(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), gap,
         ...carve.unit(sources.slideStarts, 'const afterSettle'), gap,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
