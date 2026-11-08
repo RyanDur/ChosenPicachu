@@ -18,7 +18,7 @@ The map was made from the code on `main` at 82efb32b. For each shared file, it c
 - **Practice**: `pages/Practice`.
 - **Demos**: `pages/Demos`.
   - *Course*: what every tab shares. `Recipe`, `Controls` (the dials), `Stage`, `SavedTab`, `TabLink.tsx`, `components/Explainer`, `components/fibs`.
-  - *Market*: the live trades the charts and tables read, in `Demos/Market`: its actions, slice, store, selectors, the arranged view and the exchange. `Market/Trading` holds what only the React build uses: `Trading`, the provider and the hooks. The plain-script frame imports `Market` alone, so React stays out of its bundle.
+  - *Market*: the live trades the charts and tables read, in `Demos/Market`: its actions, slice, store, selectors, the arranged view and the exchange, and, from the Tables slice on, the rules that feed them: the history fetch (`recent-trades`), the fold into windows (`fold`) and the cells a window shows (`cells`). `cells` reads Charts' money formatting until the Charts slice settles where money lives. `Market/Trading` holds what only the React build uses: `Trading`, the provider and the hooks. The plain-script frame imports `Market` alone, so React stays out of its bundle.
   - *Accordions*, *Z-index* (`ZIndexDemo`), *Drag sort* (`DragAndDrop`, with `components/glide.ts`), *Charts*, *Tables*: one subdomain per tab. Each holds its own route, as 734456f7 arranged.
 - **Gallery**: `pages/Gallery`, with `components/room.ts` still outside it. `source.ts` names the museum a tab shows, and `opening.ts` the page the rail's Gallery link opens.
   - *Museums*: `pages/Gallery/museums`, one subdomain per collection: `aic`, `cleveland`, `harvard`, `vam`.
