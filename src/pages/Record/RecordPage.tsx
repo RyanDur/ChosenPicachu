@@ -2,10 +2,10 @@ import {FC} from 'react';
 import {useArrival} from '@navigation/arrival';
 import {Quotation} from '@components/Quotation';
 import {Timeline} from './Timeline';
-import {Stories} from './Stories';
+import {Stories} from './stories';
 import {Concert} from './Concert';
 import {Bibliography} from './Bibliography';
-import {TeeUp} from './TeeUp';
+import {RecordFooter} from './RecordFooter';
 import './Record.css';
 
 export const RecordPage: FC = () => {
@@ -32,8 +32,8 @@ export const RecordPage: FC = () => {
     <Stories/>
     <Timeline/>
     <Concert/>
-    <TeeUp>
+    <RecordFooter>
       <Bibliography/>
-    </TeeUp>
+    </RecordFooter>
   </article>;
 };

@@ -1,32 +1,28 @@
-import {createContext, FC, PropsWithChildren, ReactNode, useContext} from 'react';
-import {Maybe, nothing} from '@ryandur/sand';
-import {MomentHeading, monthOf, writtenAs} from './moments';
+import {FC, PropsWithChildren, ReactNode, useContext} from 'react';
+import {MomentHeading, moments} from './moments';
+import {ConcernsInTheYear} from './concernsInTheYear';
 
-const noConcerns: Maybe<string> = nothing();
-
-export const ConcernsInTheYear = createContext<Maybe<string>>(noConcerns);
-
-export const Moment: FC<PropsWithChildren<{of: MomentHeading; tells: ReactNode}>> = ({
-  of: {date, title, id}, tells, children
+export const Moment: FC<PropsWithChildren<{heading: MomentHeading; summary: ReactNode}>> = ({
+  heading: {date, title, id}, summary, children
 }) => {
-  const concerns = useContext(ConcernsInTheYear);
+  const concernsInTheYear = useContext(ConcernsInTheYear);
   return date.kind === 'year'
     ? <li className="moment trim-rail-along" id={id} tabIndex={-1}>
       <time dateTime={date.year} className="year caption bold">{date.year}</time>
-      <h3 className="beat-title sub-title void-dot-before">{title}</h3>
-      <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
+      <h3 className="moment-title sub-title void-dot-before">{title}</h3>
+      <p className="moment-summary paragraph muted-ink hyphenated">{summary}</p>
       <details className="fuller-story" name="record">
         <summary className="prompt caption">the fuller story</summary>
         {children}
       </details>
     </li>
     : <li className="moment trim-rail-along" id={id} tabIndex={-1}>
-      <time dateTime={writtenAs(date)} className="month caption bold">{monthOf(date)}</time>
-      <hgroup className="beat-heading">
-        <h4 className="beat-title sub-title void-dot-before">{title}</h4>
-        {concerns.either(told => <p className="concerns caption">{told}</p>, () => null)}
+      <time dateTime={moments.isoDateOf(date)} className="month caption bold">{moments.monthOf(date)}</time>
+      <hgroup className="moment-heading">
+        <h4 className="moment-title sub-title void-dot-before">{title}</h4>
+        {concernsInTheYear.either(concerns => <p className="concerns caption">{concerns}</p>, () => null)}
       </hgroup>
-      <p className="beat-tells paragraph muted-ink hyphenated">{tells}</p>
+      <p className="moment-summary paragraph muted-ink hyphenated">{summary}</p>
       {children}
     </li>;
 };

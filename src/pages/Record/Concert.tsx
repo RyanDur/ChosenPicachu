@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {moments} from './moments/moments';
-import {customElementsParagraph, styleInScriptParagraph} from './concertAddress';
+import {moments} from './moments';
+import {concertParagraphs} from './concertParagraphs';
 
 export const Concert: FC = () =>
   <section className="concert trim-rule-above" aria-labelledby="the-concert">
@@ -47,9 +47,9 @@ export const Concert: FC = () =>
       and the browsers caught up with it over the years that followed. The principles name what that separation was
       for: <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“HTML should allow separation of
         content and presentation.”</a> HTML allowed it once there was a language to separate presentation into.</p>
-    <p id={styleInScriptParagraph} className="paragraph hyphenated" tabIndex={-1}>Script covered for style twice. The
+    <p id={concertParagraphs.styleInScript} className="paragraph hyphenated" tabIndex={-1}>Script covered for style twice. The
       first time was Navigator 4, which ran CSS as script,
-      as <Link className="signpost" to={`#${moments.needOutrunsStandards.id}`}>the 1996 moment</Link> tells, and
+      as <Link className="signpost" to={`#${moments.headings.needOutrunsStandards.id}`}>the 1996 moment</Link> tells, and
       also let developers write JavaScript Style Sheets, bypassing CSS entirely. JavaScript Style Sheets did not survive
       the browser. The second time was 2014, when Christopher Chedeau listed Facebook’s <a className="signpost"
       href="https://speakerdeck.com/vjeux/react-css-in-js">“Problems
@@ -69,7 +69,7 @@ export const Concert: FC = () =>
       href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM">“Before
         shadow DOM was made available to web developers, browsers were already using it to encapsulate the inner
         structure of an element.”</a> A video element’s controls live there.</p>
-    <p id={customElementsParagraph} className="paragraph hyphenated" tabIndex={-1}>Script covered for structure too.
+    <p id={concertParagraphs.customElements} className="paragraph hyphenated" tabIndex={-1}>Script covered for structure too.
       When interfaces became applications, builders needed components, self-contained pieces carrying structure, style
       and behavior together, and in 2013 script built them because markup had no such thing. The HTML Standard’s answer
       is custom elements, which <a className="signpost"

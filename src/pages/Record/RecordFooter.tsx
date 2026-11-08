@@ -3,8 +3,8 @@ import {Link} from 'react-router';
 import {Paths} from '@navigation';
 import {DemoTopics, demoAddress} from '@pages/Demos';
 
-export const TeeUp: FC<PropsWithChildren> = ({children}) =>
-  <footer className="tee-up">
+export const RecordFooter: FC<PropsWithChildren> = ({children}) =>
+  <footer className="record-footer">
     <p className="sub-title">
       The Record ends here, and the practice begins. Each feature on this site starts from what someone needs. The clues
       in that need point at an element the platform already has. The design is built around that element and cut into

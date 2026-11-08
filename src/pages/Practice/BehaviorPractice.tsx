@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
-import {MomentLink} from '@pages/Record/MomentLink';
+import {MomentLink} from '@pages/Record';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {
   BuildsCarve,

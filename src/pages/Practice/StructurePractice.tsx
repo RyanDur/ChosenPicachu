@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
-import {MomentLink} from '@pages/Record/MomentLink';
-import {customElementsAddress} from '@pages/Record/concertAddress';
+import {MomentLink, recordAddress} from '@pages/Record';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
@@ -195,7 +194,7 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
       standard’s custom elements give a new tag a name, and leave its role and its keys to the author; a component
       that renders a button has both from the element. The Record’s <Link className="signpost"
-      to={customElementsAddress}>concert</Link> tells
+      to={recordAddress.customElements}>concert</Link> tells
       how the
       platform took back what script had built. The rule underneath is the first rule of ARIA, from the W3C’s Using
       ARIA:{' '}

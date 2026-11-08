@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useArrival} from '@navigation/arrival';
 import {Tabs} from '@navigation/Tabs';
-import {Concern, concernId, concernsInOrder} from '@pages/Record/moments/concerns';
+import {Concern, concerns} from '@pages/Record/moments';
 import {practiceAddress} from './types';
 import {StructurePractice} from './StructurePractice';
 import {PresentationPractice} from './PresentationPractice';
@@ -38,8 +38,10 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
         plainly: <a className="signpost" href={appContinuum}>“Naming, organizing, and reducing circular dependencies are
           the three most important things you’ll ever do as a programmer”</a>.</p>
     </div>
-    <Tabs label="practice" current={concernId(concern)}
-      values={concernsInOrder.map(shown => ({display: shown, param: concernId(shown), to: practiceAddress(shown)}))}/>
+    <Tabs label="practice" current={concerns.idOf(concern)}
+      values={concerns.inOrder.map(shown => ({
+        display: shown, param: concerns.idOf(shown), to: practiceAddress(shown)
+      }))}/>
     <section className="practice" aria-labelledby="practice-title">
       <h2 className="sub-title" id="practice-title">how I organize it</h2>
       <Practice/>

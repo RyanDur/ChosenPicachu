@@ -1,10 +1,10 @@
 import {FC} from 'react';
 import {Header, Page, PageError} from '@page';
 import {RecordPage} from './RecordPage';
-import {recordListing} from './listing';
-import {inOrder} from './moments/moments';
+import {listing} from './listing';
+import {moments} from './moments';
 
-const header = <Header title="The record" listed={recordListing(inOrder.length)}/>;
+const header = <Header title="The record" listed={listing.ofRecord(moments.inOrder.length)}/>;
 
 export const ErrorBoundary: FC = () => <Page header={header}><PageError/></Page>;
 

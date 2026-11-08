@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Page, PageError} from '@page';
-import {Concern} from '@pages/Record/moments/concerns';
+import {Concern} from '@pages/Record/moments';
 import {Room as NoSuchRoom} from '@pages/NoRoom/route';
 import names from '@navigation/names.json';
 import {PracticePage} from './PracticePage';
