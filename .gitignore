@@ -12,7 +12,7 @@ dist
 dist-ssr
 build
 # drawn from the site's style sheets by the drawings plugin at every build and dev start
-src/pages/Practice/drawings
+src/pages/Practice/drawings/*.svg
 *.local
 .env
 # Editor directories and files
