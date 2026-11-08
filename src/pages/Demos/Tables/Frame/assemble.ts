@@ -28,7 +28,7 @@ const assembled = (environment: Exchange, frame: Dials): string => {
   return scaffold
     .replace('/* the cascade */', () => cascade)
     .replace('<!-- the table as it starts -->', () => startingTable(frame))
-    .replace('/* the environment */', () => `window.__env = ${JSON.stringify(environment)}; window.__frame = ${JSON.stringify(frame)};`)
+    .replace('/* the environment */', () => `window.__environment = ${JSON.stringify(environment)}; window.__frame = ${JSON.stringify(frame)};`)
     .replace('/* the shell */', () => frameJs);
 };
 

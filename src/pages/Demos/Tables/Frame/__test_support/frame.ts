@@ -34,20 +34,20 @@ export const vanillaFrame = {
     document.body.innerHTML = startingTable({origin, motion});
   },
   stand: ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
-    window.__env = {...environment, tradeFeed: has(feed) ? feed.url : ''};
+    window.__environment = {...environment, tradeFeed: has(feed) ? feed.url : ''};
     window.__frame = {pace, origin, motion};
     document.body.innerHTML = startingTable({origin, motion});
     boot(document);
   },
   standWithAHeaderUnnamed: (column: string): void => {
-    window.__env = {...environment, tradeFeed: ''};
+    window.__environment = {...environment, tradeFeed: ''};
     window.__frame = {pace: 'eager', origin: 'hide', motion: 'animated'};
     document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
     header(column).removeAttribute('data-column');
     boot(document);
   },
   standWithASortChoiceWorded: (column: string, choice: MenuChoice, words: string): void => {
-    window.__env = {...environment, tradeFeed: ''};
+    window.__environment = {...environment, tradeFeed: ''};
     window.__frame = {pace: 'eager', origin: 'hide', motion: 'animated'};
     document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
     menuItem(column, choice).textContent = words;

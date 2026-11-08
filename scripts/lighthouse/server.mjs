@@ -48,7 +48,7 @@ const answers = (request, response) => {
   const url = request.url ?? '/';
 
   if (url.split('?')[0].endsWith('/env.js')) {
-    return send(200, `window.__env = ${JSON.stringify({
+    return send(200, `window.__environment = ${JSON.stringify({
       tradeFeed: `ws://localhost:${server.address().port}/ws-feed`,
       tradeProduct: 'BTC-USD',
       tradeHistory: '/trade-history',

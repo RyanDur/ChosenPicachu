@@ -17,15 +17,16 @@ export type Environment = {
 };
 
 declare global {
-  const __BUILT_ENV__: Environment;
+  const __BUILT_ENVIRONMENT__: Environment;
 
   // augmenting Window only works through interface merging — a type alias cannot merge
   // oxlint-disable-next-line typescript/consistent-type-definitions
   interface Window {
-    __env?: Environment;
+    __environment?: Environment;
   }
 }
 
 // the build pre-renders the pages in Node, where there is no env.js, so they are drawn from the values env.js is built
 // from
-export const environment: Environment = import.meta.env.SSR ? __BUILT_ENV__ : window.__env ?? unconfigured;
+export const environment: Environment =
+  import.meta.env.SSR ? __BUILT_ENVIRONMENT__ : window.__environment ?? unconfigured;
