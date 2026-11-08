@@ -48,7 +48,9 @@ const Frame: FC<{room: ReactNode}> = ({room}) =>
   </FeedbackProvider></PageNameProvider></BannerProvider>;
 
 export const ErrorBoundary: FC = () =>
-  <Frame room={<Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}><PageError/></Page>}/>;
+  <Frame room={<Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}>
+    <PageError/>
+  </Page>}/>;
 
 export const HydrateFallback: FC = () =>
   <Frame room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false} pageUnknown>
