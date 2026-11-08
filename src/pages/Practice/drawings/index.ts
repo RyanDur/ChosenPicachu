@@ -1,0 +1,1 @@
+export {practiceDrawings} from './practiceDrawings';
