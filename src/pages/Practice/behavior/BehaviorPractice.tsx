@@ -195,7 +195,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">On the tables demo, an arrow key walks a column or a row: each press moves it one place.
       The table names each walk for what happened:</p>
     <WalksCarve/>
-    <p className="paragraph">A walk and a drag that passes a neighbour share one case of the reducer, so a key and
+    <p className="paragraph">A walk and a drag that passes a neighbor share one case of the reducer, so a key and
       a pointer move the other columns by the same rule:</p>
     <WalkCaseCarve/>
     <p className="paragraph">The focus stays on the column or row being walked, so the next key press reaches it
