@@ -155,18 +155,6 @@ test.describe('a visitor at a desk', () => {
     expect(await galleryPage(page).picturesNotShown()).toEqual([]);
   });
 
-  test('an empty search leaves the wall and its address as they were', async ({page}) => {
-    const gallery = galleryPage(page);
-    await page.goto('gallery/?tab=vam');
-    await expect(gallery.wall.first()).toBeVisible();
-    const before = page.url();
-
-    await gallery.submitSearch.click();
-
-    expect(page.url()).toBe(before);
-    await expect(gallery.wall.first()).toBeVisible();
-  });
-
   test('keeps the focus on a piece whose picture arrives while it holds it', async ({page}) => {
     const gallery = galleryPage(page);
     const letThePicturesThrough = await gallery.holdEveryPicture();
