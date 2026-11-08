@@ -33,9 +33,9 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
   settle.column(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
 };
 
-const columnBeside = (context: MountedTable, name: string, neighbour: string): void => {
+const columnBeside = (context: MountedTable, name: string, neighbor: string): void => {
   const current = context.order();
-  columnShoving(context, name, survey.interior(current.indexOf(neighbour), current.length),
+  columnShoving(context, name, survey.interior(current.indexOf(neighbor), current.length),
     context.store.state.drag?.survey.columnWidths ?? {});
 };
 
@@ -59,9 +59,9 @@ const rowTo = (context: MountedTable, row: string, to: number): void => {
   context.report({about: 'row', name: row, position: to, of: before.length});
 };
 
-const rowBeside = (context: MountedTable, row: string, neighbour: string): void => {
+const rowBeside = (context: MountedTable, row: string, neighbor: string): void => {
   const before = context.standing();
-  const to = before.indexOf(neighbour);
+  const to = before.indexOf(neighbor);
   tell(context.table, 'row-moved', {row, to, standing: before});
   rowShoving(context, row, before, {to, heights: context.store.state.drag?.survey.rowHeights ?? {}});
 };
@@ -87,10 +87,10 @@ const moved = (context: MountedTable, moving: Moving): void => {
   const {drag} = hand.state;
   if (drag?.axis === 'column') {
     travel.eager(survey.columnUnder(order(), drag.survey), drag.held,
-      neighbour => columnBeside(context, drag.held, neighbour))(moving);
+      neighbor => columnBeside(context, drag.held, neighbor))(moving);
   } else if (drag?.axis === 'row') {
     travel.eager(survey.rowUnder(standing(), drag.survey), drag.held,
-      neighbour => rowBeside(context, drag.held, neighbour))(moving);
+      neighbor => rowBeside(context, drag.held, neighbor))(moving);
   }
 };
 

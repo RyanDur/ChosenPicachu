@@ -10,8 +10,8 @@ const afterCrossing = (item: string, homeward: boolean): Places =>
   ({[item]: homeward ? -1 : 1});
 
 const afterKeyboardStep = (order: readonly string[], walker: string, step: 1 | -1): Places => {
-  const neighbour = order[order.indexOf(walker) + step];
-  return {[walker]: -step, [neighbour]: step};
+  const neighbor = order[order.indexOf(walker) + step];
+  return {[walker]: -step, [neighbor]: step};
 };
 
 const afterSettle = (before: readonly string[], after: readonly string[]): Places =>
