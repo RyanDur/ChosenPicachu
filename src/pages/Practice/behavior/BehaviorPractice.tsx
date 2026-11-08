@@ -139,8 +139,8 @@ export const BehaviorPractice: FC = () =>
       a failure pass.</p>
     <TwoTracks/>
     <p className="paragraph">Here is <code className="monospaced">recentTrades.load</code>, the request for recent
-      trades. It fetches the response, checks it against its decoder and turns it into trades. If a step fails, the
-      steps after it do not run:</p>
+      trades. It runs three steps: fetch the response, check it against a decoder, turn it into trades. If a step
+      fails, the steps after it do not run:</p>
     <RecentTradesCarve/>
     <p className="paragraph">The exchange takes the result that <code className="monospaced">recentTrades.load</code>{' '}
       returns. A success goes to the reducer as <code className="monospaced">historyArrived</code>. A failure goes to
