@@ -43,7 +43,7 @@ export const Workspace: FC<Props> = ({product}) => {
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number, from: Element): void => {
-    doorwayAfterRemoval(from).map(doorway => doorway.focus());
+    doorwayAfterRemoval(from).map(link => link.focus());
     remove(at);
     setReport(`${nameAt(at)} removed`);
   };
