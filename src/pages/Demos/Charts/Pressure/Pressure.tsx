@@ -12,8 +12,8 @@ import './Pressure.css';
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
 const BUCKET_MILLISECONDS = 60000;
-const WINDOW_CAP = 60;
-const TICK_EVERY_MS = 600000;
+const MOST_BUCKETS_SHOWN = 60;
+const TICK_EVERY_MILLISECONDS = 600000;
 const DEPTH_X = 1;
 const DEPTH_Y = 1.5;
 
@@ -24,7 +24,7 @@ type Props = {
 
 export const Pressure: FC<Props> = ({trades, actions}) => {
   const heading = `heading${useId()}`;
-  const pressures = bucketPressure(trades, BUCKET_MILLISECONDS).slice(-WINDOW_CAP);
+  const pressures = bucketPressure(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
   const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);
   const peak = heaviestSide(pressures);
   return <section aria-labelledby={heading} className="pressure chart card rounded-corners lifted padded">
@@ -35,7 +35,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     <figure className="chart-stage paper-veiled-before">
       <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={money.bitcoin}
         pattern="HH:mm"
-        tickEvery={TICK_EVERY_MS}
+        tickEvery={TICK_EVERY_MILLISECONDS}
         headroomMilliseconds={2 * BUCKET_MILLISECONDS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>

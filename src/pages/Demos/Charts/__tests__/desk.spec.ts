@@ -14,7 +14,7 @@ describe('the desk', () => {
     expect(desk.dealt('bogus,pie').map(({kind}) => kind)).toEqual(['pie']);
   });
 
-  test('a chart is desk.dealt with the period chosen for it, and the hour when none was', () => {
+  test('a chart is dealt with the period chosen for it, and the hour when none was', () => {
     expect(desk.dealt('price:day,candles')).toEqual([{kind: 'price', period: Period.day}, {kind: 'candles', period: Period.hour}]);
   });
 
