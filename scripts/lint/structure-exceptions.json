@@ -3,15 +3,6 @@
     "src/pages/Demos/Accordions/Accordions.tsx",
     "src/pages/Demos/Accordions/Diagrams.tsx",
     "src/pages/Demos/Accordions/Plain/assemble.ts",
-    "src/pages/Demos/Charts/Axes/Axes.tsx",
-    "src/pages/Demos/Charts/Candles/shapes.ts",
-    "src/pages/Demos/Charts/Pie/shapes.ts",
-    "src/pages/Demos/Charts/Pressure/shapes.ts",
-    "src/pages/Demos/Charts/Tutorial.tsx",
-    "src/pages/Demos/Charts/desk.ts",
-    "src/pages/Demos/Charts/kinds.ts",
-    "src/pages/Demos/Charts/live-trades.ts",
-    "src/pages/Demos/Charts/period.ts",
     "src/pages/Demos/types.ts"
   ],
   "has-index": [
@@ -25,25 +16,7 @@
     "src/pages/Demos/Accordions/Plain/assemble.ts",
     "src/pages/Demos/Accordions/Plain/fold.main.ts",
     "src/pages/Demos/Accordions/fold-motion.ts",
-    "src/pages/Demos/Accordions/fold-type.ts",
-    "src/pages/Demos/Charts/ChartPage.tsx",
-    "src/pages/Demos/Charts/Diagrams.tsx",
-    "src/pages/Demos/Charts/Dismissal.tsx",
-    "src/pages/Demos/Charts/Grip.tsx",
-    "src/pages/Demos/Charts/Introduction.tsx",
-    "src/pages/Demos/Charts/Tutorial.tsx",
-    "src/pages/Demos/Charts/Workspace.tsx",
-    "src/pages/Demos/Charts/desk.ts",
-    "src/pages/Demos/Charts/kinds.ts",
-    "src/pages/Demos/Charts/live-trades.ts",
-    "src/pages/Demos/Charts/period-history.ts",
-    "src/pages/Demos/Charts/period.ts",
-    "src/pages/Demos/Charts/sides.ts",
-    "src/pages/Demos/Charts/slots.ts",
-    "src/pages/Demos/Charts/sparkline.ts",
-    "src/pages/Demos/Charts/useChartTravel.ts",
-    "src/pages/Demos/Charts/useDesk.ts",
-    "src/pages/Demos/Charts/usePeriodCandles.ts"
+    "src/pages/Demos/Accordions/fold-type.ts"
   ],
   "through-index": [
     "src/pages/Demos/Accordions/Explained.tsx"

@@ -2,7 +2,7 @@ import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components';
 import {Trade, liveTrades} from '../../Market';
-import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
+import {pieShapes} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
 import {sideOf} from '../sides';
@@ -23,8 +23,8 @@ type Props = {
 
 export const Pie: FC<Props> = ({trades, actions}) => {
   const heading = `heading${useId()}`;
-  const totals = sideTotals(trades);
-  const cut = slices(sides.map(side => ({side, weight: totals[side]})));
+  const totals = pieShapes.sideTotals(trades);
+  const cut = pieShapes.slices(sides.map(side => ({side, weight: totals[side]})));
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
@@ -33,13 +33,13 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     <figure className="chart-stage paper-veiled-before">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
         {['wall', 'face'].map(dressed => cut.map(slice => {
-          const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
-          const {opening, closing} = sweepGates(slice);
+          const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : pieShapes.explodedBy(slice, EXPLODE);
+          const {opening, closing} = pieShapes.sweepGates(slice);
           const drop = dressed === 'wall' ? DEPTH : 0;
           return <g key={`${slice.side}-${dressed}`} className={classNames('slice', sideOf[slice.side], slice.side)}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
-              <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
+              <g className="spin" style={{'--turn': `${pieShapes.degrees(slice.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
                   viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>

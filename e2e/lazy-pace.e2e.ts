@@ -2,7 +2,7 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {dragSortTable, stagesWith} from './__test_support';
 
-const columnsAsDealt = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
+const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const windowsAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 for (const {name, at, table} of stagesWith('pace=lazy')) {
@@ -19,7 +19,7 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
 
       await hold.drop();
 
-      await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+      await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
     });
 
     test('a column dropped past two neighbors is said once, where it lands', async ({page}) => {
@@ -32,13 +32,13 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
       await hold.carryTo(trades.columnHeader('sells'));
       await hold.drop();
 
-      await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
+      await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
       await trades.moveColumnByKey('trades', 'ArrowRight');
 
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['trades moved to column 4 of 7', 'trades moved to column 5 of 7']);
     });
 
-    test('a held row leaves the windows alone until it is dropped, then takes its seat', async ({page}) => {
+    test('a held row leaves the lookbacks alone until it is dropped, then takes its seat', async ({page}) => {
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
       await expect(trades.columnHeader('trades')).toBeVisible();

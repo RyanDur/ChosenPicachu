@@ -17,9 +17,9 @@ type Stage = {
 type MenuChoice = 'ascending' | 'descending' | 'reset';
 
 const header = (name: string): HTMLElement => screen.getByRole('columnheader', {name: new RegExp(name)});
-const row = (window: string): HTMLElement => screen.getByRole('row', {name: new RegExp(window)});
+const row = (lookback: string): HTMLElement => screen.getByRole('row', {name: new RegExp(lookback)});
 const numberedGrip = (rowNumber: number): HTMLElement => screen.getByRole('button', {name: `move row ${rowNumber}`});
-const grip = (window: string): HTMLElement => within(row(window)).getByRole('button', {name: /move row/});
+const grip = (lookback: string): HTMLElement => within(row(lookback)).getByRole('button', {name: /move row/});
 const columnOrder = (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? '');
 const menuItem = (column: string, words: string): HTMLElement =>
   within(screen.getByLabelText(`sort ${column} by`)).getByRole('button', {name: words, hidden: true});
@@ -53,14 +53,14 @@ export const vanillaFrame = {
     menuItem(column, choice).textContent = words;
     boot(document);
   },
-  table: (): HTMLElement => screen.getByRole('table', {name: 'Live aggregations by window'}),
+  table: (): HTMLElement => screen.getByRole('table', {name: 'Live totals by lookback'}),
   header,
   row,
   grip,
-  figure: (window: string, column: string): HTMLElement =>
-    within(row(window)).getAllByRole('cell')[columnOrder().indexOf(column) - 1],
+  figure: (lookback: string, column: string): HTMLElement =>
+    within(row(lookback)).getAllByRole('cell')[columnOrder().indexOf(column) - 1],
   columnOrder,
-  windowNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
+  lookbackNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
   choose: async (column: string, choice: MenuChoice): Promise<void> => userEvent.click(menuItem(column, choice)),
   chooseWorded: async (column: string, words: string): Promise<void> => userEvent.click(menuItem(column, words)),
@@ -69,7 +69,7 @@ export const vanillaFrame = {
     await userEvent.pointer([{keys: '[MouseLeft>]', target: held}, {keys: '[/MouseLeft]', target: held}]);
   },
   focusColumn: (name: string): void => header(name).focus(),
-  focusRow: (window: string): void => grip(window).focus(),
+  focusRow: (lookback: string): void => grip(lookback).focus(),
   press,
   moveRowByKey: async (rowNumber: number, key: string): Promise<void> => {
     numberedGrip(rowNumber).focus();

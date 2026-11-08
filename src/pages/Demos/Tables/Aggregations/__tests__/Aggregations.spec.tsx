@@ -17,12 +17,12 @@ const fourTrades = [
 ];
 
 describe('the live aggregations', () => {
-  test('the fixed windows hold their rows while the stream fills the cells', async () => {
+  test('the fixed lookbacks hold their rows while the stream fills the cells', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
     await feedIsSubscribed(feed);
     await aggregations.arrived();
-    expect(aggregations.columns()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(aggregations.columns()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(aggregations.rows()).toHaveLength(6);
 
     broadcast(feed, fourTrades);
@@ -49,7 +49,7 @@ describe('the live aggregations', () => {
 
     await tableControls.choose('Lazy', 'Static');
 
-    expect(aggregations.windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
-    expect(aggregations.columns().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
+    expect(aggregations.lookbacks().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+    expect(aggregations.columns().slice(0, 3)).toEqual(['lookback', 'buys', 'trades']);
   });
 });

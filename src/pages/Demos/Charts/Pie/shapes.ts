@@ -5,7 +5,7 @@ export type SideTotals = {
   sold: number;
 };
 
-export const sideTotals = (trades: readonly Trade[]): SideTotals =>
+const sideTotals = (trades: readonly Trade[]): SideTotals =>
   trades.reduce((totals, trade) => ({
     bought: totals.bought + (trade.takerSide === 'buy' ? trade.size : 0),
     sold: totals.sold + (trade.takerSide === 'buy' ? 0 : trade.size)
@@ -23,7 +23,7 @@ export type Weighed = {
   weight: number;
 };
 
-export const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Slice)[] => {
+const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Slice)[] => {
   const whole = parts.reduce((sum, {weight}) => sum + weight, 0);
   return whole === 0
     ? []
@@ -39,19 +39,21 @@ export type Explosion = {
   dy: number;
 };
 
-export const explodedBy = (slice: Slice, by: number): Explosion => {
+const explodedBy = (slice: Slice, by: number): Explosion => {
   const middle = (slice.from + slice.to) / 2;
   return {dx: by * Math.sin(middle), dy: -by * Math.cos(middle)};
 };
 
-export const degrees = (radians: number): number => (radians * 180) / Math.PI;
+const degrees = (radians: number): number => (radians * 180) / Math.PI;
 
 export type Gates = {
   opening: number;
   closing: number;
 };
 
-export const sweepGates = (slice: Slice): Gates => {
+const sweepGates = (slice: Slice): Gates => {
   const sweep = degrees(slice.to - slice.from);
   return {opening: Math.min(sweep, 180) - 180, closing: Math.max(sweep - 180, 0)};
 };
+
+export const pieShapes = {sideTotals, slices, explodedBy, degrees, sweepGates};

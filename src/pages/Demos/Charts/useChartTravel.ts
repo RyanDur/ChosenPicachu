@@ -1,9 +1,9 @@
-import {DragEvent, KeyboardEvent, useState} from 'react';
-import {Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {DragEvent, KeyboardEvent, useReducer} from 'react';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components';
 import {crossing} from '../DragAndDrop';
-
-type Pushed = Readonly<Record<number, 'up' | 'down'>>;
+import {chartTravel} from './chart-travel';
+import {chartTravelChange} from './chart-travel-change';
 
 type Travel = {
   seats: number;
@@ -12,16 +12,13 @@ type Travel = {
 };
 
 export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
-  const [armed, setArmed] = useState<Maybe<number>>(nothing());
-  const [aloft, setAloft] = useState<Maybe<number>>(nothing());
-  const [mark, setMark] = useState(0);
-  const [pushed, setPushed] = useState<Pushed>({});
+  const [{armed, aloft, mark, pushed}, dispatch] = useReducer(chartTravel.reduce, chartTravel.initial);
 
   const isArmed = (at: number) => armed.map(gripped => gripped === at).orElse(false);
 
-  const arm = (at: number) => setArmed(maybe(at));
+  const arm = (at: number) => dispatch(chartTravelChange.armed(at));
 
-  const disarm = () => setArmed(nothing());
+  const disarm = () => dispatch(chartTravelChange.disarmed());
 
   const dress = (at: number) => classNames('chart-slot', 'focal-ringed',
     aloft.map(held => held === at).orElse(false) && 'hide',
@@ -31,8 +28,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
 
   const lift = (at: number) => (event: DragEvent<HTMLElement>) => {
     event.dataTransfer.effectAllowed = 'move';
-    setMark(event.clientY + scrollY);
-    setAloft(maybe(at));
+    dispatch(chartTravelChange.lifted(at, event.pageY));
   };
 
   const boundsOf = (node: Element | null | undefined): Maybe<DOMRect> =>
@@ -42,10 +38,8 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     node instanceof HTMLElement && node.getAnimations().length === 0;
 
   const swap = (held: number, to: number, pointer: number) => {
-    setMark(pointer);
-    setPushed({[held]: to > held ? 'up' : 'down'});
+    dispatch(chartTravelChange.swapped(held, to, pointer));
     onSeated(held, to, {replace: true});
-    setAloft(maybe(to));
   };
 
   const travel = (event: DragEvent<HTMLElement>) => {
@@ -53,7 +47,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     event.dataTransfer.dropEffect = 'move';
     const slots = event.currentTarget.parentElement?.children;
     aloft.map(held => boundsOf(slots?.item(held)).map(bounds => {
-      const pointer = event.clientY + scrollY;
+      const pointer = event.pageY;
       const to = crossing.strayedTo(pointer, mark, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
@@ -64,10 +58,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     }));
   };
 
-  const release = () => {
-    setAloft(nothing());
-    setArmed(nothing());
-  };
+  const release = () => dispatch(chartTravelChange.released());
 
   const keys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -83,7 +74,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     }
   };
 
-  const settled = () => setPushed({});
+  const settled = () => dispatch(chartTravelChange.settled());
 
   return {isArmed, arm, disarm, dress, lift, travel, release, keys, settled};
 };

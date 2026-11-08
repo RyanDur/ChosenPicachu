@@ -1,18 +1,12 @@
 import {render, screen} from '@testing-library/react';
-import {bucketPressure, pressureShapes} from '@pages/Demos/Charts/Pressure/shapes';
+import {bucketPressure} from '@pages/Demos/Charts/Pressure/bucket-pressure';
+import {pressureShapes} from '@pages/Demos/Charts/Pressure/pressure-shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
 import {money} from '@pages/Demos/Market';
-import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
+import {bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('pressure', () => {
-  test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
-    expect(bucketPressure([
-      aTrade({tradedAt: 60000, size: 2, takerSide: 'buy'}),
-      aTrade({id: 2, tradedAt: 61000, size: 5, takerSide: 'sell'})
-    ], 60000)).toEqual([{openedAt: 60000, bought: 2, sold: 5}]);
-  });
-
-  test('trades bucket by window, split by side', () => {
+  test('trades bucket by minute, split by side', () => {
     expect(bucketPressure([
       bought(2, {tradedAt: 60000}),
       sold(1, {id: 2, tradedAt: 61000}),

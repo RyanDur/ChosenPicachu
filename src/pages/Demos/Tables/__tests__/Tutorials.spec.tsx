@@ -12,7 +12,7 @@ describe('the table tutorials', () => {
 
     expect(demoPage.title('let’s build this feature')).toBeVisible();
     expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
-    expect(demoPage.title('The trader can watch the live market in windows they arrange')).toBeVisible();
+    expect(demoPage.title('The trader can watch the live market over lookbacks they arrange')).toBeVisible();
     expect(tablesTab().columnHeader('what it tells you')).toBeVisible();
     expect(demoPage.row(/keep themselves current/)).toBeVisible();
     expect(demoPage.title('Sketch a design from the need')).toBeVisible();
@@ -29,7 +29,7 @@ describe('the table tutorials', () => {
     const layers = tablesTab().table('the layers');
     expect(layers.columns).toHaveLength(4);
     expect(layers.rows).toHaveLength(4);
-    expect(tablesTab().columnsIn('Sketch a design from the need')).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(tablesTab().columnsIn('Sketch a design from the need')).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     const sketch = tablesTab().headersIn('Sketch a design from the need');
     expect(sketch.rows).toHaveLength(5);
   });

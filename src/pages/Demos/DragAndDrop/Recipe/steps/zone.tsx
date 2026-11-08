@@ -14,7 +14,7 @@ export const InnerHalf: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.crossing, 'const crossed')
+        ...carve.unit(sources.crossing, 'const passedAQuarter')
       ]}/>
       <CrossingFigure/>
     </Codes>

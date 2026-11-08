@@ -9,10 +9,10 @@ export const aggregations = {
   card,
   header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
   rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
-  row: (window: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${window}`)}),
+  row: (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
-  windows: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
+  lookbacks: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
   moveWindowByKey: async (row: number, key: string): Promise<void> => {
     within(card()).getByRole('button', {name: `move row ${row}`}).focus();
     await userEvent.keyboard(key);

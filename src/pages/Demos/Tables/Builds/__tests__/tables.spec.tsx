@@ -18,17 +18,17 @@ type Table = FC<HeaderEvents & BodyEvents & Dials & {
   rows: readonly Measures[];
 }>;
 
-const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
+const lookbacks = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
-const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(windows[at], trades));
+const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(lookbacks[at], trades));
 
-const windowOf = (row: Measures): string => row.window.display;
+const lookbackOf = (row: Measures): string => row.lookback.display;
 
 const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(
     arrangements.reducer,
-    arrangements.of(cells.measures.map(({name}) => name), rows.map(windowOf)));
-  const arranged = arrangements.reducer(arrangement, arrangements.arrived(rows.map(windowOf)));
+    arrangements.of(cells.measures.map(({name}) => name), rows.map(lookbackOf)));
+  const arranged = arrangements.reducer(arrangement, arrangements.arrived(rows.map(lookbackOf)));
 
   return <Table caption="live aggregations" {...dials} columns={arrangedView.columnsOf(arranged)} rows={arrangedView.rowsOf(arranged, rows)}
     onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
@@ -43,7 +43,7 @@ const seat = (Table: Table, dials: Dials = {origin: 'hide', motion: 'animated'},
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
     const Page: FC = () =>
-      <DragSortable value={useDragSortable([{name: 'window', data: {label: 'window'}}], [], {origin: 'hide', motion: 'animated'})}>
+      <DragSortable value={useDragSortable([{name: 'lookback', data: {label: 'lookback'}}], [], {origin: 'hide', motion: 'animated'})}>
         <table>
           <thead><tr><Column column="ghost">a header</Column></tr></thead>
         </table>
@@ -62,7 +62,7 @@ describe('columns by hand', () => {
     liveTable.focusColumn('trades');
     await liveTable.press('{ArrowRight}');
 
-    expect(liveTable.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     expect(liveTable.announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
@@ -72,7 +72,7 @@ describe('columns by hand', () => {
     liveTable.focusColumn('trades');
     await liveTable.press('{Enter}');
 
-    expect(liveTable.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
   test('the lazy table says a column move', async () => {
@@ -93,7 +93,7 @@ describe('columns by hand', () => {
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
-    expect(liveTable.sortToggle('window')).not.toBeInTheDocument();
+    expect(liveTable.sortToggle('lookback')).not.toBeInTheDocument();
     expect(liveTable.sortToggleIn('trades')).toBeVisible();
   });
 
@@ -120,9 +120,9 @@ describe('rows by hand', () => {
 
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     await liveTable.press('{ArrowUp}');
-    expect(liveTable.windowNames()).toEqual(windows);
+    expect(liveTable.lookbackNames()).toEqual(lookbacks);
   });
 
   test('the top row cannot walk off the table', async () => {
@@ -131,7 +131,7 @@ describe('rows by hand', () => {
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowUp}');
 
-    expect(liveTable.windowNames()).toEqual(windows);
+    expect(liveTable.lookbackNames()).toEqual(lookbacks);
   });
 
   test('rows that arrive after the deal still walk', async () => {
@@ -141,7 +141,7 @@ describe('rows by hand', () => {
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
 
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
   test('rows that arrive after the deal still say the move', async () => {
@@ -161,7 +161,7 @@ describe('rows by hand', () => {
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
 
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     expect(liveTable.announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
@@ -192,7 +192,7 @@ describe('sort criteria menus', () => {
 
     await liveTable.choose('trades', 'descending');
 
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
     expect(liveTable.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -200,10 +200,10 @@ describe('sort criteria menus', () => {
     const {rerender} = seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await liveTable.choose('trades', 'ascending');
-    expect(liveTable.windowNames()).toEqual(['session', 'this minute', 'last 15 minutes', 'this hour', 'last 5 minutes']);
+    expect(liveTable.lookbackNames()).toEqual(['session', 'this minute', 'last 15 minutes', 'this hour', 'last 5 minutes']);
 
     rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
-    expect(liveTable.windowNames()).toEqual(['session', 'last 15 minutes', 'this hour', 'last 5 minutes', 'this minute']);
+    expect(liveTable.lookbackNames()).toEqual(['session', 'last 15 minutes', 'this hour', 'last 5 minutes', 'this minute']);
   });
 
   test('an arrow at the edge of a sorted table keeps the sort and adds no report', async () => {
@@ -214,7 +214,7 @@ describe('sort criteria menus', () => {
     await liveTable.press('{ArrowUp}');
 
     expect(liveTable.header('trades')).toHaveAttribute('aria-sort', 'descending');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
     expect(liveTable.announced()).toEqual(['trades sorted descending']);
   });
 
@@ -251,7 +251,7 @@ describe('sort criteria menus', () => {
     await liveTable.press('{ArrowUp}');
 
     expect(liveTable.header('trades')).toHaveAttribute('aria-sort', 'descending');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
     expect(liveTable.announced()).toEqual(['trades sorted descending']);
   });
 
@@ -261,7 +261,7 @@ describe('sort criteria menus', () => {
     await liveTable.choose('trades', 'descending');
     await liveTable.choose('trades', 'reset');
 
-    expect(liveTable.windowNames()).toEqual(windows);
+    expect(liveTable.lookbackNames()).toEqual(lookbacks);
     expect(liveTable.header('trades')).not.toHaveAttribute('aria-sort');
   });
 
@@ -269,25 +269,25 @@ describe('sort criteria menus', () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
-    const beforeTheSort = liveTable.windowNames();
+    const beforeTheSort = liveTable.lookbackNames();
 
     await liveTable.choose('trades', 'descending');
     await liveTable.choose('trades', 'reset');
 
-    expect(beforeTheSort).not.toEqual(windows);
-    expect(liveTable.windowNames()).toEqual(beforeTheSort);
+    expect(beforeTheSort).not.toEqual(lookbacks);
+    expect(liveTable.lookbackNames()).toEqual(beforeTheSort);
   });
 
   test('a hand on a row ends the sort and keeps the standing order', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
 
     await liveTable.choose('trades', 'descending');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
 
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowUp}');
 
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
     expect(liveTable.header('trades')).not.toHaveAttribute('aria-sort');
   });
 
@@ -299,7 +299,7 @@ describe('sort criteria menus', () => {
 
     rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
 
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
   });
 });
 
@@ -313,18 +313,18 @@ describe('animated moves', () => {
     await liveTable.press('{ArrowRight}');
     await liveTable.press('{ArrowRight}');
     await liveTable.press('{ArrowRight}');
-    expect(liveTable.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
     await liveTable.press('{ArrowRight}');
-    expect(liveTable.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
     await liveTable.press('{ArrowLeft}');
-    expect(liveTable.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
     await liveTable.press('{ArrowLeft}');
     await liveTable.press('{ArrowLeft}');
     await liveTable.press('{ArrowLeft}');
-    expect(liveTable.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     await liveTable.press('{ArrowLeft}');
-    expect(liveTable.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(liveTable.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(liveTable.header('trades')).toHaveFocus();
   });
 
@@ -337,18 +337,18 @@ describe('animated moves', () => {
     await liveTable.press('{ArrowDown}');
     await liveTable.press('{ArrowDown}');
     await liveTable.press('{ArrowDown}');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
     await liveTable.press('{ArrowDown}');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
 
     await liveTable.press('{ArrowUp}');
-    expect(liveTable.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'this minute', 'session']);
+    expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'this minute', 'session']);
     await liveTable.press('{ArrowUp}');
     await liveTable.press('{ArrowUp}');
     await liveTable.press('{ArrowUp}');
-    expect(liveTable.windowNames()).toEqual(windows);
+    expect(liveTable.lookbackNames()).toEqual(lookbacks);
     await liveTable.press('{ArrowUp}');
-    expect(liveTable.windowNames()).toEqual(windows);
+    expect(liveTable.lookbackNames()).toEqual(lookbacks);
     expect(liveTable.grip('this minute')).toHaveFocus();
   });
 });

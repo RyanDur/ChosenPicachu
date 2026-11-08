@@ -7,7 +7,7 @@ import {gap} from './gap';
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">
-    <Words want="A window is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
+    <Words want="A lookback is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
       <Says>The second axis should come from substitutions, not new machinery: a real
         button for the pointer, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer
         question asked downward.</Says>

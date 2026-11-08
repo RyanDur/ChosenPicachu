@@ -73,7 +73,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
 const RankStory: FC<{build: Build}> = ({build}) => {
   const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
   return <Story param="menu" id="rank"
-    can="The trader can sort the windows by any measure, or take the order back"
+    can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
     <TheImplementation world={world} react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
@@ -322,7 +322,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(tableSrc, '<Column column="window"', '</Column>'),
+                ...carve.span(tableSrc, '<Column column="lookback"', '</Column>'),
                 ...carve.span(tableSrc, '<DraggableColumn column="trades"', '</DraggableColumn>'), gap,
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>

@@ -2,14 +2,14 @@ import {FC} from 'react';
 import {Slices} from '../../Recipe';
 
 export const StorySlices: FC = () =>
-  <Slices can="The trader can watch the live market in windows they arrange"
+  <Slices can="The trader can watch the live market over lookbacks they arrange"
     soThat="so that what they compare sits side by side, and what matters most sits on top"
     slices="Too big to build in one motion, so I slice it: the smallest table that honors the shape first, then the flow of data, then each arrangement the trader asked for. The first two slices are stations of their own; the rest are cards in the last station, and each opens into its build. Station 5 ends with a
       story told from the code’s side, the store the two worlds share."
     sliced={[
       ['The trader can read the market in a table', 4],
-      ['The trader can watch the market live, in windows', 5],
+      ['The trader can watch the market live, one lookback beside another', 5],
       ['The trader can sort by column, and by row', 6],
-      ['The trader can sort the windows by any measure, or take the order back', 6],
+      ['The trader can sort the lookbacks by any measure, or take the order back', 6],
       ['The trader can widen a column', 6]
     ]}/>;

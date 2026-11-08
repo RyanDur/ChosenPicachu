@@ -5,7 +5,7 @@ import {LiveTradesState, liveTrades} from './live-trades';
 import {Period} from './Period';
 import {PeriodHistory, periodHistory} from './period-history';
 import {cells} from './cells';
-import {fold} from './fold';
+import {tradeTotals} from './trade-totals';
 import {MarketAction} from './marketActions';
 
 export type TradesState = LiveTradesState & {
@@ -43,7 +43,7 @@ const candlesReducer = (candles: CandlesState, action: MarketAction): CandlesSta
   }
 };
 
-const arranged = arrangements.of(cells.measures.map(({name}) => name), fold.windows.map(({label}) => label));
+const arranged = arrangements.of(cells.measures.map(({name}) => name), tradeTotals.lookbacks.map(({label}) => label));
 
 export const marketSlice = slices.combined<MarketState, MarketAction>({
   trades: {initial: noTrades, reduce: tradesReducer},

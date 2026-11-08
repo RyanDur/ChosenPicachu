@@ -7,7 +7,7 @@ import {classNames} from '@components';
 import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods, Trade} from '../../Market';
 import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
-import {tickEveryMs, timePattern} from '../period';
+import {periodDisplay} from '../period-display';
 import {sparklinePoints, TimedPrice} from '../sparkline';
 import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
@@ -86,8 +86,8 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes range={view.mBind(({series, high, low}) => rangeOf(series.map(timed => timed.at), high, low))}
-        pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
-        headroomMs={2 * bucketMilliseconds}>
+        pattern={periodDisplay.timePattern[period]} tickEvery={periodDisplay.tickEveryMilliseconds[period]}
+        headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="sparkline" aria-hidden="true"
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
           preserveAspectRatio="none">
@@ -109,9 +109,9 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       <figcaption className="chart-caption caption">{captionFor(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
-      This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the
-      period: the fetched past fills the left, and new trades fold into the newest span as they happen. The dotted line
-      marks the first price in the period, the close of its first candle, and the color shows the trend against it.
+      This measures the price of one bitcoin in US dollars, live. The line is the closing price of each bucket in the
+      period: the fetched past fills the left, and new trades fold into the newest bucket as they happen. The dotted
+      line marks the first price in the period, the close of its first candle, and the color shows the trend against it.
       High and low mark the period’s range; the headline is the latest price paid and how far it has moved. The
       period menu sets how much time the chart covers. Every period stays live.
     </Explainer>

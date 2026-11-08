@@ -122,7 +122,7 @@ describe('the drag sort recipe', () => {
     expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
     const living = demoPage.part('the living table');
-    expect(recipeFolds.story(living, 'The trader can watch the market live, in windows')).not.toHaveAttribute('open');
+    expect(recipeFolds.story(living, 'The trader can watch the market live, one lookback beside another')).not.toHaveAttribute('open');
     expect(recipeFolds.story(living, 'The page is a store, and so is the table')).not.toHaveAttribute('open');
   });
 

@@ -20,8 +20,8 @@ export const EagerTable: FC<Props> = ({
       <caption className="off-screen">{caption}</caption>
       <thead>
         <Headers onColumnMoved={onColumnMoved} onSorted={onSorted}>
-          <Column column="window" className="window">window
-            <ResizeHandle column="window"/>
+          <Column column="lookback" className="lookback">lookback
+            <ResizeHandle column="lookback"/>
           </Column>
           <DraggableColumn column="trades" className="trades">trades
             <SortMenu column="trades"/>
@@ -51,15 +51,15 @@ export const EagerTable: FC<Props> = ({
       </thead>
       <Body onRowMoved={onRowMoved}>
         {rows.map(row => {
-          const window = row.window.display;
-          return <Row key={window}>
-            <RowHeader column="window" row={window} label={window}/>
-            <Cell column="trades" row={window}>{row.trades.display}</Cell>
-            <Cell column="buys" row={window}>{row.buys.display}</Cell>
-            <Cell column="sells" row={window}>{row.sells.display}</Cell>
-            <Cell column="volume" row={window}>{row.volume.display}</Cell>
-            <Cell column="vwap" row={window}>{row.vwap.display}</Cell>
-            <Cell column="change" row={window}>{row.change.display}</Cell>
+          const lookback = row.lookback.display;
+          return <Row key={lookback}>
+            <RowHeader column="lookback" row={lookback} label={lookback}/>
+            <Cell column="trades" row={lookback}>{row.trades.display}</Cell>
+            <Cell column="buys" row={lookback}>{row.buys.display}</Cell>
+            <Cell column="sells" row={lookback}>{row.sells.display}</Cell>
+            <Cell column="volume" row={lookback}>{row.volume.display}</Cell>
+            <Cell column="vwap" row={lookback}>{row.vwap.display}</Cell>
+            <Cell column="change" row={lookback}>{row.change.display}</Cell>
           </Row>;
         })}
       </Body>

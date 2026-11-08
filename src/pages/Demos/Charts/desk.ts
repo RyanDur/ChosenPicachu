@@ -1,5 +1,5 @@
 import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
-import {allChartKinds, ChartKind, isChartKind} from './kinds';
+import {ChartKind, chartKinds} from './chart-kinds';
 import {Period} from '../Market';
 
 export type Seat = {readonly kind: ChartKind; readonly period: Period};
@@ -8,39 +8,41 @@ const isPeriod = (period: string): period is Period => Object.values(Period).som
 
 const seatOf = (entry: string): Maybe<Seat> => {
   const [kind, period] = entry.split(':');
-  return isChartKind(kind) ? some({kind, period: has(period) && isPeriod(period) ? period : Period.hour}) : nothing();
+  return chartKinds.is(kind) ? some({kind, period: has(period) && isPeriod(period) ? period : Period.hour}) : nothing();
 };
 
-const written = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;
+const entryOf = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;
 
-const desk = (seats: readonly Seat[]): string => seats.map(written).join(',');
+const written = (seats: readonly Seat[]): string => seats.map(entryOf).join(',');
 
-export const dealt = (charts: string): readonly Seat[] => {
+const dealt = (charts: string): readonly Seat[] => {
   const seats = charts.split(',').flatMap(entry => seatOf(entry).either(seat => [seat], () => []))
     .filter((seat, at, all) => all.findIndex(other => other.kind === seat.kind) === at);
   return seats.length > 0 ? seats : [{kind: 'price', period: Period.hour}];
 };
 
-export const added = (kind: ChartKind, seats: readonly Seat[]): string =>
-  desk([{kind, period: Period.hour}, ...seats]);
+const added = (kind: ChartKind, seats: readonly Seat[]): string =>
+  written([{kind, period: Period.hour}, ...seats]);
 
-export const without = (at: number, seats: readonly Seat[]): string =>
-  desk(seats.filter((_, other) => other !== at));
+const without = (at: number, seats: readonly Seat[]): string =>
+  written(seats.filter((_, other) => other !== at));
 
-export const seated = (from: number, to: number, seats: readonly Seat[]): string => {
+const seated = (from: number, to: number, seats: readonly Seat[]): string => {
   const next = [...seats];
   const [lifted] = next.splice(from, 1);
   next.splice(to, 0, lifted);
-  return desk(next);
+  return written(next);
 };
 
-export const periodChosen = (kind: ChartKind, period: Period, seats: readonly Seat[]): string =>
-  desk(seats.some(seat => seat.kind === kind)
+const periodChosen = (kind: ChartKind, period: Period, seats: readonly Seat[]): string =>
+  written(seats.some(seat => seat.kind === kind)
     ? seats.map(seat => seat.kind === kind ? {...seat, period} : seat)
     : [...seats, {kind, period}]);
 
-export const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
-  allChartKinds.filter(kind => !seats.some(seat => seat.kind === kind));
+const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
+  chartKinds.all.filter(kind => !seats.some(seat => seat.kind === kind));
 
-export const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
+const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
   maybe([at + 1, at - 1].find(next => next >= 0 && next < standing));
+
+export const desk = {dealt, added, without, seated, periodChosen, absent, atAfterRemoval};

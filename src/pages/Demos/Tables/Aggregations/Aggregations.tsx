@@ -14,7 +14,7 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const dispatch = useMarketDispatch();
   const columns = useMarketSelector(marketSelectors.columns);
   const rows = useMarketSelector(marketSelectors.rows);
-  return <Table caption="Live aggregations by window" origin={origin} motion={motion} columns={columns} rows={rows}
+  return <Table caption="Live totals by lookback" origin={origin} motion={motion} columns={columns} rows={rows}
     onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(arrangements.sorted(column, direction))}
     onRowMoved={({row, to, standing}) => dispatch(arrangements.rowMoved(row, to, standing))}/>;
@@ -38,10 +38,10 @@ export const Aggregations: FC = () => {
       ? <VanillaStage {...dials}/>
       : <LiveTable {...dials}/>}
     <Explainer>
-      The stream folded into fixed windows, one column per measure: how many
+      The stream folded into fixed lookbacks, one column per measure: how many
       trades arrived, the split of buys and sells, the bitcoin traded, the
       volume-weighted average price paid, and how far the price moved. Every
-      window is measured from the newest trade, and every cell updates as
+      lookback is measured from the newest trade, and every cell updates as
       trades land. The grid never grows: no row or column is added or removed. Only the numbers change,
       and while a column is sorted, the rows reseat as their numbers do.
     </Explainer>

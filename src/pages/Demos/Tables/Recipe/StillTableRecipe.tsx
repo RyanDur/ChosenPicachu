@@ -63,7 +63,7 @@ const suppliedBy: Record<World, ReactNode> = {
     <Says>The page wraps the table in a <Term word="provider">provider</Term>, React’s way to give every component
       inside it one value without adding an element to the page, and the headers, rows, grips, handles and menus read
       the hook’s answer from it.</Says>
-    <Says>Each row header carries its window as its label, so a screen reader names the row by its window and not by
+    <Says>Each row header carries its lookback as its label, so a screen reader names the row by its lookback and not by
       the grip inside it.</Says>
   </>,
   vanilla: <>
@@ -89,8 +89,8 @@ const suppliedBy: Record<World, ReactNode> = {
     <Says>The table keeps no copy of the order: the page gives <code className="monospaced">dragSortable</code> two
       functions that read its columns and rows, and the table asks them when it needs an answer.</Says>
     <Says>The table itself is the browser’s, so it shows with its rows before the script runs and without it.</Says>
-    <Says>Each row header also carries its window as its label, so a screen reader names the row by its window and not
-      by the grip inside it.</Says>
+    <Says>Each row header also carries its lookback as its label, so a screen reader names the row by its lookback and
+      not by the grip inside it.</Says>
   </>
 };
 
@@ -128,7 +128,7 @@ const StillStory: FC<{world: World}> = ({world}) =>
     soThat="the shape is right before anything moves">
     <TheImplementation world={world} react="Aggregations" vanilla="Frame/frame.main.ts"/>
     <Tell>The shape comes from the design, in the element the clues pointed at: a few measures
-      across a few time windows, numbers on two axes. That is what a table is for. I build it first as a still, from
+      across a few lookbacks, numbers on two axes. That is what a table is for. I build it first as a still, from
       whatever trades the page holds: headers on both axes, and the
       reading order correct before a single interaction exists.</Tell>
     <Steps>
@@ -145,7 +145,7 @@ const StillStory: FC<{world: World}> = ({world}) =>
             is how a screen reader knows to say the column’s name with every cell below it.
             A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows built from the trades the page holds;
             each row leads with a th of its own,
-            announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
+            announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the lookback’s name
             travels with every cell beside it, then a td per measure.</Says>
           {suppliedBy[world]}
           <Says>You could build this out of divs and grid, and it would look identical. But the table

@@ -42,7 +42,7 @@ for (const variant of variants) {
     await page.mouse.up();
     await page.waitForTimeout(1400);
 
-    expect(await headerOrder(card)).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
+    expect(await headerOrder(card)).toEqual(['lookback', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
     await finish(`${mediaRoot}/sort/${name}.webm`, frame);
   });
 }
@@ -83,7 +83,7 @@ test('sort stills: the lift, the strike, the slide', async ({browser}) => {
 
   await page.evaluate(() => document.getAnimations().forEach(animation => animation.play()));
   await page.mouse.up();
-  expect(await headerOrder(card)).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  expect(await headerOrder(card)).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
 });
 
 for (const motion of ['animated', 'static']) {
@@ -149,6 +149,6 @@ test('keyboard reel', async ({browser}) => {
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(1100);
 
-  expect(await headerOrder(card)).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  expect(await headerOrder(card)).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   await finish(`${mediaRoot}/keyboard/reel.webm`, frame);
 });

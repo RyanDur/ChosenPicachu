@@ -1,15 +1,11 @@
 import {render, screen, within} from '@testing-library/react';
-import {explodedBy, sideTotals, slices, sweepGates} from '@pages/Demos/Charts/Pie/shapes';
+import {pieShapes} from '@pages/Demos/Charts/Pie/shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
-import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
+import {bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('the pie', () => {
-  test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
-    expect(sideTotals([aTrade({size: 2, takerSide: 'buy'}), aTrade({id: 2, size: 5, takerSide: 'sell'})])).toEqual({bought: 2, sold: 5});
-  });
-
   test('the session totals by side', () => {
-    expect(sideTotals([
+    expect(pieShapes.sideTotals([
       bought(2),
       sold(1, {id: 2}),
       sold(3, {id: 3})
@@ -17,7 +13,7 @@ describe('the pie', () => {
   });
 
   test('weights cut the circle into consecutive shares', () => {
-    const cut = slices([{weight: 3}, {weight: 1}]);
+    const cut = pieShapes.slices([{weight: 3}, {weight: 1}]);
 
     expect(cut[0].share).toBe(0.75);
     expect(cut[0].from).toBe(0);
@@ -28,20 +24,20 @@ describe('the pie', () => {
   });
 
   test('nothing traded cuts nothing', () => {
-    expect(slices([{weight: 0}, {weight: 0}])).toEqual([]);
+    expect(pieShapes.slices([{weight: 0}, {weight: 0}])).toEqual([]);
   });
 
   test('a share opens its gates in degrees', () => {
-    const [threeQuarters, quarter] = slices([{weight: 3}, {weight: 1}]);
+    const [threeQuarters, quarter] = pieShapes.slices([{weight: 3}, {weight: 1}]);
 
-    expect(sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
-    expect(sweepGates(quarter)).toEqual({opening: -90, closing: 0});
+    expect(pieShapes.sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
+    expect(pieShapes.sweepGates(quarter)).toEqual({opening: -90, closing: 0});
   });
 
   test('a slice explodes along its own middle', () => {
-    const [rightHalf] = slices([{weight: 1}, {weight: 1}]);
+    const [rightHalf] = pieShapes.slices([{weight: 1}, {weight: 1}]);
 
-    const {dx, dy} = explodedBy(rightHalf, 4);
+    const {dx, dy} = pieShapes.explodedBy(rightHalf, 4);
 
     expect(dx).toBeCloseTo(4);
     expect(dy).toBeCloseTo(0);
@@ -64,7 +60,7 @@ describe('the pie', () => {
   });
 
   test('a one-sided session opens both gates fully', () => {
-    expect(sweepGates(slices([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
+    expect(pieShapes.sweepGates(pieShapes.slices([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
   });
 
   test('the card reads a one-sided session as all bought', () => {

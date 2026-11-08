@@ -9,7 +9,7 @@ describe('the frame table, at lazy pace', () => {
     await vanillaFrame.moveRowByKey(1, '{ArrowUp}');
 
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.moveReport()).toHaveTextContent('trades sorted ascending');
   });
 });

@@ -13,13 +13,13 @@ const ownText = (cell: Element): string =>
   cell.getAttribute('aria-label')
   ?? [...cell.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent ?? '').join('').trim();
 const lanes = (): HTMLTableRowElement[] => [...table().tBodies[0].rows];
-const rowOf = (window: string): HTMLTableRowElement => {
-  const row = lanes().find(lane => ownText(lane.cells[0]) === window);
-  if (!row) throw new Error(`no row for ${window}`);
+const rowOf = (lookback: string): HTMLTableRowElement => {
+  const row = lanes().find(lane => ownText(lane.cells[0]) === lookback);
+  if (!row) throw new Error(`no row for ${lookback}`);
   return row;
 };
 const header = (name: string): HTMLElement => within(table()).getByRole('columnheader', {name});
-const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
+const grip = (lookback: string): HTMLElement => within(rowOf(lookback)).getByRole('button', {name: /move row/});
 const menuChoice = (column: string, choice: MenuChoice): HTMLElement =>
   within(screen.getByLabelText(`sort ${column} by`)).getByRole('button', {name: choice, hidden: true});
 
@@ -30,7 +30,7 @@ export const liveTable = {
   columnsNotReadingTheirName: (): string[] => within(table()).getAllByRole('columnheader')
     .map(column => column.getAttribute('aria-label') ?? '')
     .filter(column => within(header(column)).queryByText(column) !== header(column)),
-  windowNames: (): string[] => lanes().map(lane => ownText(lane.cells[0])),
+  lookbackNames: (): string[] => lanes().map(lane => ownText(lane.cells[0])),
   announced: (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== ''),
   moveReports: (): HTMLElement[] => screen.getAllByRole('status', {name: 'move report'}),
   sortToggle: (column: string): HTMLElement | null => screen.queryByRole('button', {name: `sort ${column}`}),
@@ -42,7 +42,7 @@ export const liveTable = {
   menuChoice,
   choose: async (column: string, choice: MenuChoice): Promise<void> => userEvent.click(menuChoice(column, choice)),
   focusColumn: (name: string): void => header(name).focus(),
-  focusRow: (window: string): void => grip(window).focus(),
+  focusRow: (lookback: string): void => grip(lookback).focus(),
   press: async (...keys: string[]): Promise<void> => {
     for (const key of keys) {
       await userEvent.keyboard(key);

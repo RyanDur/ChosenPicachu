@@ -1,7 +1,7 @@
 import {Measures} from '../../../Market';
 
-export const measuresFor = (window: string, trades: number): Measures => ({
-  window: {display: window},
+export const measuresFor = (lookback: string, trades: number): Measures => ({
+  lookback: {display: lookback},
   trades: {display: String(trades), value: trades},
   buys: {display: '0', value: 0},
   sells: {display: '0', value: 0},

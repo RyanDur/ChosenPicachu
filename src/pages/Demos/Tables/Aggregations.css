@@ -12,7 +12,7 @@
     }
   }
 
-  .window { width: 20.3%; }
+  .lookback { width: 20.3%; }
   .trades { width: 13.25%; }
   .buys { width: 11.83%; }
   .sells { width: 11.59%; }
@@ -21,7 +21,7 @@
   .change { width: 14.18%; }
 
   @media (pointer: coarse) {
-    .window { width: 17.5%; }
+    .lookback { width: 17.5%; }
     .trades { width: 13%; }
     .buys { width: 11.5%; }
     .sells { width: 11.5%; }

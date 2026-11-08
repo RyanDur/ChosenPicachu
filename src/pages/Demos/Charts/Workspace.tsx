@@ -3,13 +3,13 @@ import {FC, useState} from 'react';
 import {generatePath, Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
 import {Paths} from '@navigation';
-import {ChartKind, matchChartKind} from './kinds';
-import {lampOf, statusCopy} from './live-trades';
+import {ChartKind, chartKinds} from './chart-kinds';
+import {feedStatus} from './feed-status';
 import {classNames} from '@components';
 import {marketSelectors} from '../Market';
 import {useMarketSelector} from '../Market/Trading';
 import {useDesk} from './useDesk';
-import {atAfterRemoval} from './desk';
+import {desk} from './desk';
 import {useChartTravel} from './useChartTravel';
 import {Grip} from './Grip';
 import {Dismissal} from './Dismissal';
@@ -44,7 +44,7 @@ export const Workspace: FC<Props> = ({product}) => {
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number, pressed: Element): void => {
-    atAfterRemoval(at, seats.length).mBind(next => doorwayAt(next, pressed)).map(link => link.focus());
+    desk.atAfterRemoval(at, seats.length).mBind(next => doorwayAt(next, pressed)).map(link => link.focus());
     remove(at);
     setReport(`${nameAt(at)} removed`);
   };
@@ -62,7 +62,7 @@ export const Workspace: FC<Props> = ({product}) => {
   return <>
     <header className="charts-heading">
       <h2 className="headline title bold ink">{`Bitcoin, live: every ${product} trade on Coinbase`}</h2>
-      <output className={classNames('status', 'muted-ink', 'tracked', lampOf[status])} aria-label="feed">{statusCopy[status]}</output>
+      <output className={classNames('status', 'muted-ink', 'tracked', feedStatus.lamp[status])} aria-label="feed">{feedStatus.words[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&
           <>
@@ -98,7 +98,7 @@ export const Workspace: FC<Props> = ({product}) => {
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
-        {matchChartKind(kind, {
+        {chartKinds.match(kind, {
           price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
             period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
           candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}

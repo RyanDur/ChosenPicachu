@@ -1,5 +1,5 @@
 import {candles} from '../../Market';
-import {candleShapes} from '../Candles/shapes';
+import {candleShapes} from '../Candles/candle-shapes';
 
 describe('bucketTrades', () => {
   test('no trades bucket to no candles', () => {
@@ -53,7 +53,7 @@ describe('mergeLive', () => {
     ]);
   });
 
-  test('the window keeps only the last sixty candles', () => {
+  test('the chart keeps only the last sixty candles', () => {
     const seed = Array.from({length: 70}, (_, index) => candleAt(index * 60000, 50000 + index));
 
     expect(candles.mergeLive(seed, [], 60)).toHaveLength(60);

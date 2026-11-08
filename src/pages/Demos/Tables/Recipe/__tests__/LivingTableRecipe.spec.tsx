@@ -14,13 +14,13 @@ describe('the still and living table recipes', () => {
     expect(recipeFolds.story(still, 'The trader can read the market in a table')).toBeInTheDocument();
     const living = demoPage.part('the living table');
     expect(living).toBeVisible();
-    expect(recipeFolds.story(living, 'The trader can watch the market live, in windows')).toBeInTheDocument();
+    expect(recipeFolds.story(living, 'The trader can watch the market live, one lookback beside another')).toBeInTheDocument();
     expect(recipeFolds.story(living, 'The page is a store, and so is the table')).toBeInTheDocument();
   });
 
   test('the tutorial stands unchanged in the html world', async () => {
     render(<TestApp at="/?world=vanilla"><FlowTableRecipe/></TestApp>);
 
-    expect(await demoPage.findTitle('The trader can watch the market live, in windows')).toBeInTheDocument();
+    expect(await demoPage.findTitle('The trader can watch the market live, one lookback beside another')).toBeInTheDocument();
   });
 });

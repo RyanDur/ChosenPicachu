@@ -7,12 +7,12 @@ import {gap} from './gap';
 
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    lines.plain('<table><thead><tr><th scope="col">window</th> ...'),
+    lines.plain('<table><thead><tr><th scope="col">lookback</th> ...'),
     lines.plain('<button className="grip" tabIndex={0} aria-label="move row 2"><Handle/></button>'),
     lines.plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    lines.plain('<th scope="col" class="cell header-cell window">'),
+    lines.plain('<th scope="col" class="cell header-cell lookback">'),
     lines.plain('<button type="button" tabindex="0" data-row-grip class="grip grabbable" aria-label="move row 2">…</button>'),
     lines.plain('<button type="button" tabindex="0" data-resize-handle class="resize-handle" aria-label="resize trades"></button>')
   ]}/>

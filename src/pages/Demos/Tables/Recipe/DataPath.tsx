@@ -7,8 +7,8 @@ type Station = {name: string; does: string; ground: 'field' | 'faded-mint'};
 const stations: readonly Station[] = [
   {name: 'fetch', does: 'the last thousand trades, once, at open', ground: 'field'},
   {name: 'socket', does: 'every trade after that, kept under a cap', ground: 'field'},
-  {name: 'fold', does: 'the same trades refolded into windows on every pass', ground: 'faded-mint'},
-  {name: 'table', does: 'one cell per measure per window', ground: 'field'}
+  {name: 'fold', does: 'the same trades refolded into lookbacks on every pass', ground: 'faded-mint'},
+  {name: 'table', does: 'one cell per measure per lookback', ground: 'field'}
 ];
 
 export const DataPath: FC = () =>

@@ -67,7 +67,7 @@ for (const {reader, use} of desks) {
 
     test('an address that names a step shows the step', async ({page}) => {
       await page.goto('demos/tables/#station-5');
-      const step = page.getByRole('heading', {name: 'The trader can watch the market live, in windows'});
+      const step = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
 
       await expect(step).toBeInViewport();
     });
