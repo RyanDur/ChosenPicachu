@@ -117,6 +117,42 @@ test('a link that holds the panel to the window’s bottom edge raises the site�
   }).toBe(true);
 });
 
+test('a reader who dismisses the site’s only banner is left with no site banner', async ({page}) => {
+  await page.goto('demos/z-index/');
+  const banners = bannerTrap(page);
+  await banners.raiseSite.click();
+  await expect(banners.siteNotes).toHaveCount(1);
+
+  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+
+  await expect(banners.siteNotes).toHaveCount(0);
+});
+
+test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {
+  await page.goto('demos/z-index/');
+  const banners = bannerTrap(page);
+  await banners.raiseSite.click();
+  await banners.raiseSite.click();
+  await expect(banners.siteNotes).toHaveCount(2);
+  const kept = await banners.siteNotes.last().textContent();
+
+  await banners.siteNotes.first().getByRole('button', {name: /^dismiss /}).click();
+
+  await expect(banners.siteNotes).toHaveCount(1);
+  await expect(banners.siteBanner).toHaveText(kept ?? '');
+});
+
+test('in a stack that grows sideways, a dismissed banner leaves', async ({page}) => {
+  await page.goto('demos/z-index/?stack=left');
+  const banners = bannerTrap(page);
+  await banners.raiseSite.click();
+  await expect(banners.siteNotes).toHaveCount(1);
+
+  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+
+  await expect(banners.siteNotes).toHaveCount(0);
+});
+
 test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {
   await page.goto('demos/z-index/');
   const banners = bannerTrap(page);
