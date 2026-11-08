@@ -40,6 +40,13 @@ export const galleryPage = (page: Page) => {
       }
       return missing;
     },
+    hangPageOneOnEveryPage: async (): Promise<void> => {
+      await page.route(/\/vam\/objects\/search\?page=(?!1&)/, async route => {
+        const asked = new URL(route.request().url());
+        asked.searchParams.set('page', '1');
+        await route.fulfill({response: await route.fetch({url: asked.toString()})});
+      });
+    },
     refuseEveryPicture: async (): Promise<void> => {
       await page.route('**/vam-image/*/full/**', route => route.abort());
     },

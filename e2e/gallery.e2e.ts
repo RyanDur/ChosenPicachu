@@ -168,6 +168,21 @@ test.describe('a visitor at a desk', () => {
     await expect(piece).toBeFocused();
   });
 
+  test('lands at the top of the page it goes to from the page field', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.hangPageOneOnEveryPage();
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+    await gallery.wall.last().scrollIntoViewIfNeeded();
+    await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
+
+    await gallery.pageNumber.fill('2');
+    await gallery.go.click();
+    await expect(page).toHaveURL(/page=2/);
+
+    await expect.poll(() => documentScrollY(page)).toBe(0);
+  });
+
   test('takes the loading sign off a piece once its picture arrives', async ({page}) => {
     const gallery = galleryPage(page);
     const letThePicturesThrough = await gallery.holdEveryPicture();

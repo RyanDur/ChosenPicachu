@@ -2,24 +2,21 @@ import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
-import {scrolling} from '@components/__test_support/scrolling';
 import {heldAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
 import {pageControl} from '@pages/Gallery/PageControl/__test_support';
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
-    test('going to a page lands at its top, and clears the field', async () => {
+    test('going to a page clears the field', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
-      const landings = scrolling.recordLandings();
 
       await pageControl.typePage('3');
       await pageControl.go();
 
       await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=3'));
       expect(pageControl.pageField()).not.toHaveValue(3);
-      expect(landings).toContainEqual(scrolling.atTheTop('page'));
     });
 
     test('after going to a page, the field says which page it is', async () => {
