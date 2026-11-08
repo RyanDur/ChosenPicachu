@@ -28,7 +28,7 @@ describe('the users page', () => {
 
     render(<TestApp at={Paths.users}/>);
 
-    expect(await usersPage.says('the users could not be reached')).toBeInTheDocument();
+    expect(await usersPage.says('the users server could not be reached')).toBeInTheDocument();
   });
 
   describe('ranking the users', () => {
@@ -152,7 +152,7 @@ describe('the users page', () => {
 
       await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
 
-      expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+      expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
       expect(usersTable.names()).toEqual([profile.fullName(standing)]);
     });
   });
@@ -308,7 +308,7 @@ describe('the users page', () => {
 
     await usersTable.remove(profile.fullName(person));
 
-    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+    expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
     expect(usersTable.names()).toContain(profile.fullName(person));
   });
 
@@ -359,7 +359,7 @@ describe('the users page', () => {
 
     await friendsList(zedsRow).remove(profile.fullName(amo));
 
-    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+    expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
     expect(friendsList(zedsRow).removalIfAny(profile.fullName(amo))).toBeInTheDocument();
   });
 
@@ -373,7 +373,7 @@ describe('the users page', () => {
 
     await friendsList(xiasRow).add(profile.fullName(yul));
 
-    expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
+    expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
     expect(friendsList(xiasRow).removalIfAny(profile.fullName(yul))).not.toBeInTheDocument();
   });
 

@@ -16,7 +16,7 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
   const [store] = useState(() => usersStore(syncing(
     usersApi,
     () => navigate(Paths.users),
-    error => dispatchBanner(bannerChange.raised(trouble.with('the users')(error)))
+    error => dispatchBanner(bannerChange.raised(trouble.with('the users server')(error)))
   )));
   const state = useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial);
 
