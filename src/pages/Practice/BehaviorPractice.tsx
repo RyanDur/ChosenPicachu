@@ -216,8 +216,8 @@ export const BehaviorPractice: FC = () =>
       language tells its whole story alone.
       The <MomentLink to="documentComesBack">2016 moment</MomentLink> ends on the same point: the work moves, the three
       responsibilities do not.</p>
-    <p className="paragraph">Nobody checks the state test by eye. Three gates hold the site to it, and the review holds
-      one more rule.</p>
+    <p className="paragraph">Nobody checks the state test by eye. Three gates hold the site to it, and ESLint holds one
+      more rule.</p>
     <ul className="practice-list">
       <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
         <a className="signpost" href={directoryInRepository('src/components/DragSortableTable/__tests__')}>Four
@@ -236,12 +236,14 @@ export const BehaviorPractice: FC = () =>
         refuses one that lets a forbidden state into a type.
       </li>
     </ul>
-    <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
+    <p className="paragraph">The rule ESLint holds is one line in AGENTS.md:{' '}
       <a className="signpost" href={fileInRepository('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
         with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event.”</a> A ref keeps a value outside the state,
       where no reducer sees it and no test reads it. Two files hold one today, both for the second
       reason: <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
-      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side.</p>
+      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side.
+      ESLint refuses <code className="monospaced">useRef</code>, <code className="monospaced">createRef</code>{' '}
+      and <code className="monospaced">forwardRef</code> in any other file.</p>
   </>;
