@@ -74,7 +74,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const moved = '), gap,
-              ...carve.unit(sources.frameCarry, 'export const dressCarried'), gap,
+              ...carve.unit(sources.frameCarry, 'const dress'), gap,
               ...carve.span(sources.frameSettle, 'type Toward', 'const motions'), gap,
               ...carve.unit(sources.frameSettle, 'export const changeMotion'),
               lines.aside('// the reconcile sets the carried cells’ classes; the style sheet moves them')

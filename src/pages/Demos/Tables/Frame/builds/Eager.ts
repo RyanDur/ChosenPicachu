@@ -3,8 +3,6 @@ import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry
 import {
   announceSort,
   arrangeColumns,
-  carrying,
-  dressCarried,
   dressWidths,
   Given,
   headersOf,
@@ -24,7 +22,8 @@ import {
   unmarked,
   wireParts,
   writeCells,
-  mountedTable
+  mountedTable,
+  carry
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -115,7 +114,7 @@ const dress = (context: MountedTable, previous: TableState, next: TableState): v
     dressWidths(context);
   }
   if (previous.drag !== next.drag) {
-    dressCarried(context, next);
+    carry.dress(context, next);
   }
 };
 
@@ -135,7 +134,7 @@ const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled
   arrangeColumns(context);
   writeCells(context);
   reseatRows(context);
-  dressCarried(context, context.store.state);
+  carry.dress(context, context.store.state);
   announceSort(context, before);
 };
 
@@ -147,7 +146,7 @@ const wired = (context: TableContext): void => {
   headersOf(table).forEach(th => {
     const held = mountedTable.columnOfHeader(th);
     th.addEventListener('pointerdown', lifting.column(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
-    carrying(th, context);
+    carry.follow(th, context);
     th.addEventListener('keydown', arrows.column(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
   });
 };

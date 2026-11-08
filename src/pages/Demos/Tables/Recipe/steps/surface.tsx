@@ -45,7 +45,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(sources.frameCarry, 'export const carrying = '),
+            ...carve.unit(sources.frameCarry, 'const follow = '),
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>}
         <Snippet label="TS" lines={[

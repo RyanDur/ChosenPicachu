@@ -1,4 +1,4 @@
-export {carrying, dressCarried} from './carry';
+export {carry} from './carry';
 export {arrangeColumns, headersOf, markGrips} from './columns';
 export type {TableContext} from './context';
 export {tell} from './events';

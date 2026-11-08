@@ -35,7 +35,6 @@
     "src/pages/Demos/Market/recent-trades.ts",
     "src/pages/Demos/Tables/Builds/LazyTable/travel.ts",
     "src/pages/Demos/Tables/Frame/boot.ts",
-    "src/pages/Demos/Tables/Frame/table/carry.ts",
     "src/pages/Demos/Tables/Frame/table/columns.ts",
     "src/pages/Demos/Tables/Frame/table/menus.ts",
     "src/pages/Demos/Tables/Frame/table/report.ts",

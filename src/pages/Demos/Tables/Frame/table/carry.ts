@@ -12,7 +12,7 @@ const carriedCells = (mounted: MountedTable, state: TableState): readonly HTMLTa
   return drag.axis === 'column' ? columnCells(mounted, drag.held) : [...(mounted.lanes.get(drag.held)?.cells ?? [])];
 };
 
-export const dressCarried = (mounted: MountedTable, state: TableState): void => {
+const dress = (mounted: MountedTable, state: TableState): void => {
   [...mounted.table.querySelectorAll('.carried')].forEach(cell => {
     changeMotion(cell, {off: ['carried']});
     if (cell instanceof HTMLElement) {
@@ -32,8 +32,13 @@ export const dressCarried = (mounted: MountedTable, state: TableState): void => 
 
 type Carrier = Pick<TableContext, 'store' | 'moved' | 'dropped'>;
 
-export const carrying = (holder: HTMLElement, {store, moved, dropped}: Carrier): void => {
+const follow = (holder: HTMLElement, {store, moved, dropped}: Carrier): void => {
   (['pointermove', 'lostpointercapture'] as const).forEach(travelling => holder.addEventListener(travelling, event =>
     has(store.state.drag) ? travel.pointer(moved, dropped)(event) : undefined));
   (['pointerup', 'pointercancel'] as const).forEach(ending => holder.addEventListener(ending, () => dropped()));
+};
+
+export const carry = {
+  dress,
+  follow
 };
