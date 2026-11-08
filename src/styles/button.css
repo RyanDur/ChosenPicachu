@@ -37,6 +37,10 @@
   box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
   border: var(--hairline) solid var(--primary-blue);
 
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--ring);
+  }
+
   &:where(:not(:disabled, [aria-disabled="true"])) {
     &:hover,
     &:focus {
@@ -59,10 +63,6 @@
     color: var(--field);
     background: var(--smoke);
     border-color: var(--smoke);
-  }
-
-  &[aria-disabled="true"]:focus-visible {
-    outline: var(--hairline-x-2) solid var(--ring);
   }
 }
 
