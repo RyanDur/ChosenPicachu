@@ -3,15 +3,5 @@
     "src/pages/Demos/Accordions/Accordions.tsx",
     "src/pages/Demos/Accordions/Diagrams.tsx",
     "src/pages/Demos/Accordions/Plain/assemble.ts"
-  ],
-  "has-index": [
-    "src/pages/Demos/Accordions/Accordions.tsx",
-    "src/pages/Demos/Accordions/Diagrams.tsx",
-    "src/pages/Demos/Accordions/ExclusiveHtmlAlone.tsx",
-    "src/pages/Demos/Accordions/Explained.tsx",
-    "src/pages/Demos/Accordions/InclusiveHtmlAlone.tsx",
-    "src/pages/Demos/Accordions/MeasuredPanel.tsx",
-    "src/pages/Demos/Accordions/fold-motion.ts",
-    "src/pages/Demos/Accordions/fold-type.ts"
   ]
 }
