@@ -19,6 +19,16 @@ describe('the findings Claude Code\'s review answers with', () => {
     expect(findingsIn(answered([bug, note]))).toEqual([bug, note]);
   });
 
+  test('should read the findings from the last answer in the action\'s execution file', () => {
+    const execution = JSON.stringify([
+      {type: 'system', subtype: 'init'},
+      {type: 'assistant', message: {content: []}},
+      JSON.parse(answered([bug]))
+    ]);
+
+    expect(findingsIn(execution)).toEqual([bug]);
+  });
+
   test('should read no findings from an empty list', () => {
     expect(findingsIn(answered([]))).toEqual([]);
   });

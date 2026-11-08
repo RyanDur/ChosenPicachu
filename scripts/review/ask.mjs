@@ -22,9 +22,9 @@ export const reviewersIn = markdown => {
   });
 };
 
-/** @param {{before: string, after: string, reviewers: {file: string, asks: string}[]}} range */
-export const askFor = ({before, after, reviewers}) => [
-  `/code-review high ${before}..${after}.`,
+/** @param {{before: string, after: string, pull?: string, reviewers: {file: string, asks: string}[]}} range */
+export const askFor = ({before, after, pull, reviewers}) => [
+  empty(pull) ? `/code-review high ${before}..${after}.` : `/code-review high --comment ${pull}.`,
   'Hold the change to this project\'s own standards as well as to correctness. Read each of these whole before',
   'reviewing, and report a finding against one only where its rule holds:',
   'AGENTS.md (the house rules), scripts/review/values.md and scripts/review/plain.md (how a finding is worded),',
@@ -34,10 +34,10 @@ export const askFor = ({before, after, reviewers}) => [
 ].join(' ');
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {REVIEW_BEFORE: before, REVIEW_AFTER: after = 'HEAD'} = process.env;
+  const {REVIEW_BEFORE: before, REVIEW_AFTER: after = 'HEAD', REVIEW_PULL: pull} = process.env;
   if (empty(before)) {
     throw new Error('REVIEW_BEFORE names no commit to review from');
   }
   const reviewers = reviewersIn(readFileSync(join(root, 'AGENTS.md'), 'utf8'));
-  process.stdout.write(askFor({before, after, reviewers}));
+  process.stdout.write(askFor({before, after, pull, reviewers}));
 }

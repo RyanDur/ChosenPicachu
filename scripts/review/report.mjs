@@ -1,12 +1,16 @@
-import {readFileSync, writeFileSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {empty, has, maybe, not} from '@ryandur/sand';
 
 const severities = ['violation', 'concern', 'note'];
 
 const fenced = /```json\s*\n([\s\S]*?)\n```/;
 
+const lastAnswer = parsed => Array.isArray(parsed)
+  ? maybe(parsed.findLast(({type}) => type === 'result')).orElse({})
+  : parsed;
+
 export const findingsIn = answer => {
-  const {result} = JSON.parse(answer);
+  const {result} = lastAnswer(JSON.parse(answer));
   const listed = maybe(fenced.exec(result ?? '')).map(([, json]) => JSON.parse(json)).orElse(undefined);
   if (not(Array.isArray(listed))) {
     throw new Error('the review answered without a findings list');
@@ -68,8 +72,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(findings, {commit, subject});
   process.stdout.write(summary);
-  if (has(findings)) {
-    writeFileSync('review-comment.md', summary);
-  }
   process.exitCode = verdictOf(findings);
 }

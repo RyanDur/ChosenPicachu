@@ -46,6 +46,12 @@ describe('what the review is asked', () => {
     expect(asked.startsWith('/code-review high abc1234..def5678.')).toBe(true);
   });
 
+  test('should ask for a pull request by its number, with its findings left on its lines', () => {
+    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
+
+    expect(onThePull.startsWith('/code-review high --comment 412.')).toBe(true);
+  });
+
   test('should name every reviewer\'s rubric, to be read whole', () => {
     expect(asked).toContain('src/pages/Practice/structure/StructurePractice.tsx (what things are)');
     expect(asked).toContain('scripts/review/tests.md (what a test is for)');

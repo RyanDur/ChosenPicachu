@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - main
-      # a dev pushes a card's sha to verify/<issue> before Accepted: the unit tests, the journeys and the review run;
+      # a dev pushes a branch to verify/<name> and opens a pull request into main: the unit tests and the journeys run
+      # here, and review.yml reviews the pull request;
       # Lighthouse, pages and smoke run from main only
       - 'verify/**'
     # a push of documents alone runs nothing: no build or page imports a Markdown file, and the next code push's run and
@@ -12,10 +13,6 @@ on:
       - 'docs/**'
       - '**/*.md'
   workflow_dispatch:
-    inputs:
-      review_from:
-        description: 'Review the changes since this commit, instead of since the last commit the reviewer answered'
-        required: false
 env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
@@ -65,60 +62,6 @@ jobs:
         with:
           name: site
           path: ./build/client
-
-  review:
-    needs: build_test
-    runs-on: ubuntu-26.04
-    permissions:
-      contents: write
-    env:
-      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-      REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
-      REVIEW_AFTER: ${{ github.sha }}
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24.22'
-          cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-      - name: Install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm ci
-      - name: Start where the last review left off
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REVIEW_WORKFLOW: build_test_deploy_separate_jobs.yml
-          REVIEW_ASKED_FROM: ${{ inputs.review_from }}
-          REVIEW_PUSHED_FROM: ${{ github.event.before }}
-        run: |
-          if [ "$GITHUB_REF" != refs/heads/main ] && [ -z "$REVIEW_ASKED_FROM" ]; then
-            REVIEW_ASKED_FROM=$(git merge-base origin/main HEAD)
-            export REVIEW_ASKED_FROM
-          fi
-          REVIEW_BEFORE=$(node scripts/review/since.mjs)
-          echo "REVIEW_BEFORE=$REVIEW_BEFORE" >> "$GITHUB_ENV"
-      - name: Claude Code reviews the change against the house rules
-        run: |
-          npx --yes @anthropic-ai/claude-code@2.1.319 --print "$(node scripts/review/ask.mjs)" \
-            --model "$REVIEW_MODEL" \
-            --output-format json \
-            --allowedTools "Agent,Read,Grep,Glob,Skill,Bash(git diff:*),Bash(git log:*),Bash(git show:*)" \
-            --max-turns 80 \
-            --no-session-persistence > review.json
-      - name: Report
-        run: |
-          REVIEW_SUBJECT="$(git log -1 --format=%s "$GITHUB_SHA")" \
-            node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
-      - name: Leave the feedback on the commit
-        if: always() && hashFiles('review-comment.md') != ''
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" -F body=@review-comment.md
 
   pages:
     needs: journeys
