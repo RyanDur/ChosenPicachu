@@ -15,13 +15,13 @@ import {
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, siteOpenedBy} from '../routes';
-import {Environment, env} from '@transport';
+import {Environment, environment} from '@transport';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
   readonly at?: string;
   readonly feed?: Feed;
-  readonly env?: Partial<Environment>;
+  readonly environment?: Partial<Environment>;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
@@ -69,7 +69,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
+export const TestApp: FC<Props> = ({at = '/', feed, environment: overrides, children}) => {
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
     element: <Probes/>,
@@ -86,7 +86,7 @@ export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) =
 
   return <Reported.Provider value={reported}>
     <StrictMode>
-      <SiteProviders env={{...env, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}>
+      <SiteProviders environment={{...environment, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}>
         <RouterProvider router={memory} onError={report}/>
       </SiteProviders>
     </StrictMode>

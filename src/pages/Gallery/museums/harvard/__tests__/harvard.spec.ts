@@ -11,7 +11,7 @@ import {
 import {art} from '@pages/Gallery/museums';
 import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
-import {env} from '@transport';
+import {environment} from '@transport';
 
 describe('Harvard as a source of art', () => {
   describe('a page of works', () => {
@@ -25,7 +25,7 @@ describe('Harvard as a source of art', () => {
 
     test("puts the search term in Harvard's query", async () => {
       const asked: URL[] = [];
-      server.use(http.get(env.harvardDomain, ({request}) => {
+      server.use(http.get(environment.harvardDomain, ({request}) => {
         asked.push(new URL(request.url));
         return HttpResponse.json(harvardArtResponse);
       }));

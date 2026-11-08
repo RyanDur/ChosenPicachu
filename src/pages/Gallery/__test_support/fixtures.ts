@@ -17,7 +17,7 @@ import {
   ClevelandSearchResponse
 } from '@pages/Gallery/museums/cleveland/types';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@transport';
+import {environment} from '@transport';
 
 const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
 
@@ -55,8 +55,8 @@ export const fromAICPiece = ({data}: AICArtResponse): Art => ({
   id: String(data.id),
   title: data.title,
   picture: {
-    src: `${env.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
-    srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
+    src: `${environment.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
+    srcSet: [400, 800, 1200].map(width => `${environment.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
   },
   altText: data.thumbnail?.alt_text ?? '',
   artistInfo: data.artist_display
@@ -170,8 +170,8 @@ export const fromAICArt: AllArt = {
     id: String(piece.id),
     title: piece.title,
     picture: {
-      src: `${env.aicPictures}/${piece.image_id}/full/800,/0/default.jpg`,
-      srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
+      src: `${environment.aicPictures}/${piece.image_id}/full/800,/0/default.jpg`,
+      srcSet: [400, 800, 1200].map(width => `${environment.aicPictures}/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
     },
     artistInfo: piece.artist_display,
     altText: piece.term_titles.join(' ')

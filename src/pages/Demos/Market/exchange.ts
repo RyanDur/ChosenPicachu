@@ -83,8 +83,8 @@ const opened = ({feed, history, product}: Configured, dispatch: Dispatch, onTrou
   ...feed.either(address => [streamOf(address, product, dispatch, onTrouble)], () => [])
 ];
 
-export const exchange = (env: Exchange, onTrouble: Trouble): MarketMiddleware => api => {
-  const market = configured(env);
+export const exchange = (environment: Exchange, onTrouble: Trouble): MarketMiddleware => api => {
+  const market = configured(environment);
   let closers: readonly Closer[] = [];
   const asked = new Map<Period, Closer>();
   return next => action => {

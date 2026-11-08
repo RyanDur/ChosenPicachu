@@ -1,9 +1,9 @@
 import {http, HttpResponse, JsonBodyType} from 'msw';
-import {env} from '@transport';
+import {environment} from '@transport';
 import {User} from '../profile';
 import {server} from '@__test_support/server';
 
-const {usersDomain} = env;
+const {usersDomain} = environment;
 
 const noContent = () => new HttpResponse(null, {status: 204});
 const troubled = () => HttpResponse.json({}, {status: 500});

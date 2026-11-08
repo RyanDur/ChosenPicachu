@@ -6,7 +6,7 @@ import {
 } from '@pages/Gallery/museums/vam/types';
 import {limits} from '@pages/Gallery/limits';
 import {maybe} from '@ryandur/sand';
-import {env, queryString} from '@transport';
+import {environment, queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {decoded} from '@transport';
 import {http} from '@transport';
@@ -32,7 +32,7 @@ const tipuSultan = '2009BY1329';
 
 export const vam = {
   allArt: ({page, search, size = limits.record}: GetAllArtRequest) => http
-    .get(`${env.vamDomain}/objects/search${queryString.from({
+    .get(`${environment.vamDomain}/objects/search${queryString.from({
       q: search,
       page,
       page_size: size,
@@ -48,10 +48,10 @@ export const vam = {
       pieces: records.map(vamRecordToArt)
     })),
 
-  open: () => http.get(`${env.vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
+  open: () => http.get(`${environment.vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map((): Door => 'open'),
 
   art: (id: string) => http
-    .get(`${env.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
+    .get(`${environment.vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
     .mBind(decoded.by(vamSchema.art))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
@@ -62,7 +62,7 @@ export const vam = {
     })),
 
   searchOptions: (search: string) => http
-    .get(`${env.vamDomain}/objects/search${queryString.from({
+    .get(`${environment.vamDomain}/objects/search${queryString.from({
       q: search,
       page_size: limits.search
     })}`, {cache: 'force-cache'})

@@ -1,7 +1,7 @@
 import {has} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {env} from '@transport';
+import {environment} from '@transport';
 import {Feed} from '@pages/Demos/__test_support/feed';
 import type {Motion, Origin, Pace} from '../../../Controls';
 import {startingTable} from '../starting';
@@ -34,20 +34,20 @@ export const vanillaFrame = {
     document.body.innerHTML = startingTable({origin, motion});
   },
   stand: ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
-    window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
+    window.__env = {...environment, tradeFeed: has(feed) ? feed.url : ''};
     window.__frame = {pace, origin, motion};
     document.body.innerHTML = startingTable({origin, motion});
     boot(document);
   },
   standWithAHeaderUnnamed: (column: string): void => {
-    window.__env = {...env, tradeFeed: ''};
+    window.__env = {...environment, tradeFeed: ''};
     window.__frame = {pace: 'eager', origin: 'hide', motion: 'animated'};
     document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
     header(column).removeAttribute('data-column');
     boot(document);
   },
   standWithASortChoiceWorded: (column: string, choice: MenuChoice, words: string): void => {
-    window.__env = {...env, tradeFeed: ''};
+    window.__env = {...environment, tradeFeed: ''};
     window.__frame = {pace: 'eager', origin: 'hide', motion: 'animated'};
     document.body.innerHTML = startingTable({origin: 'hide', motion: 'animated'});
     menuItem(column, choice).textContent = words;

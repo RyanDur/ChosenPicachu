@@ -1,7 +1,8 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode, RefObject, SubmitEvent, SyntheticEvent, useContext, useEffect, useRef} from 'react';
 import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
-import {useEnv, usePageName} from '@page';
+import {useEnvironment} from '@environment';
+import {usePageName} from '@page-name';
 import {useHydrated} from '@components';
 import {Paths} from '@navigation';
 import {trouble} from '@transport';
@@ -61,7 +62,7 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
 
 export const Feedback: FC = () => {
   const hydrated = useHydrated();
-  const {feedbackToken, feedbackEndpoint} = useEnv();
+  const {feedbackToken, feedbackEndpoint} = useEnvironment();
   const location = useLocation();
   const {pathname} = location;
   const sentFrom = `${Paths.site}${useHref(location)}`;

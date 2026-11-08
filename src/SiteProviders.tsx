@@ -1,11 +1,11 @@
 import {FC, PropsWithChildren} from 'react';
 import {Environment} from '@transport';
-import {EnvProvider} from '@page';
+import {EnvironmentProvider} from '@environment';
 import {OpeningFragmentProvider} from '@navigation/arrival';
 
-type Props = PropsWithChildren<{readonly env: Environment}>;
+type Props = PropsWithChildren<{readonly environment: Environment}>;
 
-export const SiteProviders: FC<Props> = ({env, children}) =>
-  <EnvProvider env={env}>
+export const SiteProviders: FC<Props> = ({environment, children}) =>
+  <EnvironmentProvider environment={environment}>
     <OpeningFragmentProvider>{children}</OpeningFragmentProvider>
-  </EnvProvider>;
+  </EnvironmentProvider>;

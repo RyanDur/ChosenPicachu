@@ -1,3 +1,5 @@
+import {unconfigured} from './unconfigured';
+
 export type Environment = {
   tradeFeed: string;
   tradeProduct: string;
@@ -23,3 +25,7 @@ declare global {
     __env?: Environment;
   }
 }
+
+// the build pre-renders the pages in Node, where there is no env.js, so they are drawn from the values env.js is built
+// from
+export const environment: Environment = import.meta.env.SSR ? __BUILT_ENV__ : window.__env ?? unconfigured;

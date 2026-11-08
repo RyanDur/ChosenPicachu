@@ -23,18 +23,18 @@ const sheets: Sheet[] = [
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
-const assembled = (env: Exchange, frame: Dials): string => {
+const assembled = (environment: Exchange, frame: Dials): string => {
   const cascade = sheets.map(({css}) => css).join('\n');
   return scaffold
     .replace('/* the cascade */', () => cascade)
     .replace('<!-- the table as it starts -->', () => startingTable(frame))
-    .replace('/* the environment */', () => `window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};`)
+    .replace('/* the environment */', () => `window.__env = ${JSON.stringify(environment)}; window.__frame = ${JSON.stringify(frame)};`)
     .replace('/* the shell */', () => frameJs);
 };
 
 type FrameAssembly = {
   sheets: Sheet[];
-  document: (env: Exchange, frame: Dials) => string;
+  document: (environment: Exchange, frame: Dials) => string;
 };
 
 export const frameAssembly: FrameAssembly = {sheets, document: assembled};

@@ -6,7 +6,7 @@ import {
 } from '@pages/Gallery/museums/harvard/types';
 import {limits} from '@pages/Gallery/limits';
 import {has, maybe} from '@ryandur/sand';
-import {env, queryString} from '@transport';
+import {environment, queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {decoded} from '@transport';
 import {http} from '@transport';
@@ -15,13 +15,13 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 
 const fields = ['id', 'title', 'people', 'primaryimageurl'].join();
 const baseQueryString = {
-  fields, apikey: env.harvardAPIKey
+  fields, apikey: environment.harvardAPIKey
 };
 const withImages = (search?: string) =>
   [has(search) && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
 const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
-  .get(`${env.harvardDomain}${queryString.from({
+  .get(`${environment.harvardDomain}${queryString.from({
     q: withImages(search),
     page,
     size, ...baseQueryString
@@ -42,15 +42,15 @@ export const harvard = {
   open: () => searched({page: 1}).map(({records}): Door => records.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
-    .get(`${env.harvardDomain}/${id}${queryString.from(baseQueryString)}`, {cache: 'force-cache'})
+    .get(`${environment.harvardDomain}/${id}${queryString.from(baseQueryString)}`, {cache: 'force-cache'})
     .mBind(decoded.by(harvardSchema.art))
     .map(harvardArtToArt),
 
   searchOptions: (search: string) => http
-    .get(`${env.harvardDomain}${queryString.from({
+    .get(`${environment.harvardDomain}${queryString.from({
       title: search,
       fields: 'title',
-      apikey: env.harvardAPIKey,
+      apikey: environment.harvardAPIKey,
       size: limits.search
     })}`, {cache: 'force-cache'})
     .mBind(decoded.by(harvardSchema.search))

@@ -8,7 +8,7 @@ import {
   clevelandSchema
 } from './types';
 import {limits} from '@pages/Gallery/limits';
-import {env, queryString} from '@transport';
+import {environment, queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {decoded} from '@transport';
 import {http} from '@transport';
@@ -38,7 +38,7 @@ const toPiece = (record: ClevelandRecord): Art => ({
 });
 
 const searched = ({page, search, size = limits.record}: GetAllArtRequest) => http
-  .get(`${env.clevelandDomain}/${queryString.from({
+  .get(`${environment.clevelandDomain}/${queryString.from({
     q: search,
     skip: (page - 1) * size,
     limit: size,
@@ -64,12 +64,12 @@ export const cleveland = {
   open: () => searched({page: 1}).map(({data}): Door => data.length > 0 ? 'open' : 'closed'),
 
   art: (id: string) => http
-    .get(`${env.clevelandDomain}/${id}${queryString.from({fields: clevelandFields})}`, {cache: 'force-cache'})
+    .get(`${environment.clevelandDomain}/${id}${queryString.from({fields: clevelandFields})}`, {cache: 'force-cache'})
     .mBind(decoded.by(clevelandSchema.art))
     .map(({data}: ClevelandArtResponse): Art => toPiece(data)),
 
   searchOptions: (search: string) => http
-    .get(`${env.clevelandDomain}/${queryString.from({
+    .get(`${environment.clevelandDomain}/${queryString.from({
       q: search,
       limit: limits.search,
       has_image: 1,
