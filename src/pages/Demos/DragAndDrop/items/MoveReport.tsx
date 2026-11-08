@@ -1,13 +1,13 @@
 import {FC} from 'react';
-import {Moved} from '../drag-sort';
+import {Report} from '../drag-sort';
 import {useDragSort} from '../useDragSort';
 
-const moveReport = ({item, position}: Moved, count: number): string =>
-  `${item} moved to ${position + 1} of ${count}`;
+const moveReport = ({item, position, stayed}: Report, count: number): string =>
+  `${item} ${stayed ? 'stays at' : 'moved to'} ${position + 1} of ${count}`;
 
 export const MoveReport: FC = () => {
-  const {lastMove, order} = useDragSort();
+  const {report, order} = useDragSort();
   return <output className="off-screen" aria-label="move report">{
-    lastMove.map(moved => moveReport(moved, order.length)).orElse('')
+    report.map(said => moveReport(said, order.length)).orElse('')
   }</output>;
 };

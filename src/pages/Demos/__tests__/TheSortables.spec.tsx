@@ -64,6 +64,18 @@ describe('the sortable list demo', () => {
     expect(listControls.reading('motion')).toHaveTextContent('Reorders apply in a single frame; items cut to their new places.');
   });
 
+  test('a step taken while the item still slides says it stays where it is', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('drag-and-drop', '?motion=animated')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await sortableList.arrived();
+    await sortableList.moveByKey('A', '{ArrowRight}');
+
+    await sortableList.moveByKey('A', '{ArrowRight}');
+
+    expect(sortableList.moveReport()).toHaveTextContent('A stays at 2 of 3');
+  });
+
   test('a finger pressed and lifted without a drag leaves its item at rest', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
