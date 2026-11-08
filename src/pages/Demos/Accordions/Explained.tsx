@@ -2,20 +2,23 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {DemoTopics} from '../demo-topics';
 import {DialGroup, DialRow} from '../Controls';
-import {
-  AccordionProps,
-  ExclusiveAccordion,
-  ExclusiveMeasuredAccordion,
-  ExclusiveRadioToggleAccordion,
-  ExclusiveToggleAccordion,
-  Fold,
-  InclusiveAccordion,
-  InclusiveCheckboxToggleAccordion,
-  InclusiveMeasuredAccordion,
-  InclusiveToggleAccordion
-} from './Accordions';
+import {AccordionProps, Fold} from './accordion-props';
+import {ExclusiveAccordion} from './ExclusiveAccordion';
+import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
+import {ExclusiveRadioToggleAccordion} from './ExclusiveRadioToggleAccordion';
+import {ExclusiveToggleAccordion} from './ExclusiveToggleAccordion';
+import {InclusiveAccordion} from './InclusiveAccordion';
+import {InclusiveCheckboxToggleAccordion} from './InclusiveCheckboxToggleAccordion';
+import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
+import {InclusiveToggleAccordion} from './InclusiveToggleAccordion';
 import {carve, Line, lines, Mdn, Sample, Snippet} from '../Recipe';
-import accordionsSource from './Accordions.tsx?sample';
+import exclusiveAccordionSource from './ExclusiveAccordion.tsx?sample';
+import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
+import exclusiveRadioToggleAccordionSource from './ExclusiveRadioToggleAccordion.tsx?sample';
+import exclusiveToggleAccordionSource from './ExclusiveToggleAccordion.tsx?sample';
+import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
+import inclusiveCheckboxToggleAccordionSource from './InclusiveCheckboxToggleAccordion.tsx?sample';
+import inclusiveToggleAccordionSource from './InclusiveToggleAccordion.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
@@ -88,13 +91,13 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(accordionsSource, '<li key={key} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(accordionsSource, '<li className="fold" key={key}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={key} className="fold">', '</li>')},
+  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={key}>', '</li>')}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.span(accordionsSource, '<details className="fold">', '</details>')},
-  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.span(accordionsSource, '<details className="fold" name=', '</details>')}
+  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.span(inclusiveToggleAccordionSource, '<details className="fold">', '</details>')},
+  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.span(exclusiveToggleAccordionSource, '<details className="fold" name=', '</details>')}
 };
 
 const measuredAccordions: Record<FoldType, FC<AccordionProps>> = {
@@ -404,8 +407,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     item around the radio handles it by recording its own key in React state as the open one, and the
                     fold whose key is no longer the open one closes from that state.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.span(accordionsSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
-                    ...carve.span(accordionsSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
+                    ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), gap,
+                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={key} onChange={() => setOpen(key)}>', '<MeasuredPanel open={open === key}')
                   ]}/>
                 </li>}
                 <li className="run">
@@ -586,7 +589,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
-                <Snippet label="HTML" lines={carve.span(accordionsSource, '<li className="fold close field-inverse">', '</li>')}/>
+                <Snippet label="HTML" lines={carve.span(exclusiveAccordionSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
@@ -703,7 +706,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
             known-height build. The name is only a name: pressing it does nothing. Only the control works the fold. What
             is new is the way the text opens, below.</p>
-          <Snippet label="HTML" lines={carve.span(accordionsSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
+          <Snippet label="HTML" lines={carve.span(inclusiveCheckboxToggleAccordionSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from
@@ -722,10 +725,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
             arrow keys move the choice and press as they go, so each move is written too.</p>
           <Snippet label="TS" lines={[
-            ...carve.unit(accordionsSource, 'const openAfter'), gap,
-            ...carve.unit(accordionsSource, 'const radioPressed'), gap,
-            ...carve.unit(accordionsSource, 'const radioClicked'), gap,
-            ...carve.span(accordionsSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
+            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const openAfter'), gap,
+            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioPressed'), gap,
+            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioClicked'), gap,
+            ...carve.span(exclusiveRadioToggleAccordionSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
           ]}/>
           <WhatEachPromises/>
         </li>}
@@ -773,7 +776,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
                   nothing with it, so no press reaches the list. So a handler on the list for keydown, the event a key
                   press sends, catches the space bar too, and closes the fold when the key lands on the open radio.</p>
-                <Snippet label="TS" lines={carve.unit(accordionsSource, 'const spacePressed')}/>
+                <Snippet label="TS" lines={carve.unit(exclusiveRadioToggleAccordionSource, 'const spacePressed')}/>
               </li>}
               <li className="run">
                 {type === 'inclusive'
