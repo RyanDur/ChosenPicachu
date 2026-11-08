@@ -19,7 +19,7 @@ import pieComponent from './Pie/Pie.tsx?sample';
 import pieCss from './Pie/Pie.css?sample';
 import drawingCss from '../../../styles/drawing.css?sample';
 import moneySource from '@pages/Demos/Market/money.ts?sample';
-import slotsSource from './slots.ts?sample';
+import bucketPlacesSource from './bucket-places.ts?sample';
 import coinbaseSource from '@pages/Demos/Market/coinbase.ts?sample';
 import historySource from '@pages/Demos/Market/coinbase-history.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
@@ -190,8 +190,8 @@ const CandlesStory: FC = () =>
             the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a
             third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.</Says>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
-            lowest low at the bottom. Across the chart, <code className="monospaced">periodSlots.of</code> gives each candle an equal slot and makes the body
-            60% of the slot wide, so two candles never touch.</Says>
+            lowest low at the bottom. Across the chart, <code className="monospaced">bucketPlaces.of</code> gives each candle an equal place and makes the body
+            60% of that place wide, so two candles never touch.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed
             lower gets down.</Says>
@@ -213,7 +213,7 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(slotsSource, 'const of = (', 'export const periodSlots = {of};'), gap,
+            ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), gap,
             ...carve.unit(candleShapesSource, 'const drawn')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -235,7 +235,7 @@ const CandlesStory: FC = () =>
           <Says><code className="monospaced">candleShapes.volumes</code> draws a bar under each candle for how much was traded in
             that bucket. The tallest bar is the busiest bucket on the chart, and every other bar is in proportion to
             it.</Says>
-          <Says>The bars are a second SVG under the candles, in the same slots, so each bar sits under its
+          <Says>The bars are a second SVG under the candles, in the same places, so each bar sits under its
             candle.</Says>
           <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
             properties, values a style sheet names once and other rules read, and a side class sets them. volume-side
@@ -313,7 +313,7 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(slotsSource, 'const of = (', 'export const periodSlots = {of};'), gap,
+            ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), gap,
             ...carve.unit(pressureShapesSource, 'const heaviestSide'), gap,
             ...carve.unit(pressureShapesSource, 'const drawn')
           ]}/>
