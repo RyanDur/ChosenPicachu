@@ -1,8 +1,7 @@
 import {ChangeEvent, FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe} from '@ryandur/sand';
 import {profile, User} from '../profile';
-import {memberships} from '../memberships';
-import {FriendsReport} from '../usersSlice';
+import {Membership, memberships} from '../memberships';
 import {usersActions} from '../usersActions';
 import {usersSelectors} from '../usersSelectors';
 import {useUsersDispatch} from '../useUsersDispatch';
@@ -10,19 +9,17 @@ import {useUsersSelector} from '../useUsersSelector';
 import cancelIcon from '../../../assets/icons/cancel.svg?url';
 import './friends-list.css';
 
-const toldFor = (user: User, users: readonly User[], report: FriendsReport): string =>
-  report.stage === 'asked' && report.userId === user.id && memberships.arrived(user.friends, report.membership)
-    ? maybe(users.find(({id}) => id === report.membership.friendId))
-      .map(friend => memberships.told(profile.fullName(friend), report.membership))
-      .orElse('')
-    : '';
+const toldFor = (user: User, users: readonly User[], report: Maybe<Membership>): string =>
+  report
+    .mBind(membership => maybe(membership, asked => memberships.reached(user.friends, asked)))
+    .mBind(membership => maybe(users.find(({id}) => id === membership.friendId))
+      .map(friend => memberships.told(profile.fullName(friend), membership)))
+    .orElse('');
 
-export const FriendsList: FC<{userId: string}> = ({userId}) => {
+const Friends: FC<{user: User}> = ({user}) => {
   const dispatch = useUsersDispatch();
   const users = useUsersSelector(usersSelectors.users);
-  const report = useUsersSelector(usersSelectors.friendsReport);
-  const user = useUsersSelector(usersSelectors.withId(userId)).orNull();
-  if (!has(user)) return null;
+  const report = useUsersSelector(usersSelectors.friendsReportOf(user.id));
 
   const friends = user.friends
     .flatMap(friendId => users.filter(({id}) => id === friendId));
@@ -57,3 +54,6 @@ export const FriendsList: FC<{userId: string}> = ({userId}) => {
     <output className="off-screen" aria-label="friends report">{toldFor(user, users, report)}</output>
   </fieldset>;
 };
+
+export const FriendsList: FC<{userId: string}> = ({userId}) =>
+  useUsersSelector(usersSelectors.withId(userId)).map(user => <Friends key={user.id} user={user}/>).orNull();

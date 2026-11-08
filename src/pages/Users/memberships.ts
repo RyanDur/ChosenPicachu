@@ -5,11 +5,11 @@ export type Membership = {
 
 type Memberships = {
   told: (friendName: string, membership: Membership) => string;
-  arrived: (friendIds: readonly string[], membership: Membership) => boolean;
+  reached: (friendIds: readonly string[], membership: Membership) => boolean;
 };
 
 export const memberships: Memberships = {
   told: (friendName, {change}) => `${friendName} ${change}.`,
-  arrived: (friendIds, {change, friendId}) =>
+  reached: (friendIds, {change, friendId}) =>
     change === 'removed' ? !friendIds.includes(friendId) : friendIds.includes(friendId)
 };

@@ -116,6 +116,32 @@ describe('the friends list', () => {
 
       await waitFor(() => expect(list.report()).toHaveTextContent(`${nameOf(cy)} removed.`));
     });
+
+    test('a change to one person\'s friends is said only in that person\'s row', async () => {
+      const anasList = await rowOf(ana, roster);
+      const bensList = friendsList(await usersTable.rowOf(nameOf(ben)));
+
+      await anasList.remove(nameOf(cy));
+      await waitFor(() => expect(anasList.report()).toHaveTextContent(`${nameOf(cy)} removed.`));
+
+      expect(bensList.report()).toBeEmptyDOMElement();
+    });
+  });
+
+  test('a change in a second row leaves the first row\'s report standing', async () => {
+    const ana = aUser({id: 'ana', friends: [ben.id, cy.id]});
+    const bea = aUser({id: 'bea'});
+    const anaWithoutCy = {...ana, friends: [ben.id]};
+    setupUserUpdatedResponse(ana.id, [anaWithoutCy, ben, cy, bea]);
+    setupUserUpdatedResponse(bea.id, [anaWithoutCy, ben, cy, {...bea, friends: [cy.id]}]);
+    const anasList = await rowOf(ana, [ana, ben, cy, bea]);
+    const beasList = friendsList(await usersTable.rowOf(nameOf(bea)));
+
+    await anasList.remove(nameOf(cy));
+    await beasList.add(nameOf(cy));
+    await waitFor(() => expect(beasList.report()).toHaveTextContent(`${nameOf(cy)} added.`));
+
+    expect(anasList.report()).toHaveTextContent(`${nameOf(cy)} removed.`);
   });
 
   test('a friend the user already has is not offered again', async () => {

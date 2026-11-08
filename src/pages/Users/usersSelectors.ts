@@ -2,7 +2,8 @@ import {Maybe, maybe} from '@ryandur/sand';
 import {arrangements, TableColumn} from '@components/DragSortableTable/model';
 import {User} from './profile';
 import {Candidate, userColumns} from './columns';
-import {FriendsReport, UsersState} from './usersSlice';
+import {Membership} from './memberships';
+import {UsersState} from './usersSlice';
 
 const inOrder = (users: readonly User[], order: readonly string[]): readonly User[] =>
   order.flatMap(id => users.filter(user => user.id === id));
@@ -14,7 +15,7 @@ type UsersSelectors = {
   users: (state: UsersState) => readonly User[];
   columns: (state: UsersState) => readonly TableColumn<Candidate>[];
   withId: (id?: string) => (state: UsersState) => Maybe<User>;
-  friendsReport: (state: UsersState) => FriendsReport;
+  friendsReportOf: (userId: string) => (state: UsersState) => Maybe<Membership>;
 };
 
 export const usersSelectors: UsersSelectors = {
@@ -25,5 +26,5 @@ export const usersSelectors: UsersSelectors = {
     sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   })),
   withId: id => ({users}) => maybe(users.find(user => user.id === id)),
-  friendsReport: ({friendsReport}) => friendsReport
+  friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId])
 };

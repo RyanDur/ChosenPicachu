@@ -5,14 +5,12 @@ import {UsersAction} from './usersActions';
 import {userColumns} from './columns';
 import {Membership} from './memberships';
 
-export type FriendsReport =
-  | {readonly stage: 'quiet'}
-  | {readonly stage: 'asked'; readonly userId: string; readonly membership: Membership};
+export type FriendsReports = Readonly<Record<string, Membership>>;
 
 export type UsersState = {
   readonly users: readonly User[];
   readonly arrangement: Arrangement;
-  readonly friendsReport: FriendsReport;
+  readonly friendsReports: FriendsReports;
 };
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
@@ -20,14 +18,14 @@ const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => i
 const roster = (users: readonly User[], action: UsersAction): readonly User[] =>
   action.type === 'usersArrived' ? action.users : users;
 
-const reporting = (report: FriendsReport, action: UsersAction): FriendsReport => {
+const reporting = (reports: FriendsReports, action: UsersAction): FriendsReports => {
   switch (action.type) {
     case 'friendAdded':
-      return {stage: 'asked', userId: action.userId, membership: {change: 'added', friendId: action.friendId}};
+      return {...reports, [action.userId]: {change: 'added', friendId: action.friendId}};
     case 'friendRemoved':
-      return {stage: 'asked', userId: action.userId, membership: {change: 'removed', friendId: action.friendId}};
+      return {...reports, [action.userId]: {change: 'removed', friendId: action.friendId}};
     default:
-      return report;
+      return reports;
   }
 };
 
@@ -37,5 +35,5 @@ const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
 export const usersSlice: Slice<UsersState, UsersAction> = sliced<UsersState, UsersAction>({
   users: {initial: [], reduce: roster},
   arrangement: {initial: arrangements.of(userColumns.all.map(({name}) => name)), reduce: seating},
-  friendsReport: {initial: {stage: 'quiet'}, reduce: reporting}
+  friendsReports: {initial: {}, reduce: reporting}
 });
