@@ -20,7 +20,6 @@ const structure = [
 const stillMoveOnTheMainThread = [
   'src/components/PillGlider/PillGlider.css',
   'src/pages/Demos/Accordions/Accordions.css',
-  'src/pages/Demos/Charts/Pressure/Pressure.css', 'src/pages/Demos/Charts/PriceChart/PriceChart.css',
   'src/styles/drawing.css', 'src/styles/reset.css'
 ];
 

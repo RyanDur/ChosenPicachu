@@ -23,7 +23,7 @@
       }
 
       .marker {
-        transition: cx 300ms ease-out, cy 300ms ease-out;
+        transition: translate 300ms ease-out;
       }
     }
 
