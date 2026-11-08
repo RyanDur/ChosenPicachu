@@ -31,7 +31,7 @@
   .trouble {
     display: grid;
     transition:
-      translate 0.6s cubic-bezier(0.45, 0, 0.15, 1) 0.3s,
+      translate 0.6s var(--slide-curve) 0.3s,
       grid-template-rows 0.3s,
       grid-template-columns 0.3s;
 
@@ -86,14 +86,14 @@
   &:where(.stack-down, .stack-up) .trouble.leaving {
     grid-template-rows: 0fr;
     transition:
-      translate 0.6s cubic-bezier(0.45, 0, 0.15, 1),
+      translate 0.6s var(--slide-curve),
       grid-template-rows 0.3s 0.6s;
   }
 
   &:where(.stack-left, .stack-right) .trouble.leaving {
     grid-template-columns: 0fr;
     transition:
-      translate 0.6s cubic-bezier(0.45, 0, 0.15, 1),
+      translate 0.6s var(--slide-curve),
       grid-template-columns 0.3s 0.6s;
   }
 
