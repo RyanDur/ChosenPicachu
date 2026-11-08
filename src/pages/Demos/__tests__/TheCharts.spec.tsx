@@ -797,6 +797,8 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['event', `${Paths.demos}z-index/`],
+      ['dispatches', `${Paths.demos}z-index/`],
+      ['reducer', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
     ]);
   });
@@ -848,6 +850,7 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });

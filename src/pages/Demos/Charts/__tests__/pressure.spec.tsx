@@ -1,5 +1,4 @@
 import {render, screen} from '@testing-library/react';
-import {bucketPressure} from '@pages/Demos/Charts/Pressure/bucket-pressure';
 import {pressureShapes} from '@pages/Demos/Charts/Pressure/pressure-shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
 import {money} from '@pages/Demos/Market';
@@ -7,7 +6,7 @@ import {bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('pressure', () => {
   test('trades bucket by minute, split by side', () => {
-    expect(bucketPressure([
+    expect(pressureShapes.buckets([
       bought(2, {tradedAt: 60000}),
       sold(1, {id: 2, tradedAt: 61000}),
       sold(3, {id: 3, tradedAt: 120000})
@@ -18,7 +17,7 @@ describe('pressure', () => {
   });
 
   test('the heaviest side sets one scale for both directions', () => {
-    const shapes = pressureShapes([
+    const shapes = pressureShapes.drawn([
       {openedAt: 0, bought: 4, sold: 2},
       {openedAt: 60000, bought: 1, sold: 0}
     ], 240, 100, 60000);

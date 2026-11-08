@@ -3,8 +3,6 @@ import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {liveTrades, money, Trade} from '../../Market';
 import {Axes, rangeOf} from '../Axes';
-import {bucketPressure} from './bucket-pressure';
-import {heaviestSide} from './heaviest-side';
 import {pressureShapes} from './pressure-shapes';
 import '../chart-card.css';
 import './Pressure.css';
@@ -24,9 +22,9 @@ type Props = {
 
 export const Pressure: FC<Props> = ({trades, actions}) => {
   const heading = `heading${useId()}`;
-  const pressures = bucketPressure(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
-  const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);
-  const peak = heaviestSide(pressures);
+  const pressures = pressureShapes.buckets(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
+  const bars = pressureShapes.drawn(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);
+  const peak = pressureShapes.heaviestSide(pressures);
   return <section aria-labelledby={heading} className="pressure chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pressure</h3>
     <header className="chart-header">

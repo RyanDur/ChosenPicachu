@@ -5,6 +5,7 @@ import {Codes, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, c
 import {AThirdFromThePointer} from './Diagrams';
 import workspaceSource from './Workspace.tsx?sample';
 import travelSource from './useChartTravel.ts?sample';
+import chartTravelSource from './chart-travel.ts?sample';
 import deskSource from './desk.ts?sample';
 import kindsSource from './chart-kinds.ts?sample';
 import crossingSource from '../DragAndDrop/crossing.ts?sample';
@@ -68,6 +69,13 @@ const WorkspaceStory: FC = () =>
             it isn’t. <code className="monospaced">boundsOf</code> answers with a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
             there is one. With nothing, <code className="monospaced">travel</code> neither compares the pointer with the mark
             nor swaps.</Says>
+          <Says><code className="monospaced">swap</code> <TabLink to={DemoTopics.zIndex}>dispatches</TabLink>{' '}
+            <code className="monospaced">swapped</code>. To dispatch is to send
+            a <TabLink to={DemoTopics.zIndex}>reducer</TabLink> an action, an object that names what happened, and a
+            reducer is a function that takes the state and an action and returns the next state. The chart’s reducer,
+            in <code className="monospaced">chart-travel.ts</code>, answers <code className="monospaced">swapped</code> by
+            setting the mark again to where the pointer is, noting which way the neighbor slides, and holding the chart
+            at its new place.</Says>
           <Says>Before any of this, <code className="monospaced">travel</code> calls <code
             className="monospaced">event.preventDefault()</code>, which tells the browser that a drop is allowed here. An
             element that accepts a drop has to make that call on every dragover event that reaches it.{' '}
@@ -82,7 +90,8 @@ const WorkspaceStory: FC = () =>
           <Snippet label="TS" lines={[
             ...carve.unit(crossingSource, 'const strayedTo'), gap,
             ...carve.unit(travelSource, 'const travel = (event'), gap,
-            ...carve.unit(travelSource, 'const swap = (held')
+            ...carve.unit(travelSource, 'const swap = (held'), gap,
+            ...carve.span(chartTravelSource, "case 'swapped'", '};')
           ]}/>
           <AThirdFromThePointer/>
           <Snippet label="CSS" lines={[
