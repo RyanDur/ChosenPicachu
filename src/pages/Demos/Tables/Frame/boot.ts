@@ -15,7 +15,7 @@ declare global {
 const pace = (): Pace => window.__frame?.pace ?? 'eager';
 
 const fed = (table: HTMLTableElement, told: Pace): void => {
-  const page = marketStore(exchange({...unconfigured, ...window.__env}, () => undefined));
+  const page = marketStore(exchange({...unconfigured, ...window.__environment}, () => undefined));
   const reconcile = builds[told](table, {
     columns: () => marketSelectors.columns(page.state),
     rows: () => marketSelectors.rows(page.state)

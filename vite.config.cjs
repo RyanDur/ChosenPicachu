@@ -216,10 +216,10 @@ const runtimeEnv = env => {
     feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? '',
     feedbackEndpoint: env.VITE_APP_FEEDBACK_ENDPOINT ?? 'https://api.github.com/graphql'
   };
-  const body = `window.__env = ${JSON.stringify(values, null, 2)};\n`;
+  const body = `window.__environment = ${JSON.stringify(values, null, 2)};\n`;
   return {
     name: 'runtime-env',
-    config: () => ({define: {__BUILT_ENV__: JSON.stringify(values)}}),
+    config: () => ({define: {__BUILT_ENVIRONMENT__: JSON.stringify(values)}}),
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         if ((request.url ?? '').split('?')[0].endsWith('/env.js')) {
