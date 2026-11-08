@@ -28,8 +28,8 @@ const chartNames: Record<ChartKind, string> = {
 
 const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {kind});
 
-const doorwayAt = (seat: number, from: Element): Maybe<HTMLElement> =>
-  maybe(from.closest('li'))
+const doorwayAt = (seat: number, pressed: Element): Maybe<HTMLElement> =>
+  maybe(pressed.closest('li'))
     .mBind(removed => maybe(removed.parentElement?.children[seat]))
     .mBind(neighbor => maybe(neighbor.querySelector<HTMLElement>(':scope > [data-doorway]')));
 
@@ -43,8 +43,8 @@ export const Workspace: FC<Props> = ({product}) => {
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
-  const removed = (at: number, from: Element): void => {
-    seatAfterRemoval(at, seats.length).mBind(seat => doorwayAt(seat, from)).map(link => link.focus());
+  const removed = (at: number, pressed: Element): void => {
+    seatAfterRemoval(at, seats.length).mBind(seat => doorwayAt(seat, pressed)).map(link => link.focus());
     remove(at);
     setReport(`${nameAt(at)} removed`);
   };
@@ -85,7 +85,7 @@ export const Workspace: FC<Props> = ({product}) => {
           </>}
     </header>
     <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-      const actions = plural ? <Dismissal onRemoved={from => removed(at, from)}/> : undefined;
+      const actions = plural ? <Dismissal onRemoved={pressed => removed(at, pressed)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}

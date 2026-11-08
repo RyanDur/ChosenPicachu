@@ -1,7 +1,7 @@
 import {FC} from 'react';
 
 type Props = {
-  onRemoved: (from: Element) => void;
+  onRemoved: (pressed: Element) => void;
 };
 
 export const Dismissal: FC<Props> = ({onRemoved}) =>
