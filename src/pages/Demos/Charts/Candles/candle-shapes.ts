@@ -1,6 +1,6 @@
 import {empty} from '@ryandur/sand';
 import {Candle} from '../../Market';
-import {periodSlots} from '../slots';
+import {bucketPlaces} from '../bucket-places';
 
 export type CandleShape = {
   x: number;
@@ -33,18 +33,18 @@ const drawn = (
   const lowest = Math.min(...candles.map(candle => candle.low));
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  const slots = periodSlots.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
+  const places = bucketPlaces.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const bodyTop = scaleY(Math.max(candle.open, candle.close));
     const bodyBottom = scaleY(Math.min(candle.open, candle.close));
     return {
-      x: slots[at].x,
-      width: slots[at].width,
+      x: places[at].x,
+      width: places[at].width,
       bodyTop,
       bodyHeight: Math.max(bodyBottom - bodyTop, 1),
       wickTop: scaleY(candle.high),
       wickBottom: scaleY(candle.low),
-      center: slots[at].center,
+      center: places[at].center,
       direction: candle.close >= candle.open ? 'up' : 'down'
     };
   });
@@ -60,12 +60,12 @@ const volumes = (
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
-  const slots = periodSlots.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
+  const places = bucketPlaces.of(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const barHeight = heaviest === 0 ? 0 : (candle.volume / heaviest) * height;
     return {
-      x: slots[at].x,
-      width: slots[at].width,
+      x: places[at].x,
+      width: places[at].width,
       top: height - barHeight,
       height: barHeight
     };
