@@ -7,9 +7,16 @@ const untilTheTabMounts = {timeout: 5000};
 
 const tabAddresses = Object.values(DemoTopics).map(demoTab.address);
 
-const linksToTabsIn = (holder: HTMLElement): string[][] => within(holder).getAllByRole('link')
+const toTabs = (links: HTMLElement[]): string[][] => links
   .map(link => [link.textContent ?? '', link.getAttribute('href') ?? ''])
   .filter(([, address]) => tabAddresses.includes(address));
+
+const linksToTabsIn = (holder: HTMLElement): string[][] => toTabs(within(holder).getAllByRole('link'));
+
+const linksOffTheRail = (): HTMLElement[] => {
+  const rail = screen.getByRole('region', {name: 'pages and feedback'});
+  return screen.getAllByRole('link').filter(link => not(rail.contains(link)));
+};
 
 export const assumedLinksIn = (holder: HTMLElement): (string | null)[][] =>
   within(within(holder).getByText(/^This tab assumes/)).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
@@ -28,7 +35,7 @@ export const demoPage = {
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),
   linksToTabsIn,
-  linksToTabs: (): string[][] => linksToTabsIn(document.body),
+  linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
   sliceLinksLandingNowhere: (): string[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href') ?? '')

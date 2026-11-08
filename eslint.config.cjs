@@ -78,7 +78,7 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillReachForThePage = [
-  'src/navigation/arrival/useArrival.ts', 'src/page/SideNav.tsx'
+  'src/navigation/arrival/useArrival.ts'
 ];
 
 const refsWithAReason = [

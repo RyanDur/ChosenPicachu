@@ -5,7 +5,7 @@ import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@feedback';
 import {environment} from '@transport';
-import {Header, Page, PageError} from '@page';
+import {Header, Page, PageError, Rail} from '@page';
 import {PageNameProvider} from '@page-name';
 import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
@@ -40,8 +40,9 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
 // the router keys every entry opened by its address 'default', so those entries would all share one scroll place
 const placeOf = ({key, pathname, search}: Location): string => key === 'default' ? pathname + search : key;
 
-const Frame: FC<{room: ReactNode}> = ({room}) =>
+const Frame: FC<{room: ReactNode; pageUnknown?: boolean}> = ({room, pageUnknown}) =>
   <BannerProvider><PageNameProvider><FeedbackProvider>
+    <Rail pageUnknown={pageUnknown}/>
     {room}
     <Banners/>
     <ScrollRestoration getKey={placeOf}/>
@@ -53,7 +54,7 @@ export const ErrorBoundary: FC = () =>
   </Page>}/>;
 
 export const HydrateFallback: FC = () =>
-  <Frame room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false} pageUnknown>
+  <Frame pageUnknown room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false}>
     <noscript>
       <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here
         without it.</p>
