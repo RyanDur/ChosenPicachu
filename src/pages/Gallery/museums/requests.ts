@@ -1,9 +1,4 @@
-export enum Source {
-  AIC = 'aic',
-  HARVARD = 'harvard',
-  VAM = 'vam',
-  CLEVELAND = 'cleveland'
-}
+import {Source} from '@pages/Gallery/source';
 
 export type SearchArt = {
   search: string;

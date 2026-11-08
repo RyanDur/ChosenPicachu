@@ -9,7 +9,7 @@ import {
 } from '@pages/Gallery/__test_support/fixtures';
 import {setupVAMAllArtResponse} from '@pages/Gallery/__test_support';
 import {art} from '@pages/Gallery/museums';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
 
 describe('VAM as a source of art', () => {

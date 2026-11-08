@@ -12,7 +12,7 @@ import {env} from '@env';
 import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
-import {GetAllArtRequest} from '@pages/Gallery/museums/source';
+import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
 
 const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];

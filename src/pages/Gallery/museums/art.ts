@@ -1,5 +1,6 @@
 import {Result} from '@ryandur/sand';
-import {GetAllArt, GetArt, SearchArt, Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
+import {GetAllArt, GetArt, SearchArt} from '@pages/Gallery/museums/requests';
 import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
 import {HTTPError} from '@transport/types';
 import {aic} from '@pages/Gallery/museums/aic';

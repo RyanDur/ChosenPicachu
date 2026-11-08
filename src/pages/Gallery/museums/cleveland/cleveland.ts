@@ -13,7 +13,7 @@ import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@pages/Gallery/museums/types';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
-import {GetAllArtRequest} from '@pages/Gallery/museums/source';
+import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
 
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();

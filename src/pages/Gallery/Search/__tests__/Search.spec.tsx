@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith, server} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {heldAICSuggestions} from '@pages/Gallery/__test_support';

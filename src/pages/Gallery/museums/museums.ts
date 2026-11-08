@@ -1,4 +1,4 @@
-import {Source} from './source';
+import {Source} from '@pages/Gallery/source';
 
 const names: Record<Source, string> = {
   [Source.AIC]: 'The Art Institute of Chicago',

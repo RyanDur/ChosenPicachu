@@ -9,7 +9,7 @@ import {
   options
 } from '@pages/Gallery/__test_support/fixtures';
 import {art} from '@pages/Gallery/museums';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
 import {env} from '@env';
 

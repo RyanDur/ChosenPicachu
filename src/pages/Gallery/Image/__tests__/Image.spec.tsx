@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {render} from '@testing-library/react';
 import {Image} from '@pages/Gallery/Image';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {Paths} from '@pages/Paths';
 import {aPiece} from '@pages/Gallery/__test_support/fixtures';
 import {imageOf} from '@pages/Gallery/Image/__test_support';

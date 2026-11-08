@@ -5,7 +5,7 @@ import {server} from '@__test_support/server';
 import {env} from '@env';
 import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@pages/Gallery/Art';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';

@@ -3,7 +3,7 @@ import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
 import {HTTPError} from '@transport/types';
 import {Paths} from '@pages/Paths';
-import {Source} from '@pages/Gallery/museums/source';
+import {Source} from '@pages/Gallery/source';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@pages/Gallery/__test_support';
 import {anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@pages/Gallery/__test_support/fixtures';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
