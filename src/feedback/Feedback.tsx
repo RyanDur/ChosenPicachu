@@ -14,6 +14,8 @@ import {classNames} from '@components';
 import {Modal, ModalOpener} from '@components/Modal';
 import './Feedback.css';
 
+const feedbackDialogId = 'feedback';
+
 const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
   if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
     event.preventDefault();
@@ -90,10 +92,10 @@ export const Feedback: FC = () => {
   return <>
     <p className={classNames('feedback-item', 'field', !hydrated && 'gap-filled')}>
       <ModalOpener className="feedback-open path rail-aside bold attentive field borderless reachable"
-        inert={!hydrated} modal={hydrated ? 'feedback' : undefined} onClick={opening}>Feedback</ModalOpener>
+        inert={!hydrated} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    {hydrated && <Modal id="feedback" labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
+    {hydrated && <Modal id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
@@ -115,7 +117,7 @@ export const Feedback: FC = () => {
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close">Cancel</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
