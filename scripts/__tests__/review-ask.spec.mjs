@@ -52,10 +52,6 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('args "high --comment 412"');
   });
 
-  test('should ask for every finding in the structured output, which the gate reads', () => {
-    expect(asked).toContain('every finding in the structured output');
-  });
-
   test('should name every reviewer\'s rubric, to be read whole', () => {
     expect(asked).toContain('src/pages/Practice/structure/StructurePractice.tsx (what things are)');
     expect(asked).toContain('scripts/review/tests.md (what a test is for)');

@@ -3,9 +3,18 @@ import {empty, has, maybe, not} from '@ryandur/sand';
 
 const severities = ['violation', 'concern', 'note'];
 
-const lastAnswer = parsed => Array.isArray(parsed)
-  ? maybe(parsed.findLast(({type}) => type === 'result')).orElse({})
-  : parsed;
+const fields = ['file', 'line', 'severity', 'rubric', 'summary', 'failure_scenario'];
+
+const whole = finding => {
+  const missing = fields.find(field => empty(finding[field]));
+  if (has(missing)) {
+    throw new Error(`the review answered with a finding that has no ${missing}`);
+  }
+  if (not(severities.includes(finding.severity))) {
+    throw new Error(`the review answered with a severity of "${finding.severity}"`);
+  }
+  return finding;
+};
 
 /**
  * Reads the findings from the review's structured output: the action's `structured_output`, or the result message
@@ -13,12 +22,12 @@ const lastAnswer = parsed => Array.isArray(parsed)
  * @param {string} answer
  */
 export const findingsIn = answer => {
-  const output = empty(answer.trim()) ? {} : lastAnswer(JSON.parse(answer));
+  const output = empty(answer.trim()) ? {} : JSON.parse(answer);
   const {findings} = maybe(output.structured_output).orElse(output);
   if (not(Array.isArray(findings))) {
     throw new Error('the review answered without a findings list');
   }
-  return findings.map(finding => ({...finding, severity: severities.includes(finding.severity) ? finding.severity : 'concern'}));
+  return findings.map(whole);
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
