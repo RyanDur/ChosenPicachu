@@ -46,11 +46,11 @@ const stayed = (sort: DragSort, item: string): DragSort =>
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
 const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort => {
-  const neighbour = sort.order[at];
+  const neighbor = sort.order[at];
   return sort.held
-    .map(({item}) => neighbour === item || sliding(sort, item) || sliding(sort, neighbour)
+    .map(({item}) => neighbor === item || sliding(sort, item) || sliding(sort, neighbor)
       ? sort
-      : moved(sort, item, array.moveToIndex(at, item, sort.order), slideStarts.afterCrossing(neighbour, homeward)))
+      : moved(sort, item, array.moveToIndex(at, item, sort.order), slideStarts.afterCrossing(neighbor, homeward)))
     .orElse(sort);
 };
 

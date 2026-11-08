@@ -55,7 +55,7 @@ export const sortableList = (page: Page) => {
       await (await pressable(gripFor(item))).focus();
       await page.keyboard.press(key);
     },
-    pressBesideAGripAndDropOnItsNeighbour: async (): Promise<void> => {
+    pressBesideAGripAndDropOnItsNeighbor: async (): Promise<void> => {
       const grip = await pressable(items.first().getByRole('button', {name: /^grip for/, disabled: false}));
       const box = await boxOf(grip, 'the grip never stood');
       await grip.dragTo(items.nth(1),

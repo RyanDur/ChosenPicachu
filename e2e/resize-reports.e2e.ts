@@ -11,13 +11,13 @@ for (const {name, at, table} of stages) {
       const trades = dragSortTable(page, table(page));
       await trades.focusHandle('lookback');
       const lookback = await trades.announcedShare('lookback');
-      const neighbour = await trades.announcedShare('trades');
+      const neighbor = await trades.announcedShare('trades');
       await trades.listenToTheMoveReport();
 
       await page.keyboard.press('ArrowRight');
 
       await expect.poll(() => trades.announcedShare('lookback')).toBe(lookback + 2);
-      await expect.poll(() => trades.announcedShare('trades')).toBe(neighbour - 2);
+      await expect.poll(() => trades.announcedShare('trades')).toBe(neighbor - 2);
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual([`lookback resized to ${lookback + 2}%`]);
       expect(await trades.columnOrder()).toEqual(asDealt);
 
@@ -25,7 +25,7 @@ for (const {name, at, table} of stages) {
       await page.keyboard.press('ArrowLeft');
 
       await expect.poll(() => trades.announcedShare('lookback')).toBe(lookback - 2);
-      await expect.poll(() => trades.announcedShare('trades')).toBe(neighbour + 2);
+      await expect.poll(() => trades.announcedShare('trades')).toBe(neighbor + 2);
     });
 
     test('a handle whose column was moved past still trades two points a press', async ({page}) => {

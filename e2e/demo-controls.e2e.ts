@@ -12,7 +12,7 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
       await expect(list.items.first()).toBeVisible();
       const first = await list.items.first().textContent();
 
-      await list.pressBesideAGripAndDropOnItsNeighbour();
+      await list.pressBesideAGripAndDropOnItsNeighbor();
 
       await expect.poll(() => list.items.first().textContent()).not.toBe(first);
     });
