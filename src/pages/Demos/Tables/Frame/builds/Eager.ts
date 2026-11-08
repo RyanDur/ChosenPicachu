@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, columnLift, columnUnder, displacedBetween, eagerTravel, Grab, interior, Labelled, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState} from '@components/DragSortableTable/model';
+import {arrows, columnLift, eagerTravel, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -31,13 +31,13 @@ const columnShoving = (context: MountedTable, name: string, to: number, widths: 
   const current = context.order();
   const from = current.indexOf(name);
   tell(context.table, 'column-moved', {column: name, to});
-  shoveColumns(context, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
+  shoveColumns(context, survey.displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
 };
 
 const columnTo = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
   const from = current.indexOf(name);
-  const over = spanCrossed(current, widths, from, to);
+  const over = survey.spanCrossed(current, widths, from, to);
   columnShoving(context, name, to, widths);
   context.report({about: 'column', name, position: to, of: current.length});
   settleColumn(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
@@ -45,13 +45,13 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
 
 const columnBeside = (context: MountedTable, name: string, neighbour: string): void => {
   const current = context.order();
-  columnShoving(context, name, interior(current.indexOf(neighbour), current.length),
+  columnShoving(context, name, survey.interior(current.indexOf(neighbour), current.length),
     context.store.state.drag?.survey.columnWidths ?? {});
 };
 
 const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: Pick<RowNudge, 'to' | 'heights'>): void => {
   const from = before.indexOf(row);
-  shoveRows(context, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
+  shoveRows(context, survey.displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
 };
 
 const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowNudge): void => {
@@ -59,7 +59,7 @@ const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowN
   rowShoving(context, row, before, {to, heights});
   settleRow(context, row, tableState.settlingFromSeat({
     x: 0,
-    y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)
+    y: to > from ? -survey.spanCrossed(before, heights, from, to) : survey.spanCrossed(before, heights, from, to)
   }));
 };
 
@@ -97,10 +97,10 @@ const moved = (context: MountedTable, moving: Moving): void => {
   hand.dispatch(tableActions.drifted(moving));
   const {drag} = hand.state;
   if (drag?.axis === 'column') {
-    eagerTravel(columnUnder(order(), drag.survey), drag.held,
+    eagerTravel(survey.columnUnder(order(), drag.survey), drag.held,
       neighbour => columnBeside(context, drag.held, neighbour))(moving);
   } else if (drag?.axis === 'row') {
-    eagerTravel(rowUnder(standing(), drag.survey), drag.held,
+    eagerTravel(survey.rowUnder(standing(), drag.survey), drag.held,
       neighbour => rowBeside(context, drag.held, neighbour))(moving);
   }
 };

@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {gripLabel} from '@components/DragSortableTable/model';
+import {survey} from '@components/DragSortableTable/model';
 import {isMeasure} from '@pages/Demos/Market';
 import {changed, MountedTable} from './table-state';
 import {keepingFocus} from './focus';
@@ -37,7 +37,7 @@ export const reseatRows = ({body, lanes, standing}: Pick<MountedTable, 'body' | 
       })));
   next.forEach((row, position) =>
     maybe(lanes.get(row)?.querySelector('button.grip')).map(grip => {
-      const label = gripLabel(position);
+      const label = survey.gripLabel(position);
       if (grip.getAttribute('aria-label') !== label) {
         grip.setAttribute('aria-label', label);
       }

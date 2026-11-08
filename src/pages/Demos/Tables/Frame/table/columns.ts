@@ -1,5 +1,5 @@
 import {is, maybe} from '@ryandur/sand';
-import {anchored} from '@components/DragSortableTable/model';
+import {survey} from '@components/DragSortableTable/model';
 import {changed, columnOfHeader, MountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {dressWidths} from './resize';
@@ -15,7 +15,7 @@ export const sortableOf = (table: HTMLTableElement): string[] =>
 export const markGrips = (table: HTMLTableElement): void => {
   const headers = headersOf(table);
   headers.forEach((th, at) => {
-    if (anchored(at, headers.length)) {
+    if (survey.anchored(at, headers.length)) {
       th.classList.remove('grabbable');
       th.removeAttribute('tabindex');
     } else {

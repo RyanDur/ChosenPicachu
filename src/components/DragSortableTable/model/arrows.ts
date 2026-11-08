@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {anchored, bounded, columnSteps, nudgedColumn, nudgedRow, PixelSizes, rowHeights, rowSteps} from './survey';
+import {PixelSizes, survey} from './survey';
 
 type ArrowKey = {
   key: string;
@@ -18,27 +18,27 @@ type Arrows = {
 };
 
 const column: Arrows['column'] = (held, order, arrange) => event => {
-  maybe(columnSteps[event.key]).map(toward => {
+  maybe(survey.columnSteps[event.key]).map(toward => {
     event.preventDefault();
     const columns = order();
-    if (anchored(columns.indexOf(held), columns.length)) {
+    if (survey.anchored(columns.indexOf(held), columns.length)) {
       return;
     }
-    const {from, to} = nudgedColumn(columns, held, toward);
+    const {from, to} = survey.nudgedColumn(columns, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
     if (to !== from) {
-      arrange({from, to, widths: maybe(table).map(held => bounded(held, columns).columnWidths).orElse({})});
+      arrange({from, to, widths: maybe(table).map(held => survey.bounded(held, columns).columnWidths).orElse({})});
     }
   });
 };
 
 const row: Arrows['row'] = (held, standing, {nudged, moved}) => event => {
-  maybe(rowSteps[event.key]).map(toward => {
+  maybe(survey.rowSteps[event.key]).map(toward => {
     event.preventDefault();
     const seats = standing();
-    const {from, to} = nudgedRow(seats, held, toward);
+    const {from, to} = survey.nudgedRow(seats, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
-    const nudge = {from, to, heights: maybe(table).map(held => rowHeights(held, seats)).orElse({})};
+    const nudge = {from, to, heights: maybe(table).map(held => survey.rowHeights(held, seats)).orElse({})};
     nudged(nudge);
     if (to !== from) {
       moved(nudge);

@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {Survey, anchored, surveyed} from './survey';
+import {Survey, survey} from './survey';
 import {Drift} from './travel';
 
 export type Flight = {
@@ -30,7 +30,7 @@ export const columnLift = (
   grabbed: (grab: Grab) => void
 ) => (event: GrabEvent): void => {
   const columns = order();
-  if (anchored(columns.indexOf(held), columns.length)) {
+  if (survey.anchored(columns.indexOf(held), columns.length)) {
     return;
   }
   const th = event.currentTarget;
@@ -41,7 +41,7 @@ export const columnLift = (
   const box = th.getBoundingClientRect();
   maybe(th.closest('table')).map(table =>
     grabbed({
-      survey: surveyed(table, columns, standing()),
+      survey: survey.surveyed(table, columns, standing()),
       box: {x: box.x, y: box.y, width: box.width},
       at: {x: event.clientX, y: event.clientY}
     }));
@@ -63,7 +63,7 @@ export const rowLift = (
     .orElse(grounded);
   maybe(grip.closest('table')).map(table =>
     grabbed({
-      survey: surveyed(table, order(), standing()),
+      survey: survey.surveyed(table, order(), standing()),
       box,
       at: {x: event.clientX, y: event.clientY}
     }));

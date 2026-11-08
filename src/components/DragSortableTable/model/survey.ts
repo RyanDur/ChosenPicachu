@@ -14,7 +14,7 @@ export type Survey = Bounds & {
   rowHeights: PixelSizes;
 };
 
-export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bounds => {
+const bounded = (surface: HTMLTableElement, order: readonly string[]): Bounds => {
   const bounds = surface.getBoundingClientRect();
   const headers = [...(surface.tHead?.rows[0]?.cells ?? [])];
   return {
@@ -26,7 +26,7 @@ export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bo
   };
 };
 
-export const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): PixelSizes => {
+const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): PixelSizes => {
   const body = surface.tBodies[0];
   return seats.reduce((heights, row, position) => ({
     ...heights,
@@ -34,7 +34,7 @@ export const rowHeights = (surface: HTMLTableElement, seats: readonly string[]):
   }), {});
 };
 
-export const surveyed = (
+const surveyed = (
   surface: HTMLTableElement,
   order: readonly string[],
   seats: readonly string[]
@@ -60,7 +60,7 @@ const struckPast = <Identity>(
   return struck?.holds;
 };
 
-export const columnUnder = (order: readonly string[], survey: Bounds) =>
+const columnUnder = (order: readonly string[], survey: Bounds) =>
   (x: number, y: number, aloft: string): string | undefined => {
     if (y >= survey.top && y <= survey.top + survey.height) {
       let edge = survey.left;
@@ -75,19 +75,19 @@ export const columnUnder = (order: readonly string[], survey: Bounds) =>
     return undefined;
   };
 
-export const columnLeft = (order: readonly string[], survey: Bounds) => (column: string): number => {
+const columnLeft = (order: readonly string[], survey: Bounds) => (column: string): number => {
   const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
   const before = order.slice(0, order.indexOf(column)).reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0);
   return survey.left + before / total * survey.width;
 };
 
-export const rowTop = (seats: readonly string[], survey: Survey) => (seat: string): number => {
+const rowTop = (seats: readonly string[], survey: Survey) => (seat: string): number => {
   const all = seats.reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
   const before = seats.slice(0, seats.indexOf(seat)).reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
   return survey.top + survey.height - all + before;
 };
 
-export const rowUnder = (seats: readonly string[], survey: Survey) =>
+const rowUnder = (seats: readonly string[], survey: Survey) =>
   (x: number, y: number, aloft: string): string | undefined => {
     if (x >= survey.left && x <= survey.left + survey.width) {
       const {top, height, rowHeights} = survey;
@@ -103,37 +103,57 @@ export const rowUnder = (seats: readonly string[], survey: Survey) =>
     return undefined;
   };
 
-export const displacedBetween = <Seat>(seats: readonly Seat[], from: number, to: number): Seat[] =>
+const displacedBetween = <Seat>(seats: readonly Seat[], from: number, to: number): Seat[] =>
   seats.slice(Math.min(from, to), Math.max(from, to) + 1).filter((_seat, at) => at !== from - Math.min(from, to));
 
-export const spanCrossed = <Seat extends string | number>(
+const spanCrossed = <Seat extends string | number>(
   seats: readonly Seat[],
   sizes: Readonly<Partial<Record<Seat, number>>>,
   from: number,
   to: number
 ): number => displacedBetween(seats, from, to).reduce((sum, seat) => sum + (sizes[seat] ?? 0), 0);
 
-export const anchored = (position: number, count: number): boolean =>
+const anchored = (position: number, count: number): boolean =>
   position === 0 || position === count - 1;
 
-export const columnSteps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
+const columnSteps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
 
-export const rowSteps: Record<string, 1 | -1> = {ArrowDown: 1, ArrowUp: -1};
+const rowSteps: Record<string, 1 | -1> = {ArrowDown: 1, ArrowUp: -1};
 
-export const nudgedColumn = (order: readonly string[], held: string, toward: number): {from: number; to: number} => {
+const nudgedColumn = (order: readonly string[], held: string, toward: number): {from: number; to: number} => {
   const from = order.indexOf(held);
   return {from, to: interior(from + toward, order.length)};
 };
 
-export const nudgedRow = (seats: readonly string[], held: string, toward: number): {from: number; to: number} => {
+const nudgedRow = (seats: readonly string[], held: string, toward: number): {from: number; to: number} => {
   const from = seats.indexOf(held);
   return {from, to: Math.min(Math.max(from + toward, 0), seats.length - 1)};
 };
 
-export const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
+const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
   has(struck) && struck !== held;
 
-export const gripLabel = (position: number): string => `move row ${position + 1}`;
+const gripLabel = (position: number): string => `move row ${position + 1}`;
 
-export const interior = (at: number, count: number): number =>
+const interior = (at: number, count: number): number =>
   Math.min(Math.max(at, 1), count - 2);
+
+export const survey = {
+  bounded,
+  rowHeights,
+  surveyed,
+  columnUnder,
+  columnLeft,
+  rowTop,
+  rowUnder,
+  displacedBetween,
+  spanCrossed,
+  anchored,
+  columnSteps,
+  rowSteps,
+  nudgedColumn,
+  nudgedRow,
+  struckAway,
+  gripLabel,
+  interior
+};

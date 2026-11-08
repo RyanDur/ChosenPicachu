@@ -4,7 +4,7 @@ import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components
 import {Direction, Value} from './sorting';
 import {Drift, Moving, drifted, still} from './travel';
 import {Flight, Grab} from './lift';
-import {Survey, columnLeft, rowTop} from './survey';
+import {Survey, survey} from './survey';
 
 export type ColumnShove = {
   readonly toward: 'start' | 'end';
@@ -222,8 +222,8 @@ const seatOffset = (
     return undefined;
   }
   return drag.axis === 'column'
-    ? {x: drag.box.x - columnLeft(order, drag.survey)(drag.held), y: 0}
-    : {x: 0, y: drag.box.y - rowTop(standing, drag.survey)(drag.held)};
+    ? {x: drag.box.x - survey.columnLeft(order, drag.survey)(drag.held), y: 0}
+    : {x: 0, y: drag.box.y - survey.rowTop(standing, drag.survey)(drag.held)};
 };
 
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>

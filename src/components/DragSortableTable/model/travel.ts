@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {struckAway} from './survey';
+import {survey} from './survey';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
@@ -24,7 +24,7 @@ export const eagerTravel = <Seat>(
   settle: (struck: Seat) => void
 ) => (moving: Moving): void => {
   const struck = under(moving.clientX, moving.clientY, held);
-  if (struckAway(held, struck)) {
+  if (survey.struckAway(held, struck)) {
     settle(struck);
   }
 };
@@ -35,7 +35,7 @@ export const lazyTravel = <Seat>(under: (x: number, y: number, held: Seat) => Se
     if (!has(struck)) {
       return landing;
     }
-    return struckAway(held, struck) ? struck : undefined;
+    return survey.struckAway(held, struck) ? struck : undefined;
   };
 
 type MoveEvent = {

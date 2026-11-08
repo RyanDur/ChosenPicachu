@@ -6,7 +6,6 @@
     "src/components/DragSortableTable/model/looks.ts",
     "src/components/DragSortableTable/model/report.ts",
     "src/components/DragSortableTable/model/sorting.ts",
-    "src/components/DragSortableTable/model/survey.ts",
     "src/components/DragSortableTable/model/travel.ts",
     "src/components/DragSortableTable/useDragSortable.ts",
     "src/components/Menu/Menu.tsx",

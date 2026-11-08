@@ -71,8 +71,8 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
               lines.aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.survey, 'export const displacedBetween'), gap,
-            ...carve.unit(sources.survey, 'export const columnLeft'),
+            ...carve.unit(sources.survey, 'const displacedBetween'), gap,
+            ...carve.unit(sources.survey, 'const columnLeft'),
             lines.aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
           ]}/>
           <Snippet label="CSS" lines={[

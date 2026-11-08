@@ -2,7 +2,7 @@ import {maybe} from '@ryandur/sand';
 import {Reducer, combined} from '@components/store';
 import {Foreign, TableAction, tableActions} from './actions';
 import {Landing, landingReport} from './report';
-import {displacedBetween, interior, spanCrossed} from './survey';
+import {survey} from './survey';
 import {
   Carry,
   TableState,
@@ -28,13 +28,13 @@ const motion = (state: TableState, action: TableAction): TableState => {
     case 'columnWalkedTo': {
       const {order} = action;
       const from = order.indexOf(action.name);
-      const to = action.type === 'columnWalkedTo' ? action.to : interior(order.indexOf(action.neighbour), order.length);
+      const to = action.type === 'columnWalkedTo' ? action.to : survey.interior(order.indexOf(action.neighbour), order.length);
       const told = action.type !== 'columnWalkedTo' || to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
-      const shoved = tableState.shoveColumns(told, displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
+      const shoved = tableState.shoveColumns(told, survey.displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
       if (action.type !== 'columnWalkedTo') {
         return shoved;
       }
-      const over = spanCrossed(order, action.widths, from, to);
+      const over = survey.spanCrossed(order, action.widths, from, to);
       return tableState.unsettle(shoved, {axis: 'column', held: action.name}, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
     }
     case 'rowMovedBeside':
@@ -43,11 +43,11 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const from = standing.indexOf(action.row);
       const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbour);
       const told = action.type !== 'rowWalkedTo' || to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
-      const shoved = tableState.shoveRows(told, displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
+      const shoved = tableState.shoveRows(told, survey.displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
       if (action.type !== 'rowWalkedTo') {
         return shoved;
       }
-      const over = spanCrossed(standing, action.heights, from, to);
+      const over = survey.spanCrossed(standing, action.heights, from, to);
       return tableState.unsettle(shoved, {axis: 'row', held: action.row}, tableState.settlingFromSeat({x: 0, y: to > from ? -over : over}));
     }
     default: return state;

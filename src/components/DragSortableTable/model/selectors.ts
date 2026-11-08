@@ -2,7 +2,7 @@ import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table';
 import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
-import {anchored} from './survey';
+import {survey} from './survey';
 import {Drift} from './travel';
 
 const selectOrder = ({columns}: TableView): readonly string[] => columns.map(({name}) => name);
@@ -31,7 +31,7 @@ const selectColumnCount = ({columns}: TableView): number => columns.length;
 const selectRowCount = ({rows}: TableView): number => rows.length;
 
 const columnTravels = (name: string) => (view: TableView): boolean =>
-  not(anchored(positionOfColumn(name)(view), selectColumnCount(view)));
+  not(survey.anchored(positionOfColumn(name)(view), selectColumnCount(view)));
 
 const neighbourOfColumn = (name: string) => (view: TableView): string => neighborOf(selectOrder(view), name);
 

@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, ColumnDrag, columnLift, columnUnder, eagerTravel, Grab, headerCell, headerNeeds, interior, motionStates, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState} from './model';
+import {arrows, ColumnDrag, columnLift, eagerTravel, Grab, headerCell, headerNeeds, motionStates, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey} from './model';
 import './Header.css';
 import './motion.css';
 
@@ -28,16 +28,16 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
   };
-  const beside = (neighbour: string, survey: Survey): void => {
-    const to = interior(order.indexOf(neighbour), count);
-    dispatch(tableActions.columnMovedBeside(column, neighbour, survey.columnWidths, order));
+  const beside = (neighbour: string, bounds: Survey): void => {
+    const to = survey.interior(order.indexOf(neighbour), count);
+    dispatch(tableActions.columnMovedBeside(column, neighbour, bounds.columnWidths, order));
     onColumnMoved?.({column, to});
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    eagerTravel(columnUnder(order, held.survey), column, neighbour => beside(neighbour, held.survey))(moving);
+    eagerTravel(survey.columnUnder(order, held.survey), column, neighbour => beside(neighbour, held.survey))(moving);
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {

@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, motionStates, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -29,9 +29,9 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
   };
-  const beside = (neighbour: string, survey: Survey): void => {
-    const to = interior(order.indexOf(neighbour), count);
-    dispatch(tableActions.columnMovedBeside(column, neighbour, survey.columnWidths, order));
+  const beside = (neighbour: string, bounds: Survey): void => {
+    const to = survey.interior(order.indexOf(neighbour), count);
+    dispatch(tableActions.columnMovedBeside(column, neighbour, bounds.columnWidths, order));
     onColumnMoved?.({column, to});
   };
 
@@ -42,7 +42,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
   const release = (): void => {
     if (has(drag)) {
-      const to = has(drag.landing) ? interior(order.indexOf(drag.landing), count) : order.indexOf(column);
+      const to = has(drag.landing) ? survey.interior(order.indexOf(drag.landing), count) : order.indexOf(column);
       const settling = tableSelectors.settlingOfColumnIn(column, movedTo(order, column, to))(view);
       releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {

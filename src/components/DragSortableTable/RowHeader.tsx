@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {cellNeeds, eagerTravel, Grab, motionStates, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, rowUnder, Survey, tableActions, tableSelectors, tableState} from './model';
+import {cellNeeds, eagerTravel, Grab, motionStates, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, Survey, tableActions, tableSelectors, tableState, survey} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
@@ -27,16 +27,16 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
-  const beside = (neighbour: string, survey: Survey): void => {
+  const beside = (neighbour: string, bounds: Survey): void => {
     const to = standing.indexOf(neighbour);
-    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, survey.rowHeights, standing));
+    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, bounds.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    eagerTravel(rowUnder(standing, held.survey), row, neighbour => beside(neighbour, held.survey))(moving);
+    eagerTravel(survey.rowUnder(standing, held.survey), row, neighbour => beside(neighbour, held.survey))(moving);
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {

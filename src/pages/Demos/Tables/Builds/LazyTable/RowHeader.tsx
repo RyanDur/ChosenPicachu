@@ -27,9 +27,9 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
-  const beside = (neighbour: string, survey: Survey): void => {
+  const beside = (neighbour: string, bounds: Survey): void => {
     const to = standing.indexOf(neighbour);
-    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, survey.rowHeights, standing));
+    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, bounds.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 

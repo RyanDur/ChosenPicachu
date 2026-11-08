@@ -29,7 +29,7 @@ export const DeadZone: FC = () =>
         <Snippet label="TS" lines={[
           ...carve.unit(sources.survey, 'const deadZone = '), gap,
           ...carve.unit(sources.survey, 'const struckPast = '), gap,
-          ...carve.unit(sources.survey, 'export const columnUnder')
+          ...carve.unit(sources.survey, 'const columnUnder')
         ]}/>
       </Codes>
     </Reveal>
