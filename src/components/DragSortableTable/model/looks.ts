@@ -6,7 +6,7 @@ const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${
 const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
   has(shove) ? `${shove.by}px` : undefined;
 
-const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
+const shoved = (shove?: ColumnShove | RowShove): string | false =>
   has(shove) && `shoved-${shove.toward}`;
 
 const rowHeaderCell = ['cell', 'row-header'] as const;
@@ -31,13 +31,13 @@ const motionStates = (
   (carried || has(settlingFrom) || has(shove)) && 'paper-in-motion',
   carried && 'carried',
   has(settlingFrom) && 'settling',
-  shovedClass(shove)
+  shoved(shove)
 ];
 
 export const looks = {
   pixels,
   shoveDistance,
-  shovedClass,
+  shoved,
   rowHeaderCell,
   headerCell,
   headerNeeds,
