@@ -27,7 +27,7 @@ export const EagerHideAnimatedList: FC<Props> = ({list}) => {
             className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
             style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
             onAnimationEnd={() => dispatch(dragSortChange.slid())}
-            onDragOver={crossing.crossingOver(sort.held, sort.order)(item, index, homeward =>
+            onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>
               dispatch(dragSortChange.crossed(index, homeward)))}/>;
         })
       }</ol>

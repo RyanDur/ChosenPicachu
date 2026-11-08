@@ -21,7 +21,7 @@ export const EagerKeepStaticList: FC<Props> = ({list}) => {
         sort.order.map((item, index) =>
           <KeepItem key={item} item={item}
             className="item"
-            onDragOver={crossing.crossingOver(sort.held, sort.order)(item, index, homeward =>
+            onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>
               dispatch(dragSortChange.crossed(index, homeward)))}/>)
       }</ol>
     <MoveReport/>

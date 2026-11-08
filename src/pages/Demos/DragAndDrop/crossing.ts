@@ -22,7 +22,7 @@ const strayedTo = (clientY: number, anchor: number, strayDistance: number, at: n
     : strayed(clientY, anchor, strayDistance, true) ? at - 1
       : at;
 
-const crossingOver = (held: Maybe<Held>, order: readonly string[]) =>
+const over = (held: Maybe<Held>, order: readonly string[]) =>
   (item: string, index: number, struck: Struck) =>
     (event: DragEvent<HTMLElement>): void => {
       held.map(lifted => {
@@ -39,8 +39,8 @@ const crossingOver = (held: Maybe<Held>, order: readonly string[]) =>
 type Crossing = {
   crossed: (event: DragEvent<HTMLElement>, homeward: boolean) => boolean;
   strayedTo: (clientY: number, anchor: number, strayDistance: number, at: number) => number;
-  crossingOver: (held: Maybe<Held>, order: readonly string[]) =>
+  over: (held: Maybe<Held>, order: readonly string[]) =>
   (item: string, index: number, struck: Struck) => (event: DragEvent<HTMLElement>) => void;
 };
 
-export const crossing: Crossing = {crossed, strayedTo, crossingOver};
+export const crossing: Crossing = {crossed, strayedTo, over};
