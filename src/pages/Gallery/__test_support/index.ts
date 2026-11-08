@@ -1,5 +1,6 @@
 export {
   heldAICAllArtResponse,
+  heldAICArtPieceRefusal,
   heldAICArtPieceResponse,
   heldAICPictures,
   heldAICSuggestions,

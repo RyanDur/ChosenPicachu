@@ -1,11 +1,12 @@
 import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {HTTPError} from '@transport';
 import {Paths} from '@navigation';
 import {Source} from '@pages/Gallery/source';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@pages/Gallery/__test_support';
-import {anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@pages/Gallery/__test_support/fixtures';
+import {aicSuggestionsOf, anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@pages/Gallery/__test_support/fixtures';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
 
 describe('viewing a piece', () => {
@@ -19,11 +20,25 @@ describe('viewing a piece', () => {
     expect(await piecePage.loadingAppears()).toBeInTheDocument();
     expect(piecePage.title()).toHaveTextContent('A piece');
 
-    pieceArrives();
+    pieceArrives.arrives();
 
     await waitFor(() => expect(piecePage.loadingIfAny()).not.toBeInTheDocument());
     expect(piecePage.artist(pieceResponse.data.artist_display)).toBeInTheDocument();
     expect(piecePage.title()).toHaveTextContent(pieceResponse.data.title);
+  });
+
+  test('keeps what the reader typed into the search, and the focus, when the piece arrives', async () => {
+    anyRequestRespondsWith(JSON.stringify(aicSuggestionsOf([])));
+    const piece = heldAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}`}/>);
+    await piecePage.loadingAppears();
+
+    await userEvent.type(piecePage.search(), 'water lilies');
+    piece.arrives();
+
+    expect(await piecePage.artistAppears(pieceResponse.data.artist_display)).toBeInTheDocument();
+    expect(piecePage.search()).toHaveValue('water lilies');
+    expect(piecePage.search()).toHaveFocus();
   });
 
   test('a piece opened with no museum in its address is shown from the Art Institute', async () => {
@@ -49,7 +64,7 @@ describe('viewing a piece', () => {
     expect(await piecePage.refusalAppears()).toBeInTheDocument();
     expect(piecePage.easelIfAny()).not.toBeInTheDocument();
     expect(piecePage.loadingIfAny()).not.toBeInTheDocument();
-    expect(piecePage.troubleSaid('the museum is having trouble')).toBeInTheDocument();
+    expect(await piecePage.troubleSays('the museum is having trouble')).toBeInTheDocument();
     expect(piecePage.title()).toHaveTextContent('A piece');
   });
 });

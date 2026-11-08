@@ -6,13 +6,14 @@ import {
   harvardArtResponse,
   vamArtResponse
 } from '@pages/Gallery/__test_support/fixtures';
-import {render, waitFor} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {limits} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
 import {
   heldAICAllArtResponse,
+  heldAICArtPieceRefusal,
   heldAICArtPieceResponse,
   heldAICPictures,
   heldVAMAllArtResponse,
@@ -80,8 +81,44 @@ describe('The gallery.', () => {
       expect(piecePage.title()).toHaveTextContent('A piece');
       expect(piecePage.easelIfAny()).not.toBeInTheDocument();
 
-      secondArrives();
+      secondArrives.arrives();
       expect(await galleryPage.headerShows(secondPiece.title)).toBeInTheDocument();
+    });
+
+    it('a piece left before it arrives never shows on the piece opened after it', async () => {
+      setupAICAllArtResponse(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      const firstArrives = heldAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      const secondArrives = heldAICArtPieceResponse(anAICPieceResponse(secondPiece), secondPiece.id);
+      await galleryWall.openPiece(firstPiece.title);
+      await piecePage.loadingAppears();
+      await galleryPage.backToTheWall();
+      await galleryWall.openPiece(secondPiece.title);
+
+      firstArrives.arrives();
+      await firstArrives.served;
+      secondArrives.arrives();
+
+      expect(await piecePage.artistAppears(secondPiece.artist_display)).toBeInTheDocument();
+      expect(piecePage.title()).toHaveTextContent(secondPiece.title);
+      expect(piecePage.easel()).not.toHaveTextContent(firstPiece.artist_display);
+    });
+
+    it('a piece left before the museum refuses it raises no banner', async () => {
+      setupAICAllArtResponse(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      const refusal = heldAICArtPieceRefusal(firstPiece.id);
+      await galleryWall.openPiece(firstPiece.title);
+      await piecePage.loadingAppears();
+      const wallArrives = heldAICAllArtResponse(aicArtResponse);
+      await galleryPage.backToTheWall();
+
+      refusal.arrives();
+      await refusal.served;
+      wallArrives();
+
+      expect(await galleryWall.framesAppear()).not.toHaveLength(0);
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
   });
 

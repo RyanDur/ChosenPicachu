@@ -211,7 +211,7 @@ describe('each page is named where a search shows it', () => {
       await galleryWall.pieceStillComing();
       expect(document.title).toBe(names.gallery.title);
       expect(described()).toBe(names.gallery.description);
-      answer();
+      answer.arrives();
       await waitFor(() => expect(document.title).toBe(`${piece.title} · Gallery · Chosen Picachu`));
     });
   });

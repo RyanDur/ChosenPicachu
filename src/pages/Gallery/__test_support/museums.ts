@@ -84,16 +84,21 @@ type HeldAnswer = {
   served: Promise<{aborted: boolean}>;
 };
 
-export const heldAICSuggestions = (word: string, response: AICSearchResponse): HeldAnswer => {
-  const {held, release} = holding();
+const servedOrAborted = (): {served: Promise<{aborted: boolean}>; serve: (request: Request) => void} => {
   let serve = (_outcome: {aborted: boolean}): void => undefined;
   const served = new Promise<{aborted: boolean}>(resolve => {
     serve = resolve;
   });
+  return {served, serve: request => serve({aborted: request.signal.aborted})};
+};
+
+export const heldAICSuggestions = (word: string, response: AICSearchResponse): HeldAnswer => {
+  const {held, release} = holding();
+  const {served, serve} = servedOrAborted();
   server.use(http.get(`${environment.aicDomain}/search`, async ({request}) => {
     if (not(paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'}))) return undefined;
     await held;
-    serve({aborted: request.signal.aborted});
+    serve(request);
     return HttpResponse.json(response);
   }));
   return {arrives: release, served};
@@ -115,15 +120,23 @@ export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =
       ? HttpResponse.json(response)
       : undefined));
 
-export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): () => void => {
+const heldAICPiece = (id: number, answer: () => Response): HeldAnswer => {
   const {held, release} = holding();
+  const {served, serve} = servedOrAborted();
   server.use(http.get(`${environment.aicDomain}/:id`, async ({request, params}) => {
     if (params.id !== String(id) || not(paramsMatch(request, {fields: aicFields}))) return undefined;
     await held;
-    return HttpResponse.json(response);
+    serve(request);
+    return answer();
   }));
-  return release;
+  return {arrives: release, served};
 };
+
+export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): HeldAnswer =>
+  heldAICPiece(id, () => HttpResponse.json(response));
+
+export const heldAICArtPieceRefusal = (id: number): HeldAnswer =>
+  heldAICPiece(id, () => new HttpResponse(null, {status: 500}));
 
 export const refuseAICPictures = () =>
   server.use(http.get(`${environment.aicPictures}/:image/info.json`, () => HttpResponse.error()));

@@ -1,8 +1,9 @@
-import {FC} from 'react';
+import {FC, Suspense} from 'react';
+import {Await} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {Paths} from '@navigation';
-import {Header, Listing, Page} from '@page';
-import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
+import {AppHeader, Listing, Page, PageTitle} from '@page';
+import {askedPiece} from '@pages/Gallery/ArtPiece';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';
 import names from '@navigation/names.json';
@@ -15,15 +16,21 @@ const listingOf = ({title, artistInfo}: Art): Listing => ({
   description: maybe(artistInfo).map(artist => `${title}, by ${artist}, from the gallery’s wall.`).orElse(`${title}, from the gallery’s wall.`)
 });
 
-const PieceHeader = () => {
-  const {easel} = useArtPiece();
-  const {title, listed} = easel.reply === 'answered'
-    ? {title: easel.answer.title, listed: listingOf(easel.answer)}
-    : {title: 'A piece', listed: names.gallery};
-  return <Header title={title} listed={listed}>
+const Unnamed: FC = () => <PageTitle title="A piece" listed={names.gallery}/>;
+
+const PieceTitle: FC = () =>
+  <Suspense fallback={<Unnamed/>}>
+    <Await resolve={askedPiece.useAsked().piece}>
+      {answer => answer.either(piece => <PageTitle title={piece.title} listed={listingOf(piece)}/>, () => <Unnamed/>)}
+    </Await>
+  </Suspense>;
+
+const PieceHeader: FC = () =>
+  <AppHeader title={<PieceTitle/>}>
     <Search id="gallery-search" className="header-settings"/>
-  </Header>;
-};
+  </AppHeader>;
+
+export const loader = askedPiece.loader;
 
 export const ErrorBoundary = GalleryError;
 
