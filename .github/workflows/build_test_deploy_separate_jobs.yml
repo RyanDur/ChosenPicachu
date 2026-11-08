@@ -46,11 +46,18 @@ jobs:
           VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
         run: |
           npm ci
+          npm run build
+      # the pull request's branch ran the linters, the unit tests and the journeys on this code, so main only builds,
+      # deploys and audits (Ryan, 2026-11-08: "we don't need the full check on main if we rebase from a PR, just need
+      # the things that aren't done in the PR")
+      - name: Lint
+        if: github.ref != 'refs/heads/main'
+        run: |
           npm run lint
           npm run lint:css
           npm run lint:style
-          npm run build
       - name: Test
+        if: github.ref != 'refs/heads/main'
         run: npm test
       - name: Name the pages under a performance budget
         id: budgeted
@@ -64,7 +71,7 @@ jobs:
           path: ./build/client
 
   pages:
-    needs: journeys
+    needs: build_test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-26.04
     concurrency:
@@ -92,6 +99,7 @@ jobs:
 
   journeys:
     needs: build_test
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-24.04
     # Playwright's image has the browsers and their system libraries in it, so no job installs from the runner's apt
     # mirror, which hung on one shard a run through 2026-10-07; its tag follows @playwright/test in package.json
