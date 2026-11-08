@@ -1,4 +1,3 @@
-import {} from '@ryandur/sand';
 import {FC, PropsWithChildren, TransitionEvent, useLayoutEffect, useRef, useState} from 'react';
 import {classNames} from '@components';
 

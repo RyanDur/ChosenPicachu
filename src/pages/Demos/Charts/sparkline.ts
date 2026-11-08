@@ -21,10 +21,10 @@ export const sparklinePoints = (
   const lowest = Math.min(...prices);
   const highest = Math.max(...prices);
   const from = series[0].at;
-  const shown = series[series.length - 1].at - from + headroomMilliseconds;
+  const shownMilliseconds = series[series.length - 1].at - from + headroomMilliseconds;
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
   const scaleX = (at: number): number =>
-    shown === 0 ? width / 2 : ((at - from) / shown) * width;
+    shownMilliseconds === 0 ? width / 2 : ((at - from) / shownMilliseconds) * width;
   return series.map(timed => ({x: scaleX(timed.at), y: scaleY(timed.price)}));
 };

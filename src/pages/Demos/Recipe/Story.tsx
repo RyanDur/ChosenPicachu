@@ -1,4 +1,3 @@
-import {} from '@ryandur/sand';
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
 import {storyKeys} from './storyKeys';
 import {useOpenStories} from './useOpenStories';

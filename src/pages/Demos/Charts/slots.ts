@@ -1,4 +1,5 @@
 import {empty} from '@ryandur/sand';
+
 export type Slot = {
   x: number;
   width: number;
@@ -14,11 +15,11 @@ export const periodSlots = (
     return [];
   }
   const from = openings[0];
-  const shown = openings[openings.length - 1] + 2 * bucketMilliseconds - from;
-  const slot = (bucketMilliseconds / shown) * width;
+  const shownMilliseconds = openings[openings.length - 1] + 2 * bucketMilliseconds - from;
+  const slot = (bucketMilliseconds / shownMilliseconds) * width;
   const barWidth = slot * 0.6;
   return openings.map(openedAt => {
-    const x = ((openedAt - from) / shown) * width;
+    const x = ((openedAt - from) / shownMilliseconds) * width;
     return {x: x + (slot - barWidth) / 2, width: barWidth, center: x + slot / 2};
   });
 };
