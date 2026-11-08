@@ -7,4 +7,4 @@ const of = (times: readonly number[], high: number, low: number): Maybe<Range> =
   return maybe(first).map(at => ({high, low, times: [at, ...rest]}));
 };
 
-export const range = {of};
+export const axisRange = {of};

@@ -7,7 +7,7 @@ import {chartCaption} from '../chart-caption';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
-import {Axes, range} from '../Axes';
+import {Axes, axisRange} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
 import {classNames} from '@components';
@@ -39,7 +39,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
   );
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
-  const priceRange = range.of(
+  const range = axisRange.of(
     shownCandles.map(candle => candle.openedAt),
     Math.max(...shownCandles.map(candle => candle.high)),
     Math.min(...shownCandles.map(candle => candle.low))
@@ -65,7 +65,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       </Menu>
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={priceRange}
+      <Axes range={range}
         pattern={periodDisplay.timePattern[period]}
         tickEvery={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>
