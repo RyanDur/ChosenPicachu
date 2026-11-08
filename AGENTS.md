@@ -87,76 +87,54 @@ Each rule gives its reason, and a source where one exists outside this repo. A r
 
 ## The review
 
-A lead reads the rubric, sends each reviewer the scope, corroborates every finding that comes back, and answers in the feedback stance: habits first, then plusses and deltas. Every reviewer holds the values in `scripts/review/values.md` and writes by `scripts/review/plain.md`.
-
-`scripts/review/prompt.mjs` builds the lead's prompt and `scripts/review/agents.mjs` builds the reviewers, both from the list under Reviewers below. A reviewer added there joins the next review; one removed there leaves it.
+Claude Code's own `/code-review` reviews each push, on the range since the last commit it answered, and holds it to the rubrics under Reviewers below as well as to correctness. Every finding carries a severity (violation, concern or note) and the rubric it answers to. A violation turns the job red, and the findings are left as a comment on the commit. `scripts/review/ask.mjs` builds the request from the list under Reviewers, so a reviewer added there joins the next review, and one removed there leaves it. `scripts/review/report.mjs` turns the answer into the comment and the verdict. Why: Ryan, 2026-11-08, "can we switch to the claude code reviewer for the branches? it cna use our reviewing standards".
 
 ### Run it before a push
 
-The pipeline's own command, from the repo's root, on the commits about to be pushed:
+From the repo's root, on the commits about to be pushed:
 
 ```sh
-export REVIEW_SCOPE=changes REVIEW_BEFORE=$(git rev-parse origin/main) REVIEW_AFTER=$(git rev-parse HEAD)
-claude --print "$(node scripts/review/prompt.mjs)" \
-  --output-format stream-json --verbose \
-  --json-schema "$(cat scripts/review/feedback.schema.json)" \
-  --agents "$(node scripts/review/agents.mjs)" \
-  --allowedTools "Agent,Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
-  --max-turns 80 \
-  --no-session-persistence | node scripts/review/narrate.mjs
+export REVIEW_BEFORE=$(git rev-parse origin/main) REVIEW_AFTER=$(git rev-parse HEAD)
+claude --print "$(node scripts/review/ask.mjs)" --output-format json \
+  --allowedTools "Agent,Read,Grep,Glob,Skill,Bash(git diff:*),Bash(git log:*),Bash(git show:*)" \
+  --max-turns 80 --no-session-persistence > review.json
 node scripts/review/report.mjs < review.json
 ```
 
-The pipeline runs the same through `npx --yes @anthropic-ai/claude-code@2.1.281` with its own model. The other scopes are `full`, the whole of `src/` and `e2e/`; `tests`, every test; and `design`, the whole site.
+The pipeline runs the same through `npx --yes @anthropic-ai/claude-code@2.1.319` with its own model.
 
 ## Reviewers
 
-Each reviewer reads its rubric first and whole, reviews one half of the scope, the site or the tests, and runs in the scopes listed. A reviewer of the site reads the tests only for context; the reviewer of the tests reports on the site only that a test is missing.
+Each rubric is read whole before the review, and a finding is reported against it only where its rule holds.
 
 ### structure
 - rubric: `src/pages/Practice/structure/StructurePractice.tsx`
-- reviews: the site
-- scopes: full, changes
 - asks: what things are: the element chosen for the content, the landmarks and their names, the headings, the reading order with the styles off
 
 ### presentation
 - rubric: `src/pages/Practice/presentation/PresentationPractice.tsx`
-- reviews: the site
-- scopes: full, changes
 - asks: how things show: structure in the component sheet, needs as shared words, the platform's own states before invented ones, constants in the sheet and only runtime values inline
 
 ### dynamic-interaction
 - rubric: `src/pages/Practice/behavior/BehaviorPractice.tsx`
-- reviews: the site
-- scopes: full, changes
 - asks: how things respond: state that holds only what cannot be derived, events named for what happened, pure transitions, the platform's behaviour before script, a keyboard twin for every gesture, changes that announce themselves
 
 ### design
 - rubric: `scripts/review/design.md`
-- reviews: the site
-- scopes: full, changes, design
 - asks: how the code is shaped so that change stays cheap: where a thing lives on the app continuum, what the types allow and forbid, and how failure travels on the two tracks of a Result; names that say what a thing is and what its values mean; a functional core under an imperative shell
 
 ### tests
 - rubric: `scripts/review/tests.md`
-- reviews: the tests
-- scopes: full, changes, tests
 - asks: what a test is for: readable, worth having, pinning behaviour and not implementation, at the right level, against the real thing, and whether a test is missing; Beck's properties for unit tests, Dodds' practice for component specs, Fowler's journeys and Playwright's practices for e2e, Fowler's page objects beside their owner
 
 ### tutorials
 - rubric: `scripts/review/tutorials.md`
-- reviews: the site
-- scopes: full, changes
 - asks: what a tutorial on the demos tab owes its reader: claims that are true, a sentence after the opening saying what the tab assumes from earlier tabs with a link to each, terms defined where they first appear, each shared term taught in full on one tab and glossed and linked on the rest, and mechanisms explained before the first build that uses them, a method the cards are told in walked through once before the first card, headings that lead with the answer, an example to press for every idea, a tab that opens with why, the smallest script first with the site's build behind it, the mechanism said in plain words, one idea in each run, a point stated and not staged
 
 ### record
 - rubric: `scripts/review/record.md`
-- reviews: the site
-- scopes: full, changes
 - asks: what the record owes its reader: moments that agree with each other on every date, name, count and claim, quotations that are the source's words with a signpost to their page and the page on the shelf, prose that says what each quotation shows, and history told from the sources in the third person
 
 ### voice
 - rubric: `scripts/review/voice.md`
-- reviews: the site
-- scopes: full, changes
 - asks: how the prose reads, in the author's voice after Fowler and Beck: one point per paragraph opening on something doing something, the fact stated before it is built on, the thing then its reason with no claim wider than the evidence, no blame and no performance, trades told as trades and preferences in the first person, the depth where it belongs, and flow heard aloud

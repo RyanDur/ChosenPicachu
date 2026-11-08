@@ -73,7 +73,6 @@ jobs:
       contents: write
     env:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-      REVIEW_SCOPE: ${{ vars.REVIEW_SCOPE || 'changes' }}
       REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
       REVIEW_AFTER: ${{ github.sha }}
     steps:
@@ -103,17 +102,14 @@ jobs:
           fi
           REVIEW_BEFORE=$(node scripts/review/since.mjs)
           echo "REVIEW_BEFORE=$REVIEW_BEFORE" >> "$GITHUB_ENV"
-      - name: The home page reviews the code
+      - name: Claude Code reviews the change against the house rules
         run: |
-          set -o pipefail
-          npx --yes @anthropic-ai/claude-code@2.1.281 --print "$(node scripts/review/prompt.mjs)" \
+          npx --yes @anthropic-ai/claude-code@2.1.319 --print "$(node scripts/review/ask.mjs)" \
             --model "$REVIEW_MODEL" \
-            --output-format stream-json --verbose \
-            --json-schema "$(cat scripts/review/feedback.schema.json)" \
-            --agents "$(node scripts/review/agents.mjs)" \
-            --allowedTools "Agent,Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
+            --output-format json \
+            --allowedTools "Agent,Read,Grep,Glob,Skill,Bash(git diff:*),Bash(git log:*),Bash(git show:*)" \
             --max-turns 80 \
-            --no-session-persistence | node scripts/review/narrate.mjs
+            --no-session-persistence > review.json
       - name: Report
         run: |
           REVIEW_SUBJECT="$(git log -1 --format=%s "$GITHUB_SHA")" \
