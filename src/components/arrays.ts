@@ -1,7 +1,7 @@
 import {not} from '@ryandur/sand';
 
 const empty = <T>(list: T[] = []): boolean =>
-  list.length === 0;
+  not(list.length);
 const has = <T>(list: T[] = []) =>
   not(empty(list));
 

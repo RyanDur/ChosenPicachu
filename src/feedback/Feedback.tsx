@@ -17,7 +17,7 @@ import './Feedback.css';
 const feedbackDialogId = 'feedback';
 
 const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-  if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+  if (event.key === 'Enter' && not(event.shiftKey) && not(event.nativeEvent.isComposing)) {
     event.preventDefault();
     event.currentTarget.form?.requestSubmit();
   }
@@ -51,7 +51,7 @@ export const Feedback: FC = () => {
   const [params] = useSearchParams();
   const pageName = usePageName();
   const [draft, dispatch] = useContext(drafting);
-  if (!has(feedbackToken)) {
+  if (empty(feedbackToken)) {
     return null;
   }
 
@@ -90,9 +90,9 @@ export const Feedback: FC = () => {
   };
 
   return <>
-    <p className={classNames('feedback-item', 'field', !hydrated && 'gap-filled')}>
+    <p className={classNames('feedback-item', 'field', not(hydrated) && 'gap-filled')}>
       <ModalOpener className="feedback-open path rail-aside bold attentive field borderless reachable"
-        inert={!hydrated} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
+        inert={not(hydrated)} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
     {hydrated && <Modal id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>

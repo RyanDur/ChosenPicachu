@@ -1,7 +1,7 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {has, not} from '@ryandur/sand';
+import {empty, has, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
@@ -128,7 +128,7 @@ const ruleWith = (name, description, check) => ({
       'Program:exit': program => {
         visitors['Program:exit']?.(program);
         if (listed(exceptions, name, file)) {
-          if (found.length === 0) context.report({node: program, messageId: 'mended', data: {file}});
+          if (empty(found)) context.report({node: program, messageId: 'mended', data: {file}});
           return;
         }
         found.forEach(({node, why}) => context.report({node, messageId: 'broken', data: {why}}));

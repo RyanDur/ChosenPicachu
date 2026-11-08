@@ -1,5 +1,5 @@
 import {ChangeEvent, FC} from 'react';
-import {has, Maybe, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe, not} from '@ryandur/sand';
 import {profile, User} from '../profile';
 import {Membership, memberships} from '../memberships';
 import {usersActions} from '../usersActions';
@@ -25,7 +25,7 @@ const Friends: FC<{user: User}> = ({user}) => {
     .flatMap(friendId => users.filter(({id}) => id === friendId));
   const potentialFriends = users
     .filter(candidate => candidate.id !== user.id)
-    .filter(candidate => !user.friends.includes(candidate.id));
+    .filter(candidate => not(user.friends.includes(candidate.id)));
 
   const add = (event: ChangeEvent<HTMLSelectElement>) =>
     dispatch(usersActions.friendAdded(user.id, event.currentTarget.value));

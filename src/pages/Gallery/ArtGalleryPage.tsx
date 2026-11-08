@@ -1,7 +1,7 @@
 import {FC, useEffect, useReducer} from 'react';
 import {useLocation} from 'react-router';
 import {useHydrated} from '@components';
-import {has, maybe, notEmpty} from '@ryandur/sand';
+import {has, maybe, not, notEmpty} from '@ryandur/sand';
 import {Tabs} from '@navigation/Tabs';
 import {Loading} from '@components/Loading';
 import {ArtGallery} from '@pages/Gallery/Art';
@@ -25,7 +25,7 @@ type Shown =
 const shownFor = (doors: Doors, tab?: Source): Shown => {
   const open = openIn(doors);
   if (open.some(({param}) => param === tab)) return {shown: 'wall'};
-  if (!settledIn(doors)) return {shown: 'loading'};
+  if (not(settledIn(doors))) return {shown: 'loading'};
   return maybe(open[0])
     .map(({param}): Shown => ({shown: 'movingToAnOpenMuseum', museum: param}))
     .orElse<Shown>({shown: 'noMuseumOpen'});

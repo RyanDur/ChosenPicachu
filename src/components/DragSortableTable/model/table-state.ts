@@ -216,12 +216,12 @@ const seatOffset = (
   standing: readonly string[]
 ): Drift | undefined => {
   const {drag} = state;
-  if (!has(drag)) {
-    return undefined;
+  if (has(drag)) {
+    return drag.axis === 'column'
+      ? {x: drag.box.x - survey.columnLeft(order, drag.survey)(drag.held), y: 0}
+      : {x: 0, y: drag.box.y - survey.rowTop(standing, drag.survey)(drag.held)};
   }
-  return drag.axis === 'column'
-    ? {x: drag.box.x - survey.columnLeft(order, drag.survey)(drag.held), y: 0}
-    : {x: 0, y: drag.box.y - survey.rowTop(standing, drag.survey)(drag.held)};
+  return undefined;
 };
 
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>

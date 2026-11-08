@@ -1,5 +1,6 @@
 import {expect, test, type Browser, type Page} from '@playwright/test';
 import {differences, heldStill, lookOf, type Look} from './look';
+import {not} from '@ryandur/sand';
 import {views, type View} from './views';
 
 const stages = {before: 'http://localhost:4530/ChosenPicachu/', after: 'http://localhost:4531/ChosenPicachu/'};
@@ -10,7 +11,7 @@ const steadyLookOf = async (page: Page): Promise<Look> => {
   for (let read = 0; read < 5; read++) {
     await page.waitForTimeout(250);
     const now = await lookOf(page);
-    if (differences(last, now).length === 0) return now;
+    if (not(differences(last, now).length)) return now;
     last = now;
   }
   return last;

@@ -2,7 +2,7 @@ import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import {classNames} from '@components';
-import {has, Maybe, nothing, some} from '@ryandur/sand';
+import {maybe, Maybe, nothing, some} from '@ryandur/sand';
 import {art, SearchOptions} from '@pages/Gallery/museums';
 import {useGallery} from '@pages/Gallery/Context';
 import './Search.css';
@@ -16,6 +16,17 @@ type Props = {
 
 const suggestionPause = 300;
 
+const afterAPause = (ask: () => {cancel: () => void}): () => void => {
+  let asked: Maybe<{cancel: () => void}> = nothing();
+  const pause = setTimeout(() => {
+    asked = some(ask());
+  }, suggestionPause);
+  return () => {
+    clearTimeout(pause);
+    asked.map(({cancel}) => cancel());
+  };
+};
+
 export const Search: FC<Props> = ({id, className}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
@@ -23,18 +34,13 @@ export const Search: FC<Props> = ({id, className}) => {
   const {gallery} = useContext(GalleryLinks);
   const {tab, search, removeSearchParams, searchFromAddress} = useGallery();
 
+  const noSuggestions = () => updateSearchOptions([]);
+
   useEffect(() => {
-    if (searchString === '' || !has(tab)) return () => undefined;
-    let asked: Maybe<{cancel: () => void}> = nothing();
-    const pause = setTimeout(() => {
-      asked = some(art.search({search: searchString.toLowerCase(), source: tab})
-        .onSuccess(updateSearchOptions)
-        .onFailure(() => updateSearchOptions([])));
-    }, suggestionPause);
-    return () => {
-      clearTimeout(pause);
-      asked.map(({cancel}) => cancel());
-    };
+    if (searchString === '') return () => undefined;
+    return maybe(tab).map(source => afterAPause(() => art.search({search: searchString.toLowerCase(), source})
+      .onSuccess(updateSearchOptions)
+      .onFailure(noSuggestions))).orElse(() => undefined);
   }, [searchString, tab]);
 
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {

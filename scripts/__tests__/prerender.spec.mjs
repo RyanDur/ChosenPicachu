@@ -3,11 +3,12 @@ import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {allChartKinds} from '@pages/Demos/Charts/kinds';
 import {practiceAddress} from '@pages/Practice';
 import {concerns} from '@pages/Record/concerns';
+import {not} from '@ryandur/sand';
 import {prerender} from '../../src/entry.server';
 
 describe('the pages drawn into the build', () => {
   test.each([
-    ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && !path.includes(':')),
+    ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
     ...Object.values(DemoTopics).map(demoAddress),
     ...allChartKinds.map(kind => `${Paths.demos}charts/${kind}/`),
     ...concerns.inOrder.map(practiceAddress.of)

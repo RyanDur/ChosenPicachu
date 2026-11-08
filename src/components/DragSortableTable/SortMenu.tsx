@@ -3,6 +3,7 @@ import {FC} from 'react';
 import {tableActions, sorting} from './model';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
+import {not} from '@ryandur/sand';
 import {useHydrated} from '../useHydrated';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
@@ -11,7 +12,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
   const hydrated = useHydrated();
 
   return <>
-    <button type="button" tabIndex={0} disabled={!hydrated} className="menu-toggle rounded-corners borderless unfilled muted-ink attentive"
+    <button type="button" tabIndex={0} disabled={not(hydrated)} className="menu-toggle rounded-corners borderless unfilled muted-ink attentive"
       popoverTarget={`sort-${column}`}
       onPointerDown={event => event.stopPropagation()}
       aria-label={`sort ${column}`}/>

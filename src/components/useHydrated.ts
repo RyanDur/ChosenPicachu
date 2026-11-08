@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {startTransition, useEffect, useState} from 'react';
 
 let hydrated = false;
@@ -7,7 +8,7 @@ let hydrated = false;
 export const useHydrated = (): boolean => {
   const [taken, take] = useState(hydrated);
   useEffect(() => {
-    if (!taken) startTransition(() => {
+    if (not(taken)) startTransition(() => {
       hydrated = true;
       take(true);
     });

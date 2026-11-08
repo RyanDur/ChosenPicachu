@@ -57,7 +57,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(bannersSource, 'return banners.length > 0', '</section>;')
+            ...carve.span(bannersSource, 'return has(banners)', '</section>;')
           ]}/>
         </Codes>
       </Step>
@@ -74,7 +74,7 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(providerSource, 'export const BannerProvider'), gap,
-            ...carve.span(bannersSource, 'return banners.length > 0', "className={classNames('banners'")
+            ...carve.span(bannersSource, 'return has(banners)', "className={classNames('banners'")
           ]}/>
         </Codes>
       </Step>

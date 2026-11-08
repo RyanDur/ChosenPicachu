@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 type Roll = () => number;
 
 const hashOf = (phrase: string): number => {
@@ -103,7 +104,7 @@ const drawsWith = (rolled: Roll) => {
   const decked = <T>(pool: readonly T[]): () => T => {
     let standing: T[] = [];
     return () => {
-      if (standing.length === 0) {
+      if (not(standing.length)) {
         standing = shuffled(pool);
       }
       const [top, ...rest] = standing;

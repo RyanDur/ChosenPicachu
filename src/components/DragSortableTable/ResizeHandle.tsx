@@ -1,5 +1,5 @@
 import {FC, FocusEvent, PointerEvent} from 'react';
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {useHydrated} from '../useHydrated';
 import './Table.css';
 import {useTableDispatch} from './useTableDispatch';
@@ -23,7 +23,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
 
   return <button type="button"
     tabIndex={0}
-    disabled={!hydrated}
+    disabled={not(hydrated)}
     className="resize-handle borderless unfilled held-bar-after focus-ringed"
     aria-label={shares.resizeLabel(column, namedShare)}
     onFocus={(event: FocusEvent<HTMLElement>) =>

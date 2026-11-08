@@ -2,7 +2,7 @@ import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Address, NewUser, User} from '../../profile';
 import {format} from 'date-fns';
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 
 const swiftKeys = userEvent.setup({delay: null});
 
@@ -75,7 +75,7 @@ export const userForm = {
       if (revisited) break;
       await userEvent.tab();
     }
-    return {visited, escaped: !form().contains(document.activeElement)};
+    return {visited, escaped: not(form().contains(document.activeElement))};
   },
 
   editLink: (): HTMLElement => within(form()).getByRole('link', {name: 'Edit'}),

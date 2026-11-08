@@ -37,7 +37,7 @@ export const scoreTable = (runs, floors) => {
 
 export const failuresList = results => {
   const failed = results.filter(({passed}) => not(passed));
-  if (failed.length === 0) {
+  if (empty(failed)) {
     return '';
   }
   return ['', '### what fell short', '', ...failed.map(({auditId, auditTitle, expected, actual, operator}) =>

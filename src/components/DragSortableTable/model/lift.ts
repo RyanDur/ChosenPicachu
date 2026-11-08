@@ -34,17 +34,16 @@ const column = (
     return;
   }
   const th = event.currentTarget;
-  if (!(th instanceof Element)) {
-    return;
+  if (th instanceof Element) {
+    th.setPointerCapture(event.pointerId);
+    const box = th.getBoundingClientRect();
+    maybe(th.closest('table')).map(table =>
+      grabbed({
+        survey: survey.of(table, columns, standing()),
+        box: {x: box.x, y: box.y, width: box.width},
+        at: {x: event.clientX, y: event.clientY}
+      }));
   }
-  th.setPointerCapture(event.pointerId);
-  const box = th.getBoundingClientRect();
-  maybe(th.closest('table')).map(table =>
-    grabbed({
-      survey: survey.of(table, columns, standing()),
-      box: {x: box.x, y: box.y, width: box.width},
-      at: {x: event.clientX, y: event.clientY}
-    }));
 };
 
 const row = (
@@ -53,20 +52,19 @@ const row = (
   grabbed: (grab: Grab) => void
 ) => (event: GrabEvent): void => {
   const grip = event.currentTarget;
-  if (!(grip instanceof Element)) {
-    return;
+  if (grip instanceof Element) {
+    grip.setPointerCapture(event.pointerId);
+    const box = maybe(grip.closest('tr'))
+      .map(row => row.getBoundingClientRect())
+      .map(({x, y, width}) => ({x, y, width}))
+      .orElse(grounded);
+    maybe(grip.closest('table')).map(table =>
+      grabbed({
+        survey: survey.of(table, order(), standing()),
+        box,
+        at: {x: event.clientX, y: event.clientY}
+      }));
   }
-  grip.setPointerCapture(event.pointerId);
-  const box = maybe(grip.closest('tr'))
-    .map(row => row.getBoundingClientRect())
-    .map(({x, y, width}) => ({x, y, width}))
-    .orElse(grounded);
-  maybe(grip.closest('table')).map(table =>
-    grabbed({
-      survey: survey.of(table, order(), standing()),
-      box,
-      at: {x: event.clientX, y: event.clientY}
-    }));
 };
 
 export const lifting = {

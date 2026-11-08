@@ -39,7 +39,7 @@ export const harvard = {
       pieces: records.map(harvardArtToArt)
     })),
 
-  open: () => searched({page: 1}).map(({records}): Door => records.length > 0 ? 'open' : 'closed'),
+  open: () => searched({page: 1}).map(({records}): Door => has(records) ? 'open' : 'closed'),
 
   art: (id: string) => http
     .get(`${environment.harvardDomain}/${id}${queryString.from(baseQueryString)}`, {cache: 'force-cache'})

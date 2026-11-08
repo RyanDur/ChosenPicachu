@@ -1,5 +1,6 @@
 import {ReactNode} from 'react';
 import {useHydrated} from '../useHydrated';
+import {not} from '@ryandur/sand';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -28,7 +29,7 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
           name={name}
           value={value}
           checked={chosen === value}
-          disabled={!hydrated}
+          disabled={not(hydrated)}
           onChange={() => onChosen(value)}/>
       </label>)}
   </fieldset>;

@@ -3,6 +3,7 @@ import {classNames} from '@components';
 import {useBanners} from './useBanners';
 import {useBannerDispatch} from './useBannerDispatch';
 import {Banner, bannerChange} from './bannerChange';
+import {has} from '@ryandur/sand';
 import './Banners.css';
 
 export const Banners: FC = () => {
@@ -17,7 +18,7 @@ export const Banners: FC = () => {
     }
   };
 
-  return banners.length > 0 && <section id="banners" role="alert"
+  return has(banners) && <section id="banners" role="alert"
     className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
     <ul className="troubles">
       {banners.map(banner =>

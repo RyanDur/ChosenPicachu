@@ -5,6 +5,7 @@ import {Paths} from '@navigation';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {homePage} from '@pages/Home/__test_support/home';
+import {not} from '@ryandur/sand';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
 describe('the 1989 moment', () => {
@@ -149,7 +150,7 @@ describe('the record', () => {
     const shelved = recordPage.shelvedSources();
 
     expect(recordPage.sourcesLinked()).not.toEqual([]);
-    expect(recordPage.sourcesLinked().filter(source => !shelved.includes(source))).toEqual([]);
+    expect(recordPage.sourcesLinked().filter(source => not(shelved.includes(source)))).toEqual([]);
   });
 
   test('the timeline walks the years in order, one entry each, a year of two moments holding both under its title', () => {
@@ -1232,7 +1233,7 @@ describe('the research shelf and the Practice page', () => {
     await recordPage.arrived();
 
     expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+    expect(linked.filter(source => not(recordPage.shelvedSources().includes(source)))).toEqual([]);
   });
 });
 
@@ -1247,7 +1248,7 @@ describe('the research shelf and the Practice tabs', () => {
     await recordPage.arrived();
 
     expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+    expect(linked.filter(source => not(recordPage.shelvedSources().includes(source)))).toEqual([]);
   });
 
   test('should shelve every source the Presentation tab links to', async () => {
@@ -1260,7 +1261,7 @@ describe('the research shelf and the Practice tabs', () => {
     await recordPage.arrived();
 
     expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+    expect(linked.filter(source => not(recordPage.shelvedSources().includes(source)))).toEqual([]);
   });
 
   test('should shelve every source the Behavior tab links to', async () => {
@@ -1273,7 +1274,7 @@ describe('the research shelf and the Practice tabs', () => {
     await recordPage.arrived();
 
     expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+    expect(linked.filter(source => not(recordPage.shelvedSources().includes(source)))).toEqual([]);
   });
 });
 
@@ -1288,7 +1289,7 @@ describe('the research shelf and the home page', () => {
     await recordPage.arrived();
 
     expect(linked).not.toEqual([]);
-    expect(linked.filter(source => !recordPage.shelvedSources().includes(source))).toEqual([]);
+    expect(linked.filter(source => not(recordPage.shelvedSources().includes(source)))).toEqual([]);
   });
 });
 

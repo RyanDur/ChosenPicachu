@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {RoomModule, siteOpenedBy} from '../routes';
 
 const modules = import.meta.glob<RoomModule>('../pages/**/{route,tab}.tsx', {eager: true});
@@ -10,7 +11,7 @@ describe('the rooms the site opens', () => {
       return {};
     });
 
-    const roomless = named.filter(file => !(`../${file}` in modules) || typeof modules[`../${file}`].Room !== 'function');
+    const roomless = named.filter(file => not(`../${file}` in modules) || typeof modules[`../${file}`].Room !== 'function');
 
     expect(roomless).toEqual([]);
   });
