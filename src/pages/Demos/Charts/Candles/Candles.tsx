@@ -1,12 +1,12 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
-import {Trade} from '../coinbase';
-import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
-import {candlesOf, captionFor} from '../period-history';
+import {candles, Period, periodHistory, periods, Trade} from '../../Market';
+import {candleShapes, volumeShapes} from './shapes';
+import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
-import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
+import {tickEveryMs, timePattern} from '../period';
 import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
@@ -31,13 +31,18 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
   const generated = useId();
   const id = given ?? `candles${generated}`;
   const history = usePeriodCandles(period);
-  const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
-  const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
-  const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
+  const bucketMilliseconds = periods.bucketMilliseconds[period];
+  const shownCandles = candles.mergeLive(
+    periodHistory.candlesOf(history),
+    candles.bucketTrades(trades, bucketMilliseconds),
+    periods.candleCap[period]
+  );
+  const bodies = candleShapes(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
+  const bars = volumeShapes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const range = rangeOf(
-    candles.map(candle => candle.openedAt),
-    Math.max(...candles.map(candle => candle.high)),
-    Math.min(...candles.map(candle => candle.low))
+    shownCandles.map(candle => candle.openedAt),
+    Math.max(...shownCandles.map(candle => candle.high)),
+    Math.min(...shownCandles.map(candle => candle.low))
   );
   return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
@@ -63,9 +68,9 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       <Axes range={range}
         pattern={timePattern[period]}
         tickEvery={tickEveryMs[period]}
-        headroomMs={2 * bucketMs[period]}>
+        headroomMs={2 * bucketMilliseconds}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-          {candles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
+          {shownCandles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
             <rect className="wall side-wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
               width={bodies[at].width} height={bodies[at].bodyHeight}/>
             <line className="wick drawn" x1={bodies[at].center} y1={bodies[at].wickTop}
@@ -75,7 +80,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
           </g>)}
         </svg>
         <svg className="volumes volume-side" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
-          {candles.map((candle, at) => <g key={candle.openedAt}>
+          {shownCandles.map((candle, at) => <g key={candle.openedAt}>
             <rect className="volume-wall side-wall" x={bars[at].x + DEPTH_X} y={bars[at].top + DEPTH_Y}
               width={bars[at].width} height={bars[at].height}/>
             <rect className="volume side-face" x={bars[at].x} y={bars[at].top}
@@ -84,7 +89,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         </svg>
       </Axes>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
+      <figcaption className="chart-caption caption">{captionFor(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
       The same measurement, grouped: each candle summarizes one span of time. The body runs from the first to the

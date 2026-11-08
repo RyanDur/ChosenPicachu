@@ -33,13 +33,13 @@ const foldSays: Record<World, ReactNode> = {
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(foldSource, 'export const windows'), gap,
+      ...carve.unit(foldSource, 'const windows = ['), gap,
       ...carve.unit(foldSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(foldSource, 'export const windows'), gap,
+      ...carve.unit(foldSource, 'const windows = ['), gap,
       ...carve.unit(buildSrc, 'const reconciled = '), gap,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
@@ -73,8 +73,8 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             already delivered, and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(hydrateSource, 'export const recentTrades'), gap,
-              ...carve.unit(hydrateSource, 'export const hydrated')
+              ...carve.unit(hydrateSource, 'const load'), gap,
+              ...carve.unit(hydrateSource, 'const hydrated')
             ]}/>
           </Codes>
         </Reveal>

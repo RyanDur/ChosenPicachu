@@ -1,4 +1,4 @@
-import {Trade, takerBought} from '../Charts/coinbase';
+import {Trade, coinbase} from './coinbase';
 import {maybe} from '@ryandur/sand';
 
 export type Traded = {
@@ -19,7 +19,7 @@ export type WindowAggregate = {
 
 const MINUTE = 60000;
 
-export const windows = [
+const windows = [
   {label: 'this minute', span: MINUTE},
   {label: 'last 5 minutes', span: 5 * MINUTE},
   {label: 'last 15 minutes', span: 15 * MINUTE},
@@ -36,7 +36,7 @@ const aggregate = (label: string, span: number, trades: readonly Trade[]): Windo
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);
   const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
-  const buys = trades.filter(takerBought).length;
+  const buys = trades.filter(coinbase.takerBought).length;
   return {
     window: label,
     span,
@@ -52,7 +52,14 @@ const aggregate = (label: string, span: number, trades: readonly Trade[]): Windo
   };
 };
 
-export const windowedAggregates = (trades: readonly Trade[]): readonly WindowAggregate[] =>
+const aggregatesOf = (trades: readonly Trade[]): readonly WindowAggregate[] =>
   windows.map(({label, span}) => aggregate(label, span, maybe(trades[trades.length - 1])
     .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < span))
     .orElse([])));
+
+type Fold = {
+  windows: readonly {label: string; span: number}[];
+  aggregatesOf: (trades: readonly Trade[]) => readonly WindowAggregate[];
+};
+
+export const fold: Fold = {windows, aggregatesOf};

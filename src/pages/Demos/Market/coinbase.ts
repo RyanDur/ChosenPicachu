@@ -21,9 +21,9 @@ export type Trade = {
 };
 
 // Coinbase marks a match with the side of the order that was waiting, so a buyer took the trade when that order sold
-export const takerBought = (trade: Trade): boolean => trade.side === 'sell';
+const takerBought = (trade: Trade): boolean => trade.side === 'sell';
 
-export const subscribeTo = (product: string): string => JSON.stringify({
+const subscribeTo = (product: string): string => JSON.stringify({
   type: 'subscribe',
   channels: [{name: 'matches', product_ids: [product]}]
 });
@@ -37,7 +37,15 @@ const toTrade = (frame: schema.Output<typeof MatchDecoder>): Maybe<Trade> => {
     : maybe({id: frame.trade_id, price, tradedAt, size, side: frame.side});
 };
 
-export const decodeTrade = (raw: unknown): Maybe<Trade> =>
+const decodeTrade = (raw: unknown): Maybe<Trade> =>
   attempt((): unknown => JSON.parse(String(raw)))
     .mBind(json => maybe(MatchDecoder.decode(json)))
     .mBind(toTrade);
+
+type Coinbase = {
+  takerBought: (trade: Trade) => boolean;
+  subscribeTo: (product: string) => string;
+  decodeTrade: (raw: unknown) => Maybe<Trade>;
+};
+
+export const coinbase: Coinbase = {takerBought, subscribeTo, decodeTrade};

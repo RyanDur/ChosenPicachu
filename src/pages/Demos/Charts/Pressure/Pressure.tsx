@@ -1,13 +1,11 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {Trade} from '../coinbase';
-import {bitcoin} from '../money';
+import {Trade, liveTrades, money} from '../../Market';
 import {Axes, rangeOf} from '../Axes';
 import {bucketPressure, heaviestSide, pressureShapes} from './shapes';
 import '../chart-card.css';
 import './Pressure.css';
-import {LATEST_TRADES_CAP} from '../live-trades';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
@@ -33,7 +31,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       {actions}
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={bitcoin}
+      <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={money.bitcoin}
         pattern="HH:mm"
         tickEvery={TICK_EVERY_MS}
         headroomMs={2 * BUCKET_MS}>
@@ -53,7 +51,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       </Axes>
       <figcaption className="chart-caption caption">
         {notEmpty(pressures)
-          ? `${pressures.length} ${pressures.length === 1 ? 'minute' : 'minutes'} · up to the last ${LATEST_TRADES_CAP.toLocaleString('en-US')} trades`
+          ? `${pressures.length} ${pressures.length === 1 ? 'minute' : 'minutes'} · up to the last ${liveTrades.cap.toLocaleString('en-US')} trades`
           : 'waiting for the first trade'}
       </figcaption>
     </figure>

@@ -1,8 +1,8 @@
 import {Maybe, has, maybe, streaming} from '@ryandur/sand';
 import {HTTPError} from '@transport';
-import {decodeTrade, subscribeTo} from '../Charts/coinbase';
-import {periodCandles, periodQuery} from '../Charts/coinbase/history';
-import {Period} from '../Charts/period';
+import {coinbase} from './coinbase';
+import {coinbaseHistory} from './coinbase-history';
+import {Period} from './Period';
 import {recentTrades} from './recent-trades';
 import {MarketAction, marketActions} from './marketActions';
 import {MarketMiddleware} from './marketStore';
@@ -34,7 +34,7 @@ type Dispatch = (action: MarketAction) => void;
 type Trouble = (trouble: FeedTrouble) => void;
 
 const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
-  const fetching = recentTrades(base, product)
+  const fetching = recentTrades.load(base, product)
     .onSuccess(trades => dispatch(marketActions.historyArrived(trades)))
     .onFailure(cause => onTrouble({type: 'historyRefused', cause}));
   return () => fetching.cancel();
@@ -47,7 +47,7 @@ const candlesFor = (
   onTrouble: Trouble
 ): Closer => history.either(
   base => {
-    const fetching = periodCandles(base, product, periodQuery(period))
+    const fetching = coinbaseHistory.periodCandles(base, product, coinbaseHistory.periodQuery(period))
       .onSuccess(candles => dispatch(marketActions.candlesArrived(period, candles)))
       .onFailure(cause => {
         dispatch(marketActions.candlesRefused(period));
@@ -63,10 +63,10 @@ const candlesFor = (
 const streamOf = (address: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
   const stream = streaming(address, (): FeedTrouble => ({type: 'handshakeRefused'}))
     .onOpen(socket => {
-      socket.send(subscribeTo(product));
+      socket.send(coinbase.subscribeTo(product));
       dispatch(marketActions.feedOpened());
     })
-    .onMessage(event => decodeTrade(event.data).map(trade => dispatch(marketActions.tradeArrived(trade))))
+    .onMessage(event => coinbase.decodeTrade(event.data).map(trade => dispatch(marketActions.tradeArrived(trade))))
     .onClose(() => {
       dispatch(marketActions.feedFailed());
       onTrouble({type: 'hungUp'});

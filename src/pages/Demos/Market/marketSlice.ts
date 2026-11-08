@@ -1,11 +1,11 @@
 import {slices} from '@components/store';
 import {Arrangement, arrangements} from '@components/DragSortableTable/model';
-import {Trade} from '../Charts/coinbase';
-import {LATEST_TRADES_CAP, LiveTradesState, opening} from '../Charts/live-trades';
-import {Period} from '../Charts/period';
-import {PeriodHistory, loading, unavailable} from '../Charts/period-history';
-import {measures} from './cells';
-import {windows} from './fold';
+import {Trade} from './coinbase';
+import {LiveTradesState, liveTrades} from './live-trades';
+import {Period} from './Period';
+import {PeriodHistory, periodHistory} from './period-history';
+import {cells} from './cells';
+import {fold} from './fold';
 import {MarketAction} from './marketActions';
 
 export type TradesState = LiveTradesState & {
@@ -20,13 +20,13 @@ export type MarketState = {
   readonly arrangement: Arrangement;
 };
 
-const noTrades: TradesState = {...opening, history: []};
+const noTrades: TradesState = {...liveTrades.opening, history: []};
 
 const tradesReducer = (trades: TradesState, action: MarketAction): TradesState => {
   switch (action.type) {
     case 'feedOpened': return {...trades, status: 'streaming'};
     case 'feedFailed': return {...trades, status: 'failed'};
-    case 'tradeArrived': return {...trades, trades: [...trades.trades, action.trade].slice(-LATEST_TRADES_CAP)};
+    case 'tradeArrived': return {...trades, trades: [...trades.trades, action.trade].slice(-liveTrades.cap)};
     case 'historyArrived': return {...trades, history: action.trades};
     default: return trades;
   }
@@ -34,14 +34,16 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
 
 const candlesReducer = (candles: CandlesState, action: MarketAction): CandlesState => {
   switch (action.type) {
-    case 'candlesAsked': return candles[action.period]?.state === 'arrived' ? candles : {...candles, [action.period]: loading};
+    case 'candlesAsked': return candles[action.period]?.state === 'arrived'
+      ? candles
+      : {...candles, [action.period]: periodHistory.loading};
     case 'candlesArrived': return {...candles, [action.period]: {state: 'arrived', candles: action.candles}};
-    case 'candlesRefused': return {...candles, [action.period]: unavailable};
+    case 'candlesRefused': return {...candles, [action.period]: periodHistory.unavailable};
     default: return candles;
   }
 };
 
-const arranged = arrangements.of(measures.map(({name}) => name), windows.map(({label}) => label));
+const arranged = arrangements.of(cells.measures.map(({name}) => name), fold.windows.map(({label}) => label));
 
 export const marketSlice = slices.combined<MarketState, MarketAction>({
   trades: {initial: noTrades, reduce: tradesReducer},

@@ -1,5 +1,5 @@
 import {Arrangement, TableColumn, arrangements} from '@components/DragSortableTable/model';
-import {Measured, Measures, seated} from './cells';
+import {Measured, Measures, cells} from './cells';
 
 type ArrangedView = {
   columnsOf: (arrangement: Arrangement) => readonly TableColumn<Measured>[];
@@ -13,7 +13,7 @@ export const arrangedView: ArrangedView = {
     sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   })),
   rowsOf: (arrangement, aggregates) => {
-    const shown = seated(aggregates);
+    const shown = cells.seated(aggregates);
     const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
     const byWindow = new Map(aggregates.map(row => [row.window.display, row]));
     return arrangements.standingOf(arrangement, valueOf).flatMap(key => {

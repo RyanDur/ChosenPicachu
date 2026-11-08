@@ -1,6 +1,6 @@
 import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {allChartKinds, ChartKind, isChartKind} from './kinds';
-import {Period} from './period';
+import {Period} from '../Market';
 
 export type Seat = {readonly kind: ChartKind; readonly period: Period};
 

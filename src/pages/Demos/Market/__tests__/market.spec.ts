@@ -1,5 +1,5 @@
-import {Trade} from '../../Charts/coinbase';
-import {Period} from '../../Charts/period';
+import {Trade} from '../coinbase';
+import {Period} from '../Period';
 import {marketActions, marketSelectors, marketStore} from '..';
 
 const trade = (id: number, price: number): Trade =>

@@ -1,5 +1,5 @@
 import {absent, added, dealt, periodChosen, seated, without} from '@pages/Demos/Charts/desk';
-import {Period} from '@pages/Demos/Charts/period';
+import {Period} from '@pages/Demos/Market';
 
 describe('the desk', () => {
   test('the desk deals one of each kind', () => {

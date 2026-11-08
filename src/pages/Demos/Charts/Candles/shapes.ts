@@ -1,50 +1,5 @@
-import {has} from '@ryandur/sand';
-import {Trade} from '../coinbase';
+import {Candle} from '../../Market';
 import {windowSlots} from '../slots';
-
-export type Candle = {
-  openedAt: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-};
-
-const fold = (candle: Candle, trade: Trade): Candle => ({
-  ...candle,
-  high: Math.max(candle.high, trade.price),
-  low: Math.min(candle.low, trade.price),
-  close: trade.price,
-  volume: candle.volume + trade.size
-});
-
-const openedBy = (trade: Trade, bucketMs: number): Candle => ({
-  openedAt: Math.floor(trade.tradedAt / bucketMs) * bucketMs,
-  open: trade.price,
-  high: trade.price,
-  low: trade.price,
-  close: trade.price,
-  volume: trade.size
-});
-
-export const mergeLive = (
-  seed: readonly Candle[],
-  streamed: readonly Candle[],
-  cap: number
-): readonly Candle[] => {
-  const cut = streamed[0]?.openedAt ?? Number.POSITIVE_INFINITY;
-  return [...seed.filter(candle => candle.openedAt < cut), ...streamed].slice(-cap);
-};
-
-export const bucketTrades = (trades: readonly Trade[], bucketMs: number): readonly Candle[] =>
-  trades.reduce<readonly Candle[]>((candles, trade) => {
-    const current = candles[candles.length - 1];
-    const bucket = Math.floor(trade.tradedAt / bucketMs) * bucketMs;
-    return has(current) && current.openedAt === bucket
-      ? [...candles.slice(0, -1), fold(current, trade)]
-      : [...candles, openedBy(trade, bucketMs)];
-  }, []);
 
 export type CandleShape = {
   x: number;

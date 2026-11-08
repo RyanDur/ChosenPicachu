@@ -3,8 +3,8 @@ import {http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@__test_support/server';
 import {tradeFrame} from '@pages/Demos/__test_support/feed';
-import {Period} from '../../Charts/period';
-import {candlesOf} from '../../Charts/period-history';
+import {Period} from '../Period';
+import {periodHistory} from '../period-history';
 import {FeedTrouble} from '../exchange';
 import {exchange, marketActions, marketSelectors, marketStore} from '..';
 
@@ -154,7 +154,7 @@ describe('the exchange as middleware', () => {
     answers[0].open();
     await vi.waitFor(() => expect(answered).toEqual([2, 1]));
 
-    const shown = candlesOf(marketSelectors.periodHistoryOf(Period.hour)(store.state));
+    const shown = periodHistory.candlesOf(marketSelectors.periodHistoryOf(Period.hour)(store.state));
     expect(shown.map(({openedAt}) => openedAt)).toEqual([1700000002000]);
   });
 });

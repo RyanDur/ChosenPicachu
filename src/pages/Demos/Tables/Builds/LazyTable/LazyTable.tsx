@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Body, BodyEvents, Cell, Column, DragSortable, HeaderEvents, Headers, Motion, Origin, ResizeHandle, Row, SortMenu, useDragSortable} from '@components/DragSortableTable';
-import {Measured, Measures, seated} from '../../../Market';
+import {Measured, Measures, cells} from '../../../Market';
 import {TableColumn, tableReports, tableSelectors} from '@components/DragSortableTable/model';
 import {DraggableColumn} from './DraggableColumn';
 import {RowHeader} from './RowHeader';
@@ -14,7 +14,7 @@ type Props = HeaderEvents & BodyEvents & {
 };
 
 export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, onColumnMoved, onSorted, onRowMoved}) => {
-  const sortable = useDragSortable(columns, seated(rows), {origin, motion});
+  const sortable = useDragSortable(columns, cells.seated(rows), {origin, motion});
   return <DragSortable value={sortable}>
     <table id="live-aggregations" className={sortable.className}>
       <caption className="off-screen">{caption}</caption>

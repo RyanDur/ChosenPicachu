@@ -1,9 +1,7 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
-import {http} from '@transport';
-import {decoded} from '@transport';
-import {HTTPError} from '@transport';
-import {Trade} from '../Charts/coinbase';
+import {decoded, http, HTTPError} from '@transport';
+import {Trade} from './coinbase';
 
 const RecentTradesDecoder = schema.array(schema.object({
   required: {
@@ -26,13 +24,20 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
     !Number.isNaN(trade.price) && !Number.isNaN(trade.tradedAt) && !Number.isNaN(trade.size)
   ).reverse();
 
-export const recentTrades = (base: string, product: string): Result.Async<readonly Trade[], HTTPError> =>
+const load = (base: string, product: string): Result.Async<readonly Trade[], HTTPError> =>
   http.get(`${base}/products/${product}/trades?limit=1000`)
     .mBind(decoded.by(RecentTradesDecoder))
     .map(toTrades);
 
-export const hydrated = (history: readonly Trade[], streamed: readonly Trade[]): readonly Trade[] => {
+const hydrated = (history: readonly Trade[], streamed: readonly Trade[]): readonly Trade[] => {
   const streaming = new Set(streamed.map(trade => trade.id));
   return [...history.filter(trade => !streaming.has(trade.id)), ...streamed]
     .sort((left, right) => left.tradedAt - right.tradedAt);
 };
+
+type RecentTrades = {
+  load: (base: string, product: string) => Result.Async<readonly Trade[], HTTPError>;
+  hydrated: (history: readonly Trade[], streamed: readonly Trade[]) => readonly Trade[];
+};
+
+export const recentTrades: RecentTrades = {load, hydrated};

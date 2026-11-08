@@ -1,16 +1,16 @@
 import {TableColumn} from '@components/DragSortableTable/model';
-import {Trade} from '../Charts/coinbase';
-import {LiveTradesState} from '../Charts/live-trades';
-import {Period} from '../Charts/period';
-import {PeriodHistory, loading} from '../Charts/period-history';
+import {Trade} from './coinbase';
+import {LiveTradesState} from './live-trades';
+import {Period} from './Period';
+import {PeriodHistory, periodHistory} from './period-history';
 import {Measured, Measures, cells} from './cells';
-import {windowedAggregates} from './fold';
-import {hydrated} from './recent-trades';
+import {fold} from './fold';
+import {recentTrades} from './recent-trades';
 import {arrangedView} from './arrangedView';
 import {MarketState, TradesState} from './marketSlice';
 
 const folded = ({history, trades}: TradesState): Measures[] =>
-  windowedAggregates(hydrated(history, trades)).map(cells);
+  fold.aggregatesOf(recentTrades.hydrated(history, trades)).map(cells.from);
 
 type MarketSelectors = {
   columns: (state: MarketState) => readonly TableColumn<Measured>[];
@@ -25,5 +25,5 @@ export const marketSelectors: MarketSelectors = {
   rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, folded(trades)),
   liveTrades: ({trades}) => trades.trades,
   feedStatus: ({trades}) => trades.status,
-  periodHistoryOf: period => ({candles}) => candles[period] ?? loading
+  periodHistoryOf: period => ({candles}) => candles[period] ?? periodHistory.loading
 };

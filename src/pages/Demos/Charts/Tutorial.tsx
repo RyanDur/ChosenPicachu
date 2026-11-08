@@ -5,8 +5,9 @@ import {ChartKind} from './kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import {AThirdFromThePointer} from './Diagrams';
 import shapesSource from './Candles/shapes.ts?sample';
+import candleSeriesSource from '@pages/Demos/Market/candles.ts?sample';
 import sparklineSource from './sparkline.ts?sample';
-import periodSource from './period.ts?sample';
+import periodSource from '@pages/Demos/Market/periods.ts?sample';
 import candlesHook from './usePeriodCandles.ts?sample';
 import priceSource from './PriceChart/PriceChart.tsx?sample';
 import candlesSource from './Candles/Candles.tsx?sample';
@@ -18,12 +19,12 @@ import pieSource from './Pie/shapes.ts?sample';
 import pieComponent from './Pie/Pie.tsx?sample';
 import pieCss from './Pie/Pie.css?sample';
 import drawingCss from '../../../styles/drawing.css?sample';
-import moneySource from './money.ts?sample';
+import moneySource from '@pages/Demos/Market/money.ts?sample';
 import slotsSource from './slots.ts?sample';
-import coinbaseSource from './coinbase/index.ts?sample';
-import historySource from './coinbase/history.ts?sample';
+import coinbaseSource from '@pages/Demos/Market/coinbase.ts?sample';
+import historySource from '@pages/Demos/Market/coinbase-history.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
-import liveTradesSource from './live-trades.ts?sample';
+import liveTradesSource from '@pages/Demos/Market/live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
 import workspaceSource from './Workspace.tsx?sample';
 import travelSource from './useChartTravel.ts?sample';
@@ -64,9 +65,9 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(coinbaseSource, 'export const subscribeTo'), gap,
-            ...carve.unit(coinbaseSource, 'export const decodeTrade'), gap,
-            ...carve.unit(liveTradesSource, 'export const LATEST_TRADES_CAP'), gap,
+            ...carve.unit(coinbaseSource, 'const subscribeTo'), gap,
+            ...carve.unit(coinbaseSource, 'const decodeTrade'), gap,
+            ...carve.unit(liveTradesSource, 'export const liveTrades'), gap,
             ...carve.unit(marketSliceSource, 'const tradesReducer')
           ]}/>
         </Codes>
@@ -81,10 +82,10 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(historySource, 'export const periodCandles'), gap,
+            ...carve.unit(historySource, 'const periodCandles'), gap,
             ...carve.unit(marketSliceSource, 'const candlesReducer'), gap,
             ...carve.unit(candlesHook, 'export const usePeriodCandles'), gap,
-            ...carve.unit(shapesSource, 'export const mergeLive')
+            ...carve.unit(candleSeriesSource, 'const mergeLive')
           ]}/>
         </Codes>
       </Step>
@@ -97,8 +98,8 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(shapesSource, 'const fold'), gap,
-            ...carve.unit(shapesSource, 'export const bucketTrades')
+            ...carve.unit(candleSeriesSource, 'const fold'), gap,
+            ...carve.unit(candleSeriesSource, 'const bucketTrades')
           ]}/>
         </Codes>
       </Step>
@@ -120,8 +121,8 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(periodSource, 'export const bucketMs'), gap,
-            ...carve.unit(periodSource, 'export const periodCap')
+            ...carve.unit(periodSource, 'const bucketMilliseconds'), gap,
+            ...carve.unit(periodSource, 'const candleCap')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.span(priceSource, '{actions}', '</Menu>')
@@ -183,9 +184,9 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(shapesSource, 'const fold'), gap,
-            ...carve.unit(shapesSource, 'export const bucketTrades'), gap,
-            ...carve.unit(shapesSource, 'export const mergeLive')
+            ...carve.unit(candleSeriesSource, 'const fold'), gap,
+            ...carve.unit(candleSeriesSource, 'const bucketTrades'), gap,
+            ...carve.unit(candleSeriesSource, 'const mergeLive')
           ]}/>
         </Codes>
       </Step>
@@ -260,7 +261,7 @@ const CandlesStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.span(candlesSource, 'const range = rangeOf(', '  );'), gap,
-            ...carve.span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMs[period]}>')
+            ...carve.span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMilliseconds}>')
           ]}/>
         </Codes>
       </Step>
@@ -290,7 +291,7 @@ const PressureStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), gap,
-            ...carve.unit(coinbaseSource, 'export const takerBought'), gap,
+            ...carve.unit(coinbaseSource, 'const takerBought'), gap,
             ...carve.unit(pressureSource, 'const fold'), gap,
             ...carve.unit(pressureSource, 'export const bucketPressure')
           ]}/>
@@ -339,7 +340,7 @@ const PressureStory: FC = () =>
             ...carve.unit(drawingCss, '.side-wall {')
           ]}/>
           <Snippet label="TS" lines={[
-            ...carve.unit(moneySource, 'export const bitcoin')
+            ...carve.unit(moneySource, 'const bitcoin = ')
           ]}/>
         </Codes>
       </Step>
@@ -364,7 +365,7 @@ const PieStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(coinbaseSource, 'export const takerBought'), gap,
+            ...carve.unit(coinbaseSource, 'const takerBought'), gap,
             ...carve.unit(pieSource, 'export const sideTotals')
           ]}/>
         </Codes>

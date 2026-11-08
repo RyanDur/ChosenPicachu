@@ -1,11 +1,4 @@
-import {Trade} from './coinbase';
-
-export const LATEST_TRADES_CAP = 1500;
-
-export type LiveTradesState = {
-  status: 'connecting' | 'streaming' | 'failed';
-  trades: readonly Trade[];
-};
+import {LiveTradesState} from '../Market';
 
 export const statusCopy: Record<LiveTradesState['status'], string> = {
   connecting: 'connecting to the live feed…',
@@ -18,5 +11,3 @@ export const lampOf: Record<LiveTradesState['status'], string> = {
   streaming: 'lamp-lit-before',
   failed: 'lamp-alarm-before'
 };
-
-export const opening: LiveTradesState = {status: 'connecting', trades: []};

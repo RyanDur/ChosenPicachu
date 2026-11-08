@@ -1,16 +1,5 @@
-import {Candle} from './Candles/shapes';
-import {bucketLabel, Period} from './period';
-
-export type PeriodHistory =
-  | {state: 'loading'}
-  | {state: 'unavailable'}
-  | {state: 'arrived'; candles: readonly Candle[]};
-
-export const loading: PeriodHistory = {state: 'loading'};
-export const unavailable: PeriodHistory = {state: 'unavailable'};
-
-export const candlesOf = (history: PeriodHistory): readonly Candle[] =>
-  history.state === 'arrived' ? history.candles : [];
+import {Period, PeriodHistory} from '../Market';
+import {bucketLabel} from './period';
 
 export const captionFor = (history: PeriodHistory, candles: number, period: Period): string => {
   if (candles > 0) return `${candles} ${candles === 1 ? 'candle' : 'candles'} · ${bucketLabel[period]}`;

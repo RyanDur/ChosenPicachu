@@ -2,7 +2,7 @@ import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {ChartKind} from './kinds';
-import {Period} from './period';
+import {Period} from '../Market';
 import {absent, added, dealt, periodChosen, seated, without} from './desk';
 
 export const useDesk = () => {

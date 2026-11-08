@@ -1,6 +1,6 @@
 import {FC, useReducer} from 'react';
 import {render} from '@testing-library/react';
-import {Measured, Measures, measures} from '../../../Market/cells';
+import {Measured, Measures, cells} from '@pages/Demos/Market';
 import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, Column, DragSortable, HeaderEvents, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
 import {TableColumn, arrangements} from '@components/DragSortableTable/model';
@@ -27,7 +27,7 @@ const windowOf = (row: Measures): string => row.window.display;
 const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(
     arrangements.reducer,
-    arrangements.of(measures.map(({name}) => name), rows.map(windowOf)));
+    arrangements.of(cells.measures.map(({name}) => name), rows.map(windowOf)));
   const arranged = arrangements.reducer(arrangement, arrangements.arrived(rows.map(windowOf)));
 
   return <Table caption="live aggregations" {...dials} columns={arrangedView.columnsOf(arranged)} rows={arrangedView.rowsOf(arranged, rows)}

@@ -1,7 +1,7 @@
 import {ArrangementAction} from '@components/DragSortableTable/model';
-import {Trade} from '../Charts/coinbase';
-import {Candle} from '../Charts/Candles/shapes';
-import {Period} from '../Charts/period';
+import {Trade} from './coinbase';
+import {Candle} from './candles';
+import {Period} from './Period';
 
 export type MarketAction =
   | ArrangementAction

@@ -5,7 +5,7 @@ import {http, HttpResponse} from 'msw';
 import {HISTORY, server} from '@__test_support/server';
 import {format} from 'date-fns';
 import {chartsDesk} from '@pages/Demos/Charts/__test_support';
-import {granularitySeconds, Period} from '@pages/Demos/Charts/period';
+import {Period, periods} from '@pages/Demos/Market';
 
 const HOUR_ALIGNED = 1699995600;
 
@@ -116,7 +116,7 @@ describe('the chart periods', () => {
     });
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async ({request}) => {
       const granularity = granularityAsked(request);
-      if (granularity === granularitySeconds[period]) {
+      if (granularity === periods.granularitySeconds[period]) {
         await arrived;
         return HttpResponse.json(rowsSpaced(granularity));
       }

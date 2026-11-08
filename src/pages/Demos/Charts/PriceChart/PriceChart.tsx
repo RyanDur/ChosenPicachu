@@ -4,15 +4,12 @@ import {FC, ReactNode, useId} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
-import {Trade} from '../coinbase';
-import {LiveTradesState} from '../live-trades';
-import {cents, deltaLabel} from '../money';
-import {candlesOf, captionFor} from '../period-history';
+import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods, Trade} from '../../Market';
+import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
-import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
+import {tickEveryMs, timePattern} from '../period';
 import {sparklinePoints, TimedPrice} from '../sparkline';
 import {Axes, rangeOf} from '../Axes';
-import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
 import '../chart-card.css';
 import './PriceChart.css';
 import {sideOf} from '../sides';
@@ -53,10 +50,15 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const generated = useId();
   const id = given ?? `price${generated}`;
   const history = usePeriodCandles(period);
-  const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
-  const view = viewOf(candles, trades[trades.length - 1]);
+  const bucketMilliseconds = periods.bucketMilliseconds[period];
+  const shownCandles = candles.mergeLive(
+    periodHistory.candlesOf(history),
+    candles.bucketTrades(trades, bucketMilliseconds),
+    periods.candleCap[period]
+  );
+  const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
-    sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
+    sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trending = view.map(trendOf);
   const trend = trending.orElse(undefined);
@@ -85,7 +87,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <figure className="chart-stage paper-veiled-before">
       <Axes range={view.mBind(({series, high, low}) => rangeOf(series.map(timed => timed.at), high, low))}
         pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
-        headroomMs={2 * bucketMs[period]}>
+        headroomMs={2 * bucketMilliseconds}>
         <svg className="sparkline" aria-hidden="true"
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
           preserveAspectRatio="none">
@@ -100,11 +102,11 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
         </svg>
       </Axes>
       <p className="headline monospaced">{view.map(({first, last}) => <>
-        <data className="title bold ink" value={last}>{cents.format(last)}</data>
-        <data className="side-ink" value={last - first}>{deltaLabel(first, last)}</data>
+        <data className="title bold ink" value={last}>{money.cents.format(last)}</data>
+        <data className="side-ink" value={last - first}>{money.deltaLabel(first, last)}</data>
       </>).orNull()}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
+      <figcaption className="chart-caption caption">{captionFor(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
       This measures the price of one bitcoin in US dollars, live. The line is the closing price of each span in the

@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
 import {has, Maybe, maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
-import {dollars} from '../money';
+import {money} from '../../Market';
 import './Axes.css';
 
 export type Range = {high: number; low: number; times: readonly [number, ...number[]]};
@@ -40,7 +40,7 @@ const placed = (
 
 export const Axes: FC<Props> = ({
   range, pattern, tickEvery, headroomMs = 0,
-  label = value => dollars.format(value), children
+  label = value => money.dollars.format(value), children
 }) => <div className="axes">
   <p className="y-labels caption">{range.map(({high, low}) => <>
     <data value={high}>{label(high)}</data>

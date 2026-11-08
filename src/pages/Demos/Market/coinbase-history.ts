@@ -1,10 +1,9 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
-import {http} from '@transport';
-import {decoded} from '@transport';
-import {HTTPError} from '@transport';
-import {Candle} from '../Candles/shapes';
-import {granularitySeconds, Period, periodSpanMs} from '../period';
+import {decoded, http, HTTPError} from '@transport';
+import {Candle} from './candles';
+import {Period} from './Period';
+import {periods} from './periods';
 
 const HistoryRowsDecoder = schema.array(schema.array(schema.number));
 
@@ -20,15 +19,15 @@ const toCandle = (row: readonly number[]): Candle => ({
 const toCandles = (rows: readonly (readonly number[])[]): readonly Candle[] =>
   rows.filter(row => row.length === 6).map(toCandle).reverse();
 
-export const periodQuery = (period: Period): string => {
+const periodQuery = (period: Period): string => {
   const now = new Date();
-  const start = new Date(now.getTime() - periodSpanMs[period]);
-  return `granularity=${granularitySeconds[period]}` +
+  const start = new Date(now.getTime() - periods.spanMilliseconds[period]);
+  return `granularity=${periods.granularitySeconds[period]}` +
     `&start=${encodeURIComponent(start.toISOString())}` +
     `&end=${encodeURIComponent(now.toISOString())}`;
 };
 
-export const periodCandles = (
+const periodCandles = (
   base: string,
   product: string,
   query: string
@@ -36,3 +35,10 @@ export const periodCandles = (
   http.get(`${base}/products/${product}/candles?${query}`)
     .mBind(decoded.by(HistoryRowsDecoder))
     .map(toCandles);
+
+type CoinbaseHistory = {
+  periodQuery: (period: Period) => string;
+  periodCandles: (base: string, product: string, query: string) => Result.Async<readonly Candle[], HTTPError>;
+};
+
+export const coinbaseHistory: CoinbaseHistory = {periodQuery, periodCandles};

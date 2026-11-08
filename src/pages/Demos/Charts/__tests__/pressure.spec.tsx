@@ -1,7 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {bucketPressure, pressureShapes} from '@pages/Demos/Charts/Pressure/shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
-import {bitcoin} from '@pages/Demos/Charts/money';
+import {money} from '@pages/Demos/Market';
 import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('pressure', () => {
@@ -59,12 +59,12 @@ describe('pressure', () => {
   });
 
   test('a size under a whole unit keeps its digits', () => {
-    expect(bitcoin(0.0042)).toBe('0.0042 BTC');
+    expect(money.bitcoin(0.0042)).toBe('0.0042 BTC');
   });
 
   test('a larger size rounds to one decimal', () => {
-    expect(bitcoin(12.63)).toBe('12.6 BTC');
-    expect(bitcoin(0)).toBe('0 BTC');
+    expect(money.bitcoin(12.63)).toBe('12.6 BTC');
+    expect(money.bitcoin(0)).toBe('0 BTC');
   });
 
   test('an empty stream leaves the card waiting, not broken', () => {
