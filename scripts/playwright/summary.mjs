@@ -1,5 +1,5 @@
 import {empty} from '@ryandur/sand';
-import {readFileSync} from 'node:fs';
+import {readFileSync, realpathSync} from 'node:fs';
 
 const saidBy = results => results.map(({error}) => error?.message ?? '').find(message => message !== '') ?? '';
 
@@ -45,7 +45,7 @@ export const summaryOf = (name, report) => {
   return [`## ${name}: ${outcomes.length} tests, ${verdict}`, '', countTable(outcomes), failuresList(outcomes), ''].join('\n');
 };
 
-if (import.meta.filename === process.argv[1]) {
+if (import.meta.filename === realpathSync(process.argv[1])) {
   const [, , name, reportPath] = process.argv;
   process.stdout.write(summaryOf(name, JSON.parse(readFileSync(reportPath, 'utf8'))));
 }

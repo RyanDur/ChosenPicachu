@@ -19,7 +19,8 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch'
       || (github.event.pull_request.state == 'open' && github.event.comment.in_reply_to_id
-          && github.event.comment.user.type != 'Bot')
+          && github.event.comment.user.type != 'Bot'
+          && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-26.04
     permissions:
       contents: read
@@ -32,42 +33,61 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Check out the pull request's head
+      - name: Check out the pull request's head and gather the thread
+        id: thread
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git fetch --quiet origin "refs/pull/$PULL/head"
           git checkout --quiet FETCH_HEAD
-      - name: Claude Code answers the reply in its thread
+          first=$(gh api "repos/$GITHUB_REPOSITORY/pulls/comments/$REPLY" -q '.in_reply_to_id // .id')
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments" \
+            | jq --argjson first "$first" \
+              '[add[] | select(.id == $first or .in_reply_to_id == $first)
+                | {author: .user.login, file: .path, line, commit: .commit_id, body}]' > discussion.json
+          echo "first=$first" >> "$GITHUB_OUTPUT"
+          echo "author=$(jq -r '.[0].author' discussion.json)" >> "$GITHUB_OUTPUT"
+      - name: Claude Code weighs the reply
+        id: answer
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            You reviewed pull request #${{ env.PULL }} in ${{ github.repository }} against this project's rules, and someone has replied to one of your findings: review comment ${{ env.REPLY }}.
+            discussion.json holds one review thread on pull request #${{ env.PULL }}, oldest comment first. The first comment is a finding by ${{ steps.thread.outputs.author }}; the last is a reply to it.
 
-            1. Read the thread: `gh api repos/${{ github.repository }}/pulls/comments/${{ env.REPLY }}` gives the reply and its in_reply_to_id, the thread's first comment, which is your finding. `gh api repos/${{ github.repository }}/pulls/${{ env.PULL }}/comments --paginate` holds every reply to that first comment.
-            2. Read what the thread is about: the code at the pull request's head, which is checked out here, the commits the reply names (`git show`), and the rule your finding cited, in AGENTS.md or the rubric under its Reviewers section. A pull request merged since has its later fixes on origin/main.
-            3. Answer once, in the thread: `gh api repos/${{ github.repository }}/pulls/${{ env.PULL }}/comments/<the first comment's id>/replies -f body=...`.
-               - If the reply names a fix and the code shows it, or its argument holds against the rule, start with "Agreed." and say in a sentence or two what settled it.
-               - If not, start with "Not yet." and say plainly what still needs to be done and why, citing the code or the rule.
-            Write as scripts/review/plain.md asks. Change no file.
+            1. Read the code the finding is about, at the pull request's head, which is checked out here, and any commit the replies name (`git show`).
+            2. If the finding cites a rule, read it in AGENTS.md or the rubric under its Reviewers section. If it cites none, as Copilot's do not, judge it by its own claim against the code.
+            3. Answer the last reply. The verdict is "Agreed" if the reply names a fix and the code shows it, or its argument holds; otherwise "Not yet". The body says in a sentence or two what settled it, or what still needs doing and why, citing the code or the rule, written as scripts/review/plain.md asks.
+            Change no file.
           claude_args: |
             --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
             --max-turns 40
-            --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(gh api:*),Bash(gh pr view:*),Bash(gh pr diff:*)"
-      - name: Resolve the thread when the reviewer agrees
+            --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*)"
+            --json-schema '{"type":"object","required":["verdict","body"],"additionalProperties":false,"properties":{"verdict":{"enum":["Agreed","Not yet"]},"body":{"type":"string","description":"What settled it, or what still needs doing and why, in a sentence or two"}}}'
+      - name: Answer in the thread
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANSWER: ${{ steps.answer.outputs.structured_output }}
+          FIRST: ${{ steps.thread.outputs.first }}
         run: |
-          first=$(gh api "repos/$GITHUB_REPOSITORY/pulls/comments/$REPLY" -q '.in_reply_to_id // .id')
-          last=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments" --paginate \
-            -q "[.[] | select(.id == $first or .in_reply_to_id == $first)] | last | select(.user.type == \"Bot\") | .body")
-          if [[ "$last" == Agreed.* ]]; then
-            thread=$(gh api graphql -F pull="$PULL" -f owner="${GITHUB_REPOSITORY%/*}" -f name="${GITHUB_REPOSITORY#*/}" -f query='
-              query($owner: String!, $name: String!, $pull: Int!) {
-                repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
-                  reviewThreads(first: 100) { nodes { id comments(first: 1) { nodes { databaseId } } } } } }
-              }' -q ".data.repository.pullRequest.reviewThreads.nodes[] | select(.comments.nodes[0].databaseId == $first) | .id")
-            gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }'
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments/$FIRST/replies" \
+            -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
+      - name: Resolve the thread when the reviewer agrees
+        if: fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIRST: ${{ steps.thread.outputs.first }}
+        run: |
+          thread=$(gh api graphql --paginate -F pull="$PULL" -f owner="${GITHUB_REPOSITORY%/*}" -f name="${GITHUB_REPOSITORY#*/}" -f query='
+            query($owner: String!, $name: String!, $pull: Int!, $endCursor: String) {
+              repository(owner: $owner, name: $name) { pullRequest(number: $pull) {
+                reviewThreads(first: 100, after: $endCursor) {
+                  nodes { id comments(first: 1) { nodes { databaseId } } }
+                  pageInfo { hasNextPage endCursor } } } }
+            }' -q ".data.repository.pullRequest.reviewThreads.nodes[] | select(.comments.nodes[0].databaseId == $FIRST) | .id")
+          if [ -z "$thread" ]; then
+            echo "::error::No review thread on #$PULL starts with comment $FIRST"
+            exit 1
           fi
+          gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
