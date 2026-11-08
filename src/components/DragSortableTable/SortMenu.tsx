@@ -1,7 +1,8 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
 import {tableActions, sorting} from './model';
-import {useHeaderEvents, useTableDispatch} from './context';
+import {useHeaderEvents} from './useHeaderEvents';
+import {useTableDispatch} from './useTableDispatch';
 import {useHydrated} from '@frame/state';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {

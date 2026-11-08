@@ -1,7 +1,9 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
+import {useBodyEvents} from './useBodyEvents';
+import {useTableDispatch} from './useTableDispatch';
+import {useTableSelector} from './useTableSelector';
 import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, survey, looks, travel, lifting} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';

@@ -1,7 +1,7 @@
 import {useState, useSyncExternalStore} from 'react';
 import {classNames} from '@components/class-names';
-import {Table, TableContext} from './context';
-import {Labelled, Seated, TableColumn, tableStore, TableView, tableSelectors, tableReports} from './model';
+import {TableContext} from './tableContexts';
+import {Labelled, Seated, TableColumn, tableStore} from './model';
 import './Table.css';
 import './sortable.css';
 
@@ -27,7 +27,3 @@ export const useDragSortable = <C extends Labelled>(
   const state = useSyncExternalStore(hand.subscribe, held, held);
   return {state, columns, rows, dispatch: hand.dispatch, className: classNames('fancy-table', 'sortable', 'apportioned', origin, motion)};
 };
-
-export const DragSortable = Table.Provider;
-
-export const reportOf = (sortable: TableView): string => tableSelectors.report(sortable).map(tableReports.move).orElse('');

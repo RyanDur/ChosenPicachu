@@ -1,6 +1,8 @@
 import {shares} from '@components/Table';
 import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
+import {tableSelectors} from './selectors';
+import {TableView} from './table-state';
 
 export type Report =
   | {readonly about: 'column'; readonly name: string; readonly position: number; readonly of: number}
@@ -35,7 +37,10 @@ const landing = (axis: 'column' | 'row', orderAtLift: readonly string[], held: s
   return some(report);
 };
 
+const of = (view: TableView): string => tableSelectors.report(view).map(move).orElse('');
+
 export const tableReports = {
   move,
-  landing
+  landing,
+  of
 };

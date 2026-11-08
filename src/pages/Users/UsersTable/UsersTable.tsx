@@ -4,11 +4,11 @@ import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import {UserMenu} from './UserMenu';
-import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, reportOf, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
+import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
-import {arrangements} from '@components/DragSortableTable/model';
+import {arrangements, tableReports} from '@components/DragSortableTable/model';
 import {fullNameOf} from '@components/Users/UserInfo/user';
 
 export const UsersTable: FC = () => {
@@ -55,6 +55,6 @@ export const UsersTable: FC = () => {
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="users-table" aria-label="move report">{reportOf(sortable)}</output>
+    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(sortable)}</output>
   </DragSortable>;
 };

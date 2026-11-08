@@ -2,7 +2,8 @@ import {FC, FocusEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@frame/state';
 import './Table.css';
-import {useTableDispatch, useTableSelector} from './context';
+import {useTableDispatch} from './useTableDispatch';
+import {useTableSelector} from './useTableSelector';
 import {tableActions, tableSelectors} from './model';
 import {
   shares

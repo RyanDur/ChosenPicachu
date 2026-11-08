@@ -1,6 +1,6 @@
 import {classNames} from '@components/class-names';
 import {ComponentProps, FC} from 'react';
-import {useTableSelector} from './context';
+import {useTableSelector} from './useTableSelector';
 import {tableSelectors} from './model';
 import {placed} from './placing';
 

@@ -1,13 +1,14 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
-import {Header, HeaderEvents, useTableSelector} from './context';
+import {HeaderEvents, tableContexts} from './tableContexts';
+import {useTableSelector} from './useTableSelector';
 import {tableSelectors} from './model';
 import {placed} from './placing';
 
 export const Headers: FC<ComponentProps<'tr'> & HeaderEvents> = ({onColumnMoved, onSorted, className, children, ...tr}) => {
   const order = useTableSelector(tableSelectors.order);
 
-  return <Header.Provider value={{onColumnMoved, onSorted}}>
+  return <tableContexts.Header.Provider value={{onColumnMoved, onSorted}}>
     <tr {...tr} className={classNames('row', className)}>{placed(children, order, 'column')}</tr>
-  </Header.Provider>;
+  </tableContexts.Header.Provider>;
 };

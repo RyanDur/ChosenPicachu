@@ -7,7 +7,7 @@ import arrangementSource from '@components/DragSortableTable/model/arrangement.t
 import actionsSource from '@components/DragSortableTable/model/actions.ts?sample';
 import reducerSource from '@components/DragSortableTable/model/reducer.ts?sample';
 import storeSource from '@components/store.ts?sample';
-import contextSource from '@components/DragSortableTable/context.ts?sample';
+import useTableSelectorSource from '@components/DragSortableTable/useTableSelector.ts?sample';
 import selectorsSource from '@components/DragSortableTable/model/selectors.ts?sample';
 import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
@@ -149,7 +149,7 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(contextSource, 'export const useTableSelector'), gap,
+          ...carve.unit(useTableSelectorSource, 'export const useTableSelector'), gap,
           ...carve.unit(selectorsSource, 'const columnNamed'), gap,
           ...carve.unit(selectorsSource, 'const positionOfRow'), gap,
           ...carve.unit(selectorsSource, 'const columnTravels'),
