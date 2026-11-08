@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {FC} from 'react';
 import {TestApp} from '@__test_support/TestApp';
-import {bannerChange, useBannerDispatch} from '@notices/Banners';
+import {bannerChange, useBannerDispatch} from '@banners';
 import {banners} from '../__test_support/banners';
 
 const Trouble: FC<{message: string}> = ({message}) => {

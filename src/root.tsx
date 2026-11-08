@@ -1,9 +1,9 @@
-import {BannerProvider, Banners} from '@notices/Banners';
+import {BannerProvider, Banners} from '@banners';
 import {Location, Outlet, ScrollRestoration} from 'react-router';
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './index.css';
 import './BasePage.css';
-import {FeedbackProvider} from '@notices/Feedback';
+import {FeedbackProvider} from '@feedback';
 import {env} from '@transport';
 import {Header, Page, PageError, PageNameProvider} from '@page';
 import names from '@navigation/names.json';

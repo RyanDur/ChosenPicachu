@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
-import {Placement, unplaced} from '@notices/Banners';
+import {Placement, unplaced} from '@banners';
 
 export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';

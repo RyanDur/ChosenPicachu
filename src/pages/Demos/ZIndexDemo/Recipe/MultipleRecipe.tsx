@@ -1,11 +1,11 @@
 import {FC, ReactNode} from 'react';
-import {Entrance, Stack} from '@notices/Banners';
+import {Entrance, Stack} from '@banners';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {EntranceDial, StackDial, useControls} from '../../Controls';
-import bannersSource from '@notices/Banners/Banners.tsx?sample';
-import changeSource from '@notices/Banners/bannerChange.ts?sample';
-import newsSource from '@notices/Banners/bannerNews.ts?sample';
-import bannersCss from '@notices/Banners/Banners.css?sample';
+import bannersSource from '@banners/Banners.tsx?sample';
+import changeSource from '@banners/bannerChange.ts?sample';
+import newsSource from '@banners/bannerNews.ts?sample';
+import bannersCss from '@banners/Banners.css?sample';
 import timingCss from '../../../../styles/timing.css?sample';
 import '../../Recipe/Recipe.css';
 
