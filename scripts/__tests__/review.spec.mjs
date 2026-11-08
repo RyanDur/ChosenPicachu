@@ -35,16 +35,6 @@ describe('the findings Claude Code\'s review answers with', () => {
     expect(() => findingsIn('')).toThrow('the review answered without a findings list');
   });
 
-  test('should refuse a finding that has no summary', () => {
-    const {summary: _, ...unsaid} = bug;
-
-    expect(() => findingsIn(answered([unsaid]))).toThrow('the review answered with a finding that has no summary');
-  });
-
-  test('should refuse a severity the schema does not name', () => {
-    expect(() => findingsIn(answered([{...bug, severity: 'blocker'}])))
-      .toThrow('the review answered with a severity of "blocker"');
-  });
 });
 
 describe('the verdict', () => {

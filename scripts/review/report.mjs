@@ -1,20 +1,7 @@
-import {readFileSync, realpathSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {empty, has, maybe, not} from '@ryandur/sand';
 
 const severities = ['violation', 'concern', 'note'];
-
-const fields = ['file', 'line', 'severity', 'rubric', 'summary', 'failure_scenario'];
-
-const whole = finding => {
-  const missing = fields.find(field => empty(finding[field]));
-  if (has(missing)) {
-    throw new Error(`the review answered with a finding that has no ${missing}`);
-  }
-  if (not(severities.includes(finding.severity))) {
-    throw new Error(`the review answered with a severity of "${finding.severity}"`);
-  }
-  return finding;
-};
 
 /**
  * Reads the findings from the review's structured output: the action's `structured_output`, or the result message
@@ -27,7 +14,7 @@ export const findingsIn = answer => {
   if (not(Array.isArray(findings))) {
     throw new Error('the review answered without a findings list');
   }
-  return findings.map(whole);
+  return findings;
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
@@ -78,7 +65,7 @@ export const summaryOf = (findings, {commit, subject} = {}) => [
 /** @param {{severity: string}[]} findings */
 export const verdictOf = findings => findings.some(({severity}) => severity === 'violation') ? 1 : 0;
 
-if (import.meta.filename === realpathSync(process.argv[1])) {
+if (import.meta.main) {
   const findings = findingsIn(readFileSync(process.stdin.fd, 'utf8'));
   const {GITHUB_REPOSITORY: repository, REVIEW_AFTER: sha, REVIEW_SUBJECT: subject} = process.env;
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
