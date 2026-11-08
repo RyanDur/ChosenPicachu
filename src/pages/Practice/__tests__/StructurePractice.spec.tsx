@@ -117,6 +117,13 @@ describe('the Structure practice tab', () => {
     ]));
   });
 
+  test('should set the plain trades header cell beside the line in the React build that writes the same cell', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sample('EagerTable/EagerTable.tsx on GitHub', '<DraggableColumn column="trades"')).toBeInTheDocument();
+  });
+
   test('should send custom elements to the concert’s paragraph on them, and the first rule of ARIA to Using ARIA', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');

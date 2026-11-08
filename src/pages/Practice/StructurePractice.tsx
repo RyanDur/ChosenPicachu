@@ -152,7 +152,7 @@ export const StructurePractice: FC = () =>
         tab</Link>’s split, and the structure makes it possible: the element says what happened and does not decide
       what to do about it.</p>
     <p className="paragraph">In React, components write the same markup, each one a new element. Below, the plain
-      header cell comes first, then DraggableColumn, the component that writes it in React.</p>
+      header cell comes first, then the line in the React build that writes the same cell.</p>
     <ColumnBesideCarve/>
     <p className="paragraph">DraggableColumn writes the th and carries a column. RowGrip writes the grip button and
       can be dragged by hand or by key. ResizeHandle writes the resize button, and SortMenu the popover menu. Each
