@@ -12,7 +12,7 @@ import {feedback} from '../__test_support/feedback';
 import {setupAICAllArtResponse} from '@pages/Gallery/__test_support';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 
-describe('Feedback in a browser without invoker commands', () => {
+describe('Feedback opened and closed by its buttons', () => {
   beforeEach(() => {
     githubFindingNoThread();
   });
