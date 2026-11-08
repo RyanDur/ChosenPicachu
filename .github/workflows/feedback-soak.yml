@@ -40,10 +40,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref }}
+      # the soaked commit may predate .nvmrc, so this names the version .nvmrc names
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22.1'
+          node-version: '26'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
