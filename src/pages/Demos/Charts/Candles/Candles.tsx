@@ -3,7 +3,7 @@ import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {candles, Period, periodHistory, periods, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
-import {captionFor} from '../period-history';
+import {chartCaption} from '../chart-caption';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
@@ -109,7 +109,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         </svg>
       </Axes>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{captionFor(history, shownCandles.length, period)}</figcaption>
+      <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
       The same measurement, grouped: each candle summarizes one bucket of time. The body runs from the first to the

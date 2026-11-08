@@ -1,7 +1,7 @@
 import {Period, PeriodHistory} from '../Market';
 import {periodDisplay} from './period-display';
 
-export const captionFor = (history: PeriodHistory, candles: number, period: Period): string => {
+const of = (history: PeriodHistory, candles: number, period: Period): string => {
   if (candles > 0) return `${candles} ${candles === 1 ? 'candle' : 'candles'} · ${periodDisplay.bucketLabel[period]}`;
   switch (history.state) {
     case 'loading':
@@ -12,3 +12,5 @@ export const captionFor = (history: PeriodHistory, candles: number, period: Peri
       return 'waiting for the first trade';
   }
 };
+
+export const chartCaption = {of};

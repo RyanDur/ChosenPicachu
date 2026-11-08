@@ -5,7 +5,7 @@ import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
 import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods, Trade} from '../../Market';
-import {captionFor} from '../period-history';
+import {chartCaption} from '../chart-caption';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {periodDisplay} from '../period-display';
 import {sparkline, TimedPrice} from '../sparkline';
@@ -104,7 +104,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
         <data className="side-ink" value={last - first}>{money.deltaLabel(first, last)}</data>
       </>).orNull()}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{captionFor(history, shownCandles.length, period)}</figcaption>
+      <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
       This measures the price of one bitcoin in US dollars, live. The line is the closing price of each bucket in the
