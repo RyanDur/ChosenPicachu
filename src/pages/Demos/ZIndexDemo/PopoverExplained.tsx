@@ -4,7 +4,7 @@ import {AboveThePage} from './AboveThePage';
 import {partHeadings} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
-import menuSource from '@components/Menu/Menu.tsx?sample';
+import menuSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
