@@ -1,6 +1,7 @@
 import {is, maybe} from '@ryandur/sand';
 import {survey} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
+import {orders} from './orders';
 import {keepingFocus} from './focus';
 import {dressWidths} from './resize';
 
@@ -40,7 +41,7 @@ const reconcileColumns = (table: HTMLTableElement, shown: readonly string[], ord
 const arrange = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
   const {table, order} = context;
   const onPage = shown(table);
-  if (mountedTable.changed(onPage, order())) {
+  if (orders.differ(onPage, order())) {
     keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, onPage, order()));
     markGrips(table);
     dressWidths(context);

@@ -1,7 +1,8 @@
 import {maybe} from '@ryandur/sand';
 import {grip} from '@components/DragSortableTable/model';
 import {isMeasure} from '@pages/Demos/Market';
-import {MountedTable, mountedTable} from './table-state';
+import {MountedTable} from './table-state';
+import {orders} from './orders';
 import {keepingFocus} from './focus';
 import {frameColumns} from './columns';
 
@@ -25,7 +26,7 @@ const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' |
 
 const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
   const next = standing();
-  if (!mountedTable.changed([...body.rows].map(of), next)) {
+  if (!orders.differ([...body.rows].map(of), next)) {
     return;
   }
   keepingFocus(maybe(body.ownerDocument.activeElement), () =>

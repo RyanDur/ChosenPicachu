@@ -27,10 +27,6 @@ const columnOfHeader = (th: Element): string => maybe(th.getAttribute('data-colu
     throw new Error(`a sortable table’s header names no column: ${th.outerHTML.slice(0, th.outerHTML.indexOf('>') + 1)}`);
   });
 
-const changed = <T>(before: readonly T[], after: readonly T[]): boolean =>
-  before.length !== after.length || after.some((at, position) => before[position] !== at);
-
 export const mountedTable = {
-  columnOfHeader,
-  changed
+  columnOfHeader
 };
