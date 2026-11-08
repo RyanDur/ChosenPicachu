@@ -48,6 +48,7 @@ Activate the repo's quality gates once per clone:
 git config core.hooksPath scripts/git-hooks
 ```
 
-`pre-push` runs the linters on every push. A push to main also runs
-the typecheck, the unit tests, the production build and the journeys.
+`pre-push` runs the linters on every push. Every pull request runs
+the typecheck, the unit tests, the production build and the journeys
+before it can merge, and nothing reaches main any other way.
 CI audits the deployed site (smoke, axe, Lighthouse).
