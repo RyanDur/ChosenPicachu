@@ -10,6 +10,7 @@ export type DraftAction =
   | {readonly type: 'detailsEdited'; readonly details: string}
   | {readonly type: 'avatarDrawn'; readonly avatar: string}
   | {readonly type: 'sameAsHomeChosen'; readonly sameAsHome: boolean}
+  | {readonly type: 'addSent'; readonly confirmedAdds: number}
   | {readonly type: 'formReset'; readonly user: NewUser | User};
 
 type DraftActions = {
@@ -22,6 +23,7 @@ type DraftActions = {
   detailsEdited: (details: string) => DraftAction;
   avatarDrawn: (avatar: string) => DraftAction;
   sameAsHomeChosen: (sameAsHome: boolean) => DraftAction;
+  addSent: (confirmedAdds: number) => DraftAction;
   formReset: (user: NewUser | User) => DraftAction;
 };
 
@@ -35,5 +37,6 @@ export const draftActions: DraftActions = {
   detailsEdited: details => ({type: 'detailsEdited', details}),
   avatarDrawn: avatar => ({type: 'avatarDrawn', avatar}),
   sameAsHomeChosen: sameAsHome => ({type: 'sameAsHomeChosen', sameAsHome}),
+  addSent: confirmedAdds => ({type: 'addSent', confirmedAdds}),
   formReset: user => ({type: 'formReset', user})
 };

@@ -9,12 +9,14 @@ export type Draft = {
   sameAsHome: boolean;
   typedWork?: Address;
   avatarsDrawn: number;
+  confirmedAddsWhenSent?: number;
 };
 
 type Drafts = {
   of: (user: NewUser | User) => Draft;
   userIn: (draft: Draft) => NewUser | User;
   avatarReport: (draft: Draft) => string;
+  sentAddConfirmed: (draft: Draft, confirmedAdds: number) => boolean;
   reduce: (draft: Draft, action: DraftAction) => Draft;
 };
 
@@ -48,6 +50,8 @@ const reduce = (draft: Draft, action: DraftAction): Draft => {
       return {...draft, user: {...user, avatar: action.avatar}, avatarsDrawn: draft.avatarsDrawn + 1};
     case 'sameAsHomeChosen':
       return {...draft, sameAsHome: action.sameAsHome};
+    case 'addSent':
+      return {...draft, confirmedAddsWhenSent: action.confirmedAdds};
     case 'formReset':
       return of(action.user);
   }
@@ -58,5 +62,7 @@ export const drafts: Drafts = {
   userIn: ({user, sameAsHome, typedWork}) => ({...user, work: sameAsHome ? 'home' : typedWork}),
   avatarReport: ({avatarsDrawn}) =>
     avatarsDrawn === 0 ? '' : `${avatarsDrawn} new avatar${avatarsDrawn === 1 ? '' : 's'} drawn.`,
+  sentAddConfirmed: ({confirmedAddsWhenSent}, confirmedAdds) =>
+    maybe(confirmedAddsWhenSent).map(whenSent => whenSent !== confirmedAdds).orElse(false),
   reduce
 };
