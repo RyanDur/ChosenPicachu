@@ -23,7 +23,7 @@ const newUser = (avatar: string): NewUser => ({
   avatar
 });
 
-const buttonsFor = (open: Opened, hydrated: boolean, reset: () => void): ReactNode => {
+const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
   const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
   switch (open.mode) {
     case 'adding':
@@ -36,7 +36,7 @@ const buttonsFor = (open: Opened, hydrated: boolean, reset: () => void): ReactNo
     case 'editing':
       return <>
         {resetButton}
-        <Link to={openings.at(open.user.id, 'view')} className="cancel button secondary" onClick={reset}>Cancel</Link>
+        <Link to={openings.at(open.user.id, 'view')} className="cancel button secondary">Cancel</Link>
         <button type="submit" className="submit button primary" disabled={!hydrated}>Update</button>
       </>;
   }
@@ -44,8 +44,10 @@ const buttonsFor = (open: Opened, hydrated: boolean, reset: () => void): ReactNo
 
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
+const draftKey = (open: Opened): string => `${open.mode}:${shown(open).map(({id}) => id).orElse('')}`;
+
 export const UserInformation: FC<{className?: string}> = ({className}) =>
-  <Draft key={shown(useOpened()).map(({id}) => id).orNull()} className={className}/>;
+  <Draft key={draftKey(useOpened())} className={className}/>;
 
 const Draft: FC<{className?: string}> = ({className}) => {
   const open = useOpened();
@@ -124,7 +126,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <FancyTextarea className="details-cell" value={user.details} readOnly={readOnly}
       onChange={event => dispatch(draftActions.detailsEdited(event.currentTarget.value))}/>
 
-    {buttonsFor(open, hydrated, reset)}
+    {buttonsFor(open, hydrated)}
 
   </form>;
 };

@@ -29,6 +29,7 @@ export const usersPage = (page: Page) => {
       await firstRowActions.click();
       await page.getByLabel(`${await firstRowActions.getAttribute('aria-label')}, chosen`).getByRole('link', {name: 'View'}).click();
     },
+    editTheShownPerson: async (): Promise<void> => form.getByRole('link', {name: 'Edit'}).click(),
     shownName: async (): Promise<string> =>
       `${await form.getByLabel('First Name').inputValue()} ${await form.getByLabel('Last Name').inputValue()}`,
     homeState,
