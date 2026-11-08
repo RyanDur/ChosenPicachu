@@ -97,6 +97,13 @@ describe('a crossing', () => {
     expect(dragSort.reduce(liftedWhileSliding, dragSortChange.crossed(1, false)).order).toEqual(['B', 'A', 'C']);
   });
 
+  it('a crossing reported again after the carried item took that seat does not stop the carry', () => {
+    const pastB = dragSort.reduce(dragSort.reduce(resting, dragSortChange.lifted('A')), dragSortChange.crossed(1, false));
+    const reportedAgain = dragSort.reduce(pastB, dragSortChange.crossed(1, false));
+
+    expect(dragSort.reduce(reportedAgain, dragSortChange.crossed(2, false)).order).toEqual(['B', 'C', 'A']);
+  });
+
   it('a neighbour still sliding keeps its slide while the carried item crosses the next one', () => {
     const lifted = dragSort.reduce(resting, dragSortChange.lifted('A'));
     const pastB = dragSort.reduce(lifted, dragSortChange.crossed(1, false));
