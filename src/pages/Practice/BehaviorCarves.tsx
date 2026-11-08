@@ -18,10 +18,10 @@ import accordionsSheet from '@pages/Demos/Accordions/Accordions.css?sample';
 import {Snippet, lines, carve, Line, CodeFile, Sample} from '@pages/Demos/Recipe';
 
 const reducerType = carve.span(storeSource, 'export type Reducer', '(state, action) => reducers.reduce');
-const lifted = carve.span(actionsSource, 'export const lifted', 'export const lifted');
-const dropped = carve.span(actionsSource, 'export const dropped', 'export const dropped');
+const lifted = carve.span(actionsSource, 'const lifted = ', 'const lifted = ');
+const dropped = carve.span(actionsSource, 'const dropped = ', 'const dropped = ');
 const tradeArrived = carve.span(marketActionsSource, 'tradeArrived: trade =>', 'tradeArrived: trade =>');
-const tableReducer = carve.span(reducerSource, 'const answering', 'isTableAction(action) ? answering');
+const tableReducer = carve.span(reducerSource, 'const answering', 'tableActions.recognizes(action) ? answering');
 
 export const ReducerCarve: FC = () => <Snippet label="TS" lines={reducerType}/>;
 
@@ -96,9 +96,9 @@ export const HistoryCarve: FC = () =>
   <Snippet label="TS" lines={carve.span(exchangeSource, 'const fetching = recentTrades(', "onTrouble({type: 'historyRefused', cause})")}/>;
 
 export const WalksCarve: FC = () => <Snippet label="TS" lines={[
-  ...carve.unit(actionsSource, 'export const columnWalkedTo'),
+  ...carve.unit(actionsSource, 'const columnWalkedTo = '),
   lines.aside('// …'),
-  ...carve.unit(actionsSource, 'export const rowWalkedTo')
+  ...carve.unit(actionsSource, 'const rowWalkedTo = ')
 ]}/>;
 
 export const WalkCaseCarve: FC = () =>

@@ -3,7 +3,7 @@ import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@frame/page';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
-import {arrowLifted, awoken, columnGripped, gripped, handleDragged, handleLeft, handleReleased, namedShareOfColumn, neighbourOfColumn, selectOrder, tradedBy} from './model';
+import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder, tableActions} from './model';
 import {
   grippedAt,
   measuredFloors,
@@ -22,11 +22,11 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const hydrated = useHydrated();
 
   const awaken = (table: HTMLTableElement): void =>
-    dispatch(awoken(measuredWidths(order, table), measuredFloors(order, table)));
-  const trade = (delta: number): void => dispatch(tradedBy(column, neighbour, delta));
-  const release = (): void => dispatch(handleReleased(column));
+    dispatch(tableActions.awoken(measuredWidths(order, table), measuredFloors(order, table)));
+  const trade = (delta: number): void => dispatch(tableActions.tradedBy(column, neighbour, delta));
+  const release = (): void => dispatch(tableActions.handleReleased(column));
   const followed = (event: PointerEvent<HTMLElement>): void =>
-    dispatch(handleDragged(column, neighbour, event.clientX));
+    dispatch(tableActions.handleDragged(column, neighbour, event.clientX));
 
   return <button type="button"
     tabIndex={0}
@@ -36,8 +36,8 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
     onFocus={(event: FocusEvent<HTMLElement>) =>
       maybe(event.currentTarget.closest('table')).map(awaken)}
     onKeyDown={resizeArrows(trade)}
-    onKeyUp={resizeArrowLifted(() => dispatch(arrowLifted(column)))}
-    onBlur={() => dispatch(handleLeft(column))}
+    onKeyUp={resizeArrowLifted(() => dispatch(tableActions.arrowLifted(column)))}
+    onBlur={() => dispatch(tableActions.handleLeft(column))}
     onMouseDown={event => event.stopPropagation()}
     onPointerDown={(event: PointerEvent<HTMLElement>) => {
       event.stopPropagation();
@@ -45,7 +45,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       maybe(event.currentTarget.closest('table')).map(table => {
         awaken(table);
         maybe(grippedAt(table.getBoundingClientRect().width, event.clientX))
-          .map(grip => dispatch(gripped(column, grip)));
+          .map(grip => dispatch(tableActions.gripped(column, grip)));
       });
     }}
     onPointerMove={held ? followed : undefined}

@@ -25,7 +25,7 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
             ? <Snippet label="TS" lines={[
               ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
               ...carve.unit(headerSource, 'const walkedTo = '), gap,
-              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
+              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>
             : <Snippet label="TS" lines={[

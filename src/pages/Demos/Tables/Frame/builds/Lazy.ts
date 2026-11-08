@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn, Carry, columnLandingFound, drifted, landingReport, lifted, orderAtLift, released, Report, rowLandingFound, settlingAt, settlingFromSeat, TableState, tableStore} from '@components/DragSortableTable/model';
+import {arrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn, Carry, landingReport, orderAtLift, Report, settlingAt, settlingFromSeat, TableState, tableStore, tableActions} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -94,7 +94,7 @@ const drop = (context: MountedTable): void => {
   landed(context);
   landingReport(drag.axis, orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
   const from = settlingAt(hand.state, order(), standing());
-  hand.dispatch(released());
+  hand.dispatch(tableActions.released());
   if (drag.axis === 'column') {
     settleColumn(context, drag.held, from);
   } else {
@@ -104,18 +104,20 @@ const drop = (context: MountedTable): void => {
 
 const moved = (context: MountedTable, moving: Moving): void => {
   const {store: hand, order, standing} = context;
-  hand.dispatch(drifted(moving));
+  hand.dispatch(tableActions.drifted(moving));
   const {drag} = hand.state;
   if (drag?.axis === 'column') {
-    hand.dispatch(columnLandingFound(lazyTravel(columnUnder(order(), drag.survey))(drag.held, moving, drag.landing)));
+    const landing = lazyTravel(columnUnder(order(), drag.survey))(drag.held, moving, drag.landing);
+    hand.dispatch(tableActions.columnLandingFound(landing));
   } else if (drag?.axis === 'row') {
-    hand.dispatch(rowLandingFound(lazyTravel(rowUnder(standing(), drag.survey))(drag.held, moving, drag.landing)));
+    const landing = lazyTravel(rowUnder(standing(), drag.survey))(drag.held, moving, drag.landing);
+    hand.dispatch(tableActions.rowLandingFound(landing));
   }
 };
 
 const lift = (context: MountedTable, carry: Carry, grab: Grab): void => {
   unmarked(context);
-  context.store.dispatch(lifted(carry, grab));
+  context.store.dispatch(tableActions.lifted(carry, grab));
 };
 
 const dress = (context: MountedTable, previous: TableState, next: TableState): void => {

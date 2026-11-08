@@ -36,7 +36,7 @@ type Action = TableAction;
 
 export type Foreign = {readonly type: string};
 
-const tableActions: Record<Action['type'], true> = {
+const actionTypes: Record<Action['type'], true> = {
   measured: true,
   awoken: true,
   tradedBy: true,
@@ -62,49 +62,76 @@ const tableActions: Record<Action['type'], true> = {
   sortChosen: true
 };
 
-export const isTableAction = (action: Foreign): action is TableAction => action.type in tableActions;
+const recognizes = (action: Foreign): action is TableAction => action.type in actionTypes;
 
-export const measured = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'measured', widths, floors});
-export const awoken = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'awoken', widths, floors});
-export const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
-export const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
-export const handleDragged = (column: string, neighbour: string, clientX: number): Action => ({type: 'handleDragged', column, neighbour, clientX});
-export const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
-export const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
-export const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});
-export const rowLandingFound = (neighbour?: string): Action => ({type: 'rowLandingFound', neighbour});
-export const released = (): Action => ({type: 'released'});
-export const arrowLifted = (column: string): Action => ({type: 'arrowLifted', column});
-export const handleLeft = (column: string): Action => ({type: 'handleLeft', column});
-export const handleReleased = (column: string): Action => ({type: 'handleReleased', column});
-export const dropped = (carry: Carry, from: Settling, landing: Landing): Action => ({type: 'dropped', carry, from, landing});
-export const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});
-export const settled = (target: Carry): Action => ({type: 'settled', target});
-export const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
-export const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
-export const columnMovedBeside = (
+const measured = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'measured', widths, floors});
+const awoken = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'awoken', widths, floors});
+const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
+const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
+const handleDragged = (column: string, neighbour: string, clientX: number): Action => ({type: 'handleDragged', column, neighbour, clientX});
+const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
+const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
+const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});
+const rowLandingFound = (neighbour?: string): Action => ({type: 'rowLandingFound', neighbour});
+const released = (): Action => ({type: 'released'});
+const arrowLifted = (column: string): Action => ({type: 'arrowLifted', column});
+const handleLeft = (column: string): Action => ({type: 'handleLeft', column});
+const handleReleased = (column: string): Action => ({type: 'handleReleased', column});
+const dropped = (carry: Carry, from: Settling, landing: Landing): Action => ({type: 'dropped', carry, from, landing});
+const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});
+const settled = (target: Carry): Action => ({type: 'settled', target});
+const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
+const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
+const columnMovedBeside = (
   name: string,
   neighbour: string,
   widths: PixelSizes,
   order: readonly string[]
 ): Action =>
   ({type: 'columnMovedBeside', name, neighbour, widths, order});
-export const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
+const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
 type LabelledRow = {readonly row: string; readonly label: string};
 
-export const rowMovedBeside = (
+const rowMovedBeside = (
   {row, label}: LabelledRow,
   neighbour: string,
   heights: PixelSizes,
   standing: readonly string[]
 ): Action =>
   ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
-export const rowWalkedTo = (
+const rowWalkedTo = (
   {row, label}: LabelledRow,
   to: number,
   heights: PixelSizes,
   standing: readonly string[]
 ): Action =>
   ({type: 'rowWalkedTo', row, label, to, heights, standing});
-export const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});
+const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});
+
+export const tableActions = {
+  recognizes,
+  measured,
+  awoken,
+  tradedBy,
+  gripped,
+  handleDragged,
+  lifted,
+  drifted,
+  columnLandingFound,
+  rowLandingFound,
+  released,
+  arrowLifted,
+  handleLeft,
+  handleReleased,
+  dropped,
+  unsettled,
+  settled,
+  shovedColumns,
+  shovedRows,
+  columnMovedBeside,
+  columnWalkedTo,
+  rowMovedBeside,
+  rowWalkedTo,
+  sortChosen
+};

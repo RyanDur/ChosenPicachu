@@ -1,6 +1,6 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
-import {choices, sortChosen} from './model';
+import {choices, tableActions} from './model';
 import {useHeaderEvents, useTableDispatch} from './context';
 import {useHydrated} from '@frame/page';
 
@@ -22,7 +22,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               onSorted?.({column, direction});
-              dispatch(sortChosen(column, direction));
+              dispatch(tableActions.sortChosen(column, direction));
             }}>{display}</Item>
         </Entry>)}
     </Menu>

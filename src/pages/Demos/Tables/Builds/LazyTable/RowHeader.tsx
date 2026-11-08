@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, Grab, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, arrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLandingFound, rowLift, rowMarks, rowMovedBeside, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from '@components/DragSortableTable/model';
+import {cellNeeds, columnHeld, driftOfColumn, driftOfRow, Grab, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, arrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLift, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn, shoveDistance, Survey, tableActions} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -24,18 +24,19 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudged = (to: number, heights: PixelSizes): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
+  const nudged = (to: number, heights: PixelSizes): void =>
+    dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);
-    dispatch(rowMovedBeside({row, label}, neighbour, survey.rowHeights, standing));
+    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, survey.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 
-  const lift = (grab: Grab): void => dispatch(lifted({axis: 'row', held: row}, grab));
+  const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
-    dispatch(drifted(moving));
-    dispatch(rowLandingFound(travelledRow(standing, moving)(held)));
+    dispatch(tableActions.drifted(moving));
+    dispatch(tableActions.rowLandingFound(travelledRow(standing, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {
@@ -43,13 +44,13 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       const settling = settlingOfRowIn(row, movedTo(standing, row, to))(view);
       releasedRow(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(dropped({axis: 'row', held: row}, settling, {name: label, order: movedTo(standing, row, to)}));
+        dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: movedTo(standing, row, to)}));
       }
     }
   };
 
   return <th {...th} scope="row" aria-label={label}
-    onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
+    onAnimationEnd={() => dispatch(tableActions.settled({axis: 'row', held: row}))}
     className={classNames(
       ...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{

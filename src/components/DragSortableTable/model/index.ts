@@ -1,5 +1,5 @@
 export type {TableAction} from './actions';
-export {arrowLifted, awoken, columnLandingFound, columnMovedBeside, columnWalkedTo, drifted, dropped, gripped, handleDragged, handleLeft, handleReleased, lifted, measured, released, rowLandingFound, rowMovedBeside, rowWalkedTo, settled, sortChosen, tradedBy} from './actions';
+export {tableActions} from './actions';
 export type {Arrangement, ArrangementAction} from './arrangement';
 export {arrangementOf, arrangementReducer, arrived, columnMoved, movedTo, rowMoved, sorted, standingOf} from './arrangement';
 export type {RowNudge} from './arrows';

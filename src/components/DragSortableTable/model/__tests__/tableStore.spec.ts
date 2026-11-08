@@ -1,6 +1,6 @@
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../../__test_support';
-import {arrowLifted, gripped, handleDragged, handleReleased, measured, tradedBy} from '../actions';
+import {tableActions} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
@@ -15,14 +15,14 @@ describe('the table store', () => {
     const heard: (readonly number[])[] = [];
     store.subscribe(() => heard.push(widths(store.state)));
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(widths(store.state)).toEqual([40, 30, 30]);
     expect(heard).toEqual([[40, 30, 30]]);
   });
 
   test('the reducer applies its own actions', () => {
-    const measuredState = tableReducer(resting, measured(columnShares(40, 30), noFloors));
+    const measuredState = tableReducer(resting, tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(widths(measuredState)).toEqual([40, 30, 30]);
   });
@@ -38,9 +38,9 @@ describe('the table store', () => {
     let heard = 0;
     const leave = store.subscribe(() => heard++);
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
     leave();
-    store.dispatch(measured(columnShares(50, 20), noFloors));
+    store.dispatch(tableActions.measured(columnShares(50, 20), noFloors));
 
     expect(heard).toBe(1);
   });
@@ -49,7 +49,7 @@ describe('the table store', () => {
     const store = tableStore();
 
     expect(store.state).toBe(store.state);
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
     expect(store.state).toBe(store.state);
   });
 
@@ -61,7 +61,7 @@ describe('the table store', () => {
     };
     const store = tableStore(watching);
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(seen).toEqual([[]]);
     expect(widths(store.state)).toEqual([40, 30, 30]);
@@ -88,12 +88,12 @@ describe('the table store', () => {
       passed.push('inner');
       next(action);
       if (passed.length === 2) {
-        api.dispatch(measured(columnShares(50, 20), noFloors));
+        api.dispatch(tableActions.measured(columnShares(50, 20), noFloors));
       }
     };
     const store = tableStore(outer, inner);
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(passed).toEqual(['outer', 'inner', 'outer', 'inner']);
     expect(widths(store.state)).toEqual([50, 20, 30]);
@@ -105,11 +105,11 @@ describe('the table store', () => {
     store.subscribe((previous, current, dispatch) => {
       heard.push([widths(previous), widths(current())]);
       if (heard.length === 1) {
-        dispatch(measured(columnShares(50, 20), noFloors));
+        dispatch(tableActions.measured(columnShares(50, 20), noFloors));
       }
     });
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(heard).toEqual([
       [[], [40, 30, 30]],
@@ -127,7 +127,7 @@ describe('the table store', () => {
     const store = tableStore(layer);
     store.subscribe(previous => order.push(`listener saw ${widths(previous).join()} become ${widths(store.state).join()}`));
 
-    store.dispatch(measured(columnShares(40, 30), noFloors));
+    store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(order).toEqual(['middleware', 'listener saw  become 40,30,30', 'middleware after']);
   });
@@ -184,87 +184,87 @@ describe('a sizing', () => {
 
   test('says nothing when it ends on the whole percent it began at, however far the fractions drifted', () => {
     const ended = after(
-      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
-      tradedBy('window', 'trades', 1),
-      tradedBy('window', 'trades', -1.000012166),
-      arrowLifted('window'));
+      tableActions.measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
+      tableActions.tradedBy('window', 'trades', 1),
+      tableActions.tradedBy('window', 'trades', -1.000012166),
+      tableActions.arrowLifted('window'));
 
     expect(ended.report).toBeUndefined();
   });
 
   test('says the new share when it ends on another whole percent', () => {
     const ended = after(
-      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
-      tradedBy('window', 'trades', 2),
-      arrowLifted('window'));
+      tableActions.measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
+      tableActions.tradedBy('window', 'trades', 2),
+      tableActions.arrowLifted('window'));
 
     expect(ended.report).toEqual({about: 'share', name: 'window', share: 14.999544950163525});
   });
 
   test('an arrow on another handle ends a keyboard resize and says its new share', () => {
     const ended = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      tradedBy('window', 'trades', 2),
-      tradedBy('trades', 'buys', 1));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.tradedBy('window', 'trades', 2),
+      tableActions.tradedBy('trades', 'buys', 1));
 
     expect(ended.report).toEqual({about: 'share', name: 'window', share: 15});
   });
 
   test('a press on another handle ends a keyboard resize and says its new share', () => {
     const ended = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      tradedBy('window', 'trades', 2),
-      gripped('trades', {fromX: 100, pxPerShare: 10}));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.tradedBy('window', 'trades', 2),
+      tableActions.gripped('trades', {fromX: 100, pxPerShare: 10}));
 
     expect(ended.report).toEqual({about: 'share', name: 'window', share: 15});
   });
 
   test('a lifted arrow leaves a pointer drag of the same column under way', () => {
     const dragged = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      gripped('window', {fromX: 100, pxPerShare: 10}),
-      tradedBy('window', 'trades', 1),
-      arrowLifted('window'),
-      handleDragged('window', 'trades', 120));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.gripped('window', {fromX: 100, pxPerShare: 10}),
+      tableActions.tradedBy('window', 'trades', 1),
+      tableActions.arrowLifted('window'),
+      tableActions.handleDragged('window', 'trades', 120));
 
     expect(widthsOf(dragged)?.window).toBe(16);
   });
 
   test('a pointer moving while an arrow holds the resize trades nothing', () => {
     const keyed = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      tradedBy('window', 'trades', 1),
-      handleDragged('window', 'trades', 200));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.tradedBy('window', 'trades', 1),
+      tableActions.handleDragged('window', 'trades', 200));
 
     expect(widthsOf(keyed)?.window).toBe(14);
   });
 
   test('a pointer move on a handle that holds no grip trades nothing', () => {
     const elsewhere = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      gripped('window', {fromX: 100, pxPerShare: 10}),
-      handleDragged('trades', 'buys', 120));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.gripped('window', {fromX: 100, pxPerShare: 10}),
+      tableActions.handleDragged('trades', 'buys', 120));
 
     expect(widthsOf(elsewhere)).toEqual({window: 13, trades: 40, buys: 47});
   });
 
   test('a release on another handle leaves the grip under way', () => {
     const dragged = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      gripped('window', {fromX: 100, pxPerShare: 10}),
-      handleReleased('trades'),
-      handleDragged('window', 'trades', 120));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.gripped('window', {fromX: 100, pxPerShare: 10}),
+      tableActions.handleReleased('trades'),
+      tableActions.handleDragged('window', 'trades', 120));
 
     expect(widthsOf(dragged)?.window).toBe(15);
   });
 
   test('a release on the gripped handle ends the grip and says its new share', () => {
     const released = after(
-      measured({window: 13, trades: 40, buys: 47}, noFloors),
-      gripped('window', {fromX: 100, pxPerShare: 10}),
-      handleDragged('window', 'trades', 120),
-      handleReleased('window'),
-      handleDragged('window', 'trades', 200));
+      tableActions.measured({window: 13, trades: 40, buys: 47}, noFloors),
+      tableActions.gripped('window', {fromX: 100, pxPerShare: 10}),
+      tableActions.handleDragged('window', 'trades', 120),
+      tableActions.handleReleased('window'),
+      tableActions.handleDragged('window', 'trades', 200));
 
     expect(widthsOf(released)?.window).toBe(15);
     expect(released.report).toEqual({about: 'share', name: 'window', share: 15});

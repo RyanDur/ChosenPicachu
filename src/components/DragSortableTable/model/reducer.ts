@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
 import {Reducer, combined} from '@components/store';
-import {Foreign, TableAction, isTableAction} from './actions';
+import {Foreign, TableAction, tableActions} from './actions';
 import {Landing, landingReport} from './report';
 import {displacedBetween, interior, spanCrossed} from './survey';
 import {
@@ -85,4 +85,4 @@ const sorting = (state: TableState, action: TableAction): TableState =>
 const answering: (state: TableState, action: TableAction) => TableState = combined(motion, widths, dragging, sorting);
 
 export const tableReducer = (state: TableState, action: Foreign): TableState =>
-  isTableAction(action) ? answering(state, action) : state;
+  tableActions.recognizes(action) ? answering(state, action) : state;

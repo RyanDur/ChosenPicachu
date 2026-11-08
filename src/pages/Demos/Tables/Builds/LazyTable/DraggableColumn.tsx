@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, columnDrag, ColumnDrag, columnHeld, columnLandingFound, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnWalkedTo, drifted, driftOfColumn, dropped, Grab, headerCell, headerNeeds, interior, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from '@components/DragSortableTable/model';
+import {arrows, columnDrag, ColumnDrag, columnHeld, columnLift, columnMarks, columnNamed, columnTravels, driftOfColumn, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn, tableActions} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -25,19 +25,19 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const travels = useTableSelector(columnTravels(column));
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
-    dispatch(columnWalkedTo(column, to, widths, order));
+    dispatch(tableActions.columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
   };
   const beside = (neighbour: string, survey: Survey): void => {
     const to = interior(order.indexOf(neighbour), count);
-    dispatch(columnMovedBeside(column, neighbour, survey.columnWidths, order));
+    dispatch(tableActions.columnMovedBeside(column, neighbour, survey.columnWidths, order));
     onColumnMoved?.({column, to});
   };
 
-  const lift = (grab: Grab): void => dispatch(lifted({axis: 'column', held: column}, grab));
+  const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
-    dispatch(drifted(moving));
-    dispatch(columnLandingFound(travelledColumn(order, moving)(held)));
+    dispatch(tableActions.drifted(moving));
+    dispatch(tableActions.columnLandingFound(travelledColumn(order, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {
@@ -45,7 +45,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
       const settling = settlingOfColumnIn(column, movedTo(order, column, to))(view);
       releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(dropped({axis: 'column', held: column}, settling, {name: column, order: movedTo(order, column, to)}));
+        dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: movedTo(order, column, to)}));
       }
     }
   };
@@ -63,7 +63,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onPointerCancel={has(drag) ? release : undefined}
     onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
-    onAnimationEnd={() => dispatch(settled({axis: 'column', held: column}))}
+    onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': shareWidth(width),
       '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
