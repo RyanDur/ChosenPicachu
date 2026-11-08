@@ -6,20 +6,20 @@ type Pushed = Readonly<Record<number, 'up' | 'down'>>;
 export type ChartTravelState = {
   readonly armed: Maybe<number>;
   readonly aloft: Maybe<number>;
-  readonly mark: number;
+  readonly pointerYAtLastSeat: number;
   readonly pushed: Pushed;
 };
 
-const initial: ChartTravelState = {armed: nothing(), aloft: nothing(), mark: 0, pushed: {}};
+const initial: ChartTravelState = {armed: nothing(), aloft: nothing(), pointerYAtLastSeat: 0, pushed: {}};
 
 const reduce = (travel: ChartTravelState, change: ChartTravelChange): ChartTravelState => {
   switch (change.type) {
     case 'armed': return {...travel, armed: some(change.at)};
     case 'disarmed': return {...travel, armed: nothing()};
-    case 'lifted': return {...travel, mark: change.pointer, aloft: some(change.at)};
+    case 'lifted': return {...travel, pointerYAtLastSeat: change.pointer, aloft: some(change.at)};
     case 'swapped': return {
       ...travel,
-      mark: change.pointer,
+      pointerYAtLastSeat: change.pointer,
       pushed: {[change.held]: change.to > change.held ? 'up' : 'down'},
       aloft: some(change.to)
     };
