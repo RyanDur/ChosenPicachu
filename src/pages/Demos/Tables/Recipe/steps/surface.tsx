@@ -35,8 +35,8 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
           fires{' '}
         <code className="monospaced">lostpointercapture</code> at the next move, with that move’s coordinates on the
           event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler. In the
-          vanilla build that is one function, carrying, which gives any holder, a header or a grip, the move, the
-          release and the capture loss.</Says>}
+          vanilla build that is one function, <code className="monospaced">carry.follow</code>, which gives any holder,
+          a header or a grip, the move, the release and the capture loss.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
