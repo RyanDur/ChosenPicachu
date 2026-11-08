@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {Grab, Moving, PixelSizes, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, survey, looks, travel} from './model';
+import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, tableState, survey, looks, travel, lifting} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
@@ -57,7 +57,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       '--shoved-by': tableState.shoveDistance(shoved)
     }}>
     <RowGrip position={position}
-      onPointerDown={rowLift(() => order, () => standing, lift)}
+      onPointerDown={lifting.row(() => order, () => standing, lift)}
       onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}

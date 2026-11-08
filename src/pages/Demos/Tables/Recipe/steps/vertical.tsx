@@ -49,7 +49,7 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.survey, 'const rowUnder'), gap,
             ...carve.unit(rowSource, 'const beside = '), gap,
-            ...carve.span(rowSource, 'onPointerDown={rowLift(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'),
+            ...carve.span(rowSource, 'onPointerDown={lifting.row(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'),
             lines.aside('{/* the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it */}')
           ]}/>
           : <Snippet label="TS" lines={[

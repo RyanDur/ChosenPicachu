@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, ColumnDrag, columnLift, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel} from './model';
+import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel, lifting} from './model';
 import './Header.css';
 import './motion.css';
 
@@ -53,7 +53,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     aria-label={data.label}
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
-    onPointerDown={travels ? columnLift(column, () => order, () => standing, lift) : undefined}
+    onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
     onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
     onPointerUp={has(drag) ? release : undefined}
     onPointerCancel={has(drag) ? release : undefined}

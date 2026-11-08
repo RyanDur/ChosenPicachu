@@ -23,7 +23,7 @@ type GrabEvent = {
   currentTarget: EventTarget | null;
 };
 
-export const columnLift = (
+const column = (
   held: string,
   order: () => readonly string[],
   standing: () => readonly string[],
@@ -47,7 +47,7 @@ export const columnLift = (
     }));
 };
 
-export const rowLift = (
+const row = (
   order: () => readonly string[],
   standing: () => readonly string[],
   grabbed: (grab: Grab) => void
@@ -67,4 +67,9 @@ export const rowLift = (
       box,
       at: {x: event.clientX, y: event.clientY}
     }));
+};
+
+export const lifting = {
+  column,
+  row
 };

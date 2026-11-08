@@ -44,7 +44,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
       <Codes>
         <Snippet label="TS" lines={[
           ...carve.unit(sources.store, 'export type Store'), gap,
-          ...carve.span(sources.lift, 'export const columnLift', ') => (event: GrabEvent): void => {'),
+          ...carve.span(sources.lift, 'const column = (', ') => (event: GrabEvent): void => {'),
           lines.aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'

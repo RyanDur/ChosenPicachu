@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, columnLift, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey, travel} from '@components/DragSortableTable/model';
+import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -156,7 +156,7 @@ const wired = (context: TableContext): void => {
   wireParts(context);
   headersOf(table).forEach(th => {
     const held = columnOfHeader(th);
-    th.addEventListener('pointerdown', columnLift(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
+    th.addEventListener('pointerdown', lifting.column(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carrying(th, context);
     th.addEventListener('keydown', arrows.column(held, order, ({to, widths}) => columnTo(context, held, to, widths)));
   });

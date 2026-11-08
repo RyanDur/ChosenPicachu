@@ -40,20 +40,20 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
+            ...carve.span(headerSource, 'onPointerDown={travels ? lifting.column(column', 'onPointerDown={travels ? lifting.column(column'), gap,
             ...carve.unit(headerSource, 'const lift = '), gap,
             ...carve.unit(sources.state, 'const dragOf'), gap,
             ...carve.unit(sources.state, 'const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(buildSrc, "th.addEventListener('pointerdown', columnLift",
-              "th.addEventListener('pointerdown', columnLift"), gap,
+            ...carve.span(buildSrc, "th.addEventListener('pointerdown', lifting.column",
+              "th.addEventListener('pointerdown', lifting.column"), gap,
             ...carve.unit(buildSrc, 'const lift = '), gap,
             ...carve.unit(sources.state, 'const dragOf'), gap,
             ...carve.unit(sources.state, 'const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...carve.unit(sources.lift, 'export const columnLift'),
+          ...carve.unit(sources.lift, 'const column = ('),
           lines.aside('// one lift; each world grabs in its own way')
         ]}/>
         <Snippet label="CSS" lines={[
