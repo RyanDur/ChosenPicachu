@@ -1,4 +1,4 @@
-import {empty, streaming} from '@ryandur/sand';
+import {Maybe, has, maybe, streaming} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {decodeTrade, subscribeTo} from '../Charts/coinbase';
 import {periodCandles, periodQuery} from '../Charts/coinbase/history';
@@ -14,6 +14,15 @@ export type Exchange = {
 };
 
 type Closer = () => void;
+
+type Configured = {
+  feed: Maybe<string>;
+  history: Maybe<string>;
+  product: string;
+};
+
+const configured = ({tradeFeed, tradeHistory, tradeProduct}: Exchange): Configured =>
+  ({feed: maybe(tradeFeed, has), history: maybe(tradeHistory, has), product: tradeProduct});
 
 export type FeedTrouble =
   | {type: 'handshakeRefused'}
@@ -32,36 +41,29 @@ const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble:
 };
 
 const candlesFor = (
-  {tradeHistory, tradeProduct}: Exchange,
+  {history, product}: Configured,
   period: Period,
   dispatch: Dispatch,
   onTrouble: Trouble
-): Closer => {
-  if (empty(tradeHistory)) {
+): Closer => history.either(
+  base => {
+    const fetching = periodCandles(base, product, periodQuery(period))
+      .onSuccess(candles => dispatch(marketActions.candlesArrived(period, candles)))
+      .onFailure(cause => {
+        dispatch(marketActions.candlesRefused(period));
+        onTrouble({type: 'candlesRefused', cause});
+      });
+    return () => fetching.cancel();
+  },
+  () => {
     dispatch(marketActions.candlesRefused(period));
     return () => undefined;
-  }
-  const fetching = periodCandles(tradeHistory, tradeProduct, periodQuery(period))
-    .onSuccess(candles => dispatch(marketActions.candlesArrived(period, candles)))
-    .onFailure(cause => {
-      dispatch(marketActions.candlesRefused(period));
-      onTrouble({type: 'candlesRefused', cause});
-    });
-  return () => fetching.cancel();
-};
+  });
 
-const opened = (
-  {tradeFeed, tradeHistory, tradeProduct}: Exchange,
-  dispatch: Dispatch,
-  onTrouble: Trouble
-): readonly Closer[] => {
-  const history = tradeHistory ? [historyOf(tradeHistory, tradeProduct, dispatch, onTrouble)] : [];
-  if (!tradeFeed) {
-    return history;
-  }
-  const stream = streaming(tradeFeed, (): FeedTrouble => ({type: 'handshakeRefused'}))
+const streamOf = (address: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
+  const stream = streaming(address, (): FeedTrouble => ({type: 'handshakeRefused'}))
     .onOpen(socket => {
-      socket.send(subscribeTo(tradeProduct));
+      socket.send(subscribeTo(product));
       dispatch(marketActions.feedOpened());
     })
     .onMessage(event => decodeTrade(event.data).map(trade => dispatch(marketActions.tradeArrived(trade))))
@@ -73,17 +75,23 @@ const opened = (
       dispatch(marketActions.feedFailed());
       onTrouble(trouble);
     });
-  return [...history, () => stream.close()];
+  return () => stream.close();
 };
 
+const opened = ({feed, history, product}: Configured, dispatch: Dispatch, onTrouble: Trouble): readonly Closer[] => [
+  ...history.either(base => [historyOf(base, product, dispatch, onTrouble)], () => []),
+  ...feed.either(address => [streamOf(address, product, dispatch, onTrouble)], () => [])
+];
+
 export const exchange = (env: Exchange, onTrouble: Trouble): MarketMiddleware => api => {
+  const market = configured(env);
   let closers: readonly Closer[] = [];
   const asked = new Map<Period, Closer>();
   return next => action => {
     next(action);
     switch (action.type) {
       case 'feedRequested':
-        closers = opened(env, api.dispatch, onTrouble);
+        closers = opened(market, api.dispatch, onTrouble);
         break;
       case 'feedReleased':
         [...closers, ...asked.values()].forEach(close => close());
@@ -92,7 +100,7 @@ export const exchange = (env: Exchange, onTrouble: Trouble): MarketMiddleware =>
         break;
       case 'candlesAsked':
         asked.get(action.period)?.();
-        asked.set(action.period, candlesFor(env, action.period, api.dispatch, onTrouble));
+        asked.set(action.period, candlesFor(market, action.period, api.dispatch, onTrouble));
         break;
       default:
         break;
