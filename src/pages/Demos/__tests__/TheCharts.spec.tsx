@@ -824,6 +824,7 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
@@ -847,7 +848,6 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });

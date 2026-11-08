@@ -131,8 +131,9 @@ const PriceStory: FC = () =>
             price sets how far down, with the highest price at the top.</Says>
           <Says>The points go to one SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>, a line drawn through a
             list of points. A new trade means new points, and React draws the new line. Nothing on the page is measured,
-            and the line is never animated: it is drawn again. Only the dot on the newest point moves, sliding to its
-            new place over 300 milliseconds.</Says>
+            and the line is never animated: it is drawn again. Only the dot on the newest point moves. It is placed
+            by <code className="monospaced">translate</code>, a transform, so it slides to its new place over 300
+            milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -203,6 +204,15 @@ const CandlesStory: FC = () =>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
+          <Says>The body and the wall each start as a square one unit on a side. The markup gives every shape four
+            custom properties: where the shape starts across, where its foot sits, how wide it is and how tall. A custom
+            property is a value set by name on an element and read back in the style sheet
+            with <code className="monospaced">var()</code>, as
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The chart’s style sheet reads all
+            four in one transform that moves the square into place and stretches it to size. I move things only by
+            transform and opacity, which spare the browser a new layout on every frame, so a shape takes its size from
+            the stretch, not from its width and height. When a candle’s prices change, the four numbers change, and the
+            shape moves to them over 300 milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -321,7 +331,8 @@ const PressureStory: FC = () =>
             values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
             reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
             wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
+          <Says>The bars are placed the way the candle bodies are, by four custom properties and one transform, so when
+            a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars.
             The caption says how many minutes are on show, up to the last 1,500 trades.</Says>
         </Words>
@@ -331,6 +342,7 @@ const PressureStory: FC = () =>
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(pressureCss, '.midline {'), gap,
+            ...carve.unit(pressureCss, '.bought,\n    .sold,'), gap,
             ...carve.unit(drawingCss, '.drawn {'), gap,
             ...carve.unit(drawingCss, '.buy-side {'), gap,
             ...carve.unit(drawingCss, '.sell-side {'), gap,
@@ -392,11 +404,8 @@ const PieStory: FC = () =>
             moves is a rotation or a shift, each over 300 milliseconds.</Says>
           <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
-          <Says>The markup passes each number to the style sheet as a custom property, which
-            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
-            explains: a value set by name on the element,
-            such as <code className="monospaced">--turn</code>, and read back in the style sheet
-            with <code className="monospaced">var()</code>. The style sheet declares each one
+          <Says>The markup passes each number to the style sheet as a custom property, such
+            as <code className="monospaced">--turn</code>, as the candles do. The style sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a
             starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before
             the markup sets them, a slice sits unturned at the center.</Says>
