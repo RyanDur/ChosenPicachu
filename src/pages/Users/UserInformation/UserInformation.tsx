@@ -56,7 +56,6 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
-  const addInFlight = useUsersSelector(usersSelectors.addInFlight);
   const [confirmedAddsResetFor, setConfirmedAddsResetFor] = useState(confirmedAdds);
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
     started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
@@ -82,7 +81,6 @@ const Draft: FC<{className?: string}> = ({className}) => {
         return;
       }
 
-      if (addInFlight) return;
       usersDispatch(usersActions.userAdded(user));
     }}
     onReset={() => reset()}>

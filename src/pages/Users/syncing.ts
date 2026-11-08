@@ -6,12 +6,13 @@ import {usersActions} from './usersActions';
 import {usersSelectors} from './usersSelectors';
 
 export const syncing = (usersApi: UsersAPI, saved: () => void, refused: (error: HTTPError) => void): UsersListener =>
-  (_previous, current, dispatch, action) => {
+  (previous, current, dispatch, action) => {
     switch (action.type) {
       case 'opened':
         usersApi.getAll().onSuccess(arrived => dispatch(usersActions.usersArrived(arrived))).onFailure(refused);
         return;
       case 'userAdded':
+        if (usersSelectors.addInFlight(previous)) return;
         usersApi.add(action.user)
           .onSuccess(arrived => dispatch(usersActions.usersArrived(arrived)))
           .onSuccess(() => dispatch(usersActions.userAddConfirmed()))
