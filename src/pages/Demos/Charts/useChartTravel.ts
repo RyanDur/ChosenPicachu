@@ -12,7 +12,7 @@ type Travel = {
 };
 
 export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
-  const [{armed, aloft, mark, pushed}, dispatch] = useReducer(chartTravel.reduce, chartTravel.initial);
+  const [{armed, aloft, pointerYAtLastSeat, pushed}, dispatch] = useReducer(chartTravel.reduce, chartTravel.initial);
 
   const isArmed = (at: number) => armed.map(gripped => gripped === at).orElse(false);
 
@@ -48,7 +48,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     const slots = event.currentTarget.parentElement?.children;
     aloft.map(held => boundsOf(slots?.item(held)).map(bounds => {
       const pointer = event.pageY;
-      const to = crossing.strayedTo(pointer, mark, bounds.height / 3, held);
+      const to = crossing.strayedTo(pointer, pointerYAtLastSeat, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
