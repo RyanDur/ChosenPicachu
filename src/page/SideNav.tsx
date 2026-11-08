@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren, useContext} from 'react';
+import {FC, PropsWithChildren, useContext} from 'react';
 import {is, not} from '@ryandur/sand';
 import {Link, NavLink, useMatch} from 'react-router';
 import {Paths} from '@navigation';
@@ -6,10 +6,9 @@ import {DemoTopics, demoTab} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
+import {PageUnknown} from './PageUnknown';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
-
-const PageUnknown = createContext(false);
 
 type RailLinkProps = PropsWithChildren<{readonly id: string; readonly to: string; readonly end?: boolean}>;
 
@@ -26,8 +25,8 @@ const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
     aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
 };
 
-export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) =>
-  <PageUnknown.Provider value={pageUnknown}><nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
+export const SideNav: FC = () =>
+  <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
@@ -42,4 +41,4 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) =>
     <RailLink id="navigate-games" to={Paths.games}>Games</RailLink>
     <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}
       rel="noopener noreferrer" target="_blank">Repo</a>
-  </nav></PageUnknown.Provider>;
+  </nav>;

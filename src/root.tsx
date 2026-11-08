@@ -5,7 +5,7 @@ import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@feedback';
 import {environment} from '@transport';
-import {Header, Page, PageError, Rail} from '@page';
+import {Header, Page, PageError, PageUnknown, Rail} from '@page';
 import {PageNameProvider} from '@page-name';
 import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
@@ -40,13 +40,13 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
 // the router keys every entry opened by its address 'default', so those entries would all share one scroll place
 const placeOf = ({key, pathname, search}: Location): string => key === 'default' ? pathname + search : key;
 
-const Frame: FC<{room: ReactNode; pageUnknown?: boolean}> = ({room, pageUnknown}) =>
-  <BannerProvider><PageNameProvider><FeedbackProvider>
-    <Rail pageUnknown={pageUnknown}/>
+const Frame: FC<{room: ReactNode; pageUnknown?: boolean}> = ({room, pageUnknown = false}) =>
+  <BannerProvider><PageNameProvider><FeedbackProvider><PageUnknown.Provider value={pageUnknown}>
+    <Rail/>
     {room}
     <Banners/>
     <ScrollRestoration getKey={placeOf}/>
-  </FeedbackProvider></PageNameProvider></BannerProvider>;
+  </PageUnknown.Provider></FeedbackProvider></PageNameProvider></BannerProvider>;
 
 export const ClosedRoom: FC = () =>
   <Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}>
