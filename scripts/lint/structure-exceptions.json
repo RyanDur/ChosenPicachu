@@ -44,9 +44,6 @@
     "src/pages/Record/moments/Moment.tsx",
     "src/pages/Record/moments/concerns.ts",
     "src/pages/Record/moments/moments.ts",
-    "src/pages/Users/UserInformation/actions.ts",
-    "src/pages/Users/UserInformation/avatars.ts",
-    "src/pages/Users/UserInformation/reducer.ts",
     "src/transport/types.ts"
   ],
   "has-index": [
