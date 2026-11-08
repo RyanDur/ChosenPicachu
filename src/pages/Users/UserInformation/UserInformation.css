@@ -7,7 +7,7 @@
   grid-template-areas:
     'title title title title title title title title title title avatar avatar'
     'first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar'
-    'email email email email email email email dob dob dob avatar avatar'
+    'email email email email email email email date-of-birth date-of-birth date-of-birth avatar avatar'
     'home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address'
     'details details details details details details details details details details details details'
     'reset reset reset cancel cancel cancel submit submit submit submit submit submit';
@@ -34,8 +34,8 @@
     grid-area: email;
   }
 
-  .dob {
-    grid-area: dob;
+  .date-of-birth {
+    grid-area: date-of-birth;
     align-self: center;
     display: flex;
 
@@ -114,7 +114,7 @@
       'title title avatar'
       'first_name first_name first_name'
       'last_name last_name last_name'
-      'email email dob'
+      'email email date-of-birth'
       'home_address home_address home_address'
       'work_address work_address work_address'
       'details details details'
@@ -131,7 +131,7 @@
       'first_name'
       'last_name'
       'email'
-      'dob'
+      'date-of-birth'
       'home_address'
       'work_address'
       'details'
@@ -143,7 +143,7 @@
       justify-self: center;
     }
 
-    .dob {
+    .date-of-birth {
       align-self: stretch;
     }
   }

@@ -1,6 +1,6 @@
 import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, NewUser, User} from '@pages/Users/profile';
+import {Address, NewUser, User} from '@pages/Users/profile';
 import {format} from 'date-fns';
 import {has} from '@ryandur/sand';
 
@@ -17,18 +17,18 @@ const paste = (field: HTMLElement, text: string): Promise<void> =>
 const pasteIfGiven = (field: HTMLElement, text?: string): Promise<void> =>
   has(text) ? paste(field, text) : Promise.resolve();
 
-const fillOutAddress = (given: AddressInfo, kind: string): Promise<void> =>
+const fillOutAddress = (given: Address, kind: string): Promise<void> =>
   paste(address(kind).getByLabelText('Street'), given.streetAddress)
     .then(() => pasteIfGiven(address(kind).getByLabelText('Street Line 2'), given.streetAddressTwo))
     .then(() => paste(address(kind).getByLabelText('City'), given.city))
     .then(() => swiftKeys.selectOptions(address(kind).getByLabelText('State'), given.state))
     .then(() => paste(address(kind).getByLabelText('Postal / Zip code'), given.zip));
 
-const fillOutPerson = ({info}: Pick<NewUser, 'info'>): Promise<void> =>
-  paste(screen.getByLabelText('First Name'), info.firstName)
-    .then(() => paste(screen.getByLabelText('Last Name'), info.lastName))
-    .then(() => paste(screen.getByLabelText('Email'), info.email))
-    .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.dob!, 'yyyy-MM-dd')));
+const fillOutPerson = ({person}: Pick<NewUser, 'person'>): Promise<void> =>
+  paste(screen.getByLabelText('First Name'), person.firstName)
+    .then(() => paste(screen.getByLabelText('Last Name'), person.lastName))
+    .then(() => paste(screen.getByLabelText('Email'), person.email))
+    .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(person.dateOfBirth!, 'yyyy-MM-dd')));
 
 const field = (label: string): HTMLElement => within(form()).getByLabelText(label);
 
@@ -41,7 +41,7 @@ export const userForm = {
   field,
   sameAsHome,
 
-  showing: (user: User): Promise<HTMLElement> => waitFor(() => within(form()).getByDisplayValue(user.info.firstName)),
+  showing: (user: User): Promise<HTMLElement> => waitFor(() => within(form()).getByDisplayValue(user.person.firstName)),
 
   avatar: (): HTMLElement => screen.getByRole('button', {name: 'Draw a new avatar'}),
 
@@ -57,7 +57,7 @@ export const userForm = {
 
   cancel: (): Promise<void> => userEvent.click(within(form()).getByRole('link', {name: 'Cancel'})),
 
-  fillOut: (user: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo}): Promise<void> =>
+  fillOut: (user: Pick<NewUser, 'person' | 'homeAddress'> & {work: Address}): Promise<void> =>
     fillOutPerson(user)
       .then(() => fillOutAddress(user.homeAddress, 'home'))
       .then(() => fillOutAddress(user.work, 'work')),

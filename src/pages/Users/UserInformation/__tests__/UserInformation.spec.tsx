@@ -7,7 +7,7 @@ import {UserInformation} from '../index';
 import {UsersProvider} from '../../UsersProvider';
 import {userForm} from '../__test_support';
 import {setupUsersResponse, userAddsHeard} from '@pages/Users/__test_support';
-import {AddressInfo, NewUser} from '@pages/Users/profile';
+import {Address, NewUser} from '@pages/Users/profile';
 
 const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
   setupUsersResponse([]);
@@ -20,12 +20,12 @@ const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
 const asSent = (user: NewUser): unknown => JSON.parse(JSON.stringify(user));
 
 describe('a user form', () => {
-  const info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo; details: string} = {
-    info: {
+  const filledIn: Pick<NewUser, 'person' | 'homeAddress'> & {work: Address; details: string} = {
+    person: {
       firstName: 'Teruko',
       lastName: 'Okada',
       email: 'teruko@example.com',
-      dob: new Date(1984, 5, 2)
+      dateOfBirth: new Date(1984, 5, 2)
     },
     homeAddress: {
       streetAddress: '12 Elm St',
@@ -47,8 +47,8 @@ describe('a user form', () => {
   describe('filled out', () => {
     it('resetting empties a filled-out form', async () => {
       render(added().form);
-      await userForm.fillOut(info);
-      await userEvent.type(screen.getByLabelText('Details'), info.details);
+      await userForm.fillOut(filledIn);
+      await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
 
       await userEvent.click(screen.getByRole('button', {name: 'Reset'}));
 
@@ -70,18 +70,18 @@ describe('a user form', () => {
 
         render(form);
 
-        await userForm.fillOut(info);
-        await userEvent.type(screen.getByLabelText('Details'), info.details);
+        await userForm.fillOut(filledIn);
+        await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
         const avatar = userForm.avatarShown();
         await userForm.add();
 
-        await waitFor(() => expect(adds()).toEqual([asSent({...info, friends: [], avatar})]));
+        await waitFor(() => expect(adds()).toEqual([asSent({...filledIn, friends: [], avatar})]));
       });
 
       it('the form empties once a user is added', async () => {
         const {form, adds} = added();
         render(form);
-        await userForm.fillOut(info);
+        await userForm.fillOut(filledIn);
 
         await userForm.add();
 
@@ -91,7 +91,7 @@ describe('a user form', () => {
 
       it('the fresh form after adding wears a new avatar', async () => {
         render(added().form);
-        await userForm.fillOut(info);
+        await userForm.fillOut(filledIn);
         const submitted = userForm.avatarShown();
 
         await userForm.add();
@@ -112,14 +112,14 @@ describe('a user form', () => {
         const {form, adds} = added();
         render(form);
 
-        await userForm.fillOut(info);
-        await userEvent.type(screen.getByLabelText('Details'), info.details);
+        await userForm.fillOut(filledIn);
+        await userEvent.type(screen.getByLabelText('Details'), filledIn.details);
         await userForm.tickSameAsHome();
         const avatar = userForm.avatarShown();
         await userForm.add();
 
         await waitFor(() => expect(adds()).toEqual([asSent({
-          ...info,
+          ...filledIn,
           friends: [],
           avatar,
           work: 'home'
@@ -129,33 +129,33 @@ describe('a user form', () => {
       test('ticking Same as Home shows the home address in the work fields, disabled', async () => {
         const {form} = added();
         render(form);
-        await userForm.fillOut(info);
+        await userForm.fillOut(filledIn);
 
         await userForm.tickSameAsHome();
 
-        expect(userForm.addressField('work', 'Street')).toHaveValue(info.homeAddress.streetAddress);
-        expect(userForm.addressField('work', 'City')).toHaveValue(info.homeAddress.city);
-        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(info.homeAddress.zip);
+        expect(userForm.addressField('work', 'Street')).toHaveValue(filledIn.homeAddress.streetAddress);
+        expect(userForm.addressField('work', 'City')).toHaveValue(filledIn.homeAddress.city);
+        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(filledIn.homeAddress.zip);
         expect(userForm.addressField('work', 'Street')).toBeDisabled();
       });
 
       test('unticking Same as Home gives back the work address that was typed', async () => {
         const {form} = added();
         render(form);
-        await userForm.fillOut(info);
+        await userForm.fillOut(filledIn);
         await userForm.tickSameAsHome();
 
         await userForm.tickSameAsHome();
 
-        expect(userForm.addressField('work', 'Street')).toHaveValue(info.work.streetAddress);
-        expect(userForm.addressField('work', 'City')).toHaveValue(info.work.city);
-        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(info.work.zip);
+        expect(userForm.addressField('work', 'Street')).toHaveValue(filledIn.work.streetAddress);
+        expect(userForm.addressField('work', 'City')).toHaveValue(filledIn.work.city);
+        expect(userForm.addressField('work', 'Postal / Zip code')).toHaveValue(filledIn.work.zip);
         expect(userForm.addressField('work', 'Street')).toBeEnabled();
       });
 
       test('the fresh form after adding has the box unticked and the work address open', async () => {
         render(added().form);
-        await userForm.fillOut(info);
+        await userForm.fillOut(filledIn);
         await userForm.tickSameAsHome();
 
         await userForm.add();

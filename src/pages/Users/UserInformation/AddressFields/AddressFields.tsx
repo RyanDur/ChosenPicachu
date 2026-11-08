@@ -3,21 +3,21 @@ import {classNames} from '@components/class-names';
 import {FancyInput} from '../../FancyFormElements/FancyInput';
 import {FancySelect} from '../../FancyFormElements/FancySelect';
 import {stateAbbreviations} from './states';
-import {AddressInfo} from '@pages/Users/profile';
-import './Address.css';
+import {Address} from '@pages/Users/profile';
+import './AddressFields.css';
 
-type AddressProps = {
+type AddressFieldsAttributes = {
   title: string;
   className?: string;
-  onEdited: (address: AddressInfo) => void;
+  onEdited: (address: Address) => void;
   id: string;
-  value?: AddressInfo;
+  value?: Address;
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
 };
 
-export const Address: FC<PropsWithChildren<AddressProps>> = (
+export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
   {
     title,
     children,

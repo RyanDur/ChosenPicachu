@@ -70,7 +70,7 @@ describe('the friends list', () => {
   });
 
   test('a friend shows by their name in the roster', async () => {
-    const renamed = {...ben, info: {...ben.info, firstName: 'Renamed', lastName: 'Person'}};
+    const renamed = {...ben, person: {...ben.person, firstName: 'Renamed', lastName: 'Person'}};
     const ana = aUser({id: 'ana', friends: [ben.id]});
     const list = await rowOf(ana, [ana, renamed, cy]);
 

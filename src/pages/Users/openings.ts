@@ -12,17 +12,17 @@ export type Opened =
 export type Mode = 'view' | 'edit';
 
 type Openings = {
-  param: schema.Decoder<Mode>;
-  of: (chosen: Maybe<User>, param?: Mode) => Opened;
+  modeInAddress: schema.Decoder<Mode>;
+  of: (chosen: Maybe<User>, mode?: Mode) => Opened;
   at: (id: string, mode: Mode) => string;
   copying: (id: string) => string;
 };
 
 export const openings: Openings = {
-  param: schema.literalUnion('view', 'edit'),
-  of: (chosen, param) => chosen
+  modeInAddress: schema.literalUnion('view', 'edit'),
+  of: (chosen, mode) => chosen
     .map((user): Opened => {
-      switch (param) {
+      switch (mode) {
         case 'view': return {mode: 'viewing', user};
         case 'edit': return {mode: 'editing', user};
         default: return {mode: 'adding', copying: user};

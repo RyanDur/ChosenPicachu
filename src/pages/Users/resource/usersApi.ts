@@ -21,15 +21,15 @@ const AddressDecoder = schema.object({
   optional: {streetAddressTwo: schema.string}
 });
 
-const InfoDecoder = schema.object({
+const PersonDecoder = schema.object({
   required: {firstName: schema.string, lastName: schema.string, email: schema.string},
-  optional: {dob: schema.string.andThen(day => new Date(day))}
-}).andThen(({dob, ...info}) => isValid(dob) ? {...info, dob} : info);
+  optional: {dateOfBirth: schema.string.andThen(day => new Date(day))}
+}).andThen(({dateOfBirth, ...person}) => isValid(dateOfBirth) ? {...person, dateOfBirth} : person);
 
 const UserDecoder = schema.object({
   required: {
     id: schema.string,
-    info: InfoDecoder,
+    person: PersonDecoder,
     friends: schema.array(schema.string),
     homeAddress: AddressDecoder,
     avatar: schema.string

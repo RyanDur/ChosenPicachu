@@ -10,7 +10,7 @@ import './UsersPage.css';
 const Roster: FC = () => {
   const open = useOpened();
   return <>
-    <UserInformation className="user-info users card rounded-corners lifted padded"/>
+    <UserInformation className="user-form users card rounded-corners lifted padded"/>
 
     <section id="user-candidates" aria-labelledby="roster-title" className="user-candidates users card rounded-corners lifted padded contained">
       <h2 id="roster-title" className="roster-title title bold">User Candidates</h2>

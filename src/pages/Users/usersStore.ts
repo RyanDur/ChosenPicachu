@@ -6,7 +6,7 @@ export type UsersStore = Store<UsersState, UsersAction>;
 export type UsersListener = Listener<UsersState, UsersAction>;
 
 export const usersStore = (...listeners: UsersListener[]): UsersStore => {
-  const users = store({slice: usersSlice});
-  listeners.forEach(listener => users.subscribe(listener));
-  return users;
+  const held = store({slice: usersSlice});
+  listeners.forEach(listener => held.subscribe(listener));
+  return held;
 };

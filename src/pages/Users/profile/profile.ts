@@ -1,4 +1,4 @@
-export type AddressInfo = {
+export type Address = {
   streetAddress: string;
   streetAddressTwo?: string;
   city: string;
@@ -6,19 +6,19 @@ export type AddressInfo = {
   zip: string;
 };
 
-export type UserInfo = {
+export type Person = {
   firstName: string;
   lastName: string;
   email: string;
-  dob?: Date;
+  dateOfBirth?: Date;
 };
 
 export type NewUser = {
-  info: UserInfo;
+  person: Person;
   friends: string[];
-  homeAddress: AddressInfo;
+  homeAddress: Address;
   avatar: string;
-  work?: 'home' | AddressInfo;
+  work?: 'home' | Address;
   details?: string;
 };
 
@@ -35,7 +35,7 @@ type Profile = {
 };
 
 export const profile: Profile = {
-  fullName: ({info}) => `${info.firstName} ${info.lastName}`,
+  fullName: ({person}) => `${person.firstName} ${person.lastName}`,
   befriended: (user, friendId) => ({...user, friends: [...user.friends, friendId]}),
   unfriended: (user, friendId) => ({...user, friends: user.friends.filter(id => id !== friendId)})
 };

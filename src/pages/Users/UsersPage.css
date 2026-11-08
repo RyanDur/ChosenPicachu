@@ -1,4 +1,4 @@
-.user-info {
+.user-form {
   max-width: var(--base-x-172_5);
 }
 
@@ -72,7 +72,7 @@
 }
 
 @media (width <= 600px) {
-  .user-info {
+  .user-form {
     width: 100%;
   }
 }

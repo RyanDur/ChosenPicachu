@@ -44,7 +44,7 @@ export const UsersTable: FC = () => {
           return <Row key={user.id}>
             <RowHeader column="full-name" row={user.id} label={name}/>
             <Cell column="home-city" row={user.id}>{user.homeAddress.city}</Cell>
-            <Cell column="age" row={user.id}>{maybe(user.info.dob).map(age.of).map(age.worded).orElse('')}</Cell>
+            <Cell column="age" row={user.id}>{maybe(user.person.dateOfBirth).map(age.of).map(age.worded).orElse('')}</Cell>
             <Cell column="friends" row={user.id}>
               <FriendsList userId={user.id}/>
             </Cell>
