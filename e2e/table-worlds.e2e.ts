@@ -33,3 +33,11 @@ test('the vanilla table reads to a screen reader as the react table does: its ca
   expect(told).toContain('- table "Live aggregations by window":');
   expect(told.filter(line => line.startsWith('- img'))).toEqual([]);
 });
+
+test('the Tables tab says the table could not be assembled when its script never arrives', async ({page}) => {
+  await page.route('**/assets/assemble-*.js', route => route.abort());
+
+  await page.goto('demos/tables/?world=vanilla');
+
+  await expect(page.getByRole('alert')).toContainText('the table could not be assembled');
+});
