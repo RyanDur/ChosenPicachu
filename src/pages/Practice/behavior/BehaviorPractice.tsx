@@ -182,8 +182,8 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
       the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code>{' '}
       attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
-      buttons open and close it with invoker commands, which every major browser has shipped since December 2025, so
-      they need no fallback.</p>
+      buttons open and close it with invoker commands, which every major browser has shipped since December 2025. I
+      write for the browsers that have them, so they get no fallback.</p>
     <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
       the element that needs it by a data attribute, like the tables demo’s{' '}
     <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
