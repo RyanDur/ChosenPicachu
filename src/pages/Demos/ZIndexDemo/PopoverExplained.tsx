@@ -4,7 +4,7 @@ import {AboveThePage} from './AboveThePage';
 import {partHeadings} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
-import menuSource from '@components/Menu/Item.tsx?sample';
+import itemSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
@@ -52,7 +52,7 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes
           that set its look. I leave a menu’s look to the page that uses it, so the page
           passes <code className="monospaced">Menu</code> those classes, as the sample shows.</p>
-        <Snippet label="TS" lines={carve.unit(menuSource, 'export const Item')}/>
+        <Snippet label="TS" lines={carve.unit(itemSource, 'export const Item')}/>
       </li>
       <li className="run">
         <p className="paragraph">The button that opens the menu carries a tabIndex of 0, as its sample shows, and so
