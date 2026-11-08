@@ -14,13 +14,13 @@ const clues: [string, string][] = [
 ];
 
 const Sketch: FC = () =>
-  <div className="design-sketch" aria-hidden="true">
+  <ul className="design-sketch" aria-hidden="true">
     {['first', 'second', 'third', 'fourth'].map(item =>
-      <div className="design-item card hairline-edged rounded-corners" key={item}>
+      <li className="design-item card hairline-edged rounded-corners" key={item}>
         <span className="muted-ink">≡</span>
         <span className="design-line field rounded-corners"/>
-      </div>)}
-  </div>;
+      </li>)}
+  </ul>;
 
 const unanswered = [
   'Whether the list should make room as you hover, or hold still until the drop.',
