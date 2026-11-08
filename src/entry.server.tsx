@@ -1,9 +1,10 @@
-import {ReactNode, StrictMode} from 'react';
+import {ReactNode} from 'react';
 import {renderToReadableStream} from 'react-dom/server';
 import {createStaticHandler, createStaticRouter, RouteObject, StaticRouterProvider} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
-import {HydrateFallback, Layout} from './root';
+import {HydrateFallback} from './root';
+import {Site} from './Site';
 import {is, not} from '@ryandur/sand';
 import {lazily, siteOpenedBy} from './routes';
 
@@ -38,9 +39,9 @@ const drawn = async (routes: RouteObject[], path: string): Promise<string> => {
   const handler = createStaticHandler(routes, {basename});
   const context = await handler.query(new Request(new URL(`${basename}${path.slice(1)}`, 'http://localhost')));
   if (context instanceof Response) throw new Error(`${path} answered ${context.status}, not a page`);
-  return written(<StrictMode><Layout>
+  return written(<Site>
     <StaticRouterProvider router={createStaticRouter(handler.dataRoutes, context)} context={context} hydrate={false}/>
-  </Layout></StrictMode>);
+  </Site>);
 };
 
 const page = async (path: string): Promise<{html: string; rooms: string[]}> => {

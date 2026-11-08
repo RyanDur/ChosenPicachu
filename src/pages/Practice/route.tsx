@@ -14,16 +14,14 @@ const listings: Record<Concern, Listing> = {
   'Behavior': names.practice.behavior
 };
 
-const ConcernHeader: FC<{concern: Concern}> = ({concern}) =>
-  <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
-
 const useConcern = (): Maybe<Concern> => practiceAddress.concernFromSegment(useParams().concern);
 
-export const ErrorBoundary: FC = () => {
-  const header = useConcern().either(concern => <ConcernHeader concern={concern}/>, () => null);
-  return <Page header={header}><PageError/></Page>;
-};
+const ConcernHeader: FC = () => useConcern().either(
+  concern => <Header title={`Practice ${concern}`} listed={listings[concern]}/>,
+  () => null);
+
+export const ErrorBoundary: FC = () => <Page header={<ConcernHeader/>}><PageError/></Page>;
 
 export const Room: FC = () => useConcern().either(
-  concern => <Page header={<ConcernHeader concern={concern}/>}><PracticePage concern={concern}/></Page>,
+  concern => <Page header={<ConcernHeader/>}><PracticePage concern={concern}/></Page>,
   () => <NoSuchRoom/>);
