@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 const globals = new Set(['document', 'window']);
 
 /**
@@ -20,7 +20,7 @@ const noPageGlobals = {
       'Program:exit'(program) {
         const scope = context.sourceCode.getScope(program);
         scope.through
-          .filter(reference => globals.has(reference.identifier.name) && !isTypeMember(reference.identifier))
+          .filter(reference => globals.has(reference.identifier.name) && not(isTypeMember(reference.identifier)))
           .forEach(reference => context.report({
             node: reference.identifier, messageId: 'reached', data: {name: reference.identifier.name}
           }));

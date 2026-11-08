@@ -1,5 +1,5 @@
 import {http, HttpResponse} from 'msw';
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@pages/Gallery/museums/aic/types';
 import {limits} from '@pages/Gallery/limits';
@@ -69,7 +69,7 @@ export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllA
 }): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${environment.aicDomain}/search`, async ({request}) => {
-    if (!paramsMatch(request, allArtParams(options))) return undefined;
+    if (not(paramsMatch(request, allArtParams(options)))) return undefined;
     await held;
     return HttpResponse.json(response);
   }));
@@ -91,7 +91,7 @@ export const heldAICSuggestions = (word: string, response: AICSearchResponse): H
     serve = resolve;
   });
   server.use(http.get(`${environment.aicDomain}/search`, async ({request}) => {
-    if (!paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'})) return undefined;
+    if (not(paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'}))) return undefined;
     await held;
     serve({aborted: request.signal.aborted});
     return HttpResponse.json(response);
@@ -118,7 +118,7 @@ export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =
 export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${environment.aicDomain}/:id`, async ({request, params}) => {
-    if (params.id !== String(id) || !paramsMatch(request, {fields: aicFields})) return undefined;
+    if (params.id !== String(id) || not(paramsMatch(request, {fields: aicFields}))) return undefined;
     await held;
     return HttpResponse.json(response);
   }));
@@ -179,7 +179,7 @@ export const heldVAMAllArtResponse = (
 ): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${environment.vamDomain}/objects/search`, async ({request}) => {
-    if (!paramsMatch(request, {page: String(page), page_size: String(limit), images_exist: 'true'})) return undefined;
+    if (not(paramsMatch(request, {page: String(page), page_size: String(limit), images_exist: 'true'}))) return undefined;
     await held;
     return HttpResponse.json(response);
   }));

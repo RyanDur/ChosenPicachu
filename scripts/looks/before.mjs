@@ -2,7 +2,7 @@ import {execFileSync} from 'node:child_process';
 import {copyFileSync, existsSync, mkdirSync, symlinkSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join, resolve} from 'node:path';
-import {empty} from '@ryandur/sand';
+import {empty, not} from '@ryandur/sand';
 
 const repo = resolve(import.meta.dirname, '../..');
 const ref = process.argv[2] ?? 'main';
@@ -15,7 +15,7 @@ const builtAt = () => [frameworkModeOutput, libraryModeOutput].map(output => joi
 if (empty(builtAt())) {
   mkdirSync(root, {recursive: true});
   execFileSync('sh', ['-c', `git -C '${repo}' archive ${commit} | tar -x -C '${root}'`], {stdio: 'inherit'});
-  if (!existsSync(join(root, 'node_modules'))) symlinkSync(join(repo, 'node_modules'), join(root, 'node_modules'));
+  if (not(existsSync(join(root, 'node_modules')))) symlinkSync(join(repo, 'node_modules'), join(root, 'node_modules'));
   if (existsSync(join(repo, '.env'))) copyFileSync(join(repo, '.env'), join(root, '.env'));
   execFileSync('npm', ['run', 'build'], {cwd: root, stdio: ['ignore', 'ignore', 'inherit']});
 }

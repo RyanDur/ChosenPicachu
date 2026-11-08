@@ -1,6 +1,6 @@
 import {NavigateOptions, useSearchParams} from 'react-router';
 import {queryString} from '@transport';
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {useSearchParamsOnceHydrated} from './useSearchParamsOnceHydrated';
 
@@ -54,7 +54,7 @@ export function useSearchParamsObject<T extends Params>(
 
   const removeSearchParams = (...params: string[]) =>
     setSearchParams(Array.from(searchParams.entries())
-      .filter(([key]) => !params.includes(key)), keepingThePlace);
+      .filter(([key]) => not(params.includes(key))), keepingThePlace);
 
   const updateSearchParams = (params = {}, options?: NavigateOptions) =>
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)},

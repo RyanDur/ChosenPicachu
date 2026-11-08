@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 import {readFileSync} from 'node:fs';
 
 const saidBy = results => results.map(({error}) => error?.message ?? '').find(message => message !== '') ?? '';
@@ -31,7 +32,7 @@ const firstLine = said => said.split('\n').map(line => line.trim()).find(line =>
 
 export const failuresList = outcomes => {
   const fell = outcomes.filter(({status}) => status === 'unexpected');
-  if (fell.length === 0) {
+  if (empty(fell)) {
     return '';
   }
   return ['', '### what fell short', '', ...fell.map(({title, browser, said}) =>

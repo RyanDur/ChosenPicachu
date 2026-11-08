@@ -2,7 +2,7 @@ import {chromium} from '@playwright/test';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {empty} from '@ryandur/sand';
+import {empty, not} from '@ryandur/sand';
 
 const site = 'https://ryandur.github.io/ChosenPicachu/';
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -64,7 +64,7 @@ mkdirSync(join(fixtures, 'assets'), {recursive: true});
 const bases = new Map();
 for (const entry of rest.values()) {
   for (const [, base] of entry.body.matchAll(/"(https:\/\/framemark\.vam\.ac\.uk\/collections\/[^"]*?\/)"/g)) {
-    if (!bases.has(base)) bases.set(base, bases.size % assetCap);
+    if (not(bases.has(base))) bases.set(base, bases.size % assetCap);
   }
 }
 for (const [base, slot] of [...bases].filter(([, slot], at) => at < assetCap && slot === at)) {

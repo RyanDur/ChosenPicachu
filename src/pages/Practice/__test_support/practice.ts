@@ -1,6 +1,6 @@
 import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {maybe, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import {Paths} from '@navigation';
 
 const practice = (): HTMLElement => screen.getByRole('region', {name: 'how I organize it'});
@@ -12,7 +12,7 @@ const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).
 const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
 const carveLinks = (): HTMLElement[] => within(practice()).getAllByRole('figure')
-  .filter(figure => within(figure).queryAllByRole('code').length > 0)
+  .filter(figure => is(within(figure).queryAllByRole('code').length))
   .flatMap(carve => within(carve).queryAllByRole('link'));
 
 const drawnTexts = (figure: string | RegExp): HTMLElement[] =>
@@ -84,7 +84,7 @@ export const practicePage = {
     return figures[figures.indexOf(sample) + 1];
   },
   drawingsSeenIn: (figure: string | RegExp): string[] => drawnTexts(figure)
-    .filter(text => !isInaccessible(text))
+    .filter(text => not(isInaccessible(text)))
     .map(text => text.textContent),
   imagesHeardIn: (caption: string): HTMLElement[] =>
     within(within(practice()).getByRole('figure', {name: caption})).queryAllByRole('img'),

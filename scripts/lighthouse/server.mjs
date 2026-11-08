@@ -3,7 +3,7 @@ import {existsSync, readFileSync, statSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gzipSync} from 'node:zlib';
-import {is} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 
 const port = Number(process.env.STAGE_PORT ?? 4517);
@@ -100,7 +100,7 @@ const answers = (request, response) => {
   if (extname(path)) {
     return send(404, 'not found', 'text/plain', false);
   }
-  if (!path.endsWith('/') && existsSync(file) && statSync(file).isDirectory()) {
+  if (not(path.endsWith('/')) && existsSync(file) && statSync(file).isDirectory()) {
     const queryAt = url.indexOf('?');
     response.writeHead(301, {location: queryAt < 0 ? `${url}/` : `${url.slice(0, queryAt)}/${url.slice(queryAt)}`});
     return response.end();

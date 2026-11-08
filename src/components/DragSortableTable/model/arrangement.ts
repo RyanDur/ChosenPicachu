@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Direction, Value, sorting} from './sorting';
 import {Sort} from './table-state';
@@ -24,7 +24,7 @@ const of = (columns: readonly string[], rows: readonly string[] = []): Arrangeme
   ({columns, rows});
 
 const seatingOf = (standing: readonly string[], arrival: readonly string[]): readonly string[] =>
-  [...standing.filter(key => arrival.includes(key)), ...arrival.filter(key => !standing.includes(key))];
+  [...standing.filter(key => arrival.includes(key)), ...arrival.filter(key => not(standing.includes(key)))];
 
 const movedTo = (list: readonly string[], item: string, to: number): readonly string[] =>
   list.includes(item) ? array.moveToIndex(to, item, list) : list;

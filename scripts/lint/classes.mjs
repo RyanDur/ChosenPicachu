@@ -1,4 +1,4 @@
-import {empty} from '@ryandur/sand';
+import {empty, has, not} from '@ryandur/sand';
 import {readFileSync, readdirSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -11,7 +11,7 @@ const sheets = directory => readdirSync(directory, {withFileTypes: true}).flatMa
 
 const selectorsOf = sheet => [...readFileSync(sheet, 'utf8').replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
   .map(([, selector]) => selector.trim())
-  .filter(selector => !selector.startsWith('@'))
+  .filter(selector => not(selector.startsWith('@')))
   .map(selector => selector.replace(/"[^"]*"|'[^']*'/g, ''));
 
 const classesIn = selector => [...selector.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map(([, name]) => name);
@@ -44,7 +44,7 @@ const framedBesides = directory => readdirSync(directory)
  * @returns {string[]}
  */
 const homesOf = directory =>
-  directory === src || !directory.startsWith(src) ? [src] : [directory, ...homesOf(dirname(directory))];
+  directory === src || not(directory.startsWith(src)) ? [src] : [directory, ...homesOf(dirname(directory))];
 
 /** @param {string} file */
 const nearbyOf = file => {
@@ -75,7 +75,7 @@ const wornClasses = (node, wear) => {
       node.quasis.forEach((quasi, at) => {
         const words = quasi.value.cooked.split(/\s+/);
         const tail = at < node.quasis.length - 1 ? words.pop() ?? '' : '';
-        if (tail.length > 0) wear(node, [], [tail]);
+        if (has(tail)) wear(node, [], [tail]);
         wear(node, words.filter(Boolean));
       });
       return;
@@ -133,8 +133,8 @@ const classDefined = {
   create: context => {
     const near = nearbyOf(context.filename);
     return classPositions(node => wornClasses(node, (at, names, prefixes = []) => {
-      names.filter(name => !near.has(name)).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
-      prefixes.filter(prefix => !opens(near, prefix)).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
+      names.filter(name => not(near.has(name))).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
+      prefixes.filter(prefix => not(opens(near, prefix))).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
     }));
   }
 };
@@ -146,7 +146,7 @@ const ownClassFirst = {
   create: context => classPositions(node => {
     const names = firstWorn(node);
     const mine = names?.find(name => own.has(name));
-    if (typeof mine === 'string' && !own.has(names[0])) context.report({node, messageId: 'behind', data: {name: mine}});
+    if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
   })
 };
 

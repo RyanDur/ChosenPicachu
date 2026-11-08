@@ -4,11 +4,12 @@ import {createStaticHandler, createStaticRouter, RouteObject, StaticRouterProvid
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
 import {HydrateFallback, Layout} from './root';
+import {is, not} from '@ryandur/sand';
 import {lazily, siteOpenedBy} from './routes';
 
 const basename = import.meta.env.BASE_URL;
 
-const fixed = Object.values(Paths).filter(path => path.startsWith('/') && !path.includes(':'));
+const fixed = Object.values(Paths).filter(path => path.startsWith('/') && not(path.includes(':')));
 const tabsOf = (page: string, listings: object): string[] => Object.keys(listings).map(tab => `${page}${tab}/`);
 
 const pages = [
@@ -29,7 +30,7 @@ const written = async (app: ReactNode): Promise<string> => {
     }
   });
   await stream.allReady;
-  if (failures.length > 0) throw failures[0];
+  if (is(failures.length)) throw failures[0];
   return new Response(stream).text();
 };
 

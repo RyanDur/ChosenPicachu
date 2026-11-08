@@ -1,4 +1,4 @@
-import {is} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {itemHeadedBy} from '@__test_support/headed-item';
@@ -24,7 +24,7 @@ export const recordPage = {
   storyEpigraph: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('blockquote'),
   storyEpigraphSource: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('link'),
   storyParagraphs: (name: string): HTMLElement[] => within(story(name)).getAllByRole('paragraph')
-    .filter(paragraph => !epigraphOf(name).contains(paragraph)),
+    .filter(paragraph => not(epigraphOf(name).contains(paragraph))),
   storyQuotations: (name: string, quoted: string): HTMLElement[] => within(story(name)).getAllByRole('link', {name: quoted}),
   storyMomentsHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 3, name: 'the moments it rests on'}),
   storyMomentLines: (name: string): (string | null)[] => within(storyMoments(name)).getAllByRole('link').map(line => line.textContent),
@@ -40,7 +40,7 @@ export const recordPage = {
   sourcesLinked: (): string[] => {
     const shelf = research();
     return within(screen.getByRole('article')).getAllByRole('link', {hidden: true})
-      .filter(link => !shelf.contains(link))
+      .filter(link => not(shelf.contains(link)))
       .map(link => link.getAttribute('href') ?? '')
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },

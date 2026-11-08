@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/compositor-motion';
@@ -18,7 +19,7 @@ const items = value => {
 };
 
 /** @param {string} item */
-const propertyIn = item => item.split(/\s+/).find(word => !notAProperty.test(word)) ?? 'all';
+const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
 
 /** @param {string} property */
 const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
@@ -34,10 +35,10 @@ const rule = primary => (root, result) => {
     stylelint.utils.report({ruleName: name, result, node, message: messages.moves(property)});
   root.walkDecls(/^transition(-property)?$/, declaration => items(declaration.value)
     .map(item => declaration.prop === 'transition' && item !== 'none' ? propertyIn(item) : item)
-    .filter(property => !allowed(property))
+    .filter(property => not(allowed(property)))
     .forEach(property => report(declaration, property)));
   root.walkAtRules('keyframes', keyframes => keyframes.walkDecls(declaration => {
-    if (!allowed(declaration.prop) && declaration.prop !== 'animation-timing-function') report(declaration, declaration.prop);
+    if (not(allowed(declaration.prop)) && declaration.prop !== 'animation-timing-function') report(declaration, declaration.prop);
   }));
 };
 

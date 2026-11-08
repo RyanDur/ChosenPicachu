@@ -1,5 +1,6 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
+import {not} from '@ryandur/sand';
 import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
@@ -12,7 +13,7 @@ const readers = [
   {reader: 'an upright iPad-sized window with a mouse', use: {viewport: iPadUpright.viewport}}
 ];
 
-const desks = readers.filter(({use}) => !('hasTouch' in use));
+const desks = readers.filter(({use}) => not('hasTouch' in use));
 
 const topOf = async (part: Locator): Promise<number> => (await part.boundingBox())?.y ?? Number.NaN;
 

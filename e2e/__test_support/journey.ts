@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {expect, Page, test as base} from '@playwright/test';
 
 // WebKit on Linux reports a fetch it cancels when the page navigates away as a page error that ends this way. The
@@ -11,7 +12,7 @@ export const test = base.extend<{noUncaughtErrors: void}>({
     const errors: string[] = [];
     const watch = (page: Page): void => {
       page.on('pageerror', error => {
-        if (!cancelledByLeaving.test(error.message)) errors.push(`${page.url()}: ${error.message}`);
+        if (not(cancelledByLeaving.test(error.message))) errors.push(`${page.url()}: ${error.message}`);
       });
     };
     context.pages().forEach(watch);

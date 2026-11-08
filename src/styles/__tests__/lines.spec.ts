@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {describe, expect, test} from 'vitest';
 
 const sheets: Record<string, string> = import.meta.glob('/src/**/*.css', {query: '?raw', import: 'default', eager: true});
@@ -38,7 +39,7 @@ describe('the lines the sheets break at', () => {
     const named = namedLines();
     const strays = Object.entries(sheets).flatMap(([path, css]) =>
       queriedLines(css)
-        .filter(line => !named.includes(line) && !(ownLines[path] ?? []).includes(line))
+        .filter(line => not(named.includes(line)) && not((ownLines[path] ?? []).includes(line)))
         .map(line => `${path} breaks at ${line}`));
 
     expect(named).toHaveLength(6);
@@ -47,7 +48,7 @@ describe('the lines the sheets break at', () => {
 
   test('include a sheet\'s own line only while that sheet still breaks at it', () => {
     const unused = Object.entries(ownLines).flatMap(([path, lines]) =>
-      lines.filter(line => !queriedLines(sheets[path] ?? '').includes(line)).map(line => `${path} no longer breaks at ${line}`));
+      lines.filter(line => not(queriedLines(sheets[path] ?? '').includes(line))).map(line => `${path} no longer breaks at ${line}`));
 
     expect(unused).toEqual([]);
   });

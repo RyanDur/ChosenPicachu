@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {empty} from '@ryandur/sand';
 import {survey} from './survey';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
@@ -32,7 +32,7 @@ const eager = <Seat>(
 const lazy = <Seat>(under: (x: number, y: number, held: Seat) => Seat | undefined) =>
   (held: Seat, moving: Moving, landing: Seat | undefined): Seat | undefined => {
     const struck = under(moving.clientX, moving.clientY, held);
-    if (!has(struck)) {
+    if (empty(struck)) {
       return landing;
     }
     return survey.struckAway(held, struck) ? struck : undefined;

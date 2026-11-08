@@ -1,6 +1,7 @@
 import type {Locator, Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import * as schema from 'schemawax';
+import {not} from '@ryandur/sand';
 import {assertionPatience} from './patience';
 
 const stageAnswers = schema.array(schema.object({
@@ -44,7 +45,7 @@ export const galleryPage = (page: Page) => {
         const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
         const shown = await work.getByRole('img', {name: alt, exact: true}).waitFor({state: 'visible', timeout: assertionPatience})
           .then(() => true, () => false);
-        if (!shown) {
+        if (not(shown)) {
           missing.push(alt);
         }
       }

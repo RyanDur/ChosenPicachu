@@ -22,7 +22,7 @@ const sized = (image?: ClevelandImage | null): string | undefined =>
 
 const srcSetOf = (record: ClevelandRecord): string | undefined => {
   const sources = [sized(record.images?.web), sized(record.images?.print)].filter(has);
-  return sources.length > 0 ? sources.join(', ') : undefined;
+  return has(sources) ? sources.join(', ') : undefined;
 };
 
 const artistOf = (record: ClevelandRecord): string | null | undefined =>
@@ -61,7 +61,7 @@ export const cleveland = {
       };
     }),
 
-  open: () => searched({page: 1}).map(({data}): Door => data.length > 0 ? 'open' : 'closed'),
+  open: () => searched({page: 1}).map(({data}): Door => has(data) ? 'open' : 'closed'),
 
   art: (id: string) => http
     .get(`${environment.clevelandDomain}/${id}${queryString.from({fields: clevelandFields})}`, {cache: 'force-cache'})

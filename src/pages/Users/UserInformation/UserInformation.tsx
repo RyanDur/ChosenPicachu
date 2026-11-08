@@ -26,12 +26,12 @@ const newUser = (avatar: string): NewUser => ({
 });
 
 const buttonsFor = (open: Opened, hydrated: boolean, addInFlight: boolean): ReactNode => {
-  const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
+  const resetButton = <button type="reset" className="reset button secondary" disabled={not(hydrated)}>Reset</button>;
   switch (open.mode) {
     case 'adding':
       return <>
         {resetButton}
-        <button type="submit" className="submit button primary" disabled={!hydrated}
+        <button type="submit" className="submit button primary" disabled={not(hydrated)}
           aria-disabled={addInFlight}>Add</button>
       </>;
     case 'viewing':
@@ -40,7 +40,7 @@ const buttonsFor = (open: Opened, hydrated: boolean, addInFlight: boolean): Reac
       return <>
         {resetButton}
         <Link to={openings.at(open.user.id, 'view')} className="cancel button secondary">Cancel</Link>
-        <button type="submit" className="submit button primary" disabled={!hydrated}>Update</button>
+        <button type="submit" className="submit button primary" disabled={not(hydrated)}>Update</button>
       </>;
   }
 };
@@ -116,7 +116,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <button type="button"
       aria-label="Draw a new avatar"
       className="avatar borderless rounded-corners accent raisable"
-      disabled={readOnly || !hydrated}
+      disabled={readOnly || not(hydrated)}
       onClick={() => dispatch(draftActions.avatarDrawn(avatars.drawn()))}>
       <img className="portrait" src={user.avatar} width="264" height="280" fetchPriority="high" alt="avatar"/>
     </button>
@@ -131,7 +131,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
       value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
       disabled={draft.sameAsHome}
       onEdited={address => dispatch(draftActions.workAddressEdited(address))}>
-      {!readOnly && <label className="same-as-home paragraph pill-cornered attentive">
+      {not(readOnly) && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
         <input className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
           onChange={event => dispatch(draftActions.sameAsHomeChosen(event.currentTarget.checked))}/>

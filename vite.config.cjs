@@ -10,7 +10,7 @@ const {browserslistToTargets, transform} = require('lightningcss');
 const browserslist = require('browserslist');
 const react = require('@vitejs/plugin-react').default;
 const svgr = require('vite-plugin-svgr');
-const {has} = require('@ryandur/sand');
+const {has, not} = require('@ryandur/sand');
 const autoprefixer = require('autoprefixer');
 
 /** @param {string} path */
@@ -48,7 +48,7 @@ const frameScript = () => ({
       const bundle = await rolldown({input: path, resolve: {alias: aliases}, transform: {define: {'import.meta.env.SSR': 'false'}}, logLevel: 'silent'});
       const {output} = await bundle.generate({format: 'esm'});
       output[0].moduleIds
-        .filter(module => !module.startsWith('\0'))
+        .filter(module => not(module.startsWith('\0')))
         .forEach(module => this.addWatchFile(module));
       return `export default ${JSON.stringify(output[0].code)};`;
     }
@@ -250,7 +250,7 @@ const pagesAsPublished = () => ({
     const base = server.config.base;
     server.middlewares.use(async (request, response, next) => {
       const url = request.url ?? '/';
-      if (request.method !== 'GET' || !url.startsWith(base) || !(request.headers.accept ?? '').includes('text/html')) {
+      if (request.method !== 'GET' || not(url.startsWith(base)) || not((request.headers.accept ?? '').includes('text/html'))) {
         next();
         return;
       }
