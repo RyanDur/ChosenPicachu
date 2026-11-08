@@ -79,11 +79,9 @@ const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/
 
 const stillCallComponents = [
   'src/hydrateTheSite.tsx',
-  'src/feedback/Feedback.tsx',
   'src/pages/Demos/route.tsx',
   'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx',
-  'src/pages/Practice/route.tsx',
-  'src/pages/Users/UserInformation/UserInformation.tsx'
+  'src/pages/Practice/route.tsx'
 ];
 
 const stillReachForThePage = [
