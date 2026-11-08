@@ -158,7 +158,7 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.linkUnder('The test the state has to pass', 'Four specs'))
-      .toHaveAttribute('href', repository.directory('src/components/DragSortableTable/__tests__'));
+      .toHaveAttribute('href', repository.directory('src/components/DragSortableTable/model/__tests__'));
   });
 
   test('should send the quotation on how journeys run to AGENTS.md', async () => {

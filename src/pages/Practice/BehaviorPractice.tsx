@@ -220,7 +220,7 @@ export const BehaviorPractice: FC = () =>
       more rule.</p>
     <ul className="practice-list">
       <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
-        <a className="signpost" href={repository.directory('src/components/DragSortableTable/__tests__')}>Four
+        <a className="signpost" href={repository.directory('src/components/DragSortableTable/model/__tests__')}>Four
           specs</a>, <code className="monospaced">sorting</code>, <code className="monospaced">travel</code>,{' '}
         <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>, call the
         table’s code with no page at all, and they run on every commit.
