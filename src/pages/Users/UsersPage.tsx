@@ -1,7 +1,7 @@
 import {FC, useEffect, useState, useSyncExternalStore} from 'react';
 import {Link, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
-import {bannerChange, useBannerDispatch} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
 import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';
 import {users as usersApi} from '@components/Users';

@@ -1,4 +1,4 @@
-import {BannerProvider, Banners} from '@components/Banners';
+import {BannerProvider, Banners} from '@frame/notices/banners';
 import {Links, NavigationType, Outlet, Scripts, useLocation, useNavigationType} from 'react-router';
 import {FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import './index.css';

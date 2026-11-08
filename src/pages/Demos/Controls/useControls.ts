@@ -1,14 +1,14 @@
 import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@components/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
-import {BannerSettings, bannerDials} from '@components/Banners';
+import {Placement} from '@frame/notices/banners';
 
 export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';
 export type World = 'react' | 'vanilla';
 export type Track = 'pointer' | 'keyboard';
 
-export type Settings = BannerSettings & {
+export type Settings = Placement & {
   pace: Pace;
   origin: Origin;
   motion: Motion;
@@ -24,7 +24,10 @@ const decoders: {[K in keyof Settings]: schema.Decoder<Settings[K]>} = {
   motion: schema.literalUnion('animated', 'static'),
   world: schema.literalUnion('react', 'vanilla'),
   track: schema.literalUnion('pointer', 'keyboard'),
-  ...bannerDials.decoders
+  side: schema.literalUnion('top', 'middle', 'bottom'),
+  align: schema.literalUnion('left', 'center', 'right'),
+  enter: schema.literalUnion('above', 'below', 'left', 'right'),
+  stack: schema.literalUnion('down', 'up', 'left', 'right')
 };
 
 const defaults: Settings = {
@@ -33,7 +36,10 @@ const defaults: Settings = {
   motion: 'animated',
   world: 'react',
   track: 'pointer',
-  ...bannerDials.defaults
+  side: 'top',
+  align: 'center',
+  enter: 'above',
+  stack: 'down'
 };
 
 export const useControls = (): Controls => {

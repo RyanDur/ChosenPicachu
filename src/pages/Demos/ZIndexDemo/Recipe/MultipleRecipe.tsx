@@ -1,10 +1,11 @@
 import {FC, ReactNode} from 'react';
-import {Entrance, Stack} from '@components/Banners';
+import {Entrance, Stack} from '@frame/notices/banners';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {EntranceDial, StackDial, useControls} from '../../Controls';
-import bannersSource from '@components/Banners/Banners.tsx?sample';
-import raisingSource from '@components/Banners/raising.ts?sample';
-import bannersCss from '@components/Banners/Banners.css?sample';
+import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
+import changeSource from '@frame/notices/banners/bannerChange.ts?sample';
+import newsSource from '@frame/notices/banners/bannerNews.ts?sample';
+import bannersCss from '@frame/notices/banners/Banners.css?sample';
 import '../../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
@@ -78,14 +79,15 @@ export const MultipleRecipe: FC = () => {
         <Words want="The same message twice tells me nothing new.">
           <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>.{' '}
             <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
-            action, and it gives the new banner its id. The reducer looks for the message among the banners that are up
-            and returns them unchanged when it finds one. Otherwise it adds the new banner. Once a banner has been
-            dismissed and has gone, the same message can be raised again.</Says>
+            action, and it gives the new banner its id. The reducer is the function that takes the news and an action
+            and returns the news that follows. The news is the banners that are up and where they sit. The reducer looks
+            for the message among the banners and returns the news unchanged when it finds one. Otherwise it adds the
+            new banner. Once a banner has been dismissed and has gone, the same message can be raised again.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(raisingSource, 'export const bannerChange = {'), gap,
-            ...carve.span(raisingSource, "case 'raised':", ': [...standing, change.banner];')
+            ...carve.unit(changeSource, 'export const bannerChange = {'), gap,
+            ...carve.span(newsSource, "case 'raised':", ': {...news, banners: [...news.banners, change.banner]};')
           ]}/>
         </Codes>
       </Step>

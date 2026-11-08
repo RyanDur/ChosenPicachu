@@ -111,13 +111,13 @@ describe('the banner tutorial’s walked-through story', () => {
 
     expect(outOfReadingOrder([
       await zIndexTab.findBannerControls(),
-      recipeFolds.story(tutorial, 'The user sees the news above everything')
+      recipeFolds.story(tutorial, 'The user sees the news over the page')
     ])).toEqual([]);
   });
 });
 
 describe('the banner tutorial’s first story', () => {
-  const story = 'The user sees the news above everything';
+  const story = 'The user sees the news over the page';
 
   test('should link the first story up to Why 9999 still loses, Why a fixed banner still loses and What else forms a stacking context', async () => {
     render(<TestApp at={demosAt('accordions')}/>);

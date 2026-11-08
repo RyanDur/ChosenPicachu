@@ -84,7 +84,7 @@ export const StructurePractice: FC = () =>
     <LandmarkMap/>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
       its other side: I write a role only where no element does the job. The banners are a section with
-      the role alert, a live region, held in the top layer, because there is no alert element to reach for; the{' '}
+      the role alert, a live region, written last on the page, because there is no alert element to reach for; the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
@@ -162,7 +162,7 @@ export const StructurePractice: FC = () =>
     <h3 className="paragraph bold">Components, one behavior each</h3>
     <p className="paragraph">A component is an element that does not exist yet. I write one to add a behavior the
       platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
-      a stack of banners in the top layer. React is good at exactly that, and so are Vue, Svelte and Angular.
+      a stack of banners that any page can raise. React is good at exactly that, and so are Vue, Svelte and Angular.
       A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
       new. A component is not for wrapping an element the platform already has: that is the
       default. I keep a few wrappers that trade against it, where the trade is worth it:{' '}

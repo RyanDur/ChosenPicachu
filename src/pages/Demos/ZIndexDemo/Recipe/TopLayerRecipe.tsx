@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {Align, Side} from '@components/Banners';
+import {Align, Side} from '@frame/notices/banners';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {Sample} from '../../Recipe/sample';
 import {AlignDial, SideDial, useControls} from '../../Controls';
 import {fixedBannerLosesHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
-import bannersSource from '@components/Banners/Banners.tsx?sample';
-import providerSource from '@components/Banners/BannerProvider.tsx?sample';
-import bannersCss from '@components/Banners/Banners.css?sample';
+import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
+import providerSource from '@frame/notices/banners/BannerProvider.tsx?sample';
+import bannersCss from '@frame/notices/banners/Banners.css?sample';
 import placementCss from '../../../../styles/placement.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
 import typographyCss from '../../../../styles/typography.css?sample';
@@ -38,7 +38,7 @@ export const TopLayerRecipe: FC = () => {
   const {side, align} = useControls();
 
   return <Story {...topLayerStory}
-    can="The user sees the news above everything"
+    can="The user sees the news over the page"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>.
@@ -67,10 +67,11 @@ export const TopLayerRecipe: FC = () => {
       </Step>
       <Step title="Show it when there is news">
         <Words want="The panel should be there when news arrives, and gone when the last of it is dismissed.">
-          <Says>The site keeps its banners in a context, a value React hands to every component inside it. A component
-            raises a banner by dispatching an action, a record that a message arrived, and the dismiss button
-            dispatches one that lowers it. The panel reads the banners from the context and is written only while
-            there is at least one, so no code shows or hides it.</Says>
+          <Says>The site keeps its banners in a context, a value React hands to every component inside it. To dispatch
+            is to hand the context an action, a record of what happened. A component raises a banner by dispatching one
+            that says a message arrived, and the dismiss button dispatches one that lowers it. The panel reads the
+            banners from the context and is written only while there is at least one, so no code shows or hides
+            it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

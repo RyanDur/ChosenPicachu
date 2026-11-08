@@ -3,11 +3,17 @@ import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
 import {TestApp} from '@__test_support/TestApp';
-import {bannerChange, useBannerDispatch} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@frame/notices/banners';
 
 const Trouble: FC<{message: string}> = ({message}) => {
   const dispatchBanner = useBannerDispatch();
   return <button type="button" onClick={() => dispatchBanner(bannerChange.raised(message))}>trouble</button>;
+};
+
+const Sideways: FC = () => {
+  const dispatchBanner = useBannerDispatch();
+  return <button type="button" onClick={() => dispatchBanner(bannerChange.placed(
+    {side: 'top', align: 'center', enter: 'above', stack: 'left'}))}>sideways</button>;
 };
 
 const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);
@@ -74,8 +80,9 @@ describe('the banners', () => {
   });
 
   test('a trouble in a side stack leaves once its dismissal has finished', async () => {
-    render(<TestApp at="/?stack=left"><Trouble message="sideways trouble"/></TestApp>);
+    render(<TestApp><Sideways/><Trouble message="sideways trouble"/></TestApp>);
 
+    await userEvent.click(screen.getByRole('button', {name: 'sideways'}));
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
     const alert = screen.getByRole('alert');
     await userEvent.click(within(alert).getByRole('button', {name: 'dismiss sideways trouble'}));

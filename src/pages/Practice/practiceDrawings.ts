@@ -137,7 +137,7 @@ const landmarkMap = ((): Drawing => {
   const inset = 9;
   const landmark = 'landmark-box hollow drawn';
   const secondary = 'secondary-box hollow drawn';
-  const topLayer = 'landmark-box paper-filled drawn dashed-drawn';
+  const lastOnThePage = 'landmark-box paper-filled drawn dashed-drawn';
 
   const wide: Box[] = [
     {label: 'header', look: landmark, x: 6, y: 6, width: 468, height: 42},
@@ -147,7 +147,7 @@ const landmarkMap = ((): Drawing => {
     {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
     {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
     {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39, note: 'only where a page has one'},
-    {label: 'section · role alert · live region · top layer', look: topLayer, x: 186, y: 34, width: 282, height: 26}
+    {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 186, y: 34, width: 282, height: 26}
   ];
 
   const stacked: Box[] = [
@@ -158,7 +158,7 @@ const landmarkMap = ((): Drawing => {
     {label: 'main', look: landmark, x: 6, y: 147, width: 288, height: 165},
     {label: 'nav · tabs', look: secondary, x: 15, y: 186, width: 270, height: 30, note: 'only where a page has tabs'},
     {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39, note: 'only where a page has one'},
-    {label: 'section · role alert · live region · top layer', look: topLayer, x: 12, y: 129, width: 282, height: 24}
+    {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 12, y: 129, width: 282, height: 24}
   ];
 
   const drawnBox = (box: Box): string =>

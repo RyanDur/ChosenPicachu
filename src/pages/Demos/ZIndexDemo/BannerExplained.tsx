@@ -7,8 +7,8 @@ import {fixedBannerLosesHeading} from './part-headings';
 import {storyKeys} from '../Recipe';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
-import bannersSource from '@components/Banners/Banners.tsx?sample';
-import bannersCss from '@components/Banners/Banners.css?sample';
+import bannersSource from '@frame/notices/banners/Banners.tsx?sample';
+import bannersCss from '@frame/notices/banners/Banners.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
@@ -34,7 +34,7 @@ export const BannerExplained: FC = () => {
       <li className="run">
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside every
           card, so no card’s stacking context holds it. Its z-index is compared with card two’s, at the same level, and
-          it is the higher. It stays at the window’s edge, over everything on the page, card two included.</p>
+          it is the higher. It stays at the window’s edge, over every card on the page, card two included.</p>
         <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
         <Snippet label="CSS" lines={carve.span(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>

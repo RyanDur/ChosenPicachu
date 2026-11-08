@@ -81,7 +81,7 @@ describe('why a fixed banner still loses', () => {
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
-    const story = recipeFolds.story(document.body, 'The user sees the news above everything');
+    const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
   });
 });

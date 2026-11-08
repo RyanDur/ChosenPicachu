@@ -1,6 +1,6 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {bannerTrap, desktop, dialRow, iPhone, pressTab, tabsTo} from './__test_support';
+import {bannerTrap, boxOf, desktop, dialRow, iPhone, pressTab, tabsTo} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
@@ -36,7 +36,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await part.getByRole('link', {name: 'the tutorial below'}).click();
 
       await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
-      await expect(page.getByText('The user sees the news above everything')).toBeInViewport();
+      await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
     });
   });
 }
@@ -57,7 +57,7 @@ test.describe('a phone, where the page itself scrolls', () => {
     await expect(link).toBeInViewport();
 
     await page.goForward();
-    await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
+    await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
   });
 });
 
@@ -68,7 +68,7 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#news-top-story$/);
   await expect(link).not.toBeFocused();
-  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news above everything'})}).last()).toBeFocused();
+  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news over the page'})}).last()).toBeFocused();
 
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeVisible();
 
@@ -85,7 +85,7 @@ test('a reader who follows the tutorial below with motion allowed lands on the s
   await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
 
   await expect(page).toHaveURL(/#news-top-story$/);
-  await expect(page.getByText('The user sees the news above everything').first()).toBeInViewport();
+  await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
 });
 
 const lessMotionEntrance = 'If your system asks for less motion, a new banner appears in place, whichever entrance you choose.';
@@ -101,6 +101,20 @@ test('the entrance reads the chosen side, and reads that a new banner appears in
   await page.emulateMedia({reducedMotion: 'reduce'});
 
   await expect(reading).toHaveText(lessMotionEntrance, {useInnerText: true});
+});
+
+test('a link that holds the panel to the window’s bottom edge raises the site’s banner there', async ({page}) => {
+  await page.goto('demos/z-index/?side=bottom');
+  const banners = bannerTrap(page);
+
+  await banners.raiseSite.click();
+  await expect(banners.siteBanner).toBeVisible();
+
+  const {height} = page.viewportSize() ?? {height: 0};
+  await expect.poll(async () => {
+    const {y, height: tall} = await boxOf(banners.siteBanner);
+    return y + tall > height / 2;
+  }).toBe(true);
 });
 
 test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {

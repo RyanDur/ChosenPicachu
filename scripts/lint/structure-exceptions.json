@@ -1,6 +1,5 @@
 {
   "one-export": [
-    "src/components/Banners/raising.ts",
     "src/components/DragSortableTable/model/actions.ts",
     "src/components/DragSortableTable/model/arrangement.ts",
     "src/components/DragSortableTable/model/arrows.ts",

@@ -21,8 +21,8 @@ export const TopLayerTutorial: FC = () => {
       the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you
       can watch the mechanics.
     </p>
-    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting; the banner
-      sets none.</p>
+    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting. The banner
+      uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">
         When something breaks, tell me. Do not make me guess why the chart went quiet,
@@ -46,8 +46,8 @@ export const TopLayerTutorial: FC = () => {
     <p className="overview paragraph">
       The user’s words above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a
       screen reader, the program that reads a page aloud, announces a new note without the reader going to look. ‘Do not
-      hide the note under the thing that broke’ means the banner sits in the top layer, where nothing on the page is
-      drawn over it.
+      hide the note under the thing that broke’ means the banner is written last on the page, outside every card, so
+      no card is drawn over it.
     </p>
     <p className="overview paragraph">
       Each phrase read that way is a clue: a line of what the user said, and what it commits the build to.
