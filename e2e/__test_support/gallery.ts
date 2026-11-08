@@ -1,5 +1,15 @@
 import type {Locator, Page} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import * as schema from 'schemawax';
 import {assertionPatience} from './patience';
+
+const stageAnswers = schema.array(schema.object({
+  required: {key: schema.string, contentType: schema.string, body: schema.string}
+}));
+
+const recordedOnTheStage = (key: string) =>
+  stageAnswers.forceDecode(JSON.parse(readFileSync('scripts/lighthouse/fixtures/rest.json', 'utf8')))
+    .find(answer => answer.key === key);
 
 const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json';
 
@@ -41,10 +51,11 @@ export const galleryPage = (page: Page) => {
       return missing;
     },
     hangPageOneOnEveryPage: async (): Promise<void> => {
-      await page.route(/\/vam\/objects\/search\?page=(?!1&)/, async route => {
+      await page.route(/\/vam\/objects\/search\?page=(?!1&)/, route => {
         const asked = new URL(route.request().url());
         asked.searchParams.set('page', '1');
-        await route.fulfill({response: await route.fetch({url: asked.toString()})});
+        const pageOne = recordedOnTheStage(`${asked.pathname}${asked.search}`);
+        return pageOne ? route.fulfill({contentType: pageOne.contentType, body: pageOne.body}) : route.fallback();
       });
     },
     refuseEveryPicture: async (): Promise<void> => {
