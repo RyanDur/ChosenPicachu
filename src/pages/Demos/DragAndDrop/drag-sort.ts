@@ -43,11 +43,11 @@ const moved = (
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
 const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
-  sliding(sort, sort.order[at])
-    ? sort
-    : sort.held
-      .map(({item}) => moved(sort, item, at, slideStarts.afterCrossing(sort.order[at], homeward)))
-      .orElse(sort);
+  sort.held
+    .map(({item}) => sliding(sort, item) || sliding(sort, sort.order[at])
+      ? sort
+      : moved(sort, item, at, slideStarts.afterCrossing(sort.order[at], homeward)))
+    .orElse(sort);
 
 const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
   Object.keys(starts).some(item => sliding(sort, item));
