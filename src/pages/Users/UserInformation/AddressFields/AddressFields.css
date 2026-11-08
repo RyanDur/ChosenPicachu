@@ -1,6 +1,7 @@
 .address {
   container-type: inline-size;
   display: grid;
+  align-content: start;
   gap: var(--base-x-2);
   grid-template-columns: 1fr var(--base-x-13) 1fr;
 }
