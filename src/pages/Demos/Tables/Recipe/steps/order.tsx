@@ -59,7 +59,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
               ...carve.unit(sources.boot, 'const fed = ')
             ]}/>
             <Snippet label="TS" lines={[
-              ...carve.span(sources.frameRows, 'export const reseatRows = ',
+              ...carve.span(sources.frameRows, 'const reseat = ',
                 'body.insertBefore(desired, body.children[position] ?? null);'),
               lines.aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
             ]}/>

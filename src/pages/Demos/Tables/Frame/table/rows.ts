@@ -5,12 +5,12 @@ import {MountedTable, mountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {frameColumns} from './columns';
 
-export const rowOf = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
+const of = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
 
-export const lanesOf = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
-  new Map([...body.rows].map(lane => [rowOf(lane), lane]));
+const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
+  new Map([...body.rows].map(lane => [of(lane), lane]));
 
-export const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
+const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = frameColumns.shown(table);
   rows().forEach(row =>
     maybe(lanes.get(row.window.display)).map(lane =>
@@ -23,9 +23,9 @@ export const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'l
       })));
 };
 
-export const reseatRows = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
+const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
   const next = standing();
-  if (!mountedTable.changed([...body.rows].map(rowOf), next)) {
+  if (!mountedTable.changed([...body.rows].map(of), next)) {
     return;
   }
   keepingFocus(maybe(body.ownerDocument.activeElement), () =>
@@ -42,4 +42,11 @@ export const reseatRows = ({body, lanes, standing}: Pick<MountedTable, 'body' | 
         button.setAttribute('aria-label', label);
       }
     }));
+};
+
+export const frameRows = {
+  of,
+  lanes,
+  writeCells,
+  reseat
 };

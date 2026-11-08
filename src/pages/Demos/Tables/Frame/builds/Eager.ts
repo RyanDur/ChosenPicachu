@@ -3,10 +3,8 @@ import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry
 import {
   dressWidths,
   Given,
-  lanesOf,
   MountedTable,
   Reconcile,
-  reseatRows,
   settleColumn,
   settleRow,
   shoveColumns,
@@ -15,12 +13,12 @@ import {
   tell,
   unmarked,
   wireParts,
-  writeCells,
   mountedTable,
   carry,
   frameColumns,
   sortMenus,
-  moveReport
+  moveReport,
+  frameRows
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -129,8 +127,8 @@ const withVerbs = (parts: MountedTable): TableContext => {
 
 const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
   frameColumns.arrange(context);
-  writeCells(context);
-  reseatRows(context);
+  frameRows.writeCells(context);
+  frameRows.reseat(context);
   carry.dress(context, context.store.state);
   sortMenus.announceChanged(context, before);
 };
@@ -160,7 +158,7 @@ export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): R
     report: (said: Report) => output.map(found => moveReport.write(found, said)),
     table,
     body,
-    lanes: lanesOf(body)
+    lanes: frameRows.lanes(body)
   }));
   context().map(wired);
   return before => context().map(mounted => reconciled(mounted, before));

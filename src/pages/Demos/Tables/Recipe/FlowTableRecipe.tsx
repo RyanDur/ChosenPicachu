@@ -41,7 +41,7 @@ const foldCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...carve.unit(foldSource, 'export const windows'), gap,
       ...carve.unit(buildSrc, 'const reconciled = '), gap,
-      ...carve.unit(frameRows, 'export const writeCells = ')
+      ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
   </Codes>
 };
