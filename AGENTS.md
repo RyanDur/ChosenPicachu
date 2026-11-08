@@ -4,7 +4,7 @@ A React and TypeScript site whose home page states its own principles in three c
 
 ## Setup
 
-- `.envrc` sets the checkout's environment through [direnv](https://direnv.net): the Node version `.nvmrc` names, the one CI reads, and the values in `.env` when it exists. Run `direnv allow` once in each checkout and each worktree. A shell without the direnv hook runs a command as `direnv exec . <command>`. Why: Ryan, 2026-11-08, "we can load the env variables and use the correct node by using direnv"; the sessions had been running nvm's default Node 24 while CI ran 26.
+- `.envrc` sets the checkout's environment through [direnv](https://direnv.net): the Node version `.nvmrc` names, the one CI reads, and the values in `.env` when it exists. Run `direnv allow` once in each checkout and each worktree. A Claude Code session started in the checkout loads it too: `.claude/settings.json` has a SessionStart hook that writes direnv's environment into the session. Any other shell without the direnv hook runs a command as `direnv exec . <command>`. Why: Ryan, 2026-11-08, "we can load the env variables and use the correct node by using direnv"; the sessions had been running nvm's default Node 24 while CI ran 26.
 - `npm ci` installs, and its postinstall applies the platform patches in `patches/`.
 - `git config core.hooksPath scripts/git-hooks` turns on the hook that guards every push.
 - `npm run dev` serves the site. Feedback appears only with `VITE_APP_FEEDBACK_TOKEN` in `.env`: any value shows it, and a real fine-grained token sends. Never commit a real token.

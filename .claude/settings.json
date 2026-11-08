@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CLAUDE_ENV_FILE\" ] && direnv export bash > \"$CLAUDE_ENV_FILE\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
