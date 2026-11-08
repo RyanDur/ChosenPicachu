@@ -9,11 +9,11 @@ import '@components/DragSortableTable/motion.css';
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
   const {onRowMoved} = useBodyEvents();
-  const order = useTableSelector(tableSelectors.selectOrder);
+  const order = useTableSelector(tableSelectors.order);
   const columnCarried = useTableSelector(tableSelectors.columnHeld(column));
   const carried = useTableSelector(tableSelectors.rowHeld(row));
   const {settlingFrom, shoved} = useTableSelector(tableSelectors.rowMarks(row));
-  const standing = useTableSelector(tableSelectors.selectStanding);
+  const standing = useTableSelector(tableSelectors.standing);
   const position = useTableSelector(tableSelectors.positionOfRow(row));
   const drag = useTableSelector(tableSelectors.rowDrag(row));
   const columnSeat = useTableSelector(tableSelectors.seatOfColumn(column));

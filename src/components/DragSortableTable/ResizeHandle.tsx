@@ -15,7 +15,7 @@ import {
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
-  const order = useTableSelector(tableSelectors.selectOrder);
+  const order = useTableSelector(tableSelectors.order);
   const neighbour = useTableSelector(tableSelectors.neighbourOfColumn(column));
   const namedShare = useTableSelector(tableSelectors.namedShareOfColumn(column));
   const held = useTableSelector(tableSelectors.columnGripped(column));

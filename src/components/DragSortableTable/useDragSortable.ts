@@ -30,4 +30,4 @@ export const useDragSortable = <C extends Labelled>(
 
 export const DragSortable = Table.Provider;
 
-export const reportOf = (sortable: TableView): string => tableSelectors.selectReport(sortable).map(moveReport).orElse('');
+export const reportOf = (sortable: TableView): string => tableSelectors.report(sortable).map(moveReport).orElse('');

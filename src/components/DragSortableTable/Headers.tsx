@@ -5,7 +5,7 @@ import {tableSelectors} from './model';
 import {placed} from './placing';
 
 export const Headers: FC<ComponentProps<'tr'> & HeaderEvents> = ({onColumnMoved, onSorted, className, children, ...tr}) => {
-  const order = useTableSelector(tableSelectors.selectOrder);
+  const order = useTableSelector(tableSelectors.order);
 
   return <Header.Provider value={{onColumnMoved, onSorted}}>
     <tr {...tr} className={classNames('row', className)}>{placed(children, order, 'column')}</tr>

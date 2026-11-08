@@ -11,8 +11,8 @@ import '@components/DragSortableTable/motion.css';
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
   const {onColumnMoved} = useHeaderEvents();
-  const order = useTableSelector(tableSelectors.selectOrder);
-  const standing = useTableSelector(tableSelectors.selectStanding);
+  const order = useTableSelector(tableSelectors.order);
+  const standing = useTableSelector(tableSelectors.standing);
   const {sorted, data} = useTableSelector(tableSelectors.columnNamed(column))
     .orElse(tableSelectors.unknownColumn(column));
   const width = useTableSelector(tableSelectors.widthOfColumn(column));
@@ -22,7 +22,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const seat = useTableSelector(tableSelectors.seatOfColumn(column));
   const drift = useTableSelector(tableSelectors.driftOfColumn(column));
   const view = useTableSelector(whole => whole);
-  const count = useTableSelector(tableSelectors.selectColumnCount);
+  const count = useTableSelector(tableSelectors.columnCount);
   const travels = useTableSelector(tableSelectors.columnTravels(column));
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
