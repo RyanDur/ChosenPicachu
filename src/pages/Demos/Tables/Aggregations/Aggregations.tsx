@@ -6,7 +6,7 @@ import {Dials, useControls} from '../../Controls';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {marketSelectors} from '../../Market';
 import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
-import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
+import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
 import '../Aggregations.css';
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {

@@ -1,6 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {Direction, directionOf} from '@components/DragSortableTable/sorting';
-import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
+import {Direction, directionOf, Labelled, TableColumn} from '@components/DragSortableTable/model';
 import {columnOfHeader, MountedTable} from './table-state';
 import {tell} from './events';
 

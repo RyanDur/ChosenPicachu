@@ -1,5 +1,5 @@
 import {TableMiddleware, tableStore} from '../store';
-import {columnShares} from '../__test_support';
+import {columnShares} from '../../__test_support';
 import {arrowLifted, gripped, handleDragged, handleReleased, measured, tradedBy} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';

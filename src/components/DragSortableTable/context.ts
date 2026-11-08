@@ -1,13 +1,5 @@
 import {Dispatch, createContext, useContext} from 'react';
-import {TableAction} from './actions';
-import {TableColumn, Labelled, Seated, TableState, resting} from './table-state';
-import {Direction} from './sorting';
-
-export type TableView = {
-  readonly state: TableState;
-  readonly columns: readonly TableColumn<Labelled>[];
-  readonly rows: readonly Seated[];
-};
+import {Direction, resting, TableAction, TableView} from './model';
 
 type Selector<Slice> = (view: TableView) => Slice;
 

@@ -1,6 +1,4 @@
-import {Grab} from '@components/DragSortableTable/lift';
-import {Moving} from '@components/DragSortableTable/travel';
-import {RowNudge} from '@components/DragSortableTable/arrows';
+import {Grab, Moving, RowNudge} from '@components/DragSortableTable/model';
 import {Carry, MountedTable} from './table-state';
 
 export type TableContext = MountedTable & {

@@ -1,4 +1,4 @@
-import {ArrangementAction} from '@components/DragSortableTable/arrangement';
+import {ArrangementAction} from '@components/DragSortableTable/model';
 import {Trade} from '../Charts/coinbase';
 import {Candle} from '../Charts/Candles/shapes';
 import {Period} from '../Charts/period';

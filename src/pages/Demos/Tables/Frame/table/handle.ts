@@ -1,7 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {STEP_SHARE, grippedAt, measuredFloors, measuredWidths, neighborOf} from '@components/Table/shares';
-import {columnSteps} from '@components/DragSortableTable/survey';
-import {TableAction} from '@components/DragSortableTable/actions';
+import {columnSteps, TableAction} from '@components/DragSortableTable/model';
 import {arrowLifted, columnOfHeader, gripped, handleDragged, handleLeft, handleReleased, measured, MountedTable, pointerHolds, tradedBy, widthsOf} from './table-state';
 
 type Resizing = Pick<MountedTable, 'table' | 'store' | 'order' | 'report'>;

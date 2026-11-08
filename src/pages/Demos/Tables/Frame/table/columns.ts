@@ -1,5 +1,5 @@
 import {is, maybe} from '@ryandur/sand';
-import {anchored} from '@components/DragSortableTable/survey';
+import {anchored} from '@components/DragSortableTable/model';
 import {changed, columnOfHeader, MountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {dressWidths} from './resize';

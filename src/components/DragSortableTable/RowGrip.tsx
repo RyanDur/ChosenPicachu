@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import Handle from '@components/grip.svg';
-import {gripLabel} from './survey';
+import {gripLabel} from './model';
 import {useHydrated} from '@components/hydrated';
 import './RowGrip.css';
 

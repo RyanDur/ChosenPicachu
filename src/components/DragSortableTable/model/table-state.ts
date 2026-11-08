@@ -234,3 +234,9 @@ export const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | u
 
 export const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
   has(shove) && `shoved-${shove.toward}`;
+
+export type TableView = {
+  readonly state: TableState;
+  readonly columns: readonly TableColumn<Labelled>[];
+  readonly rows: readonly Seated[];
+};

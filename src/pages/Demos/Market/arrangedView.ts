@@ -1,5 +1,4 @@
-import {Arrangement, standingOf} from '@components/DragSortableTable/arrangement';
-import {TableColumn} from '@components/DragSortableTable/table-state';
+import {Arrangement, standingOf, TableColumn} from '@components/DragSortableTable/model';
 import {Measured, Measures, seated} from './cells';
 
 type ArrangedView = {

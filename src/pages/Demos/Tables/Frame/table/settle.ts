@@ -1,4 +1,4 @@
-import {ColumnShove, RowShove, Settling} from '@components/DragSortableTable/table-state';
+import {ColumnShove, RowShove, Settling} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 
 export const columnCells = (mounted: MountedTable, column: string): HTMLTableCellElement[] => {

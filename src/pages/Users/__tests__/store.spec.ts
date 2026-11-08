@@ -8,7 +8,7 @@ import {
 } from '@components/Users/__test_support';
 import {syncing} from '../syncing';
 import {friendAdded, friendRemoved, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
-import {rowMoved} from '@components/DragSortableTable/arrangement';
+import {rowMoved} from '@components/DragSortableTable/model';
 import {User} from '@components/Users/UserInfo/user';
 
 describe('the users store', () => {

@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {pointerTravel, still} from '@components/DragSortableTable/travel';
+import {pointerTravel, still} from '@components/DragSortableTable/model';
 import {MountedTable, TableState, seatOffset} from './table-state';
 import {columnCells, changeMotion} from './settle';
 import {TableContext} from './context';

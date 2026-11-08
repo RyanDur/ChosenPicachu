@@ -3,16 +3,9 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from './selectors';
-import {columnUnder, interior, PixelSizes, Survey} from './survey';
-import {ColumnDrag, pixels, shoveDistance} from './table-state';
-import {lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
-import {Moving, eagerTravel, pointerTravel} from './travel';
-import {Grab, columnLift} from './lift';
-import {columnArrows} from './arrows';
+import {columnArrows, columnDrag, ColumnDrag, columnHeld, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnUnder, columnWalkedTo, drifted, driftOfColumn, dropped, eagerTravel, Grab, headerCell, headerNeeds, interior, lifted, motionStates, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from './model';
 import './Header.css';
 import './motion.css';
-import {headerCell, headerNeeds, motionStates} from './looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();

@@ -3,8 +3,7 @@ import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@components/hydrated';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
-import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
-import {arrowLifted, awoken, gripped, handleDragged, handleLeft, handleReleased, tradedBy} from './actions';
+import {arrowLifted, awoken, columnGripped, gripped, handleDragged, handleLeft, handleReleased, namedShareOfColumn, neighbourOfColumn, selectOrder, tradedBy} from './model';
 import {grippedAt, measuredFloors, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {

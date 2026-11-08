@@ -2,16 +2,9 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from './selectors';
-import {PixelSizes, rowUnder, Survey} from './survey';
+import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, eagerTravel, Grab, lifted, motionStates, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, rowArrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLift, rowMarks, rowMovedBeside, rowUnder, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from './model';
 import {RowGrip} from './RowGrip';
-import {RowDrag, pixels, shoveDistance} from './table-state';
-import {lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
-import {Moving, eagerTravel, pointerTravel} from './travel';
-import {Grab, rowLift} from './lift';
-import {rowArrows} from './arrows';
 import './motion.css';
-import {cellNeeds, motionStates, rowHeaderCell} from './looks';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();

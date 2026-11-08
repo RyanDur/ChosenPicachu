@@ -3,18 +3,10 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
-import {interior, PixelSizes, Survey} from '@components/DragSortableTable/survey';
-import {ColumnDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
-import {lifted, columnLandingFound, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
-import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
-import {movedTo} from '@components/DragSortableTable/arrangement';
+import {columnArrows, columnDrag, ColumnDrag, columnHeld, columnLandingFound, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnWalkedTo, drifted, driftOfColumn, dropped, Grab, headerCell, headerNeeds, interior, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
-import {Grab, columnLift} from '@components/DragSortableTable/lift';
-import {columnArrows} from '@components/DragSortableTable/arrows';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
-import {headerCell, headerNeeds, motionStates} from '@components/DragSortableTable/looks';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();

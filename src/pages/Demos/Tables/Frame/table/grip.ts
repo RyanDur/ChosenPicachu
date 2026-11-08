@@ -1,6 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {rowLift} from '@components/DragSortableTable/lift';
-import {rowArrows} from '@components/DragSortableTable/arrows';
+import {rowArrows, rowLift} from '@components/DragSortableTable/model';
 import {TableContext} from './context';
 import {carrying} from './carry';
 import {rowOf} from './rows';

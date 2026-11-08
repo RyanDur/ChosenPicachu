@@ -3,7 +3,7 @@ import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {Measured, Measures, seated} from '../../../Market';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
-import {TableColumn} from '@components/DragSortableTable/table-state';
+import {TableColumn} from '@components/DragSortableTable/model';
 import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Motion, Origin, reportOf, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
 
 type Props = HeaderEvents & BodyEvents & {

@@ -1,5 +1,5 @@
 import {sliced} from '@components/store';
-import {Arrangement, arrangementOf, arrangementReducer} from '@components/DragSortableTable/arrangement';
+import {Arrangement, arrangementOf, arrangementReducer} from '@components/DragSortableTable/model';
 import {Trade} from '../Charts/coinbase';
 import {LATEST_TRADES_CAP, LiveTradesState, opening} from '../Charts/live-trades';
 import {Period} from '../Charts/period';

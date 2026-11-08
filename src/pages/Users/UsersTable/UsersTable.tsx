@@ -8,7 +8,7 @@ import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, reportOf, Ro
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
-import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
+import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
 import {fullNameOf} from '@components/Users/UserInfo/user';
 
 export const UsersTable: FC = () => {

@@ -1,8 +1,7 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table/shares';
-import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, pointerHolds, seatOffset, settlingAt} from './table-state';
-import {TableView} from './context';
+import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, pointerHolds, seatOffset, settlingAt, TableView} from './table-state';
 import {anchored} from './survey';
 import {Drift} from './travel';
 

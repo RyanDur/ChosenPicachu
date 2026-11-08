@@ -2,18 +2,10 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from '@components/DragSortableTable/selectors';
-import {PixelSizes, Survey} from '@components/DragSortableTable/survey';
+import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, Grab, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, rowArrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLandingFound, rowLift, rowMarks, rowMovedBeside, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from '@components/DragSortableTable/model';
 import {RowGrip} from '@components/DragSortableTable/RowGrip';
-import {RowDrag, pixels, shoveDistance} from '@components/DragSortableTable/table-state';
-import {lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
-import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
-import {movedTo} from '@components/DragSortableTable/arrangement';
 import {releasedRow, travelledRow} from './travel';
-import {Grab, rowLift} from '@components/DragSortableTable/lift';
-import {rowArrows} from '@components/DragSortableTable/arrows';
 import '@components/DragSortableTable/motion.css';
-import {cellNeeds, motionStates, rowHeaderCell} from '@components/DragSortableTable/looks';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();

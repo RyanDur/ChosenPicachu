@@ -1,17 +1,15 @@
 import {maybe} from '@ryandur/sand';
-import {TableStore} from '@components/DragSortableTable/store';
-import {Report} from '@components/DragSortableTable/report';
-import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
+import {Labelled, Report, TableColumn, TableStore} from '@components/DragSortableTable/model';
 import {Measures} from '@pages/Demos/Market';
 
-export type {TableState, Carry} from '@components/DragSortableTable/table-state';
-export type {Report} from '@components/DragSortableTable/report';
-export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
-export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/actions';
-export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
-export {tableStore} from '@components/DragSortableTable/store';
+export type {TableState, Carry} from '@components/DragSortableTable/model';
+export type {Report} from '@components/DragSortableTable/model';
+export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/model';
+export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/model';
+export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
+export {tableStore} from '@components/DragSortableTable/model';
 export {marketActions, marketSelectors, marketStore} from '@pages/Demos/Market';
-export {landingReport, moveReport} from '@components/DragSortableTable/report';
+export {landingReport, moveReport} from '@components/DragSortableTable/model';
 
 export type MountedTable = {
   store: TableStore;

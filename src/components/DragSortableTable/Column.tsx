@@ -2,9 +2,8 @@ import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
 import {useTableSelector} from './context';
-import {columnNamed, unknownColumn, widthOfColumn} from './selectors';
+import {columnNamed, headerCell, headerNeeds, unknownColumn, widthOfColumn} from './model';
 import './Header.css';
-import {headerCell, headerNeeds} from './looks';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));

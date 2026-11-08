@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {gripLabel} from '@components/DragSortableTable/survey';
+import {gripLabel} from '@components/DragSortableTable/model';
 import {isMeasure} from '@pages/Demos/Market';
 import {changed, MountedTable} from './table-state';
 import {keepingFocus} from './focus';

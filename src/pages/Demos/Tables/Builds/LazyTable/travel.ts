@@ -1,6 +1,4 @@
-import {ColumnDrag, RowDrag} from '@components/DragSortableTable/table-state';
-import {columnUnder, rowUnder} from '@components/DragSortableTable/survey';
-import {Moving, lazyTravel} from '@components/DragSortableTable/travel';
+import {ColumnDrag, columnUnder, lazyTravel, Moving, RowDrag, rowUnder} from '@components/DragSortableTable/model';
 import {has} from '@ryandur/sand';
 
 export const travelledColumn = (order: readonly string[], moving: Moving) => (drag: ColumnDrag): string | undefined =>

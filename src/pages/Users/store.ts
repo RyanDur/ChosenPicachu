@@ -1,8 +1,7 @@
 import {Listener, Store, sliced, store} from '@components/store';
 import {maybe, Maybe} from '@ryandur/sand';
 import {NewUser, User, UserEdit} from '@components/Users';
-import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, arrived, standingOf} from '@components/DragSortableTable/arrangement';
-import {TableColumn} from '@components/DragSortableTable/table-state';
+import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, arrived, standingOf, TableColumn} from '@components/DragSortableTable/model';
 import {Candidate, columns, seated} from './columns';
 
 export type UsersState = {

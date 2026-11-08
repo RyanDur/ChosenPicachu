@@ -1,4 +1,4 @@
-import {TableColumn} from '@components/DragSortableTable/table-state';
+import {TableColumn} from '@components/DragSortableTable/model';
 import {Trade} from '../Charts/coinbase';
 import {LiveTradesState} from '../Charts/live-trades';
 import {Period} from '../Charts/period';

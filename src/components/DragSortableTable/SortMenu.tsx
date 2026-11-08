@@ -1,8 +1,7 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
-import {choices} from './sorting';
+import {choices, sortChosen} from './model';
 import {useHeaderEvents, useTableDispatch} from './context';
-import {sortChosen} from './actions';
 import {useHydrated} from '@components/hydrated';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {

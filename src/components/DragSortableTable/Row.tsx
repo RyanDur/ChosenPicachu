@@ -1,7 +1,7 @@
 import {classNames} from '@components/class-names';
 import {ComponentProps, FC} from 'react';
 import {useTableSelector} from './context';
-import {selectOrder} from './selectors';
+import {selectOrder} from './model';
 import {placed} from './placing';
 
 export const Row: FC<ComponentProps<'tr'>> = ({className, children, ...tr}) => {

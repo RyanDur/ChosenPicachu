@@ -1,10 +1,8 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
 import {useTableSelector} from './context';
-import {columnHeld, columnMarks, driftOfColumn, driftOfRow, rowHeld, rowMarks, seatOfColumn, seatOfRow} from './selectors';
-import {pixels, shoveDistance} from './table-state';
+import {cellNeeds, columnHeld, columnMarks, driftOfColumn, driftOfRow, motionStates, pixels, rowHeld, rowMarks, seatOfColumn, seatOfRow, shoveDistance} from './model';
 import './motion.css';
-import {cellNeeds, motionStates} from './looks';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
   const {settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(columnMarks(column));

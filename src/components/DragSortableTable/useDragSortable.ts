@@ -1,10 +1,7 @@
 import {useState, useSyncExternalStore} from 'react';
 import {classNames} from '@components/class-names';
-import {Table, TableContext, TableView} from './context';
-import {tableStore} from './store';
-import {selectReport} from './selectors';
-import {moveReport} from './report';
-import {TableColumn, Labelled, Seated} from './table-state';
+import {Table, TableContext} from './context';
+import {Labelled, moveReport, Seated, selectReport, TableColumn, tableStore, TableView} from './model';
 import './Table.css';
 import './sortable.css';
 

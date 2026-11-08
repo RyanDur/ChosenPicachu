@@ -1,9 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {columnUnder, displacedBetween, interior, PixelSizes, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
-import {lazyTravel, Moving} from '@components/DragSortableTable/travel';
-import {columnLift, Grab} from '@components/DragSortableTable/lift';
-import {columnArrows, RowNudge} from '@components/DragSortableTable/arrows';
-import {Labelled, TableColumn} from '@components/DragSortableTable/table-state';
+import {columnArrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn} from '@components/DragSortableTable/model';
 import {
   Carry,
   columnLandingFound,
