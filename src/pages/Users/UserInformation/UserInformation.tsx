@@ -1,4 +1,4 @@
-import {FC, ReactNode, useReducer} from 'react';
+import {FC, ReactNode, useReducer, useState} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
 import {classNames} from '@components';
 import {NewUser, User} from '../profile';
@@ -25,9 +25,6 @@ const newUser = (avatar: string): NewUser => ({
   avatar
 });
 
-// the first form is drawn on the server too, so it wears the one avatar both renders agree on
-const freshAvatar = (confirmedAdds: number): string => confirmedAdds === 0 ? avatars.first : avatars.drawn();
-
 const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
   const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
   switch (open.mode) {
@@ -49,25 +46,30 @@ const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
 
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
-const draftKey = (open: Opened, confirmedAdds: number): string =>
-  `${open.mode}:${shown(open).map(({id}) => id).orElse('')}:${confirmedAdds}`;
+const draftKey = (open: Opened): string => `${open.mode}:${shown(open).map(({id}) => id).orElse('')}`;
 
 export const UserInformation: FC<{className?: string}> = ({className}) =>
-  <Draft key={draftKey(useOpened(), useUsersSelector(usersSelectors.confirmedAdds))} className={className}/>;
+  <Draft key={draftKey(useOpened())} className={className}/>;
 
 const Draft: FC<{className?: string}> = ({className}) => {
   const open = useOpened();
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
+  const [resetForAdds, setResetForAdds] = useState(confirmedAdds);
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
-    started => drafts.of(started.either(user => user, () => newUser(freshAvatar(confirmedAdds)))));
+    started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
   const user = drafts.userIn(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
 
   const reset = () =>
     dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
+
+  if (resetForAdds !== confirmedAdds) {
+    setResetForAdds(confirmedAdds);
+    reset();
+  }
 
   return <form aria-labelledby="form-title"
     className={classNames('user-information', className)}
