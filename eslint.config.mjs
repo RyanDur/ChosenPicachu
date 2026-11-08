@@ -74,13 +74,6 @@ const journeys = Object.fromEntries([
   'valid-describe-callback', 'valid-expect', 'valid-expect-in-promise'
 ].map(rule => [`playwright/${rule}`, 'error']));
 
-const routeModules = [
-  'Demos/Accordions/tab.tsx', 'Demos/ZIndexDemo/tab.tsx', 'Demos/DragAndDrop/tab.tsx', 'Demos/Charts/tab.tsx',
-  'Demos/Tables/tab.tsx', 'Home/route.tsx', 'Demos/SavedTab/route.tsx', 'Demos/route.tsx', 'Demos/Charts/route.tsx',
-  'Users/route.tsx', 'Gallery/route.tsx', 'Gallery/Piece/route.tsx', 'Games/route.tsx', 'Record/route.tsx',
-  'Practice/SavedTab/route.tsx', 'Practice/route.tsx', 'NoRoom/route.tsx'
-].map(path => `src/pages/${path}`);
-
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillReachForThePage = [
@@ -161,7 +154,7 @@ export default [
   },
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
-    ignores: ['src/root.tsx', 'src/routes.ts', ...routeModules, '*.config.{js,mjs,ts}', '**/*.d.ts'],
+    ignores: ['*.config.{js,mjs,ts}', '**/*.d.ts'],
     rules: {'no-restricted-exports': ['error', {
       restrictDefaultExports: {direct: true, named: true, defaultFrom: true, namedFrom: true, namespaceFrom: true}
     }]}
