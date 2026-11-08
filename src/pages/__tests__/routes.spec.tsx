@@ -9,6 +9,7 @@ import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice'
 import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
 import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
+import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -71,6 +72,21 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Demos Tables · Sort menu');
+  });
+
+  test('a Practice tab that crashes says the room is closed under its own Practice header', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={practiceAt('structure')}>
+        <Route path={Paths.practiceTab} element={<Boom/>} ErrorBoundary={PracticeBoundary}/>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+
+    expect(await site.roomSays('This room is closed.')).toBeVisible();
+    expect(site.pageTitle()).toHaveTextContent('Practice Structure');
   });
 
   test('a crash no page catches is reported and announced', async () => {
