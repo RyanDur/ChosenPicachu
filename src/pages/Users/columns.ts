@@ -2,10 +2,10 @@ import {has} from '@ryandur/sand';
 import {Labelled, Seated} from '@components/DragSortableTable/model';
 import {User} from './profile';
 
-export type Candidate = Labelled;
+export type ColumnLabel = Labelled;
 
 type UserColumns = {
-  all: readonly {name: string; data: Candidate}[];
+  all: readonly {name: string; data: ColumnLabel}[];
   seated: (users: readonly User[]) => readonly Seated[];
   worksFromHome: (user: User) => string;
 };

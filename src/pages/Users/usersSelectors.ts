@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import {arrangements, TableColumn} from '@components/DragSortableTable/model';
 import {User} from './profile';
-import {Candidate, userColumns} from './columns';
+import {ColumnLabel, userColumns} from './columns';
 import {Membership} from './memberships';
 import {UsersState} from './usersSlice';
 
@@ -13,7 +13,7 @@ const valueOf = (users: readonly User[]) => (row: string, column: string) =>
 
 type UsersSelectors = {
   users: (state: UsersState) => readonly User[];
-  columns: (state: UsersState) => readonly TableColumn<Candidate>[];
+  columns: (state: UsersState) => readonly TableColumn<ColumnLabel>[];
   withId: (id?: string) => (state: UsersState) => Maybe<User>;
   friendsReportOf: (userId: string) => (state: UsersState) => Maybe<Membership>;
 };
