@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {Disclosure} from '@components/Disclosure';
-import {useRoomToStandOpen} from '@components/room';
+import {useRoomToStandOpen} from '@components';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';

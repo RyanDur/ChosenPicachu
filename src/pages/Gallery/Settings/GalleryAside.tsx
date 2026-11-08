@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useRoomToStandOpen} from '@components/room';
+import {useRoomToStandOpen} from '@components';
 import {PageControl} from '@pages/Gallery/PageControl';
 
 export const GalleryAside: FC = () => {
