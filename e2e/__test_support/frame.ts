@@ -40,6 +40,7 @@ export type Hold = {
   readonly carryTo: (to: Locator) => Promise<void>;
   readonly carryHome: () => Promise<void>;
   readonly drop: () => Promise<void>;
+  readonly letGoOutsideThePage: () => Promise<void>;
 };
 
 const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> => {
@@ -62,7 +63,11 @@ const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> 
       await moveTo(along === 'x' ? {x: box.x + box.width * 0.8, y: home.y} : {x: home.x, y: box.y + box.height * 0.8});
     },
     carryHome: () => moveTo(home),
-    drop: () => page.mouse.up()
+    drop: () => page.mouse.up(),
+    letGoOutsideThePage: async () => {
+      const devtools = await page.context().newCDPSession(page);
+      await devtools.send('Input.dispatchMouseEvent', {type: 'mouseMoved', x: at.x, y: at.y, button: 'none', buttons: 0});
+    }
   };
 };
 
