@@ -1,7 +1,7 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {empty, has, not} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
@@ -9,8 +9,6 @@ const aliases = {'@components': 'src/components', '@navigation': 'src/navigation
 const code = /\.(ts|tsx)$/;
 const indexNames = ['index.ts', 'index.tsx'];
 
-/** @type {Record<string, string[]>} */
-const exceptionsOnFile = JSON.parse(readFileSync(join(root, 'scripts/lint/structure-exceptions.json'), 'utf8'));
 const routeModules = new Set([
   'src/root.tsx', 'src/routes.ts',
   ...[...readFileSync(join(src, 'routes.ts'), 'utf8').matchAll(/'(pages\/[^']+\.tsx)'/g)].map(([, path]) => `src/${path}`)
@@ -92,48 +90,15 @@ const wantedFrom = directory => {
 };
 
 /**
- * @param {string} rule
- * @param {string} file
- */
-/**
- * @param {Record<string, string[]>} exceptions
- * @param {string} rule
- * @param {string} file
- */
-const listed = (exceptions, rule, file) => (exceptions[rule] ?? []).includes(file);
-
-/**
- * @param {string} name
  * @param {string} description
  * @param {(file: string, report: (node: object, why: string) => void) => Record<string, Function>} check
  */
-const ruleWith = (name, description, check) => ({
-  meta: {type: 'problem', docs: {description}, schema: [{
-    type: 'object', properties: {exceptions: {type: 'object'}}, additionalProperties: false
-  }], messages: {
-    broken: '{{why}}',
-    mended: `{{file}} now keeps this rule: take it off the "${name}" list in scripts/lint/structure-exceptions.json`
-  }},
+const ruleWith = (description, check) => ({
+  meta: {type: 'problem', docs: {description}, schema: [], messages: {broken: '{{why}}'}},
   create: context => {
     const file = fromRoot(context.filename);
-    // a spec passes its own list, so it never depends on which files the live list still holds
-    /** @type {Record<string, string[]>} */
-    const exceptions = context.options[0]?.exceptions ?? exceptionsOnFile;
     if (not(file.startsWith('src/')) || file.endsWith('.d.ts')) return {};
-    /** @type {{node: object, why: string}[]} */
-    const found = [];
-    const visitors = check(file, (node, why) => found.push({node, why}));
-    return {
-      ...visitors,
-      'Program:exit': program => {
-        visitors['Program:exit']?.(program);
-        if (listed(exceptions, name, file)) {
-          if (empty(found)) context.report({node: program, messageId: 'mended', data: {file}});
-          return;
-        }
-        found.forEach(({node, why}) => context.report({node, messageId: 'broken', data: {why}}));
-      }
-    };
+    return check(file, (node, why) => context.report({node, messageId: 'broken', data: {why}}));
   }
 });
 
@@ -150,7 +115,7 @@ const valuesExportedBy = node => {
   return node.specifiers.filter(specifier => specifier.exportKind !== 'type').length;
 };
 
-const oneExport = ruleWith('one-export', 'a file exports one module or one component, and its types', (file, report) => {
+const oneExport = ruleWith('a file exports one module or one component, and its types', (file, report) => {
   if (isIndex(file) || routeModules.has(file)) return {};
   let count = 0;
   return {
@@ -162,7 +127,7 @@ const oneExport = ruleWith('one-export', 'a file exports one module or one compo
   };
 });
 
-const everyDirectoryHasAnIndex = ruleWith('has-index', 'every directory of code has an index', (file, report) => {
+const everyDirectoryHasAnIndex = ruleWith('every directory of code has an index', (file, report) => {
   const directory = dirname(join(root, file));
   // a route module is the framework's door, so a file that is one asks for no index beside it
   if (isTestPlace(file) || directory === src || routeModules.has(file)) return {};
@@ -173,7 +138,7 @@ const everyDirectoryHasAnIndex = ruleWith('has-index', 'every directory of code 
   };
 });
 
-const throughIndex = ruleWith('through-index', 'code outside a directory imports from the directory, never from a file inside it', (file, report) => {
+const throughIndex = ruleWith('code outside a directory imports from the directory, never from a file inside it', (file, report) => {
   const at = join(root, file);
   /** @param {any} node */
   const reach = node => {
@@ -185,7 +150,7 @@ const throughIndex = ruleWith('through-index', 'code outside a directory imports
   return {ImportDeclaration: reach, ExportNamedDeclaration: reach, ExportAllDeclaration: reach};
 });
 
-const indexTopLevel = ruleWith('index-top-level', 'an index exports only what code outside its directory imports, from its own top level', (file, report) => {
+const indexTopLevel = ruleWith('an index exports only what code outside its directory imports, from its own top level', (file, report) => {
   if (not(isIndex(file))) return {};
   const at = join(root, file);
   const directory = dirname(at);

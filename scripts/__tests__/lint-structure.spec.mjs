@@ -6,8 +6,6 @@ import {structure} from '../lint/structure.mjs';
 const at = path => join(process.cwd(), path);
 const withIndex = at('src/banners/Probe.ts');
 const withoutIndex = at('src/components/NoSuchDirectory/Probe.ts');
-const listedForOneExport = at('src/banners/Probe.ts');
-const ownList = {exceptions: {'one-export': ['src/banners/Probe.ts']}};
 const home = at('src/pages/Home/Probe.tsx');
 
 const tester = new RuleTester({languageOptions: {
@@ -21,8 +19,7 @@ tester.run('one-export', structure.rules['one-export'], {
     {name: 'should accept a module built by a function, and its types', code: 'export const banners = () => ({}); export type Side = string;', filename: withIndex}
   ],
   invalid: [
-    {name: 'should refuse a second exported value', code: 'export const one = 1; export const two = 2;', filename: withIndex, errors: 1},
-    {name: 'should ask a listed file that now keeps the rule to come off the list', code: 'export const probe = {};', filename: listedForOneExport, options: [ownList], errors: [{messageId: 'mended'}]}
+    {name: 'should refuse a second exported value', code: 'export const one = 1; export const two = 2;', filename: withIndex, errors: 1}
   ]
 });
 
