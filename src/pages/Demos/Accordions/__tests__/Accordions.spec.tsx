@@ -1,12 +1,10 @@
 import {render} from '@testing-library/react';
-import {
-  ExclusiveAccordion,
-  ExclusiveMeasuredAccordion,
-  ExclusiveRadioToggleAccordion,
-  InclusiveAccordion,
-  InclusiveCheckboxToggleAccordion,
-  InclusiveMeasuredAccordion
-} from '../Accordions';
+import {ExclusiveAccordion} from '../ExclusiveAccordion';
+import {ExclusiveMeasuredAccordion} from '../ExclusiveMeasuredAccordion';
+import {ExclusiveRadioToggleAccordion} from '../ExclusiveRadioToggleAccordion';
+import {InclusiveAccordion} from '../InclusiveAccordion';
+import {InclusiveCheckboxToggleAccordion} from '../InclusiveCheckboxToggleAccordion';
+import {InclusiveMeasuredAccordion} from '../InclusiveMeasuredAccordion';
 import {accordionFolds, foldTextUnder} from '../__test_support/build';
 
 const folds = [{key: 'Alpha', value: 'the first fold'}, {key: 'Beta', value: 'the second fold'}];

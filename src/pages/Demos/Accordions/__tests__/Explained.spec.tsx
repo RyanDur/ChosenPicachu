@@ -135,7 +135,7 @@ describe('what the platform gives now', () => {
 
     const explained = await explanation.part(parts[1]);
 
-    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/InclusiveToggleAccordion.tsx on GitHub']);
   });
 
   test('should link, with exclusive chosen, the run that introduces details to the build’s source on GitHub', async () => {
@@ -143,7 +143,7 @@ describe('what the platform gives now', () => {
 
     const explained = await explanation.part(parts[1]);
 
-    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/ExclusiveToggleAccordion.tsx on GitHub']);
   });
 });
 
@@ -462,7 +462,7 @@ describe('how the known height works', () => {
 
     const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
 
-    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/InclusiveAccordion.tsx on GitHub']);
   });
 
   test('should link, with exclusive chosen, the fold’s run to the build’s source on GitHub', async () => {
@@ -470,7 +470,7 @@ describe('how the known height works', () => {
 
     const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
 
-    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/Accordions.tsx on GitHub']);
+    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/ExclusiveAccordion.tsx on GitHub']);
   });
 });
 
