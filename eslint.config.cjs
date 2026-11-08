@@ -77,10 +77,6 @@ const journeys = Object.fromEntries([
 
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
-const stillCallComponents = [
-  'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx'
-];
-
 const stillReachForThePage = [
   'src/navigation/arrival/useArrival.ts', 'src/page/SideNav.tsx'
 ];
@@ -121,7 +117,7 @@ module.exports = [
   {
     files: ['src/**/*.tsx'],
     plugins: {components},
-    rules: {'components/rendered-as-jsx': ['error', {still: stillCallComponents}]}
+    rules: {'components/rendered-as-jsx': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],

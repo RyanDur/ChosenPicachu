@@ -36,9 +36,10 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Tabl
     onRowMoved={({row, to, standing: shownStanding}) => dispatch(arrangements.rowMoved(row, to, shownStanding))}/>;
 };
 
-const seated = (Table: Table, rows: readonly Measures[], dials: Dials = {origin: 'hide', motion: 'animated'}) => <Page Table={Table} rows={rows} dials={dials}/>;
+const Seated: FC<{table: Table; rows: readonly Measures[]; dials: Dials}> = ({table, rows, dials}) =>
+  <Page Table={table} rows={rows} dials={dials}/>;
 
-const seat = (Table: Table, dials: Dials = {origin: 'hide', motion: 'animated'}, rows: readonly Measures[] = startingRows) => render(seated(Table, rows, dials));
+const seat = (Table: Table, dials: Dials = {origin: 'hide', motion: 'animated'}, rows: readonly Measures[] = startingRows) => render(<Seated table={Table} rows={rows} dials={dials}/>);
 
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
@@ -135,8 +136,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still walk', async () => {
-    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
-    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
+    const {rerender} = render(<Seated table={EagerTable} rows={[]} dials={{origin: 'keep', motion: 'static'}}/>);
+    rerender(<Seated table={EagerTable} rows={startingRows} dials={{origin: 'keep', motion: 'static'}}/>);
 
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
@@ -145,8 +146,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still say the move', async () => {
-    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'static'}));
-    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'static'}));
+    const {rerender} = render(<Seated table={EagerTable} rows={[]} dials={{origin: 'keep', motion: 'static'}}/>);
+    rerender(<Seated table={EagerTable} rows={startingRows} dials={{origin: 'keep', motion: 'static'}}/>);
 
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
@@ -155,8 +156,8 @@ describe('rows by hand', () => {
   });
 
   test('rows that arrive after the deal still walk and say the move on the animated table', async () => {
-    const {rerender} = render(seated(EagerTable, [], {origin: 'keep', motion: 'animated'}));
-    rerender(seated(EagerTable, startingRows, {origin: 'keep', motion: 'animated'}));
+    const {rerender} = render(<Seated table={EagerTable} rows={[]} dials={{origin: 'keep', motion: 'animated'}}/>);
+    rerender(<Seated table={EagerTable} rows={startingRows} dials={{origin: 'keep', motion: 'animated'}}/>);
 
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowDown}');
@@ -202,7 +203,7 @@ describe('sort criteria menus', () => {
     await liveTable.choose('trades', 'ascending');
     expect(liveTable.lookbackNames()).toEqual(['session', 'this minute', 'last 15 minutes', 'this hour', 'last 5 minutes']);
 
-    rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
+    rerender(<Seated table={EagerTable} rows={retraded(10)} dials={{origin: 'keep', motion: 'static'}}/>);
     expect(liveTable.lookbackNames()).toEqual(['session', 'last 15 minutes', 'this hour', 'last 5 minutes', 'this minute']);
   });
 
@@ -297,7 +298,7 @@ describe('sort criteria menus', () => {
     liveTable.focusRow('this minute');
     await liveTable.press('{ArrowUp}');
 
-    rerender(seated(EagerTable, retraded(10), {origin: 'keep', motion: 'static'}));
+    rerender(<Seated table={EagerTable} rows={retraded(10)} dials={{origin: 'keep', motion: 'static'}}/>);
 
     expect(liveTable.lookbackNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
   });
