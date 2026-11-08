@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"$CLAUDE_ENV_FILE\" ] && direnv export bash >> \"$CLAUDE_ENV_FILE\" || true"
+            "command": "[ -z \"$CLAUDE_ENV_FILE\" ] || direnv export bash >> \"$CLAUDE_ENV_FILE\""
           }
         ]
       }
