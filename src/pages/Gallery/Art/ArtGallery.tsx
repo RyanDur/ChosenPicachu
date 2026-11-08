@@ -23,10 +23,8 @@ export const ArtGallery: FC = () => {
   return <>
     <ul id="art-gallery">
       {wall.reply === 'answered' && wall.answer.pieces.map((piece, index) => <li className="frame" key={piece.id}>
-        <figure>
-          <div className="wall-slot">
-            <Image className="piece hung" piece={piece} priority={index === 0} lazy={index >= 6}/>
-          </div>
+        <figure className="hanging">
+          <Image className="piece hung" piece={piece} priority={index === 0} lazy={index >= 6}/>
           <figcaption className="placard trim hairline-outline italic caption ink">{piece.title}</figcaption>
         </figure>
       </li>)}
