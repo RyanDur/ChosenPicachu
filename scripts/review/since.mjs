@@ -1,4 +1,4 @@
-import {empty, has} from '@ryandur/sand';
+import {empty, has, not} from '@ryandur/sand';
 
 const answered = new Set(['success', 'failure']);
 
@@ -25,7 +25,7 @@ export const startFor = ({asked, reviewed, pushed}) =>
 const github = (token, path) => fetch(`https://api.github.com/${path}`, {
   headers: {Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json'}
 }).then(response => {
-  if (!response.ok) throw new Error(`${response.status} from ${path}`);
+  if (not(response.ok)) throw new Error(`${response.status} from ${path}`);
   return response.json();
 });
 
@@ -42,7 +42,9 @@ export const lastAnswered = async (fetching, {repository, workflow, runId}, warn
   try {
     /** @type {{workflow_runs: {id: number, head_sha: string}[]}} */
     const {workflow_runs: runs} = await fetching(`repos/${repository}/actions/workflows/${workflow}/runs?branch=main&per_page=30`);
-    if (!runs.some(({id}) => id === Number(runId))) return notFound(`the runs GitHub listed do not include run ${runId}`);
+    if (not(runs.some(({id}) => id === Number(runId)))) {
+      return notFound(`the runs GitHub listed do not include run ${runId}`);
+    }
     const jobsOf = id => fetching(`repos/${repository}/actions/runs/${id}/jobs`).then(({jobs}) => jobs);
     return await reviewedBefore(runs, jobsOf, Number(runId));
   } catch (trouble) {

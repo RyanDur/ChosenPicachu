@@ -1,17 +1,16 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {empty, maybe} from '@ryandur/sand';
+import {empty, maybe, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /** @param {string} markdown */
 export const reviewersIn = markdown => {
-  const listed = markdown.indexOf('\n## Reviewers');
-  if (listed === -1) {
+  if (not(markdown.includes('\n## Reviewers'))) {
     throw new Error('AGENTS.md names no reviewers: it has no "## Reviewers" section');
   }
-  return markdown.slice(listed).split('\n### ').slice(1).map(section => {
+  return markdown.slice(markdown.indexOf('\n## Reviewers')).split('\n### ').slice(1).map(section => {
     const [heading, ...lines] = section.split('\n');
     const name = heading.trim();
     const field = key => maybe(lines.find(line => line.startsWith(`- ${key}: `))).either(

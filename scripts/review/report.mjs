@@ -29,11 +29,13 @@ const placeOf = ({file, line}, commit) => maybe(commit)
 const named = severity => `${severity[0].toUpperCase()}${severity.slice(1)}`;
 
 const verdictTold = findings => {
-  const stops = findings.filter(({severity}) => severity === 'violation').length;
-  if (stops > 0) {
-    return `has ${plural(stops, 'violation')} to fix before it ships`;
+  const stops = findings.filter(({severity}) => severity === 'violation');
+  if (has(stops)) {
+    return `has ${plural(stops.length, 'violation')} to fix before it ships`;
   }
-  return findings.length === 0 ? 'is fine to ship, with nothing to change' : `is fine to ship, with ${plural(findings.length, 'thing')} to look at`;
+  return empty(findings)
+    ? 'is fine to ship, with nothing to change'
+    : `is fine to ship, with ${plural(findings.length, 'thing')} to look at`;
 };
 
 const findingTold = (finding, at, commit) => [
@@ -66,7 +68,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(findings, {commit, subject});
   process.stdout.write(summary);
-  if (findings.length > 0) {
+  if (has(findings)) {
     writeFileSync('review-comment.md', summary);
   }
   process.exitCode = verdictOf(findings);
