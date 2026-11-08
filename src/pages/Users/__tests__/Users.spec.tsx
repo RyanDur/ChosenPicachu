@@ -1,5 +1,6 @@
 import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
+import {site} from '@pages/__test_support';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
 import {createSearchParams} from 'react-router';
@@ -167,6 +168,17 @@ describe('the users page', () => {
 
       expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
       expect(userForm.field('First Name')).toHaveDisplayValue(aiko.person.firstName);
+    });
+
+    it('a reader who follows the Users link while adding keeps what they typed', async () => {
+      setupUsersResponse([aUser()]);
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+      await userForm.typeInto('First Name', 'Aiko');
+
+      await site.followRail('Users');
+
+      expect(userForm.field('First Name')).toHaveDisplayValue('Aiko');
     });
   });
 
