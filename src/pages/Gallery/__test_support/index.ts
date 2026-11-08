@@ -7,6 +7,8 @@ export {
   heldVAMPictures,
   harvardNeverAnswers,
   refuseAICPictures,
+  requestsAnswered,
+  requestsAsked,
   refuseVAMPictures,
   setupAICAllArtResponse,
   setupAICArtPieceResponse,

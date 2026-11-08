@@ -1,7 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {anyRequestFailsToConnect} from '@__test_support/server';
-import {server} from '@__test_support/server';
 import {env} from '@env';
 import {render, waitFor} from '@testing-library/react';
 import {ArtGallery} from '@pages/Gallery/Art';
@@ -10,22 +9,17 @@ import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
 import {site} from '@pages/__test_support';
-import {heldAICAllArtResponse, setupAICAllArtResponse, galleryWall} from '@pages/Gallery/__test_support';
+import {heldAICAllArtResponse, requestsAnswered, setupAICAllArtResponse, galleryWall} from '@pages/Gallery/__test_support';
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
-    let hits = 0;
-    const count = ({request}: {request: Request}) => {
-      if (request.url.startsWith(`${env.aicDomain}/search`)) hits++;
-    };
-    server.events.on('response:mocked', count);
+    const wallsAsked = requestsAnswered(answered => answered.href.startsWith(`${env.aicDomain}/search`) ? answered.href : null);
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
     await galleryWall.framesAppear();
-    server.events.removeListener('response:mocked', count);
 
-    expect(hits).toEqual(1);
+    expect(wallsAsked).toHaveLength(1);
   });
 
   test('only the first rows race for the wire; the rest wait below the fold', async () => {

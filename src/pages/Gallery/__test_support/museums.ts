@@ -7,6 +7,7 @@ import {env} from '@env';
 import {HarvardAllArtResponse} from '@pages/Gallery/museums/harvard/types';
 import {VAMAllArtResponse} from '@pages/Gallery/museums/vam/types';
 import {ClevelandAllArtResponse} from '@pages/Gallery/museums/cleveland/types';
+import {onTestFinished} from 'vitest';
 
 const aicFields = 'id,title,image_id,artist_display,term_titles,thumbnail';
 const harvardFields = 'id,title,people,primaryimageurl';
@@ -15,6 +16,24 @@ const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;
   return Object.entries(expected).every(([key, value]) => params.get(key) === value);
 };
+
+type Picked = (request: URL) => string | null;
+
+const notedOn = (moment: 'request:start' | 'response:mocked') => (picked: Picked): readonly string[] => {
+  const notes: string[] = [];
+  const note = ({request}: {request: Request}): void => {
+    const pick = picked(new URL(request.url));
+    if (pick !== null) notes.push(pick);
+  };
+  server.events.on(moment, note);
+  onTestFinished(() => {
+    server.events.removeListener(moment, note);
+  });
+  return notes;
+};
+
+export const requestsAsked = notedOn('request:start');
+export const requestsAnswered = notedOn('response:mocked');
 
 const holding = (): {held: Promise<void>; release: () => void} => {
   let release = (): void => undefined;

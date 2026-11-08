@@ -1,10 +1,10 @@
 import {TestApp} from '@__test_support/TestApp';
-import {anyRequestRespondsWith, server} from '@__test_support/server';
+import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, waitFor} from '@testing-library/react';
 import {Source} from '@pages/Gallery/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {heldAICSuggestions} from '@pages/Gallery/__test_support';
+import {heldAICSuggestions, requestsAsked} from '@pages/Gallery/__test_support';
 import {heldSearch, searchBar} from '@pages/Gallery/Search/__test_support';
 import {aicSuggestionsOf} from '@pages/Gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
@@ -101,56 +101,39 @@ describe('search', () => {
     });
 
     it('a word asks the museum for suggestions once, and not again while it stands', async () => {
-      const suggestions: string[] = [];
-      const count = ({request}: {request: Request}) => {
-        if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
-      };
-      server.events.on('request:start', count);
-      try {
-        const search = heldSearch();
-        render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
-        await search.type(searchWord);
-        await search.pauseEnds();
-        await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
+      const suggestionsAsked = requestsAsked(asked => asked.href.includes('suggest_autocomplete_all') ? asked.href : null);
+      const search = heldSearch();
+      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+      await search.type(searchWord);
+      await search.pauseEnds();
+      await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
 
-        await search.pauseEnds();
+      await search.pauseEnds();
 
-        expect(suggestions).toHaveLength(1);
-      } finally {
-        server.events.removeListener('request:start', count);
-      }
+      expect(suggestionsAsked).toHaveLength(1);
     });
 
     it("the page gives up on an old word's answer, so it cannot land over the new word's suggestions", async () => {
-      const asked: string[] = [];
-      const noted = ({request}: {request: Request}) => {
-        const word = new URL(request.url).searchParams.get('query[term][title]');
-        if (word !== null) asked.push(word);
-      };
-      server.events.on('request:start', noted);
+      const wordsAsked = requestsAsked(asked => asked.searchParams.get('query[term][title]'));
       const monk = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
       const monet = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
-      try {
-        const search = heldSearch();
-        render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+      const search = heldSearch();
+      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
-        await search.type('mon');
-        await search.pauseEnds();
-        await waitFor(() => expect(asked).toContain('mon'));
-        await search.type('et');
-        await search.pauseEnds();
-        await waitFor(() => expect(asked).toContain('monet'));
-        monet.arrives();
-        await waitFor(() => expect(search.suggestions()).toHaveTextContent('MONET'));
-        monk.arrives();
+      await search.type('mon');
+      await search.pauseEnds();
+      await waitFor(() => expect(wordsAsked).toContain('mon'));
+      await search.type('et');
+      await search.pauseEnds();
+      await waitFor(() => expect(wordsAsked).toContain('monet'));
+      monet.arrives();
+      await waitFor(() => expect(search.suggestions()).toHaveTextContent('MONET'));
+      monk.arrives();
 
-        expect(await monk.served).toEqual({aborted: true});
-        expect(asked).toEqual(['mon', 'monet']);
-        expect(search.suggestions()).toHaveTextContent('MONET');
-        expect(search.suggestions()).not.toHaveTextContent('MONK');
-      } finally {
-        server.events.removeListener('request:start', noted);
-      }
+      expect(await monk.served).toEqual({aborted: true});
+      expect(wordsAsked).toEqual(['mon', 'monet']);
+      expect(search.suggestions()).toHaveTextContent('MONET');
+      expect(search.suggestions()).not.toHaveTextContent('MONK');
     });
   });
 });
