@@ -6,8 +6,8 @@ export const BannerProvider: FC<PropsWithChildren> = ({children}) => {
   const [news, dispatch] = useReducer(bannerNews.reduce, bannerNews.initial);
 
   return <newsContexts.Raising.Provider value={dispatch}>
-    <newsContexts.Raised.Provider value={news}>
+    <newsContexts.News.Provider value={news}>
       {children}
-    </newsContexts.Raised.Provider>
+    </newsContexts.News.Provider>
   </newsContexts.Raising.Provider>;
 };

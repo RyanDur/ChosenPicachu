@@ -1,5 +1,5 @@
 import {Banner, BannerChange} from './bannerChange';
-import {Placement} from './params';
+import {Placement} from './placement';
 
 export type News = {
   readonly banners: readonly Banner[];

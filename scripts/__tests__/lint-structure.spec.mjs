@@ -45,9 +45,9 @@ tester.run('through-index', structure.rules['through-index'], {
 });
 
 tester.run('index-top-level', structure.rules['index-top-level'], {
-  valid: [{name: 'should not judge a file that is not an index', code: "export * from './params';", filename: withIndex}],
+  valid: [{name: 'should not judge a file that is not an index', code: "export * from './placement';", filename: withIndex}],
   invalid: [
-    {name: 'should refuse an index that exports everything unnamed', code: "export * from './params';", filename: at('src/frame/notices/Banners/index.ts'), errors: [{messageId: 'broken'}]},
+    {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: at('src/frame/notices/Banners/index.ts'), errors: [{messageId: 'broken'}]},
     {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: at('src/frame/notices/Banners/index.ts'), errors: 1}
   ]
 });

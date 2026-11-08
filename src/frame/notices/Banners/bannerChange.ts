@@ -1,4 +1,4 @@
-import {Placement} from './params';
+import {Placement} from './placement';
 
 export type Banner = {
   readonly id: string;

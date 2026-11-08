@@ -3,6 +3,6 @@ import {BannerChange} from './bannerChange';
 import {bannerNews, News} from './bannerNews';
 
 export const newsContexts = {
-  Raised: createContext<News>(bannerNews.initial),
+  News: createContext<News>(bannerNews.initial),
   Raising: createContext<Dispatch<BannerChange>>(() => undefined)
 };
