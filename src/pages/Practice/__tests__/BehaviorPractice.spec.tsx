@@ -168,12 +168,12 @@ describe('the Behavior practice tab', () => {
     expect(practicePage.linkUnder('The test the state has to pass', /^“Journeys run as a reader/)).toHaveAttribute('href', repository.file('AGENTS.md'));
   });
 
-  test('should send before every commit to the pre-commit hook', async () => {
+  test('should send before every push to main to the pre-push hook', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linkUnder('The test the state has to pass', 'before every commit'))
-      .toHaveAttribute('href', repository.file('scripts/git-hooks/pre-commit'));
+    expect(practicePage.linkUnder('The test the state has to pass', 'before every push to main'))
+      .toHaveAttribute('href', repository.file('scripts/git-hooks/pre-push'));
   });
 
   test('should send the quotation of the ref rule to AGENTS.md', async () => {

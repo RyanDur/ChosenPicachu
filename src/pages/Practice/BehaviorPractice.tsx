@@ -231,8 +231,8 @@ export const BehaviorPractice: FC = () =>
       <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
         motion, and none is retried or skipped.”</a>
       </li>
-      <li className="paragraph">The pre-commit hook runs <code className="monospaced">tsc -b</code>{' '}
-        <a className="signpost" href={repository.file('scripts/git-hooks/pre-commit')}>before every commit</a> and
+      <li className="paragraph">The pre-push hook runs <code className="monospaced">tsc -b</code>{' '}
+        <a className="signpost" href={repository.file('scripts/git-hooks/pre-push')}>before every push to main</a> and
         refuses one that lets a forbidden state into a type.
       </li>
     </ul>
