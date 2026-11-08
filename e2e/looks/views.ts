@@ -1,6 +1,6 @@
 import type {Page} from '@playwright/test';
 import {pages, type SitePage} from '../pages';
-import {boxOf} from '../__test_support';
+import {boxOf, galleryPage} from '../__test_support';
 
 export type View = {
   readonly name: string;
@@ -100,6 +100,7 @@ export const views: readonly View[] = [
     page: named('gallery'),
     into: async page => {
       await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await galleryPage(page).openSettings();
       await page.getByRole('spinbutton', {name: /^Page #/}).focus();
       await page.mouse.move(0, 0);
     }
