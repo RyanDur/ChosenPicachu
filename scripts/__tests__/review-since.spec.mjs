@@ -26,6 +26,13 @@ describe('where the review starts', () => {
     expect(await reviewedBefore(runs, jobs, 3)).toBe('c2');
   });
 
+  test('never starts from a run pushed after the one asking, though its review answered first', async () => {
+    const runs = [run(4, 'c4'), run(3, 'c3'), run(2, 'c2')];
+    const jobs = jobsBy({4: [{name: 'review', conclusion: 'success'}], 2: [{name: 'review', conclusion: 'success'}]});
+
+    expect(await reviewedBefore(runs, jobs, 3)).toBe('c2');
+  });
+
   test('has nowhere to start when no review ever answered', async () => {
     const runs = [run(2, 'c2'), run(1, 'c1')];
 

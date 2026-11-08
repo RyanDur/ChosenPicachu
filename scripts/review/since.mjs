@@ -3,12 +3,13 @@ import {empty, has} from '@ryandur/sand';
 const answered = new Set(['success', 'failure']);
 
 /**
+ * Only runs older than this one count: a later push can finish its review first.
  * @param {{id: number, head_sha: string}[]} runs newest first
  * @param {(runId: number) => Promise<{name: string, conclusion: string | null}[]>} jobsOf
  * @param {number} thisRun
  */
 export const reviewedBefore = async (runs, jobsOf, thisRun) => {
-  for (const run of runs.filter(({id}) => id !== thisRun)) {
+  for (const run of runs.filter(({id}) => id < thisRun)) {
     const jobs = await jobsOf(run.id);
     if (jobs.some(({name, conclusion}) => name === 'review' && answered.has(conclusion ?? ''))) {
       return run.head_sha;
