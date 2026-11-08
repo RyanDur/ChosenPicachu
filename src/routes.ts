@@ -1,9 +1,9 @@
 import {FC} from 'react';
-import {NonIndexRouteObject} from 'react-router';
+import {NonIndexRouteObject, RouteObject} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
 import {GalleryPaths} from '@pages/Gallery';
-import {ErrorBoundary, HydrateFallback, Root} from './root';
+import {ClosedRoom, ErrorBoundary, HydrateFallback, Root} from './root';
 
 export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC};
 
@@ -29,31 +29,35 @@ const demoTabs: Record<keyof typeof names.demos, string> = {
   tables: 'pages/Demos/Tables/tab.tsx'
 };
 
-export const siteOpenedBy = (open: Opener): NonIndexRouteObject => ({
+export const siteHolding = (rooms: RouteObject[]): NonIndexRouteObject => ({
   id: 'root',
   path: '/',
   Component: Root,
   ErrorBoundary,
   HydrateFallback,
-  children: [
-    {path: Paths.home, ...open('pages/Home/route.tsx')},
-    {path: Paths.demos, ...open('pages/Demos/SavedTab/route.tsx')},
-    {
-      ...open('pages/Demos/route.tsx'),
-      children: [
-        ...Object.entries(demoTabs).map(([topic, file]) => ({path: `${Paths.demos}${topic}/`, ...open(file)})),
-        {path: `${Paths.demos}tables/:tutorial/`, ...open(demoTabs.tables)}
-      ]
-    },
-    {path: Paths.chartTutorial, ...open('pages/Demos/Charts/route.tsx')},
-    {path: Paths.users, ...open('pages/Users/route.tsx')},
-    {path: `${Paths.artGallery}${GalleryPaths.home}`, ...open('pages/Gallery/route.tsx')},
-    {path: `${Paths.artGallery}${GalleryPaths.piece}`, ...open('pages/Gallery/Piece/route.tsx')},
-    {path: Paths.games, ...open('pages/Games/route.tsx')},
-    {path: Paths.record, ...open('pages/Record/route.tsx')},
-    {path: Paths.practice, ...open('pages/Practice/SavedTab/route.tsx')},
-    {path: Paths.practiceTab, ...open('pages/Practice/route.tsx')},
-    {path: Paths.development, ...open('pages/Practice/SavedTab/route.tsx')},
-    {path: '*', ...open('pages/NoRoom/route.tsx')}
-  ]
+  children: [{ErrorBoundary: ClosedRoom, children: rooms}]
 });
+
+export const roomsOpenedBy = (open: Opener): RouteObject[] => [
+  {path: Paths.home, ...open('pages/Home/route.tsx')},
+  {path: Paths.demos, ...open('pages/Demos/SavedTab/route.tsx')},
+  {
+    ...open('pages/Demos/route.tsx'),
+    children: [
+      ...Object.entries(demoTabs).map(([topic, file]) => ({path: `${Paths.demos}${topic}/`, ...open(file)})),
+      {path: `${Paths.demos}tables/:tutorial/`, ...open(demoTabs.tables)}
+    ]
+  },
+  {path: Paths.chartTutorial, ...open('pages/Demos/Charts/route.tsx')},
+  {path: Paths.users, ...open('pages/Users/route.tsx')},
+  {path: `${Paths.artGallery}${GalleryPaths.home}`, ...open('pages/Gallery/route.tsx')},
+  {path: `${Paths.artGallery}${GalleryPaths.piece}`, ...open('pages/Gallery/Piece/route.tsx')},
+  {path: Paths.games, ...open('pages/Games/route.tsx')},
+  {path: Paths.record, ...open('pages/Record/route.tsx')},
+  {path: Paths.practice, ...open('pages/Practice/SavedTab/route.tsx')},
+  {path: Paths.practiceTab, ...open('pages/Practice/route.tsx')},
+  {path: Paths.development, ...open('pages/Practice/SavedTab/route.tsx')},
+  {path: '*', ...open('pages/NoRoom/route.tsx')}
+];
+
+export const siteOpenedBy = (open: Opener): NonIndexRouteObject => siteHolding(roomsOpenedBy(open));

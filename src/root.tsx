@@ -48,10 +48,12 @@ const Frame: FC<{room: ReactNode; pageUnknown?: boolean}> = ({room, pageUnknown}
     <ScrollRestoration getKey={placeOf}/>
   </FeedbackProvider></PageNameProvider></BannerProvider>;
 
-export const ErrorBoundary: FC = () =>
-  <Frame room={<Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}>
+export const ClosedRoom: FC = () =>
+  <Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}>
     <PageError/>
-  </Page>}/>;
+  </Page>;
+
+export const ErrorBoundary: FC = () => <Frame room={<ClosedRoom/>}/>;
 
 export const HydrateFallback: FC = () =>
   <Frame pageUnknown room={<Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false}>

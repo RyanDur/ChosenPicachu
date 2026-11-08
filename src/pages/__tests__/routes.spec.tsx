@@ -325,6 +325,22 @@ describe('the rail says which page the reader is on', () => {
     expect(site.railLink('Home')).not.toHaveAttribute('aria-current');
   });
 
+  test('should keep the reader on the rail link they follow out of a closed room', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp at={Paths.games}><Route path={Paths.games} element={<Boom/>}/></TestApp>,
+      {onCaughtError: () => undefined}
+    );
+    await site.roomSays('This room is closed.');
+
+    await site.followRail('Home');
+
+    await waitFor(() => expect(site.railLink('Home')).toHaveAttribute('aria-current', 'page'));
+    expect(site.railLink('Home')).toHaveFocus();
+  });
+
   test('should leave focus to the platform after a link followed from the page itself', async () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();

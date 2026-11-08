@@ -14,7 +14,7 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {SiteProviders} from '../SiteProviders';
-import {Opener, RoomModule, siteOpenedBy} from '../routes';
+import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
 import {Environment, environment} from '@transport';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
@@ -47,7 +47,7 @@ const eagerly: Opener = file => {
   return {Component: Room, ErrorBoundary};
 };
 
-const siteRoute = siteOpenedBy(eagerly);
+const siteRooms = roomsOpenedBy(eagerly);
 
 const described = (error: unknown): string => error instanceof Error ? error.message : String(error);
 
@@ -60,7 +60,7 @@ const everyRoom = (rooms: RouteObject[]): RouteObject[] =>
   rooms.flatMap(room => [room, ...everyRoom(room.children ?? [])]);
 
 const roomAt = (at: string): RouteObject | undefined =>
-  everyRoom(siteRoute.children ?? []).find(room => room.path === pathOf(at));
+  everyRoom(siteRooms).find(room => room.path === pathOf(at));
 
 const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)
@@ -74,11 +74,7 @@ export const TestApp: FC<Props> = ({at = '/', feed, environment: overrides, chil
     id: 'probes',
     element: <Probes/>,
     errorElement: <Probes/>,
-    children: [has(children) ? {
-      ...siteRoute,
-      id: 'root',
-      children: [...routesAt(at, children), {path: '*', element: null}]
-    } : siteRoute]
+    children: [siteHolding(has(children) ? [...routesAt(at, children), {path: '*', element: null}] : siteRooms)]
   }], {initialEntries: [at], hydrationData: {}}));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
