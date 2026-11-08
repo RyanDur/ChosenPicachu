@@ -18,6 +18,18 @@ test('an eager list takes the new order the moment the carried item crosses a ne
   await carried.drop();
 });
 
+test('an arrow key walks an item in an animated list past its neighbour, and back', async ({page}) => {
+  await page.goto('demos/drag-and-drop/?motion=animated');
+  const list = sortableList(page);
+
+  await list.stepByKey('A', 'ArrowRight');
+  await expect.poll(list.seats).toEqual(['B', 'A', 'C']);
+  await expect.poll(list.runningSlides).toBe(0);
+  await list.stepByKey('A', 'ArrowLeft');
+
+  await expect.poll(list.seats).toEqual(['A', 'B', 'C']);
+});
+
 test('a lazy list holds its order while an item is carried, and takes the new order when it is dropped', async ({page}) => {
   await page.goto('demos/drag-and-drop/?pace=lazy');
   const list = sortableList(page);

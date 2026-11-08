@@ -282,16 +282,17 @@ const PressureStory: FC = () =>
     <Steps>
       <Step title="Sum each minute by who took the trade">
         <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
-          <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says
-            what the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is
-            sell.</Says>
+          <Says>The decoder accepts a match only if its side is buy or sell. Coinbase marks the side of the order that
+            was waiting, so <code className="monospaced">takerSideOf</code> flips the mark to the side of the trader who
+            took the trade: a mark of sell means a buyer took it. Every Trade keeps that as{' '}
+          <code className="monospaced">takerSide</code>.</Says>
           <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for
             each minute: the size buyers took and the size sellers took. The chart shows up to 60 minutes.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), gap,
-            ...carve.unit(coinbaseSource, 'const takerBought'), gap,
+            ...carve.unit(coinbaseSource, 'const takerSideOf'), gap,
             ...carve.unit(pressureSource, 'const fold'), gap,
             ...carve.unit(pressureSource, 'export const bucketPressure')
           ]}/>
@@ -360,12 +361,13 @@ const PieStory: FC = () =>
     <Steps>
       <Step title="Add up each side">
         <Words want="One number for each side. The pie asks nothing about time.">
-          <Says>sideTotals goes through every trade and adds its size to one of two sums, bought or sold, using
-            takerBought. There are no minutes and no spans here: the pie is a pair of totals.</Says>
+          <Says><code className="monospaced">sideTotals</code> goes through every trade and adds its size to one of two
+            sums, bought or sold, by its <code className="monospaced">takerSide</code>. There are no minutes and no
+            spans here: the pie is a pair of totals.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(coinbaseSource, 'const takerBought'), gap,
+            ...carve.unit(coinbaseSource, 'const takerSideOf'), gap,
             ...carve.unit(pieSource, 'export const sideTotals')
           ]}/>
         </Codes>

@@ -19,6 +19,14 @@
     }
 }
 
+.sortable-list.eager-paced .sliding-in {
+    animation: slide-in var(--eager-slide-duration) ease-out;
+}
+
+.sortable-list.lazy-paced .sliding-in {
+    animation: slide-in var(--lazy-slide-duration) ease-out;
+}
+
 @keyframes slide-in {
     from {
         transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));

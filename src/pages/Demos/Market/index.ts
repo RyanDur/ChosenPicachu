@@ -7,7 +7,6 @@ export {arrangedView} from './arrangedView';
 export type {Measured, Measures} from './cells';
 export {cells} from './cells';
 export type {Trade} from './coinbase';
-export {coinbase} from './coinbase';
 export {Period} from './Period';
 export {periods} from './periods';
 export type {LiveTradesState} from './live-trades';

@@ -8,10 +8,10 @@ describe('bucketTrades', () => {
 
   test('trades in one bucket carry open high low close and summed volume', () => {
     const bucketed = candles.bucketTrades([
-      {id: 1, price: 50001, tradedAt: 1700000000000, size: 0.01, side: 'buy'},
-      {id: 2, price: 50003, tradedAt: 1700000001000, size: 0.02, side: 'buy'},
-      {id: 3, price: 50000, tradedAt: 1700000002000, size: 0.01, side: 'buy'},
-      {id: 4, price: 50002, tradedAt: 1700000003000, size: 0.01, side: 'buy'}
+      {id: 1, price: 50001, tradedAt: 1700000000000, size: 0.01, takerSide: 'sell'},
+      {id: 2, price: 50003, tradedAt: 1700000001000, size: 0.02, takerSide: 'sell'},
+      {id: 3, price: 50000, tradedAt: 1700000002000, size: 0.01, takerSide: 'sell'},
+      {id: 4, price: 50002, tradedAt: 1700000003000, size: 0.01, takerSide: 'sell'}
     ], 5000);
 
     expect(bucketed).toEqual([{
@@ -26,8 +26,8 @@ describe('bucketTrades', () => {
 
   test('a bucket boundary starts the next candle', () => {
     const bucketed = candles.bucketTrades([
-      {id: 1, price: 50001, tradedAt: 1700000004999, size: 0.01, side: 'buy'},
-      {id: 2, price: 50002, tradedAt: 1700000005000, size: 0.02, side: 'sell'}
+      {id: 1, price: 50001, tradedAt: 1700000004999, size: 0.01, takerSide: 'sell'},
+      {id: 2, price: 50002, tradedAt: 1700000005000, size: 0.02, takerSide: 'buy'}
     ], 5000);
 
     expect(bucketed).toEqual([

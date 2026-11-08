@@ -14,9 +14,8 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../EagerHideAnimatedList/EagerHideAnimatedList.tsx?sample';
+import listSource from '../EagerHideAnimatedList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
-import cssSource from '../EagerHideAnimatedList/EagerHideAnimatedList.css?sample';
 
 export const EagerHideAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -31,7 +30,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
       <InnerHalf/>
       <CommitCrossing listSource={listSource}/>
       <FadeOrigin itemSource={itemSource}/>
-      <SlideCrossed cssSource={cssSource}/>
+      <SlideCrossed/>
       <RoadEnd/>
     </Steps>
   </Story>

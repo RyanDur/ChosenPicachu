@@ -116,7 +116,7 @@ describe('the sortable list demo', () => {
   test('an arrow key walks an item past its neighbor, and back', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop', '?motion=static')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
     await sortableList.arrived();
@@ -124,7 +124,6 @@ describe('the sortable list demo', () => {
 
     expect(sortableList.seats()).toEqual(['B', 'A', 'C']);
 
-    sortableList.slidesEnd();
     await sortableList.moveByKey('A', '{ArrowLeft}');
     expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
   });
@@ -297,7 +296,9 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['dials', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
+      ['State', `${Paths.demos}z-index/`],
+      ['reducer', `${Paths.demos}z-index/`],
+      ['dispatch', `${Paths.demos}z-index/`],
       ['custom property', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]
     ]);

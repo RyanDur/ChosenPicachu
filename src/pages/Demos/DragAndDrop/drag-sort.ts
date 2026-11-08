@@ -64,7 +64,7 @@ const settled = (sort: DragSort): DragSort => {
 const stepped = (sort: DragSort, item: string, step: 1 | -1): DragSort => {
   const from = sort.order.indexOf(item);
   const to = Math.min(Math.max(from + step, 0), sort.order.length - 1);
-  return to === from || sliding(sort, item)
+  return to === from || sliding(sort, item) || sliding(sort, sort.order[to])
     ? sort
     : moved(sort, item, to, () => slideStarts.afterKeyboardStep(sort.order, item, step));
 };

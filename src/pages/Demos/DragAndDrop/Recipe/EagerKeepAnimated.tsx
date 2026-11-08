@@ -14,9 +14,8 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?sample';
+import listSource from '../EagerKeepAnimatedList.tsx?sample';
 import itemSource from '../items/KeepItem.tsx?sample';
-import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?sample';
 
 export const EagerKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -31,7 +30,7 @@ export const EagerKeepAnimatedRecipe: FC = () => <>
       <InnerHalf/>
       <CommitCrossing listSource={listSource}/>
       <KeepStanding listSource={listSource}/>
-      <SlideCrossed cssSource={cssSource}/>
+      <SlideCrossed/>
       <RoadEnd/>
     </Steps>
   </Story>

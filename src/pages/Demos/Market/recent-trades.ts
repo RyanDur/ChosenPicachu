@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
 import {decoded, http, HTTPError} from '@transport';
-import {Trade} from './coinbase';
+import {Trade, coinbase} from './coinbase';
 
 const RecentTradesDecoder = schema.array(schema.object({
   required: {
@@ -19,7 +19,7 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
     price: Number(row.price),
     tradedAt: Date.parse(row.time),
     size: Number(row.size),
-    side: row.side
+    takerSide: coinbase.takerSideOf(row.side)
   })).filter(trade =>
     !Number.isNaN(trade.price) && !Number.isNaN(trade.tradedAt) && !Number.isNaN(trade.size)
   ).reverse();

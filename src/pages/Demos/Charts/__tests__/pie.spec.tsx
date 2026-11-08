@@ -5,7 +5,7 @@ import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('the pie', () => {
   test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
-    expect(sideTotals([aTrade({size: 2, side: 'sell'}), aTrade({id: 2, size: 5, side: 'buy'})])).toEqual({bought: 2, sold: 5});
+    expect(sideTotals([aTrade({size: 2, takerSide: 'buy'}), aTrade({id: 2, size: 5, takerSide: 'sell'})])).toEqual({bought: 2, sold: 5});
   });
 
   test('the session totals by side', () => {

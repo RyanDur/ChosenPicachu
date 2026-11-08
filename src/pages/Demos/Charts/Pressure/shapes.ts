@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Trade, coinbase} from '../../Market';
+import {Trade} from '../../Market';
 import {windowSlots} from '../slots';
 
 export type Pressure = {
@@ -10,20 +10,20 @@ export type Pressure = {
 
 const fold = (pressure: Pressure, trade: Trade): Pressure => ({
   ...pressure,
-  bought: pressure.bought + (coinbase.takerBought(trade) ? trade.size : 0),
-  sold: pressure.sold + (coinbase.takerBought(trade) ? 0 : trade.size)
+  bought: pressure.bought + (trade.takerSide === 'buy' ? trade.size : 0),
+  sold: pressure.sold + (trade.takerSide === 'buy' ? 0 : trade.size)
 });
 
-const openedBy = (trade: Trade, bucketMs: number): Pressure =>
-  fold({openedAt: Math.floor(trade.tradedAt / bucketMs) * bucketMs, bought: 0, sold: 0}, trade);
+const openedBy = (trade: Trade, bucketMilliseconds: number): Pressure =>
+  fold({openedAt: Math.floor(trade.tradedAt / bucketMilliseconds) * bucketMilliseconds, bought: 0, sold: 0}, trade);
 
-export const bucketPressure = (trades: readonly Trade[], bucketMs: number): readonly Pressure[] =>
+export const bucketPressure = (trades: readonly Trade[], bucketMilliseconds: number): readonly Pressure[] =>
   trades.reduce<readonly Pressure[]>((pressures, trade) => {
     const current = pressures[pressures.length - 1];
-    const bucket = Math.floor(trade.tradedAt / bucketMs) * bucketMs;
+    const bucket = Math.floor(trade.tradedAt / bucketMilliseconds) * bucketMilliseconds;
     return has(current) && current.openedAt === bucket
       ? [...pressures.slice(0, -1), fold(current, trade)]
-      : [...pressures, openedBy(trade, bucketMs)];
+      : [...pressures, openedBy(trade, bucketMilliseconds)];
   }, []);
 
 export const heaviestSide = (pressures: readonly Pressure[]): number =>
@@ -42,7 +42,7 @@ export const pressureShapes = (
   pressures: readonly Pressure[],
   width: number,
   height: number,
-  bucketMs: number
+  bucketMilliseconds: number
 ): readonly PressureShape[] => {
   if (pressures.length === 0) {
     return [];
@@ -50,7 +50,7 @@ export const pressureShapes = (
   const peak = heaviestSide(pressures);
   const middle = height / 2;
   const scale = (size: number): number => peak === 0 ? 0 : (size / peak) * middle;
-  const slots = windowSlots(pressures.map(pressure => pressure.openedAt), width, bucketMs);
+  const slots = windowSlots(pressures.map(pressure => pressure.openedAt), width, bucketMilliseconds);
   return pressures.map((pressure, at) => {
     const boughtHeight = scale(pressure.bought);
     return {

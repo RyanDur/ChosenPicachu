@@ -7,8 +7,8 @@ import {aTrade, bought, sold} from '@pages/Demos/Charts/__test_support';
 describe('pressure', () => {
   test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
     expect(bucketPressure([
-      aTrade({tradedAt: 60000, size: 2, side: 'sell'}),
-      aTrade({id: 2, tradedAt: 61000, size: 5, side: 'buy'})
+      aTrade({tradedAt: 60000, size: 2, takerSide: 'buy'}),
+      aTrade({id: 2, tradedAt: 61000, size: 5, takerSide: 'sell'})
     ], 60000)).toEqual([{openedAt: 60000, bought: 2, sold: 5}]);
   });
 

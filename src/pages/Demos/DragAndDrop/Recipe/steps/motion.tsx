@@ -2,12 +2,12 @@ import {FC} from 'react';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../../types';
 import {MotionDial} from '../../../Controls';
-import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
 const gap = lines.plain(' ');
 
-export const SlideCrossed: FC<{cssSource: Sample}> = ({cssSource}) =>
+export const SlideCrossed: FC = () =>
   <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
       <Says>The swap happens at once. The crossed item gets the class{' '}
@@ -28,7 +28,7 @@ export const SlideCrossed: FC<{cssSource: Sample}> = ({cssSource}) =>
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(cssSource, '.sortable-list .sliding-in {'), gap,
+        ...carve.unit(sources.sortableListCss, '.sortable-list.eager-paced .sliding-in {'), gap,
         ...carve.unit(sources.sortableListCss, '@keyframes slide-in')
       ]}/>
     </Codes>

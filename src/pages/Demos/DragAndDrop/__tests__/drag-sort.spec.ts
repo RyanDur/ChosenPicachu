@@ -49,6 +49,12 @@ describe('a keyboard step', () => {
 
     expect(dragSort.reduce(stepped, dragSortChange.stepped('A', 1)).order).toEqual(['B', 'A', 'C']);
   });
+
+  it('a step into a neighbour still sliding is ignored', () => {
+    const stepped = dragSort.reduce(resting, dragSortChange.stepped('A', 1));
+
+    expect(dragSort.reduce(stepped, dragSortChange.stepped('C', -1)).order).toEqual(['B', 'A', 'C']);
+  });
 });
 
 describe('a crossing', () => {

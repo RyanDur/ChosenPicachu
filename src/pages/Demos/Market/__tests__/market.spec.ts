@@ -3,7 +3,7 @@ import {Period} from '../Period';
 import {marketActions, marketSelectors, marketStore} from '..';
 
 const trade = (id: number, price: number): Trade =>
-  ({id, price, tradedAt: 1700000000000 + id, size: 1, side: 'buy'});
+  ({id, price, tradedAt: 1700000000000 + id, size: 1, takerSide: 'sell'});
 
 describe('the market store', () => {
   it('a trade arriving keeps it in the trades and folds it into the measures', () => {

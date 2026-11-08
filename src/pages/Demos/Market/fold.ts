@@ -1,4 +1,4 @@
-import {Trade, coinbase} from './coinbase';
+import {Trade} from './coinbase';
 import {maybe} from '@ryandur/sand';
 
 export type Traded = {
@@ -36,7 +36,7 @@ const aggregate = (label: string, span: number, trades: readonly Trade[]): Windo
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);
   const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
-  const buys = trades.filter(coinbase.takerBought).length;
+  const buys = trades.filter(trade => trade.takerSide === 'buy').length;
   return {
     window: label,
     span,

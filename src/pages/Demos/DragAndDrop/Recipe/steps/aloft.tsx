@@ -13,9 +13,10 @@ export const HoldTheAloft: FC = () =>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read
         comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
         passes over cannot read data that was never dropped on it.</Says>
-      <Says>Keep it in state instead. The list’s state lives in a reducer, and a context hands it to every part of the
-        list. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> teaches state, reducers and contexts.</Says>
-      <Says>The lift dispatches <code className="monospaced">lifted</code> with the item’s name, and the reducer records
+      <Says>Keep it in state instead. <TabLink to={DemoTopics.zIndex}>State</TabLink> is the data a render draws from.
+        The list keeps its state in a <TabLink to={DemoTopics.zIndex}>reducer</TabLink>, a function that takes the
+        state and an action and returns the next state, and a context hands it to every part of the list.</Says>
+      <Says>To <TabLink to={DemoTopics.zIndex}>dispatch</TabLink> is to send the reducer an action. The lift dispatches <code className="monospaced">lifted</code> with the item’s name, and the reducer records
         the item as <code className="monospaced">held</code>. The release clears it, and every handler in between reads
         the same value the render does. The payload is still there for the case where another window needs the
         data.</Says>

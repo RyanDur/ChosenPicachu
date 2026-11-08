@@ -13,7 +13,7 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?sample';
+import listSource from '../LazyKeepAnimatedList.tsx?sample';
 import itemSource from '../items/KeepItem.tsx?sample';
 
 export const LazyKeepAnimatedRecipe: FC = () => <>

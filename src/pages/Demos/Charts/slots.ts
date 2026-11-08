@@ -7,14 +7,14 @@ export type Slot = {
 export const windowSlots = (
   openings: readonly number[],
   width: number,
-  bucketMs: number
+  bucketMilliseconds: number
 ): readonly Slot[] => {
   if (openings.length === 0) {
     return [];
   }
   const from = openings[0];
-  const span = openings[openings.length - 1] + 2 * bucketMs - from;
-  const slot = (bucketMs / span) * width;
+  const span = openings[openings.length - 1] + 2 * bucketMilliseconds - from;
+  const slot = (bucketMilliseconds / span) * width;
   const barWidth = slot * 0.6;
   return openings.map(openedAt => {
     const x = ((openedAt - from) / span) * width;

@@ -16,7 +16,7 @@ export const candleShapes = (
   candles: readonly Candle[],
   width: number,
   height: number,
-  bucketMs: number
+  bucketMilliseconds: number
 ): readonly CandleShape[] => {
   if (candles.length === 0) {
     return [];
@@ -25,7 +25,7 @@ export const candleShapes = (
   const lowest = Math.min(...candles.map(candle => candle.low));
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMs);
+  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const bodyTop = scaleY(Math.max(candle.open, candle.close));
     const bodyBottom = scaleY(Math.min(candle.open, candle.close));
@@ -53,13 +53,13 @@ export const volumeShapes = (
   candles: readonly Candle[],
   width: number,
   height: number,
-  bucketMs: number
+  bucketMilliseconds: number
 ): readonly VolumeShape[] => {
   if (candles.length === 0) {
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
-  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMs);
+  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMilliseconds);
   return candles.map((candle, at) => {
     const barHeight = heaviest === 0 ? 0 : (candle.volume / heaviest) * height;
     return {
