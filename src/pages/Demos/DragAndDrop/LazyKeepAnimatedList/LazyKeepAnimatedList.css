@@ -1,9 +1,3 @@
 .sortable-list .sliding-in {
     animation: slide-in 200ms ease-out;
 }
-
-@keyframes slide-in {
-    from {
-        transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));
-    }
-}

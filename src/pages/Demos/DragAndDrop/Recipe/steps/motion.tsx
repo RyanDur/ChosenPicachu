@@ -29,7 +29,7 @@ export const SlideCrossed: FC<{cssSource: Sample}> = ({cssSource}) =>
       ]}/>
       <Snippet label="CSS" lines={[
         ...carve.unit(cssSource, '.sortable-list .sliding-in {'), gap,
-        ...carve.unit(cssSource, '@keyframes slide-in')
+        ...carve.unit(sources.sortableListCss, '@keyframes slide-in')
       ]}/>
     </Codes>
   </Step>;

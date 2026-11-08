@@ -1,3 +1,9 @@
+@property --starts-places-right {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
 .sortable-list {
     display: flex;
     gap: var(--base);
@@ -10,5 +16,11 @@
 
     @media (width <= 600px) {
         overflow-x: auto;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));
     }
 }
