@@ -1,4 +1,4 @@
-import {shares} from '../../shares';
+import {shares} from './shares';
 import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 

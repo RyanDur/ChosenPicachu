@@ -1,8 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '../classNames';
-import {shares} from '../shares';
 import {useTableSelector} from './useTableSelector';
-import {tableSelectors, looks} from './model';
+import {looks, shares, tableSelectors} from './model';
 import './Header.css';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {

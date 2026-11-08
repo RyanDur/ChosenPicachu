@@ -1,24 +1,10 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '../classNames';
-import {shares} from '../shares';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
 import {useTableSelector} from './useTableSelector';
-import {
-  arrows,
-  ColumnDrag,
-  Grab,
-  lifting,
-  looks,
-  Moving,
-  PixelSizes,
-  Survey,
-  survey,
-  tableActions,
-  tableSelectors,
-  travel
-} from './model';
+import {arrows, ColumnDrag, Grab, lifting, looks, Moving, PixelSizes, shares, Survey, survey, tableActions, tableSelectors, travel} from './model';
 import './Header.css';
 import './motion.css';
 

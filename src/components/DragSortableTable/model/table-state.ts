@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
-import {ColumnWidths, Grip, shares} from '../../shares';
+import {ColumnWidths, Grip, shares} from './shares';
 import {Direction, Value} from './sorting';
 import {Drift, Moving, travel} from './travel';
 import {Flight, Grab} from './lift';

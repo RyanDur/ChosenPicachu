@@ -11,6 +11,7 @@ export {looks} from './looks';
 export type {Report} from './report';
 export {tableReports} from './report';
 export {tableSelectors} from './selectors';
+export {shares} from './shares';
 export type {Direction} from './sorting';
 export {sorting} from './sorting';
 export type {TableStore} from './store';

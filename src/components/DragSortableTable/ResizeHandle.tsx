@@ -4,10 +4,7 @@ import {useHydrated} from '../useHydrated';
 import './Table.css';
 import {useTableDispatch} from './useTableDispatch';
 import {useTableSelector} from './useTableSelector';
-import {tableActions, tableSelectors} from './model';
-import {
-  shares
-} from '../shares';
+import {shares, tableActions, tableSelectors} from './model';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();

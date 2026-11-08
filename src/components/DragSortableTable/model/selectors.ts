@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
-import {shares} from '../../shares';
+import {shares} from './shares';
 import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {survey} from './survey';
 import {Drift} from './travel';
