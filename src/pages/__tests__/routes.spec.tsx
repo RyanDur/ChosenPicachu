@@ -225,6 +225,14 @@ describe('the rail goes straight to the first tab', () => {
 
     expect(site.railLink('Practice')).toHaveAttribute('href', practiceAt('structure'));
   });
+
+  test('should link Gallery to the Art Institute\'s first page of eight works', async () => {
+    render(<TestApp at={Paths.home}/>);
+
+    await site.nav();
+
+    expect(site.railLink('Gallery')).toHaveAttribute('href', `${Paths.artGallery}?page=1&size=8&tab=aic`);
+  });
 });
 
 describe('the rail says which page the reader is on', () => {
