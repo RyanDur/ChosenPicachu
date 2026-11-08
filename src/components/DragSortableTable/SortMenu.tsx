@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {tableActions, sorting} from './model';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '../useHydrated';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
   const {onSorted} = useHeaderEvents();

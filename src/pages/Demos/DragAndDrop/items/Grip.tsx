@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import Handle from '@components/grip.svg';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 import {dragSortChange} from '../drag-sort-change';
 import {useDragSortDispatch} from '../useDragSortDispatch';
 

@@ -15,7 +15,7 @@ import {Opened, openings} from '../openings';
 import {useUsersDispatch} from '../useUsersDispatch';
 import {usersActions} from '../usersActions';
 import {useOpened} from '../useOpened';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 import './UserInformation.css';
 
 const newUser = (avatar: string): NewUser => ({

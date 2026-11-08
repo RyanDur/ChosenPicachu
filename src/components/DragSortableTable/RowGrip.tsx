@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import Handle from '@components/grip.svg';
 import {grip} from './model';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '../useHydrated';
 import './RowGrip.css';
 
 export const RowGrip: FC<ComponentProps<'button'> & {position: number}> = ({position, ...button}) =>

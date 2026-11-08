@@ -1,5 +1,5 @@
 import {SetURLSearchParams, useSearchParams} from 'react-router';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 
 const noSearch = new URLSearchParams();
 

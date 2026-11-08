@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Navigate, useHref, useSearchParams} from 'react-router';
-import {useHydrated} from '@frame/state';
+import {useHydrated} from '@components';
 import {queryString} from '@transport';
 
 export const ToSavedTab: FC<{addressOf: (tab?: string) => string}> = ({addressOf}) => {
