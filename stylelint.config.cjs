@@ -17,9 +17,10 @@ const structure = [
   'stroke-width', 'vector-effect', 'stroke-dasharray', 'stroke-linejoin', 'stroke-linecap'
 ];
 
+const motionWithAReason = ['src/pages/Demos/Accordions/OldWayMotion.css'];
+
 const stillMoveOnTheMainThread = [
   'src/components/PillGlider/PillGlider.css',
-  'src/pages/Demos/Accordions/Accordions.css',
   'src/styles/reset.css'
 ];
 
@@ -36,7 +37,8 @@ module.exports = {
     {files: ['src/styles/**/*.css', 'src/index.css'], rules: {'property-allowed-list': null}},
     {files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}},
     {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}},
-    {files: stillMoveOnTheMainThread, rules: {'chosen/compositor-motion': null}}
+    {files: stillMoveOnTheMainThread, rules: {'chosen/compositor-motion': null}},
+    {files: motionWithAReason, rules: {'chosen/compositor-motion': null}}
   ],
   extends: ['stylelint-config-recommended'],
   plugins: [

@@ -3,6 +3,7 @@ import {classNames} from '@components';
 import {AccordionProps} from './accordion-props';
 import {MeasuredPanel} from './MeasuredPanel';
 import './Accordions.css';
+import './OldWayMotion.css';
 
 const toggledTo = ({target}: ChangeEvent<HTMLLIElement>): boolean =>
   target instanceof HTMLInputElement && target.checked;

@@ -3,6 +3,7 @@ import {classNames} from '@components';
 import {AccordionProps} from './accordion-props';
 import {MeasuredPanel} from './MeasuredPanel';
 import './Accordions.css';
+import './OldWayMotion.css';
 
 export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,

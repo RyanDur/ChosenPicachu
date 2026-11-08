@@ -20,6 +20,7 @@ import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
 import inclusiveCheckboxToggleAccordionSource from './InclusiveCheckboxToggleAccordion.tsx?sample';
 import inclusiveToggleAccordionSource from './InclusiveToggleAccordion.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
+import oldWayMotionCss from './OldWayMotion.css?sample';
 import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
 import foldHtmlSource from './Plain/fold.html?sample';
@@ -309,14 +310,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
               browser apply the pinned start before it draws. Then it
               takes <code className="monospaced">unmoving</code> off and sets the end, and the
               style sheet slides between the two.</p>
-            <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+            <Snippet label="CSS" lines={carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {')}/>
           </li>
           <li className="run">
             <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
               the checkbox and the style sheet own that, so if the script fails, a fold still opens and closes, at
               once.</p>
             <Snippet label="CSS" lines={[
-              ...carve.unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
+              ...carve.unit(oldWayMotionCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
               ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
             ]}/>
           </li>
@@ -390,7 +391,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     ...carve.span(panelSource, "useLayoutEffect(() => {\n    const measured = panel.current;\n    if (motion.kind === 'pinned'", '}, [motion, open]);'), gap,
                     ...carve.unit(panelSource, 'return <section ref={panel}')
                   ]}/>
-                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+                  <Snippet label="CSS" lines={carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {')}/>
                 </li>
                 <li className="run">
                   <p className="paragraph">A press while the panel moves
@@ -528,8 +529,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   ...carve.unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
                   ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'),
                   ...{
-                    reveal: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
-                    drawer: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
+                    reveal: [gap, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
+                    drawer: [gap, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     static: []
                   }[motion]
                 ]}/>
@@ -573,8 +574,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                 <Snippet label="CSS" lines={[
                   ...carve.unit(surfaceCss, '.focus-ringed {'),
                   ...{
-                    reveal: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
-                    drawer: [gap, ...carve.unit(accordionsCss, '& .info {\n      transition: height')],
+                    reveal: [gap, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
+                    drawer: [gap, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     static: []
                   }[motion]
                 ]}/>
