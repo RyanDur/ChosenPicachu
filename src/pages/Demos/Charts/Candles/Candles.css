@@ -26,6 +26,7 @@
 
   .body,
   .wall,
+  .wick,
   .volume,
   .volume-wall {
     transform-box: fill-box;
