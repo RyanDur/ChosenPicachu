@@ -49,7 +49,7 @@ export const userAddsHeard = (): () => readonly unknown[] => {
   return () => sent;
 };
 
-export const userAddsHeld = (): {heard: () => number; answer: () => void} => {
+export const userAddsHeld = (rosterAfter: readonly User[] = []): {heard: () => number; answer: () => void} => {
   let heard = 0;
   let answer: () => void = () => undefined;
   const answered = new Promise<void>(resolve => {
@@ -58,7 +58,7 @@ export const userAddsHeld = (): {heard: () => number; answer: () => void} => {
   server.use(http.post(usersDomain, async () => {
     heard += 1;
     await answered;
-    return HttpResponse.json([], {status: 201});
+    return HttpResponse.json(rosterAfter, {status: 201});
   }));
   return {heard: () => heard, answer: () => answer()};
 };
