@@ -40,8 +40,9 @@ export const askFor = ({before, after, pull, reviewers}) => [
     'earlier-findings.json holds the conversations earlier reviews of this pull request started, each with its',
     'replies and whether it is resolved. A finding one of them already raised gets no new inline comment. Judge it',
     'by the code at the head. Leave it out of the structured output when the code no longer has the problem, or when',
-    'its conversation ends with the reviewer\'s "Agreed." to an argument that the code is right as it stands and that',
-    'code is unchanged. Otherwise keep it in, resolved or not.'
+    'its conversation ends, with that code unchanged, in the reviewer\'s "Agreed." to an argument that the code is',
+    'right as it stands, or in a ruling by the repository\'s people, a reply that says "Resolved by ruling."',
+    'Otherwise keep it in, resolved or not.'
   ]
 ].join(' ');
 

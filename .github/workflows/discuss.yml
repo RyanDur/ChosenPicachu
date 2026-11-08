@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      actions: write
       id-token: write
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
@@ -93,3 +94,12 @@ jobs:
             exit 1
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
+      - name: Run the head's failed checks again, so the review reads the agreement
+        if: steps.thread.outputs.found && fromJSON(steps.answer.outputs.structured_output).verdict == 'Agreed'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
+          run=$(gh run list --workflow checks.yml --commit "$head" --json databaseId,conclusion \
+            -q '[.[] | select(.conclusion == "failure")][0].databaseId // empty')
+          if [ -n "$run" ]; then gh run rerun "$run" --failed; fi
