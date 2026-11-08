@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Figure} from '../../Recipe/Figure';
+import {Figure} from '../../Recipe';
 import './CrossingFigure.css';
 
 export const CrossingFigure: FC = () =>

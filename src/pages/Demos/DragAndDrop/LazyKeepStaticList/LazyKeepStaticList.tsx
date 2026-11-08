@@ -1,8 +1,7 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Moved, landedMove, landedOrder} from '../session';
-import {KeepItem} from '../items/KeepItem';
-import {MoveReport} from '../items/MoveReport';
+import {Moved, session} from '../session';
+import {KeepItem, MoveReport} from '../items';
 import '../sortable-list.css';
 
 type Props = {
@@ -16,8 +15,8 @@ export const LazyKeepStaticList: FC<Props> = ({list}) => {
   const [landing, setLanding] = useState<Maybe<number>>(nothing());
 
   const release = () => {
-    landedOrder(aloft, landing, order).map(setOrder);
-    landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
+    session.landedOrder(aloft, landing, order).map(setOrder);
+    session.landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
     setAloft(nothing());
     setLanding(nothing());
   };

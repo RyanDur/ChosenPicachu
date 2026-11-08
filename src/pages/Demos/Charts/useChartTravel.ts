@@ -1,7 +1,7 @@
 import {DragEvent, KeyboardEvent, useState} from 'react';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {strayedTo} from '../DragAndDrop/crossing';
+import {crossing} from '../DragAndDrop';
 
 type Pushed = Readonly<Record<number, 'up' | 'down'>>;
 
@@ -54,7 +54,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     const slots = event.currentTarget.parentElement?.children;
     aloft.map(held => boundsOf(slots?.item(held)).map(bounds => {
       const pointer = event.clientY + scrollY;
-      const to = strayedTo(pointer, mark, bounds.height / 3, held);
+      const to = crossing.strayedTo(pointer, mark, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }

@@ -1,14 +1,10 @@
 import {FC} from 'react';
 import {Motion, Origin, Pace, useControls} from '../Controls';
 import {Stories} from '../Recipe';
-import {EagerKeepAnimatedRecipe} from './Recipe/EagerKeepAnimated';
-import {EagerKeepStaticRecipe} from './Recipe/EagerKeepStatic';
-import {EagerHideAnimatedRecipe} from './Recipe/EagerHideAnimated';
-import {EagerHideStaticRecipe} from './Recipe/EagerHideStatic';
-import {LazyKeepAnimatedRecipe} from './Recipe/LazyKeepAnimated';
-import {LazyKeepStaticRecipe} from './Recipe/LazyKeepStatic';
-import {LazyHideAnimatedRecipe} from './Recipe/LazyHideAnimated';
-import {LazyHideStaticRecipe} from './Recipe/LazyHideStatic';
+import {
+  EagerHideAnimatedRecipe, EagerHideStaticRecipe, EagerKeepAnimatedRecipe, EagerKeepStaticRecipe,
+  LazyHideAnimatedRecipe, LazyHideStaticRecipe, LazyKeepAnimatedRecipe, LazyKeepStaticRecipe
+} from './Recipe';
 import '../Recipe/Recipe.css';
 
 const recipes: Record<Pace, Record<Origin, Record<Motion, FC>>> = {

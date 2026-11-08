@@ -1,8 +1,9 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
-import {gap, hideItemCss} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {sources} from './sources';
+
+const gap = lines.plain(' ');
 
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>
@@ -18,23 +19,8 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
         ...carve.span(itemSource, 'updateHide(false);', 'updateHide(false);')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(hideItemCss, '.draggable.hide {'),
+        ...carve.unit(sources.hideItemCss, '.draggable.hide {'),
         lines.aside('/* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source */')
-      ]}/>
-    </Codes>
-  </Step>;
-
-export const KeepStanding: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Leave the lifted card where it was" dial={<OriginDial name="native-origin"/>}>
-    <Words want="A card that vanishes can be disorienting; sometimes the reader wants to see the card both where it was and where it is going.">
-      <Says>Do nothing. This is the keep list, so its <code className="monospaced">Item</code> is the plain card. The
-        browser already drew the drag image, so for the length of the drag there are two of the card, one in place and
-        one dimmed under the pointer. <code className="monospaced">KeepItem</code> has no hiding code.</Says>
-    </Words>
-    <Codes>
-      <Snippet label="HTML" lines={[
-        ...carve.span(listSource, '<KeepItem key={item}', '<KeepItem key={item}'),
-        lines.aside('{/* no hiding wiring exists in this list; nothing to erase */}')
       ]}/>
     </Codes>
   </Step>;

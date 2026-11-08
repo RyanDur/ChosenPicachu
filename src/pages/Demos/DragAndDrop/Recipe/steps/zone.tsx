@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Codes, Says, Snippet, Step, Words, carve} from '../../../Recipe';
 import {Term} from '../Term';
-import {crossingSource} from './sources';
+import {sources} from './sources';
 import {CrossingFigure} from '../CrossingFigure';
 
 export const InnerHalf: FC = () =>
@@ -14,7 +14,7 @@ export const InnerHalf: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(crossingSource, 'export const crossed')
+        ...carve.unit(sources.crossing, 'const crossed')
       ]}/>
       <CrossingFigure/>
     </Codes>

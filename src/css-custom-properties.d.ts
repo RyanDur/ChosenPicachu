@@ -6,7 +6,7 @@ declare module 'csstype' {
   interface Properties {
     '--along'?: string;
     '--stage-block-size'?: string;
-    '--toward'?: string;
+    '--starts-places-right'?: number;
     '--share'?: string;
     '--drift-x'?: `${number}px`;
     '--drift-y'?: `${number}px`;

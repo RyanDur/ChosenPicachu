@@ -1,9 +1,8 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Moved, crossingOver} from '../session';
-import {KeepItem} from '../items/KeepItem';
-import {MoveReport} from '../items/MoveReport';
+import {Moved, session} from '../session';
+import {KeepItem, MoveReport} from '../items';
 import '../sortable-list.css';
 
 type Props = {
@@ -27,7 +26,7 @@ export const EagerKeepStaticList: FC<Props> = ({list}) => {
             order={order}
             onLifted={lifted => setAloft(maybe(lifted))}
             onReleased={() => setAloft(nothing())}
-            onDragOver={crossingOver(aloft, order)(item, index, held => {
+            onDragOver={session.crossingOver(aloft, order)(item, index, held => {
               setOrder(previous => array.moveToIndex(index, held, previous));
               setMoved(maybe({item: held, position: index, of: order.length}));
             })}

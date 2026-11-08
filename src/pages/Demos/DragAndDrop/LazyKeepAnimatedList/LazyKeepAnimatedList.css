@@ -1,11 +1,11 @@
-.sortable-list .pushed {
-    --toward: 1;
+.sortable-list .sliding-in {
+    --starts-places-right: 1;
 
-    animation: pushed 150ms ease-out;
+    animation: slide-in 150ms ease-out;
 }
 
-@keyframes pushed {
+@keyframes slide-in {
     from {
-        transform: translateX(calc(var(--toward) * (100% + var(--base))));
+        transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));
     }
 }

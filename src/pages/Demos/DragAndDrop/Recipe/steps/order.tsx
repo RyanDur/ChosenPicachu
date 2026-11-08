@@ -1,7 +1,7 @@
 import {FC} from 'react';
-import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words, carve} from '../../../Recipe';
-import {gap} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words, carve, Sample, lines} from '../../../Recipe';
+
+const gap = lines.plain(' ');
 
 export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
   <Story param="native" id="keyboard"

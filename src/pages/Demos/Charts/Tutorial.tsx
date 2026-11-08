@@ -499,7 +499,7 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(crossingSource, 'export const strayedTo'), gap,
+            ...carve.unit(crossingSource, 'const strayedTo'), gap,
             ...carve.unit(travelSource, 'const travel = (event'), gap,
             ...carve.unit(travelSource, 'const swap = (held')
           ]}/>

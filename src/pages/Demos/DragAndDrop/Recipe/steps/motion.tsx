@@ -1,63 +1,32 @@
 import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
-import {gap, glideSource, marksSource, sessionSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {sources} from './sources';
+
+const gap = lines.plain(' ');
 
 export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listSource, cssSource}) =>
   <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
     <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
-      <Says>The swap happens at once. The crossed item gets the class <code className="monospaced">pushed</code>. Its
-        slide is a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> animation: an @keyframes rule names the states an
-        element passes through, and the browser draws the frames between them. This one writes only its from, the
-        starting state, one place over, so the browser draws the item where it used
-        to be and slides it to its new place.</Says>
-      <Says>The direction is data: <code className="monospaced">--toward</code>, a custom property, a value given a name
-        once and read back with <code className="monospaced">var()</code>, flips the sign of one keyframe instead of
-        naming two.</Says>
+      <Says>The swap happens at once. The crossed item gets the class{' '}
+        <code className="monospaced">sliding-in</code>. Its slide is a{' '}
+        <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> animation: an @keyframes rule names the states an element passes
+        through, and the browser draws the frames between them. This one, <code className="monospaced">slide-in</code>,
+        writes only its from, the starting state, so the browser draws the item where it used to be and slides it to its
+        new place.</Says>
+      <Says>Where it used to be is data. <code className="monospaced">--starts-places-right</code>, a custom
+        property, a value given a name once and read back with <code className="monospaced">var()</code>, says how many
+        places to the right of its new place the item starts. A crossed item starts one place over, 1 or -1, and the one
+        keyframe reads the number, so neither side needs a keyframe of its own.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(marksSource, 'export const crossedMark'), gap,
-        ...carve.span(listSource, 'setPushed(crossedMark(item, homeward));', 'setPushed(crossedMark(item, homeward));')
+        ...carve.unit(sources.slideStarts, 'const afterCrossing'), gap,
+        ...carve.span(listSource, 'setSlides(slideStarts.afterCrossing(item, homeward));', 'setSlides(slideStarts.afterCrossing(item, homeward));')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(cssSource, '.sortable-list .pushed {'), gap,
-        ...carve.unit(cssSource, '@keyframes pushed')
-      ]}/>
-    </Codes>
-  </Step>;
-
-export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Glide the settle one tick after the release" dial={<MotionDial name="native-motion"/>}>
-    <Words want="A lazy settle happens all at once on release, which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running, and the drag is still running when drop fires.">
-      <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle a tick
-        after the release, a setTimeout with no delay, which runs once the drag has ended. By the time{' '}
-      <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> takes its capture, the browser has
-        finished the drag, and every item glides from where the drag left it to where the order puts it.</Says>
-    </Words>
-    <Codes>
-      <Snippet label="HTML" lines={[
-        ...carve.span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
-      ]}/>
-      <Snippet label="TS" lines={[
-        ...carve.unit(sessionSource, 'export const glided'), gap,
-        ...carve.span(listSource, 'landedOrder(aloft, landing, order).map(glided(setOrder));', 'landedOrder(aloft, landing, order).map(glided(setOrder));'), gap,
-        ...carve.unit(glideSource, 'export const glide')
-      ]}/>
-    </Codes>
-  </Step>;
-
-export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
-    <Words want="Motion is not free: it competes with the drag, costs a frame, and some readers ask for none.">
-      <Says>This is the static list, and it has no motion code. The handler sets the order and React draws it on the
-        next frame; a keyboard move sets the order the same way.</Says>
-    </Words>
-    <Codes>
-      <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onArranged={(after, walker) => {', '}}/>'),
-        lines.aside('// nothing marked, nothing competing with the browser’s drag')
+        ...carve.unit(cssSource, '.sortable-list .sliding-in {'), gap,
+        ...carve.unit(cssSource, '@keyframes slide-in')
       ]}/>
     </Codes>
   </Step>;

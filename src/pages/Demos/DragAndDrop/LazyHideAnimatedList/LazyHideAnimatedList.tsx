@@ -1,10 +1,9 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Moved, glided, landedMove, landedOrder} from '../session';
-import {Pushed, pushedStyle, walkedMarks} from '../marks';
-import {HideItem} from '../items/HideItem';
-import {MoveReport} from '../items/MoveReport';
+import {Moved, session} from '../session';
+import {SlideStarts, slideStarts} from '../slide-starts';
+import {HideItem, MoveReport} from '../items';
 import '../sortable-list.css';
 import './LazyHideAnimatedList.css';
 
@@ -17,11 +16,11 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
   const [aloft, setAloft] = useState<Maybe<string>>(nothing());
   const [moved, setMoved] = useState<Maybe<Moved>>(nothing());
   const [landing, setLanding] = useState<Maybe<number>>(nothing());
-  const [pushed, setPushed] = useState<Pushed>({});
+  const [slides, setSlides] = useState<SlideStarts>({});
 
   const release = () => {
-    landedOrder(aloft, landing, order).map(glided(setOrder));
-    landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
+    session.landedOrder(aloft, landing, order).map(session.glided(setOrder));
+    session.landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
     setAloft(nothing());
     setLanding(nothing());
   };
@@ -34,16 +33,16 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
       className="sortable-list card rounded-corners lifted padded contained">{
         order.map((item, index) =>
           <HideItem key={item}
-            className={classNames('item', pushed[item] && 'pushed')}
-            style={{...pushedStyle(pushed[item]), viewTransitionName: `sort-${item}`}}
-            onAnimationEnd={() => setPushed({})}
+            className={classNames('item', item in slides && 'sliding-in')}
+            style={{'--starts-places-right': slides[item], viewTransitionName: `sort-${item}`}}
+            onAnimationEnd={() => setSlides({})}
             item={item}
             order={order}
             onLifted={lifted => setAloft(maybe(lifted))}
             onReleased={release}
             onDragOver={() => setLanding(maybe(index))}
             onArranged={(after, walker, toward) => {
-              setPushed(walkedMarks(order, walker, toward));
+              setSlides(slideStarts.afterKeyboardStep(order, walker, toward));
               setOrder(after);
               setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
             }}/>)

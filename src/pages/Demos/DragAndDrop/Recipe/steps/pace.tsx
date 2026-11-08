@@ -1,9 +1,10 @@
 import {FC} from 'react';
 import {PaceDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, carve} from '../../../Recipe';
+import {Codes, Sample, Says, Snippet, Step, Words, carve, lines} from '../../../Recipe';
 import {Term} from '../Term';
-import {gap, sessionSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {sources} from './sources';
+
+const gap = lines.plain(' ');
 
 export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
@@ -16,28 +17,8 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sessionSource, 'export const crossingOver'), gap,
-        ...carve.span(listSource, 'onDragOver={crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
-      ]}/>
-    </Codes>
-  </Step>;
-
-export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
-    <Words want={<>You want the list to hold still while the platform drags. The drop lands while
-      the <Term word="session">session</Term> is
-      still alive, so the reorder has to wait for the session to end.</>}>
-      <Says>Each dragover stores the <Term word="landing">landing</Term>, the item the pointer is over at that
-        moment, and the list’s <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> handler, which
-        runs when the pointer leaves an item or the list, clears it. Nothing moves until the release. The commit runs
-        from dragend, the event that ends the session, because the browser is still playing the end of its own drag
-        until then.</Says>
-    </Words>
-    <Codes>
-      <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
-        ...carve.span(listSource, 'onDragLeave={() => setLanding(nothing())}', 'onDragLeave={() => setLanding(nothing())}'), gap,
-        ...carve.unit(listSource, 'const release')
+        ...carve.unit(sources.session, 'const crossingOver'), gap,
+        ...carve.span(listSource, 'onDragOver={session.crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
       ]}/>
     </Codes>
   </Step>;

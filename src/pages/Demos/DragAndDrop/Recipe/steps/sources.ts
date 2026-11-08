@@ -1,10 +1,12 @@
 import crossingSource from '../../crossing.ts?sample';
 import glideSource from '@components/glide.ts?sample';
-import marksSource from '../../marks.ts?sample';
+import slideStartsSource from '../../slide-starts.ts?sample';
 import sessionSource from '../../session.ts?sample';
 import hideItemCss from '../../items/HideItem.css?sample';
-import {lines} from '../../../Recipe';
+import {Sample} from '../../../Recipe';
 
-export {crossingSource, glideSource, hideItemCss, marksSource, sessionSource};
+type Sources = {crossing: Sample; glide: Sample; slideStarts: Sample; session: Sample; hideItemCss: Sample};
 
-export const gap = lines.plain(' ');
+export const sources: Sources = {
+  crossing: crossingSource, glide: glideSource, slideStarts: slideStartsSource, session: sessionSource, hideItemCss
+};

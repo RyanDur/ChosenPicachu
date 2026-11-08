@@ -1,8 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../../types';
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, carve} from '../../../Recipe';
-import {Sample} from '@pages/Demos/Recipe/sample';
+import {Codes, Mdn, Says, Snippet, Step, Words, carve, Sample} from '../../../Recipe';
 
 export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Arm the drag from its grip">
