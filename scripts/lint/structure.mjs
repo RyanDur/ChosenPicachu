@@ -10,7 +10,7 @@ const code = /\.(ts|tsx)$/;
 const indexNames = ['index.ts', 'index.tsx'];
 
 /** @type {Record<string, string[]>} */
-const exceptions = JSON.parse(readFileSync(join(root, 'scripts/lint/structure-exceptions.json'), 'utf8'));
+const exceptionsOnFile = JSON.parse(readFileSync(join(root, 'scripts/lint/structure-exceptions.json'), 'utf8'));
 const routeModules = new Set([
   'src/root.tsx', 'src/routes.ts',
   ...[...readFileSync(join(src, 'routes.ts'), 'utf8').matchAll(/'(pages\/[^']+\.tsx)'/g)].map(([, path]) => `src/${path}`)
@@ -95,7 +95,12 @@ const wantedFrom = directory => {
  * @param {string} rule
  * @param {string} file
  */
-const listed = (rule, file) => (exceptions[rule] ?? []).includes(file);
+/**
+ * @param {Record<string, string[]>} exceptions
+ * @param {string} rule
+ * @param {string} file
+ */
+const listed = (exceptions, rule, file) => (exceptions[rule] ?? []).includes(file);
 
 /**
  * @param {string} name
@@ -103,12 +108,17 @@ const listed = (rule, file) => (exceptions[rule] ?? []).includes(file);
  * @param {(file: string, report: (node: object, why: string) => void) => Record<string, Function>} check
  */
 const ruleWith = (name, description, check) => ({
-  meta: {type: 'problem', docs: {description}, schema: [], messages: {
+  meta: {type: 'problem', docs: {description}, schema: [{
+    type: 'object', properties: {exceptions: {type: 'object'}}, additionalProperties: false
+  }], messages: {
     broken: '{{why}}',
     mended: `{{file}} now keeps this rule: take it off the "${name}" list in scripts/lint/structure-exceptions.json`
   }},
   create: context => {
     const file = fromRoot(context.filename);
+    // a spec passes its own list, so it never depends on which files the live list still holds
+    /** @type {Record<string, string[]>} */
+    const exceptions = context.options[0]?.exceptions ?? exceptionsOnFile;
     if (not(file.startsWith('src/')) || file.endsWith('.d.ts')) return {};
     /** @type {{node: object, why: string}[]} */
     const found = [];
@@ -117,7 +127,7 @@ const ruleWith = (name, description, check) => ({
       ...visitors,
       'Program:exit': program => {
         visitors['Program:exit']?.(program);
-        if (listed(name, file)) {
+        if (listed(exceptions, name, file)) {
           if (found.length === 0) context.report({node: program, messageId: 'mended', data: {file}});
           return;
         }
