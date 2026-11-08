@@ -88,7 +88,7 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.count()).toHaveTextContent(`${1} - ${limit} of ${total}`);
+    expect(galleryNav.pagination()).toHaveTextContent(`${1} - ${limit} of ${total}`);
   });
 
   test('the ways and the count read as separate words, even with the styles off', async () => {
@@ -96,15 +96,15 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?page=2&size=${limit}`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.count().textContent).toMatch(
-      new RegExp(`^\\s*FIRST\\s+PREV\\s+${limit + 1} - ${limit * 2} of ${total}\\s+NEXT\\s+LAST\\s*$`));
+    expect(galleryNav.pagination()).toHaveTextContent(
+      new RegExp(`^FIRST PREV ${limit + 1} - ${limit * 2} of ${total} NEXT LAST$`));
   });
 
   test('before any page has arrived, no count is said', () => {
     heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(galleryNav.count()).not.toHaveTextContent('of');
+    expect(galleryNav.pagination()).not.toHaveTextContent('of');
   });
 
   test('a museum with nothing to show counts 0 - 0 of 0', async () => {
@@ -115,7 +115,7 @@ describe('Gallery Navigation', () => {
     });
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(galleryNav.count()).toHaveTextContent(/^0 - 0 of 0$/));
+    await waitFor(() => expect(galleryNav.pagination()).toHaveTextContent(/^0 - 0 of 0$/));
   });
 
   test('a museum that refuses leaves no count from the museum before it', async () => {
@@ -127,7 +127,7 @@ describe('Gallery Navigation', () => {
     await galleryNav.go('NEXT');
 
     await galleryWall.standIn('the museum refused to answer');
-    expect(galleryNav.count()).not.toHaveTextContent(`${total}`);
+    expect(galleryNav.pagination()).not.toHaveTextContent(`${total}`);
   });
 
   test('until the museum says where the end is, there is no way forward', async () => {
@@ -153,7 +153,7 @@ describe('Gallery Navigation', () => {
 
     expect(galleryNav.way('NEXT')).toBeInTheDocument();
     expect(galleryNav.way('LAST')).toBeInTheDocument();
-    expect(galleryNav.count()).toHaveTextContent(`${limit + 1} - ${limit * 2} of ${total}`);
+    expect(galleryNav.pagination()).toHaveTextContent(`${limit + 1} - ${limit * 2} of ${total}`);
   });
 
   test('the way forward stays once the next page lands', async () => {
