@@ -43,13 +43,13 @@ describe('what the review is asked', () => {
   const asked = askFor({before: 'abc1234', after: 'def5678', reviewers: reviewersIn(two)});
 
   test('should ask Claude Code\'s own review for the pushed range', () => {
-    expect(asked.startsWith('/code-review high abc1234..def5678.')).toBe(true);
+    expect(asked).toContain('args "high abc1234..def5678"');
   });
 
   test('should ask for a pull request by its number, with its findings left on its lines', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
-    expect(onThePull.startsWith('/code-review high --comment 412.')).toBe(true);
+    expect(onThePull).toContain('args "high --comment 412"');
   });
 
   test('should ask for every finding in the structured output, which the gate reads', () => {
