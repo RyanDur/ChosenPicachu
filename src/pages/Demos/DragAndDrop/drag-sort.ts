@@ -42,12 +42,14 @@ const moved = (
 
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
-const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
-  sort.held
-    .map(({item}) => sliding(sort, item) || sliding(sort, sort.order[at])
+const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort => {
+  const neighbour = sort.order[at];
+  return sort.held
+    .map(({item}) => neighbour === item || sliding(sort, item) || sliding(sort, neighbour)
       ? sort
-      : moved(sort, item, array.moveToIndex(at, item, sort.order), slideStarts.afterCrossing(sort.order[at], homeward)))
+      : moved(sort, item, array.moveToIndex(at, item, sort.order), slideStarts.afterCrossing(neighbour, homeward)))
     .orElse(sort);
+};
 
 const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
   Object.keys(starts).some(item => sliding(sort, item));
