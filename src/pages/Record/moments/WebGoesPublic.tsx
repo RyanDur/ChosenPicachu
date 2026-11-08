@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const altHypertextReply = 'https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt';
 const altHypertextSummary = 'https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt';

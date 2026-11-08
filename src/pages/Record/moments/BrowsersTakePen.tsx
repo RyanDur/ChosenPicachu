@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const whatwgHtmlIntroduction = 'https://html.spec.whatwg.org/multipage/introduction.html';
 const whatwgPositionPaper = 'https://whatwg.org/position-paper';

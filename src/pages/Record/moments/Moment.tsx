@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode, useContext} from 'react';
-import {MomentHeading, moments} from './moments';
+import {MomentHeading, moments} from '../calendar';
 import {ConcernsInTheYear} from './concernsInTheYear';
 
 export const Moment: FC<PropsWithChildren<{heading: MomentHeading; summary: ReactNode}>> = ({

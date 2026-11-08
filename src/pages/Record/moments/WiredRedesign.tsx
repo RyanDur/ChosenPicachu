@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const wiredWithStandards = 'https://meyerweb.com/eric/thoughts/2002/10/11/wired-with-standards/';
 const bowmanInterview = 'https://web.archive.org/web/2003/http://devedge.netscape.com/viewsource/2002/wired-interview/';

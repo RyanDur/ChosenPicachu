@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Header, Page, PageError} from '@page';
 import {RecordPage} from './RecordPage';
 import {listing} from './listing';
-import {moments} from './moments';
+import {moments} from './calendar';
 
 const header = <Header title="The record" listed={listing.ofRecord(moments.inOrder.length)}/>;
 

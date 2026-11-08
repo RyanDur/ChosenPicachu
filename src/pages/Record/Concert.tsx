@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {moments} from './moments';
+import {moments} from './calendar';
 import {concertParagraphs} from './concertParagraphs';
 
 export const Concert: FC = () =>

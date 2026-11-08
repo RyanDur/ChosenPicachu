@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const raggettHtmlHistory = 'https://www.w3.org/People/Raggett/book4/ch02.html';
 const rfc1866 = 'https://www.rfc-editor.org/rfc/rfc1866';

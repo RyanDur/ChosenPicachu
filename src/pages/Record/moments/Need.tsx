@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const informationManagementProposal = 'https://www.w3.org/History/1989/proposal.html';
 

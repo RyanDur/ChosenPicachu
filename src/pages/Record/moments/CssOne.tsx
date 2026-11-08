@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const cssSaga = 'https://www.w3.org/Style/LieBos2e/history/Overview.html';
 const css1 = 'https://www.w3.org/TR/REC-CSS1-961217';

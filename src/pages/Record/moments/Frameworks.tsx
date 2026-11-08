@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const whyAngularJs = 'https://angularjs.org/';
 const angularJsChangelog = 'https://github.com/angular/angular.js/blob/master/CHANGELOG.md';

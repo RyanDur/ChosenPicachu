@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const cssInteroperability = 'https://www.w3.org/2011/05/css-pr.html.en';
 const css3Roadmap = 'https://www.w3.org/TR/2001/WD-css3-roadmap-20010523/';
