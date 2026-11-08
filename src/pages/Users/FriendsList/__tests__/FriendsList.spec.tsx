@@ -144,6 +144,19 @@ describe('the friends list', () => {
     expect(anasList.report()).toHaveTextContent(`${nameOf(cy)} removed.`);
   });
 
+  test('a friend added in one row is not announced in another row that already has them', async () => {
+    const ana = aUser({id: 'ana'});
+    const bea = aUser({id: 'bea', friends: [cy.id]});
+    setupUserUpdatedResponse(ana.id, [{...ana, friends: [cy.id]}, cy, bea]);
+    const anasList = await rowOf(ana, [ana, cy, bea]);
+    const beasList = friendsList(await usersTable.rowOf(nameOf(bea)));
+
+    await anasList.add(nameOf(cy));
+    await waitFor(() => expect(anasList.report()).toHaveTextContent(`${nameOf(cy)} added.`));
+
+    expect(beasList.report()).toBeEmptyDOMElement();
+  });
+
   test('a friend the user already has is not offered again', async () => {
     const ana = aUser({id: 'ana', friends: [ben.id]});
     const list = await rowOf(ana, [ana, ben, cy]);
