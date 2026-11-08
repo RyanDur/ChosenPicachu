@@ -232,6 +232,42 @@ const runtimeEnv = env => {
   };
 };
 
+/**
+ * @typedef {object} Prerender
+ * @property {string[]} pages
+ * @property {(path: string) => Promise<{html: string}>} page
+ * @property {() => Promise<string>} fallback
+ */
+
+/** @returns {import('vite').Plugin} */
+const pagesAsPublished = () => ({
+  name: 'pages-as-published',
+  configureServer(server) {
+    const base = server.config.base;
+    server.middlewares.use(async (request, response, next) => {
+      const url = request.url ?? '/';
+      if (request.method !== 'GET' || !url.startsWith(base) || !(request.headers.accept ?? '').includes('text/html')) {
+        next();
+        return;
+      }
+      try {
+        /** @type {Prerender} */
+        const prerender = (await server.ssrLoadModule('/src/entry.server.tsx')).prerender;
+        const path = `/${url.slice(base.length).split('?')[0]}`;
+        const published = prerender.pages.includes(path);
+        const html = published ? (await prerender.page(path)).html : await prerender.fallback();
+        const entry = published ? 'entry.client.tsx' : 'entry.fallback.tsx';
+        response.setHeader('content-type', 'text/html');
+        response.end(html.replace('</body>',
+          `<script type="module" src="${base}@id/@vitejs/plugin-react/preamble"></script>` +
+          `<script type="module" src="${base}src/${entry}"></script></body>`));
+      } catch (error) {
+        next(error);
+      }
+    });
+  }
+});
+
 // https://vitejs.dev/config/
 module.exports = defineConfig(({mode}) => ({
   base: '/ChosenPicachu/',
@@ -249,7 +285,7 @@ module.exports = defineConfig(({mode}) => ({
   },
   plugins: [
     drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(),
-    runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+    runtimeEnv(loadEnv(mode, process.cwd())), pagesAsPublished(), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
       svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
       include: '**/*.svg'
