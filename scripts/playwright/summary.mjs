@@ -45,7 +45,7 @@ export const summaryOf = (name, report) => {
   return [`## ${name}: ${outcomes.length} tests, ${verdict}`, '', countTable(outcomes), failuresList(outcomes), ''].join('\n');
 };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.filename === process.argv[1]) {
   const [, , name, reportPath] = process.argv;
   process.stdout.write(summaryOf(name, JSON.parse(readFileSync(reportPath, 'utf8'))));
 }

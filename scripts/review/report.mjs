@@ -78,7 +78,7 @@ export const summaryOf = (findings, {commit, subject} = {}) => [
 /** @param {{severity: string}[]} findings */
 export const verdictOf = findings => findings.some(({severity}) => severity === 'violation') ? 1 : 0;
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.filename === process.argv[1]) {
   const findings = findingsIn(readFileSync(process.stdin.fd, 'utf8'));
   const {GITHUB_REPOSITORY: repository, REVIEW_AFTER: sha, REVIEW_SUBJECT: subject} = process.env;
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;

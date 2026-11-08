@@ -82,7 +82,7 @@ export const summaryOf = pages => [
   ''
 ].join('\n');
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.filename === process.argv[1]) {
   const [, , reportsDir] = process.argv;
   const read = file => JSON.parse(readFileSync(file, 'utf8'));
   const rc = read('lighthouserc.json');
