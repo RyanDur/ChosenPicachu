@@ -4,14 +4,12 @@ import {format} from 'date-fns';
 import './Fancy.css';
 
 type FancyTextInputProps = {
-  inputId: string;
   type?: 'text' | 'email' | 'date';
   id?: string;
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   inputClass?: string;
-  labelId?: string;
   labelClass?: string;
   value?: string | Date;
   readOnly?: boolean;
@@ -21,14 +19,12 @@ type FancyTextInputProps = {
 
 export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   {
-    inputId,
     type = 'text',
     children,
     id,
     onChange,
     className,
     inputClass,
-    labelId,
     labelClass,
     required = false,
     readOnly = false,
@@ -41,9 +37,8 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   'soft-cornered',
   className
 )}>
-  <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', 'card-banded', required && 'alarm-starred', labelClass)}>{children}</span>
-  <input id={inputId}
-    className={classNames('fancy-text', 'writable', 'soft-cornered', 'lifted', 'raisable', inputClass)}
+  <span className={classNames('fancy-title', 'ellipsis', 'bold', 'card-banded', required && 'alarm-starred', labelClass)}>{children}</span>
+  <input className={classNames('fancy-text', 'writable', 'soft-cornered', 'lifted', 'raisable', inputClass)}
     pattern={pattern}
     placeholder={type === 'date' ? undefined : ' '}
     readOnly={readOnly}
