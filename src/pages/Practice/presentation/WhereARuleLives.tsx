@@ -1,15 +1,16 @@
 import {FC} from 'react';
-import wideFrame from './drawings/where-a-rule-lives-wide.svg?url&no-inline';
-import stackedFrame from './drawings/where-a-rule-lives-stacked.svg?url&no-inline';
-import {phoneHeldUpright, practiceDrawings} from './practiceDrawings';
-import './PracticeDrawing.css';
+import wideFrame from '../drawings/where-a-rule-lives-wide.svg?url&no-inline';
+import stackedFrame from '../drawings/where-a-rule-lives-stacked.svg?url&no-inline';
+import {practiceDrawings} from '../drawings';
+import '../PracticeDrawing.css';
 
-const {wide, stacked} = practiceDrawings['where-a-rule-lives'].sizes;
+const {wide, stacked} = practiceDrawings.byName['where-a-rule-lives'].sizes;
 
 export const WhereARuleLives: FC = () =>
   <figure className="practice-drawing">
     <picture className="center">
-      <source media={phoneHeldUpright} srcSet={stackedFrame} width={stacked.width} height={stacked.height}/>
+      <source media={practiceDrawings.phoneHeldUpright} srcSet={stackedFrame}
+        width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
     </picture>
     <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in{' '}

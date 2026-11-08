@@ -3,7 +3,7 @@ import {is, not} from '@ryandur/sand';
 import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType} from 'react-router';
 import {Paths} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
-import {practiceAddress} from '@pages/Practice/types';
+import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
 
@@ -46,7 +46,7 @@ export const SideNav: FC<{pageUnknown?: boolean}> = ({pageUnknown = false}) => {
   return <PageUnknown.Provider value={pageUnknown}><nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
-    <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress('Structure')}>Practice</SectionLink>
+    <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
     <SectionLink id="navigate-demos" page={Paths.demos} to={demoAddress(DemoTopics.accordions)}>Demos</SectionLink>
     <RailLink id="navigate-users" to={Paths.users}>Users</RailLink>
     <RailLink id="navigate-form"

@@ -5,7 +5,7 @@ const {defineConfig} = require('vitest/config');
 const {loadEnv} = require('vite');
 const {rolldown} = require('rolldown');
 const {usersServer} = require('./src/pages/Users/usersServer.ts');
-const {practiceDrawings, squeezed} = require('./src/pages/Practice/practiceDrawings.ts');
+const {practiceDrawings} = require('./src/pages/Practice/drawings/practiceDrawings.ts');
 const {browserslistToTargets, transform} = require('lightningcss');
 const browserslist = require('browserslist');
 const react = require('@vitejs/plugin-react').default;
@@ -146,13 +146,13 @@ const frameCss = () => ({
 const drawings = () => {
   const siteSheets = ['./src/styles/reset.css', './src/styles/colors.css', './src/styles/spacing.css', './src/styles/typography.css',
     './src/styles/drawing.css'].map(at);
-  const drawn = Object.entries(practiceDrawings).map(([name, {sheet, frames}]) => ({name, sheet: at(`./${sheet}`), frames}));
+  const drawn = Object.entries(practiceDrawings.byName).map(([name, {sheet, frames}]) => ({name, sheet: at(`./${sheet}`), frames}));
   const sheets = [...siteSheets, ...drawn.map(({sheet}) => sheet)];
   const folder = at('./src/pages/Practice/drawings/');
   const draw = () => {
     mkdirSync(folder, {recursive: true});
     drawn.forEach(({name, sheet, frames}) => {
-      const {wide, stacked} = frames(squeezed([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
+      const {wide, stacked} = frames(practiceDrawings.minifiedCss([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
       writeFileSync(`${folder}${name}-wide.svg`, wide);
       writeFileSync(`${folder}${name}-stacked.svg`, stacked);
     });

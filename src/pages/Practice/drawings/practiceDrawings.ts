@@ -12,7 +12,7 @@ type Drawing = {
 
 // a media attribute cannot read a custom property, so the width spacing.css names --phone-held-upright is named here
 // for both pictures
-export const phoneHeldUpright = '(width <= 600px)';
+const phoneHeldUpright = '(width <= 600px)';
 
 type Box = {
   readonly label: string;
@@ -26,7 +26,7 @@ type Box = {
 
 type Point = {readonly x: number; readonly y: number};
 
-export const squeezed = (css: string): string => css
+const minifiedCss = (css: string): string => css
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/\s+/g, ' ')
   .replace(/\s*([{};])\s*/g, '$1');
@@ -127,7 +127,7 @@ const whereARuleLives = ((): Drawing => {
     caption('wears', {x: (from.x + to.x) / 2 + inset, y: (from.y + to.y) / 2}));
 
   return {
-    sheet: 'src/pages/Practice/WhereARuleLives.css',
+    sheet: 'src/pages/Practice/presentation/WhereARuleLives.css',
     sizes: {wide: sizeAround(wide), stacked: sizeAround(stacked)},
     frames: siteStyle => ({wide: frame(wide, wideWears, siteStyle), stacked: frame(stacked, stackedWears, siteStyle)})
   };
@@ -169,7 +169,7 @@ const landmarkMap = ((): Drawing => {
   const sizes = {wide: {width: 480, height: 356}, stacked: {width: 300, height: 388}};
 
   return {
-    sheet: 'src/pages/Practice/LandmarkMap.css',
+    sheet: 'src/pages/Practice/structure/LandmarkMap.css',
     sizes,
     frames: siteStyle => ({
       wide: framed('landmark-map', sizes.wide, siteStyle, wide.map(drawnBox).join('')),
@@ -178,4 +178,6 @@ const landmarkMap = ((): Drawing => {
   };
 })();
 
-export const practiceDrawings = {'where-a-rule-lives': whereARuleLives, 'landmark-map': landmarkMap} as const;
+const byName = {'where-a-rule-lives': whereARuleLives, 'landmark-map': landmarkMap} as const;
+
+export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright};

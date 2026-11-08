@@ -2,10 +2,10 @@ import {FC} from 'react';
 import {useArrival} from '@navigation/arrival';
 import {Tabs} from '@navigation/Tabs';
 import {Concern, concerns} from '@pages/Record/moments';
-import {practiceAddress} from './types';
-import {StructurePractice} from './StructurePractice';
-import {PresentationPractice} from './PresentationPractice';
-import {BehaviorPractice} from './BehaviorPractice';
+import {practiceAddress} from './practiceAddress';
+import {StructurePractice} from './structure';
+import {PresentationPractice} from './presentation';
+import {BehaviorPractice} from './behavior';
 import './Practice.css';
 
 const appContinuum = 'https://www.appcontinuum.io/';
@@ -40,7 +40,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
     </div>
     <Tabs label="practice" current={concerns.idOf(concern)}
       values={concerns.inOrder.map(shown => ({
-        display: shown, param: concerns.idOf(shown), to: practiceAddress(shown)
+        display: shown, param: concerns.idOf(shown), to: practiceAddress.of(shown)
       }))}/>
     <section className="practice" aria-labelledby="practice-title">
       <h2 className="sub-title" id="practice-title">how I organize it</h2>

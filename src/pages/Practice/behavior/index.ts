@@ -1,0 +1,1 @@
+export {BehaviorPractice} from './BehaviorPractice';

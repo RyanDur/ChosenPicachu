@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {ToSavedTab} from '@navigation/Tabs';
-import {concernOf, practiceAddress} from '../types';
+import {practiceAddress} from '../practiceAddress';
 
-export const Room: FC = () => <ToSavedTab addressOf={tab => practiceAddress(concernOf(tab))}/>;
+export const Room: FC = () =>
+  <ToSavedTab addressOf={tab => practiceAddress.of(practiceAddress.concernForSavedTab(tab))}/>;

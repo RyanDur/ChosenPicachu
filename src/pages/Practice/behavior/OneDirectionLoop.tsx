@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {Box, bottomMiddle, DrawnArrow, DrawnBox, leftMiddle, rightMiddle, topMiddle} from './drawn';
-import './PracticeDrawing.css';
+import {Box, DrawnArrow, DrawnBox, edges} from './drawn';
+import '../PracticeDrawing.css';
 
 const width = 120;
 const height = 40;
@@ -19,10 +19,10 @@ export const OneDirectionLoop: FC = () =>
       <DrawnBox box={state} look="hollow drawn"/>
       <DrawnBox box={page} look="hollow drawn"/>
       <DrawnBox box={shell} look="hollow drawn dashed-drawn"/>
-      <DrawnArrow from={rightMiddle(event)} to={leftMiddle(reducer)}/>
-      <DrawnArrow from={bottomMiddle(reducer)} to={topMiddle(state)}/>
-      <DrawnArrow from={leftMiddle(state)} to={rightMiddle(page)}/>
-      <DrawnArrow from={topMiddle(page)} to={bottomMiddle(event)}/>
+      <DrawnArrow from={edges.rightMiddle(event)} to={edges.leftMiddle(reducer)}/>
+      <DrawnArrow from={edges.bottomMiddle(reducer)} to={edges.topMiddle(state)}/>
+      <DrawnArrow from={edges.leftMiddle(state)} to={edges.rightMiddle(page)}/>
+      <DrawnArrow from={edges.topMiddle(page)} to={edges.bottomMiddle(event)}/>
     </svg>
     <figcaption className="caption"><strong className="bold">One direction.</strong> An event goes to the reducer, the
       reducer returns the next state, the page is drawn from the state, and the page sends the next event. The shell,

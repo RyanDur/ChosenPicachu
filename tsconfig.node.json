@@ -17,5 +17,5 @@
   "include": [
     "e2e/**/*.ts",
     "playwright.config.cjs", "playwright.smoke.config.cjs", "playwright.looks.config.cjs", "playwright.media.config.cjs", "vite.config.cjs",
-    "src/pages/Users/usersServer.ts", "src/pages/Practice/practiceDrawings.ts"]
+    "src/pages/Users/usersServer.ts", "src/pages/Practice/drawings/practiceDrawings.ts"]
 }

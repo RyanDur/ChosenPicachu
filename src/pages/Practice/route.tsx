@@ -3,10 +3,10 @@ import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Page, PageError} from '@page';
 import {Concern} from '@pages/Record/moments';
-import {Room as NoSuchRoom} from '@pages/NoRoom/route';
+import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
 import {PracticePage} from './PracticePage';
-import {concernAt} from './types';
+import {practiceAddress} from './practiceAddress';
 
 const listings: Record<Concern, Listing> = {
   'Structure': names.practice.structure,
@@ -16,7 +16,7 @@ const listings: Record<Concern, Listing> = {
 
 const headerOf = (concern: Concern) => <Header title={`Practice ${concern}`} listed={listings[concern]}/>;
 
-const useConcern = (): Maybe<Concern> => concernAt(useParams().concern);
+const useConcern = (): Maybe<Concern> => practiceAddress.concernFromSegment(useParams().concern);
 
 export const ErrorBoundary: FC = () => {
   const header = useConcern().map(headerOf).orElse(null);
