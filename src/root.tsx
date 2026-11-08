@@ -3,7 +3,7 @@ import {Links, NavigationType, Outlet, Scripts, useLocation, useNavigationType} 
 import {FC, PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import './index.css';
 import './BasePage.css';
-import {FeedbackProvider} from '@components/Feedback';
+import {FeedbackProvider} from '@frame/notices/feedback';
 import {Header, Page, PageError, PageNameProvider} from '@frame/page';
 import {gotoTopOfPage, placeKept, ReadersPlaces, readersPlaces} from '@components/scroll';
 import names from '@pages/names.json';

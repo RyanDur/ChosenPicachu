@@ -1,36 +1,24 @@
-import {ActionDispatch, createContext, FC, KeyboardEvent, MouseEvent, PropsWithChildren, ReactNode, SubmitEvent, SyntheticEvent, useContext, useEffect, useReducer} from 'react';
+import {FC, KeyboardEvent, MouseEvent, ReactNode, RefObject, SubmitEvent, SyntheticEvent, useContext, useEffect, useRef} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv, useHydrated, usePageName} from '@frame/page';
 import {troubleWith} from '@transport/trouble';
-import {sent, threadFor} from './github';
-import {
-  FeedbackAction,
-  noteRefused,
-  noteSent,
-  noteSubmitted,
-  opened,
-  reachEdited,
-  threadFound,
-  threadUnknown,
-  wordsEdited
-} from './actions';
-import {Draft, draftAt, feedbackReducer} from './reducer';
+import {github} from './github';
+import {feedbackChange} from './feedbackChange';
+import {Draft} from './feedbackDraft';
+import {drafting} from './drafting';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
 
 const invokersMissing = (): boolean => not('command' in HTMLButtonElement.prototype);
 const lightDismissMissing = (): boolean => not('closedBy' in HTMLDialogElement.prototype);
 
-const commandWithoutInvokers = (event: MouseEvent<HTMLButtonElement>) => {
-  const button = event.currentTarget;
-  const dialog = document.getElementById(button.getAttribute('commandfor') ?? '');
-  if (invokersMissing() && dialog instanceof HTMLDialogElement) {
-    if (button.getAttribute('command') === 'show-modal') {
-      dialog.showModal();
-    } else {
-      dialog.close();
-    }
+type Dialog = RefObject<HTMLDialogElement | null>;
+
+const commandWithoutInvokers = (dialog: Dialog) => (event: MouseEvent<HTMLButtonElement>) => {
+  const showing = event.currentTarget.getAttribute('command') === 'show-modal';
+  if (invokersMissing()) {
+    maybe(dialog.current).map(shown => showing ? shown.showModal() : shown.close());
   }
 };
 
@@ -69,25 +57,18 @@ const said = ({sending, sentTo}: Draft): ReactNode => {
   return '';
 };
 
-const Drafting = createContext<[Draft, ActionDispatch<[FeedbackAction]>]>([draftAt('/'), () => undefined]);
-
-export const FeedbackProvider: FC<PropsWithChildren> = ({children}) => {
-  const {pathname} = useLocation();
-  return <Drafting.Provider value={useReducer(feedbackReducer, pathname, draftAt)}>{children}</Drafting.Provider>;
-};
-
 export const Feedback: FC = () => {
   const hydrated = useHydrated();
   const {feedbackToken, feedbackEndpoint} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
   const pageName = usePageName();
-  const [draft, dispatch] = useContext(Drafting);
+  const [draft, dispatch] = useContext(drafting);
+  const dialog = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const dialog = document.getElementById('feedback');
-    if (draft.sentOnScreen > 0 && dialog instanceof HTMLDialogElement) {
-      dialog.close();
+    if (draft.sentOnScreen > 0) {
+      maybe(dialog.current).map(shown => shown.close());
     }
   }, [draft.sentOnScreen]);
 
@@ -99,12 +80,14 @@ export const Feedback: FC = () => {
 
   const opening = (event: MouseEvent<HTMLButtonElement>) => {
     event.currentTarget.focus();
-    commandWithoutInvokers(event);
+    commandWithoutInvokers(dialog)(event);
     const here = {key, name: pageName};
-    dispatch(opened(key));
-    threadFor({endpoint: feedbackEndpoint, token: feedbackToken}, here)
-      .onSuccess(found => dispatch(found.either(({url}) => threadFound(here.key, url), () => threadUnknown(here.key))))
-      .onFailure(() => dispatch(threadUnknown(here.key)));
+    dispatch(feedbackChange.opened(key));
+    github.threadFor({endpoint: feedbackEndpoint, token: feedbackToken}, here)
+      .onSuccess(found => dispatch(found.either(
+        ({url}) => feedbackChange.threadFound(here.key, url),
+        () => feedbackChange.threadUnknown(here.key))))
+      .onFailure(() => dispatch(feedbackChange.threadUnknown(here.key)));
   };
 
   const send = (event: SubmitEvent<HTMLFormElement>) => {
@@ -113,13 +96,14 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
-    dispatch(noteSubmitted());
-    sent(
+    const from = event.currentTarget.ownerDocument.URL;
+    dispatch(feedbackChange.noteSubmitted());
+    github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
-      {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})}
+      {page: {key: draft.key, name: pageName}, words, from, ...(empty(reach) ? {} : {reach})}
     )
-      .onSuccess(url => dispatch(noteSent(openings, url)))
-      .onFailure(why => dispatch(noteRefused(why)));
+      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
+      .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 
   return <>
@@ -128,7 +112,7 @@ export const Feedback: FC = () => {
         inert={!hydrated} commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    {hydrated && <dialog id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    {hydrated && <dialog ref={dialog} id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
@@ -139,17 +123,18 @@ export const Feedback: FC = () => {
         <label className="feedback-field">
           <span className="feedback-label field bold approached">What did you find?</span>
           <textarea className="feedback-words bare card borderless paragraph ink" name="words" required enterKeyHint="send" value={draft.words}
-            onChange={event => dispatch(wordsEdited(event.currentTarget.value))} onKeyDown={sendsOnEnter}/>
+            onChange={event => dispatch(feedbackChange.wordsEdited(event.currentTarget.value))}
+            onKeyDown={sendsOnEnter}/>
         </label>
         <label className="feedback-field">
           <span className="feedback-label field bold approached">A way to reach you, if you like</span>
           <input className="feedback-reach bare card borderless paragraph ink" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
-            onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
+            onChange={event => dispatch(feedbackChange.reachEdited(event.currentTarget.value))}/>
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers(dialog)}>Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>

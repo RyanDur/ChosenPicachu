@@ -3,7 +3,7 @@ import {failure, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {server} from '@__test_support/server';
 import {HTTPError} from '@transport/types';
-import {sent} from '../github';
+import {github} from '../github';
 
 type Asked = {query: string; variables: Record<string, string>};
 
@@ -11,7 +11,7 @@ const askedShape = schema.object({required: {query: schema.unknown, variables: s
 
 const asking = {endpoint: 'https://api.github.com/graphql', token: 'token'};
 
-const github = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
+const githubAnswering = (answer: (asked: Asked) => JsonBodyType, status = 200) => {
   const asked: Asked[] = [];
   server.use(http.post(asking.endpoint, async ({request}) => {
     const question: Asked = maybe(askedShape.decode(await request.json()))
@@ -35,11 +35,11 @@ const note = {
 
 describe('sending a note to GitHub', () => {
   test('should open the page’s thread in the Feedback category with the first note, titled by the page’s name and key', async () => {
-    const asked = github(({query}) => query.includes('search')
+    const asked = githubAnswering(({query}) => query.includes('search')
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1', url: 'https://github.test/discussions/1'}}}});
 
-    const where = await sent(asking, note).orNull();
+    const where = await github.sent(asking, note).orNull();
 
     expect(where).toBe('https://github.test/discussions/1');
     expect(asked[1].variables.categoryId).toBe('DIC_kwDOFnONa84DGhfO');
@@ -49,11 +49,11 @@ describe('sending a note to GitHub', () => {
   });
 
   test('should add a later note to the thread the page already has', async () => {
-    const asked = github(({query}) => query.includes('search')
+    const asked = githubAnswering(({query}) => query.includes('search')
       ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/tables/)'}]}}}
       : {data: {addDiscussionComment: {comment: {url: 'https://github.test/discussions/7#c'}}}});
 
-    const where = await sent(asking, {page: note.page, words: note.words, from: note.from}).orNull();
+    const where = await github.sent(asking, {page: note.page, words: note.words, from: note.from}).orNull();
 
     expect(where).toBe('https://github.test/discussions/7');
     expect(asked[1].variables.discussionId).toBe('D_7');
@@ -61,39 +61,39 @@ describe('sending a note to GitHub', () => {
   });
 
   test('should not mistake another page’s thread for this one', async () => {
-    const asked = github(({query}) => query.includes('search')
+    const asked = githubAnswering(({query}) => query.includes('search')
       ? {data: {search: {nodes: [{id: 'D_2', url: 'https://github.test/discussions/2', title: 'Feedback: Demos (/demos/tables-old/)'}]}}}
       : {data: {createDiscussion: {discussion: {id: 'D_3', url: 'https://github.test/discussions/3'}}}});
 
-    await sent(asking, note).value;
+    await github.sent(asking, note).value;
 
     expect(asked[1].query).toContain('createDiscussion');
   });
 
   test('should fail as forbidden when GitHub answers with errors', async () => {
-    github(() => ({data: null, errors: [{type: 'FORBIDDEN', message: 'Resource not accessible by integration'}]}));
+    githubAnswering(() => ({data: null, errors: [{type: 'FORBIDDEN', message: 'Resource not accessible by integration'}]}));
 
-    const refused = (await sent(asking, note).value).inspect();
+    const refused = (await github.sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
   });
 
   test('should fail as not found when GitHub answers NOT_FOUND', async () => {
-    github(({query}) => query.includes('search')
+    githubAnswering(({query}) => query.includes('search')
       ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/tables/)'}]}}}
       : {data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]});
 
-    const refused = (await sent(asking, note).value).inspect();
+    const refused = (await github.sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.NOT_FOUND).inspect());
   });
 
   test('should fail as unreadable when GitHub opens a thread without saying where', async () => {
-    github(({query}) => query.includes('search')
+    githubAnswering(({query}) => query.includes('search')
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1'}}}});
 
-    const refused = (await sent(asking, note).value).inspect();
+    const refused = (await github.sent(asking, note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.CANNOT_DECODE).inspect());
   });

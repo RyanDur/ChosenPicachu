@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Feedback} from '@components/Feedback';
+import {Feedback} from '@frame/notices/feedback';
 import {SideNav} from './SideNav';
 
 type PageProps = PropsWithChildren<{

@@ -7,7 +7,7 @@ import {validate} from '@transport/validate';
 const repositoryId = 'MDEwOlJlcG9zaXRvcnkzNzY2NzE1OTU=';
 const feedbackCategoryId = 'DIC_kwDOFnONa84DGhfO';
 
-export const discussions = 'https://github.com/RyanDur/ChosenPicachu/discussions';
+const discussions = 'https://github.com/RyanDur/ChosenPicachu/discussions';
 
 export type GitHub = {readonly endpoint: string; readonly token: string};
 export type Page = {key: string; name: string};
@@ -35,7 +35,7 @@ const asked = <T>(
       .map(refused => asyncFailure<HTTPError, T>(failureIn(refused)))
       .orElse(validate(answered(data))(reply).map(answer => answer.data)));
 
-export const titleOf = ({key, name}: Page): string => `Feedback: ${name} (${key})`;
+const titleOf = ({key, name}: Page): string => `Feedback: ${name} (${key})`;
 
 const searching = `query($search: String!) {
   search(query: $search, type: DISCUSSION, first: 5) { nodes { ... on Discussion { id url title } } }
@@ -51,7 +51,7 @@ const found = schema.object({
   }
 });
 
-export const threadFor = (github: GitHub, page: Page): Result.Async<Maybe<Thread>, HTTPError> =>
+const threadFor = (github: GitHub, page: Page): Result.Async<Maybe<Thread>, HTTPError> =>
   asked(github, searching, {search: `repo:RyanDur/ChosenPicachu in:title "(${page.key})"`}, found)
     .map(({search}) => maybe(search.nodes.find(node => node.title.endsWith(`(${page.key})`)))
       .map(({id, url}) => ({id, url})));
@@ -77,9 +77,11 @@ const commented = schema.object({
 const bodyOf = ({words, reach, from}: Note): string =>
   [words, ...maybe(reach).map(way => [`A way to reach them: ${way}`]).orElse([]), `Sent from ${from}`].join('\n\n');
 
-export const sent = (github: GitHub, note: Note): Result.Async<string, HTTPError> =>
+const sent = (github: GitHub, note: Note): Result.Async<string, HTTPError> =>
   threadFor(github, note.page).mBind(thread => thread.either(
     ({id, url}) => asked(github, replying, {discussionId: id, body: bodyOf(note)}, commented).map(() => url),
     () => asked(github, opening,
       {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)}, opened)
       .map(({createDiscussion}) => createDiscussion.discussion.url)));
+
+export const github = {discussions, threadFor, sent};
