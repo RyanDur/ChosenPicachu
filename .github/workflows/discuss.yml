@@ -21,7 +21,8 @@ jobs:
           && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-26.04
     permissions:
-      contents: read
+      # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
+      contents: write
       pull-requests: write
       actions: write
       id-token: write
@@ -32,6 +33,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Fetch the pull request's head, to read and never run
         run: git fetch --no-tags origin "+refs/pull/$PULL/head:refs/heads/pr-head"
       - name: Gather the thread, if a reviewer started it
