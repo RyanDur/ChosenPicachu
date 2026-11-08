@@ -293,14 +293,7 @@
 
 .next-approached:has(+ :hover, + :focus) { background-color: var(--approach); }
 
-.liftable { position: relative; isolation: isolate; }
-
 .liftable::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
   box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow);
   opacity: 0;
   transition: opacity var(--lift-duration) var(--curve);
