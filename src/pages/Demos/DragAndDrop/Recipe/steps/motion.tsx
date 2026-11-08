@@ -1,4 +1,6 @@
 import {FC} from 'react';
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '../../../types';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
@@ -14,9 +16,9 @@ export const SlideCrossed: FC<{listSource: Sample; cssSource: Sample}> = ({listS
         through, and the browser draws the frames between them. This one, <code className="monospaced">slide-in</code>,
         writes only its from, the starting state, so the browser draws the item where it used to be and slides it to its
         new place.</Says>
-      <Says>Where it used to be is data, held in a custom property. A custom property is a value given a name once and
-        read back with <code className="monospaced">var()</code>.{' '}
-      <code className="monospaced">--starts-places-right</code> says how many places to the right of its new place the
+      <Says>Where it used to be is data. It sits in a custom property, a value the style sheet can read, which the{' '}
+        <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> teaches.{' '}
+        <code className="monospaced">--starts-places-right</code> says how many places to the right of its new place the
         item starts: 1 when it starts from the right, -1 when it starts from the left. The one keyframe reads the
         number, so both directions share it.</Says>
     </Words>

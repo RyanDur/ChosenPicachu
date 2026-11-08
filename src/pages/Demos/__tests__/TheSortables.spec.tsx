@@ -289,6 +289,7 @@ describe('the links to other tabs', () => {
       ['dials', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]
     ]);
   });
