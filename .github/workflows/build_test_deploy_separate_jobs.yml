@@ -25,36 +25,27 @@ env:
   VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
 
 jobs:
-  # A branch, and a push to main that changes src, the tests or the scripts without a pull request, gets every check. A
-  # pull request merged by rebase ran them on its branch, so main only builds, deploys and audits it (Ryan, 2026-11-08:
-  # "we don't need the full check on main if we rebase from a PR, just need the things that aren't done in the PR", and
-  # "if its from main, and work that is done in tests or src, then it needs the full treatment")
   scope:
     runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       full: ${{ steps.scope.outputs.full }}
     steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
       - name: Decide whether this push needs every check
         id: scope
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUSHED_FROM: ${{ github.event.before }}
         run: |
-          if [ "$GITHUB_REF" != refs/heads/main ] || [ "$GITHUB_EVENT_NAME" != push ]; then
-            echo full=true >> "$GITHUB_OUTPUT"
-            exit 0
+          full=true
+          if [ "$GITHUB_REF" = refs/heads/main ] && [ "$GITHUB_EVENT_NAME" = push ]; then
+            merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length' || echo 0)
+            if [ "$merged" != 0 ]; then
+              full=false
+            fi
           fi
-          merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length')
-          if [ "$merged" != 0 ]; then
-            echo full=false >> "$GITHUB_OUTPUT"
-          elif git diff --name-only "$PUSHED_FROM" "$GITHUB_SHA" | grep -qE '^(src|e2e|scripts)/'; then
-            echo full=true >> "$GITHUB_OUTPUT"
-          else
-            echo full=false >> "$GITHUB_OUTPUT"
-          fi
+          echo "full=$full" >> "$GITHUB_OUTPUT"
 
   build_test:
     needs: scope
@@ -186,6 +177,7 @@ jobs:
 
   smoke:
     needs: pages
+    if: always() && needs.pages.result == 'success'
     runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble

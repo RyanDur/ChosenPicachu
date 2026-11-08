@@ -1,4 +1,4 @@
-import {findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {findingsIn, findingsOnThePull, summaryOf, verdictOf} from '../review/report.mjs';
 
 const answered = findings => JSON.stringify({
   type: 'result',
@@ -42,6 +42,35 @@ describe('the findings Claude Code\'s review answers with', () => {
     const {severity: _, ...unsorted} = bug;
 
     expect(findingsIn(answered([unsorted]))[0].severity).toBe('concern');
+  });
+});
+
+describe('the findings the review left on the pull request\'s lines', () => {
+  const comment = (body, commit = 'def5678', path = 'src/a.ts', line = 3) => ({path, line, commit_id: commit, body});
+
+  test('should read each line comment as a finding, its severity from its first word', () => {
+    expect(findingsOnThePull(JSON.stringify([
+      comment('**violation** (correctness)\n\nA refused add is sent twice.'),
+      comment('**note** (scripts/review/voice.md)\n\nThe sentence stages its point.', 'def5678', 'src/b.tsx', 9)
+    ]), 'def5678')).toEqual([
+      {file: 'src/a.ts', line: 3, severity: 'violation', rubric: 'correctness', summary: 'A refused add is sent twice.'},
+      {file: 'src/b.tsx', line: 9, severity: 'note', rubric: 'scripts/review/voice.md', summary: 'The sentence stages its point.'}
+    ]);
+  });
+
+  test('should read the pages GitHub lists them in as one list', () => {
+    const pages = JSON.stringify([[comment('**note** (correctness)\n\nOne.')], [comment('**note** (correctness)\n\nTwo.')]]);
+
+    expect(findingsOnThePull(pages, 'def5678').map(({summary}) => summary)).toEqual(['One.', 'Two.']);
+  });
+
+  test('should read only the comments on the commit under review', () => {
+    expect(findingsOnThePull(JSON.stringify([comment('**violation** (correctness)\n\nOld.', 'abc1234')]), 'def5678'))
+      .toEqual([]);
+  });
+
+  test('should count a comment with no severity as a concern', () => {
+    expect(findingsOnThePull(JSON.stringify([comment('A thought.')]), 'def5678')[0].severity).toBe('concern');
   });
 });
 
