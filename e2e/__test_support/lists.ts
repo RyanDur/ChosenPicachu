@@ -18,6 +18,8 @@ export const sortableList = (page: Page) => {
   const gripNamed = (item: string): Locator => page.getByRole('button', {name: `grip for ${item}`});
   const seatOf = (item: string): Locator => items.filter({has: gripNamed(item)});
   const gripFor = (item: string): Locator => seatOf(item).getByRole('button', {name: `grip for ${item}`});
+  const enabledGripFor = (item: string): Locator =>
+    seatOf(item).getByRole('button', {name: `grip for ${item}`, disabled: false});
   const middleOf = async (target: Locator): Promise<{x: number; y: number}> => {
     await list.scrollIntoViewIfNeeded();
     const box = await boxOf(target, 'the list never stood');
@@ -40,7 +42,7 @@ export const sortableList = (page: Page) => {
     item: seatOf,
     moveReport: page.getByRole('status', {name: 'move report'}),
     stepByKey: async (item: string, key: 'ArrowLeft' | 'ArrowRight'): Promise<void> => {
-      await gripFor(item).focus();
+      await enabledGripFor(item).focus();
       await page.keyboard.press(key);
     },
     runningSlides: (): Promise<number> => list.evaluate(holder => holder.getAnimations({subtree: true}).length),
