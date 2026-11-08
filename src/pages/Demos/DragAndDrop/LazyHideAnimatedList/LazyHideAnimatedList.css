@@ -1,3 +1,3 @@
 .sortable-list .sliding-in {
-    animation: slide-in 200ms ease-out;
+    animation: slide-in var(--lazy-slide-duration) ease-out;
 }

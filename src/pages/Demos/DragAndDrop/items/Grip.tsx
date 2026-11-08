@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import Handle from '@components/grip.svg';
 import {useHydrated} from '@components';
 import {dragSortChange} from '../drag-sort-change';
@@ -19,10 +19,6 @@ export const Grip: FC<{item: string}> = ({item}) => {
     onPointerCancel={() => dispatch(dragSortChange.letGo())}
     onKeyDown={event => maybe(steps[event.key]).map(step => {
       event.preventDefault();
-      const lane = event.currentTarget.closest('li');
-      if (has(lane) && lane.getAnimations().length > 0) {
-        return;
-      }
       dispatch(dragSortChange.stepped(item, step));
     })}>
     <Handle/>

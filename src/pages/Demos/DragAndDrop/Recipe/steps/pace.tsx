@@ -12,13 +12,13 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
       <Says>Commit the reorder inside the dragover that detected the <Term word="crossing">crossing</Term>. The state
         updates during the drag, the markup renders from it, and React moves the li with the same key to its new place
         while the browser still shows the drag image under the pointer. Carrying the item back is only more crossings,
-        so the item can always return to its old place. While an item is still sliding, the handler ignores crossings
+        so the item can always return to its old place. While an item is still sliding, the reducer ignores crossings
         over it.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.session, 'const crossingOver'), gap,
-        ...carve.span(listSource, 'onDragOver={session.crossingOver(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), gap,
+        ...carve.unit(sources.crossing, 'const crossingOver'), gap,
+        ...carve.span(listSource, 'onDragOver={crossing.crossingOver(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), gap,
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
     </Codes>

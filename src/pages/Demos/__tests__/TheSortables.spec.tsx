@@ -124,6 +124,7 @@ describe('the sortable list demo', () => {
 
     expect(sortableList.seats()).toEqual(['B', 'A', 'C']);
 
+    sortableList.slidesEnd();
     await sortableList.moveByKey('A', '{ArrowLeft}');
     expect(sortableList.seats()).toEqual(['A', 'B', 'C']);
   });
@@ -280,7 +281,7 @@ describe('the links to other tabs', () => {
 
     const slideStep = recipeFolds.stepHeaded(story, 'Slide the crossed item into place');
 
-    expect(explanation.linkNamed(slideStep, 'accordions tab')).toHaveAttribute('href', `${Paths.demos}accordions/`);
+    expect(explanation.linkNamed(slideStep, 'custom property')).toHaveAttribute('href', `${Paths.demos}accordions/`);
   });
 
   test('should link each term it glosses, and each tab it names, to that tab', async () => {
@@ -297,7 +298,7 @@ describe('the links to other tabs', () => {
       ['dials', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
+      ['custom property', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]
     ]);
   });

@@ -3,7 +3,7 @@ import {classNames} from '@components';
 import {dragSort} from '../drag-sort';
 import {dragSortChange} from '../drag-sort-change';
 import {dragSorting} from '../drag-sorting';
-import {session} from '../session';
+import {crossing} from '../crossing';
 import {slideStarts} from '../slide-starts';
 import {HideItem, MoveReport} from '../items';
 import '../sortable-list.css';
@@ -27,7 +27,7 @@ export const EagerHideAnimatedList: FC<Props> = ({list}) => {
             className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
             style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
             onAnimationEnd={() => dispatch(dragSortChange.slid())}
-            onDragOver={session.crossingOver(sort.held, sort.order)(item, index, homeward =>
+            onDragOver={crossing.crossingOver(sort.held, sort.order)(item, index, homeward =>
               dispatch(dragSortChange.crossed(index, homeward)))}/>;
         })
       }</ol>

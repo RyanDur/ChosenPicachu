@@ -2,7 +2,7 @@ import {FC, useReducer} from 'react';
 import {dragSort} from './drag-sort';
 import {dragSortChange} from './drag-sort-change';
 import {dragSorting} from './drag-sorting';
-import {session} from './session';
+import {crossing} from './crossing';
 import {HideItem, MoveReport} from './items';
 import './sortable-list.css';
 
@@ -21,7 +21,7 @@ export const EagerHideStaticList: FC<Props> = ({list}) => {
         sort.order.map((item, index) =>
           <HideItem key={item} item={item}
             className="item"
-            onDragOver={session.crossingOver(sort.held, sort.order)(item, index, homeward =>
+            onDragOver={crossing.crossingOver(sort.held, sort.order)(item, index, homeward =>
               dispatch(dragSortChange.crossed(index, homeward)))}/>)
       }</ol>
     <MoveReport/>

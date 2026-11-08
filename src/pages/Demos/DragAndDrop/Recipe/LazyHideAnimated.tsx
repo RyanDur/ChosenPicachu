@@ -4,11 +4,11 @@ import {
   AcceptTheDrop,
   ArmTheDrag,
   FadeOrigin,
-  GlideSettle,
   HoldTheAloft,
   PlatformCurrency,
   Promises,
   RoadEnd,
+  SlideSettle,
   StashLanding,
   StraightToOrder
 } from './steps';
@@ -28,7 +28,7 @@ export const LazyHideAnimatedRecipe: FC = () => <>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <FadeOrigin itemSource={itemSource}/>
-      <GlideSettle listSource={listSource}/>
+      <SlideSettle listSource={listSource}/>
       <RoadEnd/>
     </Steps>
   </Story>

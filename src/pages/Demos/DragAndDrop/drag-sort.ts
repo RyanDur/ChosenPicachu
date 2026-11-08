@@ -5,10 +5,11 @@ import {SlideStarts, slideStarts} from './slide-starts';
 
 export type Moved = {readonly item: string; readonly position: number};
 
+export type Held = {readonly item: string; readonly landing: Maybe<number>};
+
 export type DragSort = {
   readonly order: readonly string[];
-  readonly held: Maybe<string>;
-  readonly landing: Maybe<number>;
+  readonly held: Maybe<Held>;
   readonly lastMove: Maybe<Moved>;
   readonly slideStarts: SlideStarts;
   readonly gripped: Maybe<string>;
@@ -21,7 +22,6 @@ const initial = ({items, animated}: Start): DragSort =>
   ({
     order: [...items],
     held: nothing(),
-    landing: nothing(),
     lastMove: nothing(),
     slideStarts: {},
     gripped: nothing(),
@@ -43,33 +43,39 @@ const moved = (
   };
 };
 
+const sliding = (sort: DragSort, item: string): boolean => !slideStarts.of(sort.slideStarts, item).isNothing;
+
 const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
-  sort.held
-    .map(held => moved(sort, held, at, () => slideStarts.afterCrossing(sort.order[at], homeward)))
-    .orElse(sort);
+  sliding(sort, sort.order[at])
+    ? sort
+    : sort.held
+      .map(({item}) => moved(sort, item, at, () => slideStarts.afterCrossing(sort.order[at], homeward)))
+      .orElse(sort);
 
 const settled = (sort: DragSort): DragSort => {
-  const empty: DragSort = {...sort, held: nothing(), landing: nothing(), gripped: nothing()};
-  return sort.held.and(sort.landing)
-    .map(([held, at]) => at === sort.order.indexOf(held)
-      ? empty
-      : moved(empty, held, at, after => slideStarts.afterSettle(sort.order, after)))
-    .orElse(empty);
+  const withNothingHeld: DragSort = {...sort, held: nothing(), gripped: nothing()};
+  return sort.held
+    .mBind(({item, landing}) => landing.map(at => at === sort.order.indexOf(item)
+      ? withNothingHeld
+      : moved(withNothingHeld, item, at, after => slideStarts.afterSettle(sort.order, after))))
+    .orElse(withNothingHeld);
 };
 
 const stepped = (sort: DragSort, item: string, step: 1 | -1): DragSort => {
   const from = sort.order.indexOf(item);
   const to = Math.min(Math.max(from + step, 0), sort.order.length - 1);
-  return to === from ? sort : moved(sort, item, to, () => slideStarts.afterKeyboardStep(sort.order, item, step));
+  return to === from || sliding(sort, item)
+    ? sort
+    : moved(sort, item, to, () => slideStarts.afterKeyboardStep(sort.order, item, step));
 };
 
 const reduce = (sort: DragSort, change: DragSortChange): DragSort => {
   switch (change.type) {
-    case 'lifted': return {...sort, held: some(change.item)};
+    case 'lifted': return {...sort, held: some({item: change.item, landing: nothing()})};
     case 'released': return settled(sort);
     case 'crossed': return crossed(sort, change.at, change.homeward);
-    case 'hovered': return {...sort, landing: some(change.at)};
-    case 'left': return {...sort, landing: nothing()};
+    case 'hovered': return {...sort, held: sort.held.map(held => ({...held, landing: some(change.at)}))};
+    case 'left': return {...sort, held: sort.held.map(held => ({...held, landing: nothing()}))};
     case 'stepped': return stepped(sort, change.item, change.step);
     case 'slid': return {...sort, slideStarts: {}};
     case 'gripped': return {...sort, gripped: some(change.item)};

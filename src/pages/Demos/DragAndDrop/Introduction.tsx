@@ -7,9 +7,8 @@ export const DragSortIntroduction: FC = () =>
     <p className="paragraph">A sortable list is a list the reader reorders by picking an item up and putting it down
       somewhere else.</p>
     <p className="paragraph">This tab assumes the details element, a class, a dial and a custom property from the{' '}
-      <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>, and React, its state and an event, which
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains. The rest
-      is new here.</p>
+      <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>, and React, its state, an event, a reducer, a context
+      and dispatch, which the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains. The rest is new here.</p>
     <p className="paragraph">The browser has shipped its own drag and drop for twenty years, and most of us have reached
       for a library anyway, because the native drag looked wrong, dropped in the wrong place, or could not be done with
       a keyboard.</p>

@@ -16,7 +16,7 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
     <Codes>
       <Snippet label="TS" lines={[
         ...carve.span(itemSource, 'const {held, gripped} = useDragSort();', 'const {held, gripped} = useDragSort();'), gap,
-        ...carve.span(itemSource, "className={classNames('draggable'", "held.map(lifted => lifted === item).orElse(false) && 'hide', className)}")
+        ...carve.span(itemSource, "className={classNames('draggable'", "held.map(lifted => lifted.item === item).orElse(false) && 'hide', className)}")
       ]}/>
       <Snippet label="CSS" lines={[
         ...carve.unit(sources.hideItemCss, '.draggable.hide {'),

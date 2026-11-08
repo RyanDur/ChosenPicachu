@@ -1,4 +1,4 @@
-import {screen, within} from '@testing-library/react';
+import {fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const untilTheTabMounts = {timeout: 5000};
@@ -15,6 +15,10 @@ export const sortableList = {
   seats: (): string[] =>
     within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem').map(({textContent}) => textContent ?? ''),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
+  slidesEnd: (): void =>
+    within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem').forEach(item => {
+      fireEvent.animationEnd(item);
+    }),
   fingerDown,
   fingerTap: async (item: string): Promise<void> => {
     await userEvent.pointer({keys: '[TouchA]', target: grip(item)});

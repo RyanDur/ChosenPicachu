@@ -3,6 +3,8 @@
   --lift-duration: 0.5s;
   --slide-curve: cubic-bezier(0.45, 0, 0.15, 1);
   --slide-duration: 0.6s;
+  --lazy-slide-duration: 0.2s;
+  --eager-slide-duration: 0.15s;
   --fold-duration: 0.3s;
   --label-float-duration: 0.3s;
 }

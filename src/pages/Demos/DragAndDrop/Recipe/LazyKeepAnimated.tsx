@@ -3,12 +3,12 @@ import {Steps, Story} from '../../Recipe';
 import {
   AcceptTheDrop,
   ArmTheDrag,
-  GlideSettle,
   HoldTheAloft,
   KeepStanding,
   PlatformCurrency,
   Promises,
   RoadEnd,
+  SlideSettle,
   StashLanding,
   StraightToOrder
 } from './steps';
@@ -28,7 +28,7 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <KeepStanding listSource={listSource}/>
-      <GlideSettle listSource={listSource}/>
+      <SlideSettle listSource={listSource}/>
       <RoadEnd/>
     </Steps>
   </Story>

@@ -14,7 +14,7 @@ export const HideItem: FC<ItemProps> = ({item, className, onDragOver, ...li}) =>
 
   return <li {...li}
     className={classNames('draggable', 'soft-cornered', 'field', 'hairline-outline', 'handle-raised',
-      held.map(lifted => lifted === item).orElse(false) && 'hide', className)}
+      held.map(lifted => lifted.item === item).orElse(false) && 'hide', className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
       dispatch(dragSortChange.lifted(item));

@@ -10,6 +10,6 @@ export {StashLanding} from './stash';
 export {FadeOrigin} from './shroud';
 export {KeepStanding} from './stand';
 export {SlideCrossed} from './motion';
-export {GlideSettle} from './settle';
+export {SlideSettle} from './settle';
 export {DirectState} from './direct';
 export {Promises} from './promises';
