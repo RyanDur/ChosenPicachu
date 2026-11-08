@@ -4,7 +4,7 @@ import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';
-import {users as usersApi} from '@components/Users';
+import {usersApi} from './resource';
 import {Paths} from '@frame/navigation';
 import {UsersTable} from './UsersTable';
 import {UsersProvider} from './Provider';

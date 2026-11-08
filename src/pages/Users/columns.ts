@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Labelled, Seated} from '@components/DragSortableTable/model';
-import {User} from '@components/Users';
+import {User} from './profile';
 
 export const worksFromHome = (user: User): string => user.work === 'home' ? 'Yes' : 'No';
 

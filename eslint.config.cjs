@@ -77,9 +77,9 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillReachForThePage = [
-  'src/frame/navigation/arrival/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
+  'src/frame/navigation/arrival/useArrival.ts', 'src/pages/Users/FriendsList/FriendsList.tsx',
   'src/components/glide.ts', 'src/components/room.ts', 'src/frame/page/SideNav.tsx',
-  'src/pages/Demos/ZIndexDemo/SortMenu.tsx', 'src/pages/Users/UsersTable/UserMenu/UserMenu.tsx'
+  'src/pages/Demos/ZIndexDemo/SortMenu.tsx'
 ];
 
 const refsWithAReason = [

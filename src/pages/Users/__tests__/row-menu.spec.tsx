@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render} from '@testing-library/react';
 import {Paths} from '@frame/navigation';
-import {aUser, setupUsersResponse} from '@components/Users/__test_support';
+import {aUser, setupUsersResponse} from '@pages/Users/__test_support';
 import {rowMenu} from '@pages/Users/__test_support';
 
 describe('the row menu', () => {

@@ -4,7 +4,7 @@ const {join, relative} = require('node:path');
 const {defineConfig} = require('vitest/config');
 const {loadEnv} = require('vite');
 const {rolldown} = require('rolldown');
-const {usersServerScript} = require('./src/components/Users/resource/usersServer.ts');
+const {usersServer} = require('./src/pages/Users/usersServer/usersServer.ts');
 const {practiceDrawings, squeezed} = require('./src/pages/Practice/practiceDrawings.ts');
 const {browserslistToTargets, transform} = require('lightningcss');
 const browserslist = require('browserslist');
@@ -168,7 +168,7 @@ const drawings = () => {
 /** @returns {import('vite').Plugin} */
 const usersServerPlugin = () => {
   const worker = at('./backend/users/worker.ts');
-  const script = usersServerScript;
+  const script = usersServer.script;
   const built = async () => {
     const bundle = await rolldown({input: worker, resolve: {alias: aliases}, logLevel: 'silent'});
     const {output} = await bundle.generate({format: 'iife'});

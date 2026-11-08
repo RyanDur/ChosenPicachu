@@ -1,4 +1,4 @@
-import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
+import {AddressInfo, NewUser, User} from '@pages/Users/profile';
 
 export enum FormActions {
   FIRST_NAME_EDITED = 'FIRST_NAME_EDITED',

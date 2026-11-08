@@ -1,6 +1,6 @@
 import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
+import {AddressInfo, NewUser, User} from '@pages/Users/profile';
 import {format} from 'date-fns';
 import {has} from '@ryandur/sand';
 

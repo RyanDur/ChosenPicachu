@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker';
 import {startOfDay} from 'date-fns';
-import {AddressInfo, User} from '@components/Users/UserInfo/user';
+import {AddressInfo, User} from '@pages/Users/profile';
 
 type Traits = {
   readonly id?: string;

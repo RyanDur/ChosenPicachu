@@ -1,6 +1,6 @@
 import {Listener, Store, sliced, store} from '@components/store';
 import {maybe, Maybe} from '@ryandur/sand';
-import {NewUser, User, UserEdit} from '@components/Users';
+import {NewUser, User, UserEdit} from './profile';
 import {Arrangement, ArrangementAction, TableColumn, arrangements} from '@components/DragSortableTable/model';
 import {Candidate, columns, seated} from './columns';
 

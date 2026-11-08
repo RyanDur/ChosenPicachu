@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {NewUser, User} from '@components/Users/UserInfo/user';
+import {NewUser, User} from '@pages/Users/profile';
 import {added, befriended, found, Roster, without} from './core';
 
 export const api = '/api/users';

@@ -2,7 +2,7 @@ import {createSearchParams} from 'react-router';
 import * as schema from 'schemawax';
 import {Maybe} from '@ryandur/sand';
 import {Paths} from '@frame/navigation';
-import {User} from '@components/Users/UserInfo/user';
+import {User} from '@pages/Users/profile';
 
 export type Opened =
   | {readonly mode: 'adding'; readonly copying?: User}
