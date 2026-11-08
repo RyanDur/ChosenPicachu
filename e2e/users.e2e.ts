@@ -74,6 +74,20 @@ test('following View in a row\'s actions closes the actions and shows that perso
   await expect.poll(() => users.shownName()).toBe(viewed);
 });
 
+test('editing a person and going Back shows that person as stored', async ({page}) => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  const stored = await users.names.first().textContent();
+  await users.viewTheFirstRow();
+  await users.editTheShownPerson();
+  await users.firstName.fill('Unsaved');
+
+  await page.goBack();
+
+  await expect.poll(() => users.shownName()).toBe(stored);
+});
+
 const aFingerLandsOnTheStateChoice = async (page: Page, end: 'start' | 'end'): Promise<void> => {
   const users = usersPage(page);
   await page.goto('users');
