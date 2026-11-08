@@ -7,6 +7,7 @@ A React and TypeScript site whose home page states its own principles in three c
 - `npm ci` installs, and its postinstall applies the platform patches in `patches/`.
 - `git config core.hooksPath scripts/git-hooks` turns on the hooks that guard every commit and push.
 - `npm run dev` serves the site. Feedback appears only with `VITE_APP_FEEDBACK_TOKEN` in `.env`: any value shows it, and a real fine-grained token sends. Never commit a real token.
+- The dev server paints each page without its styles until the page's script loads, because in dev Vite delivers the CSS through the scripts. The build links the stylesheet in the head, so the live site has no such flash. Judge looks, layout shift and timing on a build served by `STAGE_PORT=<port> node scripts/lighthouse/server.mjs`, never on `npm run dev`. Why: Ryan, 2026-11-08, chose to leave the dev flash alone rather than add dev-only code that links the styles, since a dev that links many CSS files can order the cascade differently from the build's one file.
 - `npm run build` typechecks, builds the client into `build/client` and the server entry into `build/server`, then runs `scripts/prerender.mjs`. The script draws every path in `prerender.pages` into its own `index.html`, with that page's scripts preloaded, and writes the 404 shell to `404.html`.
 
 ## Testing
