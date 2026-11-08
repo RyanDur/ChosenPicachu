@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 import {Candle} from '../../Market';
 import {periodSlots} from '../slots';
 
@@ -18,7 +19,7 @@ export const candleShapes = (
   height: number,
   bucketMilliseconds: number
 ): readonly CandleShape[] => {
-  if (candles.length === 0) {
+  if (empty(candles)) {
     return [];
   }
   const highest = Math.max(...candles.map(candle => candle.high));

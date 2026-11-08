@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useHydrated} from '@components';
 import './Picks.css';
@@ -28,7 +29,7 @@ export const Picks = <T extends string>({label, className, options, chosen, onPi
           name={label}
           value={value}
           checked={chosen === value}
-          disabled={!hydrated}
+          disabled={not(hydrated)}
           onChange={() => onPicked(value)}/>
       </label>)}
   </fieldset>;

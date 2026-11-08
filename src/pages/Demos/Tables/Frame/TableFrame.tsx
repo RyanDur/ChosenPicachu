@@ -34,12 +34,11 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, concealed = false, 
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
   useEffect(() => {
-    if (!has(frame)) {
-      return;
+    if (frame) {
+      const watcher = new ResizeObserver(() => measured(frame, setHeight));
+      watcher.observe(frame);
+      return () => watcher.disconnect();
     }
-    const watcher = new ResizeObserver(() => measured(frame, setHeight));
-    watcher.observe(frame);
-    return () => watcher.disconnect();
   }, [frame]);
 
   return has(document)

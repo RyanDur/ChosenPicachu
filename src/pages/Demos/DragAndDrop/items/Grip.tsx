@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import Handle from '@components/grip.svg';
 import {useHydrated} from '@components';
 import {dragSortChange} from '../drag-sort-change';
@@ -11,7 +11,7 @@ export const Grip: FC<{item: string}> = ({item}) => {
   const dispatch = useDragSortDispatch();
 
   return <button type="button"
-    disabled={!useHydrated()}
+    disabled={not(useHydrated())}
     className="grip handle borderless unfilled focus-ringed reachable"
     aria-label={`grip for ${item}`}
     onPointerDown={() => dispatch(dragSortChange.gripped(item))}

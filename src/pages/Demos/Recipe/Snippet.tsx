@@ -76,7 +76,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
       })}</code>
     </pre>
     <figcaption className="sources caption ink">
-      {sources.length > 0
+      {has(sources)
         ? sources.map(({path, url, owner, first, last}) =>
           <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
             key={path}>{nameOf(path, owner)} on GitHub</a>)

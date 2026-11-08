@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 import {Candle} from '../../Market';
 import {periodSlots} from '../slots';
 
@@ -14,7 +15,7 @@ export const volumeShapes = (
   height: number,
   bucketMilliseconds: number
 ): readonly VolumeShape[] => {
-  if (candles.length === 0) {
+  if (empty(candles)) {
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));

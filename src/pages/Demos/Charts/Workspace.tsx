@@ -1,7 +1,7 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC, useState} from 'react';
 import {generatePath, Link} from 'react-router';
-import {maybe, Maybe} from '@ryandur/sand';
+import {maybe, Maybe, has} from '@ryandur/sand';
 import {Paths} from '@navigation';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {feedStatus} from './feed-status';
@@ -64,7 +64,7 @@ export const Workspace: FC<Props> = ({product}) => {
       <h2 className="headline title bold ink">{`Bitcoin, live: every ${product} trade on Coinbase`}</h2>
       <output className={classNames('status', 'muted-ink', 'tracked', feedStatus.lamp[status])} aria-label="feed">{feedStatus.words[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
-      {absentKinds.length > 0 &&
+      {has(absentKinds) &&
           <>
             <button type="button" className="add-chart rounded-corners button secondary circular round-glyph"
               popoverTarget="add-chart"

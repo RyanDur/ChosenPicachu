@@ -7,10 +7,10 @@ const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add
 
 const theAddMenu = (): HTMLElement => {
   const menu = addMenu();
-  if (!menu) {
-    throw new Error('no add-a-chart menu on the desk');
+  if (menu) {
+    return menu;
   }
-  return menu;
+  throw new Error('no add-a-chart menu on the desk');
 };
 
 const addChart = async (name: string): Promise<void> =>
@@ -25,10 +25,10 @@ const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> 
 
 const slot = (chart: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(item => is(within(item).queryByRole('link', {name: `${chart} tutorial`})));
-  if (!seat) {
-    throw new Error(`the ${chart} doorway sits in no seat`);
+  if (seat) {
+    return seat;
   }
-  return seat;
+  throw new Error(`the ${chart} doorway sits in no seat`);
 };
 
 const grip = (chart: string): HTMLElement => within(slot(chart)).getByRole('button', {name: 'move chart', hidden: true});

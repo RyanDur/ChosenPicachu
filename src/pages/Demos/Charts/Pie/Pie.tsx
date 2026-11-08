@@ -1,3 +1,4 @@
+import {has} from '@ryandur/sand';
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components';
@@ -60,7 +61,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           </li>)}
       </ul>
       <figcaption className="chart-caption caption">
-        {cut.length > 0
+        {has(cut)
           ? `volume by side · up to the last ${liveTrades.cap.toLocaleString('en-US')} trades`
           : 'waiting for the first trade'}
       </figcaption>

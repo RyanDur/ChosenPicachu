@@ -386,7 +386,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     So the script pins the start first, with <code className="monospaced">unmoving</code>, as the plain
                     script does.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.span(panelSource, "useLayoutEffect(() => {\n    if (motion.kind !== 'pinned'", '}, [motion, open]);'), gap,
+                    ...carve.span(panelSource, "useLayoutEffect(() => {\n    const measured = panel.current;\n    if (motion.kind === 'pinned'", '}, [motion, open]);'), gap,
                     ...carve.unit(panelSource, 'return <section ref={panel}')
                   ]}/>
                   <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')}/>

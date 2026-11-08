@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 
@@ -40,7 +41,7 @@ type Where = {page: Page; fold: Locator; article: Locator; index: number};
 
 const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
   const text = fold.getByRole('paragraph', {includeHidden: true});
-  if (!await text.isVisible()) {
+  if (not(await text.isVisible())) {
     return false;
   }
   await fold.scrollIntoViewIfNeeded();

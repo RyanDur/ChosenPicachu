@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {boxOf} from './box';
 import {fingertipMiss} from './finger';
@@ -88,7 +89,7 @@ export const sortableList = (page: Page) => {
         heard = await page.waitForFunction(() => 'dragoverHeard' in document.documentElement.dataset, undefined, {timeout: 250})
           .then(() => true, () => false);
       }
-      if (!heard) throw new Error(`no dragover was heard at the target after ${nudges.length} nudges`);
+      if (not(heard)) throw new Error(`no dragover was heard at the target after ${nudges.length} nudges`);
       let at = {x: to.x + 1, y: to.y};
       return {
         carryOnTo: async (next: string): Promise<void> => {

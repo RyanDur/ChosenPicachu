@@ -1,5 +1,5 @@
 import {Trade} from './coinbase';
-import {maybe} from '@ryandur/sand';
+import {maybe, empty} from '@ryandur/sand';
 
 export type Traded = {
   vwap: number;
@@ -31,7 +31,7 @@ const still = (label: string, milliseconds: number): LookbackTotals =>
   ({label, milliseconds, trades: 0, buys: 0, sells: 0, volume: 0});
 
 const aggregate = (label: string, milliseconds: number, trades: readonly Trade[]): LookbackTotals => {
-  if (trades.length === 0) {
+  if (empty(trades)) {
     return still(label, milliseconds);
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);

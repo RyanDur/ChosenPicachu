@@ -1,3 +1,4 @@
+import {} from '@ryandur/sand';
 import {FC, PropsWithChildren, TransitionEvent, useLayoutEffect, useRef, useState} from 'react';
 import {classNames} from '@components';
 
@@ -24,18 +25,22 @@ export const MeasuredPanel: FC<PropsWithChildren<{open: boolean; namedBy: string
 
   useLayoutEffect(() => {
     const measured = panel.current;
-    if (open === shown || !measured) return;
-    setShown(open);
-    if (!moves(measured)) return;
-    const text = textHeight(measured);
-    const stands = standing(measured);
-    setMotion(now => pressed(now, open, text, stands));
+    if (open !== shown && measured) {
+      setShown(open);
+      if (moves(measured)) {
+        const text = textHeight(measured);
+        const stands = standing(measured);
+        setMotion(now => pressed(now, open, text, stands));
+      }
+    }
   }, [open, shown]);
 
   useLayoutEffect(() => {
-    if (motion.kind !== 'pinned' || !panel.current) return;
-    void panel.current.offsetHeight;
-    setMotion(movingTo(motion.height, open ? textHeight(panel.current) : 0));
+    const measured = panel.current;
+    if (motion.kind === 'pinned' && measured) {
+      void measured.offsetHeight;
+      setMotion(movingTo(motion.height, open ? textHeight(measured) : 0));
+    }
   }, [motion, open]);
 
   const settled = ({target, currentTarget, propertyName}: TransitionEvent<HTMLElement>): void => {

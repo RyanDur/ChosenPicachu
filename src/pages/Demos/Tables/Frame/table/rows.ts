@@ -1,4 +1,4 @@
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {grip} from '@components/DragSortableTable/model';
 import {cells} from '@pages/Demos/Market';
 import {MountedTable} from './table-state';
@@ -26,7 +26,7 @@ const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' |
 
 const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
   const next = standing();
-  if (!orders.differ([...body.rows].map(of), next)) {
+  if (not(orders.differ([...body.rows].map(of), next))) {
     return;
   }
   keepingFocus(maybe(body.ownerDocument.activeElement), () =>

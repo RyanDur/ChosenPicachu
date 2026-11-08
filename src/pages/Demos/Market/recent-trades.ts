@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {Result} from '@ryandur/sand';
+import {Result, not} from '@ryandur/sand';
 import {decoded, http, HTTPError} from '@transport';
 import {Trade, coinbase} from './coinbase';
 
@@ -21,7 +21,7 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
     size: Number(row.size),
     takerSide: coinbase.takerSideOf(row.side)
   })).filter(trade =>
-    !Number.isNaN(trade.price) && !Number.isNaN(trade.tradedAt) && !Number.isNaN(trade.size)
+    not(Number.isNaN(trade.price)) && not(Number.isNaN(trade.tradedAt)) && not(Number.isNaN(trade.size))
   ).reverse();
 
 const load = (base: string, product: string): Result.Async<readonly Trade[], HTTPError> =>
@@ -31,7 +31,7 @@ const load = (base: string, product: string): Result.Async<readonly Trade[], HTT
 
 const hydrated = (history: readonly Trade[], streamed: readonly Trade[]): readonly Trade[] => {
   const streaming = new Set(streamed.map(trade => trade.id));
-  return [...history.filter(trade => !streaming.has(trade.id)), ...streamed]
+  return [...history.filter(trade => not(streaming.has(trade.id))), ...streamed]
     .sort((left, right) => left.tradedAt - right.tradedAt);
 };
 

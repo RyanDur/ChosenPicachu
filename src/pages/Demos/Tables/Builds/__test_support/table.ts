@@ -6,8 +6,8 @@ type MenuChoice = 'ascending' | 'descending' | 'reset';
 
 const table = (): HTMLTableElement => {
   const found = screen.getAllByRole('table')[0];
-  if (!(found instanceof HTMLTableElement)) throw new Error('no table');
-  return found;
+  if (found instanceof HTMLTableElement) return found;
+  throw new Error('no table');
 };
 const ownText = (cell: Element): string =>
   cell.getAttribute('aria-label')
@@ -15,8 +15,8 @@ const ownText = (cell: Element): string =>
 const lanes = (): HTMLTableRowElement[] => [...table().tBodies[0].rows];
 const rowOf = (lookback: string): HTMLTableRowElement => {
   const row = lanes().find(lane => ownText(lane.cells[0]) === lookback);
-  if (!row) throw new Error(`no row for ${lookback}`);
-  return row;
+  if (row) return row;
+  throw new Error(`no row for ${lookback}`);
 };
 const header = (name: string): HTMLElement => within(table()).getByRole('columnheader', {name});
 const grip = (lookback: string): HTMLElement => within(rowOf(lookback)).getByRole('button', {name: /move row/});
