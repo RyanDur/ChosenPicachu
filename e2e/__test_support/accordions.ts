@@ -210,6 +210,8 @@ export const plainFold = (page: Page) => {
   return {
     bar,
     text,
+    frameLoaded: (): Promise<boolean> =>
+      frame.evaluate(holder => holder instanceof HTMLIFrameElement && holder.contentDocument?.readyState === 'complete'),
     goTo: async (): Promise<void> => {
       await page.goto('demos/accordions/');
       await panel.evaluate(() => new Promise<void>(loaded => {

@@ -1,26 +1,26 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useReducer} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {bannerChange, useBannerDispatch} from '@banners';
+import {plainFold} from './plain-fold';
+import {PlainFoldChange, plainFoldChange} from './plain-fold-change';
 import './PlainFold.css';
 
-const measured = (body: HTMLElement, grown: (height: number) => void): void => {
+const measured = (body: HTMLElement, dispatch: (change: PlainFoldChange) => void): void => {
   const height = Math.ceil(body.getBoundingClientRect().height);
   if (height > 0) {
-    grown(height);
+    dispatch(plainFoldChange.grown(height));
   }
 };
 
 export const PlainFold: FC = () => {
   const dispatchBanner = useBannerDispatch();
-  const [document, setDocument] = useState<string>();
-  const [frame, setFrame] = useState<HTMLIFrameElement>();
-  const [height, setHeight] = useState<number>();
+  const [{document, body, height}, dispatch] = useReducer(plainFold.reduce, plainFold.initial);
 
   useEffect(() => {
     let standing = true;
     void import('./assemble').then(({foldAssembly}) => {
       if (standing) {
-        setDocument(foldAssembly.document());
+        dispatch(plainFoldChange.assembled(foldAssembly.document()));
       }
     }).catch(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')));
     return () => {
@@ -28,19 +28,17 @@ export const PlainFold: FC = () => {
     };
   }, [dispatchBanner]);
 
-  useEffect(() => maybe(frame?.contentDocument?.body).map(body => {
-    const watcher = new ResizeObserver(() => measured(body, setHeight));
-    watcher.observe(body);
+  useEffect(() => maybe(body).map(watched => {
+    const watcher = new ResizeObserver(() => measured(watched, dispatch));
+    watcher.observe(watched);
     return () => watcher.disconnect();
-  }).orElse(undefined), [frame]);
+  }).orElse(undefined), [body]);
 
-  return has(document)
-    ? <iframe className="plain-fold" title="A fold measured by plain script"
-      style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
-      onLoad={event => {
-        setFrame(event.currentTarget);
-        maybe(event.currentTarget.contentDocument?.body).map(body => measured(body, setHeight));
-      }}
-      srcDoc={document}/>
-    : <div className="plain-fold"/>;
+  return <iframe className="plain-fold" title="A fold measured by plain script"
+    style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
+    onLoad={event => maybe(event.currentTarget.contentDocument?.body).map(loaded => {
+      dispatch(plainFoldChange.loaded(loaded));
+      measured(loaded, dispatch);
+    })}
+    srcDoc={document}/>;
 };

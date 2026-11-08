@@ -6,6 +6,7 @@ import {
   heightOnceSettled,
   measuredBuilds,
   plainFold,
+  siteFrame,
   textOf,
   type Part
 } from './__test_support';
@@ -148,5 +149,24 @@ test.describe('the fold measured by plain script', () => {
     await expect(fold.text).toBeVisible();
     await fold.bar.click();
     await expect(fold.text).toBeHidden();
+  });
+
+  test('reached by its tab link, with its document assembled after the frame first loads, grows to its opened text', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    const assembly = Promise.withResolvers<void>();
+    await page.route(/\/assemble-[^/]*\.js$/, async route => {
+      await assembly.promise;
+      await route.continue();
+    });
+    await page.goto('demos/z-index/');
+    await siteFrame(page).hydrated();
+    await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}).click();
+    const fold = plainFold(page);
+    await expect.poll(fold.frameLoaded).toBe(true);
+    assembly.resolve();
+
+    await fold.bar.click();
+
+    await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
   });
 });
