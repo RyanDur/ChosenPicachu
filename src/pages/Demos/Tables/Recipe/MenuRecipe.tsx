@@ -50,7 +50,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
           <code className="monospaced">sorting.choiceOf</code> looks the value up and answers with a Maybe, as
             the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: the Maybe holds a choice or nothing.{' '}
           <code className="monospaced">map</code> calls <code className="monospaced">sortMenus.choose</code> only
-            when it holds one.</Says>
+            when the Maybe holds one.</Says>
           <Says>The handler passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code>{' '}
             gave it: what the table knows about itself and the functions the table answers with. <code className="monospaced">sortMenus.choose</code> raises <code className="monospaced">sorted</code> to the
             page and writes the move report, the output that tells a screen reader what happened. The page
@@ -197,9 +197,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               calls <code className="monospaced">reconcile</code> after a new
               sort, <code className="monospaced">sortMenus.announceChanged</code> walks the columns and
               calls <code className="monospaced">sortMenus.announce</code> for each one.{' '}
-            <code className="monospaced">sortMenus.announce</code> sets that
-              column’s <code className="monospaced">th</code> from what
-              it was given: the
+              Given a direction, <code className="monospaced">sortMenus.announce</code> sets <code className="monospaced">aria-sort</code> on that
+              column’s <code className="monospaced">th</code>.
+              Given none, it removes the attribute. So the
               sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and
               every other <code className="monospaced">th</code> loses it. One value holds the sort, so the headers
               always agree with it.</Says>}
