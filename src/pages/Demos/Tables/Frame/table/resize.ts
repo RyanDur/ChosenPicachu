@@ -4,13 +4,12 @@ import {MountedTable} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
   maybe(table.querySelector(`th[data-column="${column}"]`)).map(header => {
-    if (!(header instanceof HTMLTableCellElement)) {
-      return;
+    if (header instanceof HTMLTableCellElement) {
+      header.classList.add('shared');
+      header.style.setProperty('--share', `${share}%`);
+      maybe(header.querySelector('[data-resize-handle]')).map(handle =>
+        handle.setAttribute('aria-label', shares.resizeLabel(column, named)));
     }
-    header.classList.add('shared');
-    header.style.setProperty('--share', `${share}%`);
-    maybe(header.querySelector('[data-resize-handle]')).map(handle =>
-      handle.setAttribute('aria-label', shares.resizeLabel(column, named)));
   });
 };
 

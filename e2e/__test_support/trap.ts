@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 import {clickWhereItIs} from './scrolling';
@@ -71,7 +72,7 @@ export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly
   const wrong: string[] = [];
   for (const [worn, where] of whereTheListOpens) {
     await chooser.wearing(worn).click();
-    if (!await withinAMoment(chooser.chosen(worn).waitFor({timeout: assertionPatience}))) {
+    if (not(await withinAMoment(chooser.chosen(worn).waitFor({timeout: assertionPatience})))) {
       wrong.push(`${worn}: not chosen`);
     }
     await chooser.open();
@@ -80,7 +81,7 @@ export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly
     if (seen !== onTop) {
       wrong.push(`${worn}: ${seen} on top at date, not ${onTop}`);
     }
-    if (!await withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience}))) {
+    if (not(await withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience})))) {
       wrong.push(`${worn}: said "${await chooser.said.textContent() ?? ''}", not ${where} card two`);
     }
     await page.keyboard.press('Escape');

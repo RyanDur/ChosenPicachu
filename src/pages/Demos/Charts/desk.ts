@@ -1,4 +1,4 @@
-import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing, some, not} from '@ryandur/sand';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {Period} from '../Market';
 
@@ -18,7 +18,7 @@ const written = (seats: readonly Seat[]): string => seats.map(entryOf).join(',')
 const dealt = (charts: string): readonly Seat[] => {
   const seats = charts.split(',').flatMap(entry => seatOf(entry).either(seat => [seat], () => []))
     .filter((seat, at, all) => all.findIndex(other => other.kind === seat.kind) === at);
-  return seats.length > 0 ? seats : [{kind: 'price', period: Period.hour}];
+  return has(seats) ? seats : [{kind: 'price', period: Period.hour}];
 };
 
 const added = (kind: ChartKind, seats: readonly Seat[]): string =>
@@ -40,7 +40,7 @@ const periodChosen = (kind: ChartKind, period: Period, seats: readonly Seat[]): 
     : [...seats, {kind, period}]);
 
 const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
-  chartKinds.all.filter(kind => !seats.some(seat => seat.kind === kind));
+  chartKinds.all.filter(kind => not(seats.some(seat => seat.kind === kind)));
 
 const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
   maybe([at + 1, at - 1].find(next => next >= 0 && next < standing));

@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {expect, test} from '@playwright/test';
 import {
   boxFor,
@@ -134,7 +135,7 @@ test('keyboard reel', async ({browser}) => {
 
   const focused = () => page.evaluate(() => document.activeElement?.className ?? '');
   let walked = 0;
-  while (!(await focused()).includes('trades') && walked < 60) {
+  while (not((await focused()).includes('trades')) && walked < 60) {
     await page.keyboard.press('Tab');
     await page.waitForTimeout(120);
     walked += 1;

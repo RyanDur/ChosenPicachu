@@ -1,5 +1,5 @@
 import {DragEvent, KeyboardEvent, useReducer} from 'react';
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {crossing} from '../DragAndDrop';
 import {chartTravel} from './chart-travel';
@@ -35,7 +35,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     node instanceof HTMLElement ? some(node.getBoundingClientRect()) : nothing();
 
   const resting = (node: Element | null | undefined) =>
-    node instanceof HTMLElement && node.getAnimations().length === 0;
+    node instanceof HTMLElement && not(node.getAnimations().length);
 
   const swap = (held: number, to: number, pointer: number) => {
     dispatch(chartTravelChange.swapped(held, to, pointer));

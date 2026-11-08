@@ -5,7 +5,7 @@ import {computeAccessibleName} from 'dom-accessibility-api';
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
   const holding = within(part).getAllByRole('listitem').filter(holds);
   const innermost = holding.filter(run => not(holding.some(other => other !== run && run.contains(other))));
-  if (innermost.length === 0) {
+  if (not(innermost.length)) {
     throw new Error(`no run ${what}`);
   }
   if (innermost.length > 1) {
@@ -19,7 +19,7 @@ const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
 
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure')
-    .filter(figure => not(within(figure).queryByRole('code')) && within(figure).queryAllByTitle(/./).length === 0);
+    .filter(figure => not(within(figure).queryByRole('code')) && not(within(figure).queryAllByTitle(/./).length));
 
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
   within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));

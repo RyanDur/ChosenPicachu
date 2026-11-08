@@ -1,3 +1,4 @@
+import {has, empty, not, maybe} from '@ryandur/sand';
 import {Line} from './Snippet';
 import {Sample} from './sample';
 import {lines} from './lines';
@@ -10,24 +11,21 @@ const lineAt = (source: string, offset: number): number => source.slice(0, offse
 
 const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
   const margin = Math.min(...lines
-    .filter(line => line.trim().length > 0)
+    .filter(line => has(line.trim()))
     .map(line => line.length - line.trimStart().length));
   return lines.map((line, at) => ({text: line.slice(margin), from: {file: from, line: firstLine + at}}));
 };
 
-const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean => {
-  const ahead = source.slice(at + 1).match(/\S/);
-  if (!ahead) {
-    return true;
-  }
-  if (ahead[0] === '.') {
-    return closer !== ')';
-  }
-  if (ahead[0] === ':') {
-    return closer === '}' && /^:\S/.test(source.slice(at + 1).trimStart());
-  }
-  return !'=:{>~+[|'.includes(ahead[0]);
-};
+const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean =>
+  maybe(source.slice(at + 1).match(/\S/)).map(([ahead]) => {
+    if (ahead === '.') {
+      return closer !== ')';
+    }
+    if (ahead === ':') {
+      return closer === '}' && /^:\S/.test(source.slice(at + 1).trimStart());
+    }
+    return not('=:{>~+[|'.includes(ahead));
+  }).orElse(true);
 
 const opensABlock = (line: string, pending: Closer[]): boolean =>
   pending.length === 1 && pending[0] === '}' && line.trimEnd().endsWith('{');
@@ -41,7 +39,7 @@ const halfAStatement = (line: string): boolean => {
       return true;
     }
   }
-  return pending.length > 0 && !opensABlock(line, pending);
+  return has(pending) && not(opensABlock(line, pending));
 };
 
 const unit = (sample: Sample, anchor: string): Line[] => {
@@ -55,7 +53,7 @@ const unit = (sample: Sample, anchor: string): Line[] => {
   let at = found;
   while (at < source.length) {
     const glyph = source[at];
-    if (glyph === ';' && pending.length === 0) {
+    if (glyph === ';' && empty(pending)) {
       break;
     }
     if (glyph in openers) {
@@ -63,7 +61,7 @@ const unit = (sample: Sample, anchor: string): Line[] => {
     } else if (glyph === pending[pending.length - 1]) {
       const closer = pending[pending.length - 1];
       pending.pop();
-      if (pending.length === 0 && closer !== ']' && closesTheUnit(source, at, closer)) {
+      if (empty(pending) && closer !== ']' && closesTheUnit(source, at, closer)) {
         break;
       }
     }

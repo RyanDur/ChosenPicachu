@@ -6,10 +6,10 @@ import {TableContext} from './context';
 
 const carriedCells = (mounted: MountedTable, state: TableState): readonly HTMLTableCellElement[] => {
   const {drag} = state;
-  if (!has(drag)) {
-    return [];
+  if (has(drag)) {
+    return drag.axis === 'column' ? settle.columnCells(mounted, drag.held) : [...(mounted.lanes.get(drag.held)?.cells ?? [])];
   }
-  return drag.axis === 'column' ? settle.columnCells(mounted, drag.held) : [...(mounted.lanes.get(drag.held)?.cells ?? [])];
+  return [];
 };
 
 const dress = (mounted: MountedTable, state: TableState): void => {

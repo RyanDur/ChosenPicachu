@@ -78,17 +78,16 @@ const landed = (context: MountedTable): void => {
 const drop = (context: MountedTable): void => {
   const {store: hand, order, standing} = context;
   const {drag} = hand.state;
-  if (!has(drag)) {
-    return;
-  }
-  landed(context);
-  tableReports.landing(drag.axis, tableState.orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
-  const from = tableState.settlingAt(hand.state, order(), standing());
-  hand.dispatch(tableActions.released());
-  if (drag.axis === 'column') {
-    settle.column(context, drag.held, from);
-  } else {
-    settle.row(context, drag.held, from);
+  if (has(drag)) {
+    landed(context);
+    tableReports.landing(drag.axis, tableState.orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
+    const from = tableState.settlingAt(hand.state, order(), standing());
+    hand.dispatch(tableActions.released());
+    if (drag.axis === 'column') {
+      settle.column(context, drag.held, from);
+    } else {
+      settle.row(context, drag.held, from);
+    }
   }
 };
 

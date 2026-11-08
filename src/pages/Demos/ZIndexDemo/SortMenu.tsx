@@ -1,7 +1,7 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC, FocusEvent, KeyboardEvent, useId, useReducer} from 'react';
 import {flushSync} from 'react-dom';
-import {Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some, not} from '@ryandur/sand';
 import {sortChoices} from './sort-choices';
 import {sortMenu} from './sort-menu';
 import {sortMenuChange} from './sort-menu-change';
@@ -62,7 +62,7 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
     });
   };
   const onListBlur = ({currentTarget, relatedTarget}: FocusEvent<HTMLMenuElement>): void => {
-    if (!(relatedTarget instanceof Node && currentTarget.contains(relatedTarget))) {
+    if (not(relatedTarget instanceof Node && currentTarget.contains(relatedTarget))) {
       dispatch(sortMenuChange.closed());
     }
   };

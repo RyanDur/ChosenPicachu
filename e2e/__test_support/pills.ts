@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 import {demoSettings} from './demo-settings';
@@ -44,7 +45,7 @@ export const pillsAFingerCannotChoose = async (page: Page, group: string): Promi
 
   for (const name of eachTapMovesTheChoice) {
     await fingerTap(page, pills.wordsOf(name));
-    if (!await chosenWithinAMoment(page, group, name)) unchosen.push(name);
+    if (not(await chosenWithinAMoment(page, group, name))) unchosen.push(name);
   }
   return unchosen;
 };

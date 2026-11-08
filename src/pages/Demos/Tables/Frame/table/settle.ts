@@ -1,3 +1,4 @@
+import {not, has} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 
@@ -20,9 +21,9 @@ const changeMotion = (
   {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}
 ): void => {
   const wearing = motions.filter(motion =>
-    on.includes(motion) || (cell.classList.contains(motion) && !off.includes(motion)));
+    on.includes(motion) || (cell.classList.contains(motion) && not(off.includes(motion))));
   cell.classList.remove('paper-in-motion', ...motions);
-  if (wearing.length > 0) {
+  if (has(wearing)) {
     cell.classList.add('paper-in-motion', ...wearing);
   }
 };

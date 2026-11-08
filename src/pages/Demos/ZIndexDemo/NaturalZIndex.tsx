@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {not as toggle} from '@ryandur/sand';
+import {not as toggle, not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../props-with-class-name';
 import {classNames} from '@components';
@@ -21,7 +21,7 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const layer = (card: RaisedCard) => classNames('layer card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
   return <figure className={classNames('natural-z-index', className)}>
-    <button type="button" className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
+    <button type="button" className="button primary" aria-expanded={not(isCollapsed)} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <PillGlider label="card raised" name="card-raised" options={cardsToRaise} chosen={raised} onChosen={next => updateSearchParams({raised: next})}/>
     <ol id="z-index-layers" className="demo-container">

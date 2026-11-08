@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode, useId, useState} from 'react';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe, maybe, not} from '@ryandur/sand';
 
 type Intent = ReturnType<typeof setTimeout>;
 
@@ -7,7 +7,7 @@ const definitionOf = (term: HTMLButtonElement): Maybe<HTMLElement> =>
   maybe(term.popoverTargetElement).mBind(target => maybe(target instanceof HTMLElement ? target : undefined));
 
 const revealed = (term: HTMLButtonElement): void => {
-  definitionOf(term).map(definition => !definition.matches(':popover-open') && definition.showPopover());
+  definitionOf(term).map(definition => not(definition.matches(':popover-open')) && definition.showPopover());
 };
 
 const concealed = (term: HTMLButtonElement): void => {

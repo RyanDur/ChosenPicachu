@@ -1,4 +1,4 @@
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {array} from '@components';
 import {DragSortChange} from './drag-sort-change';
 import {SlideStarts, slideStarts} from './slide-starts';
@@ -43,7 +43,7 @@ const moved = (
   };
 };
 
-const sliding = (sort: DragSort, item: string): boolean => !slideStarts.of(sort.slideStarts, item).isNothing;
+const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
 
 const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
   sliding(sort, sort.order[at])

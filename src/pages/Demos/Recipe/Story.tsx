@@ -1,3 +1,4 @@
+import {} from '@ryandur/sand';
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
 import {storyKeys} from './storyKeys';
 import {useOpenStories} from './useOpenStories';
@@ -6,10 +7,12 @@ import {Steps} from './Steps';
 
 const stepsIn = (children: ReactNode): number =>
   Children.toArray(children).reduce<number>((count, child) => {
-    if (!isValidElement<PropsWithChildren>(child)) return count;
-    return child.type === Steps
-      ? count + Children.toArray(child.props.children).filter(isValidElement).length
-      : count + stepsIn(child.props.children);
+    if (isValidElement<PropsWithChildren>(child)) {
+      return child.type === Steps
+        ? count + Children.toArray(child.props.children).filter(isValidElement).length
+        : count + stepsIn(child.props.children);
+    }
+    return count;
   }, 0);
 
 type Props = PropsWithChildren<{

@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 import {Pressure} from './bucket-pressure';
 import {heaviestSide} from './heaviest-side';
 import {periodSlots} from '../slots';
@@ -17,7 +18,7 @@ export const pressureShapes = (
   height: number,
   bucketMilliseconds: number
 ): readonly PressureShape[] => {
-  if (pressures.length === 0) {
+  if (empty(pressures)) {
     return [];
   }
   const peak = heaviestSide(pressures);

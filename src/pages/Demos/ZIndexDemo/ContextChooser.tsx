@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {useHydrated} from '@components';
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {useSearchParamsObject} from '@navigation/search-params';
@@ -53,7 +53,7 @@ export const ContextChooser: FC = () => {
       <legend className="paragraph">What card one wears</legend>
       {inOrder.map(choice =>
         <label key={choice} className="context-choice reachable">
-          <input type="radio" name="card-one-wears" checked={worn === choice} disabled={!hydrated}
+          <input type="radio" name="card-one-wears" checked={worn === choice} disabled={not(hydrated)}
             onChange={() => {
               updateOpened(nothing());
               updateSearchParams({wears: choice});

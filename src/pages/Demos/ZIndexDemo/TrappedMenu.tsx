@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {useHydrated} from '@components';
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
@@ -30,7 +30,7 @@ export const TrappedMenu: FC = () => {
     <ol className="old-way-cards">
       <li className={classNames('old-way-card card rounded-corners floating positioned', cardOne === 'contained' && 'forms-context')}>
         <label className="context-choice reachable">
-          <input type="checkbox" checked={cardOne === 'contained'} disabled={!hydrated}
+          <input type="checkbox" checked={cardOne === 'contained'} disabled={not(hydrated)}
             onChange={({currentTarget}) => {
               updateOpened(nothing());
               updateSearchParams({'card-one': currentTarget.checked ? 'contained' : 'free'});

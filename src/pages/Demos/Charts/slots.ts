@@ -1,3 +1,4 @@
+import {empty} from '@ryandur/sand';
 export type Slot = {
   x: number;
   width: number;
@@ -9,7 +10,7 @@ export const periodSlots = (
   width: number,
   bucketMilliseconds: number
 ): readonly Slot[] => {
-  if (openings.length === 0) {
+  if (empty(openings)) {
     return [];
   }
   const from = openings[0];

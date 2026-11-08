@@ -1,3 +1,4 @@
+import {not, has} from '@ryandur/sand';
 export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call';
 
 export type Token = {
@@ -18,7 +19,7 @@ const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>
       const start = hit.index;
       const overlaps = found.some(taken =>
         start < taken.start + taken.length && taken.start < start + hit[0].length);
-      if (!overlaps && hit[0].length > 0) {
+      if (not(overlaps) && has(hit[0])) {
         found.push({start, length: hit[0].length, kind});
       }
     }
