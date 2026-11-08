@@ -31,7 +31,13 @@ export const askFor = ({before, after, pull, reviewers}) => [
   `${reviewers.map(({file, asks}) => `${file} (${asks})`).join('; ')}.`,
   'Give every finding two more fields: "severity", one of "violation" (a bug a reader meets, or a broken rule from',
   'AGENTS.md or a rubric), "concern" or "note"; and "rubric", the file whose rule it answers to, or "correctness".',
-  'Answer with every finding in the structured output, an empty list when there are none.'
+  'Answer with every finding in the structured output, an empty list when there are none.',
+  ...empty(pull) ? [] : [
+    'earlier-findings.json holds the conversations earlier reviews of this pull request started, each with its',
+    'replies and whether it is resolved. A finding one of them already raised gets no new inline comment. If its',
+    'conversation is resolved, it was fixed or settled, so leave it out of the structured output too, unless the code',
+    'at the head has undone the fix. If it is still open, keep it in the structured output.'
+  ]
 ].join(' ');
 
 if (import.meta.main) {

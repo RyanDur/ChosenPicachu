@@ -52,6 +52,13 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('args "high --comment 412 --max-findings all"');
   });
 
+  test('should hand a pull request\'s review the conversations earlier reviews started, and a range none', () => {
+    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
+
+    expect(onThePull).toContain('earlier-findings.json');
+    expect(asked).not.toContain('earlier-findings.json');
+  });
+
   test('should name every reviewer\'s rubric, to be read whole', () => {
     expect(asked).toContain('src/pages/Practice/structure/StructurePractice.tsx (what things are)');
     expect(asked).toContain('scripts/review/tests.md (what a test is for)');
