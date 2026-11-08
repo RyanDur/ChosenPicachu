@@ -8,7 +8,7 @@ test.afterEach(async ({page}, testInfo) => {
   }
 });
 
-test('an eager list takes the new order the moment the carried item crosses a neighbour', async ({page}) => {
+test('an eager list takes the new order the moment the carried item crosses a neighbor', async ({page}) => {
   await page.goto('demos/drag-and-drop/');
   const list = sortableList(page);
 
@@ -18,7 +18,7 @@ test('an eager list takes the new order the moment the carried item crosses a ne
   await carried.drop();
 });
 
-test('an arrow key walks an item in an animated list past its neighbour, and back', async ({page}) => {
+test('an arrow key walks an item in an animated list past its neighbor, and back', async ({page}) => {
   await page.goto('demos/drag-and-drop/?motion=animated');
   const list = sortableList(page);
 
@@ -42,7 +42,7 @@ test('a lazy list holds its order while an item is carried, and takes the new or
   await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
 });
 
-test('an eager list keeps following a carried item back across a neighbour, so the drag has not ended under the reader', async ({page}) => {
+test('an eager list keeps following a carried item back across a neighbor, so the drag has not ended under the reader', async ({page}) => {
   await page.goto('demos/drag-and-drop/?pace=eager');
   const list = sortableList(page);
   const carried = await list.carry('A', 'C');

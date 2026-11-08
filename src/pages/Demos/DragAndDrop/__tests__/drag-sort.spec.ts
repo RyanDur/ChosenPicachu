@@ -39,7 +39,7 @@ describe('a drop', () => {
     expect(dragSort.reduce(hoveredAgain, dragSortChange.released()).order).toEqual(['B', 'C', 'A']);
   });
 
-  it('a drop that would move a neighbour still sliding is ignored', () => {
+  it('a drop that would move a neighbor still sliding is ignored', () => {
     const stepped = dragSort.reduce(resting, dragSortChange.stepped('B', 1));
     const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
@@ -47,7 +47,7 @@ describe('a drop', () => {
     expect(dragSort.reduce(hovered, dragSortChange.released()).order).toEqual(['A', 'C', 'B']);
   });
 
-  it('a drop ignored while a neighbour slides says the item stays where it is', () => {
+  it('a drop ignored while a neighbor slides says the item stays where it is', () => {
     const stepped = dragSort.reduce(resting, dragSortChange.stepped('B', 1));
     const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
@@ -81,7 +81,7 @@ describe('a keyboard step', () => {
     expect(dragSort.reduce(stepped, dragSortChange.stepped('A', 1)).order).toEqual(['B', 'A', 'C']);
   });
 
-  it('a step into a neighbour still sliding is ignored', () => {
+  it('a step into a neighbor still sliding is ignored', () => {
     const stepped = dragSort.reduce(resting, dragSortChange.stepped('A', 1));
 
     expect(dragSort.reduce(stepped, dragSortChange.stepped('C', -1)).order).toEqual(['B', 'A', 'C']);
