@@ -84,7 +84,8 @@ export const StructurePractice: FC = () =>
     <LandmarkMap/>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
       its other side: I write a role only where no element does the job. The banners are a section with
-      the role alert, a live region, written last on the page, because there is no alert element to reach for; the{' '}
+      the role alert, because there is no alert element to reach for. The role makes the section a live region.
+      The{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
