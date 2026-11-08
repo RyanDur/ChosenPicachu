@@ -21,7 +21,7 @@ type ImageProps = {
   lazy?: boolean;
 };
 
-const Framed: FC<PropsWithChildren<{door: Maybe<string>; title: string}>> = ({door, title, children}) => door.either(
+const Framed: FC<PropsWithChildren<{link: Maybe<string>; title: string}>> = ({link, title, children}) => link.either(
   to => <Link to={to} aria-label={title} className="scrim looking-glassed liftable">{children}</Link>,
   () => <>{children}</>
 );
@@ -37,7 +37,7 @@ export const Image: FC<ImageProps> = (
   const [picture, pictured] = useState<Picture>('arriving');
   const {tab} = useGallery();
   const {gallery} = useContext(GalleryLinks);
-  const door = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
+  const link = maybe(linkEnabled ? `${gallery}${piece.id}${toQueryString({tab})}` : undefined);
 
   return picture === 'missing' ?
     <StandIn alt={`${piece.title} would not load`}
@@ -47,7 +47,7 @@ export const Image: FC<ImageProps> = (
         className="image"
         src={noImage}/> :
       (<>
-        <Framed door={door} title={piece.title}>
+        <Framed link={link} title={piece.title}>
           <img className={classNames('image', className, picture === 'arriving' && 'arriving')}
             referrerPolicy="no-referrer"
             onError={() => pictured('missing')}
