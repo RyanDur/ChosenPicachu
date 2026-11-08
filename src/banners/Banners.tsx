@@ -18,20 +18,21 @@ export const Banners: FC = () => {
     }
   };
 
-  return has(banners) && <section id="banners" role="alert"
-    className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
-    <ul className="troubles">
-      {banners.map(banner =>
-        <li key={banner.id} onTransitionEnd={left(banner)}
-          className={classNames('trouble', banner.leaving && 'leaving')}>
-          <p className="news-item">
-            <span className="news field rounded-corners floating hairline-outline alarm-ink">
-              {banner.message}
-              <button type="button" className="dismiss borderless unfilled glyph-icon muted-ink reachable" aria-label={`dismiss ${banner.message}`}
-                onClick={() => dispatchBanner(bannerChange.dismissed(banner.id))}>×</button>
-            </span>
-          </p>
-        </li>)}
-    </ul>
-  </section>;
+  return has(banners) &&
+    <section id="banners" role="alert"
+      className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
+      <ul className="troubles">
+        {banners.map(banner =>
+          <li key={banner.id} onTransitionEnd={left(banner)}
+            className={classNames('trouble', banner.leaving && 'leaving')}>
+            <p className="news-item">
+              <span className="news field rounded-corners floating hairline-outline alarm-ink">
+                {banner.message}
+                <button type="button" className="dismiss borderless unfilled glyph-icon muted-ink reachable" aria-label={`dismiss ${banner.message}`}
+                  onClick={() => dispatchBanner(bannerChange.dismissed(banner.id))}>×</button>
+              </span>
+            </p>
+          </li>)}
+      </ul>
+    </section>;
 };
