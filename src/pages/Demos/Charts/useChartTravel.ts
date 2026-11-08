@@ -1,5 +1,5 @@
 import {DragEvent, KeyboardEvent, useState} from 'react';
-import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {strayedTo} from '../DragAndDrop/crossing';
 
@@ -35,8 +35,8 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     setAloft(maybe(at));
   };
 
-  const boundsOf = (node: Element | null | undefined) =>
-    node instanceof HTMLElement ? node.getBoundingClientRect() : undefined;
+  const boundsOf = (node: Element | null | undefined): Maybe<DOMRect> =>
+    node instanceof HTMLElement ? some(node.getBoundingClientRect()) : nothing();
 
   const resting = (node: Element | null | undefined) =>
     node instanceof HTMLElement && node.getAnimations().length === 0;
@@ -51,21 +51,17 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const travel = (event: DragEvent<HTMLElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    aloft.map(held => {
-      const slots = event.currentTarget.parentElement?.children;
-      const seat = boundsOf(slots?.item(held));
-      if (!seat) {
-        return;
-      }
+    const slots = event.currentTarget.parentElement?.children;
+    aloft.map(held => boundsOf(slots?.item(held)).map(bounds => {
       const pointer = event.clientY + scrollY;
-      const to = strayedTo(pointer, mark, seat.height / 3, held);
+      const to = strayedTo(pointer, mark, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
       if (resting(slots?.item(to))) {
         swap(held, to, pointer);
       }
-    });
+    }));
   };
 
   const release = () => {
