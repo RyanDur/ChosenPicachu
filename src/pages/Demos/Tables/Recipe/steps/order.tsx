@@ -3,6 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {arrangementSource, bootSource, frameRows, gap, headersSource, placingSource, rowSource} from './sources';
+import {elidedHeaders} from '../elidedHeaders';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
   ({world, tableSource, buildSrc}) =>
@@ -41,7 +42,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
               ...carve.span(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
             ]}/>
             <Snippet label="HTML" lines={[
-              ...carve.span(tableSource, '<Headers onColumnMoved', '</Headers>'), gap,
+              ...elidedHeaders(carve.span(tableSource, '<Headers onColumnMoved', '</Headers>')), gap,
               ...carve.span(tableSource, '<Body onRowMoved', '</Body>')
             ]}/>
             <Snippet label="TS" lines={[

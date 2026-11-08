@@ -20,6 +20,7 @@ import tableSource from '../Frame/table.html?sample';
 import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
+import {elidedHeaders} from './elidedHeaders';
 
 const gap = lines.plain(' ');
 
@@ -107,7 +108,7 @@ const dealCodes: Record<World, ReactNode> = {
       ...carve.span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>'), gap,
+      ...elidedHeaders(carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), gap,
       ...carve.span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[

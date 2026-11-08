@@ -1,5 +1,6 @@
 import {Line} from './Snippet';
 import {Sample} from './sample';
+import {lines} from './lines';
 
 type Closer = '}' | ')' | ']';
 
@@ -106,10 +107,25 @@ const withoutImports = (sample: Sample): Line[] => {
   return dedented(body, sample, firstLine);
 };
 
+const elided = (carved: Line[], from: string, until: string, note: string): Line[] => {
+  const first = carved.findIndex(({text}) => text.includes(from));
+  if (first < 0) {
+    throw new Error(`no elided run opens at "${from}"`);
+  }
+  const last = carved.findIndex(({text}, at) => at > first && text.includes(until));
+  if (last < 0) {
+    throw new Error(`no elided run closes before "${until}"`);
+  }
+  const {text} = carved[first];
+  const indent = text.slice(0, text.length - text.trimStart().length);
+  return [...carved.slice(0, first), lines.aside(indent + note), ...carved.slice(last)];
+};
+
 type Carve = {
   unit: (sample: Sample, anchor: string) => Line[];
   span: (sample: Sample, from: string, to: string) => Line[];
   withoutImports: (sample: Sample) => Line[];
+  elided: (carved: Line[], from: string, until: string, note: string) => Line[];
 };
 
-export const carve: Carve = {unit, span, withoutImports};
+export const carve: Carve = {unit, span, withoutImports, elided};

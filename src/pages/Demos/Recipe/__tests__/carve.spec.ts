@@ -263,6 +263,26 @@ describe('carving examples out of the source they teach', () => {
     expect(() => carve.span(nested, 'const rule', 'const rule')).toThrow(/const rule/);
   });
 
+  test('an elided run gives way to an aside standing at the run’s indent', () => {
+    const rule = carve.span(source, 'const rule', '};');
+
+    expect(carve.elided(rule, 'onPointerMove', 'onPointerUp', '// …and the move').map(({text}) => text)).toEqual([
+      'const rule = {',
+      '    surface: {',
+      '        // …and the move',
+      '        onPointerUp: drop',
+      '    }',
+      '};'
+    ]);
+  });
+
+  test('an elided run that never opens or never closes fails loudly instead of dropping the wrong lines', () => {
+    const rule = carve.span(source, 'const rule', '};');
+
+    expect(() => carve.elided(rule, 'onGone', 'onPointerUp', '// …')).toThrow(/onGone/);
+    expect(() => carve.elided(rule, 'onPointerMove', 'onGone', '// …')).toThrow(/onGone/);
+  });
+
   test('a missing anchor fails loudly instead of teaching nothing', () => {
     expect(() => carve.unit(source, 'const vanished = ')).toThrow(/vanished/);
     expect(() => carve.span(source, 'onPointerMove', 'onGone')).toThrow(/onGone/);
