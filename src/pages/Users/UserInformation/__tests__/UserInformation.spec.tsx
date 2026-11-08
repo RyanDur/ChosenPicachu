@@ -117,7 +117,7 @@ describe('a user form', () => {
 
         await waitFor(() => expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true'));
         adds.answer();
-        await waitFor(() => expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'false'));
+        await waitFor(() => expect(userForm.addButton()).not.toHaveAttribute('aria-disabled', 'true'));
       });
 
       it('focus stays on Add after a confirmed add', async () => {

@@ -4,7 +4,8 @@ import {
   setupUserRemovedResponse,
   setupUsersResponse,
   setupUserUpdatedResponse,
-  someUsers
+  someUsers,
+  userAddsHeld
 } from '@pages/Users/__test_support';
 import {syncing} from '../syncing';
 import {usersActions} from '../usersActions';
@@ -61,6 +62,19 @@ describe('the users store', () => {
 
     await vi.waitFor(() => expect(usersSelectors.withId('newcomer')(store.state).isNothing).toBe(false));
     expect(sent()).toMatchObject({person: {firstName: newcomer.person.firstName}, homeAddress: newcomer.homeAddress});
+  });
+
+  it('a second add while one is in flight reaches the backend once', async () => {
+    const store = await openedStore();
+    const {id: _id, ...newcomer} = third;
+    const adds = userAddsHeld([...someUsers, {...newcomer, id: 'newcomer'}]);
+    store.dispatch(usersActions.userAdded(newcomer));
+    store.dispatch(usersActions.userAdded(newcomer));
+
+    adds.answer();
+
+    await vi.waitFor(() => expect(usersSelectors.confirmedAdds(store.state)).toBe(1));
+    expect(adds.heard()).toBe(1);
   });
 
   it('a user is found by id in the roster', async () => {
