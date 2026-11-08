@@ -180,9 +180,10 @@ export const BehaviorPractice: FC = () =>
       right a second time, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what that
       cost when pages rebuilt the back button and scroll restoration by hand.</p>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
-      the feature. The feedback dialog holds the site’s two. Its buttons open and close it with invoker commands, and
-      where a browser has none, a click handler does it instead. Its <code className="monospaced">closedby</code>{' '}
-      attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too.</p>
+      the feature. The feedback dialog holds the site’s one. Its <code className="monospaced">closedby</code>{' '}
+      attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
+      buttons open and close it with invoker commands, which every major browser has shipped since December 2025, so
+      they need no fallback.</p>
     <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
       the element that needs it by a data attribute, like the tables demo’s{' '}
     <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
@@ -244,9 +245,8 @@ export const BehaviorPractice: FC = () =>
       <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
         with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
-        measured size, when nothing else gives them, such as an event.”</a> Three files are on the list today.{' '}
-      <code className="monospaced">Feedback</code> holds its dialog for the first reason.{' '}
-      <code className="monospaced">MeasuredPanel</code> and <code className="monospaced">DialGroup</code> hold theirs
-      for the second. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
-      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side.</p>
+        measured size, when nothing else gives them, such as an event.”</a> Two files are on the list today, both for
+      the second reason. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
+      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side. No
+      file needs the first: the feedback dialog opens and closes with invoker commands, so nothing holds it.</p>
   </>;

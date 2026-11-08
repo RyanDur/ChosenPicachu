@@ -82,7 +82,7 @@ const stillReachForThePage = [
 ];
 
 const refsWithAReason = [
-  'src/feedback/Feedback.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
+  'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
 module.exports = [

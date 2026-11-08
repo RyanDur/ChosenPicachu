@@ -12,11 +12,10 @@ export type Draft = {
   reach: string;
   sending: Sending;
   sentTo?: string;
-  sentOnScreen: number;
 };
 
 const draftAt = (key: string): Draft =>
-  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentOnScreen: 0});
+  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}});
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
@@ -47,7 +46,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
       return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case 'noteSent':
       return onScreen(draft, action.openings)
-        ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}, sentOnScreen: draft.sentOnScreen + 1}
+        ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}}
         : {...draft, ...unsentWords(draft), sentTo: action.url, sending: {state: 'sent'}};
     case 'noteRefused':
       return {...draft, sending: {state: 'refused', why: action.why}};

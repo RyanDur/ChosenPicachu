@@ -115,9 +115,8 @@ export const StructurePractice: FC = () =>
     <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope"><code
       className="monospaced">scope</code></Mdn>{' '}
       tells a screen reader which header a cell belongs to.{' '}
-    <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, and
-      where a browser lacks them a click handler is the fallback, as the feedback dialog does. I reach for one of
-      these before any script.</p>
+    <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, as the
+      feedback dialog’s buttons do. I reach for one of these before any script.</p>
     <p className="paragraph">Three attributes carry three jobs. A data attribute attaches a behavior:{' '}
       <code className="monospaced">data-row-grip</code> says a grip can be dragged, and the script finds grips by it. A
       class says how the element looks, in the

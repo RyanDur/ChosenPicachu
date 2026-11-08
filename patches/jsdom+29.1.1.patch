@@ -114,6 +114,36 @@ index 0ef1ce8..3d8e664 100644
    getBoundingClientRect() {
      return {
        x: 0,
+diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLButtonElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLButtonElement-impl.js
+index 0bd1c81..16254e8 100644
+--- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLButtonElement-impl.js
++++ b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLButtonElement-impl.js
+@@ -26,6 +26,25 @@ class HTMLButtonElementImpl extends HTMLElementImpl {
+         form._doReset();
+       }
+     }
++    if (this.type === "button" && !isDisabled(this)) {
++      this._runTheCommandSteps();
++    }
++  }
++
++  _runTheCommandSteps() {
++    const id = this.getAttributeNS(null, "commandfor");
++    const command = asciiLowercase(this.getAttributeNS(null, "command") || "");
++    const target = id === null ? null : this.getRootNode({}).getElementById(id);
++    if (target === null || target.localName !== "dialog") {
++      return;
++    }
++    const open = target.hasAttributeNS(null, "open");
++    if (command === "show-modal" && !open) {
++      target.showModal();
++    }
++    if ((command === "close" || command === "request-close") && open) {
++      target.close();
++    }
+   }
+ 
+   _getValue() {
 diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js
 index d020e3c..a1b38fa 100644
 --- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js

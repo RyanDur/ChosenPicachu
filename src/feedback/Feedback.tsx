@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, MouseEvent, ReactNode, RefObject, SubmitEvent, SyntheticEvent, useContext, useEffect, useRef} from 'react';
+import {FC, KeyboardEvent, MouseEvent, ReactNode, SubmitEvent, SyntheticEvent, useContext} from 'react';
 import {useHref, useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnvironment} from '@environment';
@@ -11,33 +11,13 @@ import {feedbackChange} from './feedbackChange';
 import {Draft} from './feedbackDraft';
 import {drafting} from './drafting';
 import {classNames} from '@components';
+import {Modal, ModalOpener} from '@components/Modal';
 import './Feedback.css';
-
-const invokersMissing = (): boolean => not('command' in HTMLButtonElement.prototype);
-const lightDismissMissing = (): boolean => not('closedBy' in HTMLDialogElement.prototype);
-
-type Dialog = RefObject<HTMLDialogElement | null>;
-
-const commandWithoutInvokers = (dialog: Dialog) => (event: MouseEvent<HTMLButtonElement>) => {
-  const showing = event.currentTarget.getAttribute('command') === 'show-modal';
-  if (invokersMissing()) {
-    maybe(dialog.current).map(shown => showing ? shown.showModal() : shown.close());
-  }
-};
 
 const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
   if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
     event.preventDefault();
     event.currentTarget.form?.requestSubmit();
-  }
-};
-
-const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
-  const box = event.currentTarget.getBoundingClientRect();
-  const onTheVeil = event.clientX < box.left || event.clientX > box.right
-    || event.clientY < box.top || event.clientY > box.bottom;
-  if (lightDismissMissing() && event.target === event.currentTarget && onTheVeil) {
-    event.currentTarget.close();
   }
 };
 
@@ -69,14 +49,6 @@ export const Feedback: FC = () => {
   const [params] = useSearchParams();
   const pageName = usePageName();
   const [draft, dispatch] = useContext(drafting);
-  const dialog = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    if (draft.sentOnScreen > 0) {
-      maybe(dialog.current).map(shown => shown.close());
-    }
-  }, [draft.sentOnScreen]);
-
   if (!has(feedbackToken)) {
     return null;
   }
@@ -85,7 +57,6 @@ export const Feedback: FC = () => {
 
   const opening = (event: MouseEvent<HTMLButtonElement>) => {
     event.currentTarget.focus();
-    commandWithoutInvokers(dialog)(event);
     const here = {key, name: pageName};
     dispatch(feedbackChange.opened(key));
     github.threadFor({endpoint: feedbackEndpoint, token: feedbackToken}, here)
@@ -101,23 +72,28 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
+    const shown = maybe(event.currentTarget.closest('dialog'));
+    const closedSince = new AbortController();
+    shown.map(dialog => dialog.addEventListener('close', () => closedSince.abort(), {once: true}));
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
       {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
       .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
+      .onSuccess(() => {
+        if (not(closedSince.signal.aborted)) shown.map(dialog => dialog.close());
+      })
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 
   return <>
     <p className={classNames('feedback-item', 'field', !hydrated && 'gap-filled')}>
-      <button type="button" className="feedback-open path rail-aside bold attentive field borderless reachable"
-        inert={!hydrated} commandfor={hydrated ? 'feedback' : undefined} command="show-modal"
-        onClick={opening}>Feedback</button>
+      <ModalOpener className="feedback-open path rail-aside bold attentive field borderless reachable"
+        inert={!hydrated} modal={hydrated ? 'feedback' : undefined} onClick={opening}>Feedback</ModalOpener>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    {hydrated && <dialog ref={dialog} id="feedback" className="feedback-dialog backdrop veiled ink" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    {hydrated && <Modal id="feedback" labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
@@ -139,10 +115,10 @@ export const Feedback: FC = () => {
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers(dialog)}>Cancel</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor="feedback" command="close">Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
-    </dialog>}
+    </Modal>}
   </>;
 };
