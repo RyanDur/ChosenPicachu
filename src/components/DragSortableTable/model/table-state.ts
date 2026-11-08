@@ -82,18 +82,18 @@ export type TableState = {
   readonly report?: Report;
 };
 
-export const resting: TableState = {columnMarks: {}, rowMarks: {}, floors: {}};
+const resting: TableState = {columnMarks: {}, rowMarks: {}, floors: {}};
 
-export const columnOf = (order: readonly string[], cell: Element): string =>
+const columnOf = (order: readonly string[], cell: Element): string =>
   order.find(name => cell.classList.contains(name)) ?? '';
 
-export const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
+const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
   ({...state, widths, floors});
 
-export const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
+const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
   has(state.widths) ? {...state, floors} : measure(state, widths, floors);
 
-export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
+const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
 
 const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
@@ -112,14 +112,14 @@ const sizingOf = (state: TableState, column: string): TableState =>
 const startedAt = (state: TableState, column: string): number | undefined =>
   state.sizing?.column === column ? state.sizing.from : state.widths?.[column];
 
-export const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState => {
+const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState => {
   const ours = sizingOf(state, column);
   return maybe(startedAt(ours, column))
     .map((from): TableState => trade({...ours, sizing: ours.sizing ?? {stage: 'keyed', column, from}}, column, neighbour, delta))
     .orElse(ours);
 };
 
-export const grip = (state: TableState, column: string, at: Grip): TableState => {
+const grip = (state: TableState, column: string, at: Grip): TableState => {
   const ours = sizingOf(state, column);
   return maybe(startedAt(ours, column))
     .map((from): TableState => ({...ours, sizing: {stage: 'gripped', column, from, grip: at}}))
@@ -132,10 +132,10 @@ const pointerSizing = (sizing?: Sizing): PointerSizing | undefined =>
 const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
   state.sizing?.column === column ? pointerSizing(state.sizing) : undefined;
 
-export const pointerHolds = (state: TableState, column: string): boolean =>
+const pointerHolds = (state: TableState, column: string): boolean =>
   maybe(gripOf(state, column)).map(() => true).orElse(false);
 
-export const dragHandle = (state: TableState, column: string, neighbour: string, clientX: number): TableState =>
+const dragHandle = (state: TableState, column: string, neighbour: string, clientX: number): TableState =>
   maybe(gripOf(state, column))
     .map((sizing): TableState => {
       const sought = soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
@@ -143,16 +143,16 @@ export const dragHandle = (state: TableState, column: string, neighbour: string,
     })
     .orElse(state);
 
-export const ungripOf = (state: TableState, column: string): TableState =>
+const ungripOf = (state: TableState, column: string): TableState =>
   maybe(gripOf(state, column)).map(() => endSizing(state)).orElse(state);
 
-export const endKeyedSizingOf = (state: TableState, column: string): TableState =>
+const endKeyedSizingOf = (state: TableState, column: string): TableState =>
   state.sizing?.column === column && state.sizing.stage === 'keyed' ? endSizing(state) : state;
 
-export const endSizingOf = (state: TableState, column: string): TableState =>
+const endSizingOf = (state: TableState, column: string): TableState =>
   state.sizing?.column === column ? endSizing(state) : state;
 
-export const namedShare = (state: TableState, column: string): number | undefined => startedAt(state, column);
+const namedShare = (state: TableState, column: string): number | undefined => startedAt(state, column);
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 
@@ -169,50 +169,50 @@ const unsettledMark = <Shove>(
 ): Readonly<Record<string, Marks<Shove>>> =>
   Object.fromEntries(Object.entries(marks).filter(([marked]) => marked !== key));
 
-export const unsettle = (state: TableState, target: Carry, from: Settling): TableState =>
+const unsettle = (state: TableState, target: Carry, from: Settling): TableState =>
   target.axis === 'column'
     ? {...state, columnMarks: marked(state.columnMarks, target.held, {settlingFrom: from})}
     : {...state, rowMarks: marked(state.rowMarks, target.held, {settlingFrom: from})};
 
-export const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: still});
+const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: still});
 
-export const settle = (state: TableState, target: Carry): TableState =>
+const settle = (state: TableState, target: Carry): TableState =>
   target.axis === 'column'
     ? {...state, columnMarks: unsettledMark(state.columnMarks, target.held)}
     : {...state, rowMarks: unsettledMark(state.rowMarks, target.held)};
 
-export const shoveColumns = (state: TableState, names: readonly string[], shove: ColumnShove): TableState =>
+const shoveColumns = (state: TableState, names: readonly string[], shove: ColumnShove): TableState =>
   ({...state, columnMarks: names.reduce((marks, name) => marked(marks, name, {shoved: shove}), state.columnMarks)});
 
-export const shoveRows = (state: TableState, keys: readonly string[], shove: RowShove): TableState =>
+const shoveRows = (state: TableState, keys: readonly string[], shove: RowShove): TableState =>
   ({...state, rowMarks: keys.reduce((marks, key) => marked(marks, key, {shoved: shove}), state.rowMarks)});
 
-export const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
+const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
 
 const flying = (grab: Grab): Flying =>
   ({survey: grab.survey, box: grab.box, origin: grab.at, drift: still});
 
-export const dragOf = (carry: Carry, grab: Grab): Drag =>
+const dragOf = (carry: Carry, grab: Grab): Drag =>
   ({...carry, ...flying(grab)});
 
-export const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
+const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
   ({...unmarked(state), drag: dragOf(carry, grab)});
 
-export const drift = (state: TableState, moving: Moving): TableState =>
+const drift = (state: TableState, moving: Moving): TableState =>
   has(state.drag) ? {...state, drag: {...state.drag, drift: drifted(moving, state.drag.origin)}} : state;
 
-export const landColumn = (state: TableState, landing?: string): TableState =>
+const landColumn = (state: TableState, landing?: string): TableState =>
   state.drag?.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;
 
-export const landRow = (state: TableState, landing?: string): TableState =>
+const landRow = (state: TableState, landing?: string): TableState =>
   state.drag?.axis === 'row' ? {...state, drag: {...state.drag, landing}} : state;
 
-export const orderAtLift = (drag: Drag): readonly string[] =>
+const orderAtLift = (drag: Drag): readonly string[] =>
   Object.keys(drag.axis === 'column' ? drag.survey.columnWidths : drag.survey.rowHeights);
 
-export const ground = ({drag: _drag, ...state}: TableState): TableState => state;
+const ground = ({drag: _drag, ...state}: TableState): TableState => state;
 
-export const seatOffset = (
+const seatOffset = (
   state: TableState,
   order: readonly string[],
   standing: readonly string[]
@@ -226,17 +226,50 @@ export const seatOffset = (
     : {x: 0, y: drag.box.y - rowTop(standing, drag.survey)(drag.held)};
 };
 
-export const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
+const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
   ({seat: seatOffset(state, order, standing) ?? still, drift: state.drag?.drift ?? still});
 
-export const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
+const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
   has(shove) ? `${shove.by}px` : undefined;
 
-export const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
+const shovedClass = (shove?: ColumnShove | RowShove): string | false =>
   has(shove) && `shoved-${shove.toward}`;
 
 export type TableView = {
   readonly state: TableState;
   readonly columns: readonly TableColumn<Labelled>[];
   readonly rows: readonly Seated[];
+};
+
+export const tableState = {
+  resting,
+  columnOf,
+  measure,
+  awaken,
+  widthsOf,
+  tradeBy,
+  grip,
+  pointerHolds,
+  dragHandle,
+  ungripOf,
+  endKeyedSizingOf,
+  endSizingOf,
+  namedShare,
+  unsettle,
+  settlingFromSeat,
+  settle,
+  shoveColumns,
+  shoveRows,
+  pixels,
+  dragOf,
+  lift,
+  drift,
+  landColumn,
+  landRow,
+  orderAtLift,
+  ground,
+  seatOffset,
+  settlingAt,
+  shoveDistance,
+  shovedClass
 };

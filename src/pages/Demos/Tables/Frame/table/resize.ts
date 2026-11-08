@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {namedShare, widthsOf} from '@components/DragSortableTable/model';
+import {tableState} from '@components/DragSortableTable/model';
 import {resizeLabel} from '@components/Table';
 import {MountedTable} from './table-state';
 
@@ -16,9 +16,9 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number, nam
 };
 
 export const dressWidths = ({table, store, order}: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
-  maybe(widthsOf(store.state)).map(widths => {
+  maybe(tableState.widthsOf(store.state)).map(widths => {
     table.classList.add('apportioned');
     order().forEach(column =>
-      dressColumn(table, column, widths[column], namedShare(store.state, column) ?? widths[column]));
+      dressColumn(table, column, widths[column], tableState.namedShare(store.state, column) ?? widths[column]));
   });
 };

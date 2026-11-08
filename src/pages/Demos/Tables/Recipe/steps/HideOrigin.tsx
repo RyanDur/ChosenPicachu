@@ -70,7 +70,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
               ...carve.unit(headerSource, 'const moved = '), gap,
               ...carve.span(headerSource, 'className={classNames(', '...motionStates(carried'), gap,
               ...carve.unit(sources.looks, 'export const motionStates'), gap,
-              ...carve.span(headerSource, "'--seat-x': pixels(seat?.x)", "'--drift-x': pixels(drift?.x)")
+              ...carve.span(headerSource, "'--seat-x': tableState.pixels(seat?.x)", "'--drift-x': tableState.pixels(drift?.x)")
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSrc, 'const moved = '), gap,
@@ -80,8 +80,8 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
               lines.aside('// the reconcile sets the carried cells’ classes; the style sheet moves them')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.state, 'export const drift'), gap,
-            ...carve.unit(sources.state, 'export const seatOffset'), gap,
+            ...carve.unit(sources.state, 'const drift'), gap,
+            ...carve.unit(sources.state, 'const seatOffset'), gap,
             ...carve.unit(sources.selectors, 'const seatOfColumn'), gap,
             ...carve.unit(sources.selectors, 'const driftOfColumn'),
             lines.aside('// the drift is carried in the drag; the seat is a selector over it and the order')

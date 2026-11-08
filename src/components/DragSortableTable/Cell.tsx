@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
 import {useTableSelector} from './context';
-import {cellNeeds, motionStates, pixels, shoveDistance, tableSelectors} from './model';
+import {cellNeeds, motionStates, tableSelectors, tableState} from './model';
 import './motion.css';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
@@ -21,11 +21,11 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   return <td {...td}
     className={classNames('cell', className, ...cellNeeds, ...motionStates(columnCarried || rowCarried, from, shove))}
     style={{
-      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-      '--settle-x': pixels(from?.seat.x), '--settle-y': pixels(from?.seat.y),
-      '--settle-drift-x': pixels(from?.drift.x), '--settle-drift-y': pixels(from?.drift.y),
-      '--shoved-by': shoveDistance(shove)
+      '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
+      '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),
+      '--settle-x': tableState.pixels(from?.seat.x), '--settle-y': tableState.pixels(from?.seat.y),
+      '--settle-drift-x': tableState.pixels(from?.drift.x), '--settle-drift-y': tableState.pixels(from?.drift.y),
+      '--shoved-by': tableState.shoveDistance(shove)
     }}>
     {children}
   </td>;

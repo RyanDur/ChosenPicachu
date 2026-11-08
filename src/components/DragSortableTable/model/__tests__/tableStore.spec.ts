@@ -2,12 +2,12 @@ import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../../__test_support';
 import {tableActions} from '../actions';
 import {tableReducer} from '../reducer';
-import {resting, widthsOf} from '../table-state';
+import {tableState} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
 
 const noFloors = {};
 
-const widths = (state: typeof resting): readonly number[] => Object.values(widthsOf(state) ?? {});
+const widths = (state: typeof tableState.resting): readonly number[] => Object.values(tableState.widthsOf(state) ?? {});
 
 describe('the table store', () => {
   test('a dispatch applies the reducer and every subscriber hears it once', () => {
@@ -22,15 +22,15 @@ describe('the table store', () => {
   });
 
   test('the reducer applies its own actions', () => {
-    const measuredState = tableReducer(resting, tableActions.measured(columnShares(40, 30), noFloors));
+    const measuredState = tableReducer(tableState.resting, tableActions.measured(columnShares(40, 30), noFloors));
 
     expect(widths(measuredState)).toEqual([40, 30, 30]);
   });
 
   test("the reducer hands back the same state for anyone else's action", () => {
-    const untouched = tableReducer(resting, {type: 'userArrived'});
+    const untouched = tableReducer(tableState.resting, {type: 'userArrived'});
 
-    expect(untouched).toBe(resting);
+    expect(untouched).toBe(tableState.resting);
   });
 
   test('an unsubscribed listener hears nothing more', () => {
@@ -74,7 +74,7 @@ describe('the table store', () => {
       (store as {dispatch: unknown}).dispatch = () => undefined;
     }).toThrow(TypeError);
     expect(() => {
-      (store as {state: unknown}).state = resting;
+      (store as {state: unknown}).state = tableState.resting;
     }).toThrow(TypeError);
   });
 
@@ -180,7 +180,7 @@ describe('the arrangement', () => {
 });
 
 describe('a sizing', () => {
-  const after = (...actions: Parameters<typeof tableReducer>[1][]) => actions.reduce(tableReducer, resting);
+  const after = (...actions: Parameters<typeof tableReducer>[1][]) => actions.reduce(tableReducer, tableState.resting);
 
   test('says nothing when it ends on the whole percent it began at, however far the fractions drifted', () => {
     const ended = after(
@@ -227,7 +227,7 @@ describe('a sizing', () => {
       tableActions.arrowLifted('window'),
       tableActions.handleDragged('window', 'trades', 120));
 
-    expect(widthsOf(dragged)?.window).toBe(16);
+    expect(tableState.widthsOf(dragged)?.window).toBe(16);
   });
 
   test('a pointer moving while an arrow holds the resize trades nothing', () => {
@@ -236,7 +236,7 @@ describe('a sizing', () => {
       tableActions.tradedBy('window', 'trades', 1),
       tableActions.handleDragged('window', 'trades', 200));
 
-    expect(widthsOf(keyed)?.window).toBe(14);
+    expect(tableState.widthsOf(keyed)?.window).toBe(14);
   });
 
   test('a pointer move on a handle that holds no grip trades nothing', () => {
@@ -245,7 +245,7 @@ describe('a sizing', () => {
       tableActions.gripped('window', {fromX: 100, pxPerShare: 10}),
       tableActions.handleDragged('trades', 'buys', 120));
 
-    expect(widthsOf(elsewhere)).toEqual({window: 13, trades: 40, buys: 47});
+    expect(tableState.widthsOf(elsewhere)).toEqual({window: 13, trades: 40, buys: 47});
   });
 
   test('a release on another handle leaves the grip under way', () => {
@@ -255,7 +255,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('trades'),
       tableActions.handleDragged('window', 'trades', 120));
 
-    expect(widthsOf(dragged)?.window).toBe(15);
+    expect(tableState.widthsOf(dragged)?.window).toBe(15);
   });
 
   test('a release on the gripped handle ends the grip and says its new share', () => {
@@ -266,7 +266,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('window'),
       tableActions.handleDragged('window', 'trades', 200));
 
-    expect(widthsOf(released)?.window).toBe(15);
+    expect(tableState.widthsOf(released)?.window).toBe(15);
     expect(released.report).toEqual({about: 'share', name: 'window', share: 15});
   });
 });

@@ -1,6 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {grippedAt, measuredFloors, measuredWidths, neighborOf, STEP_SHARE} from '@components/Table';
-import {columnSteps, TableAction, pointerHolds, widthsOf, tableActions} from '@components/DragSortableTable/model';
+import {columnSteps, TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
 import {columnOfHeader, MountedTable} from './table-state';
 
 type Resizing = Pick<MountedTable, 'table' | 'store' | 'order' | 'report'>;
@@ -12,7 +12,7 @@ const saidAfter = ({store, report}: Pick<MountedTable, 'store' | 'report'>, happ
 };
 
 const awaken = ({table, store, order}: Resizing): void => {
-  const widths = widthsOf(store.state) ?? measuredWidths(order(), table);
+  const widths = tableState.widthsOf(store.state) ?? measuredWidths(order(), table);
   store.dispatch(tableActions.measured(widths, measuredFloors(order(), table)));
 };
 
@@ -25,7 +25,7 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
       .map(grip => saidAfter(context, tableActions.gripped(column, grip)));
     handle.setPointerCapture(event.pointerId);
   });
-  handle.addEventListener('pointermove', event => not(pointerHolds(context.store.state, column))
+  handle.addEventListener('pointermove', event => not(tableState.pointerHolds(context.store.state, column))
     ? undefined
     : context.store.dispatch(tableActions.handleDragged(column, neighborOf(context.order(), column), event.clientX)));
   (['pointerup', 'pointercancel', 'lostpointercapture'] as const).forEach(landing =>

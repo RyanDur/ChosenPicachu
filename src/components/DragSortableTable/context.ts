@@ -1,5 +1,5 @@
 import {Dispatch, createContext, useContext} from 'react';
-import {Direction, resting, TableAction, TableView} from './model';
+import {Direction, TableAction, TableView, tableState} from './model';
 
 type Selector<Slice> = (view: TableView) => Slice;
 
@@ -7,7 +7,8 @@ export type TableContext = TableView & {
   readonly dispatch: Dispatch<TableAction>;
 };
 
-export const Table = createContext<TableContext>({state: resting, columns: [], rows: [], dispatch: () => undefined});
+export const Table = createContext<TableContext>(
+  {state: tableState.resting, columns: [], rows: [], dispatch: () => undefined});
 
 export const useTableSelector = <Slice>(select: Selector<Slice>): Slice => select(useContext(Table));
 

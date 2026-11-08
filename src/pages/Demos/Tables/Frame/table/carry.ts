@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {pointerTravel, still, TableState, seatOffset} from '@components/DragSortableTable/model';
+import {pointerTravel, still, TableState, tableState} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 import {columnCells, changeMotion} from './settle';
 import {TableContext} from './context';
@@ -19,7 +19,7 @@ export const dressCarried = (mounted: MountedTable, state: TableState): void => 
       ['--seat-x', '--seat-y', '--drift-x', '--drift-y'].forEach(property => cell.style.removeProperty(property));
     }
   });
-  const seat = seatOffset(state, mounted.order(), mounted.standing()) ?? still;
+  const seat = tableState.seatOffset(state, mounted.order(), mounted.standing()) ?? still;
   const drift = state.drag?.drift ?? still;
   carriedCells(mounted, state).forEach(cell => {
     changeMotion(cell, {on: ['carried']});

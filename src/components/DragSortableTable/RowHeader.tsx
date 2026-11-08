@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {cellNeeds, eagerTravel, Grab, motionStates, Moving, pixels, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, rowUnder, shoveDistance, Survey, tableActions, tableSelectors} from './model';
+import {cellNeeds, eagerTravel, Grab, motionStates, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, rowUnder, Survey, tableActions, tableSelectors, tableState} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
@@ -49,11 +49,11 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     className={classNames(
       ...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{
-      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-      '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
-      '--shoved-by': shoveDistance(shoved)
+      '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
+      '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),
+      '--settle-x': tableState.pixels(settlingFrom?.seat.x), '--settle-y': tableState.pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': tableState.pixels(settlingFrom?.drift.x), '--settle-drift-y': tableState.pixels(settlingFrom?.drift.y),
+      '--shoved-by': tableState.shoveDistance(shoved)
     }}>
     <RowGrip position={position}
       onPointerDown={rowLift(() => order, () => standing, lift)}

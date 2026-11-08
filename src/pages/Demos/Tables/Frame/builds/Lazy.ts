@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn, Carry, landingReport, orderAtLift, Report, settlingAt, settlingFromSeat, TableState, tableStore, tableActions} from '@components/DragSortableTable/model';
+import {arrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -40,7 +40,7 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
   const over = spanCrossed(current, widths, from, to);
   columnShoving(context, name, to, widths);
   context.report({about: 'column', name, position: to, of: current.length});
-  settleColumn(context, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
+  settleColumn(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
 };
 
 const columnBeside = (context: MountedTable, name: string, neighbour: string): void => {
@@ -57,7 +57,7 @@ const rowShoving = (context: MountedTable, row: string, before: readonly string[
 const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowNudge): void => {
   const before = context.standing();
   rowShoving(context, row, before, {to, heights});
-  settleRow(context, row, settlingFromSeat({
+  settleRow(context, row, tableState.settlingFromSeat({
     x: 0,
     y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)
   }));
@@ -92,8 +92,8 @@ const drop = (context: MountedTable): void => {
     return;
   }
   landed(context);
-  landingReport(drag.axis, orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
-  const from = settlingAt(hand.state, order(), standing());
+  landingReport(drag.axis, tableState.orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
+  const from = tableState.settlingAt(hand.state, order(), standing());
   hand.dispatch(tableActions.released());
   if (drag.axis === 'column') {
     settleColumn(context, drag.held, from);

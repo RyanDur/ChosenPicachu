@@ -42,15 +42,15 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
           ? <Snippet label="TS" lines={[
             ...carve.span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
             ...carve.unit(headerSource, 'const lift = '), gap,
-            ...carve.unit(sources.state, 'export const dragOf'), gap,
-            ...carve.unit(sources.state, 'export const lift = ')
+            ...carve.unit(sources.state, 'const dragOf'), gap,
+            ...carve.unit(sources.state, 'const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.span(buildSrc, "th.addEventListener('pointerdown', columnLift",
               "th.addEventListener('pointerdown', columnLift"), gap,
             ...carve.unit(buildSrc, 'const lift = '), gap,
-            ...carve.unit(sources.state, 'export const dragOf'), gap,
-            ...carve.unit(sources.state, 'export const lift = ')
+            ...carve.unit(sources.state, 'const dragOf'), gap,
+            ...carve.unit(sources.state, 'const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[
           ...carve.unit(sources.lift, 'export const columnLift'),

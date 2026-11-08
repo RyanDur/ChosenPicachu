@@ -1,7 +1,7 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table';
-import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, pointerHolds, seatOffset, settlingAt, TableView} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {anchored} from './survey';
 import {Drift} from './travel';
 
@@ -16,7 +16,8 @@ const unknownColumn = (name: string): TableColumn<Labelled> => ({name, data: {la
 
 const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
-const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined => namedShare(state, name);
+const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
+  tableState.namedShare(state, name);
 
 const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> => state.columnMarks[name] ?? {};
 
@@ -42,14 +43,14 @@ const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefined =>
 
 const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
 
-const columnGripped = (name: string) => ({state}: TableView): boolean => pointerHolds(state, name);
+const columnGripped = (name: string) => ({state}: TableView): boolean => tableState.pointerHolds(state, name);
 
 const selectReport = ({state}: TableView): Maybe<Report> => maybe(state.report);
 
 const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
 const selectSeatOffset = (view: TableView): Drift | undefined =>
-  seatOffset(view.state, selectOrder(view), selectStanding(view));
+  tableState.seatOffset(view.state, selectOrder(view), selectStanding(view));
 
 const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
   columnHeld(name)(view) ? selectSeatOffset(view) : undefined;
@@ -62,10 +63,10 @@ const driftOfColumn = (name: string) => (view: TableView): Drift | undefined => 
 const driftOfRow = (key: string) => (view: TableView): Drift | undefined => rowDrag(key)(view)?.drift;
 
 const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Settling | undefined =>
-  columnHeld(name)(view) ? settlingAt(view.state, order, selectStanding(view)) : undefined;
+  columnHeld(name)(view) ? tableState.settlingAt(view.state, order, selectStanding(view)) : undefined;
 
 const settlingOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Settling | undefined =>
-  rowHeld(key)(view) ? settlingAt(view.state, selectOrder(view), standing) : undefined;
+  rowHeld(key)(view) ? tableState.settlingAt(view.state, selectOrder(view), standing) : undefined;
 
 export const tableSelectors = {
   selectOrder,

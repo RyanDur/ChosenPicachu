@@ -58,9 +58,9 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
           {world === 'react'
             ? <Snippet label="TS" lines={[
               ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'), gap,
-              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
-              ...carve.unit(sources.state, 'export const shoveColumns'), gap,
-              ...carve.unit(sources.state, 'export const settle'),
+              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return tableState.unsettle(shoved, {axis: 'column', held: action.name}"), gap,
+              ...carve.unit(sources.state, 'const shoveColumns'), gap,
+              ...carve.unit(sources.state, 'const settle'),
               lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
             ]}/>
             : <Snippet label="TS" lines={[

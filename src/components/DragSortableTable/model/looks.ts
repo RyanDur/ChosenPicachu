@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {ColumnShove, RowShove, Settling, shovedClass} from './table-state';
+import {ColumnShove, RowShove, Settling, tableState} from './table-state';
 
 export const rowHeaderCell = ['cell', 'row-header'] as const;
 
@@ -23,5 +23,5 @@ export const motionStates = (
   (carried || has(settlingFrom) || has(shove)) && 'paper-in-motion',
   carried && 'carried',
   has(settlingFrom) && 'settling',
-  shovedClass(shove)
+  tableState.shovedClass(shove)
 ];

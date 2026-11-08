@@ -117,8 +117,8 @@ const GripWords: FC = () =>
   <Snippet label="TS" lines={[
     ...carve.unit(sharesSource, 'export const grippedAt'), gap,
     ...carve.unit(sharesSource, 'export const soughtTrade'), gap,
-    ...carve.unit(stateSource, 'export const grip ='), gap,
-    ...carve.unit(stateSource, 'export const dragHandle'),
+    ...carve.unit(stateSource, 'const grip ='), gap,
+    ...carve.unit(stateSource, 'const dragHandle'),
     lines.aside('// both worlds seed the grip and fold the moves in the same store')
   ]}/>;
 

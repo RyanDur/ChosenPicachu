@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, shoveDistance, Survey, tableActions, tableSelectors} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, interior, motionStates, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -67,11 +67,11 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': shareWidth(width),
-      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-      '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
-      '--shoved-by': shoveDistance(shoved)
+      '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
+      '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),
+      '--settle-x': tableState.pixels(settlingFrom?.seat.x), '--settle-y': tableState.pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': tableState.pixels(settlingFrom?.drift.x), '--settle-drift-y': tableState.pixels(settlingFrom?.drift.y),
+      '--shoved-by': tableState.shoveDistance(shoved)
     }}>
     {children}
   </th>;
