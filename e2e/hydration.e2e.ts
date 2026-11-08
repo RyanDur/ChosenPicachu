@@ -16,12 +16,16 @@ for (const path of [...pages.map(({path}) => path), ...addressesBesideThePages])
 
 test('a reader whose room fails to load keeps the built page, its words, its folds and its links', async ({page}) => {
   await page.route(/\/assets\/(route|tab)-[^/]+\.js$/, route => route.abort());
+  const roomRefused = page.waitForEvent('console', message =>
+    message.type() === 'error' && message.text().includes('/demos/accordions/ did not load'));
   await page.goto('demos/accordions/');
+  await roomRefused;
   const fold = accordionsTab(page).htmlAloneFold('basalt');
 
   await expect(page.getByRole('heading', {name: 'An accordion in HTML alone'})).toBeVisible();
   await fold.open();
-  expect(await fold.showsText()).toBe(true);
+  await expect.poll(fold.showsText).toBe(true);
+  await expect(siteFrame(page).feedback).toHaveAttribute('inert');
   await siteFrame(page).nav.getByRole('link', {name: 'Record'}).click();
   await expect(siteFrame(page).title).toHaveText('The record');
 });

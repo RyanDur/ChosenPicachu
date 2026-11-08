@@ -6,6 +6,7 @@ export const siteFrame = (page: Page) => {
     nav,
     title: page.getByRole('heading', {level: 1}),
     home: nav.getByRole('link', {name: 'Home', exact: true}),
+    feedback: page.getByRole('button', {name: 'Feedback', exact: true, includeHidden: true}),
     hydrated: (): Promise<void> => page.getByRole('dialog', {name: 'Feedback', includeHidden: true}).waitFor({state: 'attached'})
   };
 };
