@@ -1,9 +1,11 @@
 import accordionsCss from '../Accordions.css?frame';
+import oldWayMotionCss from '../OldWayMotion.css?frame';
 import scaffold from './fold.html?raw';
 import foldJs from './fold.main.ts?frame';
 import {Sheet, siteSheets} from '../../Stage';
 
-const sheets: Sheet[] = [...siteSheets, {name: 'Accordions.css', css: accordionsCss}];
+const sheets: Sheet[] = [...siteSheets, {name: 'Accordions.css', css: accordionsCss},
+  {name: 'OldWayMotion.css', css: oldWayMotionCss}];
 
 const assembled = (): string => scaffold
   .replace('/* the cascade */', () => sheets.map(({css}) => css).join('\n'))

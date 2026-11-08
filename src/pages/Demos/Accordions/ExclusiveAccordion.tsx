@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {classNames} from '@components';
 import {AccordionProps} from './accordion-props';
 import './Accordions.css';
+import './OldWayMotion.css';
 
 export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
