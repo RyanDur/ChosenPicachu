@@ -1,10 +1,10 @@
 # The record rubric
 
-The home page states what the site is, how it shows, and how it responds. The tutorials rubric states what a tutorial owes its reader. This rubric states what the record owes its reader: a history whose moments agree with each other and whose quotations are its sources' own words. You hold every file under `src/pages/Record`: the opener, the tee-up, the timeline and its moments, the concert and the shelf, and the lines on the home that cite a moment. You hold nothing outside it.
+The home page states what the site is, how it shows, and how it responds. The tutorials rubric states what a tutorial owes its reader. This rubric states what the record owes its reader: a history whose moments agree with each other and whose quotations are its sources' own words. You hold every file under `src/pages/Record`: the opener, the footer, the timeline and its moments, the concert and the shelf, and the lines on the home that cite a moment. You hold nothing outside it.
 
 ## What you can and cannot read
 
-You have no web tool. You cannot open a source page, so you never report that a quotation is or is not on its page; that check is the designer's, run by grep against the page before a card is accepted. You can read every moment, the concert, the tee-up, the opener, the shelf, the home's rubrics and the tests that pin a quotation to its address, and that is what the four questions below ask about.
+You have no web tool. You cannot open a source page, so you never report that a quotation is or is not on its page; that check is the designer's, run by grep against the page before a card is accepted. You can read every moment, the concert, the footer, the opener, the shelf, the home's rubrics and the tests that pin a quotation to its address, and that is what the four questions below ask about.
 
 ## Four questions, in order
 
