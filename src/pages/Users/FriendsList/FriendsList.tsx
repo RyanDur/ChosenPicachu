@@ -1,8 +1,8 @@
 import {ChangeEvent, FC, useEffect, useState} from 'react';
-import {fullNameOf, User} from '@components/Users/UserInfo/user';
+import {profile, User} from '@pages/Users/profile';
 import {Consumer, has} from '@ryandur/sand';
-import {arrived, friendsReport, Membership} from './report';
-import {addFriendId, placeAfterAddition, placeAfterRemoval, removeButtonId} from './focus';
+import {Membership, memberships} from './report';
+import {friendFocus} from './focus';
 import cancelIcon from '../../../assets/icons/cancel.svg?url';
 import './friends-list.css';
 
@@ -25,8 +25,8 @@ const placeAfter = (
   of: Membership
 ): string =>
   of.change === 'removed'
-    ? placeAfterRemoval(userId, friends, of.at)
-    : placeAfterAddition(userId, candidatesLeft, of.friend.id);
+    ? friendFocus.afterRemoval(userId, friends, of.at)
+    : friendFocus.afterAddition(userId, candidatesLeft, of.friend.id);
 
 export const FriendsList: FC<Props> = ({users, user, onFriendAdded, onFriendRemoved}) => {
   const [report, tell] = useState<Report>({stage: 'quiet'});
@@ -37,12 +37,12 @@ export const FriendsList: FC<Props> = ({users, user, onFriendAdded, onFriendRemo
     .filter(candidate => !user.friends.includes(candidate.id));
 
   useEffect(() => {
-    if (report.stage !== 'asked' || !arrived(user.friends, report.of)) return;
+    if (report.stage !== 'asked' || !memberships.arrived(user.friends, report.of)) return;
     document.getElementById(placeAfter(user.id, friends, potentialFriends, report.of))?.focus();
     tell({stage: 'settled', of: report.of});
   }, [report, user.id, user.friends, friends, potentialFriends]);
 
-  const said = report.stage === 'quiet' || !arrived(user.friends, report.of) ? '' : friendsReport(report.of);
+  const said = report.stage === 'quiet' || !memberships.arrived(user.friends, report.of) ? '' : memberships.told(report.of);
 
   const add = (event: ChangeEvent<HTMLSelectElement>) => {
     const chosen = users.find(({id}) => id === event.currentTarget.value);
@@ -56,24 +56,24 @@ export const FriendsList: FC<Props> = ({users, user, onFriendAdded, onFriendRemo
   };
 
   return <fieldset className="friends-list shrinkable">
-    <legend className="off-screen">friends of {fullNameOf(user)}</legend>
+    <legend className="off-screen">friends of {profile.fullName(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map((friend, at) =>
       <li className="friend warmed" key={friend.id}>
-        <span className="ellipsis">{fullNameOf(friend)}</span>
-        <button id={removeButtonId(user.id, friend.id)} className="remove borderless unfilled" type="button"
+        <span className="ellipsis">{profile.fullName(friend)}</span>
+        <button id={friendFocus.removalId(user.id, friend.id)} className="remove borderless unfilled" type="button"
           onClick={remove(friend, at)}>
           <img className="icon" src={cancelIcon} width="24" height="24"
-            alt={`remove ${fullNameOf(friend)}`}/>
+            alt={`remove ${profile.fullName(friend)}`}/>
         </button>
       </li>
     )}</ul>
     {has(potentialFriends) &&
-        <select id={addFriendId(user.id)} className="select-friend bare rounded-corners lifted pressable" value=""
+        <select id={friendFocus.additionId(user.id)} className="select-friend bare rounded-corners lifted pressable" value=""
           aria-label="Add a friend" onChange={add}>{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
             ...potentialFriends.map(potentialFriend =>
               <option key={potentialFriend.id} value={potentialFriend.id}>{
-                fullNameOf(potentialFriend)
+                profile.fullName(potentialFriend)
               }</option>)
           ]}</select>}
     <output className="off-screen" aria-label="friends report">{said}</output>

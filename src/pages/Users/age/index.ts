@@ -1,0 +1,1 @@
+export {age} from './age';

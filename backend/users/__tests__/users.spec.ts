@@ -1,4 +1,4 @@
-import {User} from '@components/Users/UserInfo/user';
+import {User} from '@pages/Users/profile';
 import {maybe, not} from '@ryandur/sand';
 import {createUser} from '../core';
 import {api, respond} from '../respond';

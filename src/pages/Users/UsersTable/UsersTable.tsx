@@ -2,14 +2,15 @@ import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
 import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
-import {age, formatAge, FriendsList} from '@components/Users';
+import {age} from '../age';
+import {FriendsList} from '../FriendsList';
 import {UserMenu} from './UserMenu';
 import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, Row, RowHeader, useDragSortable} from '@components/DragSortableTable';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
 import {arrangements, tableReports, tableSelectors} from '@components/DragSortableTable/model';
-import {fullNameOf} from '@components/Users/UserInfo/user';
+import {profile} from '@pages/Users/profile';
 
 export const UsersTable: FC = () => {
   const dispatch = useUsersDispatch();
@@ -37,11 +38,11 @@ export const UsersTable: FC = () => {
       <Body
         onRowMoved={({row, to, standing}) => dispatch(arrangements.rowMoved(row, to, standing))}>
         {users.map(user => {
-          const name = fullNameOf(user);
+          const name = profile.fullName(user);
           return <Row key={user.id}>
             <RowHeader column="full-name" row={user.id} label={name}/>
             <Cell column="home-city" row={user.id}>{user.homeAddress.city}</Cell>
-            <Cell column="age" row={user.id}>{maybe(user.info.dob).map(age).map(formatAge).orElse('')}</Cell>
+            <Cell column="age" row={user.id}>{maybe(user.info.dob).map(age.of).map(age.worded).orElse('')}</Cell>
             <Cell column="friends" row={user.id}>
               <FriendsList user={user} users={users}
                 onFriendAdded={friend => dispatch(friendAdded(user.id, friend))}

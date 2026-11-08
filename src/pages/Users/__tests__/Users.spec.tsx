@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
 import {createSearchParams} from 'react-router';
-import {fullNameOf} from '@components/Users/UserInfo/user';
+import {profile} from '@pages/Users/profile';
 import {
   anAddress,
   aUser,
@@ -16,7 +16,7 @@ import {
   userRemovalRefused,
   userUpdateRefused,
   usersUnreachable
-} from '@components/Users/__test_support';
+} from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
 import {usersPage, usersTable} from '../__test_support';
 import {userAt} from '../mode';
@@ -45,7 +45,7 @@ describe('the users page', () => {
       setupUsersResponse([{...ageless, info: {...ageless.info, dob: undefined}}]);
       render(<TestApp at={Paths.users}/>);
 
-      expect(await usersTable.rowOf(fullNameOf(ageless))).not.toHaveTextContent(/old/);
+      expect(await usersTable.rowOf(profile.fullName(ageless))).not.toHaveTextContent(/old/);
     });
 
     it('a birthday the backend cannot spell shows no age', async () => {
@@ -53,7 +53,7 @@ describe('the users page', () => {
       setupUsersAnswering([{...person, info: {...person.info, dob: 'yesterday'}}]);
       render(<TestApp at={Paths.users}/>);
 
-      expect(await usersTable.rowOf(fullNameOf(person))).not.toHaveTextContent(/old/);
+      expect(await usersTable.rowOf(profile.fullName(person))).not.toHaveTextContent(/old/);
     });
 
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
@@ -83,9 +83,9 @@ describe('the users page', () => {
       render(<TestApp at={Paths.users}/>);
       await usersTable.roster();
 
-      await usersTable.moveByKey(fullNameOf(kai), '{ArrowDown}');
+      await usersTable.moveByKey(profile.fullName(kai), '{ArrowDown}');
 
-      expect(usersTable.moveReport()).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
+      expect(usersTable.moveReport()).toHaveTextContent(`${profile.fullName(kai)} moved to 2 of 3`);
     });
 
     it('a column is resized from one handle', async () => {
@@ -125,7 +125,7 @@ describe('the users page', () => {
       render(<TestApp at={Paths.users}/>);
       await usersTable.roster();
 
-      await usersTable.clone(fullNameOf(kai));
+      await usersTable.clone(profile.fullName(kai));
 
       expect(userForm.addButton()).toBeVisible();
       expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
@@ -152,7 +152,7 @@ describe('the users page', () => {
       await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
 
       expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-      expect(usersTable.names()).toEqual([fullNameOf(standing)]);
+      expect(usersTable.names()).toEqual([profile.fullName(standing)]);
     });
   });
 
@@ -284,7 +284,7 @@ describe('the users page', () => {
     await userForm.typeInto('Last Name', ' Jr');
     await userForm.update();
 
-    expect(await usersTable.rowOf(`${fullNameOf(person)} Jr`)).toBeInTheDocument();
+    expect(await usersTable.rowOf(`${profile.fullName(person)} Jr`)).toBeInTheDocument();
   });
 
   test('a removed user leaves the roster', async () => {
@@ -293,9 +293,9 @@ describe('the users page', () => {
     setupUserRemovedResponse(person.id, []);
     render(<TestApp at={Paths.users}/>);
 
-    await usersTable.remove(fullNameOf(person));
+    await usersTable.remove(profile.fullName(person));
 
-    await waitFor(() => expect(usersTable.names()).not.toContain(fullNameOf(person)));
+    await waitFor(() => expect(usersTable.names()).not.toContain(profile.fullName(person)));
   });
 
   test('a person the backend cannot remove stays in the roster, and the page says so', async () => {
@@ -305,10 +305,10 @@ describe('the users page', () => {
     render(<TestApp at={Paths.users}/>);
     await usersTable.roster();
 
-    await usersTable.remove(fullNameOf(person));
+    await usersTable.remove(profile.fullName(person));
 
     expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-    expect(usersTable.names()).toContain(fullNameOf(person));
+    expect(usersTable.names()).toContain(profile.fullName(person));
   });
 
   test('removing the chosen user clears them from the address', async () => {
@@ -318,7 +318,7 @@ describe('the users page', () => {
     render(<TestApp at={userAt(person.id, 'view')}/>);
     await userForm.showing(person);
 
-    await usersTable.remove(fullNameOf(person));
+    await usersTable.remove(profile.fullName(person));
 
     await waitFor(() => expect(appAddress.shown()).not.toContain('id='));
   });
@@ -332,7 +332,7 @@ describe('the users page', () => {
 
     await userForm.add();
 
-    await waitFor(() => expect(usersTable.names().filter(name => name === fullNameOf(person))).toHaveLength(2));
+    await waitFor(() => expect(usersTable.names().filter(name => name === profile.fullName(person))).toHaveLength(2));
   });
 
   test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
@@ -341,11 +341,11 @@ describe('the users page', () => {
     setupUsersResponse([pia, quin]);
     setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
     render(<TestApp at={Paths.users}/>);
-    const quinsRow = await usersTable.rowOf(fullNameOf(quin));
+    const quinsRow = await usersTable.rowOf(profile.fullName(quin));
 
-    await usersTable.unfriend(quinsRow, fullNameOf(pia));
+    await usersTable.unfriend(quinsRow, profile.fullName(pia));
 
-    await waitFor(() => expect(usersTable.friendRemovalIfAny(quinsRow, fullNameOf(pia))).not.toBeInTheDocument());
+    await waitFor(() => expect(usersTable.friendRemovalIfAny(quinsRow, profile.fullName(pia))).not.toBeInTheDocument());
     expect(usersTable.friendChooser(quinsRow)).toHaveFocus();
   });
 
@@ -355,9 +355,9 @@ describe('the users page', () => {
     setupUsersResponse([vic, wen]);
     const sent = setupUserUpdatedResponse(vic.id, [{...vic, friends: []}, wen]);
     render(<TestApp at={Paths.users}/>);
-    const vicsRow = await usersTable.rowOf(fullNameOf(vic));
+    const vicsRow = await usersTable.rowOf(profile.fullName(vic));
 
-    await usersTable.unfriend(vicsRow, fullNameOf(wen));
+    await usersTable.unfriend(vicsRow, profile.fullName(wen));
 
     await waitFor(() => expect(sent()).toMatchObject({id: vic.id, friends: []}));
   });
@@ -368,12 +368,12 @@ describe('the users page', () => {
     setupUsersResponse([zed, amo]);
     userUpdateRefused(zed.id);
     render(<TestApp at={Paths.users}/>);
-    const zedsRow = await usersTable.rowOf(fullNameOf(zed));
+    const zedsRow = await usersTable.rowOf(profile.fullName(zed));
 
-    await usersTable.unfriend(zedsRow, fullNameOf(amo));
+    await usersTable.unfriend(zedsRow, profile.fullName(amo));
 
     expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-    expect(usersTable.friendRemoval(zedsRow, fullNameOf(amo))).toBeInTheDocument();
+    expect(usersTable.friendRemoval(zedsRow, profile.fullName(amo))).toBeInTheDocument();
   });
 
   test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
@@ -382,12 +382,12 @@ describe('the users page', () => {
     setupUsersResponse([xia, yul]);
     userUpdateRefused(xia.id);
     render(<TestApp at={Paths.users}/>);
-    const xiasRow = await usersTable.rowOf(fullNameOf(xia));
+    const xiasRow = await usersTable.rowOf(profile.fullName(xia));
 
-    await usersTable.befriend(xiasRow, fullNameOf(yul));
+    await usersTable.befriend(xiasRow, profile.fullName(yul));
 
     expect(await usersPage.says('the users is having trouble')).toBeInTheDocument();
-    expect(usersTable.friendRemovalIfAny(xiasRow, fullNameOf(yul))).not.toBeInTheDocument();
+    expect(usersTable.friendRemovalIfAny(xiasRow, profile.fullName(yul))).not.toBeInTheDocument();
   });
 
   test("choosing a friend in a person's row sends the backend that person with the friend added", async () => {
@@ -396,9 +396,9 @@ describe('the users page', () => {
     setupUsersResponse([tam, uma]);
     const sent = setupUserUpdatedResponse(tam.id, [{...tam, friends: [uma.id]}, uma]);
     render(<TestApp at={Paths.users}/>);
-    const tamsRow = await usersTable.rowOf(fullNameOf(tam));
+    const tamsRow = await usersTable.rowOf(profile.fullName(tam));
 
-    await usersTable.befriend(tamsRow, fullNameOf(uma));
+    await usersTable.befriend(tamsRow, profile.fullName(uma));
 
     await waitFor(() => expect(sent()).toMatchObject({id: tam.id, friends: [uma.id]}));
   });
@@ -411,10 +411,10 @@ describe('the users page', () => {
     setupUserUpdatedResponse(rae.id, unfriended);
     setupUserUpdatedResponse(sol.id, unfriended);
     render(<TestApp at={Paths.users}/>);
-    const raesRow = await usersTable.rowOf(fullNameOf(rae));
-    await usersTable.unfriend(raesRow, fullNameOf(sol));
+    const raesRow = await usersTable.rowOf(profile.fullName(rae));
+    await usersTable.unfriend(raesRow, profile.fullName(sol));
     await waitFor(() => expect(usersTable.friendChooser(raesRow)).toHaveFocus());
-    await usersTable.edit(fullNameOf(sol));
+    await usersTable.edit(profile.fullName(sol));
 
     await userForm.update();
 

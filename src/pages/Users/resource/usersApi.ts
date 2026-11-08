@@ -5,8 +5,8 @@ import {env} from '@env';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
-import {NewUser, User} from '@components/Users/UserInfo/user';
-import {loadedUncontrolled, usersServerScript} from './usersServer';
+import {NewUser, User} from '../profile';
+import {usersServer} from '../usersServer';
 
 export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;
@@ -38,24 +38,22 @@ const UserDecoder = schema.object({
 });
 
 const {usersDomain} = env;
-const usersServerUrl = `${import.meta.env.BASE_URL}${usersServerScript}`;
+const usersServerUrl = `${import.meta.env.BASE_URL}${usersServer.script}`;
 const patience = 10_000;
 
-const claimed = (workers: ServiceWorkerContainer): Promise<void> => new Promise(resolve => {
-  workers.addEventListener('controllerchange', () => resolve(), {once: true});
-  void workers.ready.then(({active}) => active?.postMessage(loadedUncontrolled));
-});
-
-const gaveUp = (): Promise<never> => new Promise((_, reject) => {
-  setTimeout(reject, patience);
-});
-
-const served = (workers: ServiceWorkerContainer): Promise<void> => workers.register(usersServerUrl)
-  .then(() => workers.controller ? undefined : claimed(workers));
+const claimed = (workers: ServiceWorkerContainer): Result.Async<ServiceWorkerRegistration, unknown> =>
+  asyncResult<ServiceWorkerRegistration, unknown>(workers.ready)
+    .onSuccess(({active}) => active?.postMessage(usersServer.loadedUncontrolled));
 
 const servedInTime = (workers: ServiceWorkerContainer): Result.Async<void, HTTPError> => workers.controller
   ? asyncSuccess(undefined)
-  : asyncResult(Promise.race([served(workers), gaveUp()])).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
+  : asyncResult<void, unknown>(new Promise((resolve, reject) => {
+    setTimeout(reject, patience);
+    workers.addEventListener('controllerchange', () => resolve(), {once: true});
+    asyncResult<ServiceWorkerRegistration, unknown>(workers.register(usersServerUrl))
+      .onSuccess(() => workers.controller ? resolve() : claimed(workers))
+      .onFailure(reject);
+  })).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
 
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
   maybe(navigator.serviceWorker)
@@ -66,7 +64,7 @@ const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T,
 const getAll = (): Result.Async<User[], HTTPError> =>
   whenServed(() => http.get(usersDomain)).mBind(validate(schema.array(UserDecoder)));
 
-export const users: UsersAPI = {
+export const usersApi: UsersAPI = {
   getAll,
   get: id => whenServed(() => http.get(`${usersDomain}/${id}`)).mBind(validate(UserDecoder)),
   add: user => whenServed(() => http.post(usersDomain, user)).mBind(validate(schema.array(UserDecoder))),

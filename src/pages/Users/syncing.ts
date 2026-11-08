@@ -1,6 +1,6 @@
-import {UsersAPI} from '@components/Users/resource/usersApi';
+import {UsersAPI} from './resource';
 import {HTTPError} from '@transport/types';
-import {befriended, unfriended} from '@components/Users/UserInfo/user';
+import {profile} from '@pages/Users/profile';
 import {UsersListener, userWithId, usersArrived} from './store';
 
 export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTTPError) => void): UsersListener =>
@@ -25,12 +25,12 @@ export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTT
           .onFailure(refused);
         return;
       case 'friendAdded':
-        userWithId(action.userId)(current()).map(known => users.update(befriended(known, action.friendId))
+        userWithId(action.userId)(current()).map(known => users.update(profile.befriended(known, action.friendId))
           .onSuccess(arrived => dispatch(usersArrived(arrived)))
           .onFailure(refused));
         return;
       case 'friendRemoved':
-        userWithId(action.userId)(current()).map(known => users.update(unfriended(known, action.friendId))
+        userWithId(action.userId)(current()).map(known => users.update(profile.unfriended(known, action.friendId))
           .onSuccess(arrived => dispatch(usersArrived(arrived)))
           .onFailure(refused));
         return;

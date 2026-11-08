@@ -1,7 +1,7 @@
 import {Entry, Item, ItemLink, Menu} from '@components/Menu';
-import {FC} from 'react';
+import {FC, MouseEvent} from 'react';
 import {maybe} from '@ryandur/sand';
-import {User} from '@components/Users/UserInfo/user';
+import {User} from '@pages/Users/profile';
 import {copyingAt, userAt} from '../../mode';
 
 type Props = {
@@ -12,12 +12,8 @@ type Props = {
 
 export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
   const id = `menu-${user.id}`;
-  const dismissed = (): void => {
-    maybe(document.getElementById(id)).map(menu => {
-      if (menu.matches(':popover-open')) {
-        menu.hidePopover();
-      }
-    });
+  const dismissed = ({currentTarget: followed}: MouseEvent<HTMLAnchorElement>): void => {
+    maybe(followed.closest<HTMLElement>(':popover-open')).map(menu => menu.hidePopover());
   };
 
   return <>

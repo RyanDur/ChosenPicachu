@@ -1,7 +1,7 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
-import {usersServerScript} from '../src/components/Users/resource/usersServer';
+import {usersServer} from '../src/pages/Users/usersServer';
 
 const ada: Person = {
   firstName: 'Ada',
@@ -120,7 +120,7 @@ test('a users page reloaded past its worker is taken back by it', async ({page, 
 
 test('the users page gives up on a worker script that never answers and says the users could not be reached', async ({page, browserName}) => {
   test.skip(browserName !== 'webkit', 'only WebKit lets a route hold a worker script unanswered, so Chromium and Firefox hold no pin for the deadline on registration');
-  await page.route(`**/${usersServerScript}`, () => new Promise(() => undefined));
+  await page.route(`**/${usersServer.script}`, () => new Promise(() => undefined));
 
   await page.goto('users', {waitUntil: 'commit'});
 

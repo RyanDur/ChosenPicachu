@@ -1,21 +1,21 @@
-import {users} from '@components/Users';
+import {usersApi} from '@pages/Users/resource';
 import {
   setupUserAddedResponse,
   setupUserRemovedResponse,
   setupUsersResponse,
   setupUserUpdatedResponse,
   someUsers
-} from '@components/Users/__test_support';
+} from '@pages/Users/__test_support';
 import {syncing} from '../syncing';
 import {friendAdded, friendRemoved, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {arrangements} from '@components/DragSortableTable/model';
-import {User} from '@components/Users/UserInfo/user';
+import {User} from '@pages/Users/profile';
 
 describe('the users store', () => {
   const [first, second, third] = someUsers;
   const openedStore = async (roster: readonly User[] = someUsers) => {
     setupUsersResponse([...roster]);
-    const store = usersStore(syncing(users, () => undefined, () => undefined));
+    const store = usersStore(syncing(usersApi, () => undefined, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(roster.length));
     return store;
@@ -42,7 +42,7 @@ describe('the users store', () => {
 
   it('opening fills the roster with everyone the backend has', async () => {
     setupUsersResponse(someUsers);
-    const store = usersStore(syncing(users, () => undefined, () => undefined));
+    const store = usersStore(syncing(usersApi, () => undefined, () => undefined));
 
     store.dispatch(opened());
 
@@ -111,7 +111,7 @@ describe('the users store', () => {
   it('an update sends the backend the friends the roster already holds', async () => {
     const befriended = {...first, friends: [second.id]};
     setupUsersResponse([befriended, ...someUsers.slice(1)]);
-    const store = usersStore(syncing(users, () => undefined, () => undefined));
+    const store = usersStore(syncing(usersApi, () => undefined, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() =>
       expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));

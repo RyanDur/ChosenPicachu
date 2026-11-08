@@ -1,4 +1,4 @@
-import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
+import {AddressInfo, NewUser, User} from '@pages/Users/profile';
 import {maybe} from '@ryandur/sand';
 import {FormAction, FormActions} from './actions';
 

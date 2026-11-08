@@ -1,11 +1,6 @@
 {
   "one-export": [
     "src/components/Menu/Menu.tsx",
-    "src/components/Users/FriendsList/focus.ts",
-    "src/components/Users/FriendsList/report.ts",
-    "src/components/Users/UserInfo/user.ts",
-    "src/components/Users/age.ts",
-    "src/components/Users/resource/usersServer.ts",
     "src/components/store.ts",
     "src/env.ts",
     "src/pages/Demos/Accordions/Accordions.tsx",
@@ -52,9 +47,6 @@
     "src/transport/types.ts"
   ],
   "has-index": [
-    "src/components/Users/UserInfo/user.ts",
-    "src/components/Users/resource/usersApi.ts",
-    "src/components/Users/resource/usersServer.ts",
     "src/components/arrays.ts",
     "src/components/glide.ts",
     "src/components/room.ts",
@@ -188,11 +180,7 @@
   ],
   "through-index": [
     "src/frame/navigation/Tabs/ToSavedTab.tsx",
-    "src/components/Users/FriendsList/FriendsList.tsx",
-    "src/components/Users/FriendsList/focus.ts",
-    "src/components/Users/FriendsList/report.ts",
-    "src/components/Users/index.ts",
-    "src/components/Users/resource/usersApi.ts",
+    "src/pages/Users/resource/usersApi.ts",
     "src/frame/navigation/search-params/useSearchParamsObject.ts",
     "src/frame/notices/Feedback/Feedback.tsx",
     "src/frame/notices/Feedback/feedbackChange.ts",
@@ -250,20 +238,13 @@
     "src/pages/Record/route.tsx",
     "src/pages/Record/stories/PresentationStory.tsx",
     "src/pages/Record/storyAddress.ts",
-    "src/pages/Users/UserInformation/Address/Address.tsx",
-    "src/pages/Users/UserInformation/UserInformation.tsx",
-    "src/pages/Users/UserInformation/actions.ts",
-    "src/pages/Users/UserInformation/reducer.ts",
     "src/pages/Users/UsersPage.tsx",
-    "src/pages/Users/UsersTable/UserMenu/UserMenu.tsx",
     "src/pages/Users/UsersTable/UsersTable.tsx",
-    "src/pages/Users/mode.ts",
     "src/pages/Users/store.ts",
     "src/pages/Users/syncing.ts",
     "src/routes.ts"
   ],
   "index-top-level": [
-    "src/components/Users/index.ts",
     "src/pages/Users/UsersTable/index.ts"
   ]
 }
