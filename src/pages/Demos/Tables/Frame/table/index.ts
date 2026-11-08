@@ -4,7 +4,7 @@ export type {TableContext} from './context';
 export {tell} from './events';
 export {sortMenus} from './menus';
 export {wireParts} from './parts';
-export {moveReportOf, report} from './report';
+export {moveReport} from './report';
 export {dressWidths} from './resize';
 export {lanesOf, reseatRows, writeCells} from './rows';
 export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';

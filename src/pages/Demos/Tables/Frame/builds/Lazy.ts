@@ -5,9 +5,7 @@ import {
   Given,
   lanesOf,
   MountedTable,
-  moveReportOf,
   Reconcile,
-  report,
   reseatRows,
   settleColumn,
   settleRow,
@@ -21,7 +19,8 @@ import {
   mountedTable,
   carry,
   frameColumns,
-  sortMenus
+  sortMenus,
+  moveReport
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -161,14 +160,14 @@ const wired = (context: TableContext): void => {
 
 export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): Reconcile => {
   const hand = tableStore();
-  const output = moveReportOf(table);
+  const output = moveReport.output(table);
   const context = (): Maybe<TableContext> => maybe(table.tBodies.item(0)).map(body => withVerbs({
     store: hand,
     columns,
     rows,
     order: () => columns().map(({name}) => name),
     standing: () => rows().map(row => row.window.display),
-    report: (said: Report) => output.map(found => report(found, said)),
+    report: (said: Report) => output.map(found => moveReport.write(found, said)),
     table,
     body,
     lanes: lanesOf(body)
