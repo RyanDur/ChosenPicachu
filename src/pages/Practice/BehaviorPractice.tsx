@@ -221,9 +221,9 @@ export const BehaviorPractice: FC = () =>
     <ul className="practice-list">
       <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
         <a className="signpost" href={repository.directory('src/components/DragSortableTable/model/__tests__')}>Four
-          specs</a>, <code className="monospaced">sorting</code>, <code className="monospaced">travel</code>,{' '}
-        <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>, call the
-        table’s code with no page at all, and they run on every commit.
+          specs</a> call the table’s code with no page at all: <code className="monospaced">sorting</code>,{' '}
+        <code className="monospaced">shares</code>, <code className="monospaced">survey</code> and{' '}
+        <code className="monospaced">tableStore</code>. They run before every push.
       </li>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
