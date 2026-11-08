@@ -1,4 +1,4 @@
-import {SubmitEvent} from 'react';
+import {SubmitEvent, useId} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
 import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
@@ -9,6 +9,8 @@ const typed = (form: FormData, field: string): Maybe<number> =>
 
 export const PageControl = () => {
   const {pagination, page, size, updateSearchParams} = useGallery();
+  const goTo = useId();
+  const perPage = useId();
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
@@ -21,23 +23,23 @@ export const PageControl = () => {
       {preventScrollReset: false});
   };
 
-  return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">
-    <label id="go-to-label" className="go-to-label control-label field next-approached" htmlFor="go-to">Page
+  return <form onSubmit={onSubmit} className="page-control backdrop">
+    <label className="go-to-label control-label field next-approached" htmlFor={goTo}>Page
       #{page}</label>
     <input type="number"
-      id="go-to"
+      id={goTo}
       min={firstPage}
       max={lastPage}
       name="page"
       className="go-to control borderless focus-ringed"/>
-    <label id="per-page-label" className="per-page-label control-label field next-approached" htmlFor="per-page">{size} Per Page</label>
+    <label className="per-page-label control-label field next-approached" htmlFor={perPage}>{size} Per Page</label>
     <input type="number"
       className="per-page control borderless focus-ringed"
       min={1}
       max={100}
-      id="per-page"
+      id={perPage}
       name="size"/>
-    <button type="submit" id="submit-page-number" className="submit-page control borderless field bold square-cornered attentive">Go
+    <button type="submit" className="submit-page control borderless field bold square-cornered attentive">Go
     </button>
   </form>;
 };

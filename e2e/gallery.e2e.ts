@@ -123,8 +123,8 @@ for (const {reader, device} of [
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
-      await expect(page.getByRole('banner').getByLabel(/Search For/)).toBeVisible();
-      await expect(gallery.settingsPanel.getByLabel(/^Page #/)).toBeVisible();
+      await expect(page.getByRole('banner').getByRole('combobox', {name: /Search For/})).toBeVisible();
+      await expect(gallery.settingsPanel.getByRole('spinbutton', {name: /^Page #/})).toBeVisible();
       await expect(gallery.settings).toHaveCount(0);
     });
   });
