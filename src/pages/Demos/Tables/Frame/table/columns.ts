@@ -1,13 +1,13 @@
 import {is, maybe} from '@ryandur/sand';
 import {survey} from '@components/DragSortableTable/model';
-import {changed, columnOfHeader, MountedTable} from './table-state';
+import {MountedTable, mountedTable} from './table-state';
 import {keepingFocus} from './focus';
 import {dressWidths} from './resize';
 
 export const headersOf = (table: HTMLTableElement): HTMLTableCellElement[] =>
   [...table.querySelectorAll('thead th')].filter(th => th instanceof HTMLTableCellElement);
 
-export const columnsShown = (table: HTMLTableElement): string[] => headersOf(table).map(columnOfHeader);
+export const columnsShown = (table: HTMLTableElement): string[] => headersOf(table).map(mountedTable.columnOfHeader);
 
 export const sortableOf = (table: HTMLTableElement): string[] =>
   columnsShown(table).filter(column => is(table.querySelector(`#sort-${column}`)));
@@ -40,7 +40,7 @@ const reconcileColumns = (table: HTMLTableElement, shown: readonly string[], ord
 export const arrangeColumns = (context: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
   const {table, order} = context;
   const shown = columnsShown(table);
-  if (changed(shown, order())) {
+  if (mountedTable.changed(shown, order())) {
     keepingFocus(maybe(table.ownerDocument.activeElement), () => reconcileColumns(table, shown, order()));
     markGrips(table);
     dressWidths(context);

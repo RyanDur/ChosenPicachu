@@ -4,7 +4,6 @@ import {
   announceSort,
   arrangeColumns,
   carrying,
-  columnOfHeader,
   dressCarried,
   dressWidths,
   Given,
@@ -24,7 +23,8 @@ import {
   tell,
   unmarked,
   wireParts,
-  writeCells
+  writeCells,
+  mountedTable
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -145,7 +145,7 @@ const wired = (context: TableContext): void => {
   markGrips(table);
   wireParts(context);
   headersOf(table).forEach(th => {
-    const held = columnOfHeader(th);
+    const held = mountedTable.columnOfHeader(th);
     th.addEventListener('pointerdown', lifting.column(held, order, standing, grab => context.lifted({axis: 'column', held}, grab)));
     carrying(th, context);
     th.addEventListener('keydown', arrows.column(held, order, ({to, widths}) => columnTo(context, held, to, widths)));

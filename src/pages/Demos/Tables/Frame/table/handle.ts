@@ -1,7 +1,7 @@
 import {maybe, not} from '@ryandur/sand';
 import {shares} from '@components/Table';
 import {arrows, TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
-import {columnOfHeader, MountedTable} from './table-state';
+import {MountedTable, mountedTable} from './table-state';
 
 type Resizing = Pick<MountedTable, 'table' | 'store' | 'order' | 'report'>;
 
@@ -42,5 +42,5 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
 };
 
 export const resizeHandle = (context: Resizing, handle: HTMLElement): void => {
-  maybe(handle.closest('th')).map(th => resizing(context, columnOfHeader(th), handle));
+  maybe(handle.closest('th')).map(th => resizing(context, mountedTable.columnOfHeader(th), handle));
 };

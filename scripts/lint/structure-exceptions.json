@@ -41,7 +41,6 @@
     "src/pages/Demos/Tables/Frame/table/report.ts",
     "src/pages/Demos/Tables/Frame/table/rows.ts",
     "src/pages/Demos/Tables/Frame/table/settle.ts",
-    "src/pages/Demos/Tables/Frame/table/table-state.ts",
     "src/pages/Demos/ZIndexDemo/Diagrams.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/part-headings.ts",

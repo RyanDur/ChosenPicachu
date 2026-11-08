@@ -9,4 +9,4 @@ export {dressWidths} from './resize';
 export {lanesOf, reseatRows, writeCells} from './rows';
 export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';
 export type {Given, MountedTable, Reconcile} from './table-state';
-export {columnOfHeader} from './table-state';
+export {mountedTable} from './table-state';

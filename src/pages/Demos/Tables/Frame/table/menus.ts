@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
 import {Direction, Labelled, TableColumn, sorting} from '@components/DragSortableTable/model';
-import {columnOfHeader, MountedTable} from './table-state';
+import {MountedTable, mountedTable} from './table-state';
 import {tell} from './events';
 
 export const announce = (table: ParentNode, column: string, sorted?: Direction): void => {
@@ -38,7 +38,7 @@ const keepingTheColumnStill = (chrome: Element): void => {
 
 export const sortMenu = (context: Pick<MountedTable, 'table' | 'report'>, menu: HTMLElement): void => {
   maybe(menu.closest('th')).map(th => {
-    menu.querySelectorAll('button').forEach(item => choosing(context, columnOfHeader(th), item));
+    menu.querySelectorAll('button').forEach(item => choosing(context, mountedTable.columnOfHeader(th), item));
     [menu, ...th.querySelectorAll('[data-sort-toggle]')].forEach(keepingTheColumnStill);
   });
 };
