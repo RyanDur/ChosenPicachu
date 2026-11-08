@@ -14,7 +14,7 @@ for (const path of [...pages.map(({path}) => path), ...addressesBesideThePages])
   });
 }
 
-test('a reader whose room fails to load keeps the built page, its words, its folds and its links', async ({page}) => {
+test('a reader whose room fails to load keeps the built page, its words, its folds and its links, and a Feedback button that cannot be pressed until the script arrives', async ({page}) => {
   await page.route(/\/assets\/(route|tab)-[^/]+\.js$/, route => route.abort());
   const roomRefused = page.waitForEvent('console', message =>
     message.type() === 'error' && message.text().includes('/demos/accordions/ did not load'));
