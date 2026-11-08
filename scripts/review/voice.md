@@ -6,6 +6,8 @@ The home page states what the site is for and what each language does; the recor
 
 You read the words as they stand in the components and the data they draw from (`src/pages/**/*.tsx`, `src/navigation/names.json`, the moments and stories under `src/pages/Record`). You have no web tool, so you never judge whether a quotation is on its page or whether a claim about the field is true; those are the record rubric's and the designer's. You judge how the prose reads.
 
+The site spells the American way: behavior, color, center, gray, organize. A quotation keeps its source's spelling. Why: Ryan, 2026-10-25, "I am American."
+
 ## Seven questions, in order
 
 1. **Does each paragraph make one point, and does each sentence name what acts?** A paragraph's first sentence names a person, a document or a thing acting, or picks up what the paragraph before ended on; it is never a verdict in abstract nouns ("the method was the point", "what the separation bought was control"). Every sentence after it has the actor as its subject: a lint refuses, a decoder checks, the reducer answers, the browser matches, the author chooses. Of a passive, ask "by what?"; if the answer is a lint, a file, the platform or the author, the sentence is a finding ("how each is kept" for "what keeps each", "the response is fetched" for "`recentTrades` fetches the response"). The passive stays only where the thing acted on is the paragraph's subject ("the markup is read by more than the browser") or the actor is unknown and saying so is the point. A sentence that needs a breath in the middle is two sentences; a chain of fragments on semicolons is a list pretending to be a sentence.
