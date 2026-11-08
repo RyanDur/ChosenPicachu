@@ -195,9 +195,10 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               what it was given and the toggle wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page
               calls <code className="monospaced">reconcile</code> after a new
-              sort, <code className="monospaced">sortMenus.announceChanged</code> walks the columns.{' '}
-            <code className="monospaced">sortMenus.announce</code> sets
-              each <code className="monospaced">th</code> from what
+              sort, <code className="monospaced">sortMenus.announceChanged</code> walks the columns and
+              calls <code className="monospaced">sortMenus.announce</code> for each one.{' '}
+            <code className="monospaced">sortMenus.announce</code> sets that
+              column’s <code className="monospaced">th</code> from what
               it was given: the
               sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and
               every other <code className="monospaced">th</code> loses it. One value holds the sort, so the headers
