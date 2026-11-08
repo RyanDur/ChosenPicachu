@@ -83,7 +83,7 @@ const routeModules = [
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillReachForThePage = [
-  'src/components/Banners/Banners.tsx', 'src/components/Feedback/Feedback.tsx',
+  'src/components/Feedback/Feedback.tsx',
   'src/components/OpeningFragment/useArrival.ts', 'src/components/Users/FriendsList/FriendsList.tsx',
   'src/components/glide.ts', 'src/components/room.ts', 'src/components/scroll/scroll.ts', 'src/pages/BasePage/SideNav.tsx',
   'src/pages/Demos/Tables/Aggregations/fold.ts', 'src/pages/Demos/ZIndexDemo/BannerTrap.tsx',
@@ -91,7 +91,7 @@ const stillReachForThePage = [
 ];
 
 const refsWithAReason = [
-  'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
+  'src/components/Banners/Banners.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx', 'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
 const stillMoveByScript = ['src/components/glide.ts'];

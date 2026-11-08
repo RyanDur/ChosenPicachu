@@ -20,7 +20,7 @@ export const BannerTrap: FC = () => {
       <li className="paragraph">Press Raise a banner, built the old way.</li>
       <li className="paragraph">Scroll until card two reaches the bottom of the window, and watch it pass over the
         banner.</li>
-      <li className="paragraph">Press Raise a banner, in the top layer, and scroll again.</li>
+      <li className="paragraph">Press Raise a banner, the site’s own, and scroll again.</li>
     </ol>
     <ol className="old-way-cards">
       <li className="old-way-card card rounded-corners floating positioned forms-context">
@@ -32,8 +32,8 @@ export const BannerTrap: FC = () => {
               onClick={() => updateRaised(true)}>Raise a banner</button>
           </li>
           <li className="trap-way">
-            <p className="caption">The top layer</p>
-            <button type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, in the top layer"
+            <p className="caption">The site’s banner</p>
+            <button type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, the site’s own"
               onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>Raise a banner</button>
           </li>
         </ul>

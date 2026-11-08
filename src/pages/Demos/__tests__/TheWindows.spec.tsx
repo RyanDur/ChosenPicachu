@@ -37,6 +37,6 @@ describe('the windows hydrate from history', () => {
     expect(await within(card).findByText('session')).toBeVisible();
     const sessionRow = within(card).getByRole('row', {name: /^session/});
     expect(sessionRow).toHaveTextContent('0');
-    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the trade history could not be reached')).toBeInTheDocument();
+    expect(await within(await screen.findByRole('alert')).findByText('the trade history could not be reached')).toBeInTheDocument();
   });
 });

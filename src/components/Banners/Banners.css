@@ -5,9 +5,12 @@
 }
 
 .banners {
-  /* the browser's own style sheet gives a popover overflow: auto, which would clip the slide */
-  overflow: visible;
-  padding: 0;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  inline-size: fit-content;
+  block-size: fit-content;
+  z-index: 3;
   max-inline-size: min(60ch, calc(100vw - var(--base-x-4)));
 
   &:where(.stack-left, .stack-right) {

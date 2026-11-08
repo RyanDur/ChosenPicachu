@@ -12,5 +12,5 @@ export const piecePage = {
   refusalAppears: (): Promise<HTMLElement> => screen.findByAltText(refusal),
   easel: (): HTMLElement => screen.getByRole('figure'),
   easelIfAny: (): HTMLElement | null => screen.queryByRole('figure'),
-  troubleSaid: (words: string): HTMLElement => within(screen.getByRole('alert', {hidden: true})).getByText(words)
+  troubleSaid: (words: string): HTMLElement => within(screen.getByRole('alert')).getByText(words)
 };

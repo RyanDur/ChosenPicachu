@@ -60,7 +60,7 @@ const findOnChart = async (name: string, told: string): Promise<HTMLElement> =>
 
 const priceCard = (): HTMLElement => chart('live trades');
 
-const alert = (): HTMLElement => screen.getByRole('alert', {hidden: true});
+const alert = (): HTMLElement => screen.getByRole('alert');
 
 const explainer = (name: string): HTMLElement => {
   const [fold] = within(chart(name)).getAllByRole('group').filter(group => within(group).queryByText('what am I looking at?') !== null);
@@ -113,7 +113,7 @@ export const chartsDesk = {
   deskReport: (): HTMLElement => screen.getByRole('status', {name: 'desk report'}),
   feedStatus,
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
-  findTrouble: (told: string): Promise<HTMLElement> => within(alert()).findByText(told),
+  findTrouble: async (told: string): Promise<HTMLElement> => within(await screen.findByRole('alert')).findByText(told),
   priceCard,
   onPriceCard: (told: string): HTMLElement => onChart('live trades', told),
   findOnPriceCard: (told: string): Promise<HTMLElement> => findOnChart('live trades', told),

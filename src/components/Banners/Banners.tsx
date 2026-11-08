@@ -1,4 +1,4 @@
-import {FC, TransitionEvent, useEffect, useState} from 'react';
+import {FC, TransitionEvent, useCallback, useState} from 'react';
 import {maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
@@ -8,42 +8,31 @@ import {bannerChange} from './raising';
 import {bannerDials} from './bannerDials';
 import './Banners.css';
 
+const unsettled = (news: HTMLElement): undefined => {
+  news.style.removeProperty('--news-block-size');
+  return undefined;
+};
+
+const settledAsItWraps = (news: HTMLElement): () => void => {
+  const settler = new ResizeObserver(() => {
+    unsettled(news);
+    const borders = news.offsetHeight - news.clientHeight;
+    news.style.setProperty('--news-block-size', `${news.scrollHeight + borders}px`);
+  });
+  settler.observe(news);
+  return () => settler.disconnect();
+};
+
 export const Banners: FC = () => {
   const banners = useBanners();
   const dispatchBanner = useBannerDispatch();
   const {side, align, enter, stack} = useSearchParamsObject(bannerDials.decoders, bannerDials.defaults);
   const [leaving, setLeaving] = useState<readonly string[]>([]);
 
-  useEffect(() => {
-    maybe(document.getElementById('banners')).map(panel => {
-      if (banners.length > 0 && !panel.matches(':popover-open')) {
-        panel.showPopover();
-      }
-      if (banners.length === 0 && panel.matches(':popover-open')) {
-        panel.hidePopover();
-      }
-    });
-  }, [banners.length]);
-
-  useEffect(() => {
-    const sideways = stack === 'left' || stack === 'right';
-    const settler = new ResizeObserver(entries => entries.forEach(entry => {
-      if (entry.target instanceof HTMLElement) {
-        entry.target.style.removeProperty('--news-block-size');
-        const borders = entry.target.offsetHeight - entry.target.clientHeight;
-        entry.target.style.setProperty('--news-block-size', `${entry.target.scrollHeight + borders}px`);
-      }
-    }));
-    maybe(document.getElementById('banners')).map(panel =>
-      [...panel.querySelectorAll('.news')].forEach(news => {
-        if (sideways) {
-          settler.observe(news);
-        } else if (news instanceof HTMLElement) {
-          news.style.removeProperty('--news-block-size');
-        }
-      }));
-    return () => settler.disconnect();
-  }, [banners, stack]);
+  const sideways = stack === 'left' || stack === 'right';
+  const settled = useCallback((news: HTMLParagraphElement | null) => maybe(news)
+    .map(shown => sideways ? settledAsItWraps(shown) : unsettled(shown))
+    .orElse(undefined), [sideways]);
 
   const dismissed = (id: string) =>
     setLeaving(standing => [...standing, id]);
@@ -57,13 +46,13 @@ export const Banners: FC = () => {
     }
   };
 
-  return <section id="banners" popover="manual" role="alert"
-    className={classNames('banners', 'borderless', 'unfilled', side, align, `from-${enter}`, `stack-${stack}`)}>
+  return banners.length > 0 && <section id="banners" role="alert"
+    className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
     <ul className="troubles">
       {banners.map(banner =>
         <li key={banner.id} onTransitionEnd={left(banner.id)}
           className={classNames('trouble', leaving.includes(banner.id) && 'leaving')}>
-          <p className="news field rounded-corners floating hairline-outline alarm-ink">
+          <p ref={settled} className="news field rounded-corners floating hairline-outline alarm-ink">
             {banner.message}
             <button type="button" className="dismiss borderless unfilled glyph-icon muted-ink reachable" aria-label={`dismiss ${banner.message}`}
               onClick={() => dismissed(banner.id)}>×</button>

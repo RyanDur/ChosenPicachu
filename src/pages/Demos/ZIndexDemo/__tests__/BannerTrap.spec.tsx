@@ -22,13 +22,13 @@ describe('the banner exhibit', () => {
     const banners = await screen.findByRole('figure', {name: /^The banners\./});
 
     const oldWay = within(banners).getByRole('button', {name: 'Raise a banner, the old way'});
-    const topLayer = within(banners).getByRole('button', {name: 'Raise a banner, in the top layer'});
+    const sites = within(banners).getByRole('button', {name: 'Raise a banner, the site’s own'});
 
     expect(wayLabelled(banners, 'The old way')).toContainElement(oldWay);
-    expect(wayLabelled(banners, 'The old way')).not.toContainElement(topLayer);
-    expect(wayLabelled(banners, 'The top layer')).toContainElement(topLayer);
+    expect(wayLabelled(banners, 'The old way')).not.toContainElement(sites);
+    expect(wayLabelled(banners, 'The site’s banner')).toContainElement(sites);
     expect(oldWay).toHaveTextContent(/^Raise a banner$/);
-    expect(topLayer).toHaveTextContent(/^Raise a banner$/);
+    expect(sites).toHaveTextContent(/^Raise a banner$/);
   });
 });
 
@@ -65,13 +65,13 @@ describe('the old banner', () => {
 });
 
 describe('why a fixed banner still loses', () => {
-  test('should open the banner tutorial at the step that makes it a popover, keeping the reader’s choices', async () => {
+  test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
-    expect(screen.getByText('Make the panel a popover')).toBeVisible();
+    expect(screen.getByText('Write the panel last, at the page’s root')).toBeVisible();
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('raised=second');
   });
 

@@ -6,7 +6,7 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 import {render} from '@testing-library/react';
 import {seed} from '@components/fibs';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {topLayerBanners, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {siteBanners, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 beforeEach(() => seed('top-layer'));
 
@@ -24,25 +24,21 @@ describe('the top layer', () => {
   test('the user raises a banner from the demo', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
-    const alert = topLayerBanners.pile();
-    const alreadyStanding = topLayerBanners.standingIn(alert).length;
 
-    await topLayerBanners.raise();
+    await siteBanners.raise();
 
-    expect(topLayerBanners.standingIn(alert)).toHaveLength(alreadyStanding + 1);
+    expect(siteBanners.standingIn(await siteBanners.pile())).toHaveLength(1);
   });
 
   test('every press stacks another banner', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
-    const alert = topLayerBanners.pile();
-    const alreadyStanding = topLayerBanners.standingIn(alert).length;
 
-    await topLayerBanners.raise();
-    await topLayerBanners.raise();
-    await topLayerBanners.raise();
+    await siteBanners.raise();
+    await siteBanners.raise();
+    await siteBanners.raise();
 
-    expect(topLayerBanners.standingIn(alert)).toHaveLength(alreadyStanding + 3);
+    expect(siteBanners.standingIn(await siteBanners.pile())).toHaveLength(3);
   });
 
   test('should head a story The user can have multiple banners', async () => {
@@ -133,33 +129,15 @@ describe('the banner tutorial’s first story', () => {
     expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 
-  test('should link the first story’s popover up to Why the popover wins', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
-    const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
-
-    expect(explanation.linkNamed(news, 'Why the popover wins')).toHaveAttribute('href', zIndexTab.fragmentOf('Why the popover wins'));
-  });
-
   test('should head each step with what happens', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
     const news = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
 
     expect(recipeFolds.stepTitles(news))
-      .toEqual(['Make the panel a popover', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
+      .toEqual(['Write the panel last, at the page’s root', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
   });
 
-  test('should open the second story from step 3’s slide-step link, keeping the side and align chosen', async () => {
-    render(<TestApp at={demosAt('z-index', '?news=top&side=bottom&align=right')}/>);
-    const tutorial = await zIndexTab.findFeatureStories();
-    const placing = recipeFolds.steps(recipeFolds.story(tutorial, story))[2];
-
-    await zIndexTab.follow(placing, 'Slide in from off screen');
-
-    expect(demoPage.title('Slide in from off screen')).toBeVisible();
-    expect(demoPage.urlSearch()).toHaveTextContent(/side=bottom&align=right/);
-  });
 });
 
 describe('the banner tutorial’s second story', () => {
@@ -185,13 +163,6 @@ describe('the banner tutorial’s second story', () => {
     expect(recipeFolds.stepTitles(many)).not.toContain('Change a banner’s height smoothly when its text rewraps');
   });
 
-  test('should point the popover up to Why the popover wins, where it is taught', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
-    const many = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
-
-    expect(explanation.linkNamed(many, 'Why the popover wins')).toHaveAttribute('href', zIndexTab.fragmentOf('Why the popover wins'));
-  });
 });
 
 describe('the z-index tab’s introduction', () => {

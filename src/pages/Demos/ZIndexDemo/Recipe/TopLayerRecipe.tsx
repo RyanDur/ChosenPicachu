@@ -1,14 +1,11 @@
 import {FC} from 'react';
-import {Link} from 'react-router';
-import {useSearchParamsOnceHydrated} from '@components/search-params';
 import {Align, Side} from '@components/Banners';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {Sample} from '../../Recipe/sample';
-import {storyKeys} from '../../Recipe';
-import {multipleStory, slideInStep} from './MultipleRecipe';
 import {AlignDial, SideDial, useControls} from '../../Controls';
-import {fixedBannerLosesHeading, popoverWinsHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
+import {fixedBannerLosesHeading, stillLosesHeading, whatElseFormsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
+import providerSource from '@components/Banners/BannerProvider.tsx?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import placementCss from '../../../../styles/placement.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
@@ -39,7 +36,6 @@ export const topLayerStory = {param: 'news', id: 'top'} as const;
 
 export const TopLayerRecipe: FC = () => {
   const {side, align} = useControls();
-  const [searchParams] = useSearchParamsOnceHydrated();
 
   return <Story {...topLayerStory}
     can="The user sees the news above everything"
@@ -52,51 +48,43 @@ export const TopLayerRecipe: FC = () => {
       window, does not lift it out of that context,
       as <a className="signpost" href={`#${fixedBannerLosesHeading}`}><cite>Why a fixed banner still
         loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
-      I made the panel a popover, drawn in the top layer like the new menu
-      above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
-      both are.</Tell>
+      I write the panel outside every card, last on the page, where its z-index is compared with the cards’
+      own.</Tell>
     <Steps>
-      <Step title="Make the panel a popover">
-        <Words want="A bigger number does not get the banner out of a stacking context. The news needs a layer above all of them.">
-          <Says>The panel is a section with the popover attribute set to manual. The usual value, auto, gives a
-            popover light dismiss: a click outside it or the Escape key closes it. A manual popover has no light
-            dismiss, so the news stays through a stray click and goes when the code hides it. Its role
+      <Step title="Write the panel last, at the page’s root">
+        <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit where none holds it.">
+          <Says>The panel is a section written once, at the root of the site, after the page itself. Nothing around it
+            forms a stacking context, so its z-index is compared with the page’s own elements, the cards among them,
+            and it is higher than theirs. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
             announces what arrives without being asked.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(bannersSource, 'return <section', '</section>;')
+            ...carve.span(bannersSource, 'return banners.length > 0', '</section>;')
           ]}/>
         </Codes>
       </Step>
       <Step title="Show it when there is news">
-        <Words want="A popover is in the top layer only while it is shown. The panel should be shown when news arrives and hidden when the last of it is dismissed.">
-          <Says>A React effect, code that React runs after it has updated the page, runs when the number of banners
-            changes. showPopover shows the panel when the first banner arrives, and hidePopover hides it when the last
-            one has gone. matches(':popover-open') says whether the panel is shown, so neither call is made
-            twice.</Says>
+        <Words want="The panel should be there when news arrives, and gone when the last of it is dismissed.">
+          <Says>The site keeps its banners in a context, a value React hands to every component inside it. A component
+            raises a banner by dispatching an action, a record that a message arrived, and the dismiss button
+            dispatches one that lowers it. The panel reads the banners from the context and is written only while
+            there is at least one, so no code shows or hides it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(bannersSource, 'useEffect(() => {')
+            ...carve.unit(providerSource, 'export const BannerProvider'), gap,
+            ...carve.span(bannersSource, 'return banners.length > 0', "className={classNames('banners'")
           ]}/>
         </Codes>
       </Step>
       <Step title="Place the panel with two class names"
         dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
-        <Words want="Nine places, and no arithmetic: the browser already centers a popover.">
-          <Says>The browser’s own style sheet, the styles every page starts with, gives a popover a fixed position, a
-            size that fits its content, inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the
-            window. It takes only the room its content needs, and the auto margins share the rest, which centers it in
-            the window. That style sheet also gives a popover a border, a background and padding; the panel wears
-            borderless and unfilled, which take off the first two, and padding: 0, so only the banners inside it
-            show.</Says>
-          <Says>The .banners rule’s overflow: visible is for the banners’ entrance, a slide in from off screen
-            that <cite>The user can have multiple banners</cite> explains in its
-            step{' '}
-          <Link className="signpost" to={{search: `?${storyKeys.openedIn(searchParams, multipleStory)}`, hash: slideInStep}}><cite>Slide in
-            from off screen</cite></Link>.</Says>
+        <Words want="Nine places, and no arithmetic: auto margins center the panel.">
+          <Says>The panel’s own rule gives it a fixed position, inset: 0, margin: auto and a size that fits its content.
+            inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the
+            auto margins share the rest, which centers it in the window.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
             spare room and the panel holds to that
             edge. <code className="monospaced">middle</code> and <code className="monospaced">center</code> set auto
@@ -109,7 +97,7 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
-            ...carve.span(bannersCss, '.banners {', 'padding: 0;'), gap,
+            ...carve.span(bannersCss, '.banners {', 'z-index: 3;'), gap,
             ...carve.unit(bannersCss, `.${side} {`), gap,
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>

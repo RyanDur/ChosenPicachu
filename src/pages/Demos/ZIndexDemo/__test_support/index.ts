@@ -1,4 +1,4 @@
-export {topLayerBanners} from './banners';
+export {siteBanners} from './banners';
 export {wearsChooser} from './chooser';
 export {stackingPile} from './pile';
 export {controlsBeforeTheSteps} from './steps';

@@ -80,7 +80,6 @@
     "src/pages/Demos/Tables/Recipe/steps/sources.ts",
     "src/pages/Demos/Tables/Recipe/steps/tells.tsx",
     "src/pages/Demos/ZIndexDemo/Diagrams.tsx",
-    "src/pages/Demos/ZIndexDemo/Recipe/MultipleRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
     "src/pages/Demos/ZIndexDemo/part-headings.ts",
     "src/pages/Demos/ZIndexDemo/sort-choices.ts",

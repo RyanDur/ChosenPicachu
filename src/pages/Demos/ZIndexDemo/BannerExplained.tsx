@@ -8,6 +8,7 @@ import {storyKeys} from '../Recipe';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
+import bannersCss from '@components/Banners/Banners.css?sample';
 import '../Runs.css';
 
 const gap = lines.plain(' ');
@@ -31,16 +32,16 @@ export const BannerExplained: FC = () => {
         ]}/>
       </li>
       <li className="run">
-        <p className="paragraph">The banner in the top layer is the site’s own banner. It is a popover shown in the top
-          layer, so card one’s stacking context does not hold it. It stays at the window’s edge, over everything on the
-          page, card two included.</p>
+        <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside every
+          card, so no card’s stacking context holds it. Its z-index is compared with card two’s, at the same level, and
+          it is the higher. It stays at the window’s edge, over everything on the page, card two included.</p>
         <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+        <Snippet label="CSS" lines={carve.span(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
           to={{search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`, hash: storyKeys.anchorOf(topLayerStory)}}>the
-          tutorial below</Link>. It
-          opens at the step where the panel becomes a popover and so is shown in the top layer.</p>
+          tutorial below</Link>. It opens at the step where the panel is written at the page’s root.</p>
       </li>
     </ol>
   </section>;

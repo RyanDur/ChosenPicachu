@@ -27,5 +27,5 @@ export const site = {
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
   closedRoomIfAny: (): HTMLElement | null => screen.queryByText('This room is closed.'),
   frontDoor: (): HTMLElement => screen.getByRole('link', {name: 'Back to the front door'}),
-  announced: (words: string): HTMLElement => within(screen.getByRole('alert', {hidden: true})).getByText(words)
+  announced: (words: string): HTMLElement => within(screen.getByRole('alert')).getByText(words)
 };

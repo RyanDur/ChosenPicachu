@@ -12,7 +12,7 @@ const Trouble: FC<{message: string}> = ({message}) => {
 const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);
 
 const troubleOf = (alert: HTMLElement, message: string): HTMLElement => {
-  const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => within(standing).queryByText(message) !== null);
+  const item = within(alert).getAllByRole('listitem').find(standing => within(standing).queryByText(message) !== null);
   if (!item) {
     throw new Error(`no standing trouble says "${message}"`);
   }
@@ -25,7 +25,7 @@ describe('the banners', () => {
 
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
 
-    expect(within(screen.getByRole('alert', {hidden: true})).getByText('the live feed refused the handshake')).toBeInTheDocument();
+    expect(within(screen.getByRole('alert')).getByText('the live feed refused the handshake')).toBeInTheDocument();
   });
 
   test('every raised error stands on its own until dismissed', async () => {
@@ -34,11 +34,11 @@ describe('the banners', () => {
 
     await userEvent.click(first);
     await userEvent.click(second);
-    const alert = screen.getByRole('alert', {hidden: true});
+    const alert = screen.getByRole('alert');
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
     expect(within(alert).getByText('second trouble')).toBeInTheDocument();
 
-    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble', hidden: true}));
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble'}));
     fireEvent.transitionEnd(troubleOf(alert, 'first trouble'), {propertyName: 'grid-template-rows'});
     expect(within(alert).queryByText('first trouble')).not.toBeInTheDocument();
     expect(within(alert).getByText('second trouble')).toBeInTheDocument();
@@ -47,9 +47,9 @@ describe('the banners', () => {
   test('a dismissed trouble leaves only once it has finished closing', async () => {
     render(<TestApp><Trouble message="first trouble"/></TestApp>);
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
-    const alert = screen.getByRole('alert', {hidden: true});
+    const alert = screen.getByRole('alert');
 
-    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble', hidden: true}));
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble'}));
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
     fireEvent.transitionEnd(troubleOf(alert, 'first trouble'), {propertyName: 'translate'});
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
@@ -63,10 +63,10 @@ describe('the banners', () => {
 
     await userEvent.click(trouble);
     await userEvent.click(trouble);
-    const alert = screen.getByRole('alert', {hidden: true});
+    const alert = screen.getByRole('alert');
     expect(within(alert).getAllByText('the feed is down')).toHaveLength(1);
 
-    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss the feed is down', hidden: true}));
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss the feed is down'}));
     fireEvent.transitionEnd(troubleOf(alert, 'the feed is down'), {propertyName: 'grid-template-rows'});
     await userEvent.click(trouble);
     expect(within(alert).getAllByText('the feed is down')).toHaveLength(1);
@@ -76,16 +76,27 @@ describe('the banners', () => {
     render(<TestApp at="/?stack=left"><Trouble message="sideways trouble"/></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
-    const alert = screen.getByRole('alert', {hidden: true});
-    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss sideways trouble', hidden: true}));
+    const alert = screen.getByRole('alert');
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss sideways trouble'}));
     fireEvent.transitionEnd(troubleOf(alert, 'sideways trouble'), {propertyName: 'grid-template-columns'});
     expect(within(alert).queryByText('sideways trouble')).not.toBeInTheDocument();
   });
 
-  test('with nothing raised, the panel holds no messages', () => {
+  test('with nothing raised, there is no panel', () => {
     renderWithTrouble('unraised');
 
-    expect(within(screen.getByRole('alert', {hidden: true})).queryAllByRole('listitem', {hidden: true})).toHaveLength(0);
+    expect(screen.queryByRole('alert', {hidden: true})).not.toBeInTheDocument();
+  });
+
+  test('once the last banner has left, the panel is gone', async () => {
+    renderWithTrouble('the only trouble');
+    await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
+    const alert = screen.getByRole('alert');
+
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss the only trouble'}));
+    fireEvent.transitionEnd(troubleOf(alert, 'the only trouble'), {propertyName: 'grid-template-rows'});
+
+    expect(screen.queryByRole('alert', {hidden: true})).not.toBeInTheDocument();
   });
 
   test('without a provider, raising degrades quietly', async () => {

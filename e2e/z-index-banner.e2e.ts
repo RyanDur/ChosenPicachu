@@ -18,24 +18,24 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect.poll(() => banners.onTopOf(banners.oldBanner, 'start')).toBe('the banner');
     });
 
-    test('the banner in the top layer stays over card two as it passes', async ({page}) => {
+    test('the site’s banner stays over card two as it passes', async ({page}) => {
       await page.goto('demos/z-index/');
       const banners = bannerTrap(page);
-      await banners.raiseNew.click();
-      await expect(banners.topLayerBanner).toBeVisible();
+      await banners.raiseSite.click();
+      await expect(banners.siteBanner).toBeVisible();
 
-      await banners.scrollCardTwoOnto(banners.topLayerBanner);
+      await banners.scrollCardTwoOnto(banners.siteBanner);
 
-      await expect.poll(() => banners.onTopOf(banners.topLayerBanner, 'middle')).toBe('the banner');
+      await expect.poll(() => banners.onTopOf(banners.siteBanner, 'middle')).toBe('the banner');
     });
 
-    test('the tutorial below brings the step that makes the banner a popover into view, with its story heading in view', async ({page}) => {
+    test('the tutorial below brings the step that writes the panel at the page’s root into view, with its story heading in view', async ({page}) => {
       await page.goto('demos/z-index/');
       const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
 
       await part.getByRole('link', {name: 'the tutorial below'}).click();
 
-      await expect(page.getByText('Make the panel a popover')).toBeInViewport();
+      await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
       await expect(page.getByText('The user sees the news above everything')).toBeInViewport();
     });
   });
@@ -51,7 +51,7 @@ test.describe('a phone, where the page itself scrolls', () => {
     await page.goto('demos/z-index/');
     const link = tutorialBelow(page);
     await link.click();
-    await expect(page.getByText('Make the panel a popover')).toBeInViewport();
+    await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
 
     await page.goBack();
     await expect(link).toBeInViewport();
@@ -70,29 +70,13 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
   await expect(link).not.toBeFocused();
   await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news above everything'})}).last()).toBeFocused();
 
-  await expect(page.getByText('Make the panel a popover')).toBeVisible();
+  await expect(page.getByText('Write the panel last, at the page’s root')).toBeVisible();
 
   await pressTab(page);
   await page.keyboard.press('Enter');
 
-  await expect(page.getByText('Make the panel a popover')).toBeHidden();
+  await expect(page.getByText('Write the panel last, at the page’s root')).toBeHidden();
 });
-
-for (const motion of ['no-preference', 'reduce'] as const) {
-  test.describe(`with ${motion} motion asked for`, () => {
-    test('a reader who follows step 3\'s link to the slide step lands on that step, its story opened and the step focused', async ({page}) => {
-      await page.emulateMedia({reducedMotion: motion});
-      await page.goto('demos/z-index/?news=top');
-
-      await page.getByRole('link', {name: 'Slide in from off screen'}).click();
-
-      await expect(page).toHaveURL(/#step-slide-in$/);
-      const step = page.getByRole('listitem').filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})}).last();
-      await expect(step).toBeFocused();
-      await expect(page.getByRole('heading', {name: 'Slide in from off screen'})).toBeInViewport();
-    });
-  });
-}
 
 test('a reader who follows the tutorial below with motion allowed lands on the story\'s heading', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
@@ -122,9 +106,8 @@ test('the entrance reads the chosen side, and reads that a new banner appears in
 test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {
   await page.goto('demos/z-index/');
   const banners = bannerTrap(page);
-  const standing = await banners.topLayerNotes.count();
 
-  await banners.raiseNew.click();
+  await banners.raiseSite.click();
 
-  await expect(banners.topLayerNotes).toHaveCount(standing + 1);
+  await expect(banners.siteNotes).toHaveCount(1);
 });

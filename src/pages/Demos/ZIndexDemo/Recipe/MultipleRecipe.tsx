@@ -2,7 +2,6 @@ import {FC, ReactNode} from 'react';
 import {Entrance, Stack} from '@components/Banners';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../../Recipe';
 import {EntranceDial, StackDial, useControls} from '../../Controls';
-import {popoverWinsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
 import raisingSource from '@components/Banners/raising.ts?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
@@ -78,6 +77,7 @@ const SettleStep: FC = () => (
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
+        ...carve.unit(bannersSource, 'const unsettled = '), gap,
         ...carve.unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
       <Snippet label="CSS" lines={[
@@ -88,8 +88,8 @@ const SettleStep: FC = () => (
   </Step>
 );
 
-export const multipleStory = {param: 'news', id: 'many'} as const;
-export const slideInStep = 'step-slide-in';
+const multipleStory = {param: 'news', id: 'many'} as const;
+const slideInStep = 'step-slide-in';
 
 export const MultipleRecipe: FC = () => {
   const {enter, stack} = useControls();
@@ -151,15 +151,10 @@ export const MultipleRecipe: FC = () => {
           <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving
             rule reads it again to send the banner back.</Says>
-          <Says>The slide can be seen only because the panel sets overflow to visible. The panel is a popover,
-            as <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains,
-            and the browser’s own style sheet gives a popover overflow: auto. That would clip the slide to the panel’s
-            own box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.unit(bannersCss, `&.from-${enter} {`), gap,
-            ...carve.span(bannersCss, "/* the browser's own style sheet", 'overflow: visible;')
+            ...carve.unit(bannersCss, `&.from-${enter} {`)
           ]}/>
         </Codes>
       </Step>
