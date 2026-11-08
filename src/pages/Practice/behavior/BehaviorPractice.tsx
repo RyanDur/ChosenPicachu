@@ -224,7 +224,7 @@ export const BehaviorPractice: FC = () =>
         <a className="signpost" href={repository.directory('src/components/DragSortableTable/model/__tests__')}>Four
           specs</a> call the table’s code with no page at all: <code className="monospaced">sorting</code>,{' '}
         <code className="monospaced">shares</code>, <code className="monospaced">survey</code> and{' '}
-        <code className="monospaced">tableStore</code>. They run before every push to main.
+        <code className="monospaced">tableStore</code>. They run on every pull request, before it can merge.
       </li>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
@@ -232,9 +232,9 @@ export const BehaviorPractice: FC = () =>
       <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
         motion, and none is retried or skipped.”</a>
       </li>
-      <li className="paragraph">The pre-push hook runs <code className="monospaced">tsc -b</code>{' '}
-        <a className="signpost" href={repository.file('scripts/git-hooks/pre-push')}>before every push to main</a> and
-        refuses one that lets a forbidden state into a type.
+      <li className="paragraph">Every pull request runs <code className="monospaced">tsc -b</code>{' '}
+        <a className="signpost" href={repository.file('.github/workflows/checks.yml')}>before it can merge</a>, and the
+        check fails on one that lets a forbidden state into a type.
       </li>
     </ul>
     <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>,{' '}
