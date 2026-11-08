@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {PaceDial} from '../../../Controls';
 import {Codes, Mdn, Sample, Says, Snippet, Step, Words, carve, lines} from '../../../Recipe';
 import {Term} from '../Term';
+import {sources} from './sources';
 
 const gap = lines.plain(' ');
 
@@ -18,9 +19,9 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
-        ...carve.span(listSource, 'onDragLeave={() => setLanding(nothing())}', 'onDragLeave={() => setLanding(nothing())}'), gap,
-        ...carve.unit(listSource, 'const release')
+        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), gap,
+        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), gap,
+        ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
     </Codes>
   </Step>;

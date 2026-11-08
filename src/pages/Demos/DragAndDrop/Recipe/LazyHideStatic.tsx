@@ -13,7 +13,7 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?sample';
+import listSource from '../LazyHideStaticList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
 
 export const LazyHideStaticRecipe: FC = () => <>
@@ -24,7 +24,7 @@ export const LazyHideStaticRecipe: FC = () => <>
     <Promises pace="lazy" origin="hide" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <FadeOrigin itemSource={itemSource}/>

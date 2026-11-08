@@ -13,7 +13,7 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../LazyKeepStaticList/LazyKeepStaticList.tsx?sample';
+import listSource from '../LazyKeepStaticList.tsx?sample';
 import itemSource from '../items/KeepItem.tsx?sample';
 
 export const LazyKeepStaticRecipe: FC = () => <>
@@ -24,7 +24,7 @@ export const LazyKeepStaticRecipe: FC = () => <>
     <Promises pace="lazy" origin="keep" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <KeepStanding listSource={listSource}/>

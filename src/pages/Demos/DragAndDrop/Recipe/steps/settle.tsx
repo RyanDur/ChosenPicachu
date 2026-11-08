@@ -1,26 +1,28 @@
 import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
-import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
 const gap = lines.plain(' ');
 
 export const GlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Glide the settle one tick after the release" dial={<MotionDial name="native-motion"/>}>
-    <Words want="A lazy settle happens all at once on release, which suits a view transition. A view transition is the browser’s way of animating a page from one state to the next by taking a picture of both; its capture, that picture, swallows the drag’s events if it is taken while the drag is still running, and the drag is still running when drop fires.">
-      <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and run the settle a tick
-        after the release, a setTimeout with no delay, which runs once the drag has ended. By the time{' '}
-      <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> takes its capture, the browser has
-        finished the drag, and every item glides from where the drag left it to where the order puts it.</Says>
+  <Step title="Slide every moved item home on release" dial={<MotionDial name="native-motion"/>}>
+    <Words want="A lazy settle happens all at once on release, so every item whose place changed has to travel, and the reader should see them all go together.">
+      <Says>The list takes its new order at once. Each item whose place changed gets the
+        class <code className="monospaced">sliding-in</code> and its own{' '}
+      <code className="monospaced">--starts-places-right</code>, its old place minus its new one, so an item that moved
+        three places left starts three places to the right. It is the keyframe that slides a crossed item, so every
+        moved item slides home together, and the item the reader let go of slides from the place it was lifted
+        from.</Says>
+      <Says>A reader who asks for less motion gets the new order with no slide.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...carve.span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
+        ...carve.span(listSource, 'const slideStart = slideStarts.of(', "style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}")
       ]}/>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.session, 'const glided'), gap,
-        ...carve.span(listSource, 'session.landedOrder(aloft, landing, order).map(session.glided(setOrder));', 'session.landedOrder(aloft, landing, order).map(session.glided(setOrder));'), gap,
-        ...carve.unit(sources.glide, 'export const glide')
+        ...carve.unit(sources.slideStarts, 'const afterSettle'), gap,
+        ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
     </Codes>
   </Step>;

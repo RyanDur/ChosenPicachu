@@ -160,7 +160,6 @@
     "src/pages/Demos/Charts/PriceChart/PriceChart.tsx",
     "src/pages/Demos/Charts/coinbase/history.ts",
     "src/pages/Demos/Charts/period-history.ts",
-    "src/pages/Demos/DragAndDrop/session.ts",
     "src/pages/Demos/Market/cells.ts",
     "src/pages/Demos/Market/exchange.ts",
     "src/pages/Demos/Market/marketActions.ts",

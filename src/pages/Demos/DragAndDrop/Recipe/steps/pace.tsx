@@ -18,7 +18,8 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     <Codes>
       <Snippet label="TS" lines={[
         ...carve.unit(sources.session, 'const crossingOver'), gap,
-        ...carve.span(listSource, 'onDragOver={session.crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
+        ...carve.span(listSource, 'onDragOver={session.crossingOver(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), gap,
+        ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
     </Codes>
   </Step>;

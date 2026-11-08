@@ -13,8 +13,9 @@ export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
       <Step title="Arrows go straight to the order">
         <Words want="A keyboard user needs the same reorders, and drag and drop cannot give them.">
           <Says>The grip is a real button, so focus reaches it with no extra code. Its keydown handler turns a left or
-            right arrow into a move of one place and reports the new order up to the list, with no drag involved. While
-            the item is still sliding, the handler ignores the keys.</Says>
+            right arrow into a step of one place and dispatches it, with no drag involved. The reducer moves the item,
+            and an item already at an end stays where it is. While the item is still sliding, the handler ignores the
+            keys.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[

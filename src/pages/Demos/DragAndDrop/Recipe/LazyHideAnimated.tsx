@@ -24,7 +24,7 @@ export const LazyHideAnimatedRecipe: FC = () => <>
     <Promises pace="lazy" origin="hide" motion="animated"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <FadeOrigin itemSource={itemSource}/>

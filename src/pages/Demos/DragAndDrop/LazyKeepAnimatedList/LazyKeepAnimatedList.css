@@ -1,7 +1,5 @@
 .sortable-list .sliding-in {
-    --starts-places-right: 1;
-
-    animation: slide-in 150ms ease-out;
+    animation: slide-in 200ms ease-out;
 }
 
 @keyframes slide-in {

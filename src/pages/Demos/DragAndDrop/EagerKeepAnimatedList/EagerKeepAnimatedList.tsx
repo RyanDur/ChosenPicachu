@@ -1,9 +1,10 @@
-import {FC, useState} from 'react';
-import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {array} from '@components';
+import {FC, useReducer} from 'react';
 import {classNames} from '@components/class-names';
-import {Moved, session} from '../session';
-import {SlideStarts, slideStarts} from '../slide-starts';
+import {dragSort} from '../drag-sort';
+import {dragSortChange} from '../drag-sort-change';
+import {dragSorting} from '../drag-sorting';
+import {session} from '../session';
+import {slideStarts} from '../slide-starts';
 import {KeepItem, MoveReport} from '../items';
 import '../sortable-list.css';
 import './EagerKeepAnimatedList.css';
@@ -13,36 +14,23 @@ type Props = {
 };
 
 export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
-  const [order, setOrder] = useState<string[]>(() => [...list]);
-  const [aloft, setAloft] = useState<Maybe<string>>(nothing());
-  const [moved, setMoved] = useState<Maybe<Moved>>(nothing());
-  const [slides, setSlides] = useState<SlideStarts>({});
+  const [sort, dispatch] = useReducer(dragSort.reduce, {items: list, animated: true}, dragSort.initial);
 
-  return <>
+  return <dragSorting.Provider value={[sort, dispatch]}>
     <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       className="sortable-list card rounded-corners lifted padded contained">{
-        order.map((item, index) =>
-          <KeepItem key={item}
-            className={classNames('item', item in slides && 'sliding-in')}
-            style={{'--starts-places-right': slides[item]}}
-            onAnimationEnd={() => setSlides({})}
-            item={item}
-            order={order}
-            onLifted={lifted => setAloft(maybe(lifted))}
-            onReleased={() => setAloft(nothing())}
-            onDragOver={session.crossingOver(aloft, order)(item, index, (held, homeward) => {
-              setSlides(slideStarts.afterCrossing(item, homeward));
-              setOrder(previous => array.moveToIndex(index, held, previous));
-              setMoved(maybe({item: held, position: index, of: order.length}));
-            })}
-            onArranged={(after, walker, toward) => {
-              setSlides(slideStarts.afterKeyboardStep(order, walker, toward));
-              setOrder(after);
-              setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
-            }}/>)
+        sort.order.map((item, index) => {
+          const slideStart = slideStarts.of(sort.slideStarts, item);
+          return <KeepItem key={item} item={item}
+            className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
+            style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
+            onAnimationEnd={() => dispatch(dragSortChange.slid())}
+            onDragOver={session.crossingOver(sort.held, sort.order)(item, index, homeward =>
+              dispatch(dragSortChange.crossed(index, homeward)))}/>;
+        })
       }</ol>
-    <MoveReport moved={moved}/>
-  </>;
+    <MoveReport/>
+  </dragSorting.Provider>;
 };

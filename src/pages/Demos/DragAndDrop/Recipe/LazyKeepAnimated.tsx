@@ -24,7 +24,7 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
     <Promises pace="lazy" origin="keep" motion="animated"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <StashLanding listSource={listSource}/>
       <KeepStanding listSource={listSource}/>

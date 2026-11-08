@@ -205,7 +205,7 @@ describe('the sortable list demo', () => {
 
     expect(recipeFolds.stepTitled(recipe, 'Stash the landing, settle after the drag')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Leave the lifted card where it was')).toBeInTheDocument();
-    expect(recipeFolds.stepTitled(recipe, 'Glide the settle one tick after the release')).toBeInTheDocument();
+    expect(recipeFolds.stepTitled(recipe, 'Slide every moved item home on release')).toBeInTheDocument();
     expect(recipeFolds.queryStepTitled(recipe, 'Commit inside the crossing')).not.toBeInTheDocument();
   });
 
@@ -257,7 +257,7 @@ describe('the native drag sort tutorial’s steps', () => {
       'Accept the drop, or the platform takes it back',
       'Stash the landing, settle after the drag',
       'Fade the lifted card almost away',
-      'Glide the settle one tick after the release',
+      'Slide every moved item home on release',
       'What drag and drop cannot give you'
     ]);
   });

@@ -1,8 +1,9 @@
-import {FC, useState} from 'react';
-import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {FC, useReducer} from 'react';
 import {classNames} from '@components/class-names';
-import {Moved, session} from '../session';
-import {SlideStarts, slideStarts} from '../slide-starts';
+import {dragSort} from '../drag-sort';
+import {dragSortChange} from '../drag-sort-change';
+import {dragSorting} from '../drag-sorting';
+import {slideStarts} from '../slide-starts';
 import {HideItem, MoveReport} from '../items';
 import '../sortable-list.css';
 import './LazyHideAnimatedList.css';
@@ -12,41 +13,23 @@ type Props = {
 };
 
 export const LazyHideAnimatedList: FC<Props> = ({list}) => {
-  const [order, setOrder] = useState<string[]>(() => [...list]);
-  const [aloft, setAloft] = useState<Maybe<string>>(nothing());
-  const [moved, setMoved] = useState<Maybe<Moved>>(nothing());
-  const [landing, setLanding] = useState<Maybe<number>>(nothing());
-  const [slides, setSlides] = useState<SlideStarts>({});
+  const [sort, dispatch] = useReducer(dragSort.reduce, {items: list, animated: true}, dragSort.initial);
 
-  const release = () => {
-    session.landedOrder(aloft, landing, order).map(session.glided(setOrder));
-    session.landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
-    setAloft(nothing());
-    setLanding(nothing());
-  };
-
-  return <>
+  return <dragSorting.Provider value={[sort, dispatch]}>
     <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
-      onDragLeave={() => setLanding(nothing())}
+      onDragLeave={() => dispatch(dragSortChange.left())}
       className="sortable-list card rounded-corners lifted padded contained">{
-        order.map((item, index) =>
-          <HideItem key={item}
-            className={classNames('item', item in slides && 'sliding-in')}
-            style={{'--starts-places-right': slides[item], viewTransitionName: `sort-${item}`}}
-            onAnimationEnd={() => setSlides({})}
-            item={item}
-            order={order}
-            onLifted={lifted => setAloft(maybe(lifted))}
-            onReleased={release}
-            onDragOver={() => setLanding(maybe(index))}
-            onArranged={(after, walker, toward) => {
-              setSlides(slideStarts.afterKeyboardStep(order, walker, toward));
-              setOrder(after);
-              setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
-            }}/>)
+        sort.order.map((item, index) => {
+          const slideStart = slideStarts.of(sort.slideStarts, item);
+          return <HideItem key={item} item={item}
+            onDragOver={() => dispatch(dragSortChange.hovered(index))}
+            className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
+            style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
+            onAnimationEnd={() => dispatch(dragSortChange.slid())}/>;
+        })
       }</ol>
-    <MoveReport moved={moved}/>
-  </>;
+    <MoveReport/>
+  </dragSorting.Provider>;
 };

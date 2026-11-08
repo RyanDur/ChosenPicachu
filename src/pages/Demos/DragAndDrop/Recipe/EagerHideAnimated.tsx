@@ -26,12 +26,12 @@ export const EagerHideAnimatedRecipe: FC = () => <>
     <Promises pace="eager" origin="hide" motion="animated"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <InnerHalf/>
       <CommitCrossing listSource={listSource}/>
       <FadeOrigin itemSource={itemSource}/>
-      <SlideCrossed listSource={listSource} cssSource={cssSource}/>
+      <SlideCrossed cssSource={cssSource}/>
       <RoadEnd/>
     </Steps>
   </Story>

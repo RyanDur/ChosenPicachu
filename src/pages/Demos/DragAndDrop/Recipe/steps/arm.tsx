@@ -9,9 +9,9 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
       <Says><code className="monospaced">draggable</code> is an attribute, a setting written on the element, and the
         grip turns it on. An event is the browser telling the page that something happened.
         The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about events. On pointerdown, the event for
-        a mouse button, a pen or a finger pressing down, the grip sets a flag, and the card
-        renders <code className="monospaced">draggable</code> for that
-        gesture only.</Says>
+        a mouse button, a pen or a finger pressing down, the grip dispatches <code className="monospaced">gripped</code> with its item,
+        and the card renders <code className="monospaced">draggable</code> only while it is the gripped one, so for that gesture
+        only.</Says>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag
         beginning, and its handler sets <code className="monospaced">effectAllowed</code> to move: this drag moves the
         card, it does not copy or link it.</Says>
@@ -23,7 +23,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...carve.span(itemSource, '<li', 'draggable={dragging}>')
+        ...carve.span(itemSource, '<li', 'draggable={gripped.map(pressed => pressed === item).orElse(false)}>')
       ]}/>
     </Codes>
   </Step>;

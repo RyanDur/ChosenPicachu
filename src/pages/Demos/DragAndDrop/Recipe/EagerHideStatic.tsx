@@ -14,7 +14,7 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?sample';
+import listSource from '../EagerHideStaticList.tsx?sample';
 import itemSource from '../items/HideItem.tsx?sample';
 
 export const EagerHideStaticRecipe: FC = () => <>
@@ -25,7 +25,7 @@ export const EagerHideStaticRecipe: FC = () => <>
     <Promises pace="eager" origin="hide" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <InnerHalf/>
       <CommitCrossing listSource={listSource}/>

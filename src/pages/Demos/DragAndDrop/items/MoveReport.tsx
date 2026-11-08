@@ -1,9 +1,13 @@
 import {FC} from 'react';
-import {Maybe} from '@ryandur/sand';
-import {Moved} from '../session';
+import {Moved} from '../drag-sort';
+import {useDragSort} from '../useDragSort';
 
-const moveReport = ({item, position, of}: Moved): string =>
-  `${item} moved to ${position + 1} of ${of}`;
+const moveReport = ({item, position}: Moved, count: number): string =>
+  `${item} moved to ${position + 1} of ${count}`;
 
-export const MoveReport: FC<{moved: Maybe<Moved>}> = ({moved}) =>
-  <output className="off-screen" aria-label="move report">{moved.map(moveReport).orElse('')}</output>;
+export const MoveReport: FC = () => {
+  const {lastMove, order} = useDragSort();
+  return <output className="off-screen" aria-label="move report">{
+    lastMove.map(moved => moveReport(moved, order.length)).orElse('')
+  }</output>;
+};

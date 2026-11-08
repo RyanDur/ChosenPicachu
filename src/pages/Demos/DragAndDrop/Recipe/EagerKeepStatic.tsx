@@ -14,7 +14,7 @@ import {
   StraightToOrder
 } from './steps';
 import gripSource from '../items/Grip.tsx?sample';
-import listSource from '../EagerKeepStaticList/EagerKeepStaticList.tsx?sample';
+import listSource from '../EagerKeepStaticList.tsx?sample';
 import itemSource from '../items/KeepItem.tsx?sample';
 
 export const EagerKeepStaticRecipe: FC = () => <>
@@ -25,7 +25,7 @@ export const EagerKeepStaticRecipe: FC = () => <>
     <Promises pace="eager" origin="keep" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
-      <HoldTheAloft listSource={listSource}/>
+      <HoldTheAloft/>
       <AcceptTheDrop listSource={listSource} itemSource={itemSource}/>
       <InnerHalf/>
       <CommitCrossing listSource={listSource}/>
