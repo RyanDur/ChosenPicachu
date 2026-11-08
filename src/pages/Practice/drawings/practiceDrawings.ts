@@ -10,9 +10,10 @@ type Drawing = {
   readonly frames: (siteStyle: string) => {wide: string; stacked: string};
 };
 
-// a media attribute cannot read a custom property, so the width spacing.css names --phone-held-upright is named here
-// for both pictures
+// a media attribute cannot read a custom property, so the widths spacing.css names --phone-held-upright and
+// --nav-in-a-row are named here for the pictures
 const phoneHeldUpright = '(width <= 600px)';
+const railAboveTheHeader = '(width <= 1100px)';
 
 type Box = {
   readonly label: string;
@@ -180,4 +181,4 @@ const landmarkMap = ((): Drawing => {
 
 const byName = {'where-a-rule-lives': whereARuleLives, 'landmark-map': landmarkMap} as const;
 
-export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright};
+export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright, railAboveTheHeader};
