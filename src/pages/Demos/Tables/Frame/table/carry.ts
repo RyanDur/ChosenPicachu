@@ -1,7 +1,7 @@
 import {has} from '@ryandur/sand';
 import {TableState, tableState, travel} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
-import {columnCells, changeMotion} from './settle';
+import {settle} from './settle';
 import {TableContext} from './context';
 
 const carriedCells = (mounted: MountedTable, state: TableState): readonly HTMLTableCellElement[] => {
@@ -9,12 +9,12 @@ const carriedCells = (mounted: MountedTable, state: TableState): readonly HTMLTa
   if (!has(drag)) {
     return [];
   }
-  return drag.axis === 'column' ? columnCells(mounted, drag.held) : [...(mounted.lanes.get(drag.held)?.cells ?? [])];
+  return drag.axis === 'column' ? settle.columnCells(mounted, drag.held) : [...(mounted.lanes.get(drag.held)?.cells ?? [])];
 };
 
 const dress = (mounted: MountedTable, state: TableState): void => {
   [...mounted.table.querySelectorAll('.carried')].forEach(cell => {
-    changeMotion(cell, {off: ['carried']});
+    settle.changeMotion(cell, {off: ['carried']});
     if (cell instanceof HTMLElement) {
       ['--seat-x', '--seat-y', '--drift-x', '--drift-y'].forEach(property => cell.style.removeProperty(property));
     }
@@ -22,7 +22,7 @@ const dress = (mounted: MountedTable, state: TableState): void => {
   const seat = tableState.seatOffset(state, mounted.order(), mounted.standing()) ?? travel.still;
   const drift = state.drag?.drift ?? travel.still;
   carriedCells(mounted, state).forEach(cell => {
-    changeMotion(cell, {on: ['carried']});
+    settle.changeMotion(cell, {on: ['carried']});
     cell.style.setProperty('--seat-x', `${seat.x}px`);
     cell.style.setProperty('--seat-y', `${seat.y}px`);
     cell.style.setProperty('--drift-x', `${drift.x}px`);

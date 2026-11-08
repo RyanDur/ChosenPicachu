@@ -5,27 +5,23 @@ import {
   Given,
   MountedTable,
   Reconcile,
-  settleColumn,
-  settleRow,
-  shoveColumns,
-  shoveRows,
   TableContext,
   tell,
-  unmarked,
   wireParts,
   mountedTable,
   carry,
   frameColumns,
   sortMenus,
   moveReport,
-  frameRows
+  frameRows,
+  settle
 } from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();
   const from = current.indexOf(name);
   tell(context.table, 'column-moved', {column: name, to});
-  shoveColumns(context, survey.displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
+  settle.shoveColumns(context, survey.displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
 };
 
 const columnTo = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -34,7 +30,7 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
   const over = survey.spanCrossed(current, widths, from, to);
   columnShoving(context, name, to, widths);
   context.report({about: 'column', name, position: to, of: current.length});
-  settleColumn(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
+  settle.column(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
 };
 
 const columnBeside = (context: MountedTable, name: string, neighbour: string): void => {
@@ -45,13 +41,13 @@ const columnBeside = (context: MountedTable, name: string, neighbour: string): v
 
 const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: Pick<RowNudge, 'to' | 'heights'>): void => {
   const from = before.indexOf(row);
-  shoveRows(context, survey.displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
+  settle.shoveRows(context, survey.displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
 };
 
 const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowNudge): void => {
   const before = context.standing();
   rowShoving(context, row, before, {to, heights});
-  settleRow(context, row, tableState.settlingFromSeat({
+  settle.row(context, row, tableState.settlingFromSeat({
     x: 0,
     y: to > from ? -survey.spanCrossed(before, heights, from, to) : survey.spanCrossed(before, heights, from, to)
   }));
@@ -90,9 +86,9 @@ const drop = (context: MountedTable): void => {
   const from = tableState.settlingAt(hand.state, order(), standing());
   hand.dispatch(tableActions.released());
   if (drag.axis === 'column') {
-    settleColumn(context, drag.held, from);
+    settle.column(context, drag.held, from);
   } else {
-    settleRow(context, drag.held, from);
+    settle.row(context, drag.held, from);
   }
 };
 
@@ -110,7 +106,7 @@ const moved = (context: MountedTable, moving: Moving): void => {
 };
 
 const lift = (context: MountedTable, carry: Carry, grab: Grab): void => {
-  unmarked(context);
+  settle.unmarked(context);
   context.store.dispatch(tableActions.lifted(carry, grab));
 };
 

@@ -7,6 +7,6 @@ export {wireParts} from './parts';
 export {moveReport} from './report';
 export {dressWidths} from './resize';
 export {frameRows} from './rows';
-export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';
+export {settle} from './settle';
 export type {Given, MountedTable, Reconcile} from './table-state';
 export {mountedTable} from './table-state';

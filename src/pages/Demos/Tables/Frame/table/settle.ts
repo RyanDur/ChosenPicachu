@@ -1,7 +1,7 @@
 import {ColumnShove, RowShove, Settling} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 
-export const columnCells = (mounted: MountedTable, column: string): HTMLTableCellElement[] => {
+const columnCells = (mounted: MountedTable, column: string): HTMLTableCellElement[] => {
   const at = mounted.order().indexOf(column);
   return [...mounted.table.rows].map(row => row.cells[at]);
 };
@@ -15,7 +15,7 @@ const shoves = Object.values(shoveOf);
 const marks: readonly Motion[] = ['settling', ...shoves];
 const motions: readonly Motion[] = ['carried', ...marks];
 
-export const changeMotion = (
+const changeMotion = (
   cell: Element,
   {on = [], off = []}: {on?: readonly Motion[]; off?: readonly Motion[]}
 ): void => {
@@ -34,7 +34,7 @@ const undressed = (cells: readonly HTMLTableCellElement[]): void =>
     cell.style.removeProperty('--shoved-by');
   });
 
-export const unmarked = ({table}: MountedTable): void =>
+const unmarked = ({table}: MountedTable): void =>
   undressed([...table.querySelectorAll(marks.map(mark => `.${mark}`).join(', '))]
     .filter(cell => cell instanceof HTMLTableCellElement));
 
@@ -60,14 +60,24 @@ const shoving = (cells: readonly HTMLTableCellElement[], {toward, by}: ColumnSho
   untilSettled(cells);
 };
 
-export const settleColumn = (mounted: MountedTable, column: string, from: Settling): void =>
-  settling(columnCells(mounted, column), from);
+const column = (mounted: MountedTable, name: string, from: Settling): void =>
+  settling(columnCells(mounted, name), from);
 
-export const settleRow = ({lanes}: MountedTable, row: string, from: Settling): void =>
-  settling([...(lanes.get(row)?.cells ?? [])], from);
+const row = ({lanes}: MountedTable, key: string, from: Settling): void =>
+  settling([...(lanes.get(key)?.cells ?? [])], from);
 
-export const shoveColumns = (mounted: MountedTable, columns: readonly string[], shove: ColumnShove): void =>
+const shoveColumns = (mounted: MountedTable, columns: readonly string[], shove: ColumnShove): void =>
   columns.forEach(column => shoving(columnCells(mounted, column), shove));
 
-export const shoveRows = ({lanes}: MountedTable, rows: readonly string[], shove: RowShove): void =>
+const shoveRows = ({lanes}: MountedTable, rows: readonly string[], shove: RowShove): void =>
   rows.forEach(row => shoving([...(lanes.get(row)?.cells ?? [])], shove));
+
+export const settle = {
+  columnCells,
+  changeMotion,
+  unmarked,
+  column,
+  row,
+  shoveColumns,
+  shoveRows
+};
