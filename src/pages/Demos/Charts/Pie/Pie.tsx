@@ -3,7 +3,7 @@ import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components';
 import {Trade, liveTrades} from '../../Market';
-import {pieShapes} from './shapes';
+import {pieShapes} from './pie-shapes';
 import '../chart-card.css';
 import './Pie.css';
 import {sideOf} from '../sides';

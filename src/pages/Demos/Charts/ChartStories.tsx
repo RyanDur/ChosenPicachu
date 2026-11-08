@@ -15,7 +15,7 @@ import candlesCss from './Candles/Candles.css?sample';
 import pressureShapesSource from './Pressure/pressure-shapes.ts?sample';
 import pressureComponent from './Pressure/Pressure.tsx?sample';
 import pressureCss from './Pressure/Pressure.css?sample';
-import pieSource from './Pie/shapes.ts?sample';
+import pieSource from './Pie/pie-shapes.ts?sample';
 import pieComponent from './Pie/Pie.tsx?sample';
 import pieCss from './Pie/Pie.css?sample';
 import drawingCss from '../../../styles/drawing.css?sample';
