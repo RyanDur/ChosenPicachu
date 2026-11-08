@@ -5,7 +5,6 @@ import './Fancy.css';
 
 type FancyTextInputProps = {
   type?: 'text' | 'email' | 'date';
-  id?: string;
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
@@ -21,7 +20,6 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   {
     type = 'text',
     children,
-    id,
     onChange,
     className,
     inputClass,
@@ -32,7 +30,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     pattern,
     value = ''
   }
-) => <label id={id} className={classNames(
+) => <label className={classNames(
   'fancy',
   'soft-cornered',
   className

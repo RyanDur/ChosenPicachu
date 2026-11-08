@@ -2,7 +2,6 @@ import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {FancyInput} from './FancyInput';
 
 type FancyDateInputProps = {
-  id?: string;
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
