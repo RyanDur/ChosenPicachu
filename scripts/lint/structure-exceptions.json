@@ -3,7 +3,6 @@
     "src/components/DragSortableTable/context.ts",
     "src/components/DragSortableTable/useDragSortable.ts",
     "src/components/Menu/Menu.tsx",
-    "src/components/Table/shares.ts",
     "src/components/Users/FriendsList/focus.ts",
     "src/components/Users/FriendsList/report.ts",
     "src/components/Users/UserInfo/user.ts",

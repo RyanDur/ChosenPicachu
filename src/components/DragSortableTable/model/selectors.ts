@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
-import {neighborOf} from '@components/Table';
+import {shares} from '@components/Table';
 import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {survey} from './survey';
 import {Drift} from './travel';
@@ -33,7 +33,7 @@ const rowCount = ({rows}: TableView): number => rows.length;
 const columnTravels = (name: string) => (view: TableView): boolean =>
   not(survey.anchored(positionOfColumn(name)(view), columnCount(view)));
 
-const neighbourOfColumn = (name: string) => (view: TableView): string => neighborOf(order(view), name);
+const neighbourOfColumn = (name: string) => (view: TableView): string => shares.neighborOf(order(view), name);
 
 const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
   state.drag?.axis === 'column' && state.drag.held === name ? state.drag : undefined;

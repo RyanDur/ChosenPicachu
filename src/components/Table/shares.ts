@@ -3,7 +3,7 @@ const SLIMMEST = 5;
 
 export type ColumnWidths = Readonly<Record<string, number>>;
 
-export const measuredWidths = (keys: readonly string[], table: HTMLTableElement): ColumnWidths => {
+const measuredWidths = (keys: readonly string[], table: HTMLTableElement): ColumnWidths => {
   const widths = [...table.querySelectorAll('thead th')].map(header => header.getBoundingClientRect().width);
   const total = widths.reduce((sum, width) => sum + width, 0);
   return keys.reduce<ColumnWidths>((measured, key, at) =>
@@ -18,7 +18,7 @@ const controlsWidth = (header: Element): number => {
     pixels(borderInlineStartWidth) + pixels(borderInlineEndWidth);
 };
 
-export const measuredFloors = (keys: readonly string[], table: HTMLTableElement): ColumnWidths => {
+const measuredFloors = (keys: readonly string[], table: HTMLTableElement): ColumnWidths => {
   const headers = [...table.querySelectorAll('thead th')];
   const total = headers.reduce((sum, header) => sum + header.getBoundingClientRect().width, 0);
   return keys.reduce<ColumnWidths>((floors, key, at) =>
@@ -27,7 +27,7 @@ export const measuredFloors = (keys: readonly string[], table: HTMLTableElement)
 
 const floorOf = (floors: ColumnWidths, column: string): number => Math.max(SLIMMEST, floors[column] ?? 0);
 
-export const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths) =>
+const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths) =>
   (previous: ColumnWidths): ColumnWidths => {
     const given = Math.min(
       Math.max(delta, floorOf(floors, column) - previous[column]),
@@ -36,38 +36,38 @@ export const traded = (column: string, neighbor: string, delta: number, floors: 
     return {...previous, [column]: previous[column] + given, [neighbor]: previous[neighbor] - given};
   };
 
-export const neighborOf = (apportioned: readonly string[], key: string): string => {
+const neighborOf = (apportioned: readonly string[], key: string): string => {
   const index = apportioned.indexOf(key);
   return apportioned[index + 1] ?? apportioned[index - 1];
 };
 
-export const STEP_SHARE = 2;
+const step = 2;
 
 export type Grip = Readonly<{fromX: number; pxPerShare: number}>;
 
-export const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (clientX - fromX) / pxPerShare;
+const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (clientX - fromX) / pxPerShare;
 
-export const shareWidth = (share?: number): string | undefined =>
+const width = (share?: number): string | undefined =>
   has(share) ? `${share}%` : undefined;
 
-export const wholePercent = (share: number): number => Math.round(share);
+const wholePercent = (share: number): number => Math.round(share);
 
-export const resizeLabel = (column: string, share?: number): string =>
+const resizeLabel = (column: string, share?: number): string =>
   has(share) ? `resize ${column}, ${wholePercent(share)}%` : `resize ${column}`;
 
-export const grippedAt = (width: number, clientX: number): Grip | undefined => {
+const grippedAt = (width: number, clientX: number): Grip | undefined => {
   const pxPerShare = width / 100;
   return pxPerShare ? {fromX: clientX, pxPerShare} : undefined;
 };
 
-export const soughtTrade = (grip: Grip, clientX: number, carried: number): {delta: number; carried: number} => {
+const soughtTrade = (grip: Grip, clientX: number, carried: number): {delta: number; carried: number} => {
   const share = sought(grip, clientX);
   return {delta: share - carried, carried: share};
 };
 
-const arrowTrades: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
+const arrowTrades: Record<string, number> = {ArrowRight: step, ArrowLeft: -step};
 
-export const resizeArrows = (trade: (delta: number) => void) =>
+const resizeArrows = (trade: (delta: number) => void) =>
   (event: {key: string; preventDefault: () => void; stopPropagation: () => void}): void => {
     const delta = arrowTrades[event.key];
     if (has(delta)) {
@@ -77,9 +77,25 @@ export const resizeArrows = (trade: (delta: number) => void) =>
     }
   };
 
-export const resizeArrowLifted = (ended: () => void) =>
+const resizeArrowLifted = (ended: () => void) =>
   ({key}: {key: string}): void => {
     if (has(arrowTrades[key])) {
       ended();
     }
   };
+
+export const shares = {
+  measuredWidths,
+  measuredFloors,
+  traded,
+  neighborOf,
+  step,
+  sought,
+  width,
+  wholePercent,
+  resizeLabel,
+  grippedAt,
+  soughtTrade,
+  resizeArrows,
+  resizeArrowLifted
+};

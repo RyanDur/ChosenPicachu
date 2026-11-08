@@ -1,5 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {grippedAt, measuredFloors, measuredWidths, neighborOf, STEP_SHARE} from '@components/Table';
+import {shares} from '@components/Table';
 import {arrows, TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
 import {columnOfHeader, MountedTable} from './table-state';
 
@@ -12,8 +12,8 @@ const saidAfter = ({store, report}: Pick<MountedTable, 'store' | 'report'>, happ
 };
 
 const awaken = ({table, store, order}: Resizing): void => {
-  const widths = tableState.widthsOf(store.state) ?? measuredWidths(order(), table);
-  store.dispatch(tableActions.measured(widths, measuredFloors(order(), table)));
+  const widths = tableState.widthsOf(store.state) ?? shares.measuredWidths(order(), table);
+  store.dispatch(tableActions.measured(widths, shares.measuredFloors(order(), table)));
 };
 
 const resizing = (context: Resizing, column: string, handle: HTMLElement): void => {
@@ -21,13 +21,14 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
   handle.addEventListener('pointerdown', event => {
     event.stopPropagation();
     awaken(context);
-    maybe(grippedAt(context.table.getBoundingClientRect().width, event.clientX))
+    maybe(shares.grippedAt(context.table.getBoundingClientRect().width, event.clientX))
       .map(grip => saidAfter(context, tableActions.gripped(column, grip)));
     handle.setPointerCapture(event.pointerId);
   });
   handle.addEventListener('pointermove', event => not(tableState.pointerHolds(context.store.state, column))
     ? undefined
-    : context.store.dispatch(tableActions.handleDragged(column, neighborOf(context.order(), column), event.clientX)));
+    : context.store.dispatch(
+      tableActions.handleDragged(column, shares.neighborOf(context.order(), column), event.clientX)));
   (['pointerup', 'pointercancel', 'lostpointercapture'] as const).forEach(landing =>
     handle.addEventListener(landing, () => saidAfter(context, tableActions.handleReleased(column))));
   handle.addEventListener('keyup', event => maybe(arrows.columnSteps[event.key]).map(() => saidAfter(context, tableActions.arrowLifted(column))));
@@ -36,7 +37,7 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
     event.preventDefault();
     event.stopPropagation();
     awaken(context);
-    saidAfter(context, tableActions.tradedBy(column, neighborOf(context.order(), column), toward * STEP_SHARE));
+    saidAfter(context, tableActions.tradedBy(column, shares.neighborOf(context.order(), column), toward * shares.step));
   }));
 };
 

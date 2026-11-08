@@ -24,12 +24,12 @@ const gap = lines.plain(' ');
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(sharesSource, 'export const measuredWidths'), gap,
+      ...carve.unit(sharesSource, 'const measuredWidths'), gap,
       ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
       ...carve.span(buildSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), gap,
-      ...carve.span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
+      ...carve.span(buildSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
@@ -38,7 +38,7 @@ const ledgerCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(sharesSource, 'export const measuredWidths'), gap,
+      ...carve.unit(sharesSource, 'const measuredWidths'), gap,
       ...carve.unit(frameHandle, 'const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
@@ -63,12 +63,12 @@ const edgeMarkup: Record<World, ReactNode> = {
 
 const SpokenLabel: FC = () =>
   <Snippet label="TS" lines={[
-    ...carve.unit(sharesSource, 'export const resizeLabel')
+    ...carve.unit(sharesSource, 'const resizeLabel')
   ]}/>;
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...carve.span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
+    ...carve.span(resizeSource, '<button type="button"', 'aria-label={shares.resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...carve.span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize window"></button>')
@@ -115,8 +115,8 @@ const captureSays: Record<World, ReactNode> = {
 
 const GripWords: FC = () =>
   <Snippet label="TS" lines={[
-    ...carve.unit(sharesSource, 'export const grippedAt'), gap,
-    ...carve.unit(sharesSource, 'export const soughtTrade'), gap,
+    ...carve.unit(sharesSource, 'const grippedAt'), gap,
+    ...carve.unit(sharesSource, 'const soughtTrade'), gap,
     ...carve.unit(stateSource, 'const grip ='), gap,
     ...carve.unit(stateSource, 'const dragHandle'),
     lines.aside('// both worlds seed the grip and fold the moves in the same store')
@@ -144,8 +144,8 @@ const gestureCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...carve.span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
       lines.aside('// …the press measures; the bubbling stops here'), gap,
-      ...carve.unit(sharesSource, 'export const resizeArrows'), gap,
-      ...carve.span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
+      ...carve.unit(sharesSource, 'const resizeArrows'), gap,
+      ...carve.span(resizeSource, 'onKeyDown={shares.resizeArrows(trade)}', 'onKeyDown={shares.resizeArrows(trade)}'),
       lines.aside('// the column drag above never gets the press')
     ]}/>
   </Codes>,
@@ -278,7 +278,7 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             <Snippet label="TS" lines={[
               ...carve.unit(sharesSource, 'const SLIMMEST'), gap,
               ...carve.unit(sharesSource, 'const floorOf'), gap,
-              ...carve.unit(sharesSource, 'export const traded')
+              ...carve.unit(sharesSource, 'const traded')
             ]}/>
           </Codes>
         </Reveal>

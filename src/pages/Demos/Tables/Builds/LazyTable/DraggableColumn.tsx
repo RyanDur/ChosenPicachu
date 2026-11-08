@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table';
+import {shares} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
 import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, survey, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
@@ -67,7 +67,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
-      '--share': shareWidth(width),
+      '--share': shares.width(width),
       '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
       '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
       '--settle-x': looks.pixels(settlingFrom?.seat.x), '--settle-y': looks.pixels(settlingFrom?.seat.y),

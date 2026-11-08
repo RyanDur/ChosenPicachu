@@ -1,4 +1,4 @@
-import {wholePercent} from '@components/Table';
+import {shares} from '@components/Table';
 import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 
@@ -15,7 +15,7 @@ const move = (report: Report): string => {
     case 'row':
       return `${report.name} moved to ${report.position + 1} of ${report.of}`;
     case 'share':
-      return `${report.name} resized to ${wholePercent(report.share)}%`;
+      return `${report.name} resized to ${shares.wholePercent(report.share)}%`;
     case 'sort':
       return has(report.direction) ? `${report.name} sorted ${report.direction}` : `${report.name} sort reset`;
   }

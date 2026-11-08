@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
-import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components/Table';
+import {ColumnWidths, Grip, shares} from '@components/Table';
 import {Direction, Value} from './sorting';
 import {Drift, Moving, travel} from './travel';
 import {Flight, Grab} from './lift';
@@ -97,13 +97,13 @@ const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
 
 const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => measure(state, traded(column, neighbour, delta, state.floors)(previous), state.floors))
+    .map(previous => measure(state, shares.traded(column, neighbour, delta, state.floors)(previous), state.floors))
     .orElse(state);
 
 const endSizing = ({sizing, ...state}: TableState): TableState =>
   maybe(sizing)
     .mBind(({column, from}) => maybe(state.widths?.[column])
-      .map((share): TableState => wholePercent(share) === wholePercent(from) ? state : {...state, report: {about: 'share', name: column, share}}))
+      .map((share): TableState => shares.wholePercent(share) === shares.wholePercent(from) ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
 const sizingOf = (state: TableState, column: string): TableState =>
@@ -138,7 +138,7 @@ const pointerHolds = (state: TableState, column: string): boolean =>
 const dragHandle = (state: TableState, column: string, neighbour: string, clientX: number): TableState =>
   maybe(gripOf(state, column))
     .map((sizing): TableState => {
-      const sought = soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
+      const sought = shares.soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
       return {...trade(state, column, neighbour, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
     })
     .orElse(state);

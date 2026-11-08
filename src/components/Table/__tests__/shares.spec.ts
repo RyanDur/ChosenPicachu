@@ -1,18 +1,18 @@
 import {describe, expect, it} from 'vitest';
-import {grippedAt, resizeArrows, resizeLabel, soughtTrade} from '../shares';
+import {shares} from '../shares';
 
 describe('the shares vocabulary', () => {
   it('seeds the grip from the table width, or nothing from no width', () => {
-    expect(grippedAt(700, 120)).toEqual({fromX: 120, pxPerShare: 7});
-    expect(grippedAt(0, 120)).toBeUndefined();
+    expect(shares.grippedAt(700, 120)).toEqual({fromX: 120, pxPerShare: 7});
+    expect(shares.grippedAt(0, 120)).toBeUndefined();
   });
 
   it('folds each move into the increment since the last one', () => {
     const grip = {fromX: 100, pxPerShare: 7};
 
-    const first = soughtTrade(grip, 170, 0);
+    const first = shares.soughtTrade(grip, 170, 0);
     expect(first).toEqual({delta: 10, carried: 10});
-    expect(soughtTrade(grip, 240, first.carried)).toEqual({delta: 10, carried: 20});
+    expect(shares.soughtTrade(grip, 240, first.carried)).toEqual({delta: 10, carried: 20});
   });
 
   const press = (key: string, swallowed: string[]) => ({
@@ -27,7 +27,7 @@ describe('the shares vocabulary', () => {
 
   it('a left or right arrow steps the share by two', () => {
     const trades: number[] = [];
-    const listener = resizeArrows(delta => trades.push(delta));
+    const listener = shares.resizeArrows(delta => trades.push(delta));
 
     listener(press('ArrowRight', []));
     listener(press('ArrowLeft', []));
@@ -38,7 +38,7 @@ describe('the shares vocabulary', () => {
 
   it('a claimed arrow press goes no further', () => {
     const swallowed: string[] = [];
-    const listener = resizeArrows(() => undefined);
+    const listener = shares.resizeArrows(() => undefined);
 
     listener(press('ArrowRight', swallowed));
     listener(press('ArrowLeft', swallowed));
@@ -48,7 +48,7 @@ describe('the shares vocabulary', () => {
   });
 
   it('speaks the resize announcement, with the share once the ledger exists', () => {
-    expect(resizeLabel('trades', 24.4)).toBe('resize trades, 24%');
-    expect(resizeLabel('trades', undefined)).toBe('resize trades');
+    expect(shares.resizeLabel('trades', 24.4)).toBe('resize trades, 24%');
+    expect(shares.resizeLabel('trades', undefined)).toBe('resize trades');
   });
 });

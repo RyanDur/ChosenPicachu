@@ -5,12 +5,7 @@ import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {tableActions, tableSelectors} from './model';
 import {
-  grippedAt,
-  measuredFloors,
-  measuredWidths,
-  resizeArrowLifted,
-  resizeArrows,
-  resizeLabel
+  shares
 } from '@components/Table';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
@@ -22,7 +17,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const hydrated = useHydrated();
 
   const awaken = (table: HTMLTableElement): void =>
-    dispatch(tableActions.awoken(measuredWidths(order, table), measuredFloors(order, table)));
+    dispatch(tableActions.awoken(shares.measuredWidths(order, table), shares.measuredFloors(order, table)));
   const trade = (delta: number): void => dispatch(tableActions.tradedBy(column, neighbour, delta));
   const release = (): void => dispatch(tableActions.handleReleased(column));
   const followed = (event: PointerEvent<HTMLElement>): void =>
@@ -32,11 +27,11 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
     tabIndex={0}
     disabled={!hydrated}
     className="resize-handle borderless unfilled held-bar-after focus-ringed"
-    aria-label={resizeLabel(column, namedShare)}
+    aria-label={shares.resizeLabel(column, namedShare)}
     onFocus={(event: FocusEvent<HTMLElement>) =>
       maybe(event.currentTarget.closest('table')).map(awaken)}
-    onKeyDown={resizeArrows(trade)}
-    onKeyUp={resizeArrowLifted(() => dispatch(tableActions.arrowLifted(column)))}
+    onKeyDown={shares.resizeArrows(trade)}
+    onKeyUp={shares.resizeArrowLifted(() => dispatch(tableActions.arrowLifted(column)))}
     onBlur={() => dispatch(tableActions.handleLeft(column))}
     onMouseDown={event => event.stopPropagation()}
     onPointerDown={(event: PointerEvent<HTMLElement>) => {
@@ -44,7 +39,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       event.currentTarget.setPointerCapture(event.pointerId);
       maybe(event.currentTarget.closest('table')).map(table => {
         awaken(table);
-        maybe(grippedAt(table.getBoundingClientRect().width, event.clientX))
+        maybe(shares.grippedAt(table.getBoundingClientRect().width, event.clientX))
           .map(grip => dispatch(tableActions.gripped(column, grip)));
       });
     }}
