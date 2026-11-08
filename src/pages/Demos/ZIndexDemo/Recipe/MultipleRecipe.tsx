@@ -80,10 +80,11 @@ export const MultipleRecipe: FC = () => {
         <Words want="The same message twice tells me nothing new.">
           <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>.{' '}
             <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
-            action, and it gives the new banner its id. The reducer is the function that takes the news and an action
-            and returns the news that follows. The news is the banners that are up and where they sit. The reducer looks
-            for the message among the banners and returns the news unchanged when it finds one. Otherwise it adds the
-            new banner. Once a banner has been dismissed and has gone, the same message can be raised again.</Says>
+            action, and it gives the new banner its id. The site’s news is the banners that are up and where they sit.
+            The reducer is the function that takes the news and an action and returns the news that follows. The
+            reducer looks for the message among the banners and returns the news unchanged when it finds one. Otherwise
+            it adds the new banner. Once a banner has been dismissed and has gone, the same message can be raised
+            again.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
