@@ -6,10 +6,11 @@ on:
       # a dev pushes a card's sha to verify/<issue> before Accepted: the unit tests, the journeys and the review run;
       # Lighthouse, pages and smoke run from main only
       - 'verify/**'
-    # words for the agents and the docs run nothing: no test, build or page reads them, and the next code push's review covers them
+    # a push of documents alone runs nothing: no build or page imports a Markdown file, and the next code push's run and
+    # review cover them (Ryan, 2026-11-08: "the ci should probably not run on doc updates")
     paths-ignore:
       - 'docs/**'
-      - 'AGENTS.md'
+      - '**/*.md'
   workflow_dispatch:
     inputs:
       review_from:

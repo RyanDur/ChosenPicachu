@@ -32,6 +32,16 @@ Scott Wlaschin, Railway Oriented Programming: https://fsharpforfunandprofit.com/
 - The success track carries no failure checks; the failure track carries no business logic. A `try` and `catch` inside the domain is a finding; one at the edge that turns a thrown platform error into a Result is the boundary doing its job.
 - A promise that can reject is a failure the type does not name. Where the code awaits something of ours, ask whether the rejection has a track.
 
+## What the names say
+
+Carl Alexander, The importance of naming in programming: https://carlalexander.ca/importance-naming-programming/
+
+- A name says what the thing is or does, in words someone who reads the code would use: "Be as clear and explicit as you can be when naming anything." A name that needs its type or its body read before it means anything, such as `style`, `data`, `value`, `handle` or `item` for a thing more particular than an item, is a finding.
+- A value's name says what its values mean. A property or a flag whose values have to be decoded from the code that uses them, such as `--toward: 1` for an item that came from the right, is a finding.
+- No abbreviations: "Saving a few characters isn't worth the confusion that an abbreviation might bring."
+- A module member reads as a phrase with its module, `travel.eager`. Dropping a word the module already says is right only when what is left still names the thing. `marks.style`, cut down from `pushedStyle`, says neither whose style it is nor what for, so it is a finding.
+- A comment that explains what a name means is a sign the name is wrong.
+
 ## How you report
 
 A finding points at a file and a line, names which section it answers to, and quotes that source. Name a pattern once and list where it recurs. Code that is merely different from how you would write it is not a finding, and a stage the site has chosen not to reach is not a finding. Nothing wrong is a true answer: never invent a finding to have something to say.
