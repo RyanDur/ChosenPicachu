@@ -91,6 +91,15 @@ describe('Gallery Navigation', () => {
     expect(galleryNav.count()).toHaveTextContent(`${1} - ${limit} of ${total}`);
   });
 
+  test('the ways and the count read as separate words, even with the styles off', async () => {
+    setupAICEveryPage(aicArtResponse);
+    render(<TestApp at={`${Paths.artGallery}?page=2&size=${limit}`}/>);
+    await galleryWall.framesAppear();
+
+    expect(galleryNav.count().textContent).toMatch(
+      new RegExp(`^\\s*FIRST\\s+PREV\\s+${limit + 1} - ${limit * 2} of ${total}\\s+NEXT\\s+LAST\\s*$`));
+  });
+
   test('before any page has arrived, no count is said', () => {
     heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
