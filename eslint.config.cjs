@@ -78,10 +78,8 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const stillCallComponents = [
-  'src/hydrateTheSite.tsx',
   'src/pages/Demos/route.tsx',
-  'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx',
-  'src/pages/Practice/route.tsx'
+  'src/pages/Demos/Tables/Builds/__tests__/tables.spec.tsx'
 ];
 
 const stillReachForThePage = [
