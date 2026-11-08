@@ -40,19 +40,24 @@ export const museumReply: MuseumReplies = {
     }
   },
   awaited: ({reply}) => reply === 'unasked' || reply === 'asked',
-  ask: (question, dispatch, refused) => question
-    .map(asked => {
-      const {cancel} = asked()
-        .onPending(pending => pending && dispatch(replyChange.asked()))
-        .onSuccess(answer => dispatch(replyChange.answered(answer)))
-        .onFailure(failure => {
-          dispatch(replyChange.refused());
-          refused(failure);
-        });
-      return () => {
-        cancel();
-        dispatch(replyChange.abandoned());
-      };
-    })
-    .orElse(() => dispatch(replyChange.abandoned()))
+  ask: (question, dispatch, refused) => {
+    const abandon = (): void => {
+      dispatch(replyChange.abandoned());
+    };
+    return question
+      .map(asked => {
+        const {cancel} = asked()
+          .onPending(pending => pending && dispatch(replyChange.asked()))
+          .onSuccess(answer => dispatch(replyChange.answered(answer)))
+          .onFailure(failure => {
+            dispatch(replyChange.refused());
+            refused(failure);
+          });
+        return () => {
+          cancel();
+          abandon();
+        };
+      })
+      .orElse(abandon);
+  }
 };
