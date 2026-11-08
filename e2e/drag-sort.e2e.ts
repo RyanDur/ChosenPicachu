@@ -1,4 +1,5 @@
 import {expect} from '@playwright/test';
+import {not} from '@ryandur/sand';
 import {test} from './__test_support/journey';
 import {iPhone, sortableList} from './__test_support';
 
@@ -26,7 +27,8 @@ test('an arrow key walks an item in an animated list past its neighbour, and bac
   await expect.poll(list.seats).toEqual(['B', 'A', 'C']);
 
   await expect(async () => {
-    if ((await list.seats())[0] !== 'A') {
+    const [first] = await list.seats();
+    if (not(first === 'A')) {
       await list.stepByKey('A', 'ArrowLeft');
     }
     expect(await list.seats()).toEqual(['A', 'B', 'C']);
