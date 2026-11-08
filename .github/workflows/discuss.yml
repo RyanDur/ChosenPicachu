@@ -17,6 +17,7 @@ jobs:
       github.event_name == 'workflow_dispatch'
       || (github.event.pull_request.state == 'open' && github.event.comment.in_reply_to_id
           && github.event.comment.user.type != 'Bot'
+          && !contains(github.event.comment.body, 'Resolved by ruling.')
           && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-26.04
     permissions:
