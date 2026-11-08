@@ -47,7 +47,8 @@ tester.run('through-index', structure.rules['through-index'], {
 tester.run('index-top-level', structure.rules['index-top-level'], {
   valid: [
     {name: 'should not judge a file that is not an index', code: "export * from './placement';", filename: withIndex},
-    {name: 'should count an import of a top-level directory by its bare alias, as src imports http from @transport', code: "export {http} from './http';", filename: at('src/transport/index.ts')}
+    {name: 'should count an import of a top-level directory by its bare alias, as src imports http from @transport', code: "export {http} from './http';", filename: at('src/transport/index.ts')},
+    {name: 'should count an import from the backend, as backend/users imports Person from the Users profile', code: "export type {Person} from './profile';", filename: at('src/pages/Users/profile/index.ts')}
   ],
   invalid: [
     {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: at('src/frame/notices/Banners/index.ts'), errors: [{messageId: 'broken'}]},

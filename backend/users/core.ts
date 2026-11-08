@@ -1,9 +1,7 @@
 import {nanoid} from 'nanoid';
 import {startOfDay} from 'date-fns';
 import {AvatarGenerator} from 'random-avatar-generator';
-import {Address, NewUser, User} from '@pages/Users/profile';
-
-type Person = NewUser['person'];
+import {Address, NewUser, Person, User} from '@pages/Users/profile';
 import {
   rand,
   randBetweenDate,
