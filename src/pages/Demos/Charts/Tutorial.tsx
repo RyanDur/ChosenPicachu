@@ -503,7 +503,10 @@ const WorkspaceStory: FC = () =>
         <Words want="The grip and the remove button show only under a pointer. A keyboard works on the chart itself.">
           <Says>Each chart is a link, so Tab reaches it. With a chart in focus, the up and down arrows move it one
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
-            Delete or Backspace removes it, unless it is the last chart.</Says>
+            Delete or Backspace removes it, unless it is the last chart. Focus then moves to the next chart’s link, or
+            to the one before when the removed chart was last, so the reader keeps their place.{' '}
+          <code className="monospaced">keys</code> passes up the element the key was pressed on, and the workspace walks
+            from it to that link.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
