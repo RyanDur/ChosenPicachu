@@ -13,8 +13,7 @@
     "src/pages/Demos/Charts/kinds.ts",
     "src/pages/Demos/Charts/live-trades.ts",
     "src/pages/Demos/Charts/period.ts",
-    "src/pages/Demos/types.ts",
-    "src/pages/Games/frame.tsx"
+    "src/pages/Demos/types.ts"
   ],
   "has-index": [
     "src/pages/Demos/Accordions/Accordions.tsx",
@@ -45,9 +44,7 @@
     "src/pages/Demos/Charts/sparkline.ts",
     "src/pages/Demos/Charts/useChartTravel.ts",
     "src/pages/Demos/Charts/useDesk.ts",
-    "src/pages/Demos/Charts/usePeriodCandles.ts",
-    "src/pages/Games/GamesPage.tsx",
-    "src/pages/Games/frame.tsx"
+    "src/pages/Demos/Charts/usePeriodCandles.ts"
   ],
   "through-index": [
     "src/pages/Demos/Accordions/Explained.tsx",
