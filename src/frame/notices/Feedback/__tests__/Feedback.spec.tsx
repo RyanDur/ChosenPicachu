@@ -34,7 +34,7 @@ describe('Feedback in a browser without invoker commands', () => {
     await feedback.write('The rail moved.');
     await feedback.cancel();
     await site.followRail('Gallery');
-    await waitFor(async () => expect(await site.currentPages()).toEqual(['Gallery']));
+    await site.arrivedAt('Gallery');
 
     await feedback.open();
 

@@ -19,6 +19,8 @@ export const site = {
   currentPages: async (): Promise<string[]> =>
     within(await screen.findByRole('navigation', {name: 'site'})).findAllByRole('link', {current: 'page'})
       .then(links => links.map(link => link.textContent)),
+  arrivedAt: async (name: string): Promise<HTMLElement> =>
+    within(await screen.findByRole('navigation', {name: 'site'})).findByRole('link', {name, current: 'page'}),
   railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('navigation', {name: 'site'}),
   railHoldsFeedback: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('button', {name: 'Feedback'}),
   railLinks: async (): Promise<HTMLElement[]> => within(await screen.findByRole('navigation', {name: 'site'})).getAllByRole('link'),

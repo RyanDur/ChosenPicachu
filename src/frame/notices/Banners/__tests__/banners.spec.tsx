@@ -12,7 +12,7 @@ const Trouble: FC<{message: string}> = ({message}) => {
 const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);
 
 describe('the banners', () => {
-  test('a raised error is announced as an alert', async () => {
+  test('should announce a raised error as an alert', async () => {
     renderWithTrouble('the live feed refused the handshake');
 
     await banners.raise();
@@ -20,7 +20,7 @@ describe('the banners', () => {
     expect(banners.saying('the live feed refused the handshake')).toHaveLength(1);
   });
 
-  test('every raised error stands on its own', async () => {
+  test('should let every raised error stand on its own', async () => {
     render(<TestApp><Trouble message="first trouble"/><Trouble message="second trouble"/></TestApp>);
     const [first, second] = banners.raisers();
 
@@ -31,7 +31,7 @@ describe('the banners', () => {
     expect(banners.saying('second trouble')).toHaveLength(1);
   });
 
-  test('the same trouble raised twice stands only once', async () => {
+  test('should let the same trouble raised twice stand only once', async () => {
     renderWithTrouble('the feed is down');
 
     await banners.raise();
@@ -40,13 +40,13 @@ describe('the banners', () => {
     expect(banners.saying('the feed is down')).toHaveLength(1);
   });
 
-  test('with nothing raised, there is no panel', () => {
+  test('should show no panel with nothing raised', () => {
     renderWithTrouble('unraised');
 
     expect(banners.panel()).not.toBeInTheDocument();
   });
 
-  test('without a provider, raising degrades quietly', async () => {
+  test('should degrade quietly when raising without a provider', async () => {
     render(<Trouble message="into the void"/>);
 
     await banners.raise();
