@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 import {presentation} from '../sources';
 
 const {sassVariables, usingCssCustomProperties, wathan, tailwindTheme} = presentation;

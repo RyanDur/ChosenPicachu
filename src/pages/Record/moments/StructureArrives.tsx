@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const worldWideWebProposal = 'https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html';
 const htmlTags = 'https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html';

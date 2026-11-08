@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const cssZenGarden = 'https://csszengarden.com/';
 const aboutCssZenGarden = 'https://csszengarden.com/pages/about/';

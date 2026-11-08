@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Concern, concerns} from '../concerns';
-import {moments} from '../moments';
+import {moments} from '../calendar';
 import {recordAddress} from '../addresses';
 import {StructureStory} from './StructureStory';
 import {PresentationStory} from './PresentationStory';

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const detailsElement = 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details';
 const dialogElement = 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog';

@@ -1,4 +1,4 @@
-import {MomentKey} from '../moments';
+import {MomentKey} from '../calendar';
 
 const inOrder = ['Structure', 'Presentation', 'Behavior'] as const;
 

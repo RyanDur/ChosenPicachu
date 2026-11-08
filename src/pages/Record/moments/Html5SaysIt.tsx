@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const htmlCom = 'https://html.com/html5/';
 const infoQ = 'https://www.infoq.com/news/2011/05/html5-design/';

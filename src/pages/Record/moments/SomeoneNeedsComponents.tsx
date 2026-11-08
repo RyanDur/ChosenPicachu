@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const whyReact = 'https://legacy.reactjs.org/blog/2013/06/05/why-react.html';
 const chedeauTalk = 'https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html';
