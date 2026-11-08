@@ -1,0 +1,1 @@
+export {pageControl} from './pageControl';

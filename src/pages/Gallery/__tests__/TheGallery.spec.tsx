@@ -10,6 +10,7 @@ import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 import {limits} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
+import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
 import {
   heldAICAllArtResponse,
   heldAICArtPieceResponse,
@@ -50,8 +51,8 @@ describe('The gallery.', () => {
 
       await galleryWall.openPiece(firstPiece.title);
 
-      expect(await galleryPage.artistShown(firstPiece.artist_display)).toBeInTheDocument();
-      expect(galleryPage.easel()).toBeInTheDocument();
+      expect(await piecePage.artistAppears(firstPiece.artist_display)).toBeInTheDocument();
+      expect(piecePage.easel()).toBeInTheDocument();
     });
 
     it('should update the header with the piece title', async () => {
@@ -75,9 +76,9 @@ describe('The gallery.', () => {
       await galleryPage.backToTheWall();
       await galleryWall.openPiece(secondPiece.title);
 
-      expect(await galleryPage.pieceLoadingAppears()).toBeInTheDocument();
-      expect(galleryPage.title()).toHaveTextContent('A piece');
-      expect(galleryPage.easel()).not.toBeInTheDocument();
+      expect(await piecePage.loadingAppears()).toBeInTheDocument();
+      expect(piecePage.title()).toHaveTextContent('A piece');
+      expect(piecePage.easelIfAny()).not.toBeInTheDocument();
 
       secondArrives();
       expect(await galleryPage.headerShows(secondPiece.title)).toBeInTheDocument();

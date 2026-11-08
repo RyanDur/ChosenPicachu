@@ -1,10 +1,10 @@
 import {TestApp} from '@__test_support/TestApp';
-import userEvent from '@testing-library/user-event';
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
 import {scrolling} from '@components/__test_support/scrolling';
 import {heldAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
+import {pageControl} from '@pages/Gallery/PageControl/__test_support';
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
@@ -14,11 +14,11 @@ describe('The page controls', () => {
       await galleryWall.framesAppear();
       const landings = scrolling.recordLandings();
 
-      await userEvent.type(screen.getByLabelText(/Page #/), '3');
-      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await pageControl.typePage('3');
+      await pageControl.go();
 
-      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3'));
-      expect(screen.getByLabelText(/Page #/)).not.toHaveValue(3);
+      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=3'));
+      expect(pageControl.pageField()).not.toHaveValue(3);
       expect(landings).toContainEqual(scrolling.atTheTop('page'));
     });
 
@@ -27,26 +27,26 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      await userEvent.type(screen.getByLabelText('Page #1'), '3');
-      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await pageControl.typePage('3');
+      await pageControl.go();
 
-      expect(await screen.findByLabelText('Page #3')).toBeInTheDocument();
+      expect(await pageControl.pageFieldSaysAppears(3)).toBeInTheDocument();
     });
 
     test('changing only the page size keeps the page the nav walked to', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
-      await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-      await screen.findByLabelText('Page #2');
-      await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-      await screen.findByLabelText('Page #3');
+      await pageControl.nextPage();
+      await pageControl.pageFieldSaysAppears(2);
+      await pageControl.nextPage();
+      await pageControl.pageFieldSaysAppears(3);
 
-      await userEvent.type(screen.getByLabelText(/Per Page/), '45');
-      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await pageControl.typeSize('45');
+      await pageControl.go();
 
-      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('size=45'));
-      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
+      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('size=45'));
+      expect(pageControl.addressSearch()).toHaveTextContent('page=3');
     });
 
     it('the page field will not go before the first', async () => {
@@ -54,7 +54,7 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      expect(screen.getByLabelText(/Page #/)).toHaveAttribute('min', '1');
+      expect(pageControl.pageField()).toHaveAttribute('min', '1');
     });
 
     it('the page field will not go past the last page the museum has', async () => {
@@ -62,18 +62,18 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
+      expect(pageControl.pageField()).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
     });
 
     it('has no ceiling until the museum says where the end is', async () => {
       const artArrives = heldAICAllArtResponse(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
 
-      expect(screen.getByLabelText(/Page #/)).not.toHaveAttribute('max');
+      expect(pageControl.pageField()).not.toHaveAttribute('max');
 
       artArrives();
 
-      await waitFor(() => expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`));
+      await waitFor(() => expect(pageControl.pageField()).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`));
     });
 
     test('a page typed and then rubbed out leaves the page where the URL has it', async () => {
@@ -81,12 +81,12 @@ describe('The page controls', () => {
       render(<TestApp at={`${Paths.artGallery}?page=4`}/>);
       await galleryWall.framesAppear();
 
-      await userEvent.type(screen.getByLabelText('Page #4'), '7');
-      await userEvent.clear(screen.getByLabelText('Page #4'));
-      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await pageControl.typePage('7');
+      await pageControl.rubOutPage();
+      await pageControl.go();
 
-      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=4'));
-      expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page=7');
+      await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=4'));
+      expect(pageControl.addressSearch()).not.toHaveTextContent('page=7');
     });
   });
 
@@ -96,10 +96,10 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
 
-      await userEvent.type(screen.getByLabelText(/Per Page/), '45');
-      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await pageControl.typeSize('45');
+      await pageControl.go();
 
-      expect(await screen.findByRole('status', {name: 'url search'})).toHaveTextContent('size=45');
+      expect(await pageControl.addressSearchAppears()).toHaveTextContent('size=45');
     });
   });
 });
