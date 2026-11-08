@@ -15,3 +15,14 @@ describe('the pages drawn into the build', () => {
     expect(prerender.pages).toContain(address);
   });
 });
+
+describe('a page that sends the reader on to a saved tab', () => {
+  test('is drawn into the build without a warning', async () => {
+    const warned = vi.spyOn(console, 'warn');
+
+    await prerender.page(Paths.demos);
+
+    expect(warned).not.toHaveBeenCalled();
+    warned.mockRestore();
+  });
+});
