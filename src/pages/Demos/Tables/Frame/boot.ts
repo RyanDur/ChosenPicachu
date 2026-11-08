@@ -1,7 +1,7 @@
 import {unconfigured} from '@env';
+import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
 import type {Dials, Pace} from '../../Controls';
-import {exchange} from '@pages/Demos/Market';
-import {columnMoved, marketActions, marketSelectors, marketStore, rowMoved, sorted} from './table';
+import {exchange, marketActions, marketSelectors, marketStore} from '@pages/Demos/Market';
 import {builds} from './builds';
 
 declare global {

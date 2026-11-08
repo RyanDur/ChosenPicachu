@@ -1,5 +1,5 @@
-import {Grab, Moving, RowNudge} from '@components/DragSortableTable/model';
-import {Carry, MountedTable} from './table-state';
+import {Grab, Moving, RowNudge, Carry} from '@components/DragSortableTable/model';
+import {MountedTable} from './table-state';
 
 export type TableContext = MountedTable & {
   readonly lifted: (carry: Carry, grab: Grab) => void;

@@ -1,6 +1,7 @@
 import {maybe} from '@ryandur/sand';
+import {namedShare, widthsOf} from '@components/DragSortableTable/model';
 import {resizeLabel} from '@components/Table';
-import {MountedTable, namedShare, widthsOf} from './table-state';
+import {MountedTable} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
   maybe(table.querySelector(`th[data-column="${column}"]`)).map(header => {

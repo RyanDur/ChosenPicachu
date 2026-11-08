@@ -8,5 +8,5 @@ export {moveReportOf, report} from './report';
 export {dressWidths} from './resize';
 export {lanesOf, reseatRows, writeCells} from './rows';
 export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';
-export type {Carry, Given, MountedTable, Reconcile, Report, TableState} from './table-state';
-export {columnLandingFound, columnMoved, columnOfHeader, drifted, landingReport, lifted, marketActions, marketSelectors, marketStore, orderAtLift, released, rowLandingFound, rowMoved, settlingAt, settlingFromSeat, sorted, tableStore} from './table-state';
+export type {Given, MountedTable, Reconcile} from './table-state';
+export {columnOfHeader} from './table-state';

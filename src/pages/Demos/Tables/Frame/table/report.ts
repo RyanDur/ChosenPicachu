@@ -1,5 +1,5 @@
 import {Maybe, maybe} from '@ryandur/sand';
-import {moveReport, Report} from './table-state';
+import {moveReport, Report} from '@components/DragSortableTable/model';
 
 export const moveReportOf = (table: HTMLTableElement): Maybe<Element> =>
   maybe(table.ownerDocument.querySelector(`output[for~="${table.id}"]`));

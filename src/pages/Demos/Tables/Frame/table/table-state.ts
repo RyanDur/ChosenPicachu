@@ -2,15 +2,6 @@ import {maybe} from '@ryandur/sand';
 import {Labelled, Report, TableColumn, TableStore} from '@components/DragSortableTable/model';
 import {Measures} from '@pages/Demos/Market';
 
-export type {TableState, Carry} from '@components/DragSortableTable/model';
-export type {Report} from '@components/DragSortableTable/model';
-export {namedShare, orderAtLift, pointerHolds, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/model';
-export {lifted, columnLandingFound, drifted, gripped, handleDragged, handleReleased, measured, released, rowLandingFound, arrowLifted, handleLeft, tradedBy} from '@components/DragSortableTable/model';
-export {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
-export {tableStore} from '@components/DragSortableTable/model';
-export {marketActions, marketSelectors, marketStore} from '@pages/Demos/Market';
-export {landingReport, moveReport} from '@components/DragSortableTable/model';
-
 export type MountedTable = {
   store: TableStore;
   columns: () => readonly TableColumn<Labelled>[];
