@@ -228,5 +228,18 @@ export const fromClevelandToPiece: Art = {
   artistInfo: clevelandPieceRecord.tombstone,
   altText: clevelandPieceRecord.title
 };
+const clevelandPrintOnlyRecord = {
+  id: 94980,
+  title: faker.lorem.words(),
+  creators: [],
+  images: {web: null, print: {url: faker.internet.url(), width: '2398', height: '3400'}}
+};
+export const clevelandPrintOnlyResponse: ClevelandArtResponse = {data: clevelandPrintOnlyRecord};
+export const fromClevelandPrintOnly: Art = {
+  id: '94980',
+  title: clevelandPrintOnlyRecord.title,
+  picture: {src: clevelandPrintOnlyRecord.images.print.url, srcSet: `${clevelandPrintOnlyRecord.images.print.url} 2398w`},
+  altText: clevelandPrintOnlyRecord.title
+};
 export const clevelandArtOptions: ClevelandSearchResponse = {data: options.map(title => ({title}))};
 export const aicArtOptions = aicSuggestionsOf(options);

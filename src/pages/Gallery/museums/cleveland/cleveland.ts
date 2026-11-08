@@ -32,7 +32,8 @@ const artistOf = (record: ClevelandRecord): string | null | undefined =>
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
-  ...maybe(record.images?.web).map(web => ({picture: {src: web.url, srcSet: srcSetOf(record)}})).orElse({}),
+  ...maybe(record.images?.web ?? record.images?.print)
+    .map(shown => ({picture: {src: shown.url, srcSet: srcSetOf(record)}})).orElse({}),
   ...artFields.attributed(artistOf(record)),
   altText: record.title
 });

@@ -3,7 +3,9 @@ import {
   clevelandArtOptions,
   clevelandArtResponse,
   clevelandPieceResponse,
+  clevelandPrintOnlyResponse,
   fromClevelandArt,
+  fromClevelandPrintOnly,
   fromClevelandToPiece,
   options
 } from '@pages/Gallery/__test_support/fixtures';
@@ -46,6 +48,14 @@ describe('Cleveland as a source of art', () => {
       const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
 
       expect(actual).toEqual(fromClevelandToPiece);
+    });
+
+    test('pictures a piece from its print when Cleveland has no web image', async () => {
+      anyRequestRespondsWith(JSON.stringify(clevelandPrintOnlyResponse));
+
+      const actual = await art.get({id: fromClevelandPrintOnly.id, source: Source.CLEVELAND}).orNull();
+
+      expect(actual).toEqual(fromClevelandPrintOnly);
     });
 
     test('names no artist when Cleveland has no creator and no tombstone', async () => {
