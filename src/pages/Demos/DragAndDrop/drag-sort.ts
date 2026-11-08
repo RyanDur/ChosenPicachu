@@ -52,12 +52,18 @@ const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort =>
       .map(({item}) => moved(sort, item, at, () => slideStarts.afterCrossing(sort.order[at], homeward)))
       .orElse(sort);
 
+const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
+  Object.keys(starts).some(item => sliding(sort, item));
+
 const settled = (sort: DragSort): DragSort => {
   const withNothingHeld: DragSort = {...sort, held: nothing(), gripped: nothing()};
   return sort.held
-    .mBind(({item, landing}) => landing.map(at => at === sort.order.indexOf(item)
-      ? withNothingHeld
-      : moved(withNothingHeld, item, at, after => slideStarts.afterSettle(sort.order, after))))
+    .mBind(({item, landing}) => landing.map(at => {
+      const starts = slideStarts.afterSettle(sort.order, array.moveToIndex(at, item, sort.order));
+      return at === sort.order.indexOf(item) || anySliding(sort, starts)
+        ? withNothingHeld
+        : moved(withNothingHeld, item, at, () => starts);
+    }))
     .orElse(withNothingHeld);
 };
 
