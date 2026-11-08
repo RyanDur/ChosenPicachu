@@ -19,7 +19,7 @@ import {
 } from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
 import {usersPage, usersTable} from '../__test_support';
-import {userAt} from '../mode';
+import {openings} from '../openings';
 
 describe('the users page', () => {
   test('a users backend that cannot be reached says so', async () => {
@@ -112,7 +112,7 @@ describe('the users page', () => {
     it('an edit address for someone not in the roster opens the form to add, not to update', async () => {
       setupUsersResponse([aUser()]);
 
-      render(<TestApp at={userAt('nobody', 'edit')}/>);
+      render(<TestApp at={openings.at('nobody', 'edit')}/>);
       await usersTable.roster();
 
       expect(userForm.addButton()).toBeVisible();
@@ -161,7 +161,7 @@ describe('the users page', () => {
 
     beforeEach(async () => {
       setupUsersResponse([jo]);
-      render(<TestApp at={userAt(jo.id, 'view')}/>);
+      render(<TestApp at={openings.at(jo.id, 'view')}/>);
       await userForm.showing(jo);
     });
 
@@ -205,7 +205,7 @@ describe('the users page', () => {
 
     beforeEach(async () => {
       setupUsersResponse([kai]);
-      render(<TestApp at={userAt(kai.id, 'edit')}/>);
+      render(<TestApp at={openings.at(kai.id, 'edit')}/>);
       await userForm.showing(kai);
     });
 
@@ -255,7 +255,7 @@ describe('the users page', () => {
     const person = aUser({work});
     setupUsersResponse([person]);
 
-    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    render(<TestApp at={openings.at(person.id, 'edit')}/>);
     await userForm.showing(person);
 
     expect(userForm.addressField('work', 'Street')).toHaveValue(work.streetAddress);
@@ -266,7 +266,7 @@ describe('the users page', () => {
     const person = aUser({work});
     setupUsersResponse([person]);
     const sent = setupUserUpdatedResponse(person.id, [person]);
-    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    render(<TestApp at={openings.at(person.id, 'edit')}/>);
     await userForm.showing(person);
 
     await userForm.update();
@@ -278,7 +278,7 @@ describe('the users page', () => {
     const person = aUser();
     setupUsersResponse([person]);
     setupUserUpdatedResponse(person.id, [{...person, info: {...person.info, lastName: `${person.info.lastName} Jr`}}]);
-    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    render(<TestApp at={openings.at(person.id, 'edit')}/>);
     await userForm.showing(person);
 
     await userForm.typeInto('Last Name', ' Jr');
@@ -315,7 +315,7 @@ describe('the users page', () => {
     const person = aUser();
     setupUsersResponse([person]);
     setupUserRemovedResponse(person.id, []);
-    render(<TestApp at={userAt(person.id, 'view')}/>);
+    render(<TestApp at={openings.at(person.id, 'view')}/>);
     await userForm.showing(person);
 
     await usersTable.remove(profile.fullName(person));

@@ -1,23 +1,23 @@
 import {ReactNode} from 'react';
-import {UserInformation} from '../index';
-import {UsersProvider} from '../../Provider';
-import {UsersAction, UsersListener, usersStore} from '../../store';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {Paths} from '@frame/navigation';
+import {TestApp} from '@__test_support/TestApp';
+import {UserInformation} from '../index';
+import {UsersProvider} from '../../UsersProvider';
 import {userForm} from '../__test_support';
+import {setupUsersResponse, userAddsHeard} from '@pages/Users/__test_support';
 import {AddressInfo, NewUser} from '@pages/Users/profile';
 
 const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
-  const heard: UsersAction[] = [];
-  const hearing: UsersListener = (_previous, _current, _dispatch, action) => {
-    heard.push(action);
-  };
-  const store = usersStore(hearing);
+  setupUsersResponse([]);
   return {
-    form: <UsersProvider store={store}><UserInformation/></UsersProvider>,
-    adds: () => heard.filter(action => action.type === 'userAdded').map(action => action.type === 'userAdded' ? action.user : undefined)
+    form: <TestApp at={Paths.users}><UsersProvider><UserInformation/></UsersProvider></TestApp>,
+    adds: userAddsHeard()
   };
 };
+
+const asSent = (user: NewUser): unknown => JSON.parse(JSON.stringify(user));
 
 describe('a user form', () => {
   const info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo; details: string} = {
@@ -75,7 +75,7 @@ describe('a user form', () => {
         const avatar = userForm.avatarShown();
         await userForm.add();
 
-        await waitFor(() => expect(adds()).toEqual([{...info, friends: [], avatar}]));
+        await waitFor(() => expect(adds()).toEqual([asSent({...info, friends: [], avatar})]));
       });
 
       it('the form empties once a user is added', async () => {
@@ -86,7 +86,7 @@ describe('a user form', () => {
         await userForm.add();
 
         expect(screen.getByLabelText('First Name')).toHaveValue('');
-        expect(adds()).toHaveLength(1);
+        await waitFor(() => expect(adds()).toHaveLength(1));
       });
 
       it('the fresh form after adding wears a new avatar', async () => {
@@ -118,12 +118,12 @@ describe('a user form', () => {
         const avatar = userForm.avatarShown();
         await userForm.add();
 
-        expect(adds()).toEqual([{
+        await waitFor(() => expect(adds()).toEqual([asSent({
           ...info,
           friends: [],
           avatar,
           work: 'home'
-        }]);
+        })]));
       });
 
       test('ticking Same as Home shows the home address in the work fields, disabled', async () => {

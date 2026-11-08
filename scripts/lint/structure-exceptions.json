@@ -44,13 +44,9 @@
     "src/pages/Record/moments/Moment.tsx",
     "src/pages/Record/moments/concerns.ts",
     "src/pages/Record/moments/moments.ts",
-    "src/pages/Users/Provider.tsx",
     "src/pages/Users/UserInformation/actions.ts",
     "src/pages/Users/UserInformation/avatars.ts",
     "src/pages/Users/UserInformation/reducer.ts",
-    "src/pages/Users/columns.ts",
-    "src/pages/Users/mode.ts",
-    "src/pages/Users/store.ts",
     "src/transport/types.ts"
   ],
   "has-index": [
@@ -195,12 +191,6 @@
     "src/pages/Record/stories/PresentationStory.tsx",
     "src/pages/Record/stories/StructureStory.tsx",
     "src/pages/Record/storyAddress.ts",
-    "src/pages/Users/Provider.tsx",
-    "src/pages/Users/UsersPage.tsx",
-    "src/pages/Users/columns.ts",
-    "src/pages/Users/mode.ts",
-    "src/pages/Users/store.ts",
-    "src/pages/Users/syncing.ts",
     "src/transport/http.ts",
     "src/transport/trouble.ts",
     "src/transport/types.ts",
@@ -281,14 +271,13 @@
     "src/pages/Record/route.tsx",
     "src/pages/Record/stories/PresentationStory.tsx",
     "src/pages/Record/storyAddress.ts",
-    "src/pages/Users/UsersPage.tsx",
-    "src/pages/Users/UsersTable/UsersTable.tsx",
-    "src/pages/Users/store.ts",
+    "src/pages/Users/UsersProvider.tsx",
+    "src/pages/Users/usersSlice.ts",
+    "src/pages/Users/usersStore.ts",
     "src/pages/Users/syncing.ts",
     "src/routes.ts"
   ],
   "index-top-level": [
-    "src/pages/Demos/DragAndDrop/Recipe/steps/index.ts",
-    "src/pages/Users/UsersTable/index.ts"
+    "src/pages/Demos/DragAndDrop/Recipe/steps/index.ts"
   ]
 }
