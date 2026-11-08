@@ -9,7 +9,7 @@ describe('the frame table', () => {
     vanillaFrame.arrive();
 
     expect(vanillaFrame.table()).toBeInTheDocument();
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.moveReport()).toBeInTheDocument();
   });
 
@@ -17,7 +17,7 @@ describe('the frame table', () => {
     vanillaFrame.stand();
 
     ['trades', 'buys', 'sells', 'volume', 'vwap'].forEach(movable => expect(vanillaFrame.header(movable)).toHaveAttribute('tabindex', '0'));
-    expect(vanillaFrame.header('window')).not.toHaveAttribute('tabindex');
+    expect(vanillaFrame.header('lookback')).not.toHaveAttribute('tabindex');
     expect(vanillaFrame.header('change')).not.toHaveAttribute('tabindex');
   });
 
@@ -31,7 +31,7 @@ describe('the frame table', () => {
     await vanillaFrame.moveRowByKey(5, '{ArrowUp}');
     await vanillaFrame.press('{ArrowUp}');
 
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'session', 'last 15 minutes', 'this hour']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'session', 'last 15 minutes', 'this hour']);
     expect(vanillaFrame.moveReport()).toHaveTextContent('session moved to 3 of 5');
   });
 
@@ -62,7 +62,7 @@ describe('the frame table', () => {
   it('without a feed the starting zeros stand', () => {
     vanillaFrame.stand();
 
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
   });
 
@@ -71,7 +71,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.choose('trades', 'descending');
 
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
@@ -82,7 +82,7 @@ describe('the frame table', () => {
     await vanillaFrame.choose('buys', 'ascending');
     await vanillaFrame.choose('buys', 'reset');
 
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.header('buys')).not.toHaveAttribute('aria-sort');
   });
 
@@ -106,7 +106,7 @@ describe('the frame table', () => {
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
-  it('trades fold into the windows', async () => {
+  it('trades fold into the lookbacks', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
     await feedIsSubscribed(feed);
@@ -122,7 +122,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.moveColumnByKey('trades', '{ArrowRight}');
 
-    expect(vanillaFrame.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
@@ -132,10 +132,10 @@ describe('the frame table', () => {
     const trades = vanillaFrame.header('trades');
     vanillaFrame.focusColumn('trades');
     await vanillaFrame.press('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
-    expect(vanillaFrame.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
     await vanillaFrame.press('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
-    expect(vanillaFrame.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(trades).toHaveFocus();
   });
 
@@ -146,10 +146,10 @@ describe('the frame table', () => {
     const grip = vanillaFrame.grip('this minute');
     vanillaFrame.focusRow('this minute');
     await vanillaFrame.press('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
-    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
 
     await vanillaFrame.press('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(grip).toHaveFocus();
   });
 
@@ -158,7 +158,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.moveColumnByKey('trades', '{ArrowLeft}');
 
-    expect(vanillaFrame.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(vanillaFrame.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
   it('the fold finds its columns after they move', async () => {
@@ -177,7 +177,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
-    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.grip('this minute')).toHaveAccessibleName('move row 2');
   });
 
@@ -202,7 +202,7 @@ describe('the frame table', () => {
 
     await vanillaFrame.moveRowByKey(5, '{ArrowDown}');
 
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a hand that lifts a row and drops it where it was leaves the sort standing', async () => {
@@ -214,7 +214,7 @@ describe('the frame table', () => {
     await vanillaFrame.liftAndLetGo(1);
 
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a keyboard nudge ends the sort and keeps the rows where it left them', async () => {
@@ -226,7 +226,7 @@ describe('the frame table', () => {
     await vanillaFrame.moveRowByKey(1, '{ArrowDown}');
 
     expect(vanillaFrame.header('trades')).not.toHaveAttribute('aria-sort');
-    expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('a keyboard nudge at the rail keeps the sort and adds no report', async () => {
@@ -238,7 +238,7 @@ describe('the frame table', () => {
     await vanillaFrame.moveRowByKey(1, '{ArrowUp}');
 
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'ascending');
-    expect(vanillaFrame.windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(vanillaFrame.moveReport()).toHaveTextContent('trades sorted ascending');
   });
 
@@ -251,7 +251,7 @@ describe('the frame table', () => {
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
     await waitFor(() =>
-      expect(vanillaFrame.windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']));
+      expect(vanillaFrame.lookbackNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']));
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 });

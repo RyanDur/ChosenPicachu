@@ -70,7 +70,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
-      soThat="the windows they watch closest sit on top">
+      soThat="the lookbacks they watch closest sit on top">
       <TurnedVertical/>
       <Steps>
         <CarryVertical world={world} rowSource={rowSource} buildSrc={buildSrc}/>
@@ -95,7 +95,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
-      soThat="the windows they watch closest sit on top">
+      soThat="the lookbacks they watch closest sit on top">
       <Steps>
         <GripArrows world={world} rowSource={rowSource} buildSrc={buildSrc}/>
       </Steps>

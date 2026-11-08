@@ -9,9 +9,9 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {useDesk} from './useDesk';
-import {ChartKind, isChartKind, matchChartKind} from './kinds';
+import {ChartKind, chartKinds} from './chart-kinds';
 import {StoryDepth} from '../Recipe';
-import {ChartStories} from './Tutorial';
+import {ChartStories} from './ChartStories';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import './ChartPage.css';
@@ -50,7 +50,7 @@ const features: Record<ChartKind, Feature> = {
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     chart: LiveCandles,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
-      'so I want each window to answer for itself: where it opened and closed, how far it ' +
+      'so I want each bucket of time to answer for itself: where it opened and closed, how far it ' +
       'reached, and how much conviction was underneath.'
   },
   pressure: {
@@ -108,7 +108,7 @@ export const ChartPage: FC = () => {
       </section>
     </article>;
   };
-  return matchChartKind(isChartKind(kind) ? kind : undefined, {
+  return chartKinds.match(chartKinds.is(kind) ? kind : undefined, {
     price: page('price'),
     candles: page('candles'),
     pressure: page('pressure'),

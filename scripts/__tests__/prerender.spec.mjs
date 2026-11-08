@@ -1,6 +1,6 @@
 import {Paths} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
-import {allChartKinds} from '@pages/Demos/Charts/kinds';
+import {chartKinds} from '@pages/Demos/Charts/chart-kinds';
 import {practiceAddress} from '@pages/Practice';
 import {concerns} from '@pages/Record/concerns';
 import {not} from '@ryandur/sand';
@@ -10,7 +10,7 @@ describe('the pages drawn into the build', () => {
   test.each([
     ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
     ...Object.values(DemoTopics).map(demoAddress),
-    ...allChartKinds.map(kind => `${Paths.demos}charts/${kind}/`),
+    ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
     ...concerns.inOrder.map(practiceAddress.of)
   ])('include %s', address => {
     expect(prerender.pages).toContain(address);

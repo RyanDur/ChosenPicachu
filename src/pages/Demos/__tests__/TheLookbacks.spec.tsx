@@ -14,8 +14,8 @@ const recentTradesNewestFirst = [
   {trade_id: 1, price: '50001.00', size: '0.10', side: coinbaseSide('bought'), time: new Date(NOW - 30 * 60000).toISOString()}
 ];
 
-describe('the windows hydrate from history', () => {
-  test('a pull of recent trades fills the windows before the socket speaks', async () => {
+describe('the lookbacks hydrate from history', () => {
+  test('a pull of recent trades fills the lookbacks before the socket speaks', async () => {
     tradeHistoryAnswers(recentTradesNewestFirst);
 
     render(<TestApp at={demosAt('tables')}/>);
@@ -28,7 +28,7 @@ describe('the windows hydrate from history', () => {
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('a history that cannot be reached leaves the windows empty, and the page says so', async () => {
+  test('a history that cannot be reached leaves the lookbacks empty, and the page says so', async () => {
     tradeHistoryUnreachable();
 
     render(<TestApp at={demosAt('tables')}/>);

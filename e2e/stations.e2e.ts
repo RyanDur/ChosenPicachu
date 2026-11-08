@@ -16,5 +16,5 @@ test('a keyboard reader who follows a story\'s station link carries on inside th
 test('an address that names a station takes the keyboard to that station', async ({page}) => {
   await page.goto('demos/tables/#station-5');
 
-  await expect(courseStations(page).station('The trader can watch the market live, in windows')).toBeFocused();
+  await expect(courseStations(page).station('The trader can watch the market live, one lookback beside another')).toBeFocused();
 });

@@ -1,15 +1,17 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {Trade, liveTrades, money} from '../../Market';
+import {liveTrades, money, Trade} from '../../Market';
 import {Axes, rangeOf} from '../Axes';
-import {bucketPressure, heaviestSide, pressureShapes} from './shapes';
+import {bucketPressure} from './bucket-pressure';
+import {heaviestSide} from './heaviest-side';
+import {pressureShapes} from './pressure-shapes';
 import '../chart-card.css';
 import './Pressure.css';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
-const BUCKET_MS = 60000;
+const BUCKET_MILLISECONDS = 60000;
 const WINDOW_CAP = 60;
 const TICK_EVERY_MS = 600000;
 const DEPTH_X = 1;
@@ -22,8 +24,8 @@ type Props = {
 
 export const Pressure: FC<Props> = ({trades, actions}) => {
   const heading = `heading${useId()}`;
-  const pressures = bucketPressure(trades, BUCKET_MS).slice(-WINDOW_CAP);
-  const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MS);
+  const pressures = bucketPressure(trades, BUCKET_MILLISECONDS).slice(-WINDOW_CAP);
+  const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);
   const peak = heaviestSide(pressures);
   return <section aria-labelledby={heading} className="pressure chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pressure</h3>
@@ -34,7 +36,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={money.bitcoin}
         pattern="HH:mm"
         tickEvery={TICK_EVERY_MS}
-        headroomMs={2 * BUCKET_MS}>
+        headroomMilliseconds={2 * BUCKET_MILLISECONDS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
           {pressures.map((pressure, at) => <g key={pressure.openedAt}>

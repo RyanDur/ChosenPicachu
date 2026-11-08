@@ -5,7 +5,7 @@ import type {World} from '../../Controls';
 import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
-import foldSource from '@pages/Demos/Market/fold.ts?sample';
+import tradeTotalsSource from '@pages/Demos/Market/trade-totals.ts?sample';
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import frameRows from '../Frame/table/rows.ts?sample';
 import hydrateSource from '@pages/Demos/Market/recent-trades.ts?sample';
@@ -21,11 +21,11 @@ const socketPlans: Record<World, string> = {
 };
 
 const foldSays: Record<World, ReactNode> = {
-  react: <Says>Every render folds the same trades into per-window aggregates: counts, volume,
-    vwap, the change since the window opened. The fold runs over the same capped trades
-    each time, so the windows always match the trades the page holds.</Says>,
-  vanilla: <Says>Every arrival refolds the same trades into per-window aggregates. The fold is the same module the
-    React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the
+  react: <Says>Every render folds the same trades into totals per lookback: counts, volume,
+    vwap, the change since the lookback opened. The fold runs over the same capped trades
+    each time, so the lookbacks always match the trades the page holds.</Says>,
+  vanilla: <Says>Every arrival refolds the same trades into totals per lookback. It is the same{' '}
+    <code className="monospaced">tradeTotals</code> module the React world runs. What React did for you ends here: there is no render to catch the change, so the page refolds the
     trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and
     reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
 };
@@ -33,13 +33,13 @@ const foldSays: Record<World, ReactNode> = {
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(foldSource, 'const windows = ['), gap,
-      ...carve.unit(foldSource, 'const aggregate = ')
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), gap,
+      ...carve.unit(tradeTotalsSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(foldSource, 'const windows = ['), gap,
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), gap,
       ...carve.unit(buildSrc, 'const reconciled = '), gap,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
@@ -47,13 +47,13 @@ const foldCodes: Record<World, ReactNode> = {
 };
 
 const refolds: Record<World, string> = {
-  react: 'Then every render refolds every trade the page holds into the windows, because refolding is simple math and cannot drift out of sync.',
-  vanilla: 'Then every arrival refolds every trade the page holds into the windows, and the page calls reconcile, which writes what changed.'
+  react: 'Then every render refolds every trade the page holds into the lookbacks, because refolding is simple math and cannot drift out of sync.',
+  vanilla: 'Then every arrival refolds every trade the page holds into the lookbacks, and the page calls reconcile, which writes what changed.'
 };
 
 const FlowStory: FC<{world: World}> = ({world}) =>
   <Story param="living" id="flow"
-    can="The trader can watch the market live, in windows"
+    can="The trader can watch the market live, one lookback beside another"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
       one plain fetch of the recent history. And the numbers have to keep themselves current:
@@ -99,10 +99,10 @@ const FlowStory: FC<{world: World}> = ({world}) =>
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Fold the stream into windows">
-        <Words want="Raw trades tick too fast to read; the trader reads windows: this minute, the last five, the hour, the whole session.">
-          <Says>The windows should be derived, never accumulated: refold every trade the page holds
-            each time, so the aggregates cannot drift from the trades that made them.</Says>
+      <Step title="Fold the stream into lookbacks">
+        <Words want="Raw trades tick too fast to read. The trader reads lookbacks, each measured back from the newest trade: this minute, the last five, the hour, the whole session.">
+          <Says>The lookbacks should be derived, never accumulated: refold every trade the page holds
+            each time, so the totals cannot drift from the trades that made them.</Says>
         </Words>
         <Reveal>
           {foldSays[world]}

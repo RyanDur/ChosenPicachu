@@ -30,7 +30,7 @@ test('the vanilla table reads to a screen reader as the react table does: its ca
   await expect(tablesCard(page).vanillaTable).toBeVisible();
 
   expect(await dragSortTable(page, vanilla.table(page)).reading()).toEqual(told);
-  expect(told).toContain('- table "Live aggregations by window":');
+  expect(told).toContain('- table "Live totals by lookback":');
   expect(told.filter(line => line.startsWith('- img'))).toEqual([]);
 });
 

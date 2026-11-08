@@ -1,7 +1,7 @@
 import {has} from '@ryandur/sand';
 import {Labelled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
-import {Traded, WindowAggregate} from './fold';
+import {LookbackTotals, Traded} from './trade-totals';
 
 const moved = (traded?: Traded): Measure =>
   has(traded) ? {display: money.deltaLabel(traded.opened, traded.closed), value: traded.closed - traded.opened} : {display: '—'};
@@ -14,7 +14,7 @@ export type Measure = {
   value?: number;
 };
 
-const measureNames = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'] as const;
+const measureNames = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'] as const;
 
 export type MeasureName = typeof measureNames[number];
 
@@ -29,12 +29,12 @@ const measures: readonly {name: MeasureName; data: Measured}[] =
 
 const seated = (rows: readonly Measures[]): readonly Seated[] =>
   rows.map(row => ({
-    key: row.window.display,
+    key: row.lookback.display,
     values: Object.fromEntries(measureNames.map(name => [name, row[name].value]))
   }));
 
-const from = (aggregate: WindowAggregate): Measures => ({
-  window: {display: aggregate.window},
+const from = (aggregate: LookbackTotals): Measures => ({
+  lookback: {display: aggregate.label},
   trades: {display: String(aggregate.trades), value: aggregate.trades},
   buys: {display: String(aggregate.buys), value: aggregate.buys},
   sells: {display: String(aggregate.sells), value: aggregate.sells},
@@ -47,7 +47,7 @@ type Cells = {
   measures: readonly {name: MeasureName; data: Measured}[];
   isMeasure: (name: string) => name is MeasureName;
   seated: (rows: readonly Measures[]) => readonly Seated[];
-  from: (aggregate: WindowAggregate) => Measures;
+  from: (aggregate: LookbackTotals) => Measures;
 };
 
 export const cells: Cells = {measures, isMeasure, seated, from};

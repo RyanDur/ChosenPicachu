@@ -4,13 +4,13 @@ import {LiveTradesState} from './live-trades';
 import {Period} from './Period';
 import {PeriodHistory, periodHistory} from './period-history';
 import {Measured, Measures, cells} from './cells';
-import {fold} from './fold';
+import {tradeTotals} from './trade-totals';
 import {recentTrades} from './recent-trades';
 import {arrangedView} from './arrangedView';
 import {MarketState, TradesState} from './marketSlice';
 
 const folded = ({history, trades}: TradesState): Measures[] =>
-  fold.aggregatesOf(recentTrades.hydrated(history, trades)).map(cells.from);
+  tradeTotals.perLookback(recentTrades.hydrated(history, trades)).map(cells.from);
 
 type MarketSelectors = {
   columns: (state: MarketState) => readonly TableColumn<Measured>[];

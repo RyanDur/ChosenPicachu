@@ -4,7 +4,7 @@ import {Held} from './drag-sort';
 
 type Struck = (homeward: boolean) => void;
 
-const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
+const passedAQuarter = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
   const space = event.currentTarget.getBoundingClientRect();
   const quarter = space.width / 4;
   return homeward
@@ -12,14 +12,14 @@ const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
     : event.clientX > space.left + quarter;
 };
 
-const strayed = (clientY: number, anchor: number, strayDistance: number, upward: boolean): boolean =>
+const strayed = (pageY: number, anchor: number, strayDistance: number, upward: boolean): boolean =>
   upward
-    ? clientY < anchor - strayDistance
-    : clientY > anchor + strayDistance;
+    ? pageY < anchor - strayDistance
+    : pageY > anchor + strayDistance;
 
-const strayedTo = (clientY: number, anchor: number, strayDistance: number, at: number): number =>
-  strayed(clientY, anchor, strayDistance, false) ? at + 1
-    : strayed(clientY, anchor, strayDistance, true) ? at - 1
+const strayedTo = (pageY: number, anchor: number, strayDistance: number, at: number): number =>
+  strayed(pageY, anchor, strayDistance, false) ? at + 1
+    : strayed(pageY, anchor, strayDistance, true) ? at - 1
       : at;
 
 const over = (held: Maybe<Held>, order: readonly string[]) =>
@@ -30,17 +30,16 @@ const over = (held: Maybe<Held>, order: readonly string[]) =>
           return;
         }
         const homeward = index < order.indexOf(lifted.item);
-        if (crossed(event, homeward)) {
+        if (passedAQuarter(event, homeward)) {
           struck(homeward);
         }
       });
     };
 
 type Crossing = {
-  crossed: (event: DragEvent<HTMLElement>, homeward: boolean) => boolean;
-  strayedTo: (clientY: number, anchor: number, strayDistance: number, at: number) => number;
+  strayedTo: (pageY: number, anchor: number, strayDistance: number, at: number) => number;
   over: (held: Maybe<Held>, order: readonly string[]) =>
   (item: string, index: number, struck: Struck) => (event: DragEvent<HTMLElement>) => void;
 };
 
-export const crossing: Crossing = {crossed, strayedTo, over};
+export const crossing: Crossing = {strayedTo, over};

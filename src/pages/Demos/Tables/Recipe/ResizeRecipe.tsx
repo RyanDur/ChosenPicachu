@@ -71,7 +71,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...carve.span(resizeSource, '<button type="button"', 'aria-label={shares.resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize window"></button>')
+    ...carve.span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize lookback"></button>')
   ]}/>
 };
 

@@ -215,7 +215,7 @@
     text-align: start;
   }
 
-  .design-window {
+  .design-lookback {
     text-align: start;
     vertical-align: middle;
     white-space: nowrap;
@@ -245,7 +245,7 @@
       rotate: 180deg;
     }
 
-    .design-window {
+    .design-lookback {
       white-space: normal;
     }
   }

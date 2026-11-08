@@ -1,4 +1,38 @@
+@property --shape-x {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+
+@property --shape-base {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+
+@property --shape-width {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+
+@property --shape-height {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
 .candles {
+
+  .body,
+  .wall,
+  .volume,
+  .volume-wall {
+    transform-box: fill-box;
+    transform-origin: 0 100%;
+    transform: translate(var(--shape-x), var(--shape-base)) scale(var(--shape-width), var(--shape-height));
+    transition: transform 300ms ease-out;
+  }
 
   .candlesticks {
     display: block;
@@ -10,12 +44,6 @@
       .wick {
         stroke-width: var(--hairline);
         vector-effect: non-scaling-stroke;
-        transition: x1 300ms ease-out, y1 300ms ease-out, x2 300ms ease-out, y2 300ms ease-out;
-      }
-
-      .body,
-      .wall {
-        transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
       }
     }
   }
@@ -26,11 +54,6 @@
     height: var(--base-x-7_5);
     margin-top: var(--base-x-0_5);
     padding: var(--base) 0 var(--base-x-0_5);
-
-    .volume,
-    .volume-wall {
-      transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
-    }
   }
 
 }

@@ -19,7 +19,7 @@ export const ChartsIntroduction: FC = () =>
       past, fetched for each period, the stretch of time a chart shows. Each chart is worked out from those every time
       the page redraws.</p>
     <p className="paragraph">By the end you can draw four charts from one feed. The first is a live line.
-      The second is candles, which show where the price opened and closed and how far it reached in each span of time.
+      The second is candles, which show where the price opened and closed and how far it reached in each bucket of time.
       The last two show who is buying and who is selling. You can
       also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to
       add another. The last part of this page builds the workspace the charts sit in.</p>

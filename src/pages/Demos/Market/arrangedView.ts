@@ -15,9 +15,9 @@ export const arrangedView: ArrangedView = {
   rowsOf: (arrangement, aggregates) => {
     const shown = cells.seated(aggregates);
     const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
-    const byWindow = new Map(aggregates.map(row => [row.window.display, row]));
+    const byLookback = new Map(aggregates.map(row => [row.lookback.display, row]));
     return arrangements.standingOf(arrangement, valueOf).flatMap(key => {
-      const row = byWindow.get(key);
+      const row = byLookback.get(key);
       return row ? [row] : [];
     });
   }

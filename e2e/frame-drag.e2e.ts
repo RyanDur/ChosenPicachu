@@ -11,7 +11,7 @@ for (const {name, at, table} of [...stagesWith('origin=keep'), ...stagesWith('or
     await expect(trades.columnHeader('trades')).toBeVisible();
 
     await trades.dragColumnPast('trades', 'vwap');
-    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
     await trades.dragRowPast(1, /last 15 minutes/);
     await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
@@ -28,7 +28,7 @@ for (const {name, at, table} of stages) {
     await trades.listenToTheMoveReport();
 
     await trades.dragColumnPast('trades', 'sells');
-    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
 
     await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['trades moved to column 4 of 7']);
   });
@@ -54,12 +54,12 @@ for (const {name, at, table} of stages) {
     const trades = dragSortTable(page, table(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
 
-    await trades.dragColumnPast('window', 'buys');
+    await trades.dragColumnPast('lookback', 'buys');
     await trades.dragColumnPast('change', 'volume');
-    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
 
-    await trades.dragColumnPast('buys', 'window');
-    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    await trades.dragColumnPast('buys', 'lookback');
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 }
 
@@ -72,7 +72,7 @@ for (const {name, at, table} of stages) {
     await trades.sortBy('trades', 'descending');
 
     await expect(trades.columnHeader('trades')).toHaveAttribute('aria-sort', 'descending');
-    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 }
 

@@ -132,7 +132,7 @@ describe('the chart periods', () => {
     await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(3));
   };
 
-  test('switching the window shows the loading view until history arrives', async () => {
+  test('switching the period shows the loading view until history arrives', async () => {
     const releaseHistory = heldHistory(Period.day);
     await chartsWithTheHourInHand();
 

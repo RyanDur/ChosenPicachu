@@ -1,21 +1,15 @@
 import {FC, PropsWithChildren} from 'react';
-import {has, Maybe, maybe} from '@ryandur/sand';
+import {has, Maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {money} from '../../Market';
+import {Range} from './range';
 import './Axes.css';
-
-export type Range = {high: number; low: number; times: readonly [number, ...number[]]};
-
-export const rangeOf = (times: readonly number[], high: number, low: number): Maybe<Range> => {
-  const [first, ...rest] = times;
-  return maybe(first).map(at => ({high, low, times: [at, ...rest]}));
-};
 
 type Props = PropsWithChildren<{
   range: Maybe<Range>;
   pattern: string;
   tickEvery?: number;
-  headroomMs?: number;
+  headroomMilliseconds?: number;
   label?: (value: number) => string;
 }>;
 
@@ -31,15 +25,15 @@ const chosenTicks = (times: readonly number[], tickEvery?: number): readonly num
 const placed = (
   times: readonly number[],
   ticks: readonly number[],
-  headroomMs: number
+  headroomMilliseconds: number
 ): readonly {at: number; along: number}[] => {
   const from = times[0];
-  const span = times[times.length - 1] - from + headroomMs;
-  return ticks.map(at => ({at, along: span === 0 ? 50 : ((at - from) / span) * 100}));
+  const shown = times[times.length - 1] - from + headroomMilliseconds;
+  return ticks.map(at => ({at, along: shown === 0 ? 50 : ((at - from) / shown) * 100}));
 };
 
 export const Axes: FC<Props> = ({
-  range, pattern, tickEvery, headroomMs = 0,
+  range, pattern, tickEvery, headroomMilliseconds = 0,
   label = value => money.dollars.format(value), children
 }) => <div className="axes">
   <p className="y-labels caption">{range.map(({high, low}) => <>
@@ -48,7 +42,7 @@ export const Axes: FC<Props> = ({
     <data value={low}>{label(low)}</data>
   </>).orNull()}</p>
   <div className="chart-area">{children}</div>
-  <p className="x-labels caption">{range.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
+  <p className="x-labels caption">{range.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
     <time key={tick.at}
       className="tick"
       dateTime={new Date(tick.at).toISOString()}

@@ -1,5 +1,5 @@
 import {render, within} from '@testing-library/react';
-import {fold} from '@pages/Demos/Market/fold';
+import {tradeTotals} from '@pages/Demos/Market/trade-totals';
 import {cells} from '@pages/Demos/Market';
 import {EagerTable} from '../../Builds/EagerTable';
 import {vanillaFrame} from '../__test_support';
@@ -28,7 +28,7 @@ const shapeOf = (root: HTMLElement): {headers: CellShape[]; rows: CellShape[][]}
 
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
-    const rows = fold.aggregatesOf([]).map(cells.from);
+    const rows = tradeTotals.perLookback([]).map(cells.from);
     const {unmount} = render(<EagerTable caption="live aggregations" origin="hide" motion="animated" columns={cells.measures} rows={rows}/>);
     const react = shapeOf(document.body);
     unmount();

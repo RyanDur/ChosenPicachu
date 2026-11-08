@@ -12,7 +12,7 @@ for (const {name, at, table} of stagesWith('pace=eager')) {
       const hold = await trades.holdColumn('trades');
       await hold.carryTo(trades.columnHeader('vwap'));
 
-      await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+      await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
       await hold.drop();
     });
 
@@ -27,7 +27,7 @@ for (const {name, at, table} of stagesWith('pace=eager')) {
       await hold.letGoOutsideThePage();
 
       await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['trades moved to column 6 of 7']);
-      expect(await trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+      expect(await trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
     });
 
     test('a held row takes each seat it crosses before it is dropped', async ({page}) => {

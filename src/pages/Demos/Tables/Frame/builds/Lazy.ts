@@ -160,7 +160,7 @@ export const dragSortable = (table: HTMLTableElement, {columns, rows}: Given): R
     columns,
     rows,
     order: () => columns().map(({name}) => name),
-    standing: () => rows().map(row => row.window.display),
+    standing: () => rows().map(row => row.lookback.display),
     report: (said: Report) => output.map(found => moveReport.write(found, said)),
     table,
     body,

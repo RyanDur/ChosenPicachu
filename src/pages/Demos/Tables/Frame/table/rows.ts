@@ -14,7 +14,7 @@ const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowE
 const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = frameColumns.shown(table);
   rows().forEach(row =>
-    maybe(lanes.get(row.window.display)).map(lane =>
+    maybe(lanes.get(row.lookback.display)).map(lane =>
       frameColumns.sortable(table).forEach(measure => {
         const text = cells.isMeasure(measure) ? row[measure].display : '';
         const cell = lane.cells[order.indexOf(measure)];

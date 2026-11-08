@@ -2,7 +2,7 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {dragSortTable, stagesWith} from './__test_support';
 
-const columnsAsDealt = ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
+const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const windowsAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 for (const pace of ['eager', 'lazy']) {
