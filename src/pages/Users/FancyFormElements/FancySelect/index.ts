@@ -1,1 +1,0 @@
-export {FancySelect} from './FancySelect';

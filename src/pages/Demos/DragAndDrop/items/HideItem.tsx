@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {dragSortChange} from '../drag-sort-change';
 import {useDragSort} from '../useDragSort';
 import {useDragSortDispatch} from '../useDragSortDispatch';

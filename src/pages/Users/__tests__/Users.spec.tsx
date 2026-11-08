@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
 import {createSearchParams} from 'react-router';
-import {profile} from '@pages/Users/profile';
+import {profile} from '../profile';
 import {
   anAddress,
   aUser,

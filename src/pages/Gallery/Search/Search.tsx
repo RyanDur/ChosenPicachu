@@ -1,7 +1,7 @@
 import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {GalleryLinks} from '@pages/Gallery/Links';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {has, Maybe, nothing, some} from '@ryandur/sand';
 import {art, SearchOptions} from '@pages/Gallery/museums';
 import {useGallery} from '@pages/Gallery/Context';

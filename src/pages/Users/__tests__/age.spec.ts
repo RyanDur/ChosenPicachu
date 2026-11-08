@@ -1,4 +1,4 @@
-import {age} from '..';
+import {age} from '../age';
 
 const agedSince = (dateOfBirth: string): string => age.worded(age.of(new Date(dateOfBirth)));
 

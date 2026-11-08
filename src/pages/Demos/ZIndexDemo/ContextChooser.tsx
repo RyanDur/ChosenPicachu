@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {useHydrated} from '@components';
 import {Maybe, nothing, some} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {Worn} from './worn';
 

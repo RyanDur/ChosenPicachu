@@ -1,4 +1,4 @@
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import {ComponentProps, FC} from 'react';
 import {useTableSelector} from './useTableSelector';
 import {tableSelectors} from './model';

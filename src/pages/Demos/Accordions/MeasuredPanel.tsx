@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, TransitionEvent, useLayoutEffect, useRef, useState} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 
 type Motion = {kind: 'resting'} | {kind: 'pinned'; height: number} | {kind: 'moving'; height: number};
 

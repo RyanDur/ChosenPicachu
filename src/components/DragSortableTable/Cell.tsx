@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import {useTableSelector} from './useTableSelector';
 import {tableSelectors, looks} from './model';
 import './motion.css';

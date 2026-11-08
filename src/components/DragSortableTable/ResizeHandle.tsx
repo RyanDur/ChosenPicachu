@@ -7,7 +7,7 @@ import {useTableSelector} from './useTableSelector';
 import {tableActions, tableSelectors} from './model';
 import {
   shares
-} from '@components/Table';
+} from '../shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();

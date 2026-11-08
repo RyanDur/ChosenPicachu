@@ -5,8 +5,6 @@ import {has, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
-// the users service worker's backend lives outside src and imports from it, so it counts among an index's importers
-const backend = join(root, 'backend');
 const aliases = {'@components': 'src/components', '@frame': 'src/frame', '@pages': 'src/pages', '@transport': 'src/transport'};
 const code = /\.(ts|tsx)$/;
 const indexNames = ['index.ts', 'index.tsx'];
@@ -88,7 +86,7 @@ const noteWhatLeaves = (into, file) => importsIn(file).forEach(({names, specifie
 const wantedFrom = directory => {
   if (not(has(wanted))) {
     wanted = new Map();
-    [...sourceFiles(src), ...sourceFiles(backend)].forEach(file => noteWhatLeaves(wanted, file));
+    sourceFiles(src).forEach(file => noteWhatLeaves(wanted, file));
   }
   return wanted.get(directory) ?? new Set();
 };

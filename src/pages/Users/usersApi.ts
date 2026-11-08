@@ -1,12 +1,12 @@
 import * as schema from 'schemawax';
 import {isValid} from 'date-fns';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {env} from '@frame/state/env';
+import {env} from '@frame/state';
 import {http} from '@transport';
 import {decoded} from '@transport';
 import {HTTPError} from '@transport';
-import {NewUser, User} from '../profile';
-import {usersServer} from '../usersServer';
+import {NewUser, User} from './profile';
+import {usersServer} from './usersServer';
 
 export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;

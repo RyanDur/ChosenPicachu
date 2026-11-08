@@ -10,7 +10,7 @@ import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {sideOf} from '../sides';
 
 const CHART_WIDTH = 240;

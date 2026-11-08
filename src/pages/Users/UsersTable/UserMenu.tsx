@@ -1,8 +1,8 @@
 import {Entry, Item, ItemLink, Menu} from '@components/Menu';
 import {FC, MouseEvent} from 'react';
 import {maybe} from '@ryandur/sand';
-import {User} from '@pages/Users/profile';
-import {openings} from '../../openings';
+import {User} from '../profile';
+import {openings} from '../openings';
 
 type UserMenuAttributes = {
   user: User;

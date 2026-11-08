@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import {HeaderEvents, tableContexts} from './tableContexts';
 import {useTableSelector} from './useTableSelector';
 import {tableSelectors} from './model';

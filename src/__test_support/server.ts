@@ -1,6 +1,6 @@
 import {setupServer} from 'msw/node';
 import {http, HttpResponse, ws} from 'msw';
-import {env} from '@frame/state/env';
+import {env} from '@frame/state';
 
 export const FEED = 'wss://feed.test';
 export const HISTORY = 'https://history.test';

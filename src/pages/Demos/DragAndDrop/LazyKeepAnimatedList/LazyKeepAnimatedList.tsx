@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {dragSort} from '../drag-sort';
 import {dragSortChange} from '../drag-sort-change';
 import {dragSorting} from '../drag-sorting';

@@ -12,8 +12,8 @@
     "backend/users/worker.ts",
     "backend/users/core.ts",
     "backend/users/respond.ts",
-    "src/pages/Users/profile",
-    "src/pages/Users/usersServer",
+    "src/pages/Users/profile.ts",
+    "src/pages/Users/usersServer.ts",
     "src/components/fibs"
   ],
   "exclude": []

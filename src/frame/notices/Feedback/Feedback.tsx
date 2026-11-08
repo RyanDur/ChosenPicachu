@@ -9,7 +9,7 @@ import {github} from './github';
 import {feedbackChange} from './feedbackChange';
 import {Draft} from './feedbackDraft';
 import {drafting} from './drafting';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import './Feedback.css';
 
 const invokersMissing = (): boolean => not('command' in HTMLButtonElement.prototype);

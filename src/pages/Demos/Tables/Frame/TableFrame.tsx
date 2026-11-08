@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {asyncResult, has, maybe} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {useEnv} from '@frame/state';
 import {bannerChange, useBannerDispatch} from '@frame/notices/Banners';
 import {Dials} from '../../Controls';

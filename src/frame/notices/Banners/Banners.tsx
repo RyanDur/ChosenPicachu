@@ -1,5 +1,5 @@
 import {FC, TransitionEvent} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {useBanners} from './useBanners';
 import {useBannerDispatch} from './useBannerDispatch';
 import {Banner, bannerChange} from './bannerChange';

@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import './Quotation.css';
 
 type QuotationProps = Required<PropsWithChildren<{

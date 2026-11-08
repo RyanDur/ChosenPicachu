@@ -17,7 +17,7 @@ import {
   ClevelandSearchResponse
 } from '@pages/Gallery/museums/cleveland/types';
 import {limits} from '@pages/Gallery/limits';
-import {env} from '@frame/state/env';
+import {env} from '@frame/state';
 
 const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
 

@@ -1,5 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {shares} from '@components/Table';
+import {shares} from '@components';
 import {TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
 

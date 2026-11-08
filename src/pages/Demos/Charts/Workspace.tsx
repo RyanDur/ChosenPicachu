@@ -5,7 +5,7 @@ import {maybe, Maybe} from '@ryandur/sand';
 import {Paths} from '@frame/navigation';
 import {ChartKind, matchChartKind} from './kinds';
 import {lampOf, statusCopy} from './live-trades';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {marketSelectors} from '../Market';
 import {useMarketSelector} from '../Market/Trading';
 import {useDesk} from './useDesk';

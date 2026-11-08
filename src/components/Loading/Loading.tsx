@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {classNames} from '@components/class-names';
+import {classNames} from '../classNames';
 import './Loading.css';
 
 type LoadingProps = {

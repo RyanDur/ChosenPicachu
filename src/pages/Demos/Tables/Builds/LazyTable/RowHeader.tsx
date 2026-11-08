@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
 import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
 import {lazyDrop} from './lazyDrop';

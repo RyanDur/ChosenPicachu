@@ -1,5 +1,5 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
-import {FancyInput} from '../FancyInput';
+import {FancyInput} from './FancyInput';
 
 type FancyDateInputProps = {
   inputId: string;

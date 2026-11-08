@@ -2,7 +2,7 @@ import {FC, useState} from 'react';
 import {not as toggle} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
-import {classNames} from '@components/class-names';
+import {classNames} from '@components';
 import {RaisedCard} from './raised';
 import './ZIndexDemo.css';
 
