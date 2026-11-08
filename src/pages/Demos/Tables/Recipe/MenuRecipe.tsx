@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../types';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve, Sample} from '../../Recipe';
 import type {World} from '../../Controls';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
@@ -13,13 +13,11 @@ import arrangementSource from '@components/DragSortableTable/model/arrangement.t
 import arrangedViewSource from '@pages/Demos/Market/arrangedView.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
 import frameColumns from '../Frame/table/columns.ts?sample';
-import {buildSources} from '../Frame/builds/sources';
+import {buildSources} from './buildSources';
 import {headerSources, rowSources, tableSources} from './sources';
-import {menuSource, surfaceCss} from './steps/sources';
-import {TheImplementation} from './steps';
+import {menuSource, surfaceCss, TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 const gap = lines.plain(' ');
 

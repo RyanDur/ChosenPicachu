@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameGrip, frameHtml, frameParts, gap, gripSource, surveySource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">

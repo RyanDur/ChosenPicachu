@@ -1,4 +1,4 @@
-export {frameCarry, gap, gripSource, headerCss, selectorsSource, sortableCss, stateSource, surveySource, travelSource, liftSource, arrowsSource} from './sources';
+export {frameCarry, gap, gripSource, headerCss, selectorsSource, sortableCss, stateSource, surveySource, travelSource, liftSource, arrowsSource, menuSource, surfaceCss} from './sources';
 export {AccessTrack, AgainstTheStream, NamesInTheCode, OwnedPixels, QuietDials, TheImplementation, TheWholeBuild, TurnedVertical, TwoRoads} from './tells';
 export {CssShare} from './share';
 export {DeadZone} from './zone';

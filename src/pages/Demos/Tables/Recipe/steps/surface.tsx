@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameCarry, gap, travelSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">

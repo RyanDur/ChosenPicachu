@@ -1,9 +1,8 @@
 import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {arrowsSource, frameGrip, frameSettle, gap} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>

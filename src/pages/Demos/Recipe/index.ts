@@ -22,3 +22,5 @@ export {lines} from './lines';
 export {carve} from './carve';
 export {Mdn} from './Mdn';
 export {Figure} from './Figure';
+export type {CodeFile, Sample} from './sample';
+export type {Line} from './Snippet';

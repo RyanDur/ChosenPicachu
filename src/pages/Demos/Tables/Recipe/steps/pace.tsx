@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {PaceDial} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameColumns, gap, travelSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>

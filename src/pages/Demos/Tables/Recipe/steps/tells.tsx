@@ -2,9 +2,8 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {directoryInRepository, fileInRepository} from '@pages/Paths';
 import {DemoTopics} from '../../../types';
-import {Codes, Mdn, Snippet, Tell, carve} from '../../../Recipe';
+import {Codes, Mdn, Snippet, Tell, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
-import {Sample} from '@pages/Demos/Recipe/sample';
 import {whatTheDomIs} from '../definitions';
 
 const sourceOf = (world: World, path: string): string =>

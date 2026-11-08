@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {gap, sortableCss, stateSource, liftSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">

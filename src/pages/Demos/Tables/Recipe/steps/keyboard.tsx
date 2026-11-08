@@ -1,8 +1,7 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {frameColumns, gap, gripSource, headerCss, surfaceCss, surveySource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Give focus a place to land">

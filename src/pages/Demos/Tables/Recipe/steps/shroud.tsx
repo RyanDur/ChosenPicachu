@@ -1,11 +1,9 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample, Line} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {frameCarry, frameSettle, gap, looksSource, selectorsSource, stateSource, surfaceCss} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
-import {Line} from '@pages/Demos/Recipe/Snippet';
 import {whatACustomPropertyIs} from '../definitions';
 
 const theSheetDeclaresSeatAndDrift = <>

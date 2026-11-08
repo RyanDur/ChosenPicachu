@@ -15,9 +15,7 @@ import lazyBuildSource from '@pages/Demos/Tables/Frame/builds/Lazy.ts?sample';
 import bootSource from '@pages/Demos/Tables/Frame/boot.ts?sample';
 import surfaceSheet from '../../styles/surface.css?sample';
 import accordionsSheet from '@pages/Demos/Accordions/Accordions.css?sample';
-import {Snippet, lines, carve} from '@pages/Demos/Recipe';
-import {Line} from '@pages/Demos/Recipe/Snippet';
-import {CodeFile, Sample} from '@pages/Demos/Recipe/sample';
+import {Snippet, lines, carve, Line, CodeFile, Sample} from '@pages/Demos/Recipe';
 
 const reducerType = carve.span(storeSource, 'export type Reducer', '(state, action) => reducers.reduce');
 const lifted = carve.span(actionsSource, 'export const lifted', 'export const lifted');

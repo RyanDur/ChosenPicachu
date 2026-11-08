@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {arrangementSource, bootSource, frameRows, gap, headersSource, placingSource, rowSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
   ({world, tableSource, buildSrc}) =>

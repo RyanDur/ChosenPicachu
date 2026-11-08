@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import type {World} from '../../../Controls';
 import {gap, elementSource, storeSource, liftSource} from './sources';
-import {Sample} from '@pages/Demos/Recipe/sample';
 
 export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
   <Step title="Write each listener once, for both worlds">
