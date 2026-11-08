@@ -6,6 +6,10 @@ on:
       # a dev pushes a card's sha to verify/<issue> before Accepted: the unit tests, the journeys and the review run;
       # Lighthouse, pages and smoke run from main only
       - 'verify/**'
+    # words for the agents and the docs run nothing: no test, build or page reads them, and the next code push's review covers them
+    paths-ignore:
+      - 'docs/**'
+      - 'AGENTS.md'
   workflow_dispatch:
     inputs:
       review_from:
