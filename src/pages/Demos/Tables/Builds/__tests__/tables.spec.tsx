@@ -3,7 +3,7 @@ import {render} from '@testing-library/react';
 import {Measured, Measures, measures} from '../../../Market/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, Column, DragSortable, HeaderEvents, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
-import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, TableColumn} from '@components/DragSortableTable/model';
+import {TableColumn, arrangements} from '@components/DragSortableTable/model';
 import {arrangedView} from '@pages/Demos/Market';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
@@ -26,14 +26,14 @@ const windowOf = (row: Measures): string => row.window.display;
 
 const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(
-    arrangementReducer,
-    arrangementOf(measures.map(({name}) => name), rows.map(windowOf)));
-  const arranged = arrangementReducer(arrangement, arrived(rows.map(windowOf)));
+    arrangements.reducer,
+    arrangements.of(measures.map(({name}) => name), rows.map(windowOf)));
+  const arranged = arrangements.reducer(arrangement, arrangements.arrived(rows.map(windowOf)));
 
   return <Table caption="live aggregations" {...dials} columns={arrangedView.columnsOf(arranged)} rows={arrangedView.rowsOf(arranged, rows)}
-    onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-    onSorted={({column, direction}) => dispatch(sorted(column, direction))}
-    onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
+    onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
+    onSorted={({column, direction}) => dispatch(arrangements.sorted(column, direction))}
+    onRowMoved={({row, to, standing: shownStanding}) => dispatch(arrangements.rowMoved(row, to, shownStanding))}/>;
 };
 
 const seated = (Table: Table, rows: readonly Measures[], dials: Dials = {origin: 'hide', motion: 'animated'}) => <Page Table={Table} rows={rows} dials={dials}/>;

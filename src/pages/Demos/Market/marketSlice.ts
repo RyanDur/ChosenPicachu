@@ -1,5 +1,5 @@
 import {sliced} from '@components/store';
-import {Arrangement, arrangementOf, arrangementReducer} from '@components/DragSortableTable/model';
+import {Arrangement, arrangements} from '@components/DragSortableTable/model';
 import {Trade} from '../Charts/coinbase';
 import {LATEST_TRADES_CAP, LiveTradesState, opening} from '../Charts/live-trades';
 import {Period} from '../Charts/period';
@@ -41,10 +41,10 @@ const candlesReducer = (candles: CandlesState, action: MarketAction): CandlesSta
   }
 };
 
-const arranged = arrangementOf(measures.map(({name}) => name), windows.map(({label}) => label));
+const arranged = arrangements.of(measures.map(({name}) => name), windows.map(({label}) => label));
 
 export const marketSlice = sliced<MarketState, MarketAction>({
   trades: {initial: noTrades, reduce: tradesReducer},
   candles: {initial: {}, reduce: candlesReducer},
-  arrangement: {initial: arranged, reduce: arrangementReducer}
+  arrangement: {initial: arranged, reduce: arrangements.reducer}
 });

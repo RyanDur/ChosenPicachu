@@ -6,7 +6,7 @@ import {Dials, useControls} from '../../Controls';
 import {prefetch, TableFrame} from '../Frame';
 import {marketSelectors} from '../../Market';
 import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
-import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
+import {arrangements} from '@components/DragSortableTable/model';
 import '../Aggregations.css';
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
@@ -15,9 +15,9 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const columns = useMarketSelector(marketSelectors.columns);
   const rows = useMarketSelector(marketSelectors.rows);
   return <Table caption="Live aggregations by window" origin={origin} motion={motion} columns={columns} rows={rows}
-    onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-    onSorted={({column, direction}) => dispatch(sorted(column, direction))}
-    onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>;
+    onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
+    onSorted={({column, direction}) => dispatch(arrangements.sorted(column, direction))}
+    onRowMoved={({row, to, standing}) => dispatch(arrangements.rowMoved(row, to, standing))}/>;
 };
 
 const VanillaStage: FC<Dials> = dials => {

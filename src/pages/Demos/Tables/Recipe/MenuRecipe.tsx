@@ -243,7 +243,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             <Snippet label="TS" lines={[
               ...carve.unit(sortingSource, 'const ranked'), gap,
-              ...carve.unit(arrangementSource, 'export const standingOf'), gap,
+              ...carve.unit(arrangementSource, 'const standingOf'), gap,
               ...carve.unit(arrangedViewSource, '  rowsOf: (arrangement, aggregates) =>'),
               lines.aside('// both worlds ask the arrangement the same question')
             ]}/>
@@ -265,12 +265,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'export const sortEnded'), gap,
+                ...carve.unit(arrangementSource, 'const sortEnded'), gap,
                 ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
                 ...carve.unit(rowSrc, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'export const sortEnded'), gap,
+                ...carve.unit(arrangementSource, 'const sortEnded'), gap,
                 ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
                 ...carve.unit(buildSrc, 'const rowBeside = '),
                 lines.aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')

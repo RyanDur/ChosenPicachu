@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, columnLift, Grab, movedTo, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, tableState, survey, looks, travel, arrangements} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -43,10 +43,10 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? survey.interior(order.indexOf(drag.landing), count) : order.indexOf(column);
-      const settling = tableSelectors.settlingOfColumnIn(column, movedTo(order, column, to))(view);
+      const settling = tableSelectors.settlingOfColumnIn(column, arrangements.movedTo(order, column, to))(view);
       releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: movedTo(order, column, to)}));
+        dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: arrangements.movedTo(order, column, to)}));
       }
     }
   };

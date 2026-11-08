@@ -8,7 +8,7 @@ import {
 } from '@components/Users/__test_support';
 import {syncing} from '../syncing';
 import {friendAdded, friendRemoved, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
-import {rowMoved} from '@components/DragSortableTable/model';
+import {arrangements} from '@components/DragSortableTable/model';
 import {User} from '@components/Users/UserInfo/user';
 
 describe('the users store', () => {
@@ -34,7 +34,7 @@ describe('the users store', () => {
     const ids = someUsers.map(({id}) => id);
     store.dispatch(usersArrived(someUsers));
 
-    store.dispatch(rowMoved(first.id, 2, ids));
+    store.dispatch(arrangements.rowMoved(first.id, 2, ids));
     store.dispatch(usersArrived(someUsers));
 
     expect(selectUsers(store.state).map(({id}) => id)).toEqual([ids[1], ids[2], first.id, ...ids.slice(3)]);

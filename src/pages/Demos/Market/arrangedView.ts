@@ -1,4 +1,4 @@
-import {Arrangement, standingOf, TableColumn} from '@components/DragSortableTable/model';
+import {Arrangement, TableColumn, arrangements} from '@components/DragSortableTable/model';
 import {Measured, Measures, seated} from './cells';
 
 type ArrangedView = {
@@ -16,7 +16,7 @@ export const arrangedView: ArrangedView = {
     const shown = seated(aggregates);
     const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
     const byWindow = new Map(aggregates.map(row => [row.window.display, row]));
-    return standingOf(arrangement, valueOf).flatMap(key => {
+    return arrangements.standingOf(arrangement, valueOf).flatMap(key => {
       const row = byWindow.get(key);
       return row ? [row] : [];
     });

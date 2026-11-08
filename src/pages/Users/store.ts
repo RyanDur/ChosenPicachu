@@ -1,7 +1,7 @@
 import {Listener, Store, sliced, store} from '@components/store';
 import {maybe, Maybe} from '@ryandur/sand';
 import {NewUser, User, UserEdit} from '@components/Users';
-import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, arrived, standingOf, TableColumn} from '@components/DragSortableTable/model';
+import {Arrangement, ArrangementAction, TableColumn, arrangements} from '@components/DragSortableTable/model';
 import {Candidate, columns, seated} from './columns';
 
 export type UsersState = {
@@ -42,18 +42,18 @@ const roster = (users: readonly User[], action: UsersAction): readonly User[] =>
   action.type === 'usersArrived' ? action.users : users;
 
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
-  arrangementReducer(arrangement, action.type === 'usersArrived' ? arrived(ids(action.users)) : action);
+  arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
 
 export const usersSlice = sliced<UsersState, UsersAction>({
   users: {initial: [], reduce: roster},
-  arrangement: {initial: arrangementOf(columns.map(({name}) => name)), reduce: seating}
+  arrangement: {initial: arrangements.of(columns.map(({name}) => name)), reduce: seating}
 });
 
 const valueOf = (users: readonly User[]) => (row: string, column: string) =>
   seated(users).find(({key}) => key === row)?.values[column];
 
 export const selectUsers = ({users, arrangement}: UsersState): readonly User[] =>
-  inOrder(users, standingOf(arrangement, valueOf(users)));
+  inOrder(users, arrangements.standingOf(arrangement, valueOf(users)));
 
 export const selectColumns = ({arrangement}: UsersState): readonly TableColumn<Candidate>[] =>
   arrangement.columns.map(name => ({

@@ -1,7 +1,7 @@
 export type {TableAction} from './actions';
 export {tableActions} from './actions';
 export type {Arrangement, ArrangementAction} from './arrangement';
-export {arrangementOf, arrangementReducer, arrived, columnMoved, movedTo, rowMoved, sorted, standingOf} from './arrangement';
+export {arrangements} from './arrangement';
 export type {RowNudge} from './arrows';
 export {arrows} from './arrows';
 export type {Grab} from './lift';

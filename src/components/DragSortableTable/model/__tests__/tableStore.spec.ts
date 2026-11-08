@@ -3,7 +3,7 @@ import {columnShares} from '../../__test_support';
 import {tableActions} from '../actions';
 import {tableReducer} from '../reducer';
 import {tableState} from '../table-state';
-import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
+import {arrangements} from '../arrangement';
 
 const noFloors = {};
 
@@ -136,46 +136,46 @@ describe('the table store', () => {
 describe('the arrangement', () => {
   const trades: Readonly<Record<string, number>> = {'this minute': 3, 'this hour': 9, session: 5};
   const valueOf = (row: string, column: string) => column === 'trades' ? trades[row] : undefined;
-  const arranged = arrangementOf(['window', 'trades', 'buys'], ['this minute', 'this hour']);
+  const arranged = arrangements.of(['window', 'trades', 'buys'], ['this minute', 'this hour']);
 
   test('a column moves to the seat the hand chose', () => {
-    expect(arrangementReducer(arranged, columnMoved('trades', 2)).columns).toEqual(['window', 'buys', 'trades']);
+    expect(arrangements.reducer(arranged, arrangements.columnMoved('trades', 2)).columns).toEqual(['window', 'buys', 'trades']);
   });
 
   test('a sort ranks the standing over the values given; the rows stay as the hand left them', () => {
-    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+    const byTrades = arrangements.reducer(arranged, arrangements.sorted('trades', 'descending'));
 
     expect(byTrades.rows).toEqual(['this minute', 'this hour']);
-    expect(standingOf(byTrades, valueOf)).toEqual(['this hour', 'this minute']);
+    expect(arrangements.standingOf(byTrades, valueOf)).toEqual(['this hour', 'this minute']);
   });
 
   test('keys that arrive later sit after the ones still seated, and the sort ranks them all', () => {
-    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+    const byTrades = arrangements.reducer(arranged, arrangements.sorted('trades', 'descending'));
 
-    const more = arrangementReducer(byTrades, arrived(['this minute', 'this hour', 'session']));
+    const more = arrangements.reducer(byTrades, arrangements.arrived(['this minute', 'this hour', 'session']));
 
     expect(more.rows).toEqual(['this minute', 'this hour', 'session']);
-    expect(standingOf(more, valueOf)).toEqual(['this hour', 'session', 'this minute']);
+    expect(arrangements.standingOf(more, valueOf)).toEqual(['this hour', 'session', 'this minute']);
   });
 
   test('a row moved under a sort ends the sort, and the rows stay where the sort showed them', () => {
-    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+    const byTrades = arrangements.reducer(arranged, arrangements.sorted('trades', 'descending'));
 
-    const ended = arrangementReducer(byTrades, rowMoved('this hour', 0, ['this hour', 'this minute']));
+    const ended = arrangements.reducer(byTrades, arrangements.rowMoved('this hour', 0, ['this hour', 'this minute']));
 
     expect(ended.sort).toBeUndefined();
     expect(ended.rows).toEqual(['this hour', 'this minute']);
-    expect(standingOf(ended, valueOf)).toEqual(['this hour', 'this minute']);
+    expect(arrangements.standingOf(ended, valueOf)).toEqual(['this hour', 'this minute']);
   });
 
   test('a moved row takes the seat the hand chose in the standing it was shown', () => {
-    const moved = arrangementReducer(arranged, rowMoved('this minute', 1, ['this minute', 'this hour']));
+    const moved = arrangements.reducer(arranged, arrangements.rowMoved('this minute', 1, ['this minute', 'this hour']));
 
     expect(moved.rows).toEqual(['this hour', 'this minute']);
   });
 
   test('a foreign action leaves the arrangement as it was', () => {
-    expect(arrangementReducer(arranged, {type: 'tradeArrived'})).toBe(arranged);
+    expect(arrangements.reducer(arranged, {type: 'tradeArrived'})).toBe(arranged);
   });
 });
 

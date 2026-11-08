@@ -15,21 +15,21 @@ export type ArrangementAction =
   | {readonly type: 'sorted'; readonly column: string; readonly direction?: Direction}
   | {readonly type: 'arrived'; readonly keys: readonly string[]};
 
-export const columnMoved = (column: string, to: number): ArrangementAction => ({type: 'columnMoved', column, to});
-export const rowMoved = (row: string, to: number, standing: readonly string[]): ArrangementAction => ({type: 'rowMoved', row, to, standing});
-export const sorted = (column: string, direction?: Direction): ArrangementAction => ({type: 'sorted', column, direction});
-export const arrived = (keys: readonly string[]): ArrangementAction => ({type: 'arrived', keys});
+const columnMoved = (column: string, to: number): ArrangementAction => ({type: 'columnMoved', column, to});
+const rowMoved = (row: string, to: number, standing: readonly string[]): ArrangementAction => ({type: 'rowMoved', row, to, standing});
+const sorted = (column: string, direction?: Direction): ArrangementAction => ({type: 'sorted', column, direction});
+const arrived = (keys: readonly string[]): ArrangementAction => ({type: 'arrived', keys});
 
-export const arrangementOf = (columns: readonly string[], rows: readonly string[] = []): Arrangement =>
+const of = (columns: readonly string[], rows: readonly string[] = []): Arrangement =>
   ({columns, rows});
 
 const seatingOf = (standing: readonly string[], arrival: readonly string[]): readonly string[] =>
   [...standing.filter(key => arrival.includes(key)), ...arrival.filter(key => !standing.includes(key))];
 
-export const movedTo = (list: readonly string[], item: string, to: number): readonly string[] =>
+const movedTo = (list: readonly string[], item: string, to: number): readonly string[] =>
   list.includes(item) ? array.moveToIndex(to, item, list) : list;
 
-export const standingOf = (
+const standingOf = (
   {rows, sort}: Arrangement,
   valueOf: (row: string, column: string) => Value | undefined
 ): readonly string[] =>
@@ -37,7 +37,7 @@ export const standingOf = (
 
 const unsorted = ({sort: _sort, ...arrangement}: Arrangement): Arrangement => arrangement;
 
-export const sortEnded = (arrangement: Arrangement, standing: readonly string[]): Arrangement =>
+const sortEnded = (arrangement: Arrangement, standing: readonly string[]): Arrangement =>
   ({...unsorted(arrangement), rows: seatingOf(standing, arrangement.rows)});
 
 const arrangementActions: Record<ArrangementAction['type'], true> = {
@@ -60,5 +60,17 @@ const answering = (arrangement: Arrangement, action: ArrangementAction): Arrange
   }
 };
 
-export const arrangementReducer = (arrangement: Arrangement, action: {readonly type: string}): Arrangement =>
+const reducer = (arrangement: Arrangement, action: {readonly type: string}): Arrangement =>
   isArrangementAction(action) ? answering(arrangement, action) : arrangement;
+
+export const arrangements = {
+  columnMoved,
+  rowMoved,
+  sorted,
+  arrived,
+  of,
+  movedTo,
+  standingOf,
+  sortEnded,
+  reducer
+};

@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {Grab, movedTo, Moving, PixelSizes, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, looks, travel} from '@components/DragSortableTable/model';
+import {Grab, Moving, PixelSizes, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, looks, travel, arrangements} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -41,10 +41,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? standing.indexOf(drag.landing) : standing.indexOf(row);
-      const settling = tableSelectors.settlingOfRowIn(row, movedTo(standing, row, to))(view);
+      const settling = tableSelectors.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
       releasedRow(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: movedTo(standing, row, to)}));
+        dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: arrangements.movedTo(standing, row, to)}));
       }
     }
   };

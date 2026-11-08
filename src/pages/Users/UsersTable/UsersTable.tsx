@@ -8,7 +8,7 @@ import {Body, Cell, Column, DraggableColumn, DragSortable, Headers, reportOf, Ro
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
-import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';
+import {arrangements} from '@components/DragSortableTable/model';
 import {fullNameOf} from '@components/Users/UserInfo/user';
 
 export const UsersTable: FC = () => {
@@ -23,8 +23,8 @@ export const UsersTable: FC = () => {
       <caption className="off-screen">User candidates</caption>
       <thead>
         <Headers
-          onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-          onSorted={({column, direction}) => dispatch(sorted(column, direction))}>
+          onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
+          onSorted={({column, direction}) => dispatch(arrangements.sorted(column, direction))}>
           <Column column="full-name" className="full-name">Full Name<ResizeHandle column="full-name"/></Column>
           <DraggableColumn column="home-city" className="home-city">Home
             City<ResizeHandle column="home-city"/></DraggableColumn>
@@ -35,7 +35,7 @@ export const UsersTable: FC = () => {
         </Headers>
       </thead>
       <Body
-        onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}>
+        onRowMoved={({row, to, standing}) => dispatch(arrangements.rowMoved(row, to, standing))}>
         {users.map(user => {
           const name = fullNameOf(user);
           return <Row key={user.id}>

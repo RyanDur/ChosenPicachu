@@ -115,7 +115,7 @@ const ActionsAreData: FC = () =>
       <Codes>
         <Snippet label="TS" lines={[
           ...carve.span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), gap,
-          ...carve.unit(arrangementSource, 'export const columnMoved'), gap,
+          ...carve.unit(arrangementSource, 'const columnMoved'), gap,
           ...carve.unit(actionsSource, 'const columnMovedBeside = '),
           lines.aside('// the record says what happened; the creator is named for the verb')
         ]}/>
