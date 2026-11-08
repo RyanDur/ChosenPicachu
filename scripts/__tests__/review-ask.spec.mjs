@@ -52,10 +52,8 @@ describe('what the review is asked', () => {
     expect(onThePull.startsWith('/code-review high --comment 412.')).toBe(true);
   });
 
-  test('should ask a pull request\'s review to end its answer with the findings it left, so the gate can read them', () => {
-    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
-
-    expect(onThePull).toContain('end your answer with every finding you left as one fenced json list');
+  test('should ask for every finding in the structured output, which the gate reads', () => {
+    expect(asked).toContain('every finding in the structured output');
   });
 
   test('should name every reviewer\'s rubric, to be read whole', () => {

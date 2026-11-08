@@ -44,6 +44,7 @@ jobs:
             node scripts/review/ask.mjs
             echo
             echo 'ASKED'
+            echo "REVIEW_SCHEMA=$(node -e "process.stdout.write(JSON.stringify(require('./scripts/review/findings.schema.json')))")"
           } >> "$GITHUB_ENV"
       - name: Claude Code reviews the pull request against the house rules
         id: review
@@ -56,8 +57,10 @@ jobs:
           claude_args: |
             --model ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
             --max-turns 80
+            --json-schema '${{ env.REVIEW_SCHEMA }}'
             --allowedTools "Agent,Read,Grep,Glob,Skill,Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),mcp__github_inline_comment__create_inline_comment"
       - name: A violation stops the merge
         env:
           REVIEW_SUBJECT: ${{ github.event.pull_request.title }}
-        run: node scripts/review/report.mjs < "${{ steps.review.outputs.execution_file }}" >> "$GITHUB_STEP_SUMMARY"
+          REVIEW_FINDINGS: ${{ steps.review.outputs.structured_output }}
+        run: printf '%s' "$REVIEW_FINDINGS" | node scripts/review/report.mjs >> "$GITHUB_STEP_SUMMARY"
