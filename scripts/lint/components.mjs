@@ -1,4 +1,3 @@
-import {relative} from 'node:path';
 import {empty, has, not} from '@ryandur/sand';
 
 const functionTypes = new Set(['ArrowFunctionExpression', 'FunctionExpression', 'FunctionDeclaration']);
@@ -39,16 +38,12 @@ const definitionOf = variable => {
 const renderedAsJsx = {
   meta: {
     type: 'problem',
-    schema: [{type: 'object', properties: {still: {type: 'array', items: {type: 'string'}}}, additionalProperties: false}],
+    schema: [],
     messages: {
-      called: 'render {{name}} as JSX, <Name …/>, and name it in PascalCase if it isn\'t',
-      mended: '{{file}} now keeps this rule: take it off stillCallComponents in eslint.config.cjs'
+      called: 'render {{name}} as JSX, <Name …/>, and name it in PascalCase if it isn\'t'
     }
   },
   create(context) {
-    const file = relative(context.cwd, context.filename);
-    /** @type {string[]} */
-    const still = context.options[0]?.still ?? [];
     const source = context.sourceCode;
     const functionsReturningJsx = new Set();
     const callsByName = [];
@@ -81,15 +76,9 @@ const renderedAsJsx = {
         call.arguments.filter(argument => mapped && argument.type === 'Identifier')
           .forEach(argument => callsByName.push({node: argument, identifier: argument}));
       },
-      'Program:exit': program => {
-        const found = callsByName.filter(({identifier}) =>
-          functionsReturningJsx.has(functionIn(definitionOf(variableOf(identifier)))));
-        if (still.includes(file)) {
-          if (empty(found)) context.report({node: program, messageId: 'mended', data: {file}});
-          return;
-        }
-        found.forEach(({node, identifier}) => context.report({node, messageId: 'called', data: {name: identifier.name}}));
-      }
+      'Program:exit': () => callsByName
+        .filter(({identifier}) => functionsReturningJsx.has(functionIn(definitionOf(variableOf(identifier)))))
+        .forEach(({node, identifier}) => context.report({node, messageId: 'called', data: {name: identifier.name}}))
     };
   }
 };

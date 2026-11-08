@@ -7,8 +7,6 @@ const tester = new RuleTester({languageOptions: {
   parserOptions: {requireConfigFile: false, babelOptions: {presets: ['@babel/preset-typescript'], plugins: ['@babel/plugin-syntax-jsx']}}
 }});
 
-const listed = 'src/listed.tsx';
-
 tester.run('rendered-as-jsx', components.rules['rendered-as-jsx'], {
   valid: [
     {name: 'should accept a component rendered as JSX', code: 'const TabHeader = ({topic}) => <h1>{topic}</h1>;\nconst page = <TabHeader topic="tables"/>;'},
@@ -23,9 +21,7 @@ tester.run('rendered-as-jsx', components.rules['rendered-as-jsx'], {
       name: 'should not count JSX returned from an inner callback as the outer function\'s',
       code: 'const names = list => list.map(name => { return <li>{name}</li>; });\nconst shown = names(list);'
     },
-    {name: 'should accept a call of a prop', code: 'const Picks = ({onPicked}) => <button onClick={() => onPicked(1)}/>;'},
-    {name: 'should accept a listed file that still makes a call', filename: listed, options: [{still: [listed]}],
-      code: 'const header = x => <h1>{x}</h1>;\nconst page = header(1);'}
+    {name: 'should accept a call of a prop', code: 'const Picks = ({onPicked}) => <button onClick={() => onPicked(1)}/>;'}
   ],
   invalid: [
     {
@@ -63,12 +59,6 @@ tester.run('rendered-as-jsx', components.rules['rendered-as-jsx'], {
       name: 'should tell a component called as a function to render it',
       code: 'const TabHeader = ({topic}) => <h1>{topic}</h1>;\nconst page = TabHeader({topic});',
       errors: [{message: 'render TabHeader as JSX, <Name …/>, and name it in PascalCase if it isn\'t'}]
-    },
-    {
-      name: 'should report a listed file that keeps the rule now',
-      filename: listed, options: [{still: [listed]}],
-      code: 'const Header = ({x}) => <h1>{x}</h1>;\nconst page = <Header x={1}/>;',
-      errors: [{messageId: 'mended', data: {file: listed}}]
     }
   ]
 });
