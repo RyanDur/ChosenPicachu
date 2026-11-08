@@ -1,7 +1,7 @@
 import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@frame/navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
-import {Placement} from '@frame/notices/Banners';
+import {Placement, unplaced} from '@frame/notices/Banners';
 
 export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';
@@ -36,10 +36,7 @@ const defaults: Settings = {
   motion: 'animated',
   world: 'react',
   track: 'pointer',
-  side: 'top',
-  align: 'center',
-  enter: 'above',
-  stack: 'down'
+  ...unplaced
 };
 
 export const useControls = (): Controls => {

@@ -9,3 +9,5 @@ export type Placement = {
   readonly enter: Entrance;
   readonly stack: Stack;
 };
+
+export const unplaced: Placement = {side: 'top', align: 'center', enter: 'above', stack: 'down'};

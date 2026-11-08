@@ -1,12 +1,10 @@
 import {Banner, BannerChange} from './bannerChange';
-import {Placement} from './placement';
+import {Placement, unplaced} from './placement';
 
 export type News = {
   readonly banners: readonly Banner[];
   readonly placement: Placement;
 };
-
-const unplaced: Placement = {side: 'top', align: 'center', enter: 'above', stack: 'down'};
 
 const initial: News = {banners: [], placement: unplaced};
 
