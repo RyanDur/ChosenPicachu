@@ -40,8 +40,8 @@ const shape = {
 };
 
 const comparedToUndefined = {
-  selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"])',
-  message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
+  selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"], [left.raw="null"], [right.raw="null"])',
+  message: 'Say presence with has, empty, is, not or maybe from sand, never a comparison to null or undefined.'
 };
 
 const inlineAction = {
