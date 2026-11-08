@@ -1,24 +1,16 @@
-name: Build Test
+name: Checks
+# every check runs on the pull request, and main only deploys what passed here (deploy.yml); nothing is pushed to main
+# directly. Why: Ryan, 2026-11-08, "build_test review lighthose and journeys happen on PR's, rebase onto main takes the
+# built artifact from a passing PR and then deploys it to pages and then smoke tests. no pushes to main"
 on:
-  # a dev's branch reaches main as a pull request: the build, the unit tests and the journeys run on the pull request,
-  # whatever files it changes, because the merge waits for them by name (Ryan, 2026-11-08: "require the checks before
-  # merging"), and review.yml reviews it; Lighthouse, pages and smoke run from main only
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
-    # a push of documents alone to main runs nothing: no build or page imports a Markdown file (Ryan, 2026-11-08: "the
-    # ci should probably not run on doc updates")
-    paths-ignore:
-      - 'docs/**'
-      - '**/*.md'
   workflow_dispatch:
-# a new push to a pull request stops its older run; runs on main are never stopped
+# a new push to a pull request stops its older run
 concurrency:
-  group: build-test-${{ github.event.pull_request.number || github.sha }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: checks-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
 env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
@@ -31,41 +23,47 @@ env:
   VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
 
 jobs:
-  scope:
+  changes:
     runs-on: ubuntu-26.04
     permissions:
       contents: read
       pull-requests: read
     outputs:
-      full: ${{ steps.scope.outputs.full }}
+      site: ${{ steps.changes.outputs.site }}
     steps:
-      - name: Decide whether this push needs every check
-        id: scope
+      - name: Decide whether the pull request changes the site
+        id: changes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL: ${{ github.event.pull_request.number }}
         run: |
-          full=true
-          if [ "$GITHUB_REF" = refs/heads/main ] && [ "$GITHUB_EVENT_NAME" = push ]; then
-            # a failed lookup leaves full=true: gh prints the error's body and exits non-zero
-            if merged=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null)] | length'); then
-              if [ "$merged" != 0 ]; then
-                full=false
-              fi
+          # documents alone change nothing a page imports, so they get the review and no build; anything else, or a
+          # failed lookup, gets every check
+          site=true
+          if [ -n "$PULL" ] && files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only); then
+            if [ -n "$files" ] && ! grep -qvE '^docs/|\.md$' <<< "$files"; then
+              site=false
             fi
           fi
-          echo "full=$full" >> "$GITHUB_OUTPUT"
+          echo "site=$site" >> "$GITHUB_OUTPUT"
 
   build_test:
-    needs: scope
+    needs: changes
+    if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-26.04
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
     steps:
+      # the pull request's own head is built, never GitHub's temporary merge commit: the head stays on GitHub after the
+      # merge, so the samples' links to it keep working, and the branch is up to date with main, so its tree is the
+      # tree the rebase lands
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22'
+          node-version: '24.22.1'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Build
@@ -79,13 +77,11 @@ jobs:
           npm ci
           npm run build
       - name: Lint
-        if: needs.scope.outputs.full == 'true'
         run: |
           npm run lint
           npm run lint:css
           npm run lint:style
       - name: Test
-        if: needs.scope.outputs.full == 'true'
         run: npm test
       - name: Name the pages under a performance budget
         id: budgeted
@@ -98,38 +94,8 @@ jobs:
           name: site
           path: ./build/client
 
-  pages:
-    needs: [build_test, journeys]
-    if: >-
-      !cancelled() && github.ref == 'refs/heads/main' && needs.build_test.result == 'success'
-      && contains(fromJSON('["success", "skipped"]'), needs.journeys.result)
-    runs-on: ubuntu-26.04
-    concurrency:
-      group: github-pages
-      cancel-in-progress: false
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Download the site
-        uses: actions/download-artifact@v7
-        with:
-          name: site
-          path: ./build/client
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: ./build/client
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-
   journeys:
-    needs: [scope, build_test]
-    if: needs.scope.outputs.full == 'true'
+    needs: build_test
     runs-on: ubuntu-24.04
     # Playwright's image has the browsers and their system libraries in it, so no job installs from the runner's apt
     # mirror, which hung on one shard a run through 2026-10-07; its tag follows @playwright/test in package.json
@@ -155,7 +121,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22'
+          node-version: '24.22.1'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -183,36 +149,8 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
 
-  smoke:
-    needs: pages
-    if: ${{ !cancelled() && needs.pages.result == 'success' }}
-    runs-on: ubuntu-24.04
-    container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
-      options: --user 1001
-    steps:
-      - uses: actions/checkout@v5
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24.22'
-          cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-      - name: Install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm ci
-      - name: Smoke the deployed site
-        env:
-          PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json
-        run: npx playwright test --config=playwright.smoke.config.cjs --reporter=line,json
-      - name: Read the smoke in the run
-        if: always() && hashFiles('smoke.json') != ''
-        run: node scripts/playwright/summary.mjs smoke smoke.json >> "$GITHUB_STEP_SUMMARY"
-
   lighthouse:
     needs: build_test
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
@@ -224,7 +162,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22'
+          node-version: '24.22.1'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -262,7 +200,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24.22'
+          node-version: '24.22.1'
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
       - name: Install
@@ -276,3 +214,19 @@ jobs:
           path: lighthouse-reports
       - name: Read the scores in the run
         run: node --import ./scripts/node/imports-like-vite.mjs scripts/lighthouse/summary.mjs lighthouse-reports >> "$GITHUB_STEP_SUMMARY"
+
+  # the one check a merge waits for besides the review: the matrix jobs' names change with their shards and pages, so
+  # the ruleset names this job, which passes only when every check above passed or had nothing to check
+  ready:
+    needs: [changes, build_test, journeys, lighthouse, lighthouse_scores]
+    if: always()
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Every check passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "$RESULTS"
+          if grep -qE 'failure|cancelled' <<< "$RESULTS"; then
+            exit 1
+          fi

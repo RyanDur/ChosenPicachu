@@ -78,7 +78,7 @@ const rawCss = () => ({
 
 const builtCommit = () => {
   try {
-    return process.env.GITHUB_SHA ?? execSync('git rev-parse HEAD', {encoding: 'utf8'}).trim();
+    return execSync('git rev-parse HEAD', {encoding: 'utf8'}).trim();
   } catch {
     return 'main';
   }
