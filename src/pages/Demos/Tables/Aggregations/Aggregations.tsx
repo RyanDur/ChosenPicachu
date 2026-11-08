@@ -3,7 +3,7 @@ import {FC, useEffect, useState} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials, useControls} from '../../Controls';
-import {TableFrame, warmed} from '../Frame/TableFrame';
+import {TableFrame, warmed} from '../Frame';
 import {marketSelectors} from '../../Market';
 import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/model';

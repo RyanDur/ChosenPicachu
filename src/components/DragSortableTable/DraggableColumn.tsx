@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table/shares';
+import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
 import {columnArrows, columnDrag, ColumnDrag, columnHeld, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnUnder, columnWalkedTo, drifted, driftOfColumn, dropped, eagerTravel, Grab, headerCell, headerNeeds, interior, lifted, motionStates, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from './model';
 import './Header.css';

@@ -1,4 +1,4 @@
-import type {ColumnMoved, RowMoved, Sorted} from '@components/DragSortableTable/context';
+import type {ColumnMoved, RowMoved, Sorted} from '@components/DragSortableTable';
 
 declare global {
   // augmenting the event map only works through interface merging — a type alias cannot merge

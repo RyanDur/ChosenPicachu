@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {resizeLabel} from '@components/Table/shares';
+import {resizeLabel} from '@components/Table';
 import {MountedTable, namedShare, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {

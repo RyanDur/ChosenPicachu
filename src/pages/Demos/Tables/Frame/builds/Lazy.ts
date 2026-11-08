@@ -1,34 +1,44 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
 import {columnArrows, columnLift, columnUnder, displacedBetween, Grab, interior, Labelled, lazyTravel, Moving, PixelSizes, RowNudge, rowUnder, spanCrossed, TableColumn} from '@components/DragSortableTable/model';
 import {
+  announceSort,
+  arrangeColumns,
   Carry,
+  carrying,
   columnLandingFound,
   columnOfHeader,
+  dressCarried,
+  dressWidths,
   drifted,
-  landingReport,
-  lifted,
   Given,
+  headersOf,
+  landingReport,
+  lanesOf,
+  lifted,
+  markGrips,
   MountedTable,
-  Reconcile,
+  moveReportOf,
   orderAtLift,
+  Reconcile,
   released,
-  rowLandingFound,
+  report,
   Report,
+  reseatRows,
+  rowLandingFound,
+  settleColumn,
+  settleRow,
   settlingAt,
   settlingFromSeat,
+  shoveColumns,
+  shoveRows,
+  TableContext,
   TableState,
-  tableStore
-} from '../table/table-state';
-import {announceSort} from '../table/menus';
-import {dressWidths} from '../table/resize';
-import {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from '../table/settle';
-import {carrying, dressCarried} from '../table/carry';
-import {tell} from '../table/events';
-import {arrangeColumns, headersOf, markGrips} from '../table/columns';
-import {lanesOf, reseatRows, writeCells} from '../table/rows';
-import {moveReportOf, report} from '../table/report';
-import {TableContext} from '../table/context';
-import {wireParts} from '../table/parts';
+  tableStore,
+  tell,
+  unmarked,
+  wireParts,
+  writeCells
+} from '../table';
 
 const columnShoving = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
   const current = context.order();

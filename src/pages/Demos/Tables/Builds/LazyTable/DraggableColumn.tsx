@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table/shares';
+import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
 import {columnArrows, columnDrag, ColumnDrag, columnHeld, columnLandingFound, columnLift, columnMarks, columnMovedBeside, columnNamed, columnTravels, columnWalkedTo, drifted, driftOfColumn, dropped, Grab, headerCell, headerNeeds, interior, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settled, settlingOfColumnIn, shoveDistance, Survey, unknownColumn, widthOfColumn} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';

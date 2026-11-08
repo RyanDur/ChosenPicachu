@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
-import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components/Table/shares';
+import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components/Table';
 import {Direction, Value} from './sorting';
 import {Drift, Moving, drifted, still} from './travel';
 import {Flight, Grab} from './lift';

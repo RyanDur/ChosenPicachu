@@ -1,4 +1,4 @@
-import {wholePercent} from '@components/Table/shares';
+import {wholePercent} from '@components/Table';
 import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 

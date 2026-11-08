@@ -1,5 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {STEP_SHARE, grippedAt, measuredFloors, measuredWidths, neighborOf} from '@components/Table/shares';
+import {grippedAt, measuredFloors, measuredWidths, neighborOf, STEP_SHARE} from '@components/Table';
 import {columnSteps, TableAction} from '@components/DragSortableTable/model';
 import {arrowLifted, columnOfHeader, gripped, handleDragged, handleLeft, handleReleased, measured, MountedTable, pointerHolds, tradedBy, widthsOf} from './table-state';
 

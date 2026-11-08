@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table/shares';
+import {shareWidth} from '@components/Table';
 import {useTableSelector} from './context';
 import {columnNamed, headerCell, headerNeeds, unknownColumn, widthOfColumn} from './model';
 import './Header.css';

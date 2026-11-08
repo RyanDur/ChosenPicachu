@@ -1,5 +1,5 @@
 import {Direction} from './sorting';
-import {ColumnWidths, Grip} from '@components/Table/shares';
+import {ColumnWidths, Grip} from '@components/Table';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
 import {Moving} from './travel';
 import {PixelSizes} from './survey';

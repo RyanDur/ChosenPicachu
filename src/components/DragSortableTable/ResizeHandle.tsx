@@ -4,7 +4,14 @@ import {useHydrated} from '@components/hydrated';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {arrowLifted, awoken, columnGripped, gripped, handleDragged, handleLeft, handleReleased, namedShareOfColumn, neighbourOfColumn, selectOrder, tradedBy} from './model';
-import {grippedAt, measuredFloors, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
+import {
+  grippedAt,
+  measuredFloors,
+  measuredWidths,
+  resizeArrowLifted,
+  resizeArrows,
+  resizeLabel
+} from '@components/Table';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();

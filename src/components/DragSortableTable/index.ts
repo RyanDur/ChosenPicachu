@@ -7,3 +7,4 @@ export {Row} from './Row';
 export {Body} from './Body';
 export {DragSortable, reportOf, useDragSortable} from './useDragSortable';
 export type {Motion, Origin} from './useDragSortable';
+export type {ColumnMoved, RowMoved, Sorted} from './context';

@@ -1,7 +1,7 @@
 import {unconfigured} from '@env';
 import type {Dials, Pace} from '../../Controls';
 import {exchange} from '@pages/Demos/Market';
-import {columnMoved, marketActions, marketSelectors, marketStore, rowMoved, sorted} from './table/table-state';
+import {columnMoved, marketActions, marketSelectors, marketStore, rowMoved, sorted} from './table';
 import {builds} from './builds';
 
 declare global {
