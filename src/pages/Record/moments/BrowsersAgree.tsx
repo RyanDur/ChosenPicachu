@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const css2 = 'https://www.w3.org/TR/1998/REC-CSS2-19980512/';
 const css1TestSuiteAcknowledgments = 'https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html';

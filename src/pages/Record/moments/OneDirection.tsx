@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const fluxOverview = 'https://facebookarchive.github.io/flux/docs/in-depth-overview';
 const elmArchitecture = 'https://guide.elm-lang.org/architecture/';

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
 import {PeriodSample} from './PeriodSample';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const cssLookBack = 'https://thehistoryoftheweb.com/look-back-history-css/';
 const riseOfCss = 'https://thehistoryoftheweb.com/the-rise-of-css/';

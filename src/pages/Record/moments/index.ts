@@ -23,5 +23,4 @@ export {WebGoesPublic} from './WebGoesPublic';
 export {WiredRedesign} from './WiredRedesign';
 export {ZenGarden} from './ZenGarden';
 export {ConcernsInTheYear} from './concernsInTheYear';
-export {moments, type MomentKey, type SharedYear} from './moments';
 export {spelled} from './spelled';

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
 import {PeriodSample} from './PeriodSample';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const cssSaga = 'https://www.w3.org/Style/LieBos2e/history/Overview.html';
 const lieProposal = 'https://www.w3.org/People/howcome/p/cascade.html';

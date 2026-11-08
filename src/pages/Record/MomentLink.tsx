@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
-import {MomentKey} from './moments';
+import {MomentKey} from './calendar';
 import {recordAddress} from './addresses';
 
 export const MomentLink: FC<PropsWithChildren<{to: MomentKey}>> = ({to, children}) =>

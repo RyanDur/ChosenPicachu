@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const nextJsAnnouncement = 'https://vercel.com/blog/next';
 const renderingOnTheWeb = 'https://web.dev/rendering-on-the-web/';

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {moments} from './moments';
+import {moments} from '../calendar';
 
 const ecma262Editions = 'https://ecma-international.org/publications-and-standards/standards/ecma-262/';
 const fifthEdition = 'https://262.ecma-international.org/5.1/';
