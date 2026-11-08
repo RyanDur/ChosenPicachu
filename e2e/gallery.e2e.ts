@@ -168,6 +168,33 @@ test.describe('a visitor at a desk', () => {
     await expect(piece).toBeFocused();
   });
 
+  test('takes the loading sign off a piece once its picture arrives', async ({page}) => {
+    const gallery = galleryPage(page);
+    const letThePicturesThrough = await gallery.holdEveryPicture();
+    await page.goto('gallery/?tab=vam');
+    const work = gallery.wall.first();
+    await expect(gallery.loadingSignOn(work)).toHaveCount(1);
+
+    letThePicturesThrough();
+
+    await expect(work.getByRole('img')).toBeVisible();
+    await expect(gallery.loadingSignOn(work)).toHaveCount(0);
+  });
+
+  test('takes the loading sign off a piece whose picture will not load', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.refuseEveryPicture();
+    const letThePicturesGo = await gallery.holdEveryPicture();
+    await page.goto('gallery/?tab=vam');
+    const work = gallery.wall.first();
+    await expect(gallery.loadingSignOn(work)).toHaveCount(1);
+
+    letThePicturesGo();
+
+    await expect(gallery.standInOf(work)).toBeVisible();
+    await expect(gallery.loadingSignOn(work)).toHaveCount(0);
+  });
+
   test('shows a stand-in naming the piece when its picture will not load', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.refuseEveryPicture();

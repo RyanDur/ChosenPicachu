@@ -44,12 +44,13 @@ export const galleryPage = (page: Page) => {
       await page.route('**/vam-image/*/full/**', route => route.abort());
     },
     standInOf: (work: Locator): Locator => work.getByRole('img', {name: / would not load$/}),
+    loadingSignOn: (work: Locator): Locator => work.getByRole('progressbar', {name: 'loading', exact: true}),
     holdEveryPicture: async (): Promise<() => void> => {
       const held: (() => void)[] = [];
       let letGo = false;
       await page.route('**/vam-image/*/full/**', route => {
-        if (letGo) return route.continue();
-        return new Promise<void>(released => held.push(() => released(route.continue())));
+        if (letGo) return route.fallback();
+        return new Promise<void>(released => held.push(() => released(route.fallback())));
       });
       return () => {
         letGo = true;
