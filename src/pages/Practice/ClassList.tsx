@@ -37,7 +37,7 @@ const lengthOf = (segments: Segment[]): number =>
 const placedAlong = (segments: Segment[]): Placed[] =>
   segments.map((segment, at) => ({segment, x: margin + (at > 0 ? lengthOf(segments.slice(0, at)) + gap : 0)}));
 
-const Code: FC<PropsWithChildren<{x: number; y: number}>> = ({x, y, children}) =>
+const Code: FC<Required<PropsWithChildren<{x: number; y: number}>>> = ({x, y, children}) =>
   <text className="monospaced" x={x} y={y} fontSize={codeSize}>{children}</text>;
 
 const DrawnRun: FC<{run: Run; x: number; y: number}> = ({run: {classes, word, look}, x, y}) => <>

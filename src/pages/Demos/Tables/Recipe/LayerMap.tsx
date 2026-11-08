@@ -11,7 +11,7 @@ const layers: Layer[] = [
   {layer: 'Widen a column', askedFor: 'precision they can actually read', mouse: 'drag the edge', keyboard: 'arrows on the handle'}
 ];
 
-const CellHeading: FC<PropsWithChildren> = ({children}) =>
+const CellHeading: FC<Required<PropsWithChildren>> = ({children}) =>
   <span className="cell-heading caption uppercase">{children}</span>;
 
 export const LayerMap: FC = () =>
