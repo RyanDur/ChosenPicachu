@@ -1,7 +1,7 @@
 import {maybe} from '@ryandur/sand';
 import {Reducer, combined} from '@components/store';
 import {Foreign, TableAction, tableActions} from './actions';
-import {Landing, landingReport} from './report';
+import {Landing, tableReports} from './report';
 import {survey} from './survey';
 import {
   Carry,
@@ -13,7 +13,7 @@ export type TableReducer = Reducer<TableState, Foreign>;
 
 const landed = (state: TableState, carry: Carry, landing: Landing): TableState =>
   maybe(state.drag)
-    .mBind(drag => landingReport(carry.axis, tableState.orderAtLift(drag), carry.held, landing))
+    .mBind(drag => tableReports.landing(carry.axis, tableState.orderAtLift(drag), carry.held, landing))
     .map(report => ({...state, report}))
     .orElse(state);
 

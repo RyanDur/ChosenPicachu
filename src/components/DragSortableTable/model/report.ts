@@ -8,7 +8,7 @@ export type Report =
   | {readonly about: 'share'; readonly name: string; readonly share: number}
   | {readonly about: 'sort'; readonly name: string; readonly direction?: Direction};
 
-export const moveReport = (report: Report): string => {
+const move = (report: Report): string => {
   switch (report.about) {
     case 'column':
       return `${report.name} moved to column ${report.position + 1} of ${report.of}`;
@@ -23,7 +23,7 @@ export const moveReport = (report: Report): string => {
 
 export type Landing = {readonly name: string; readonly order: readonly string[]};
 
-export const landingReport = (axis: 'column' | 'row', orderAtLift: readonly string[], held: string, {name, order}: Landing): Maybe<Report> => {
+const landing = (axis: 'column' | 'row', orderAtLift: readonly string[], held: string, {name, order}: Landing): Maybe<Report> => {
   const from = orderAtLift.indexOf(held);
   const to = order.indexOf(held);
   if (to === from || to < 0) {
@@ -33,4 +33,9 @@ export const landingReport = (axis: 'column' | 'row', orderAtLift: readonly stri
     ? {about: 'column', name, position: to, of: order.length}
     : {about: 'row', name, position: to, of: order.length};
   return some(report);
+};
+
+export const tableReports = {
+  move,
+  landing
 };

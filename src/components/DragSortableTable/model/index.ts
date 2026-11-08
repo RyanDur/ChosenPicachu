@@ -8,7 +8,7 @@ export type {Grab} from './lift';
 export {lifting} from './lift';
 export {looks} from './looks';
 export type {Report} from './report';
-export {landingReport, moveReport} from './report';
+export {tableReports} from './report';
 export {tableSelectors} from './selectors';
 export type {Direction} from './sorting';
 export {sorting} from './sorting';

@@ -105,4 +105,4 @@ export const WalkCaseCarve: FC = () =>
   <Snippet label="TS" lines={carve.span(reducerSource, "case 'columnMovedBeside':", "const to = action.type === 'columnWalkedTo'")}/>;
 
 export const MoveReportCarve: FC = () =>
-  <Snippet label="TS" lines={carve.span(reportSource, 'export const moveReport', '`${report.name} moved to ${report.position')}/>;
+  <Snippet label="TS" lines={carve.span(reportSource, 'const move', '`${report.name} moved to ${report.position')}/>;

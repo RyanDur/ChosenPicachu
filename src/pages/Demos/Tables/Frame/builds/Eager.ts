@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, landingReport, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting} from '@components/DragSortableTable/model';
+import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting, tableReports} from '@components/DragSortableTable/model';
 import {
   announceSort,
   arrangeColumns,
@@ -82,7 +82,7 @@ const drop = (context: MountedTable): void => {
   if (!has(drag)) {
     return;
   }
-  landingReport(drag.axis, tableState.orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
+  tableReports.landing(drag.axis, tableState.orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? order() : standing()}).map(context.report);
   const from = tableState.settlingAt(hand.state, order(), standing());
   hand.dispatch(tableActions.released());
   if (drag.axis === 'column') {

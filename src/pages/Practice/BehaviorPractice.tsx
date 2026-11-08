@@ -202,7 +202,7 @@ export const BehaviorPractice: FC = () =>
     <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
     <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
       reader user hears where the column or row went. The report is a type, and{' '}
-    <code className="monospaced">moveReport</code> turns it into words:</p>
+    <code className="monospaced">tableReports.move</code> turns it into words:</p>
     <MoveReportCarve/>
     <p className="paragraph">Both builds write those words into an <code className="monospaced">output</code> named
       move report. An output is a status, and MDN says a screen reader announces what is posted in

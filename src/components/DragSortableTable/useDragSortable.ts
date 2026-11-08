@@ -1,7 +1,7 @@
 import {useState, useSyncExternalStore} from 'react';
 import {classNames} from '@components/class-names';
 import {Table, TableContext} from './context';
-import {Labelled, moveReport, Seated, TableColumn, tableStore, TableView, tableSelectors} from './model';
+import {Labelled, Seated, TableColumn, tableStore, TableView, tableSelectors, tableReports} from './model';
 import './Table.css';
 import './sortable.css';
 
@@ -30,4 +30,4 @@ export const useDragSortable = <C extends Labelled>(
 
 export const DragSortable = Table.Provider;
 
-export const reportOf = (sortable: TableView): string => tableSelectors.report(sortable).map(moveReport).orElse('');
+export const reportOf = (sortable: TableView): string => tableSelectors.report(sortable).map(tableReports.move).orElse('');
