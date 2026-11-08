@@ -9,7 +9,7 @@ const steps = {
   'the layers': {
     step: (page: Page): Locator => page.getByRole('listitem')
       .filter({has: page.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for', exact: true})}),
-    before: (step: Locator): Locator => step.getByText(/Both axes, every layer, or the layer is not done/)
+    before: (step: Locator): Locator => step.getByText(/every arrangement a pointer can make, a key can make too\./)
   }
 };
 
