@@ -38,6 +38,14 @@ describe('a drop', () => {
 
     expect(dragSort.reduce(hoveredAgain, dragSortChange.released()).order).toEqual(['B', 'C', 'A']);
   });
+
+  it('a drop that would move a neighbour still sliding is ignored', () => {
+    const stepped = dragSort.reduce(resting, dragSortChange.stepped('B', 1));
+    const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
+    const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
+
+    expect(dragSort.reduce(hovered, dragSortChange.released()).order).toEqual(['A', 'C', 'B']);
+  });
 });
 
 describe('a drag that leaves', () => {
