@@ -5,11 +5,29 @@ import {shares} from '@components/Table';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
 import {useTableSelector} from './useTableSelector';
-import {arrows, ColumnDrag, Grab, Moving, PixelSizes, Survey, tableActions, tableSelectors, survey, looks, travel, lifting} from './model';
+import {
+  arrows,
+  ColumnDrag,
+  Grab,
+  lifting,
+  looks,
+  Moving,
+  PixelSizes,
+  Survey,
+  survey,
+  tableActions,
+  tableSelectors,
+  travel
+} from './model';
 import './Header.css';
 import './motion.css';
 
-export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
+export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
+  column,
+  className,
+  children,
+  ...th
+}) => {
   const dispatch = useTableDispatch();
   const {onColumnMoved} = useHeaderEvents();
   const order = useTableSelector(tableSelectors.order);
@@ -60,14 +78,21 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onPointerUp={has(drag) ? release : undefined}
     onPointerCancel={has(drag) ? release : undefined}
     onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
-    onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
+    onKeyDown={travels ? arrows.column(column, () => order, ({
+      to,
+      widths
+    }) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': shares.width(width),
-      '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
-      '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
-      '--settle-x': looks.pixels(settlingFrom?.seat.x), '--settle-y': looks.pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x), '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
+      '--seat-x': looks.pixels(seat?.x),
+      '--seat-y': looks.pixels(seat?.y),
+      '--drift-x': looks.pixels(drift?.x),
+      '--drift-y': looks.pixels(drift?.y),
+      '--settle-x': looks.pixels(settlingFrom?.seat.x),
+      '--settle-y': looks.pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x),
+      '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
       '--shoved-by': looks.shoveDistance(shoved)
     }}>
     {children}

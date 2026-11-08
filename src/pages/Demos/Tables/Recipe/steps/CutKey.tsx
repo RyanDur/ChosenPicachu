@@ -20,7 +20,7 @@ export const CutKey: FC<{world: World; headerSource: Sample; buildSrc: Sample}> 
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
-            ...carve.span(headerSource, 'onKeyDown={travels ? arrows.column', 'onKeyDown={travels ? arrows.column'), gap,
+            ...carve.span(headerSource, 'onKeyDown={travels ? arrows.column', 'walkedTo(to, widths)) : undefined}'), gap,
             ...carve.unit(headerSource, 'const walkedTo = '),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
