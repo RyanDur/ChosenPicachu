@@ -24,8 +24,8 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
           const slideStart = slideStarts.of(sort.slideStarts, item);
           return <HideItem key={item} item={item}
             onDragOver={() => dispatch(dragSortChange.hovered(index))}
-            className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
-            style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
+            className={classNames('item', slideStart.map(({again}) => again ? 'sliding-in-again' : 'sliding-in').orElse(''))}
+            style={slideStart.map(({places}) => ({'--starts-places-right': places})).orElse({})}
             onAnimationEnd={() => dispatch(dragSortChange.slid(item))}/>;
         })
       }</ol>

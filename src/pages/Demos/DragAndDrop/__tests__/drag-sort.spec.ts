@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {dragSort} from '../drag-sort';
 import {dragSortChange} from '../drag-sort-change';
+import {slideStarts} from '../slide-starts';
 
 describe('a landed drag', () => {
   const resting = dragSort.initial({items: ['A', 'B', 'C'], animated: false});
@@ -84,6 +85,16 @@ describe('a keyboard step', () => {
     const stepped = dragSort.reduce(resting, dragSortChange.stepped('A', 1));
 
     expect(dragSort.reduce(stepped, dragSortChange.stepped('C', -1)).order).toEqual(['B', 'A', 'C']);
+  });
+
+  it('an item that slides again runs its new slide under the other name, so the browser starts it over', () => {
+    const stepped = dragSort.reduce(resting, dragSortChange.stepped('A', 1));
+    const settled = dragSort.reduce(dragSort.reduce(stepped, dragSortChange.slid('A')), dragSortChange.slid('B'));
+
+    const steppedAgain = dragSort.reduce(settled, dragSortChange.stepped('B', 1));
+
+    expect([stepped, steppedAgain].map(({slideStarts: starts}) => slideStarts.of(starts, 'B').map(({again}) => again).orNull()))
+      .toEqual([false, true]);
   });
 });
 

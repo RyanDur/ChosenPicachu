@@ -18,16 +18,32 @@
         overflow-x: auto;
     }
 
-    &.eager-paced .sliding-in {
-        animation: slide-in var(--eager-slide-duration) ease-out;
+    .sliding-in {
+        animation-name: slide-in;
     }
 
-    &.lazy-paced .sliding-in {
-        animation: slide-in var(--lazy-slide-duration) ease-out;
+    .sliding-in-again {
+        animation-name: slide-in-again;
+    }
+
+    &.eager-paced :is(.sliding-in, .sliding-in-again) {
+        animation-duration: var(--eager-slide-duration);
+        animation-timing-function: ease-out;
+    }
+
+    &.lazy-paced :is(.sliding-in, .sliding-in-again) {
+        animation-duration: var(--lazy-slide-duration);
+        animation-timing-function: ease-out;
     }
 }
 
 @keyframes slide-in {
+    from {
+        transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));
+    }
+}
+
+@keyframes slide-in-again {
     from {
         transform: translateX(calc(var(--starts-places-right) * (100% + var(--base))));
     }
