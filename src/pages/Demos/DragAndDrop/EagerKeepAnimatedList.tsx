@@ -23,8 +23,8 @@ export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
         sort.order.map((item, index) => {
           const slideStart = slideStarts.of(sort.slideStarts, item);
           return <KeepItem key={item} item={item}
-            className={classNames('item', slideStart.map(() => 'sliding-in').orElse(''))}
-            style={slideStart.map(places => ({'--starts-places-right': places})).orElse({})}
+            className={classNames('item', slideStart.map(({again}) => again ? 'sliding-in-again' : 'sliding-in').orElse(''))}
+            style={slideStart.map(({places}) => ({'--starts-places-right': places})).orElse({})}
             onAnimationEnd={() => dispatch(dragSortChange.slid(item))}
             onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>
               dispatch(dragSortChange.crossed(index, homeward)))}/>;

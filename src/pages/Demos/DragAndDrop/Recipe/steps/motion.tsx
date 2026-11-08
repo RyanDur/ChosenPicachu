@@ -25,6 +25,9 @@ export const SlideCrossed: FC = () =>
         class’s rule sets how long the slide runs from <code className="monospaced">--eager-slide-duration</code>, a
         custom property in the site’s timing style sheet that holds 0.15s. The <code className="monospaced">&</code>{' '}
         stands for the rule it sits inside, here <code className="monospaced">.sortable-list</code>.</Says>
+      <Says>The slide has two names, <code className="monospaced">sliding-in</code> and{' '}
+        <code className="monospaced">sliding-in-again</code>, and both run the same keyframes. A new start moves the item
+        to the other name, so the browser starts the slide over even when the last one ended a moment before.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -32,8 +35,11 @@ export const SlideCrossed: FC = () =>
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(sources.sortableListCss, '&.eager-paced .sliding-in {'), gap,
-        ...carve.unit(sources.sortableListCss, '@keyframes slide-in')
+        ...carve.unit(sources.sortableListCss, '.sliding-in {'), gap,
+        ...carve.unit(sources.sortableListCss, '.sliding-in-again {'), gap,
+        ...carve.unit(sources.sortableListCss, '&.eager-paced :is(.sliding-in, .sliding-in-again) {'), gap,
+        ...carve.unit(sources.sortableListCss, '@keyframes slide-in {'), gap,
+        ...carve.unit(sources.sortableListCss, '@keyframes slide-in-again {')
       ]}/>
     </Codes>
   </Step>;

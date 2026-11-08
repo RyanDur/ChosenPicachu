@@ -1,7 +1,7 @@
 import {Maybe, not, nothing, some} from '@ryandur/sand';
 import {array} from '@components';
 import {DragSortChange} from './drag-sort-change';
-import {SlideStarts, slideStarts} from './slide-starts';
+import {Places, SlideStarts, slideStarts} from './slide-starts';
 
 export type Report = {readonly item: string; readonly position: number; readonly stayed: boolean};
 
@@ -32,12 +32,12 @@ const moved = (
   sort: DragSort,
   item: string,
   order: readonly string[],
-  starts: SlideStarts
+  starts: Places
 ): DragSort => ({
   ...sort,
   order,
   report: some({item, position: order.indexOf(item), stayed: false}),
-  slideStarts: sort.animated ? {...sort.slideStarts, ...starts} : {}
+  slideStarts: sort.animated ? slideStarts.begun(sort.slideStarts, starts) : {}
 });
 
 const stayed = (sort: DragSort, item: string): DragSort =>
@@ -54,7 +54,7 @@ const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort => {
     .orElse(sort);
 };
 
-const anySliding = (sort: DragSort, starts: SlideStarts): boolean =>
+const anySliding = (sort: DragSort, starts: Places): boolean =>
   Object.keys(starts).some(item => sliding(sort, item));
 
 const settled = (sort: DragSort): DragSort => {
