@@ -2,14 +2,13 @@ import {FC, useReducer} from 'react';
 import {render} from '@testing-library/react';
 import {Measured, Measures, measures} from '../../../Market/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
-import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
+import {BodyEvents, Column, DragSortable, HeaderEvents, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, TableColumn} from '@components/DragSortableTable/model';
 import {arrangedView} from '@pages/Demos/Market';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {liveTable} from '../__test_support/table';
-import {Column, DragSortable, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
 
 type Dials = {origin: Origin; motion: Motion};
 

@@ -1,13 +1,9 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
-import {LayerMap} from './Recipe/LayerMap';
+import {DesignAsk, FlowTableRecipe, LayerMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
 import {useArrival} from '@components/OpeningFragment';
-import {StoryClues} from './Recipe/StoryClues';
-import {DesignAsk} from './Recipe/DesignAsk';
-import {StorySlices} from './Recipe/StorySlices';
-import {FlowTableRecipe, StillTableRecipe} from './Recipe/LivingTableRecipe';
 import {tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
 import '../Tutorials.css';

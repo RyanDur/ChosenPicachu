@@ -1,9 +1,8 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
+import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
 import {cellNeeds, columnHeld, drifted, driftOfColumn, driftOfRow, dropped, Grab, lifted, motionStates, movedTo, Moving, pixels, PixelSizes, pointerTravel, positionOfRow, rowArrows, RowDrag, rowDrag, rowHeaderCell, rowHeld, rowLandingFound, rowLift, rowMarks, rowMovedBeside, rowWalkedTo, seatOfColumn, seatOfRow, selectOrder, selectStanding, settled, settlingOfRowIn, shoveDistance, Survey} from '@components/DragSortableTable/model';
-import {RowGrip} from '@components/DragSortableTable/RowGrip';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 

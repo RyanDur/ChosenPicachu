@@ -1,10 +1,7 @@
 import {FC} from 'react';
-import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
-import {SortMenu} from '@components/DragSortableTable/SortMenu';
+import {Body, BodyEvents, Cell, Column, DragSortable, HeaderEvents, Headers, Motion, Origin, reportOf, ResizeHandle, Row, SortMenu, useDragSortable} from '@components/DragSortableTable';
 import {Measured, Measures, seated} from '../../../Market';
-import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/model';
-import {Body, Cell, Column, DragSortable, Headers, Motion, Origin, reportOf, Row, useDragSortable} from '@components/DragSortableTable';
 import {DraggableColumn} from './DraggableColumn';
 import {RowHeader} from './RowHeader';
 

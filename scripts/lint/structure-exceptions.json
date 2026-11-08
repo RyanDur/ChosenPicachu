@@ -316,12 +316,7 @@
     "src/pages/Demos/Market/marketStore.ts",
     "src/pages/Demos/Market/cells.ts",
     "src/pages/Demos/Market/recent-trades.ts",
-    "src/pages/Demos/Tables/Builds/EagerTable/EagerTable.tsx",
-    "src/pages/Demos/Tables/Builds/LazyTable/DraggableColumn.tsx",
-    "src/pages/Demos/Tables/Builds/LazyTable/LazyTable.tsx",
-    "src/pages/Demos/Tables/Builds/LazyTable/RowHeader.tsx",
     "src/pages/Demos/Tables/Picks.tsx",
-    "src/pages/Demos/Tables/Tutorials.tsx",
     "src/pages/Demos/ZIndexDemo/BannerExplained.tsx",
     "src/pages/Demos/ZIndexDemo/ContextChooser.tsx",
     "src/pages/Demos/ZIndexDemo/Recipe/TopLayerRecipe.tsx",
@@ -383,7 +378,6 @@
   "index-top-level": [
     "src/components/Users/index.ts",
     "src/pages/Demos/DragAndDrop/Recipe/steps/index.ts",
-    "src/pages/Demos/Tables/Recipe/steps/index.ts",
     "src/pages/Users/UsersTable/index.ts"
   ]
 }

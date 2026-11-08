@@ -8,3 +8,8 @@ export {Body} from './Body';
 export {DragSortable, reportOf, useDragSortable} from './useDragSortable';
 export type {Motion, Origin} from './useDragSortable';
 export type {ColumnMoved, RowMoved, Sorted} from './context';
+export {ResizeHandle} from './ResizeHandle';
+export {SortMenu} from './SortMenu';
+export {RowGrip} from './RowGrip';
+export {useBodyEvents, useHeaderEvents, useTableDispatch, useTableSelector} from './context';
+export type {BodyEvents, HeaderEvents} from './context';
