@@ -151,10 +151,10 @@ const landmarkMap = ((): Drawing => {
   ];
 
   const stacked: Box[] = [
-    {label: 'header', look: landmark, x: 6, y: 6, width: 288, height: 42},
-    {label: 'section · pages and feedback', look: landmark, x: 6, y: 57, width: 288, height: 81},
-    {label: 'nav · site', look: landmark, x: 15, y: 90, width: 180, height: 39},
-    {label: 'feedback', look: secondary, x: 204, y: 90, width: 81, height: 39},
+    {label: 'section · pages and feedback', look: landmark, x: 6, y: 6, width: 288, height: 81},
+    {label: 'nav · site', look: landmark, x: 15, y: 39, width: 180, height: 39},
+    {label: 'feedback', look: secondary, x: 204, y: 39, width: 81, height: 39},
+    {label: 'header', look: landmark, x: 6, y: 96, width: 288, height: 42},
     {label: 'main', look: landmark, x: 6, y: 147, width: 288, height: 165},
     {label: 'nav · tabs', look: secondary, x: 15, y: 186, width: 270, height: 30, note: 'only where a page has tabs'},
     {label: 'footer', look: landmark, x: 6, y: 321, width: 288, height: 39, note: 'only where a page has one'},
