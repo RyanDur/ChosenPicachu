@@ -1,2 +1,2 @@
 export {Axes} from './Axes';
-export {range} from './range';
+export {axisRange} from './axis-range';

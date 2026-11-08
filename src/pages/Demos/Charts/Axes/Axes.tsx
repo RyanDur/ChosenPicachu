@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {has, Maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {money} from '../../Market';
-import {Range} from './range';
+import {Range} from './axis-range';
 import './Axes.css';
 
 type Props = PropsWithChildren<{
