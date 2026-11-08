@@ -250,7 +250,7 @@ jobs:
         run: |
           scripts/review/threads.sh "$REVIEW_PULL" \
             | jq '[.[] | select(.first.nodes[0].author.__typename == "Bot")
-                | {resolved: .isResolved, file: .path, line,
+                | {resolved: .isResolved, file: .path, line: (.line // .originalLine), finding: .first.nodes[0].body,
                    comments: [.latest.nodes[] | select((.author.__typename == "Bot" or (.authorAssociation | IN("OWNER", "MEMBER", "COLLABORATOR")))) | {author: .author.login, body}]}]' \
             > earlier-findings.json
       - name: Ask for the review
