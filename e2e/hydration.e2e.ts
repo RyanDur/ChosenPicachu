@@ -1,7 +1,7 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {pages} from './pages';
-import {siteFrame, twoFramesLater} from './__test_support';
+import {drawingHeldBack, siteFrame, twoFramesLater} from './__test_support';
 
 const addressesBesideThePages = ['gallery/?page=1&size=8&tab=aic', 'gallery/O9138?tab=vam', 'games/colorGame'];
 
@@ -17,6 +17,18 @@ for (const path of [...pages.map(({path}) => path), ...addressesBesideThePages])
     expect(errors).toEqual([]);
   });
 }
+
+test('the script takes over a page the build did not draw without an error, when its room arrives before the first draw', async ({page}) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await drawingHeldBack(page, 500);
+  await page.goto('nowhere/');
+
+  await expect(siteFrame(page).title).toHaveText('No such room');
+  await twoFramesLater(page);
+
+  expect(errors).toEqual([]);
+});
 
 const theSiteNameBeforeTheScript = async (page: Page, path: string): Promise<void> => {
   await page.route('**/*.js', route => route.abort());
