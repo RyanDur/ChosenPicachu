@@ -8,6 +8,7 @@ export {
   userAddsHeard,
   userAddRefused,
   userRemovalRefused,
+  userUpdatePending,
   userUpdateRefused,
   usersUnreachable
 } from './users';

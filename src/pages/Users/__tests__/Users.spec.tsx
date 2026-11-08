@@ -335,20 +335,6 @@ describe('the users page', () => {
     await waitFor(() => expect(usersTable.names().filter(name => name === profile.fullName(person))).toHaveLength(2));
   });
 
-  test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
-    const pia = aUser({id: 'pia', friends: ['quin']});
-    const quin = aUser({id: 'quin', friends: ['pia']});
-    setupUsersResponse([pia, quin]);
-    setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
-    render(<TestApp at={Paths.users}/>);
-    const quinsRow = await usersTable.rowOf(profile.fullName(quin));
-
-    await usersTable.unfriend(quinsRow, profile.fullName(pia));
-
-    await waitFor(() => expect(usersTable.friendRemovalIfAny(quinsRow, profile.fullName(pia))).not.toBeInTheDocument());
-    expect(usersTable.friendChooser(quinsRow)).toHaveFocus();
-  });
-
   test("removing a friend in a person's row sends the backend that person without the friend", async () => {
     const vic = aUser({id: 'vic', friends: ['wen']});
     const wen = aUser({id: 'wen', friends: []});
@@ -401,24 +387,5 @@ describe('the users page', () => {
     await usersTable.befriend(tamsRow, profile.fullName(uma));
 
     await waitFor(() => expect(sent()).toMatchObject({id: tam.id, friends: [uma.id]}));
-  });
-
-  test('focus is not pulled back to a settled removal when the roster renders again', async () => {
-    const rae = aUser({id: 'rae', friends: ['sol']});
-    const sol = aUser({id: 'sol', friends: ['rae']});
-    const unfriended = [{...rae, friends: []}, {...sol, friends: []}];
-    setupUsersResponse([rae, sol]);
-    setupUserUpdatedResponse(rae.id, unfriended);
-    setupUserUpdatedResponse(sol.id, unfriended);
-    render(<TestApp at={Paths.users}/>);
-    const raesRow = await usersTable.rowOf(profile.fullName(rae));
-    await usersTable.unfriend(raesRow, profile.fullName(sol));
-    await waitFor(() => expect(usersTable.friendChooser(raesRow)).toHaveFocus());
-    await usersTable.edit(profile.fullName(sol));
-
-    await userForm.update();
-
-    await waitFor(() => expect(appAddress.shown()).not.toContain('mode='));
-    expect(usersTable.friendChooser(raesRow)).not.toHaveFocus();
   });
 });

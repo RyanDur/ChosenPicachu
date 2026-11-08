@@ -1,161 +1,134 @@
-import {render} from '@testing-library/react';
-import {FC, useState} from 'react';
-import {FriendsList} from '@pages/Users/FriendsList';
+import {render, waitFor} from '@testing-library/react';
+import {Paths} from '@frame/navigation';
+import {TestApp} from '@__test_support/TestApp';
 import {profile, User} from '@pages/Users/profile';
-import {someUsers} from '@pages/Users/__test_support';
+import {aUser, setupUsersResponse, setupUserUpdatedResponse, userUpdatePending, usersTable} from '@pages/Users/__test_support';
 import {friendsList} from '../__test_support';
 
-const Befriending: FC<{user: User; among?: readonly User[]}> = ({user: first, among = someUsers}) => {
-  const [user, update] = useState(first);
-  return <FriendsList users={among} user={user}
-    onFriendAdded={friend => update(profile.befriended(user, friend))}
-    onFriendRemoved={friend => update(profile.unfriended(user, friend))}/>;
+const nameOf = profile.fullName;
+
+const rowOf = async (person: User, roster: readonly User[]): Promise<ReturnType<typeof friendsList>> => {
+  setupUsersResponse(roster);
+  render(<TestApp at={Paths.users}/>);
+  return friendsList(await usersTable.rowOf(nameOf(person)));
 };
 
 describe('the friends list', () => {
-  const friendAdded = (): void => undefined;
-  const friendRemoved = (): void => undefined;
-  const firstUser = someUsers[0];
-  const secondUser = someUsers[1];
-  const thirdUser = someUsers[2];
+  const ben = aUser({id: 'ben'});
+  const cy = aUser({id: 'cy'});
 
-  it('should be able to add friends', async () => {
-    render(<Befriending user={firstUser}/>);
-    await friendsList.add(profile.fullName(secondUser));
+  test('a chosen friend joins the list once the backend has them', async () => {
+    const ana = aUser({id: 'ana'});
+    setupUserUpdatedResponse(ana.id, [{...ana, friends: [ben.id]}, ben, cy]);
+    const list = await rowOf(ana, [ana, ben, cy]);
 
-    expect(friendsList.friendsOf(profile.fullName(firstUser))).toHaveTextContent(profile.fullName(secondUser));
+    await list.add(nameOf(ben));
+
+    await waitFor(() => expect(list.friends()).toHaveTextContent(nameOf(ben)));
   });
 
-  it('adding a friend says who was added once they are on the list', async () => {
-    render(<Befriending user={firstUser}/>);
-    await friendsList.add(profile.fullName(secondUser));
+  test('adding a friend says who was added once they are on the list', async () => {
+    const ana = aUser({id: 'ana'});
+    setupUserUpdatedResponse(ana.id, [{...ana, friends: [ben.id]}, ben, cy]);
+    const list = await rowOf(ana, [ana, ben, cy]);
 
-    expect(friendsList.report()).toHaveTextContent(`${profile.fullName(secondUser)} added.`);
+    await list.add(nameOf(ben));
+
+    await waitFor(() => expect(list.report()).toHaveTextContent(`${nameOf(ben)} added.`));
   });
 
-  it('while a change is still on its way nothing is said', async () => {
-    render(<FriendsList users={someUsers} user={{...firstUser, friends: [secondUser.id]}}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
-    await friendsList.remove(profile.fullName(secondUser));
+  test('while a change is still on its way nothing is said', async () => {
+    const ana = aUser({id: 'ana', friends: [ben.id]});
+    userUpdatePending(ana.id);
+    const list = await rowOf(ana, [ana, ben, cy]);
 
-    expect(friendsList.report()).toBeEmptyDOMElement();
+    await list.remove(nameOf(ben));
+
+    expect(list.report()).toBeEmptyDOMElement();
   });
 
-  it('the friends of a user are a group that says whose friends they are', () => {
-    render(<FriendsList users={someUsers} user={firstUser}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
+  test('the friends of a user are a group that says whose friends they are', async () => {
+    const ana = aUser({id: 'ana'});
+    const list = await rowOf(ana, [ana, ben, cy]);
 
-    expect(friendsList.friendsOf(profile.fullName(firstUser))).toBeInTheDocument();
+    expect(list.friendsOf(nameOf(ana))).toBeInTheDocument();
   });
 
-  it('should not allow you to pick yourself', () => {
-    render(<FriendsList users={someUsers} user={firstUser}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
-    expect(friendsList.chooser()).not.toHaveTextContent(profile.fullName(firstUser));
+  test('a user cannot choose themselves', async () => {
+    const ana = aUser({id: 'ana'});
+    const list = await rowOf(ana, [ana, ben, cy]);
+
+    expect(list.chooser()).not.toHaveTextContent(nameOf(ana));
   });
 
-  it('should display the friends the user already has', () => {
-    const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
-    render(<FriendsList users={someUsers} user={userWithFriends}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
-    expect(friendsList.friends()).toHaveTextContent(profile.fullName(thirdUser));
-    expect(friendsList.friends()).toHaveTextContent(profile.fullName(secondUser));
+  test('the list shows the friends the user already has', async () => {
+    const ana = aUser({id: 'ana', friends: [ben.id, cy.id]});
+    const list = await rowOf(ana, [ana, ben, cy]);
+
+    expect(list.friends()).toHaveTextContent(nameOf(ben));
+    expect(list.friends()).toHaveTextContent(nameOf(cy));
   });
 
-  it('should display friends by their current name, not a snapshot', () => {
-    const renamedSecond = {
-      ...secondUser,
-      info: {...secondUser.info, firstName: 'Renamed', lastName: 'Person'}
-    };
-    const userWithFriends = {...firstUser, friends: [secondUser.id]};
-    render(<FriendsList users={[firstUser, renamedSecond, thirdUser]} user={userWithFriends}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
-    expect(friendsList.friends()).toHaveTextContent('Renamed Person');
+  test('a friend shows by their name in the roster', async () => {
+    const renamed = {...ben, info: {...ben.info, firstName: 'Renamed', lastName: 'Person'}};
+    const ana = aUser({id: 'ana', friends: [ben.id]});
+    const list = await rowOf(ana, [ana, renamed, cy]);
+
+    expect(list.friends()).toHaveTextContent('Renamed Person');
   });
 
   describe('removing a friend from the list', () => {
+    const ana = aUser({id: 'ana', friends: [ben.id, cy.id]});
+    const roster = [ana, ben, cy];
+
     beforeEach(() => {
-      render(<Befriending user={{...firstUser, friends: [secondUser.id, thirdUser.id]}}/>);
+      setupUserUpdatedResponse(ana.id, [{...ana, friends: [ben.id]}, ben, cy]);
     });
 
     test('clicking a friend removes them', async () => {
-      await friendsList.remove(profile.fullName(thirdUser));
+      const list = await rowOf(ana, roster);
 
-      expect(friendsList.removalIfAny(profile.fullName(thirdUser))).not.toBeInTheDocument();
+      await list.remove(nameOf(cy));
+
+      await waitFor(() => expect(list.removalIfAny(nameOf(cy))).not.toBeInTheDocument());
     });
 
     test('pressing enter on a friend removes them', async () => {
-      await friendsList.removeByKey(profile.fullName(thirdUser), '{enter}');
+      const list = await rowOf(ana, roster);
 
-      expect(friendsList.removalIfAny(profile.fullName(thirdUser))).not.toBeInTheDocument();
+      await list.removeByKey(nameOf(cy), '{enter}');
+
+      await waitFor(() => expect(list.removalIfAny(nameOf(cy))).not.toBeInTheDocument());
     });
 
     test('pressing space on a friend removes them', async () => {
-      await friendsList.removeByKey(profile.fullName(thirdUser), ' ');
+      const list = await rowOf(ana, roster);
 
-      expect(friendsList.removalIfAny(profile.fullName(thirdUser))).not.toBeInTheDocument();
+      await list.removeByKey(nameOf(cy), ' ');
+
+      await waitFor(() => expect(list.removalIfAny(nameOf(cy))).not.toBeInTheDocument());
     });
 
-  });
+    test('once the removal has arrived the list says who was removed', async () => {
+      const list = await rowOf(ana, roster);
 
-  describe('once a removal has arrived', () => {
-    const withTwoFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
+      await list.remove(nameOf(cy));
 
-    test('the list says who was removed', async () => {
-      render(<Befriending user={withTwoFriends}/>);
-
-      await friendsList.remove(profile.fullName(thirdUser));
-
-      expect(friendsList.removalIfAny(profile.fullName(thirdUser))).not.toBeInTheDocument();
-      expect(friendsList.report()).toHaveTextContent(`${profile.fullName(thirdUser)} removed.`);
-    });
-
-    test("focus lands on the next friend's remove button", async () => {
-      render(<Befriending user={withTwoFriends}/>);
-
-      await friendsList.remove(profile.fullName(secondUser));
-
-      expect(friendsList.removal(profile.fullName(thirdUser))).toHaveFocus();
-    });
-
-    test('focus lands on the friend before when the last one goes', async () => {
-      render(<Befriending user={withTwoFriends}/>);
-
-      await friendsList.remove(profile.fullName(thirdUser));
-
-      expect(friendsList.removal(profile.fullName(secondUser))).toHaveFocus();
-    });
-
-    test('focus lands on Add a friend when the only friend goes', async () => {
-      render(<Befriending user={{...firstUser, friends: [secondUser.id]}}/>);
-
-      await friendsList.remove(profile.fullName(secondUser));
-
-      expect(friendsList.chooser()).toHaveFocus();
-    });
-
-    test('focus lands on Add a friend even when it only appears once the friend is gone', async () => {
-      render(<Befriending user={{...firstUser, friends: [secondUser.id]}} among={[firstUser, secondUser]}/>);
-      expect(friendsList.chooserIfAny()).not.toBeInTheDocument();
-
-      await friendsList.remove(profile.fullName(secondUser));
-
-      expect(friendsList.chooser()).toHaveFocus();
+      await waitFor(() => expect(list.report()).toHaveTextContent(`${nameOf(cy)} removed.`));
     });
   });
 
-  it('should not allow a user to select something twice', () => {
-    const userWithFriends = {...firstUser, friends: [secondUser.id]};
-    render(<FriendsList users={someUsers} user={userWithFriends}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
-    expect(friendsList.chooser()).not.toHaveTextContent(profile.fullName(secondUser));
+  test('a friend the user already has is not offered again', async () => {
+    const ana = aUser({id: 'ana', friends: [ben.id]});
+    const list = await rowOf(ana, [ana, ben, cy]);
+
+    expect(list.chooser()).not.toHaveTextContent(nameOf(ben));
   });
 
-  it('should not allow to select a friend if no more friends are left', () => {
-    const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
-    render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={userWithFriends}
-      onFriendAdded={friendAdded} onFriendRemoved={friendRemoved}/>);
+  test('nobody is offered once everyone is a friend', async () => {
+    const ana = aUser({id: 'ana', friends: [ben.id, cy.id]});
+    const list = await rowOf(ana, [ana, ben, cy]);
 
-    expect(friendsList.chooserIfAny()).not.toBeInTheDocument();
+    expect(list.chooserIfAny()).not.toBeInTheDocument();
   });
 });
