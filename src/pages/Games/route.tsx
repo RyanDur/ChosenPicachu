@@ -1,8 +1,10 @@
 import {FC} from 'react';
-import {Page} from '@page';
+import {Header, Page, PageError} from '@page';
+import names from '@navigation/names.json';
 import {GamesPage} from './GamesPage';
-import {gamesHeader, GamesError} from './frame';
 
-export const ErrorBoundary = GamesError;
+const header = <Header title="Play Games" listed={names.games}/>;
 
-export const Room: FC = () => <Page header={gamesHeader}><GamesPage/></Page>;
+export const ErrorBoundary: FC = () => <Page header={header} inView={false}><PageError/></Page>;
+
+export const Room: FC = () => <Page header={header}><GamesPage/></Page>;
