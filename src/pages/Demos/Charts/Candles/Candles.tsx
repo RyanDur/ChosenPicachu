@@ -39,7 +39,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
   );
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
-  const range = axisRange.of(
+  const extent = axisRange.of(
     shownCandles.map(candle => candle.openedAt),
     Math.max(...shownCandles.map(candle => candle.high)),
     Math.min(...shownCandles.map(candle => candle.low))
@@ -65,7 +65,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       </Menu>
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={range}
+      <Axes extent={extent}
         pattern={periodDisplay.timePattern[period]}
         tickEvery={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>

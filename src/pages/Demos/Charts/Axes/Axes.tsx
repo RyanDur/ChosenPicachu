@@ -2,11 +2,11 @@ import {FC, PropsWithChildren} from 'react';
 import {has, Maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {money} from '../../Market';
-import {Range} from './axis-range';
+import {AxisExtent} from './axis-range';
 import './Axes.css';
 
 type Props = PropsWithChildren<{
-  range: Maybe<Range>;
+  extent: Maybe<AxisExtent>;
   pattern: string;
   tickEvery?: number;
   headroomMilliseconds?: number;
@@ -33,16 +33,16 @@ const placed = (
 };
 
 export const Axes: FC<Props> = ({
-  range, pattern, tickEvery, headroomMilliseconds = 0,
+  extent, pattern, tickEvery, headroomMilliseconds = 0,
   label = value => money.dollars.format(value), children
 }) => <div className="axes">
-  <p className="y-labels caption">{range.map(({high, low}) => <>
+  <p className="y-labels caption">{extent.map(({high, low}) => <>
     <data value={high}>{label(high)}</data>
     <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
     <data value={low}>{label(low)}</data>
   </>).orNull()}</p>
   <div className="chart-area">{children}</div>
-  <p className="x-labels caption">{range.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
+  <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
     <time key={tick.at}
       className="tick"
       dateTime={new Date(tick.at).toISOString()}

@@ -266,7 +266,7 @@ const CandlesStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.span(candlesSource, 'const range = axisRange.of(', '  );'), gap,
-            ...carve.span(candlesSource, '<Axes range', 'headroomMilliseconds={2 * bucketMilliseconds}>')
+            ...carve.span(candlesSource, '<Axes extent', 'headroomMilliseconds={2 * bucketMilliseconds}>')
           ]}/>
         </Codes>
       </Step>

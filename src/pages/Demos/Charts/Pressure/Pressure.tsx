@@ -31,7 +31,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       {actions}
     </header>
     <figure className="chart-stage paper-veiled-before">
-      <Axes range={axisRange.of(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={money.bitcoin}
+      <Axes extent={axisRange.of(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={money.bitcoin}
         pattern="HH:mm"
         tickEvery={TICK_EVERY_MILLISECONDS}
         headroomMilliseconds={2 * BUCKET_MILLISECONDS}>
