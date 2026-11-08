@@ -141,13 +141,13 @@ const landmarkMap = ((): Drawing => {
   const lastOnThePage = 'landmark-box paper-filled drawn dashed-drawn';
 
   const wide: Box[] = [
-    {label: 'header', look: landmark, x: 6, y: 6, width: 468, height: 42},
-    {label: 'section · pages and feedback', look: landmark, x: 6, y: 57, width: 180, height: 225},
-    {label: 'nav · site', look: landmark, x: 18, y: 84, width: 156, height: 120},
-    {label: 'feedback', look: secondary, x: 18, y: 216, width: 156, height: 54},
+    {label: 'section · pages and feedback', look: landmark, x: 6, y: 6, width: 180, height: 324},
+    {label: 'nav · site', look: landmark, x: 18, y: 33, width: 156, height: 120},
+    {label: 'feedback', look: secondary, x: 18, y: 165, width: 156, height: 54},
+    {label: 'header', look: landmark, x: 195, y: 6, width: 279, height: 42},
     {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
     {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
-    {label: 'footer', look: landmark, x: 6, y: 291, width: 468, height: 39, note: 'only where a page has one'},
+    {label: 'footer', look: landmark, x: 195, y: 291, width: 279, height: 39, note: 'only where a page has one'},
     {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 186, y: 34, width: 282, height: 26}
   ];
 
