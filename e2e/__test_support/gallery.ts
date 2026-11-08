@@ -20,6 +20,8 @@ export const galleryPage = (page: Page) => {
         .evaluate(fold => Promise.all(fold.getAnimations({subtree: true}).map(motion => motion.finished)));
     },
     submitSearch: page.getByRole('button', {name: 'submit search'}),
+    searchFieldValid: (): Promise<boolean> =>
+      searchField.evaluate(field => field instanceof HTMLInputElement && field.validity.valid),
     resetSearch: page.getByRole('button', {name: 'reset search'}),
     go: page.getByRole('button', {name: 'Go', exact: true}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),

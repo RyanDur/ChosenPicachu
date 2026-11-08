@@ -68,15 +68,15 @@ describe('search', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
   });
 
-  it('a reset empties the box and puts the submit to rest', async () => {
+  it('a reset empties the box, and the browser holds the empty box invalid', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
-    expect(screen.getByRole('button', {name: 'submit search'})).toBeEnabled();
+    expect(screen.getByLabelText(/Search For/)).toBeValid();
 
     await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
 
     expect(screen.getByLabelText(/Search For/)).toHaveValue('');
-    expect(screen.getByRole('button', {name: 'submit search'})).toBeDisabled();
+    expect(screen.getByLabelText(/Search For/)).toBeInvalid();
   });
 
   describe('with the clock held', () => {

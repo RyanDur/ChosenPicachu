@@ -39,7 +39,7 @@ export const Search: FC<Props> = ({id, className}) => {
 
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (searchString) void navigate({
+    void navigate({
       pathname: gallery,
       search: searchFromAddress({search: searchString})
     });
@@ -55,13 +55,12 @@ export const Search: FC<Props> = ({id, className}) => {
     <form className="search-form" onSubmit={submitted} onReset={reset}>
       <label id="query-label" className="query-label field next-approached ellipsis" htmlFor="query"><span
         className="bold">Search For:</span> {search ?? ''}</label>
-      <input type="search" autoComplete="off" list="search-options" id="query"
+      <input type="search" autoComplete="off" list="search-options" id="query" required
         className="query bare card"
         onInput={event => updateQuery(event.currentTarget.value)}/>
       <button className="reset-query button icon-button borderless field attentive reachable" type="reset"
         aria-label="reset search"><img className="icon" src={resetIcon} width="24" height="24" alt=""/></button>
-      <button className="submit-query button icon-button borderless field attentive reachable" disabled={!searchString.length}
-        type="submit"
+      <button className="submit-query button icon-button borderless field attentive reachable" type="submit"
         aria-label="submit search"><img className="icon" src={searchIcon} width="24" height="24" alt=""/></button>
       <datalist id="search-options" className="field">
         {searchOptions.map((searchOption, index) =>
