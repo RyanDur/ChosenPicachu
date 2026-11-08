@@ -101,6 +101,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
-          run=$(gh run list --workflow checks.yml --commit "$head" --json databaseId,conclusion \
-            -q '[.[] | select(.conclusion == "failure")][0].databaseId // empty')
-          if [ -n "$run" ]; then gh run rerun "$run" --failed; fi
+          run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
+          if [ -z "$run" ]; then exit 0; fi
+          gh run watch "$run" --interval 30 > /dev/null
+          if [ "$(gh run view "$run" --json conclusion -q .conclusion)" = failure ]; then gh run rerun "$run" --failed; fi
