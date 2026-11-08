@@ -15,6 +15,7 @@
     --rise: var(--base);
 
     position: relative;
+    container-type: inline-size;
 
     .loading {
       position: absolute;
@@ -22,12 +23,10 @@
       margin: auto;
     }
 
-    .wall-slot {
-      aspect-ratio: 1;
-      container-type: size;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+    .hanging {
+      display: grid;
+      grid-template-rows: 100cqw auto;
+      place-items: end center;
     }
 
     .scrim {
@@ -40,7 +39,7 @@
     .piece {
       display: block;
       max-width: 100cqw;
-      max-height: 100cqh;
+      max-height: 100cqw;
       transition: transform var(--lift-duration) var(--curve);
     }
 
