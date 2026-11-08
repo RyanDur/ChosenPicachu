@@ -16,7 +16,7 @@ describe('The page controls', () => {
       await pageControl.go();
 
       await waitFor(() => expect(pageControl.addressSearch()).toHaveTextContent('page=3'));
-      expect(pageControl.pageField()).not.toHaveValue(3);
+      expect(pageControl.pageField()).toHaveValue(null);
     });
 
     test('after going to a page, the field says which page it is', async () => {
