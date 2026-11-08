@@ -95,7 +95,7 @@ export const Feedback: FC = () => {
         inert={not(hydrated)} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    {hydrated && <Modal id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
+    {hydrated && <Modal key={key} id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
