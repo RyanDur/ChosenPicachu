@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
-import {arrows, ColumnDrag, columnLift, eagerTravel, Grab, headerCell, headerNeeds, motionStates, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey} from './model';
+import {arrows, ColumnDrag, columnLift, eagerTravel, Grab, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey, looks} from './model';
 import './Header.css';
 import './motion.css';
 
@@ -47,7 +47,8 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
 
   return <th {...th}
     className={classNames(
-      ...headerCell, className, ...headerNeeds(travels, width), ...motionStates(carried, settlingFrom, shoved))}
+      ...looks.headerCell, className, ...looks.headerNeeds(travels, width),
+      ...looks.motionStates(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

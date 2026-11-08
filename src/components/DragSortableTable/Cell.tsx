@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
 import {useTableSelector} from './context';
-import {cellNeeds, motionStates, tableSelectors, tableState} from './model';
+import {tableSelectors, tableState, looks} from './model';
 import './motion.css';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
@@ -19,7 +19,7 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
-    className={classNames('cell', className, ...cellNeeds, ...motionStates(columnCarried || rowCarried, from, shove))}
+    className={classNames('cell', className, ...looks.cellNeeds, ...looks.motionStates(columnCarried || rowCarried, from, shove))}
     style={{
       '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
       '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),

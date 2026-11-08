@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {cellNeeds, Grab, motionStates, movedTo, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, Survey, tableActions, tableSelectors, tableState} from '@components/DragSortableTable/model';
+import {Grab, movedTo, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, looks} from '@components/DragSortableTable/model';
 import {releasedRow, travelledRow} from './travel';
 import '@components/DragSortableTable/motion.css';
 
@@ -52,7 +52,8 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'row', held: row}))}
     className={classNames(
-      ...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
+      ...looks.rowHeaderCell, className, ...looks.cellNeeds,
+      ...looks.motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
       '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),

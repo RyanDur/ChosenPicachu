@@ -2,7 +2,7 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {cellNeeds, eagerTravel, Grab, motionStates, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowHeaderCell, rowLift, Survey, tableActions, tableSelectors, tableState, survey} from './model';
+import {eagerTravel, Grab, Moving, PixelSizes, pointerTravel, arrows, RowDrag, rowLift, Survey, tableActions, tableSelectors, tableState, survey, looks} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
@@ -47,7 +47,8 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   return <th {...th} scope="row" aria-label={label}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'row', held: row}))}
     className={classNames(
-      ...rowHeaderCell, className, ...cellNeeds, ...motionStates(columnCarried || carried, settlingFrom, shoved))}
+      ...looks.rowHeaderCell, className, ...looks.cellNeeds,
+      ...looks.motionStates(columnCarried || carried, settlingFrom, shoved))}
     style={{
       '--seat-x': tableState.pixels(seat?.x), '--seat-y': tableState.pixels(seat?.y),
       '--drift-x': tableState.pixels(drift?.x), '--drift-y': tableState.pixels(drift?.y),

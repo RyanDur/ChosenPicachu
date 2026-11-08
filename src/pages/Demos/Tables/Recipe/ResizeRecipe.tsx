@@ -25,10 +25,10 @@ const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...carve.unit(sharesSource, 'export const measuredWidths'), gap,
-      ...carve.unit(looksSource, 'export const headerNeeds')
+      ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(buildSource, 'className={classNames(', '...headerNeeds(travels, width)'), gap,
+      ...carve.span(buildSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), gap,
       ...carve.span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[

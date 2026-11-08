@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {arrows, ColumnDrag, columnLift, Grab, headerCell, headerNeeds, motionStates, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey} from '@components/DragSortableTable/model';
+import {arrows, ColumnDrag, columnLift, Grab, movedTo, Moving, PixelSizes, pointerTravel, Survey, tableActions, tableSelectors, tableState, survey, looks} from '@components/DragSortableTable/model';
 import {releasedColumn, travelledColumn} from './travel';
 import '@components/DragSortableTable/Header.css';
 import '@components/DragSortableTable/motion.css';
@@ -53,7 +53,8 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
 
   return <th {...th}
     className={classNames(
-      ...headerCell, className, ...headerNeeds(travels, width), ...motionStates(carried, settlingFrom, shoved))}
+      ...looks.headerCell, className, ...looks.headerNeeds(travels, width),
+      ...looks.motionStates(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}

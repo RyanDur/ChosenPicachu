@@ -6,7 +6,7 @@ export type {RowNudge} from './arrows';
 export {arrows} from './arrows';
 export type {Grab} from './lift';
 export {columnLift, rowLift} from './lift';
-export {cellNeeds, headerCell, headerNeeds, motionStates, rowHeaderCell} from './looks';
+export {looks} from './looks';
 export type {Report} from './report';
 export {landingReport, moveReport} from './report';
 export {tableSelectors} from './selectors';

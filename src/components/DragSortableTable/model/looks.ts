@@ -1,11 +1,11 @@
 import {has} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling, tableState} from './table-state';
 
-export const rowHeaderCell = ['cell', 'row-header'] as const;
+const rowHeaderCell = ['cell', 'row-header'] as const;
 
-export const headerCell = ['cell', 'header-cell'] as const;
+const headerCell = ['cell', 'header-cell'] as const;
 
-export const headerNeeds = (travels: boolean, width?: number): readonly (string | false)[] => [
+const headerNeeds = (travels: boolean, width?: number): readonly (string | false)[] => [
   'muted-rule-after',
   'muted-bar-below',
   'focus-ringed',
@@ -13,9 +13,9 @@ export const headerNeeds = (travels: boolean, width?: number): readonly (string 
   has(width) && 'shared'
 ];
 
-export const cellNeeds = ['muted-rule-after', 'muted-rule-below'] as const;
+const cellNeeds = ['muted-rule-after', 'muted-rule-below'] as const;
 
-export const motionStates = (
+const motionStates = (
   carried: boolean,
   settlingFrom?: Settling,
   shove?: ColumnShove | RowShove
@@ -25,3 +25,11 @@ export const motionStates = (
   has(settlingFrom) && 'settling',
   tableState.shovedClass(shove)
 ];
+
+export const looks = {
+  rowHeaderCell,
+  headerCell,
+  headerNeeds,
+  cellNeeds,
+  motionStates
+};
