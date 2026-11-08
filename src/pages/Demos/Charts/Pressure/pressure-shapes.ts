@@ -50,7 +50,7 @@ const drawn = (
   const peak = heaviestSide(pressures);
   const middle = height / 2;
   const scale = (size: number): number => peak === 0 ? 0 : (size / peak) * middle;
-  const slots = periodSlots(pressures.map(pressure => pressure.openedAt), width, bucketMilliseconds);
+  const slots = periodSlots.of(pressures.map(pressure => pressure.openedAt), width, bucketMilliseconds);
   return pressures.map((pressure, at) => {
     const boughtHeight = scale(pressure.bought);
     return {

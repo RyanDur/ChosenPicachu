@@ -8,7 +8,7 @@ import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods,
 import {captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {periodDisplay} from '../period-display';
-import {sparklinePoints, TimedPrice} from '../sparkline';
+import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, range} from '../Axes';
 import '../chart-card.css';
 import './PriceChart.css';
@@ -58,7 +58,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   );
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
-    sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
+    sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trending = view.map(trendOf);
   const trend = trending.orElse(undefined);
