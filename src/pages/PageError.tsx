@@ -1,13 +1,13 @@
 import {FC, useEffect} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 
 const closed = 'This room is closed.';
 
 export const PageError: FC = () => {
-  const {raise} = useBanners();
-  useEffect(() => raise(closed), [raise]);
+  const dispatchBanner = useBannerDispatch();
+  useEffect(() => dispatchBanner(bannerChange.raised(closed)), [dispatchBanner]);
 
   return <section className="prose" aria-labelledby="closed-room">
     <h2 id="closed-room" className="title bold">{closed}</h2>

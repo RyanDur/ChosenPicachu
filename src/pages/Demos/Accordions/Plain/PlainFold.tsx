@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 import './PlainFold.css';
 
 const measured = (body: HTMLElement, grown: (height: number) => void): void => {
@@ -11,7 +11,7 @@ const measured = (body: HTMLElement, grown: (height: number) => void): void => {
 };
 
 export const PlainFold: FC = () => {
-  const {raise} = useBanners();
+  const dispatchBanner = useBannerDispatch();
   const [document, setDocument] = useState<string>();
   const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
@@ -22,11 +22,11 @@ export const PlainFold: FC = () => {
       if (standing) {
         setDocument(foldDocument());
       }
-    }).catch(() => raise('the plain fold could not be assembled'));
+    }).catch(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')));
     return () => {
       standing = false;
     };
-  }, [raise]);
+  }, [dispatchBanner]);
 
   useEffect(() => maybe(frame?.contentDocument?.body).map(body => {
     const watcher = new ResizeObserver(() => measured(body, setHeight));

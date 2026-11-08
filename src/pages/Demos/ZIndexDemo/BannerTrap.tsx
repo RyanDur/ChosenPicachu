@@ -1,7 +1,7 @@
 import {FC, useId, useState} from 'react';
 import {maybe} from '@ryandur/sand';
 import {decked, news} from '@components/fibs';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 import './ZIndexDemo.css';
 
 const nextNews = decked(news);
@@ -9,7 +9,7 @@ const nextNews = decked(news);
 export const BannerTrap: FC = () => {
   const [raised, updateRaised] = useState(false);
   const raiser = useId();
-  const {raise} = useBanners();
+  const dispatchBanner = useBannerDispatch();
   const dismissed = (): void => {
     updateRaised(false);
     maybe(document.getElementById(raiser)).map(button => button.focus());
@@ -34,7 +34,7 @@ export const BannerTrap: FC = () => {
           <li className="trap-way">
             <p className="caption">The top layer</p>
             <button type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, in the top layer"
-              onClick={() => raise(nextNews())}>Raise a banner</button>
+              onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>Raise a banner</button>
           </li>
         </ul>
         {raised && <p role="alert" className="old-banner field rounded-corners floating hairline-outline alarm-ink">

@@ -3,7 +3,7 @@ import {Loading} from '@components/Loading';
 import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {empty, maybe} from '@ryandur/sand';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {art as artResource, museumReply} from '@pages/Gallery/museums';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
@@ -12,13 +12,13 @@ import {StandIn} from '@pages/Gallery/StandIn';
 
 export const ArtGallery: FC = () => {
   const {wall, dispatch, page, size, search, tab} = useGallery();
-  const {raise} = useBanners();
+  const dispatchBanner = useBannerDispatch();
 
   useEffect(() => museumReply.ask(
     maybe(tab).map(source => () => artResource.getAll({page, size, search, source})),
     dispatch,
-    error => raise(troubleWith('the museum')(error))
-  ), [page, search, tab, size, dispatch, raise]);
+    error => dispatchBanner(bannerChange.raised(troubleWith('the museum')(error)))
+  ), [page, search, tab, size, dispatch, dispatchBanner]);
 
   return <>
     <ul id="art-gallery">

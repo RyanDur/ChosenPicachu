@@ -1,4 +1,4 @@
 import {useContext} from 'react';
-import {Raised, Raising} from './raising';
+import {Banner, Raised} from './raising';
 
-export const useBanners = (): Raising => useContext(Raised);
+export const useBanners = (): readonly Banner[] => useContext(Raised);

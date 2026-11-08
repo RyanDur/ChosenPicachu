@@ -2,11 +2,11 @@ import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
 import {TestApp} from '@__test_support/TestApp';
-import {useBanners} from '@components/Banners/useBanners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 
 const Trouble: FC<{message: string}> = ({message}) => {
-  const {raise} = useBanners();
-  return <button type="button" onClick={() => raise(message)}>trouble</button>;
+  const dispatchBanner = useBannerDispatch();
+  return <button type="button" onClick={() => dispatchBanner(bannerChange.raised(message))}>trouble</button>;
 };
 
 const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);

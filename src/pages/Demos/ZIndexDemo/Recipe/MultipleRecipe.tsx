@@ -4,7 +4,7 @@ import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} fro
 import {EntranceDial, StackDial, useControls} from '../../Controls';
 import {popoverWinsHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?sample';
-import providerSource from '@components/Banners/BannerProvider.tsx?sample';
+import raisingSource from '@components/Banners/raising.ts?sample';
 import bannersCss from '@components/Banners/Banners.css?sample';
 import '../../Recipe/Recipe.css';
 
@@ -106,13 +106,16 @@ export const MultipleRecipe: FC = () => {
     <Steps>
       <Step title="Skip a message that is already up">
         <Words want="The same message twice tells me nothing new.">
-          <Says>raise is the function a page calls with a message. It looks for that message among the banners that
-            are up and adds a banner only when it finds none. Once a banner has been dismissed and has gone, the same
-            message can be raised again.</Says>
+          <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>.{' '}
+            <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
+            action, and it gives the new banner its id. The reducer looks for the message among the banners that are up
+            and returns them unchanged when it finds one. Otherwise it adds the new banner. Once a banner has been
+            dismissed and has gone, the same message can be raised again.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(providerSource, 'const raise = useCallback(')
+            ...carve.unit(raisingSource, 'export const bannerChange = {'), gap,
+            ...carve.span(raisingSource, "case 'raised':", ': [...standing, change.banner];')
           ]}/>
         </Codes>
       </Step>

@@ -3,11 +3,14 @@ import {maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
 import {useBanners} from './useBanners';
+import {useBannerDispatch} from './useBannerDispatch';
+import {bannerChange} from './raising';
 import {bannerDials} from './bannerDials';
 import './Banners.css';
 
 export const Banners: FC = () => {
-  const {banners, lower} = useBanners();
+  const banners = useBanners();
+  const dispatchBanner = useBannerDispatch();
   const {side, align, enter, stack} = useSearchParamsObject(bannerDials.decoders, bannerDials.defaults);
   const [leaving, setLeaving] = useState<readonly string[]>([]);
 
@@ -49,7 +52,7 @@ export const Banners: FC = () => {
     const slotClosed = event.target === event.currentTarget
       && ['grid-template-rows', 'grid-template-columns'].includes(event.propertyName);
     if (slotClosed && leaving.includes(id)) {
-      lower(id);
+      dispatchBanner(bannerChange.lowered(id));
       setLeaving(standing => standing.filter(going => going !== id));
     }
   };

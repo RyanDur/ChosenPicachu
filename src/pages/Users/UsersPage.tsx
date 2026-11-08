@@ -1,7 +1,7 @@
 import {FC, useEffect, useState, useSyncExternalStore} from 'react';
 import {Link, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';
 import {users as usersApi} from '@components/Users';
@@ -16,9 +16,9 @@ import './UsersPage.css';
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
-  const {raise} = useBanners();
+  const dispatchBanner = useBannerDispatch();
   const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: modeParam});
-  const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
+  const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => dispatchBanner(bannerChange.raised(troubleWith('the users')(error))))));
   const open = openedOn(
     userWithId(id)(useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial)),
     param

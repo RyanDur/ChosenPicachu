@@ -1,13 +1,13 @@
 import {FC, useEffect} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 
 const noRoom = 'There is no room at this address.';
 
 export const NoRoom: FC = () => {
-  const {raise} = useBanners();
-  useEffect(() => raise(noRoom), [raise]);
+  const dispatchBanner = useBannerDispatch();
+  useEffect(() => dispatchBanner(bannerChange.raised(noRoom)), [dispatchBanner]);
 
   return <section className="prose" aria-labelledby="no-room">
     <h2 id="no-room" className="title bold">{noRoom}</h2>

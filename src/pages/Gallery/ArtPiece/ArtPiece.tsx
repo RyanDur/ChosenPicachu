@@ -6,7 +6,7 @@ import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {Image} from '@pages/Gallery/Image';
 import {useGallery} from '@pages/Gallery/Context';
 import {opening} from '@pages/Gallery/opening';
-import {useBanners} from '@components/Banners';
+import {bannerChange, useBannerDispatch} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {art, museumReply} from '@pages/Gallery/museums';
 import noImage from '../../../assets/icons/missing-art.svg?url';
@@ -15,15 +15,15 @@ import {StandIn} from '@pages/Gallery/StandIn';
 
 export const ArtPiece = () => {
   const {easel, dispatch} = useArtPiece();
-  const {raise} = useBanners();
+  const dispatchBanner = useBannerDispatch();
   const {tab} = useGallery();
   const {id} = useParams<{id: string}>();
 
   useEffect(() => museumReply.ask(
     maybe(id).map(chosen => () => art.get({id: chosen, source: tab ?? opening.museum})),
     dispatch,
-    error => raise(troubleWith('the museum')(error))
-  ), [id, tab, dispatch, raise]);
+    error => dispatchBanner(bannerChange.raised(troubleWith('the museum')(error)))
+  ), [id, tab, dispatch, dispatchBanner]);
 
   return <>
     {museumReply.awaited(easel) && <Loading label="loading piece"/>}
