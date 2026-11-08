@@ -9,25 +9,25 @@ import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';
 import {tableTutorials} from './Tables';
 
-type Place = {topic: DemoTopics; title: string; listed: Listing};
+type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};
 
-const placeAt = (pathname: string): Maybe<Place> => tableTutorials.at(pathname)
-  .map((tutorial): Place => ({
+const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pathname)
+  .map((tutorial): ShownDemo => ({
     topic: DemoTopics.tables,
     title: `Demos ${topicNames[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
     listed: names.tables[tutorial]
   }))
   .or(() => maybe(Object.values(DemoTopics).find(topic => pathname === demoAddress(topic)))
-    .map((topic): Place => ({topic, title: `Demos ${topicNames[topic]}`, listed: names.demos[topic]})));
+    .map((topic): ShownDemo => ({topic, title: `Demos ${topicNames[topic]}`, listed: names.demos[topic]})));
 
-const usePlace = (): Maybe<Place> => placeAt(useLocation().pathname);
+const useShownDemo = (): Maybe<ShownDemo> => shownDemoAt(useLocation().pathname);
 
-const DemoHeader: FC = () => usePlace().either(
+const DemoHeader: FC = () => useShownDemo().either(
   ({title, listed}) => <Header title={title} listed={listed}/>,
   () => null);
 
 export const ErrorBoundary: FC = () => <Page header={<DemoHeader/>}><PageError/></Page>;
 
-export const Room: FC = () => usePlace().either(
+export const Room: FC = () => useShownDemo().either(
   ({topic}) => <Page header={<DemoHeader/>}><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Page>,
   () => <NoSuchRoom/>);
