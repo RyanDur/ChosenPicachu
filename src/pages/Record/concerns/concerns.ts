@@ -1,4 +1,4 @@
-import {MomentKey} from './moments';
+import {MomentKey} from '../moments';
 
 const inOrder = ['Structure', 'Presentation', 'Behavior'] as const;
 

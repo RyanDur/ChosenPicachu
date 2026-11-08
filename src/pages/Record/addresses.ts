@@ -1,5 +1,6 @@
 import {Paths} from '@navigation';
-import {Concern, concerns, MomentKey, moments} from './moments';
+import {Concern, concerns} from './concerns';
+import {MomentKey, moments} from './moments';
 import {concertParagraphs} from './concertParagraphs';
 
 const ofMoment = (key: MomentKey): string => `${Paths.record}#${moments.headings[key].id}`;

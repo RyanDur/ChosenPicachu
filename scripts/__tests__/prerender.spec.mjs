@@ -2,7 +2,7 @@ import {Paths} from '@navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {allChartKinds} from '@pages/Demos/Charts/kinds';
 import {practiceAddress} from '@pages/Practice';
-import {concerns} from '@pages/Record/moments';
+import {concerns} from '@pages/Record/concerns';
 import {prerender} from '../../src/entry.server';
 
 describe('the pages drawn into the build', () => {

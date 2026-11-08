@@ -4,8 +4,9 @@ import {
   Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
   BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
   WebGoesPublic, HtmlTwo, CssOne, WiredRedesign, CssTwoOne, EcmaScript, EsFive, DefaultsAgree, ConstantsNeedHome,
-  ElementsArrive, Frameworks, concerns, ConcernsInTheYear, MomentKey, moments, SharedYear, spelled
+  ElementsArrive, Frameworks, ConcernsInTheYear, MomentKey, moments, SharedYear, spelled
 } from './moments';
+import {concerns} from './concerns';
 
 const momentComponents: Record<MomentKey, FC> = {
   need: Need,

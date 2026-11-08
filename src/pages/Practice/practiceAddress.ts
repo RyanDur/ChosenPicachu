@@ -1,4 +1,4 @@
-import {Concern, concerns} from '@pages/Record/moments';
+import {Concern, concerns} from '@pages/Record/concerns';
 import {Maybe, maybe} from '@ryandur/sand';
 import {Paths} from '@navigation';
 

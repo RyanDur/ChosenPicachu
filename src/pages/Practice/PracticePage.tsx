@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useArrival} from '@navigation/arrival';
 import {Tabs} from '@navigation/Tabs';
-import {Concern, concerns} from '@pages/Record/moments';
+import {Concern, concerns} from '@pages/Record/concerns';
 import {practiceAddress} from './practiceAddress';
 import {StructurePractice} from './structure';
 import {PresentationPractice} from './presentation';

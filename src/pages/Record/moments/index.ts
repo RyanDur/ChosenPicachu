@@ -22,7 +22,6 @@ export {StructureArrives} from './StructureArrives';
 export {WebGoesPublic} from './WebGoesPublic';
 export {WiredRedesign} from './WiredRedesign';
 export {ZenGarden} from './ZenGarden';
-export {concerns, type Concern} from './concerns';
 export {ConcernsInTheYear} from './concernsInTheYear';
 export {moments, type MomentKey, type SharedYear} from './moments';
 export {spelled} from './spelled';
