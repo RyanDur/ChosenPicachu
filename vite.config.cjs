@@ -298,6 +298,7 @@ module.exports = defineConfig(({mode}) => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./test-setup.ts'],
-    slowTestThreshold: 200
+    slowTestThreshold: 200,
+    execArgv: ['--no-experimental-webstorage']
   }
 }));
