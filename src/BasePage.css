@@ -485,14 +485,14 @@
         z-index: 2;
       }
 
-      .app-header {
-        top: calc(var(--base-x-6) + var(--base));
-      }
-
       .filter {
         top: calc(var(--header-block) + var(--base-x-6) + var(--base) * 2);
         z-index: 2;
       }
+    }
+
+    #root:has(.feedback-item) .app-header {
+      top: calc(var(--base-x-6) + var(--base));
     }
   }
 }
