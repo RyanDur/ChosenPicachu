@@ -5,7 +5,7 @@ import {bannerChange, useBannerDispatch} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';
 import {users as usersApi} from '@components/Users';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {UsersTable} from './UsersTable';
 import {UsersProvider} from './Provider';
 import {syncing} from './syncing';

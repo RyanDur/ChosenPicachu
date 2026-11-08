@@ -1,7 +1,5 @@
 import {FC} from 'react';
-import {PageError} from '@pages/PageError';
-import {Header} from '@pages/BasePage/Header';
-import {Page} from '@pages/BasePage/Page';
+import {Header, Page, PageError} from '@frame/page';
 import {UsersPage} from '@pages/Users/UsersPage';
 import names from '@pages/names.json';
 

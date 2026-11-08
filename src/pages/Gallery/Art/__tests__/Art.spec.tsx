@@ -7,7 +7,7 @@ import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {test} from 'vitest';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {site} from '@pages/__test_support';
 import {heldAICAllArtResponse, requestsAnswered, setupAICAllArtResponse, galleryWall} from '@pages/Gallery/__test_support';
 

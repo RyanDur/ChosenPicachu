@@ -1,9 +1,7 @@
 import {FC} from 'react';
 import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
-import {PageError} from '@pages/PageError';
-import {Header, Listing} from '@pages/BasePage/Header';
-import {Page} from '@pages/BasePage/Page';
+import {Header, Listing, Page, PageError} from '@frame/page';
 import {Concern} from '@pages/Record/moments/concerns';
 import NoSuchRoom from '@pages/NoRoom/route';
 import names from '@pages/names.json';

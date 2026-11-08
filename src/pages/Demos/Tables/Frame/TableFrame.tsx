@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {useEnv} from '@components/Env';
+import {useEnv} from '@frame/page';
 import {bannerChange, useBannerDispatch} from '@components/Banners';
 import {Dials} from '../../Controls';
 import './TableFrame.css';

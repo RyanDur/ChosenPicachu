@@ -1,10 +1,11 @@
 import {FC} from 'react';
-import {directoryInRepository, fileInRepository} from '@pages/Paths';
+import {repository} from '@frame/navigation';
 import {Tell} from '../../../Recipe';
 import type {World} from '../../../Controls';
 
-const sourceOf = (world: World, path: string): string =>
-  (world === 'react' ? directoryInRepository : fileInRepository)(`src/pages/Demos/Tables/${path}`);
+const sourceOf = (world: World, path: string): string => world === 'react'
+  ? repository.directory(`src/pages/Demos/Tables/${path}`)
+  : repository.file(`src/pages/Demos/Tables/${path}`);
 
 export const TheImplementation: FC<{world: World; react: string; vanilla: string}> = ({world, react, vanilla}) =>
   <Tell>Every block below is carved from the source as it stands, so it cannot drift from the

@@ -7,7 +7,7 @@ import {
   vamArtResponse
 } from '@pages/Gallery/__test_support/fixtures';
 import {render, waitFor} from '@testing-library/react';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {limits} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {directoryInRepository, fileInRepository} from '@pages/Paths';
+import {repository} from '@frame/navigation';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {
@@ -220,7 +220,7 @@ export const BehaviorPractice: FC = () =>
       more rule.</p>
     <ul className="practice-list">
       <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
-        <a className="signpost" href={directoryInRepository('src/components/DragSortableTable/__tests__')}>Four
+        <a className="signpost" href={repository.directory('src/components/DragSortableTable/__tests__')}>Four
           specs</a>, <code className="monospaced">sorting</code>, <code className="monospaced">travel</code>,{' '}
         <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>, call the
         table’s code with no page at all, and they run on every commit.
@@ -228,20 +228,20 @@ export const BehaviorPractice: FC = () =>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
         hears. AGENTS.md sets one rule for them:{' '}
-      <a className="signpost" href={fileInRepository('AGENTS.md')}>“Journeys run as a reader who asks for less
+      <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
         motion, and none is retried or skipped.”</a>
       </li>
       <li className="paragraph">The pre-commit hook runs <code className="monospaced">tsc -b</code>{' '}
-        <a className="signpost" href={fileInRepository('scripts/git-hooks/pre-commit')}>before every commit</a> and
+        <a className="signpost" href={repository.file('scripts/git-hooks/pre-commit')}>before every commit</a> and
         refuses one that lets a forbidden state into a type.
       </li>
     </ul>
     <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>,{' '}
       <code className="monospaced">createRef</code> and <code className="monospaced">forwardRef</code> in any file that
-      is not on <a className="signpost" href={fileInRepository('eslint.config.mjs')}>a list in its configuration</a>.
+      is not on <a className="signpost" href={repository.file('eslint.config.mjs')}>a list in its configuration</a>.
       A ref keeps a value outside the state, where no reducer sees it and no test reads it. A file joins the list for
       one of the two reasons AGENTS.md gives:{' '}
-      <a className="signpost" href={fileInRepository('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
+      <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
         with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event.”</a> Two files are on the list today, both

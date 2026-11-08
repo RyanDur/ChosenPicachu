@@ -1,6 +1,6 @@
 import {FC, FocusEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
-import {useHydrated} from '@components/hydrated';
+import {useHydrated} from '@frame/page';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {arrowLifted, awoken, columnGripped, gripped, handleDragged, handleLeft, handleReleased, namedShareOfColumn, neighbourOfColumn, selectOrder, tradedBy} from './model';

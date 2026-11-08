@@ -1,7 +1,7 @@
 import {createContext, FC, PropsWithChildren, useContext, useEffect} from 'react';
 import {is, not} from '@ryandur/sand';
 import {Link, NavigationType, NavLink, useLocation, useMatch, useNavigationType} from 'react-router';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice/types';
 import {toQueryString} from '@transport/url';

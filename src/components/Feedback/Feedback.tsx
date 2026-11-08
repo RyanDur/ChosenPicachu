@@ -1,9 +1,7 @@
 import {ActionDispatch, createContext, FC, KeyboardEvent, MouseEvent, PropsWithChildren, ReactNode, SubmitEvent, SyntheticEvent, useContext, useEffect, useReducer} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
-import {useEnv} from '@components/Env';
-import {useHydrated} from '@components/hydrated';
-import {usePageName} from '@components/PageName';
+import {useEnv, useHydrated, usePageName} from '@frame/page';
 import {troubleWith} from '@transport/trouble';
 import {sent, threadFor} from './github';
 import {

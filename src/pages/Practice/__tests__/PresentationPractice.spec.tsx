@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 

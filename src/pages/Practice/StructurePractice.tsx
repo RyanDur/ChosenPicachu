@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {fileInRepository} from '@pages/Paths';
+import {repository} from '@frame/navigation';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {customElementsAddress} from '@pages/Record/concertAddress';
 import {demoAddress, DemoTopics} from '@pages/Demos';
@@ -166,7 +166,7 @@ export const StructurePractice: FC = () =>
       A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
       new. A component is not for wrapping an element the platform already has: that is the
       default. I keep a few wrappers that trade against it, where the trade is worth it:{' '}
-    <a className="signpost" href={fileInRepository('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a>, a
+    <a className="signpost" href={repository.file('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a>, a
       details with a name and a class, and the menu’s Menu, Entry and Item, which write one element each and carry the
       site’s classes for it. Each saves a line every time it is used, and each costs the reader the doubt of whether it
       is a new element, which is why I say here that they are not. The test for a component is to name the behavior the
@@ -178,14 +178,14 @@ export const StructurePractice: FC = () =>
       props and does whatever they say is a div under a longer name: nothing about it says what it is, and every caller
       has to know all of it. One component, one new behavior, named for it, the way
       one class is one look. The drag-sortable table is not one component but parts that each do one thing:{' '}
-    <a className="signpost" href={fileInRepository('src/components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be
+    <a className="signpost" href={repository.file('src/components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be
       dragged by
       hand or by key, <a className="signpost"
-      href={fileInRepository('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
+      href={repository.file('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
       resizes, <a className="signpost"
-      href={fileInRepository('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts,{' '}
+      href={repository.file('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts,{' '}
     <a className="signpost"
-      href={fileInRepository('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
+      href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
       carries a column. The menu is three components that write one element each, as the{' '}
     <Link className="signpost" to={demoAddress(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
       that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
@@ -283,23 +283,23 @@ export const StructurePractice: FC = () =>
         recommended rules. I switch four style rules off and change two on purpose. A group of checkboxes may
         share a name, as radios already may, and buttons may not. An id may hold what React’s server render writes,
         since{' '}
-      <a className="signpost" href={fileInRepository('e2e/a11y.e2e.ts')}>“React's server render names its own
+      <a className="signpost" href={repository.file('e2e/a11y.e2e.ts')}>“React's server render names its own
         script _R_, and HTML asks only that an id hold no space”</a>.
       </li>
       <li className="paragraph"><a className="signpost"
-        href={fileInRepository('src/__test_support/reading-order.ts')}><code
+        href={repository.file('src/__test_support/reading-order.ts')}><code
           className="monospaced">outOfReadingOrder</code></a> takes a list of elements in the order a reader should meet
         them and returns any that come earlier in the document than the one before; the Home, Record, Practice and
         Demos specs call it wherever an order is a claim.
       </li>
       <li className="paragraph"><code className="monospaced">stylelint</code> refuses a selector on an obsolete element
         and prints{' '}
-      <a className="signpost" href={fileInRepository('stylelint.config.js')}>“obsolete element — this is a strict
+      <a className="signpost" href={repository.file('stylelint.config.js')}>“obsolete element — this is a strict
         html5 site”</a>.
       </li>
     </ul>
     <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
-      <a className="signpost" href={fileInRepository('AGENTS.md')}>“Tests find what a reader finds: by role, label
+      <a className="signpost" href={repository.file('AGENTS.md')}>“Tests find what a reader finds: by role, label
         and text, never by class.”</a> A test that found a thing by its class would pass where a reader could not find
       it.</p>
   </>;

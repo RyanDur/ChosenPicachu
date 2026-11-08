@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
-import {Paths} from '@pages/Paths';
-import {Header, Listing} from '@pages/BasePage/Header';
-import {Page} from '@pages/BasePage/Page';
+import {Paths} from '@frame/navigation';
+import {Header, Listing, Page} from '@frame/page';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';

@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {Header} from '@pages/BasePage/Header';
-import {Page} from '@pages/BasePage/Page';
+import {Header, Page} from '@frame/page';
 import names from '@pages/names.json';
 import {NoRoom} from './NoRoom';
 

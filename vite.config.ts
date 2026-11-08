@@ -18,6 +18,7 @@ import {has} from '@ryandur/sand';
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
   '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
+  '@frame': fileURLToPath(new URL('./src/frame', import.meta.url)),
   '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
   '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
   '@__test_support': fileURLToPath(new URL('./src/__test_support', import.meta.url))

@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {useNamingThePage} from '@components/PageName';
+import {useNamingThePage} from './useNamingThePage';
 
 export type Listing = {readonly title: string; readonly description: string};
 

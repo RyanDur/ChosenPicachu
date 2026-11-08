@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import {directoryInRepository, fileInRepository} from '@pages/Paths';
+import {repository} from '@frame/navigation';
 
 const oneDirection = /^One direction\./;
 const twoTracks = /^Two tracks\./;
@@ -158,14 +158,14 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.linkUnder('The test the state has to pass', 'Four specs'))
-      .toHaveAttribute('href', directoryInRepository('src/components/DragSortableTable/__tests__'));
+      .toHaveAttribute('href', repository.directory('src/components/DragSortableTable/__tests__'));
   });
 
   test('should send the quotation on how journeys run to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('behavior')}/>);
     await practicePage.arrivedOn('Behavior');
 
-    expect(practicePage.linkUnder('The test the state has to pass', /^“Journeys run as a reader/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The test the state has to pass', /^“Journeys run as a reader/)).toHaveAttribute('href', repository.file('AGENTS.md'));
   });
 
   test('should send before every commit to the pre-commit hook', async () => {
@@ -173,7 +173,7 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.linkUnder('The test the state has to pass', 'before every commit'))
-      .toHaveAttribute('href', fileInRepository('scripts/git-hooks/pre-commit'));
+      .toHaveAttribute('href', repository.file('scripts/git-hooks/pre-commit'));
   });
 
   test('should send the quotation of the ref rule to AGENTS.md', async () => {
@@ -181,6 +181,6 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.linkUnder('The test the state has to pass', /^“A useRef is allowed only/))
-      .toHaveAttribute('href', fileInRepository('AGENTS.md'));
+      .toHaveAttribute('href', repository.file('AGENTS.md'));
   });
 });

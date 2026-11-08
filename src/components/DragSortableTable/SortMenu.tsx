@@ -2,7 +2,7 @@ import {Entry, Item, Menu} from '@components/Menu';
 import {FC} from 'react';
 import {choices, sortChosen} from './model';
 import {useHeaderEvents, useTableDispatch} from './context';
-import {useHydrated} from '@components/hydrated';
+import {useHydrated} from '@frame/page';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
   const {onSorted} = useHeaderEvents();

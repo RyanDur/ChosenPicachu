@@ -25,7 +25,7 @@ import {Maybe, maybe, not, some} from '@ryandur/sand';
 import {Opened, userAt} from '../mode';
 import {useUsersDispatch} from '../Provider';
 import {userAdded, userUpdated} from '../store';
-import {useHydrated} from '@components/hydrated';
+import {useHydrated} from '@frame/page';
 import './UserInformation.css';
 
 const newUser = (avatar: string): NewUser => ({

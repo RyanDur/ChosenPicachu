@@ -1,6 +1,6 @@
 import {layout, route, RouteConfig} from '@react-router/dev/routes';
 // React Router loads this file before Vite's aliases apply, so its imports stay relative
-import {Paths} from './pages/Paths';
+import {Paths} from './frame/navigation';
 import {GalleryPaths} from './pages/Gallery/GalleryPaths';
 import names from './pages/names.json' with {type: 'json'};
 

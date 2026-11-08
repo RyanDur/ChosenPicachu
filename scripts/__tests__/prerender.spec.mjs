@@ -1,5 +1,5 @@
 import config from '../../react-router.config';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos/types';
 import {allChartKinds} from '@pages/Demos/Charts/kinds';
 import {practiceAddress} from '@pages/Practice/types';

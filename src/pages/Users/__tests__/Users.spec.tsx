@@ -1,4 +1,4 @@
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';

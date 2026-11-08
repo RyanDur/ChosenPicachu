@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {homePage} from '@pages/Home/__test_support/home';

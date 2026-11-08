@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
 import {limits} from '@pages/Gallery/limits';
 import {anyRequestFailsToConnect} from '@__test_support/server';

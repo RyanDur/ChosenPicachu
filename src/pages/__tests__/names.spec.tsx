@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {chartPage} from '@pages/Demos/Charts/__test_support';
 import {Route} from 'react-router';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import names from '@pages/names.json';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {practiceAt} from '@pages/Practice/__test_support/practice';

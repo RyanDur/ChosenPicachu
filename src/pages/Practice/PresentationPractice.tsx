@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {styleInScriptAddress} from '@pages/Record/concertAddress';
-import {fileInRepository} from '@pages/Paths';
+import {repository} from '@frame/navigation';
 import {presentation} from '@pages/Record/sources/presentation';
 import {MomentLink} from '@pages/Record/MomentLink';
 import {ColumnHeaderClassList} from './ClassList';
@@ -13,10 +13,10 @@ const {
   customProperties, layer, container, has, nestingSelector, scope, pseudoClasses, prefersReducedMotion,
   meaningfulSequence, usingCssCustomProperties, hyatt
 } = presentation;
-const sheet = (file: string): string => fileInRepository(`src/styles/${file}.css`);
-const stylelintConfig = fileInRepository('stylelint.config.js');
-const classLint = fileInRepository('scripts/lint/classes.mjs');
-const importList = fileInRepository('src/index.css');
+const sheet = (file: string): string => repository.file(`src/styles/${file}.css`);
+const stylelintConfig = repository.file('stylelint.config.js');
+const classLint = repository.file('scripts/lint/classes.mjs');
+const importList = repository.file('src/index.css');
 
 export const PresentationPractice: FC = () =>
   <>

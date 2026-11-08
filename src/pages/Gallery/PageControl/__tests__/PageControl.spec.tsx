@@ -2,7 +2,7 @@ import {appAddress} from '@__test_support/address';
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {heldAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
 import {pageControl} from '@pages/Gallery/PageControl/__test_support';
 

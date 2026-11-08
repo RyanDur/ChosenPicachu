@@ -1,7 +1,7 @@
 import type {Config} from '@react-router/dev/config';
 // React Router loads this file before Vite's aliases apply, so its imports stay relative
 import names from './src/pages/names.json' with {type: 'json'};
-import {Paths} from './src/pages/Paths';
+import {Paths} from './src/frame/navigation';
 
 const fixed = Object.values(Paths).filter(path => path.startsWith('/') && !path.includes(':'));
 const tabsOf = (page: string, listings: object): string[] => Object.keys(listings).map(tab => `${page}${tab}/`);

@@ -1,7 +1,6 @@
 import {FC} from 'react';
-import {Paths} from '@pages/Paths';
-import {PageError} from '@pages/PageError';
-import {Page} from '@pages/BasePage/Page';
+import {Paths} from '@frame/navigation';
+import {Page, PageError} from '@frame/page';
 import {GalleryProviders} from './Providers';
 import {GalleryHeader} from './GalleryHeader';
 

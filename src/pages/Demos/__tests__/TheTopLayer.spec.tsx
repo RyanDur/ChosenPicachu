@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {paragraphOpening} from '@__test_support/paragraph';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {render} from '@testing-library/react';

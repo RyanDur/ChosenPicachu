@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {DemoTopics, demoAddress} from '@pages/Demos';
 
 export const TeeUp: FC<PropsWithChildren> = ({children}) =>

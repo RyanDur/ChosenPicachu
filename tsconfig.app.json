@@ -3,6 +3,7 @@
     "paths": {
       "@env": ["./src/env.ts"],
       "@pages/*": ["./src/pages/*"],
+      "@frame/*": ["./src/frame/*"],
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
       "@__test_support/*": ["./src/__test_support/*"]

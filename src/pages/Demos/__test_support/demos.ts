@@ -1,4 +1,4 @@
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import '@pages/Demos/DemosPage';
 import '@pages/Demos/Charts/ChartPage';
 

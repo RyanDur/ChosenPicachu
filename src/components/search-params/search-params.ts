@@ -2,7 +2,7 @@ import {SetURLSearchParams, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
-import {useHydrated} from '@components/hydrated';
+import {useHydrated} from '@frame/page';
 
 const filterEmpty = (obj: {[p: string]: string | number}) =>
   Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});

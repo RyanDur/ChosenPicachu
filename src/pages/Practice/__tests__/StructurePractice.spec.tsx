@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {fileInRepository, Paths} from '@pages/Paths';
+import {Paths, repository} from '@frame/navigation';
 import {demoAddress, DemoTopics} from '@pages/Demos';
 import {momentAddress} from '@pages/Record/MomentLink';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
@@ -63,14 +63,14 @@ describe('the Structure practice tab', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linkUnder('The styles-off test', /^“React's server render names its own script/))
-      .toHaveAttribute('href', fileInRepository('e2e/a11y.e2e.ts'));
+      .toHaveAttribute('href', repository.file('e2e/a11y.e2e.ts'));
   });
 
   test('should send the quotation on how a test finds things to AGENTS.md', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('The styles-off test', /^“Tests find what a reader finds/)).toHaveAttribute('href', fileInRepository('AGENTS.md'));
+    expect(practicePage.linkUnder('The styles-off test', /^“Tests find what a reader finds/)).toHaveAttribute('href', repository.file('AGENTS.md'));
   });
 
   test('should send outOfReadingOrder to its file', async () => {
@@ -78,14 +78,14 @@ describe('the Structure practice tab', () => {
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linkUnder('The styles-off test', 'outOfReadingOrder'))
-      .toHaveAttribute('href', fileInRepository('src/__test_support/reading-order.ts'));
+      .toHaveAttribute('href', repository.file('src/__test_support/reading-order.ts'));
   });
 
   test('should send the quotation of stylelint’s message on an obsolete element to stylelint.config.js', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', fileInRepository('stylelint.config.js'));
+    expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', repository.file('stylelint.config.js'));
   });
 
   test('should send the old-style banner to the z-index tab that raises it', async () => {

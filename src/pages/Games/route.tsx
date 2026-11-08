@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Page} from '@pages/BasePage/Page';
+import {Page} from '@frame/page';
 import {GamesPage} from './GamesPage';
 import {gamesHeader, GamesError} from './frame';
 

@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {useHydrated} from '@components/hydrated';
+import {useHydrated} from '@frame/page';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';

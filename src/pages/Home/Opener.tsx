@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {storyAddress} from '@pages/Record/storyAddress';
 
 export const Opener: FC = () =>

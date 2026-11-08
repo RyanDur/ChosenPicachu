@@ -1,9 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {Outlet, useLocation} from 'react-router';
 import {Maybe, maybe} from '@ryandur/sand';
-import {Header} from '@pages/BasePage/Header';
-import {Page} from '@pages/BasePage/Page';
-import {PageError} from '@pages/PageError';
+import {Header, Page, PageError} from '@frame/page';
 import NoSuchRoom from '@pages/NoRoom/route';
 import names from '@pages/names.json';
 import {demoAddress, DemoTopics, topicNames} from './types';

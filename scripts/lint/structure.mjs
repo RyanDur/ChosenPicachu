@@ -5,7 +5,7 @@ import {has, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
-const aliases = {'@components/': 'src/components/', '@pages/': 'src/pages/', '@transport/': 'src/transport/'};
+const aliases = {'@components/': 'src/components/', '@frame/': 'src/frame/', '@pages/': 'src/pages/', '@transport/': 'src/transport/'};
 const code = /\.(ts|tsx)$/;
 const indexNames = ['index.ts', 'index.tsx'];
 

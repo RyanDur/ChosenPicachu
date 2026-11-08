@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 import {demoPage} from '@pages/Demos/__test_support';
 import {TablesIntroduction} from '../Introduction';
 

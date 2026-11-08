@@ -1,4 +1,4 @@
-import {Paths} from '@pages/Paths';
+import {Paths} from '@frame/navigation';
 
 export const styleInScriptParagraph = 'style-in-script';
 
