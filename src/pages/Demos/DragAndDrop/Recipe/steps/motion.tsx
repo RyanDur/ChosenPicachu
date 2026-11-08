@@ -21,6 +21,10 @@ export const SlideCrossed: FC = () =>
         <code className="monospaced">--starts-places-right</code> says how many places to the right of its new place the
         item starts: 1 when it starts from the right, -1 when it starts from the left. Both directions share the one
         keyframe. It reads the number with <code className="monospaced">var()</code>.</Says>
+      <Says>The list wears a class for its pace, here <code className="monospaced">eager-paced</code>, and that
+        class’s rule sets how long the slide runs from <code className="monospaced">--eager-slide-duration</code>, a
+        custom property in the site’s timing style sheet that holds 0.15s. The <code className="monospaced">&</code>{' '}
+        stands for the rule it sits inside, here <code className="monospaced">.sortable-list</code>.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -28,7 +32,7 @@ export const SlideCrossed: FC = () =>
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(sources.sortableListCss, '.sortable-list.eager-paced .sliding-in {'), gap,
+        ...carve.unit(sources.sortableListCss, '&.eager-paced .sliding-in {'), gap,
         ...carve.unit(sources.sortableListCss, '@keyframes slide-in')
       ]}/>
     </Codes>

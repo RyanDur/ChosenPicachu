@@ -133,9 +133,9 @@ export const MultipleRecipe: FC = () => {
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
           <Says>{enterFact[enter]} The distance is a{' '}
             <TabLink to={DemoTopics.accordions}>custom property</TabLink>, here{' '}
-            <code className="monospaced">--arrive</code>, read back with <code className="monospaced">var()</code>. The
-            starting style reads it to place the banner before the slide, and the leaving
-            rule reads it again to send the banner back.</Says>
+            <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
+            with <code className="monospaced">var()</code> wherever it is needed. The starting style reads it to place
+            the banner before the slide, and the leaving rule reads it again to send the banner back.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[

@@ -298,6 +298,7 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['State', `${Paths.demos}z-index/`],
       ['reducer', `${Paths.demos}z-index/`],
+      ['context', `${Paths.demos}z-index/`],
       ['dispatch', `${Paths.demos}z-index/`],
       ['custom property', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]

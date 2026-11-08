@@ -17,11 +17,15 @@ const afterSettle = (before: readonly string[], after: readonly string[]): Slide
 
 const of = (starts: SlideStarts, item: string): Maybe<number> => maybe(starts[item]);
 
+const ended = (starts: SlideStarts, item: string): SlideStarts =>
+  Object.fromEntries(Object.entries(starts).filter(([sliding]) => sliding !== item));
+
 type SlideStartsModule = {
   of: (starts: SlideStarts, item: string) => Maybe<number>;
   afterCrossing: (item: string, homeward: boolean) => SlideStarts;
   afterKeyboardStep: (order: readonly string[], walker: string, step: 1 | -1) => SlideStarts;
   afterSettle: (before: readonly string[], after: readonly string[]) => SlideStarts;
+  ended: (starts: SlideStarts, item: string) => SlideStarts;
 };
 
-export const slideStarts: SlideStartsModule = {of, afterCrossing, afterKeyboardStep, afterSettle};
+export const slideStarts: SlideStartsModule = {of, afterCrossing, afterKeyboardStep, afterSettle, ended};

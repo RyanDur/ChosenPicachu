@@ -45,7 +45,6 @@ export const sortableList = (page: Page) => {
       await enabledGripFor(item).focus();
       await page.keyboard.press(key);
     },
-    runningSlides: (): Promise<number> => list.evaluate(holder => holder.getAnimations({subtree: true}).length),
     pressBesideAGripAndDropOnItsNeighbour: async (): Promise<void> => {
       const grip = items.first().getByRole('button', {name: /^grip for/});
       const box = await boxOf(grip, 'the grip never stood');
