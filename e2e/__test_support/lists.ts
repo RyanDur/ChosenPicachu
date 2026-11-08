@@ -2,7 +2,7 @@ import {not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {boxOf} from './box';
 import {fingertipMiss} from './finger';
-import {siteFrame} from './site';
+import {assertionPatience} from './patience';
 
 type Carried = {
   readonly carryOnTo: (onto: string) => Promise<void>;
@@ -18,9 +18,12 @@ export const sortableList = (page: Page) => {
   const items = list.getByRole('listitem');
   const gripNamed = (item: string): Locator => page.getByRole('button', {name: `grip for ${item}`});
   const seatOf = (item: string): Locator => items.filter({has: gripNamed(item)});
-  const gripFor = (item: string): Locator => seatOf(item).getByRole('button', {name: `grip for ${item}`});
-  const enabledGripFor = (item: string): Locator =>
+  const gripFor = (item: string): Locator =>
     seatOf(item).getByRole('button', {name: `grip for ${item}`, disabled: false});
+  const pressable = async (grip: Locator): Promise<Locator> => {
+    await grip.waitFor({timeout: assertionPatience});
+    return grip;
+  };
   const middleOf = async (target: Locator): Promise<{x: number; y: number}> => {
     await list.scrollIntoViewIfNeeded();
     const box = await boxOf(target, 'the list never stood');
@@ -43,11 +46,11 @@ export const sortableList = (page: Page) => {
     item: seatOf,
     moveReport: page.getByRole('status', {name: 'move report'}),
     stepByKey: async (item: string, key: 'ArrowLeft' | 'ArrowRight'): Promise<void> => {
-      await enabledGripFor(item).focus();
+      await (await pressable(gripFor(item))).focus();
       await page.keyboard.press(key);
     },
     pressBesideAGripAndDropOnItsNeighbour: async (): Promise<void> => {
-      const grip = items.first().getByRole('button', {name: /^grip for/});
+      const grip = await pressable(items.first().getByRole('button', {name: /^grip for/, disabled: false}));
       const box = await boxOf(grip, 'the grip never stood');
       await grip.dragTo(items.nth(1),
         {force: true, sourcePosition: {x: box.width / 2 + fingertipMiss, y: box.height / 2}});
@@ -56,8 +59,7 @@ export const sortableList = (page: Page) => {
     // the carry hangs in
     dragEventsSeen: (): Promise<string> => page.evaluate(() => document.documentElement.dataset.dragLog ?? 'no drag event was heard'),
     carry: async (item: string, onto: string): Promise<Carried> => {
-      await siteFrame(page).hydrated();
-      const from = await middleOf(gripFor(item));
+      const from = await middleOf(await pressable(gripFor(item)));
       const to = await pastTheMiddleOf(seatOf(onto), from);
       await page.evaluate(() => {
         const root = document.documentElement;
@@ -101,9 +103,8 @@ export const sortableList = (page: Page) => {
       };
     },
     fingerOnTheGrip: async (item: string): Promise<Pressed> => {
-      await siteFrame(page).hydrated();
       const devtools = await page.context().newCDPSession(page);
-      const at = await middleOf(gripFor(item));
+      const at = await middleOf(await pressable(gripFor(item)));
       await devtools.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: [at]});
       return {
         takenOverByTheBrowser: async (): Promise<void> => {
