@@ -200,7 +200,7 @@ const usersServerPlugin = () => {
  * @param {Record<string, string>} env
  * @returns {import('vite').Plugin}
  */
-const runtimeEnv = env => {
+const runtimeEnvironment = env => {
   const values = {
     tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
     tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
@@ -218,7 +218,7 @@ const runtimeEnv = env => {
   };
   const body = `window.__environment = ${JSON.stringify(values, null, 2)};\n`;
   return {
-    name: 'runtime-env',
+    name: 'runtime-environment',
     config: () => ({define: {__BUILT_ENVIRONMENT__: JSON.stringify(values)}}),
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
@@ -289,7 +289,7 @@ module.exports = defineConfig(({mode}) => ({
   },
   plugins: [
     drawings(), rawCss(), sample(), frameCss(), frameScript(), usersServerPlugin(),
-    runtimeEnv(loadEnv(mode, process.cwd())), pagesAsPublished(), react(), svgr({
+    runtimeEnvironment(loadEnv(mode, process.cwd())), pagesAsPublished(), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
       svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
       include: '**/*.svg'
