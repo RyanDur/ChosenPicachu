@@ -27,7 +27,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
       const atTheTutorial = await settledScrollY(page);
       await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}));
       await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
-      const onTheOtherTab = await documentScrollY(page);
+      const onTheOtherTab = await settledScrollY(page);
 
       await page.goBack();
 
