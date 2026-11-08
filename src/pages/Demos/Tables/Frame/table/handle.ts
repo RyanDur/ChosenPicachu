@@ -1,6 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {shares} from '@components/Table';
-import {arrows, TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
+import {TableAction, tableActions, tableState} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
 
 type Resizing = Pick<MountedTable, 'table' | 'store' | 'order' | 'report'>;
@@ -31,13 +31,11 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
       tableActions.handleDragged(column, shares.neighborOf(context.order(), column), event.clientX)));
   (['pointerup', 'pointercancel', 'lostpointercapture'] as const).forEach(landing =>
     handle.addEventListener(landing, () => saidAfter(context, tableActions.handleReleased(column))));
-  handle.addEventListener('keyup', event => maybe(arrows.columnSteps[event.key]).map(() => saidAfter(context, tableActions.arrowLifted(column))));
+  handle.addEventListener('keyup', shares.resizeArrowLifted(() => saidAfter(context, tableActions.arrowLifted(column))));
   handle.addEventListener('blur', () => saidAfter(context, tableActions.handleLeft(column)));
-  handle.addEventListener('keydown', event => maybe(arrows.columnSteps[event.key]).map(toward => {
-    event.preventDefault();
-    event.stopPropagation();
+  handle.addEventListener('keydown', shares.resizeArrows(delta => {
     awaken(context);
-    saidAfter(context, tableActions.tradedBy(column, shares.neighborOf(context.order(), column), toward * shares.step));
+    saidAfter(context, tableActions.tradedBy(column, shares.neighborOf(context.order(), column), delta));
   }));
 };
 

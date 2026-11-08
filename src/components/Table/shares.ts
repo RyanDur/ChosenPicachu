@@ -89,7 +89,6 @@ export const shares = {
   measuredFloors,
   traded,
   neighborOf,
-  step,
   sought,
   width,
   wholePercent,

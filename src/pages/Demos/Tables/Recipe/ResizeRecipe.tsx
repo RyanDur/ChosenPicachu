@@ -153,6 +153,7 @@ const gestureCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...carve.span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       lines.aside('// …the press measures; the bubbling stops here'), gap,
+      ...carve.unit(sharesSource, 'const resizeArrows'), gap,
       ...carve.unit(frameHandle, "handle.addEventListener('keydown'"),
       lines.aside('// the column drag above never gets the press')
     ]}/>
