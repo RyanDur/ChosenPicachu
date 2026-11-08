@@ -25,7 +25,7 @@ export const added = (kind: ChartKind, seats: readonly Seat[]): string =>
   desk([{kind, period: Period.hour}, ...seats]);
 
 export const without = (at: number, seats: readonly Seat[]): string =>
-  desk(seats.filter((_, seat) => seat !== at));
+  desk(seats.filter((_, other) => other !== at));
 
 export const seated = (from: number, to: number, seats: readonly Seat[]): string => {
   const next = [...seats];
