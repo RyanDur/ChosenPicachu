@@ -155,6 +155,19 @@ describe('the users page', () => {
       expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
       expect(usersTable.names()).toEqual([profile.fullName(standing)]);
     });
+
+    it('a refused add keeps what the reader typed', async () => {
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([aUser()]);
+      userAddRefused();
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+
+      await userForm.addWhoWorksFromHome(aiko);
+
+      expect(await usersPage.says('the users server is having trouble')).toBeInTheDocument();
+      expect(userForm.field('First Name')).toHaveDisplayValue(aiko.person.firstName);
+    });
   });
 
   describe('viewing a user', () => {

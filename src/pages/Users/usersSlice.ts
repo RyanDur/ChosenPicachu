@@ -11,6 +11,7 @@ export type UsersState = {
   readonly users: readonly User[];
   readonly arrangement: Arrangement;
   readonly friendsReports: FriendsReports;
+  readonly confirmedAdds: number;
 };
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
@@ -29,11 +30,15 @@ const reporting = (reports: FriendsReports, action: UsersAction): FriendsReports
   }
 };
 
+const confirming = (count: number, action: UsersAction): number =>
+  action.type === 'userAddConfirmed' ? count + 1 : count;
+
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
   arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
 
 export const usersSlice: Slice<UsersState, UsersAction> = slices.combined<UsersState, UsersAction>({
   users: {initial: [], reduce: roster},
   arrangement: {initial: arrangements.of(userColumns.all.map(({name}) => name)), reduce: seating},
-  friendsReports: {initial: {}, reduce: reporting}
+  friendsReports: {initial: {}, reduce: reporting},
+  confirmedAdds: {initial: 0, reduce: confirming}
 });

@@ -13,6 +13,8 @@ import {Opened, openings} from '../openings';
 import {useUsersDispatch} from '../useUsersDispatch';
 import {usersActions} from '../usersActions';
 import {useOpened} from '../useOpened';
+import {useUsersSelector} from '../useUsersSelector';
+import {usersSelectors} from '../usersSelectors';
 import {useHydrated} from '@components';
 import './UserInformation.css';
 
@@ -22,6 +24,9 @@ const newUser = (avatar: string): NewUser => ({
   homeAddress: {city: '', state: '', streetAddress: '', zip: ''},
   avatar
 });
+
+// the first form is drawn on the server too, so it wears the one avatar both renders agree on
+const freshAvatar = (confirmedAdds: number): string => confirmedAdds === 0 ? avatars.first : avatars.drawn();
 
 const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
   const resetButton = <button type="reset" className="reset button secondary" disabled={!hydrated}>Reset</button>;
@@ -44,17 +49,19 @@ const buttonsFor = (open: Opened, hydrated: boolean): ReactNode => {
 
 const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
-const draftKey = (open: Opened): string => `${open.mode}:${shown(open).map(({id}) => id).orElse('')}`;
+const draftKey = (open: Opened, confirmedAdds: number): string =>
+  `${open.mode}:${shown(open).map(({id}) => id).orElse('')}:${confirmedAdds}`;
 
 export const UserInformation: FC<{className?: string}> = ({className}) =>
-  <Draft key={draftKey(useOpened())} className={className}/>;
+  <Draft key={draftKey(useOpened(), useUsersSelector(usersSelectors.confirmedAdds))} className={className}/>;
 
 const Draft: FC<{className?: string}> = ({className}) => {
   const open = useOpened();
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
+  const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
-    started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
+    started => drafts.of(started.either(user => user, () => newUser(freshAvatar(confirmedAdds)))));
   const user = drafts.userIn(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
@@ -73,7 +80,6 @@ const Draft: FC<{className?: string}> = ({className}) => {
       }
 
       usersDispatch(usersActions.userAdded(user));
-      reset();
     }}
     onReset={() => reset()}>
     <h2 id="form-title" className="form-title title bold">User Information</h2>
