@@ -482,6 +482,10 @@ const WorkspaceStory: FC = () =>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
+          <Says><code className="monospaced">travel</code> is the code that runs on each dragover. It takes the held
+            chart’s height from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the
+            slot is on the page and gives nothing when it isn’t. With nothing, <code className="monospaced">travel</code>{' '}
+            does nothing.</Says>
           <Says>The neighbor’s slide is the{' '}
             <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot
