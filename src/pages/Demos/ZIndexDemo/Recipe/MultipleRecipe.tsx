@@ -111,9 +111,11 @@ export const MultipleRecipe: FC = () => {
             second transition declaration on the same element replaces the list; it does not add to it. So the arriving
             banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its
             own.</Says>
-          <Says>The slide follows <code className="monospaced">--slide-curve</code>, named once in timing.css. It is a
-            cubic-bezier, a curve that sets how a move speeds up and slows down. This one starts slowly and eases into
-            place at the end.</Says>
+          <Says>timing.css names all three: <code className="monospaced">--slide-curve</code>,{' '}
+            <code className="monospaced">--slide-duration</code> at 0.6 seconds and{' '}
+            <code className="monospaced">--fold-duration</code> at 0.3. The slide follows the curve, a cubic-bezier,
+            which sets how a move speeds up and slows down. This one starts slowly and eases into place at the
+            end.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[

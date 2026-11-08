@@ -32,9 +32,11 @@ export const BannerExplained: FC = () => {
         ]}/>
       </li>
       <li className="run">
-        <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside every
-          card, so no card’s stacking context holds it. Its z-index is compared with card two’s, at the same level, and
-          it is the higher. It stays at the window’s edge, over every card on the page, card two included.</p>
+        <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside this
+          tab’s content, the area under the tabs that holds every card. That area forms a stacking context of its own,
+          so no card’s z-index is ever compared with the banner’s. The banner’s 3 is compared with that area and with
+          the header, the footer, the site’s navigation and the tabs, none of them higher than 2. It stays at the
+          window’s edge, over every card on the page, card two included.</p>
         <Snippet label="TS" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
         <Snippet label="CSS" lines={carve.span(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>

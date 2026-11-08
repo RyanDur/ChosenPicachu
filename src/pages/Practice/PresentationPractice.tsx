@@ -180,9 +180,12 @@ export const PresentationPractice: FC = () =>
       <li className="paragraph">the breakpoints, in pixels, since they follow the window.</li>
     </ul>
     <p className="paragraph">The third token file, <a className="signpost" href={sheet('timing')}>timing.css</a>,
-      names the easing curve that three style sheets’ transitions follow. A transition is a change of style over time,
-      and its easing curve sets how it speeds up and slows down. <code className="monospaced">timing.css</code> also
-      names how long a gallery piece takes to rise under the pointer or the keyboard’s focus: half a second.</p>
+      names the site’s easing curves and how long its motions take. A transition is a change of style over time, and
+      its easing curve sets how it speeds up and slows down. <code className="monospaced">--curve</code> is the curve
+      three style sheets’ transitions follow, and <code className="monospaced">--slide-curve</code> is the one the
+      site’s banners slide on. The file also names how long a gallery piece takes to rise under the pointer or the
+      keyboard’s focus, half a second, how long a banner takes to slide, 0.6 seconds, and how long the gap it leaves
+      takes to close, 0.3.</p>
     <p className="paragraph">A few sizes belong to one component and sit in its own style sheet:</p>
     <ul className="practice-list">
       <li className="paragraph">its own breakpoints, in pixels, and its container queries, in rems, in pixels and one

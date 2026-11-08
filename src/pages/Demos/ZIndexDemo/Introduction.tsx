@@ -17,7 +17,7 @@ export const ZIndexIntroduction: FC = () =>
       one, what it traps, and the browser’s own way out of it, the top layer.</p>
     <p className="paragraph">By the end you can say why one box is drawn over another, why a z-index of 9999 can still
       lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the
-      page. The last part builds this site’s banner, which stays over the page because of where it is written and
+      page. The last part builds this site’s banner. It stays over the page for two reasons: where it is written, and
       the z-index it sets there. The first exhibit below is a pile of three cards with no z-index at all. Raise First
       with the pills and watch it come to the top.</p>
   </header>;

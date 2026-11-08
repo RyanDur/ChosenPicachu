@@ -246,7 +246,7 @@ export const BehaviorPractice: FC = () =>
         with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event.”</a> Three files are on the list today.{' '}
       <code className="monospaced">Feedback</code> holds its dialog for the first reason.{' '}
-      <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at, and{' '}
-      <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side, both for
-      the second.</p>
+      <code className="monospaced">MeasuredPanel</code> and <code className="monospaced">DialGroup</code> hold theirs
+      for the second. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
+      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side.</p>
   </>;
