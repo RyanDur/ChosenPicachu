@@ -11,19 +11,19 @@ import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
 import {useGallery} from '@pages/Gallery/Context';
 
-type Answer = 'awaited' | 'open' | 'closed';
-type Answers = Record<Source, Answer>;
+type Door = 'unknown' | 'open' | 'closed';
+type Doors = Record<Source, Door>;
 
-const unanswered: Answers = {
-  [Source.AIC]: 'awaited',
-  [Source.HARVARD]: 'awaited',
-  [Source.VAM]: 'awaited',
-  [Source.CLEVELAND]: 'awaited'
+const unknownDoors: Doors = {
+  [Source.AIC]: 'unknown',
+  [Source.HARVARD]: 'unknown',
+  [Source.VAM]: 'unknown',
+  [Source.CLEVELAND]: 'unknown'
 };
 
-const openIn = (answers: Answers) => museums.all.filter(({param}) => answers[param] === 'open');
+const openIn = (doors: Doors) => museums.all.filter(({param}) => doors[param] === 'open');
 
-const settledIn = (answers: Answers): boolean => museums.all.every(({param}) => answers[param] !== 'awaited');
+const settledIn = (doors: Doors): boolean => museums.all.every(({param}) => doors[param] !== 'unknown');
 
 type Shown =
   | {readonly shown: 'wall'}
@@ -31,32 +31,32 @@ type Shown =
   | {readonly shown: 'movingToAnOpenMuseum'; readonly museum: Source}
   | {readonly shown: 'loading'};
 
-const shownFor = (answers: Answers, tab?: Source): Shown => {
-  const open = openIn(answers);
+const shownFor = (doors: Doors, tab?: Source): Shown => {
+  const open = openIn(doors);
   if (open.some(({param}) => param === tab)) return {shown: 'wall'};
-  if (!settledIn(answers)) return {shown: 'loading'};
+  if (!settledIn(doors)) return {shown: 'loading'};
   return maybe(open[0])
     .map(({param}): Shown => ({shown: 'movingToAnOpenMuseum', museum: param}))
     .orElse<Shown>({shown: 'noMuseumOpen'});
 };
 
-const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) =>
+const doorFrom = (museum: Source, tell: Dispatch<SetStateAction<Doors>>) =>
   (answer: Result<boolean, HTTPError>): void =>
-    tell(known => ({...known, [museum]: answer.map((open): Answer => open ? 'open' : 'closed').orElse('closed')}));
+    tell(known => ({...known, [museum]: answer.map((open): Door => open ? 'open' : 'closed').orElse('closed')}));
 
 export const ArtGalleryPage: FC = () => {
-  const [answers, updateAnswers] = useState<Answers>(unanswered);
+  const [doors, updateDoors] = useState<Doors>(unknownDoors);
   const {tab, updateSearchParams, searchFromShown} = useGallery();
   const {pathname} = useLocation();
   const hydrated = useHydrated();
 
   useEffect(() => {
-    const asked = museums.all.map(({param}) => art.open(param).onComplete(answered(param, updateAnswers)));
+    const asked = museums.all.map(({param}) => art.open(param).onComplete(doorFrom(param, updateDoors)));
     return () => asked.forEach(asked => asked.cancel());
   }, []);
 
-  const open = openIn(answers);
-  const shown = shownFor(answers, tab);
+  const open = openIn(doors);
+  const shown = shownFor(doors, tab);
   const movingTo = shown.shown === 'movingToAnOpenMuseum' ? shown.museum : undefined;
 
   useEffect(() => {
