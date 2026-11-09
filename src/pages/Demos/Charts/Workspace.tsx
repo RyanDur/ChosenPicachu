@@ -31,7 +31,7 @@ const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {
 const doorwayAt = (at: number, pressed: Element): Maybe<HTMLElement> =>
   maybe(pressed.closest('li'))
     .mBind(removed => maybe(removed.parentElement?.children[at]))
-    .mBind(neighbor => maybe(neighbor.querySelector<HTMLElement>(':scope > [data-doorway]')));
+    .mBind(neighbor => maybe([...neighbor.children].find(child => child instanceof HTMLAnchorElement)));
 
 type Props = {
   product: string;
@@ -94,7 +94,7 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link className="doorway focal" data-doorway to={doorway(kind)} onKeyDown={keys(at)}>
+        <Link className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}

@@ -112,8 +112,8 @@ const WorkspaceStory: FC = () =>
             link, then removes the chart.</Says>
           <Says>Each step of that walk may find nothing. <code className="monospaced">maybe</code> turns a value that may be missing into a Maybe,
             and <code className="monospaced">mBind</code> runs the next step only when the last one found something, so the walk stops at the first
-            missing piece and nothing is focused. The chart’s link carries a <code className="monospaced">data-doorway</code> attribute for the
-            walk to find, and its class only dresses it.</Says>
+            missing piece and nothing is focused. The walk finds the link by what it is,
+            an <code className="monospaced">a</code> element, never by its class, which only dresses it.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
