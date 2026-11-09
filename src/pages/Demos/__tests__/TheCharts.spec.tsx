@@ -814,6 +814,7 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
