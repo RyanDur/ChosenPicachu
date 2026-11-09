@@ -14,10 +14,13 @@ import {
   setupUsersResponse,
   setupUserUpdatedResponse,
   userAddRefused,
+  userAddsHeard,
   userAddsHeld,
   userRemovalRefused,
   userUpdateRefused,
-  usersUnreachable
+  usersUnreachable,
+  lentToThePage,
+  workersContainer
 } from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
 import {friendsList} from '../FriendsList/__test_support';
@@ -27,6 +30,28 @@ import {openings} from '../openings';
 describe('the users page', () => {
   test('a users backend that cannot be reached says so', async () => {
     usersUnreachable();
+
+    render(<TestApp at={Paths.users}/>);
+
+    expect(await usersPage.says('the users server could not be reached')).toBeInTheDocument();
+  });
+
+  test('the roster is asked for only once the users server takes control of the page', async () => {
+    const container = workersContainer();
+    lentToThePage(container);
+    setupUsersResponse([aUser()]);
+    render(<TestApp at={Paths.users}/>);
+    await waitFor(() => expect(container.registered()).toBe(1));
+    expect(usersTable.rows()).toEqual([]);
+
+    container.takeControl();
+
+    expect(await usersTable.roster()).toHaveLength(1);
+  });
+
+  test('a users server that cannot take control of the page says it could not be reached', async () => {
+    lentToThePage(workersContainer({registering: Promise.reject(new Error('refused'))}));
+    setupUsersResponse([aUser()]);
 
     render(<TestApp at={Paths.users}/>);
 
@@ -112,6 +137,32 @@ describe('the users page', () => {
   });
 
   describe('adding a user', () => {
+    it('Add says it cannot save yet while the roster has not arrived', async () => {
+      const container = workersContainer();
+      lentToThePage(container);
+      setupUsersResponse([aUser()]);
+
+      render(<TestApp at={Paths.users}/>);
+      await waitFor(() => expect(container.registered()).toBe(1));
+
+      expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    it('an Add pressed before the roster arrives sends nothing', async () => {
+      const container = workersContainer();
+      lentToThePage(container);
+      setupUsersResponse([aUser()]);
+      const adds = userAddsHeard();
+      render(<TestApp at={Paths.users}/>);
+      await waitFor(() => expect(container.registered()).toBe(1));
+      await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
+
+      container.takeControl();
+      await usersTable.roster();
+
+      expect(adds()).toEqual([]);
+    });
+
     it('an edit address for someone not in the roster opens the form to add, not to update', async () => {
       setupUsersResponse([aUser()]);
 

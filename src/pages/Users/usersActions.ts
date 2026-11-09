@@ -4,6 +4,7 @@ import {NewUser, User, UserEdit} from './profile';
 export type UsersAction =
   | ArrangementAction
   | {readonly type: 'opened'}
+  | {readonly type: 'serverUnreachable'}
   | {readonly type: 'usersArrived'; readonly users: readonly User[]}
   | {readonly type: 'userAdded'; readonly user: NewUser}
   | {readonly type: 'userAddConfirmed'}
@@ -15,6 +16,7 @@ export type UsersAction =
 
 type UsersActions = {
   opened: () => UsersAction;
+  serverUnreachable: () => UsersAction;
   usersArrived: (users: readonly User[]) => UsersAction;
   userAdded: (user: NewUser) => UsersAction;
   userAddConfirmed: () => UsersAction;
@@ -27,6 +29,7 @@ type UsersActions = {
 
 export const usersActions: UsersActions = {
   opened: () => ({type: 'opened'}),
+  serverUnreachable: () => ({type: 'serverUnreachable'}),
   usersArrived: users => ({type: 'usersArrived', users}),
   userAdded: user => ({type: 'userAdded', user}),
   userAddConfirmed: () => ({type: 'userAddConfirmed'}),

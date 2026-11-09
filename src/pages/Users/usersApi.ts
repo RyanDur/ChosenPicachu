@@ -1,11 +1,10 @@
 import * as schema from 'schemawax';
 import {isValid} from 'date-fns';
-import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
+import {Result} from '@ryandur/sand';
 import {environment, http} from '@transport';
 import {decoded} from '@transport';
 import {HTTPError} from '@transport';
 import {NewUser, User} from './profile';
-import {usersServer} from './usersServer';
 
 export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;
@@ -37,36 +36,14 @@ const UserDecoder = schema.object({
 });
 
 const {usersDomain} = environment;
-const usersServerUrl = `${import.meta.env.BASE_URL}${usersServer.script}`;
-const patience = 10_000;
-
-const claimed = (workers: ServiceWorkerContainer): Result.Async<ServiceWorkerRegistration, unknown> =>
-  asyncResult<ServiceWorkerRegistration, unknown>(workers.ready)
-    .onSuccess(({active}) => active?.postMessage(usersServer.loadedUncontrolled));
-
-const servedInTime = (workers: ServiceWorkerContainer): Result.Async<void, HTTPError> => workers.controller
-  ? asyncSuccess(undefined)
-  : asyncResult<void, unknown>(new Promise((resolve, reject) => {
-    setTimeout(reject, patience);
-    workers.addEventListener('controllerchange', () => resolve(), {once: true});
-    asyncResult<ServiceWorkerRegistration, unknown>(workers.register(usersServerUrl))
-      .onSuccess(() => workers.controller ? resolve() : claimed(workers))
-      .onFailure(reject);
-  })).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
-
-const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
-  maybe(navigator.serviceWorker)
-    .map(servedInTime)
-    .orElse(asyncSuccess(undefined))
-    .mBind(asked);
 
 const getAll = (): Result.Async<User[], HTTPError> =>
-  whenServed(() => http.get(usersDomain)).mBind(decoded.by(schema.array(UserDecoder)));
+  http.get(usersDomain).mBind(decoded.by(schema.array(UserDecoder)));
 
 export const usersApi: UsersAPI = {
   getAll,
-  get: id => whenServed(() => http.get(`${usersDomain}/${id}`)).mBind(decoded.by(UserDecoder)),
-  add: user => whenServed(() => http.post(usersDomain, user)).mBind(decoded.by(schema.array(UserDecoder))),
-  update: user => whenServed(() => http.put(`${usersDomain}/${user.id}`, user)).mBind(getAll),
-  delete: user => whenServed(() => http.delete(`${usersDomain}/${user.id}`)).mBind(getAll)
+  get: id => http.get(`${usersDomain}/${id}`).mBind(decoded.by(UserDecoder)),
+  add: user => http.post(usersDomain, user).mBind(decoded.by(schema.array(UserDecoder))),
+  update: user => http.put(`${usersDomain}/${user.id}`, user).mBind(getAll),
+  delete: user => http.delete(`${usersDomain}/${user.id}`).mBind(getAll)
 };

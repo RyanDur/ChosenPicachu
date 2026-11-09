@@ -22,14 +22,14 @@ import './UserInformation.css';
 const FormButtons: FC = () => {
   const open = useOpened();
   const hydrated = useHydrated();
-  const addInFlight = useUsersSelector(usersSelectors.addInFlight);
+  const addWaits = useUsersSelector(usersSelectors.addWaits);
   const resetButton = <button type="reset" className="reset button secondary" disabled={not(hydrated)}>Reset</button>;
   switch (open.mode) {
     case 'adding':
       return <>
         {resetButton}
         <button type="submit" className="submit button primary" disabled={not(hydrated)}
-          aria-disabled={addInFlight}>Add</button>
+          aria-disabled={addWaits}>Add</button>
       </>;
     case 'viewing':
       return <Link to={openings.at(open.user.id, 'edit')} className="edit button secondary">Edit</Link>;
@@ -54,7 +54,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
-  const addInFlight = useUsersSelector(usersSelectors.addInFlight);
+  const addWaits = useUsersSelector(usersSelectors.addWaits);
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
     started => drafts.of(started.either(user => user, () => drafts.newUser(avatars.first))));
   const user = drafts.userIn(draft);
@@ -76,7 +76,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
         return;
       }
 
-      if (addInFlight) return;
+      if (addWaits) return;
       dispatch(draftActions.addSent(confirmedAdds));
       usersDispatch(usersActions.userAdded(user));
     }}

@@ -11,6 +11,9 @@ export const syncing = (usersApi: UsersAPI, saved: () => void, refused: (error: 
       case 'opened':
         usersApi.getAll().onSuccess(arrived => dispatch(usersActions.usersArrived(arrived))).onFailure(refused);
         return;
+      case 'serverUnreachable':
+        refused(HTTPError.NETWORK_ERROR);
+        return;
       case 'userAdded':
         if (usersSelectors.addInFlight(previous)) return;
         usersApi.add(action.user)
