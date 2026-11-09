@@ -195,9 +195,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a
         selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
         like a height or a color, given a value.</p>
-      <p className="paragraph">The fold motion does not reach the accordion above. The reset is the style sheet that
-        sets every element’s defaults, and it opens every details at once. The first accordion keeps that, so you see
-        what HTML alone does.</p>
+      <p className="paragraph">The fold motion does not reach the accordion above. A browser opens a details at once
+        on its own, and the first accordion leaves it that way, so you see what HTML alone does.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
