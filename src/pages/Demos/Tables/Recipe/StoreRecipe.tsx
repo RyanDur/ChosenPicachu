@@ -77,13 +77,13 @@ const OneState: FC<{world: World}> = ({world}) =>
   </Step>;
 
 const ActionsAreData: FC = () =>
-  <Step title="Actions are data, and one reducer reads them">
+  <Step title="Actions are data, and one reducer takes them in">
     <Words want="A change must say what happened, not how to poke the state, and it must leave the old value untouched.">
       <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries
         the column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’
         order as shown, ranked while a sort holds.
         columnMovedBeside carries the neighbor and the widths.</Says>
-      <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> reads the type and
+      <Says>A creator named for the verb makes the record. One <Term word="reducer">reducer</Term> matches the type and
         returns the next state.</Says>
     </Words>
     <Reveal>
@@ -125,7 +125,7 @@ const ActionsAreData: FC = () =>
           ...carve.unit(slicesSource, 'export type Slice'), gap,
           ...carve.unit(arrangementSource, 'const answering = '), gap,
           ...carve.unit(reducerSource, 'export const tableReducer'),
-          lines.aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers read the type in turn')
+          lines.aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers match the type in turn')
         ]}/>
       </Codes>
     </Reveal>
