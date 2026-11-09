@@ -2,6 +2,7 @@ import {FC, useSyncExternalStore} from 'react';
 import {render} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useNavigate} from 'react-router';
 import {arrival} from '../arrival';
+import {ArrivalDrawn} from '../ArrivalDrawn';
 import {useArrivalDrawn} from '../useArrivalDrawn';
 import {arrivingReader} from '../__test_support/reader';
 
@@ -85,8 +86,9 @@ const siteFollowed = (opened = '/'): FollowedSite => {
   const late = lateTargets();
   const later = laterPage();
   const router = site(late, later, opened);
-  render(<RouterProvider router={router}/>);
-  const stopFollowing = arrival.follow(router);
+  const arrived = arrival(window);
+  render(<ArrivalDrawn.Provider value={arrived.drawn}><RouterProvider router={router}/></ArrivalDrawn.Provider>);
+  const stopFollowing = arrived.follow(router);
   onTestFinished(stopFollowing);
   return {draws: late.draw, loadsTheLaterPage: later.loads, stopFollowing};
 };

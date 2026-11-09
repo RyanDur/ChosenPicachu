@@ -1,8 +1,9 @@
-import {useLayoutEffect} from 'react';
+import {useContext, useLayoutEffect} from 'react';
 import {useLocation} from 'react-router';
-import {arrival} from './arrival';
+import {ArrivalDrawn} from './ArrivalDrawn';
 
 export const useArrivalDrawn = (): void => {
+  const drawn = useContext(ArrivalDrawn);
   const location = useLocation();
-  useLayoutEffect(() => arrival.drawn(location), [location]);
+  useLayoutEffect(() => drawn(location), [drawn, location]);
 };
