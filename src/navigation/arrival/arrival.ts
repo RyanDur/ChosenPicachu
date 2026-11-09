@@ -1,5 +1,5 @@
-import {DataRouter, NavigationType, RouterState} from 'react-router';
-import {empty, Maybe, maybe, not, notEmpty} from '@ryandur/sand';
+import {DataRouter, Location, NavigationType, RouterState} from 'react-router';
+import {empty, Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {landing, Measured, Watch} from './landing';
 
 const targetNamedBy = (id: string): Maybe<Element> => maybe(document.getElementById(id));
@@ -26,8 +26,8 @@ const landedOn = (target: Element): void => {
   if (around instanceof HTMLElement) around.focus({preventScroll: true});
 };
 
-// the router changes the address before React draws the page it leads to, and a fold opening grows the page for a
-// few frames after, so the landing looks for its target each frame and waits for it to hold still
+// a page can draw its target after the page itself, and a fold opening grows the page for a few frames after, so the
+// landing looks for its target each frame and waits for it to hold still
 const landOnceItHoldsStill = (id: string): (() => void) => {
   let frameRequest = 0;
   const lookNextFrame = (watch: Watch, foldsOpened: boolean): void => {
@@ -51,25 +51,34 @@ const nothingToStop = (): void => undefined;
 const landWhereAsked = (hash: string): (() => void) =>
   maybe(hash.slice(1), notEmpty).map(landOnceItHoldsStill).orElse(nothingToStop);
 
-// the browser resolves a fragment before the page has drawn it, and restores back and forward by itself
+const followers = new Set<(location: Location) => void>();
+
+const drawn = (location: Location): void => followers.forEach(follower => follower(location));
+
+// the browser resolves a fragment before the page has drawn it, and restores back and forward by itself; the router
+// moves on before React draws the page it leads to, so arrival lands only on a location React has drawn
 const follow = (router: DataRouter): (() => void) => {
   let followedKey = '';
   let stopLanding = nothingToStop;
-  const arrived = ({initialized, location, historyAction, navigation}: RouterState): void => {
-    const leaving = navigation.state !== 'idle';
-    if (leaving) stopLanding();
-    if (not(initialized) || leaving || location.key === followedKey) return;
+  const arrivedAt = (location: Location): void => {
+    const {location: current, historyAction, navigation} = router.state;
+    if (navigation.state !== 'idle' || location.key !== current.key || location.key === followedKey) return;
     const opening = empty(followedKey);
     followedKey = location.key;
     stopLanding();
     stopLanding = opening || historyAction !== NavigationType.Pop ? landWhereAsked(location.hash) : nothingToStop;
   };
-  arrived(router.state);
-  const unsubscribe = router.subscribe(arrived);
+  const left = ({navigation}: RouterState): void => {
+    if (navigation.state !== 'idle') stopLanding();
+  };
+  if (router.state.initialized) arrivedAt(router.state.location);
+  followers.add(arrivedAt);
+  const unsubscribe = router.subscribe(left);
   return () => {
     unsubscribe();
+    followers.delete(arrivedAt);
     stopLanding();
   };
 };
 
-export const arrival = {follow};
+export const arrival = {follow, drawn};
