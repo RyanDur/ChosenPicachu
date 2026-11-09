@@ -224,9 +224,10 @@ const CandlesStory: FC = () =>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
-          <Says><code className="monospaced">Bar</code> draws the wall first, then what the candle puts inside it,
-            here the wick, then the body on top, so the wick shows over the wall. The body and the wall each start as a
-            square one unit on a side, and the wick as a line one unit
+          <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as
+            the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. It draws the wall first, then what the
+            candle puts inside it, here the wick, then the body on top, so the wick shows over the wall.</Says>
+          <Says>The body and the wall each start as a square one unit on a side, and the wick as a line one unit
             tall. <code className="monospaced">shapes.placed</code> gives every shape four custom properties: where the
             shape starts across, where its foot sits, how wide it is and how tall. A custom property is a value set by
             name on an element and read back in the style sheet with <code className="monospaced">var()</code>, as
