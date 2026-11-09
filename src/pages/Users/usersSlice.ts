@@ -51,6 +51,8 @@ const awaitingAdd = (inFlight: boolean, action: UsersAction): boolean => {
 
 const requesting = (request: RosterRequest, action: UsersAction): RosterRequest => {
   switch (action.type) {
+    case 'opened':
+      return 'waiting';
     case 'usersArrived':
       return 'arrived';
     case 'rosterRefused':

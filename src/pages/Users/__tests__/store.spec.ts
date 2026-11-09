@@ -63,6 +63,15 @@ describe('the users store', () => {
     expect(usersSelectors.addWaits(store.state)).toBe(true);
   });
 
+  it('a server reached after it was unreachable leaves the roster waiting, not unreachable', () => {
+    const store = usersStore();
+    store.dispatch(usersActions.serverUnreachable());
+
+    store.dispatch(usersActions.opened());
+
+    expect(store.state.rosterRequest).toBe('waiting');
+  });
+
   it('an add waits while another is in flight', async () => {
     const store = await openedStore();
     userAddsHeld();
