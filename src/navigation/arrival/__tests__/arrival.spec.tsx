@@ -1,5 +1,5 @@
 import {FC, useSyncExternalStore} from 'react';
-import {fireEvent, render, screen} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useLocation, useNavigate} from 'react-router';
 import {scrollPlace} from '@navigation';
 import {arrival} from '../arrival';
@@ -43,12 +43,11 @@ const Story: FC<{late: LateTargets}> = ({late}) => <>
 
 const Links: FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const {pathname, search} = useLocation();
   return <nav>
     {['/story#late', '/story#here', '/story#folded', '/other', '/later'].map(to => <Link key={to} to={to}>{to}</Link>)}
     <button type="button" onClick={() => navigate(-1)}>back</button>
-    <button type="button" onClick={() => navigate({search: '?rewritten', hash: location.hash},
-      {replace: true, state: scrollPlace.keptFrom(location)})}>rewrite</button>
+    <p>at {pathname}{search}</p>
   </nav>;
 };
 
@@ -98,7 +97,11 @@ const siteFollowed = (opened = '/'): FollowedSite => {
   return {
     draws: late.draw,
     loadsTheLaterPage: later.loads,
-    rewritesTheAddress: () => fireEvent.click(screen.getByRole('button', {name: 'rewrite'})),
+    rewritesTheAddress: () => queueMicrotask(() => {
+      const {location} = router.state;
+      void router.navigate({search: '?rewritten', hash: location.hash},
+        {replace: true, state: scrollPlace.keptFrom(location)});
+    }),
     stopFollowing
   };
 };
@@ -191,6 +194,7 @@ describe('arrival', () => {
     await reader.presses('{Tab}');
 
     site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
     await reader.waits(500);
 
     expect(reader.headingsFocused()).toEqual(['here']);
@@ -216,6 +220,7 @@ describe('arrival', () => {
     await reader.waits(100);
 
     site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
     site.draws('late');
     await reader.sees('late');
     await reader.waits(500);
