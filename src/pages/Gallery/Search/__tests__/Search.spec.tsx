@@ -82,6 +82,7 @@ describe('search', () => {
       render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
 
       await search.type(searchWord);
+      await search.pauseEnds();
 
       await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
     });
@@ -90,10 +91,12 @@ describe('search', () => {
       const search = heldSearch();
       render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
       await search.type(searchWord);
+      await search.pauseEnds();
       await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
       anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
 
       await search.type('X');
+      await search.pauseEnds();
 
       await waitFor(() => expect(search.suggestions()).toBeEmptyDOMElement());
     });
@@ -103,6 +106,7 @@ describe('search', () => {
       const search = heldSearch();
       render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
       await search.type(searchWord);
+      await search.pauseEnds();
       await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
 
       await search.pauseEnds();
@@ -118,8 +122,10 @@ describe('search', () => {
       render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
       await search.type('mon');
+      await search.pauseEnds();
       await waitFor(() => expect(wordsAsked).toContain('mon'));
       await search.type('et');
+      await search.pauseEnds();
       await waitFor(() => expect(wordsAsked).toContain('monet'));
       monet.arrives();
       await waitFor(() => expect(search.suggestions()).toHaveTextContent('MONET'));
