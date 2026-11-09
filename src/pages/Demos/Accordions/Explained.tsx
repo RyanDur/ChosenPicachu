@@ -830,13 +830,14 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       </ol>
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">
-      <h2 id="motion-heading" className="title bold">How every fold moves</h2>
+      <h2 id="motion-heading" className="title bold">How a sliding fold moves</h2>
       <ol className={runs}>
         <li className="run">
-          <p className="paragraph">Every fold on this tab moves by transition, never by animation, because a reader may
-            press again before the fold lands. If they do, a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns
-            around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes
-            on its own clock, whatever the state does.</p>
+          <p className="paragraph">Every fold on this tab that slides moves by transition, never by animation, because a
+            reader may press again before the fold lands. If they do,
+            a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns around from wherever it is.
+            An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes on its own clock, whatever
+            the state does.</p>
         </li>
         <li className="run">
           <p className="paragraph">When a reader asks for{' '}
