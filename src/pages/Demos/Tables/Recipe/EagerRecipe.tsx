@@ -50,7 +50,7 @@ export const EagerRecipe: FC = () => {
         <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
         <AgainstTheStream/>
         <OwnedPixels/>
-        <Promises pace="eager"/>
+        <Promises/>
         <Steps>
           <CssShare/>
           <OrderInState tableSource={tableSource} buildSource={buildSource}/>
