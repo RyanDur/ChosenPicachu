@@ -11,10 +11,10 @@ const lengths: Record<Period, Lengths> = {
   [Period.week]: {bucketSeconds: 21600, lengthMilliseconds: 604800000}
 };
 
-const perPeriod = (valueOf: (lengths: Lengths) => number): Record<Period, number> => ({
-  [Period.hour]: valueOf(lengths[Period.hour]),
-  [Period.day]: valueOf(lengths[Period.day]),
-  [Period.week]: valueOf(lengths[Period.week])
+const perPeriod = (fromLengths: (lengths: Lengths) => number): Record<Period, number> => ({
+  [Period.hour]: fromLengths(lengths[Period.hour]),
+  [Period.day]: fromLengths(lengths[Period.day]),
+  [Period.week]: fromLengths(lengths[Period.week])
 });
 
 const granularitySeconds = perPeriod(lengths => lengths.bucketSeconds);
