@@ -46,27 +46,41 @@ const Links: FC = () => {
   </nav>;
 };
 
-const site = (late: LateTargets): DataRouter => createMemoryRouter([{
+type LaterPage = {readonly loaded: Promise<void>; readonly loads: () => void};
+
+const laterPage = (): LaterPage => {
+  let loads = (): void => undefined;
+  const loaded = new Promise<void>(resolve => {
+    loads = resolve;
+  });
+  return {loaded, loads};
+};
+
+const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter => createMemoryRouter([{
   element: <><Links/><Outlet/></>,
+  hydrateFallbackElement: <p>loading</p>,
   children: [
     {path: '/', element: <p>home</p>},
     {path: '/story', element: <Story late={late}/>},
-    {path: '/other', element: <p>other</p>}
+    {path: '/other', element: <p>other</p>},
+    {path: '/later', lazy: async () => later.loaded.then(() => ({element: <Story late={late}/>}))}
   ]
-}]);
+}], {initialEntries: [opened]});
 
 type FollowedSite = {
   readonly draws: (id: string) => void;
+  readonly loadsTheLaterPage: () => void;
   readonly stopFollowing: () => void;
 };
 
-const siteFollowed = (): FollowedSite => {
+const siteFollowed = (opened = '/'): FollowedSite => {
   const late = lateTargets();
-  const router = site(late);
+  const later = laterPage();
+  const router = site(late, later, opened);
   render(<RouterProvider router={router}/>);
   const stopFollowing = arrival.follow(router);
   onTestFinished(stopFollowing);
-  return {draws: late.draw, stopFollowing};
+  return {draws: late.draw, loadsTheLaterPage: later.loads, stopFollowing};
 };
 
 describe('arrival', () => {
@@ -147,6 +161,18 @@ describe('arrival', () => {
     await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader who opens an address whose page loads later lands on its fragment', async () => {
+    const site = siteFollowed('/later#here');
+    const reader = arrivingReader();
+    await reader.waits(11000);
+
+    site.loadsTheLaterPage();
+    await reader.sees('here');
+    await reader.waits(500);
+
+    expect(reader.heading('here')).toHaveFocus();
   });
 
   test('a landing stops when arrival stops following', async () => {
