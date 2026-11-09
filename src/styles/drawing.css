@@ -57,7 +57,7 @@
   width: 1em;
   height: 1em;
   box-shadow: var(--dots-trailing);
-  animation: turning 1.7s infinite ease;
+  animation: turning 1.7s infinite linear;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
