@@ -38,9 +38,11 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
           {pressures.map((pressure, at) => <g key={pressure.openedAt}>
             <Bar className="buy-side"
-              x={bars[at].x} top={bars[at].boughtTop} width={bars[at].width} height={bars[at].boughtHeight}/>
+              x={bars[at].x} foot={bars[at].boughtTop + bars[at].boughtHeight} width={bars[at].width}
+              height={bars[at].boughtHeight}/>
             <Bar className="sell-side"
-              x={bars[at].x} top={bars[at].soldTop} width={bars[at].width} height={bars[at].soldHeight}/>
+              x={bars[at].x} foot={bars[at].soldTop + bars[at].soldHeight} width={bars[at].width}
+              height={bars[at].soldHeight}/>
           </g>)}
         </svg>
       </Axes>

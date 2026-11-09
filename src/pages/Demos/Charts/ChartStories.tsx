@@ -227,7 +227,7 @@ const CandlesStory: FC = () =>
           <Says><code className="monospaced">Bar</code> draws the wall first, then what the candle puts inside it,
             here the wick, then the body on top, so the wick shows over the wall. The body and the wall each start as a
             square one unit on a side, and the wick as a line one unit
-            tall. <code className="monospaced">shapes.at</code> gives every shape four custom properties: where the
+            tall. <code className="monospaced">shapes.placed</code> gives every shape four custom properties: where the
             shape starts across, where its foot sits, how wide it is and how tall. A custom property is a value set by
             name on an element and read back in the style sheet with <code className="monospaced">var()</code>, as
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The charts share a style
@@ -241,7 +241,7 @@ const CandlesStory: FC = () =>
           <Snippet label="TS" lines={[
             ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
             ...carve.unit(candleShapesSource, 'const drawn'), lines.blank,
-            ...carve.span(shapesSource, 'const at = (', 'export const shapes = {at};'), lines.blank,
+            ...carve.span(shapesSource, 'const placed = (', 'export const shapes = {placed};'), lines.blank,
             ...carve.span(barSource, 'export const Bar', '</g>;')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -372,7 +372,7 @@ const PressureStory: FC = () =>
             wears drawn, which gives it its charcoal stroke.</Says>
           <Says>Each bar and the wall behind it are the same <code className="monospaced">Bar</code> the candles use,
             and the candles chart’s steps show it in full. Each starts as a square one unit on a side, takes its four
-            custom properties from <code className="monospaced">shapes.at</code>, and moves by
+            custom properties from <code className="monospaced">shapes.placed</code>, and moves by
             the <Mdn path="Web/CSS/transform">transform</Mdn> in <code className="monospaced">shape.css</code>. I move
             things only by transform and opacity, which spare the browser a new layout on every frame. When a minute’s
             sums change, its bars grow to their new size over 300 milliseconds.</Says>
