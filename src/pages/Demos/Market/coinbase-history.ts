@@ -5,19 +5,16 @@ import {Candle} from './candles';
 import {Period} from './Period';
 import {periods} from './periods';
 
-const HistoryRowsDecoder = schema.array(schema.array(schema.number));
+const HistoryRowsDecoder = schema.array(
+  schema.tuple(schema.number, schema.number, schema.number, schema.number, schema.number, schema.number)
+);
 
-const toCandle = (row: readonly number[]): Candle => ({
-  openedAt: row[0] * 1000,
-  low: row[1],
-  high: row[2],
-  open: row[3],
-  close: row[4],
-  volume: row[5]
-});
+type HistoryRow = schema.Output<typeof HistoryRowsDecoder>[number];
 
-const toCandles = (rows: readonly (readonly number[])[]): readonly Candle[] =>
-  rows.filter(row => row.length === 6).map(toCandle).reverse();
+const toCandle = ([openedAt, low, high, open, close, volume]: HistoryRow): Candle =>
+  ({openedAt: openedAt * 1000, low, high, open, close, volume});
+
+const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(toCandle).reverse();
 
 const periodQuery = (period: Period): string => {
   const now = new Date();
