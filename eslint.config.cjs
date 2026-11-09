@@ -77,8 +77,6 @@ const journeys = Object.fromEntries([
 
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
-const stillReachForThePage = [];
-
 const refsWithAReason = [
   'src/components/Modal/Modal.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx',
   'src/pages/Demos/Controls/DialGroup.tsx'
@@ -163,7 +161,7 @@ module.exports = [
   {
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['**/__tests__/**', '**/__test_support/**', 'src/entry.client.tsx', 'src/hydrateTheSite.tsx',
-      'src/transport/environment.ts', 'src/navigation/arrival/arrival.ts', ...vanilla, ...stillReachForThePage],
+      'src/transport/environment.ts', 'src/navigation/arrival/arrival.ts', ...vanilla],
     plugins: {page},
     rules: {'page/no-page-globals': 'error'}
   },
