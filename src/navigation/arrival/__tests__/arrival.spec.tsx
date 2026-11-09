@@ -1,6 +1,7 @@
 import {FC, useSyncExternalStore} from 'react';
-import {render} from '@testing-library/react';
-import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useNavigate} from 'react-router';
+import {fireEvent, render, screen} from '@testing-library/react';
+import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useLocation, useNavigate} from 'react-router';
+import {scrollPlace} from '@navigation/scroll-place';
 import {arrival} from '../arrival';
 import {ArrivalDrawn} from '../ArrivalDrawn';
 import {useArrivalDrawn} from '../useArrivalDrawn';
@@ -42,9 +43,12 @@ const Story: FC<{late: LateTargets}> = ({late}) => <>
 
 const Links: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   return <nav>
     {['/story#late', '/story#here', '/story#folded', '/other', '/later'].map(to => <Link key={to} to={to}>{to}</Link>)}
     <button type="button" onClick={() => navigate(-1)}>back</button>
+    <button type="button" onClick={() => navigate({search: '?rewritten', hash: location.hash},
+      {replace: true, state: scrollPlace.keptFrom(location)})}>rewrite</button>
   </nav>;
 };
 
@@ -79,6 +83,7 @@ const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter =
 type FollowedSite = {
   readonly draws: (id: string) => void;
   readonly loadsTheLaterPage: () => void;
+  readonly rewritesTheAddress: () => void;
   readonly stopFollowing: () => void;
 };
 
@@ -90,7 +95,12 @@ const siteFollowed = (opened = '/'): FollowedSite => {
   render(<ArrivalDrawn.Provider value={arrived.drawn}><RouterProvider router={router}/></ArrivalDrawn.Provider>);
   const stopFollowing = arrived.follow(router);
   onTestFinished(stopFollowing);
-  return {draws: late.draw, loadsTheLaterPage: later.loads, stopFollowing};
+  return {
+    draws: late.draw,
+    loadsTheLaterPage: later.loads,
+    rewritesTheAddress: () => fireEvent.click(screen.getByRole('button', {name: 'rewrite'})),
+    stopFollowing
+  };
 };
 
 describe('arrival', () => {
@@ -171,6 +181,46 @@ describe('arrival', () => {
     await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader whose address the page rewrites under them is not moved', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.presses('{Tab}');
+
+    site.rewritesTheAddress();
+    await reader.waits(500);
+
+    expect(reader.headingsFocused()).toEqual(['here']);
+  });
+
+  test('a reader who follows the link to the address they are on lands on it again', async () => {
+    siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.presses('{Tab}');
+
+    await reader.follows('/story#here');
+    await reader.waits(500);
+
+    expect(reader.headingsFocused()).toEqual(['here', 'here']);
+  });
+
+  test('a reader whose address the page rewrites while it is still landing lands on it', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.rewritesTheAddress();
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).toHaveFocus();
   });
 
   test('a reader who opens an address whose page loads later lands on its fragment', async () => {
