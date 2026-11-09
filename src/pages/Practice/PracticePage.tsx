@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {useArrival} from '@navigation/arrival';
 import {Tabs} from '@navigation/Tabs';
 import {Concern, concerns} from '@pages/Record/concerns';
 import {practiceAddress} from './practiceAddress';
@@ -17,7 +16,6 @@ const practices: Record<Concern, FC> = {
 };
 
 export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
-  useArrival();
   const Practice = practices[concern];
 
   return <>

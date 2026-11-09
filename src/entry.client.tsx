@@ -2,6 +2,7 @@ import {createBrowserRouter, matchRoutes, RouteMatch} from 'react-router';
 import {asyncSuccess, asyncTryCatch, foldAll, maybe, Result} from '@ryandur/sand';
 import {lazily, siteOpenedBy} from './routes';
 import {hydrateTheSite} from './hydrateTheSite';
+import {arrival} from '@navigation/arrival';
 
 const basename = import.meta.env.BASE_URL;
 const site = siteOpenedBy(lazily());
@@ -24,5 +25,9 @@ foldAll<void, void, Result.Async<void, RoomNotLoaded>>(
   maybe(matchRoutes([site], window.location, basename)).orElse([]).map(opened),
   loaded,
   loaded()
-).onSuccess(() => hydrateTheSite.overTheBuiltPage(createBrowserRouter([site], {basename, hydrationData: {}})))
+).onSuccess(() => {
+  const router = createBrowserRouter([site], {basename, hydrationData: {}});
+  hydrateTheSite.overTheBuiltPage(router);
+  arrival.follow(router);
+})
   .onFailure(({address, thrown}) => console.error(`the room at ${address} did not load`, thrown));

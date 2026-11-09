@@ -1,7 +1,6 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {useArrival} from '@navigation/arrival';
 import {DemoTopics} from '../demo-topics';
 import {demoTab} from '../demo-tab';
 import {Aggregations} from './Aggregations';
@@ -22,7 +21,6 @@ const bodies: Record<Tutorial, FC> = {
 export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
-  useArrival();
   return useShownTutorial().either(tutorial => {
     const {number, of} = tableTutorials.placeOf(tutorial);
     const Body = bodies[tutorial];
