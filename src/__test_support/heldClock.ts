@@ -1,7 +1,7 @@
 import {waitFor} from '@testing-library/react';
 
-// heldClockMoves needs this clock: RTL's own setTimeout(0) after the move fires only while real time moves it
-export const holdTheClock = (): void => {
+// moves needs this clock: RTL's own setTimeout(0) after the move fires only while real time moves it
+const hold = (): void => {
   vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
 };
 
@@ -12,9 +12,11 @@ export const holdTheClock = (): void => {
 // more than vitest's test timeout, which then reports a real hang
 type Outcome = {thrown?: unknown};
 
-export const heldClockMoves = async (milliseconds: number): Promise<void> => {
+const moves = async (milliseconds: number): Promise<void> => {
   const held: {moving?: Promise<Outcome>} = {};
   const outcome = await waitFor(() => (held.moving ??= vi.advanceTimersByTimeAsync(milliseconds)
     .then((): Outcome => ({}), (thrown: unknown): Outcome => ({thrown}))), {timeout: milliseconds * 2});
   if ('thrown' in outcome) throw outcome.thrown;
 };
+
+export const heldClock = {hold, moves};

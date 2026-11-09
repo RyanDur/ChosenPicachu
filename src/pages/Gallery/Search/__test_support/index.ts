@@ -1,1 +1,1 @@
-export {heldSearch, searchBar} from './search';
+export {searchPage} from './search';
