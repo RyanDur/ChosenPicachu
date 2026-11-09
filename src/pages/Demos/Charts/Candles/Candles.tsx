@@ -71,10 +71,11 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {shownCandles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
-            <Bar x={bodies[at].x} top={bodies[at].bodyTop} width={bodies[at].width} height={bodies[at].bodyHeight}>
-              <line className="wick shape drawn" y1={-1} y2={0} style={shapes.at({
+            <Bar x={bodies[at].x} foot={bodies[at].bodyTop + bodies[at].bodyHeight} width={bodies[at].width}
+              height={bodies[at].bodyHeight}>
+              <line className="wick shape drawn" y1={-1} y2={0} style={shapes.placed({
                 x: bodies[at].center,
-                base: bodies[at].wickBottom,
+                foot: bodies[at].wickBottom,
                 width: 1,
                 height: bodies[at].wickBottom - bodies[at].wickTop
               })}/>
@@ -84,7 +85,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         <svg className="volumes volume-side" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
           {shownCandles.map((candle, at) =>
             <Bar key={candle.openedAt}
-              x={bars[at].x} top={bars[at].top} width={bars[at].width} height={bars[at].height}/>)}
+              x={bars[at].x} foot={bars[at].top + bars[at].height} width={bars[at].width} height={bars[at].height}/>)}
         </svg>
       </Axes>
       {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
