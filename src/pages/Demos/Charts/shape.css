@@ -4,7 +4,7 @@
     initial-value: 0px;
 }
 
-@property --shape-base {
+@property --shape-foot {
     syntax: '<length>';
     inherits: false;
     initial-value: 0px;
@@ -25,6 +25,6 @@
 .shape {
   transform-box: fill-box;
   transform-origin: 0 100%;
-  transform: translate(var(--shape-x), var(--shape-base)) scale(var(--shape-width), var(--shape-height));
+  transform: translate(var(--shape-x), var(--shape-foot)) scale(var(--shape-width), var(--shape-height));
   transition: transform 300ms ease-out;
 }

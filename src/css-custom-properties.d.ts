@@ -24,7 +24,7 @@ declare module 'csstype' {
     '--term-anchor'?: string;
     '--measured-height'?: `${number}px`;
     '--shape-x'?: `${number}px`;
-    '--shape-base'?: `${number}px`;
+    '--shape-foot'?: `${number}px`;
     '--shape-width'?: number;
     '--shape-height'?: number;
   }
