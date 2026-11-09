@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useEffect, useState, useSyncExternalStore} from '
 import {useNavigate} from 'react-router';
 import {Paths} from '@navigation';
 import {bannerChange, useBannerDispatch} from '@banners';
-import {trouble} from '@transport';
+import {HTTPError, trouble} from '@transport';
 import {maybe} from '@ryandur/sand';
 import {usersApi} from './usersApi';
 import {syncing} from './syncing';
@@ -22,10 +22,19 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
   )));
   const state = useSyncExternalStore(store.subscribe, () => store.state, () => usersSlice.initial);
 
-  useEffect(() => usersServing.reach(maybe(navigator.serviceWorker), {
-    reached: () => store.dispatch(usersActions.opened()),
-    unreachable: () => store.dispatch(usersActions.serverUnreachable())
-  }), [store]);
+  useEffect(() => {
+    const unreachableBanner = bannerChange.raised(trouble.with('the users server')(HTTPError.NETWORK_ERROR));
+    return usersServing.reach(maybe(navigator.serviceWorker), {
+      reached: () => {
+        dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
+        store.dispatch(usersActions.opened());
+      },
+      unreachable: () => {
+        dispatchBanner(unreachableBanner);
+        store.dispatch(usersActions.serverUnreachable());
+      }
+    });
+  }, [store, dispatchBanner]);
 
   return <usersContexts.State.Provider value={{state, dispatch: store.dispatch}}>
     {children}
