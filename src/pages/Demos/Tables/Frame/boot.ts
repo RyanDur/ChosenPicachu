@@ -1,7 +1,7 @@
 import {unconfigured} from '@transport';
 import {arrangements} from '@components/DragSortableTable/model';
 import type {Dials, Pace} from '../../Controls';
-import {exchange, marketActions, marketSelectors, marketStore} from '@pages/Demos/Market';
+import {exchange, marketActions, marketReads, marketStore} from '@pages/Demos/Market';
 import {builds} from './builds';
 
 declare global {
@@ -17,13 +17,13 @@ const pace = (): Pace => window.__frame?.pace ?? 'eager';
 const fed = (table: HTMLTableElement, told: Pace): void => {
   const page = marketStore(exchange({...unconfigured, ...window.__environment}, () => undefined));
   const reconcile = builds[told](table, {
-    columns: () => marketSelectors.columns(page.state),
-    rows: () => marketSelectors.rows(page.state)
+    columns: () => marketReads.columns(page.state),
+    rows: () => marketReads.rows(page.state)
   });
   table.addEventListener('column-moved', ({detail: {column, to}}) => page.dispatch(arrangements.columnMoved(column, to)));
   table.addEventListener('row-moved', ({detail: {row, to, standing}}) => page.dispatch(arrangements.rowMoved(row, to, standing)));
   table.addEventListener('sorted', ({detail: {column, direction}}) => page.dispatch(arrangements.sorted(column, direction)));
-  page.subscribe(previous => reconcile(marketSelectors.columns(previous)));
+  page.subscribe(previous => reconcile(marketReads.columns(previous)));
   reconcile([]);
   page.dispatch(marketActions.feedRequested());
 };

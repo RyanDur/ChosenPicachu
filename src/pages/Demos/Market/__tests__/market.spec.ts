@@ -1,6 +1,6 @@
 import {Trade} from '../coinbase';
 import {Period} from '../Period';
-import {marketActions, marketSelectors, marketStore} from '..';
+import {marketActions, marketReads, marketStore} from '..';
 
 const trade = (id: number, price: number): Trade =>
   ({id, price, tradedAt: 1700000000000 + id, size: 1, takerSide: 'sell'});
@@ -8,13 +8,13 @@ const trade = (id: number, price: number): Trade =>
 describe('the market store', () => {
   it('a trade arriving keeps it in the trades and folds it into the measures', () => {
     const store = marketStore();
-    const before = marketSelectors.rows(store.state).map(row => row.trades?.display);
+    const before = marketReads.rows(store.state).map(row => row.trades?.display);
 
     store.dispatch(marketActions.tradeArrived(trade(1, 100)));
 
-    expect(marketSelectors.liveTrades(store.state)).toHaveLength(1);
-    expect(marketSelectors.rows(store.state).map(row => row.trades?.display)).not.toEqual(before);
-    expect(marketSelectors.rows(store.state)[0]?.trades?.display).toBe('1');
+    expect(marketReads.liveTrades(store.state)).toHaveLength(1);
+    expect(marketReads.rows(store.state).map(row => row.trades?.display)).not.toEqual(before);
+    expect(marketReads.rows(store.state)[0]?.trades?.display).toBe('1');
   });
 
   it('history arriving folds into the measures too', () => {
@@ -22,7 +22,7 @@ describe('the market store', () => {
 
     store.dispatch(marketActions.historyArrived([trade(1, 100)]));
 
-    expect(marketSelectors.rows(store.state)[0]?.trades?.display).toBe('1');
+    expect(marketReads.rows(store.state)[0]?.trades?.display).toBe('1');
   });
 
   it('past the newest 1500 trades the oldest fall off the front', () => {
@@ -31,8 +31,8 @@ describe('the market store', () => {
     Array.from({length: 1501}, (_, at) => trade(at + 1, 100))
       .forEach(arrived => store.dispatch(marketActions.tradeArrived(arrived)));
 
-    expect(marketSelectors.liveTrades(store.state)).toHaveLength(1500);
-    expect(marketSelectors.liveTrades(store.state)[0].id).toBe(2);
+    expect(marketReads.liveTrades(store.state)).toHaveLength(1500);
+    expect(marketReads.liveTrades(store.state)[0].id).toBe(2);
   });
 
   it('asking again for a period that has arrived keeps its candles while the new ones are on their way', () => {
@@ -42,6 +42,6 @@ describe('the market store', () => {
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
-    expect(marketSelectors.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'arrived', candles: [candle]});
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'arrived', candles: [candle]});
   });
 });

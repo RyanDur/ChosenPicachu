@@ -55,7 +55,7 @@ export const BehaviorPractice: FC = () =>
       table’s:</p>
     <TableReducerCarve/>
     <p className="paragraph">The market store holds the column order in its{' '}
-      <code className="monospaced">arrangement</code>. <code className="monospaced">marketSelectors.columns</code> works out the
+      <code className="monospaced">arrangement</code>. <code className="monospaced">marketReads.columns</code> works out the
       columns on screen from it, so nothing stores them twice.</p>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and
       view both ways. I keep one direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s

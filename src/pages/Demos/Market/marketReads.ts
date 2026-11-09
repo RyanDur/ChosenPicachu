@@ -12,7 +12,7 @@ import {MarketState, TradesState} from './marketSlice';
 const folded = ({history, trades}: TradesState): Measures[] =>
   tradeTotals.perLookback(recentTrades.hydrated(history, trades)).map(cells.from);
 
-type MarketSelectors = {
+type MarketReads = {
   columns: (state: MarketState) => readonly TableColumn<Measured>[];
   rows: (state: MarketState) => readonly Measures[];
   liveTrades: (state: MarketState) => readonly Trade[];
@@ -20,7 +20,7 @@ type MarketSelectors = {
   periodHistoryOf: (period: Period) => (state: MarketState) => PeriodHistory;
 };
 
-export const marketSelectors: MarketSelectors = {
+export const marketReads: MarketReads = {
   columns: ({arrangement}) => arrangedView.columnsOf(arrangement),
   rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, folded(trades)),
   liveTrades: ({trades}) => trades.trades,
