@@ -21,7 +21,7 @@ import '../../Recipe/Recipe.css';
 
 type Build = {
   world: World;
-  source: Sample;
+  headerSource: Sample;
   menuSource: Sample;
   tableSource: Sample;
   rowSource: Sample;
@@ -69,7 +69,7 @@ const SortedDirectly: FC<Build> = ({world, menuSource}) =>
   </Step>;
 
 const RankStory: FC<{build: Build}> = ({build}) => {
-  const {world, source, menuSource, tableSource, rowSource, buildSource} = build;
+  const {world, headerSource, menuSource, tableSource, rowSource, buildSource} = build;
   return <Story param="menu" id="rank"
     can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
@@ -220,8 +220,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             ]}/>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(source, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), lines.blank,
-                ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
+                ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), lines.blank,
+                ...carve.span(headerSource, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...carve.span(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
@@ -345,7 +345,7 @@ export const MenuRecipe: FC = () => {
   const {pace, world} = useControls();
   const build: Build = {
     world,
-    source: paceSources.header[pace],
+    headerSource: paceSources.header[pace],
     menuSource: sources.menu,
     tableSource: paceSources.table[pace],
     rowSource: paceSources.row[pace],
