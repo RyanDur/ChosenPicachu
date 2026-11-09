@@ -1,4 +1,4 @@
-import {millisecondsInHour, millisecondsInMinute} from 'date-fns/constants';
+import {millisecondsInDay, millisecondsInHour, millisecondsInMinute} from 'date-fns/constants';
 import {Period, periods} from '../Market';
 
 const bucketLabelOf = (period: Period): string => {
@@ -15,9 +15,9 @@ const bucketLabel: Record<Period, string> = {
 };
 
 const tickEveryMilliseconds: Record<Period, number> = {
-  [Period.hour]: 600000,
-  [Period.day]: 3600000,
-  [Period.week]: 86400000
+  [Period.hour]: 10 * millisecondsInMinute,
+  [Period.day]: millisecondsInHour,
+  [Period.week]: millisecondsInDay
 };
 
 const timePattern: Record<Period, string> = {
