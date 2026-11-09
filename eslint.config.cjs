@@ -161,7 +161,7 @@ module.exports = [
   {
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['**/__tests__/**', '**/__test_support/**', 'src/entry.client.tsx', 'src/hydrateTheSite.tsx',
-      'src/transport/environment.ts', 'src/navigation/arrival/arrival.ts', ...vanilla],
+      'src/transport/environment.ts', ...vanilla],
     plugins: {page},
     rules: {'page/no-page-globals': 'error'}
   },
