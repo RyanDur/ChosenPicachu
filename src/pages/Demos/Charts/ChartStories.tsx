@@ -11,6 +11,9 @@ import candlesHook from './usePeriodCandles.ts?sample';
 import priceSource from './PriceChart/PriceChart.tsx?sample';
 import candlesSource from './Candles/Candles.tsx?sample';
 import candlesCss from './Candles/Candles.css?sample';
+import barSource from './Bar.tsx?sample';
+import shapeAtSource from './shape-at.ts?sample';
+import shapeCss from './shape.css?sample';
 import pressureShapesSource from './Pressure/pressure-shapes.ts?sample';
 import pressureComponent from './Pressure/Pressure.tsx?sample';
 import pressureCss from './Pressure/Pressure.css?sample';
@@ -234,14 +237,16 @@ const CandlesStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
-            ...carve.unit(candleShapesSource, 'const drawn')
+            ...carve.unit(candleShapesSource, 'const drawn'), lines.blank,
+            ...carve.unit(shapeAtSource, 'export const shapeAt')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>')
+            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>'), lines.blank,
+            ...carve.unit(barSource, 'export const Bar')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(candlesCss, '.wick {'), lines.blank,
-            ...carve.unit(candlesCss, '.body,\n  .wall,'), lines.blank,
+            ...carve.unit(shapeCss, '.shape {'), lines.blank,
             ...carve.unit(drawingCss, '.drawn {'), lines.blank,
             ...carve.unit(drawingCss, '.buy-side {'), lines.blank,
             ...carve.unit(drawingCss, '.sell-side {'), lines.blank,
@@ -270,7 +275,7 @@ const CandlesStory: FC = () =>
             ...carve.span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...carve.unit(candlesCss, '.body,\n  .wall,'), lines.blank,
+            ...carve.unit(shapeCss, '.shape {'), lines.blank,
             ...carve.unit(drawingCss, '.volume-side {'), lines.blank,
             ...carve.unit(drawingCss, '.side-face {'), lines.blank,
             ...carve.unit(drawingCss, '.side-wall {')
@@ -376,7 +381,7 @@ const PressureStory: FC = () =>
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(pressureCss, '.midline {'), lines.blank,
-            ...carve.unit(pressureCss, '.bought,\n    .sold,'), lines.blank,
+            ...carve.unit(shapeCss, '.shape {'), lines.blank,
             ...carve.unit(drawingCss, '.drawn {'), lines.blank,
             ...carve.unit(drawingCss, '.buy-side {'), lines.blank,
             ...carve.unit(drawingCss, '.sell-side {'), lines.blank,

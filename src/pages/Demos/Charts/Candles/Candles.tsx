@@ -8,6 +8,8 @@ import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {Axes, axisRange} from '../Axes';
+import {Bar} from '../Bar';
+import {shapeAt} from '../shape-at';
 import '../chart-card.css';
 import './Candles.css';
 import {classNames} from '@components';
@@ -16,8 +18,6 @@ import {sideOf} from '../sides';
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
 const VOLUME_HEIGHT = 24;
-const DEPTH_X = 1;
-const DEPTH_Y = 1.5;
 
 type Props = {
   trades: readonly Trade[];
@@ -71,41 +71,20 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {shownCandles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
-            <rect className="wall side-wall" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bodies[at].x + DEPTH_X}px`,
-              '--shape-base': `${bodies[at].bodyTop + bodies[at].bodyHeight + DEPTH_Y}px`,
-              '--shape-width': bodies[at].width,
-              '--shape-height': bodies[at].bodyHeight
-            }}/>
-            <line className="wick drawn" y1={-1} y2={0} style={{
-              '--shape-x': `${bodies[at].center}px`,
-              '--shape-base': `${bodies[at].wickBottom}px`,
-              '--shape-width': 1,
-              '--shape-height': bodies[at].wickBottom - bodies[at].wickTop
-            }}/>
-            <rect className="body side-face" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bodies[at].x}px`,
-              '--shape-base': `${bodies[at].bodyTop + bodies[at].bodyHeight}px`,
-              '--shape-width': bodies[at].width,
-              '--shape-height': bodies[at].bodyHeight
-            }}/>
+            <Bar x={bodies[at].x} top={bodies[at].bodyTop} width={bodies[at].width} height={bodies[at].bodyHeight}>
+              <line className="wick shape drawn" y1={-1} y2={0} style={shapeAt({
+                x: bodies[at].center,
+                base: bodies[at].wickBottom,
+                width: 1,
+                height: bodies[at].wickBottom - bodies[at].wickTop
+              })}/>
+            </Bar>
           </g>)}
         </svg>
         <svg className="volumes volume-side" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
-          {shownCandles.map((candle, at) => <g key={candle.openedAt}>
-            <rect className="volume-wall side-wall" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x + DEPTH_X}px`,
-              '--shape-base': `${bars[at].top + bars[at].height + DEPTH_Y}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].height
-            }}/>
-            <rect className="volume side-face" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x}px`,
-              '--shape-base': `${bars[at].top + bars[at].height}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].height
-            }}/>
-          </g>)}
+          {shownCandles.map((candle, at) =>
+            <Bar key={candle.openedAt}
+              x={bars[at].x} top={bars[at].top} width={bars[at].width} height={bars[at].height}/>)}
         </svg>
       </Axes>
       {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
