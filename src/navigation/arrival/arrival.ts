@@ -26,24 +26,36 @@ const landedOn = (target: Element): void => {
   if (around instanceof HTMLElement) around.focus({preventScroll: true});
 };
 
+const readerMoves = ['pointerdown', 'wheel', 'touchmove', 'keydown'] as const;
+
 // a page can draw its target after the page itself, and a fold opening grows the page for a few frames after, so the
 // landing looks for its target each frame and waits for it to hold still
 const landOnceItHoldsStill = (id: string): (() => void) => {
   let frameRequest = 0;
-  const lookNextFrame = (watch: Watch, foldsOpened: boolean): void => {
-    frameRequest = requestAnimationFrame(() => {
+  const readerMoved = new AbortController();
+  const stop = (): void => {
+    cancelAnimationFrame(frameRequest);
+    readerMoved.abort();
+  };
+  const lookNextFrame = (foldsOpened: boolean, watch?: Watch): void => {
+    frameRequest = requestAnimationFrame(now => {
+      const looking = watch ?? landing.watching(now);
       const target = targetNamedBy(id);
       const opened = foldsOpened || target.map(found => {
         openFoldsAround(found);
         return true;
       }).orElse(false);
-      const next = target.map(found => landing.watched(watch, measured(found))).orElse(landing.lookedFor(watch));
+      const next = target.map(found => landing.watched(looking, measured(found)))
+        .orElse(landing.lookedFor(looking, now));
       if (next === 'land') target.map(landedOn);
-      else if (next !== 'given up') lookNextFrame(next, opened);
+      if (next === 'land' || next === 'given up') readerMoved.abort();
+      else lookNextFrame(opened, next);
     });
   };
-  lookNextFrame(landing.watching, false);
-  return () => cancelAnimationFrame(frameRequest);
+  readerMoves.forEach(move =>
+    window.addEventListener(move, stop, {capture: true, passive: true, signal: readerMoved.signal}));
+  lookNextFrame(false);
+  return stop;
 };
 
 const nothingToStop = (): void => undefined;
