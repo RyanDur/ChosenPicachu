@@ -26,6 +26,7 @@ jobs:
     outputs:
       first: ${{ steps.thread.outputs.first }}
       answer: ${{ steps.answer.outputs.structured_output }}
+      verdict: ${{ steps.verdict.outputs.verdict }}
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
       REPLY: ${{ github.event.comment.id || inputs.comment }}
@@ -75,21 +76,41 @@ jobs:
             --max-turns 40
             --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(git grep:*)"
             --json-schema '{"type":"object","required":["verdict","body"],"additionalProperties":false,"properties":{"verdict":{"enum":["Agreed","Not yet"]},"body":{"type":"string","description":"What settled it, or what still needs doing and why, in a sentence or two"}}}'
+      - name: Read the verdict
+        if: steps.answer.outputs.structured_output
+        id: verdict
+        env:
+          ANSWER: ${{ steps.answer.outputs.structured_output }}
+        run: echo "verdict=$(jq -r .verdict <<< "$ANSWER")" >> "$GITHUB_OUTPUT"
 
-  settle:
+  reply:
     needs: answer
-    if: needs.answer.outputs.first
+    if: needs.answer.outputs.verdict
+    runs-on: ubuntu-26.04
+    permissions:
+      pull-requests: write
+    env:
+      PULL: ${{ github.event.pull_request.number || inputs.pull }}
+      FIRST: ${{ needs.answer.outputs.first }}
+      ANSWER: ${{ needs.answer.outputs.answer }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Answer in the thread
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments/$FIRST/replies" \
+            -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
+
+  resolve:
+    needs: [answer, reply]
+    if: needs.answer.outputs.verdict == 'Agreed'
     runs-on: ubuntu-26.04
     permissions:
       # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
       contents: write
       pull-requests: write
-    outputs:
-      agreed: ${{ steps.resolve.outputs.agreed }}
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
       FIRST: ${{ needs.answer.outputs.first }}
-      ANSWER: ${{ needs.answer.outputs.answer }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
@@ -97,13 +118,7 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           sparse-checkout: scripts/review
           persist-credentials: false
-      - name: Answer in the thread
-        run: |
-          gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments/$FIRST/replies" \
-            -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
       - name: Resolve the thread the reviewer agrees on
-        id: resolve
-        if: fromJSON(env.ANSWER).verdict == 'Agreed'
         shell: bash
         run: |
           thread=$(scripts/review/threads.sh "$PULL" \
@@ -113,11 +128,9 @@ jobs:
             exit 1
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
-          echo "agreed=true" >> "$GITHUB_OUTPUT"
 
   rerun:
-    needs: [answer, settle]
-    if: needs.settle.outputs.agreed
+    needs: resolve
     concurrency:
       group: discuss-rerun-${{ github.event.pull_request.number || inputs.pull }}
       cancel-in-progress: false
