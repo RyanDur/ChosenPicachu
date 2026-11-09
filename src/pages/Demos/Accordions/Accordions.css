@@ -153,7 +153,6 @@
 
     .info-measured {
       overflow: hidden;
-      interpolate-size: numeric-only;
     }
 
     .drawer & .info-measured {
