@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-[ -n "$CLAUDE_ENV_FILE" ] || exit 0
+# GitHub Actions sets CI, and its runners, where claude-code-action runs this hook, have no direnv.
+[ -n "$CLAUDE_ENV_FILE" ] && [ -z "$CI" ] || exit 0
 tell() {
   jq -n --arg m "$1" '{systemMessage: $m, hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $m}}'
   exit 0
