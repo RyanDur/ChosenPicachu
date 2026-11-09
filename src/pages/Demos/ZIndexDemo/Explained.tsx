@@ -26,9 +26,9 @@ export const StackingExplained: FC = () =>
           property changes it, and its starting value, auto, keeps a positioned card in the order the code lists
           it. No card here sets a z-index, so First is painted first, Third is painted last, and Third lands on
           top.</p>
-        <Snippet label="HTML" lines={carve.span(naturalSource, '<ol id="z-index-layers"', '</ol>')}/>
+        <Snippet label="HTML" lines={carve.span(naturalSource, '<ol id="z-index-pile"', '</ol>')}/>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.layer {'), gap,
+          ...carve.unit(zIndexCss, '.pile-card {'), gap,
           ...carve.unit(zIndexCss, '.closed {')
         ]}/>
         <PileFromTheSide/>
@@ -43,7 +43,7 @@ export const StackingExplained: FC = () =>
           still at auto, and still painted in the order the code lists them. A z-index only shows where cards
           overlap. Expand the pile, and a raise changes nothing you can see. Collapse it again, and the raised
           card comes down on top.</p>
-        <Snippet label="TS" lines={carve.unit(naturalSource, 'const layer =')}/>
+        <Snippet label="TS" lines={carve.unit(naturalSource, 'const pileCard =')}/>
         <Snippet label="CSS" lines={carve.unit(zIndexCss, '.raised {')}/>
         <OneNumberLiftsOneCard/>
       </li>
