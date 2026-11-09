@@ -7,10 +7,10 @@ import './Axes.css';
 
 type Props = PropsWithChildren<{
   extent: Maybe<AxisExtent>;
-  pattern: string;
+  timeFormat: string;
   tickEvery?: number;
   headroomMilliseconds?: number;
-  label?: (value: number) => string;
+  priceText?: (value: number) => string;
 }>;
 
 const firstMidLast = (times: readonly number[]): readonly number[] =>
@@ -33,19 +33,19 @@ const placed = (
 };
 
 export const Axes: FC<Props> = ({
-  extent, pattern, tickEvery, headroomMilliseconds = 0,
-  label = value => money.dollars.format(value), children
+  extent, timeFormat, tickEvery, headroomMilliseconds = 0,
+  priceText = value => money.dollars.format(value), children
 }) => <>
   <p className="y-labels caption">{extent.map(({high, low}) => <>
-    <data value={high}>{label(high)}</data>
-    <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
-    <data value={low}>{label(low)}</data>
+    <data value={high}>{priceText(high)}</data>
+    <data value={(high + low) / 2}>{priceText((high + low) / 2)}</data>
+    <data value={low}>{priceText(low)}</data>
   </>).orNull()}</p>
   {children}
   <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
     <time key={tick.at}
       className="tick"
       dateTime={new Date(tick.at).toISOString()}
-      style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
+      style={{'--along': `${tick.along}%`}}>{format(tick.at, timeFormat)}</time>
   )).orNull()}</p>
 </>;

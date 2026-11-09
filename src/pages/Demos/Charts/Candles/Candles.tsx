@@ -66,7 +66,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={extent}
-        pattern={periodDisplay.timePattern[period]}
+        timeFormat={periodDisplay.timePattern[period]}
         tickEvery={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
