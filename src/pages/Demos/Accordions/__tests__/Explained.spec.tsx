@@ -9,7 +9,7 @@ import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 const htmlAlone = 'An accordion in HTML alone';
 
 const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
-const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('exclusive'), 'How every fold moves'];
+const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('exclusive'), 'How a sliding fold moves'];
 
 const drawingsTitled = (part: HTMLElement, titles: string[]): HTMLElement[] =>
   titles.map(title => explanation.drawingNamed(part, new RegExp(`^${title}\\.`)));
@@ -33,7 +33,7 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how every fold moves', async () => {
+  test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how a sliding fold moves', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
