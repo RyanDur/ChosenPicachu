@@ -20,6 +20,7 @@ import {
   userUpdateRefused,
   usersUnreachable,
   lentToThePage,
+  noWorkersOnThePage,
   rosterAsksHeard,
   rosterRefused,
   workersContainer
@@ -87,6 +88,16 @@ describe('the users page', () => {
     await usersTable.roster();
 
     expect(usersPage.alertIfAny()).not.toBeInTheDocument();
+  });
+
+  test('a browser without service workers says the users server could not be reached, and Add waits', async () => {
+    noWorkersOnThePage();
+    setupUsersResponse([aUser()]);
+
+    render(<TestApp at={Paths.users}/>);
+
+    expect(await usersPage.says('the users server could not be reached')).toBeInTheDocument();
+    expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true');
   });
 
   test('a users server that cannot take control of the page says it could not be reached', async () => {
