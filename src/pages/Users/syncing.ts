@@ -15,7 +15,8 @@ export const syncing = (usersApi: UsersAPI, saved: () => void, refused: (error: 
           .onFailure(refused);
         return;
       case 'userAdded':
-        if (usersSelectors.addInFlight(previous)) return;
+        if (usersSelectors.addWaits(previous)) return;
+        dispatch(usersActions.userAddSent());
         usersApi.add(action.user)
           .onSuccess(arrived => dispatch(usersActions.usersArrived(arrived)))
           .onSuccess(() => dispatch(usersActions.userAddConfirmed()))

@@ -5,6 +5,7 @@ import {
   setupUsersResponse,
   setupUserUpdatedResponse,
   someUsers,
+  userAddsHeard,
   userAddsHeld
 } from '@pages/Users/__test_support';
 import {syncing} from '../syncing';
@@ -62,13 +63,27 @@ describe('the users store', () => {
     expect(usersSelectors.addWaits(store.state)).toBe(true);
   });
 
-  it('an add waits while another is in flight', () => {
-    const store = usersStore();
-    store.dispatch(usersActions.usersArrived([]));
+  it('an add waits while another is in flight', async () => {
+    const store = await openedStore();
+    userAddsHeld();
 
     store.dispatch(usersActions.userAdded(first));
 
     expect(usersSelectors.addWaits(store.state)).toBe(true);
+  });
+
+  it('an add dispatched before the roster arrives never reaches the backend', async () => {
+    const {id: _early, ...early} = second;
+    const {id: _late, ...late} = third;
+    const adds = userAddsHeard();
+    const store = usersStore(syncing(usersApi, () => undefined, () => undefined));
+    store.dispatch(usersActions.userAdded(early));
+    store.dispatch(usersActions.usersArrived(someUsers));
+
+    store.dispatch(usersActions.userAdded(late));
+
+    await vi.waitFor(() => expect(adds()).toHaveLength(1));
+    expect(adds()).toMatchObject([{person: {firstName: late.person.firstName}}]);
   });
 
   it('a row moved to a new seat stays there when the roster arrives again', () => {
