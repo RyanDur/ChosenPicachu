@@ -67,10 +67,12 @@ test('a reader who follows the rail while the room is on its way stays on the li
     await route.continue();
   });
   const site = siteFrame(page);
-  await page.goto('gallery/O9138?tab=vam');
+  // WebKit holds the load event until the held room arrives
+  await page.goto('gallery/O9138?tab=vam', {waitUntil: 'commit'});
   await site.hydrated();
 
-  await site.home.click();
+  await site.home.focus();
+  await page.keyboard.press('Enter');
   arrive();
 
   await expect(site.home).toHaveAttribute('aria-current', 'page');
