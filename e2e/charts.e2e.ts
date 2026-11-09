@@ -24,6 +24,16 @@ test('the feed says it is connecting, then that it is live', async ({page}) => {
   await expect(status).toHaveText('live');
 });
 
+test('removing a chart leaves focus on the next chart\'s link', async ({page}) => {
+  const charts = chartsPage(page);
+  await page.goto('demos/charts/?charts=price,candles');
+  await charts.doorway('Price line').focus();
+
+  await page.keyboard.press('Delete');
+
+  await expect(charts.doorway('Candles')).toBeFocused();
+});
+
 const aPressOpensTheTutorial = async (page: Page, press: 'click' | 'tap', kind: string, region: string): Promise<void> => {
   await page.goto(`demos/charts/?charts=${kind}`);
   const drawing = page.getByRole('region', {name: region, exact: true}).getByRole('figure');
