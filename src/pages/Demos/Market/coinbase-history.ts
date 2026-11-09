@@ -1,23 +1,27 @@
 import * as schema from 'schemawax';
-import {asyncFailure, asyncSuccess, is, Maybe, maybe, not, Result} from '@ryandur/sand';
+import {is, not, Result} from '@ryandur/sand';
 import {decoded, http, HTTPError} from '@transport';
 import {Candle} from './candles';
 import {Period} from './Period';
 import {periods} from './periods';
 
-const HistoryRowsDecoder = schema.array(schema.unknown);
-
 const HistoryRowDecoder =
   schema.tuple(schema.number, schema.number, schema.number, schema.number, schema.number, schema.number);
 
-const toCandle = (row: unknown): Maybe<Candle> =>
-  maybe(HistoryRowDecoder.decode(row)).map(([openedAt, low, high, open, close, volume]) =>
-    ({openedAt: openedAt * 1000, low, high, open, close, volume}));
+type HistoryRow = schema.Output<typeof HistoryRowDecoder>;
 
-const toCandles = (rows: readonly unknown[]): Result.Async<readonly Candle[], HTTPError> => {
-  const candles = rows.flatMap(row => toCandle(row).either(candle => [candle], () => [])).reverse();
-  return is(rows.length) && not(candles.length) ? asyncFailure(HTTPError.CANNOT_DECODE) : asyncSuccess(candles);
-};
+const HistoryRowsDecoder = schema.array(schema.unknown).andThen(rows => {
+  const readable = rows.filter(HistoryRowDecoder.is);
+  if (is(rows.length) && not(readable.length)) {
+    throw new schema.DecoderError('No row of this history is six numbers');
+  }
+  return readable;
+});
+
+const toCandle = ([openedAt, low, high, open, close, volume]: HistoryRow): Candle =>
+  ({openedAt: openedAt * 1000, low, high, open, close, volume});
+
+const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(toCandle).reverse();
 
 const periodQuery = (period: Period, now: Date): string => {
   const start = new Date(now.getTime() - periods.spanMilliseconds[period]);
@@ -33,7 +37,7 @@ const periodCandles = (
 ): Result.Async<readonly Candle[], HTTPError> =>
   http.get(`${base}/products/${product}/candles?${query}`)
     .mBind(decoded.by(HistoryRowsDecoder))
-    .mBind(toCandles);
+    .map(toCandles);
 
 type CoinbaseHistory = {
   periodQuery: (period: Period, now: Date) => string;
