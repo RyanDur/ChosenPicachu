@@ -1,6 +1,6 @@
 import {Location} from 'react-router';
 import * as schema from 'schemawax';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe, maybe, not} from '@ryandur/sand';
 
 type KeptPlace = {place: string};
 
@@ -21,6 +21,6 @@ const of = (location: Location): string => placeKeptIn(location).orElse(ownPlace
 
 const keptFrom = (location: Location): KeptPlace => ({place: of(location)});
 
-const keeps = (location: Location): boolean => !placeKeptIn(location).isNothing;
+const keeps = (location: Location): boolean => not(placeKeptIn(location).isNothing);
 
 export const scrollPlace: ScrollPlace = {of, keptFrom, keeps};
