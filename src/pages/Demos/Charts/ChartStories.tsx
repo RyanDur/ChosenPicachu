@@ -1,5 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, ReactNode} from 'react';
+import {generatePath, Link} from 'react-router';
+import {Paths} from '@navigation';
 import {DemoTopics} from '../demo-topics';
 import {ChartKind} from './chart-kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
@@ -30,6 +32,8 @@ import liveTradesSource from '@pages/Demos/Market/live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
 import axesCss from './Axes/Axes.css?sample';
 import '../Recipe/Recipe.css';
+
+const candlesSteps = generatePath(Paths.chartTutorial, {kind: 'candles'});
 
 const PriceStory: FC = () =>
   <Story param="graph" id="price"
@@ -371,9 +375,12 @@ const PressureStory: FC = () =>
             values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
             reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
             wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>Each bar and the wall behind it are the same <code className="monospaced">Bar</code> the candles use,
-            and the candles chart’s steps show it in full. Each starts as a square one unit on a side, takes its four
-            custom properties from <code className="monospaced">shapes.placed</code>, and moves by
+          <Says>Each bar is drawn by <code className="monospaced">Bar</code>, the component the candles use: a function
+            that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index
+              tab</TabLink> says. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
+            and <Link className="signpost" to={candlesSteps}>the candles chart’s steps</Link> show it in full. Each
+            shape starts as a square one unit on a side, takes its four custom properties
+            from <code className="monospaced">shapes.placed</code>, and moves by
             the <Mdn path="Web/CSS/transform">transform</Mdn> in <code className="monospaced">shape.css</code>. I move
             things only by transform and opacity, which spare the browser a new layout on every frame. When a minute’s
             sums change, its bars grow to their new size over 300 milliseconds.</Says>
