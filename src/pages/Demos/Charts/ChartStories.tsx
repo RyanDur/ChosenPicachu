@@ -155,8 +155,7 @@ const PriceStory: FC = () =>
             ...carve.span(axesSource, 'export const Axes', '</>;')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...carve.unit(axesCss, '.chart-stage:has(> .y-labels) {'), gap,
-            ...carve.unit(axesCss, ':where(.chart-stage:has(> .y-labels)) {')
+            ...carve.unit(axesCss, '.chart-stage:has(> .y-labels) {')
           ]}/>
         </Codes>
       </Step>
