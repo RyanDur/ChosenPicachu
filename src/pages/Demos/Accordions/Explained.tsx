@@ -486,8 +486,12 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   ...carve.unit(accordionsCss, '&:not(.close) .info-label {'), lines.blank,
                   ...carve.unit(accordionsCss, '.opening-arrow::after {'), lines.blank,
                   ...carve.unit(surfaceCss, '.corner-after::after {'), lines.blank,
-                  ...carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), lines.blank,
-                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
+                  ...carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'),
+                  ...{
+                    reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
+                    drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
+                    static: []
+                  }[motion]
                 ]}/>
                 <TwoBordersTurned/>
               </li>
@@ -675,8 +679,12 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 }[motion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '&::details-content {'), lines.blank,
-                  ...carve.unit(accordionsCss, '&[open]::details-content {'), lines.blank,
-                  ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'),
+                  ...carve.unit(accordionsCss, '&[open]::details-content {'),
+                  ...{
+                    reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
+                    drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
+                    static: []
+                  }[motion],
                   ...(motion === 'drawer' ? [lines.blank, ...carve.unit(accordionsCss, '.drawer &::details-content {')] : [])
                 ]}/>
                 <SizedToTheText/>
