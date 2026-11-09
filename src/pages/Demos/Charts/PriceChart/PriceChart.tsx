@@ -47,7 +47,7 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'price', period, trades});
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, kind: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
@@ -60,7 +60,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
-      <PeriodMenu id={`${id}-period`} chart="price" period={period} onPeriodChosen={onPeriodChosen}/>
+      <PeriodMenu id={`${id}-period`} kind="price" period={period} onPeriodChosen={onPeriodChosen}/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={view.mBind(({series, high, low}) => axisRange.of(series.map(timed => timed.at), high, low))}
