@@ -1,3 +1,11 @@
+import {
+  millisecondsInDay,
+  millisecondsInHour,
+  millisecondsInSecond,
+  millisecondsInWeek,
+  secondsInHour,
+  secondsInMinute
+} from 'date-fns/constants';
 import {Period} from './Period';
 
 type Lengths = {
@@ -6,9 +14,9 @@ type Lengths = {
 };
 
 const lengthsByPeriod: Record<Period, Lengths> = {
-  [Period.hour]: {bucketSeconds: 60, lengthMilliseconds: 3600000},
-  [Period.day]: {bucketSeconds: 3600, lengthMilliseconds: 86400000},
-  [Period.week]: {bucketSeconds: 21600, lengthMilliseconds: 604800000}
+  [Period.hour]: {bucketSeconds: secondsInMinute, lengthMilliseconds: millisecondsInHour},
+  [Period.day]: {bucketSeconds: secondsInHour, lengthMilliseconds: millisecondsInDay},
+  [Period.week]: {bucketSeconds: 6 * secondsInHour, lengthMilliseconds: millisecondsInWeek}
 };
 
 const perPeriod = (fromLengths: (lengths: Lengths) => number): Record<Period, number> => ({
@@ -21,9 +29,9 @@ const bucketSeconds = perPeriod(lengths => lengths.bucketSeconds);
 
 const lengthMilliseconds = perPeriod(lengths => lengths.lengthMilliseconds);
 
-const bucketMilliseconds = perPeriod(lengths => lengths.bucketSeconds * 1000);
+const bucketMilliseconds = perPeriod(lengths => lengths.bucketSeconds * millisecondsInSecond);
 
-const candleCap = perPeriod(lengths => lengths.lengthMilliseconds / (lengths.bucketSeconds * 1000));
+const candleCap = perPeriod(lengths => lengths.lengthMilliseconds / (lengths.bucketSeconds * millisecondsInSecond));
 
 type Periods = {
   bucketSeconds: Record<Period, number>;
