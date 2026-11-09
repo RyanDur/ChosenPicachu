@@ -55,12 +55,12 @@ export const Feedback: FC = () => {
     return null;
   }
 
-  const key = maybe(params.get('tab')).map(tab => `${pathname}?tab=${tab}`).orElse(pathname);
+  const pageThread = maybe(params.get('tab')).map(tab => `${pathname}?tab=${tab}`).orElse(pathname);
 
   const opening = (event: MouseEvent<HTMLButtonElement>) => {
     event.currentTarget.focus();
-    const here = {key, name: pageName};
-    dispatch(feedbackChange.opened(key));
+    const here = {key: pageThread, name: pageName};
+    dispatch(feedbackChange.opened(pageThread));
     github.threadFor({endpoint: feedbackEndpoint, token: feedbackToken}, here)
       .onSuccess(found => dispatch(found.either(
         ({url}) => feedbackChange.threadFound(here.key, url),
@@ -95,7 +95,7 @@ export const Feedback: FC = () => {
         inert={not(hydrated)} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
-    {hydrated && <Modal key={key} id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
+    {hydrated && <Modal key={pageThread} id={feedbackDialogId} labelledBy="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
