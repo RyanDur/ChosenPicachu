@@ -16,7 +16,8 @@ export const arrivingReader = (): ArrivingReader => {
   const user = userEvent.setup({delay: null});
   const focused: string[] = [];
   const noteFocus = ({target}: FocusEvent): void => {
-    if (target instanceof HTMLElement && target.matches('h2')) focused.push(target.id);
+    const heading = screen.queryAllByRole('heading').find(each => each === target);
+    if (heading) focused.push(heading.textContent);
   };
   document.addEventListener('focusin', noteFocus);
   onTestFinished(() => document.removeEventListener('focusin', noteFocus));
