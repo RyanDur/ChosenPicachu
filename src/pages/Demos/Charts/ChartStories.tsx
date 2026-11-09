@@ -344,6 +344,7 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
+            ...carve.unit(coinbaseSource, 'const tradeFields'), lines.blank,
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), lines.blank,
             ...carve.unit(coinbaseSource, 'const takerSideOf'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const fold'), lines.blank,
