@@ -56,7 +56,9 @@ const follow = (router: DataRouter): (() => void) => {
   let followedKey = '';
   let stopLanding = nothingToStop;
   const arrived = ({initialized, location, historyAction, navigation}: RouterState): void => {
-    if (not(initialized) || navigation.state !== 'idle' || location.key === followedKey) return;
+    const leaving = navigation.state !== 'idle';
+    if (leaving) stopLanding();
+    if (not(initialized) || leaving || location.key === followedKey) return;
     const opening = empty(followedKey);
     followedKey = location.key;
     stopLanding();

@@ -41,7 +41,7 @@ const Story: FC<{late: LateTargets}> = ({late}) => <>
 const Links: FC = () => {
   const navigate = useNavigate();
   return <nav>
-    {['/story#late', '/story#here', '/story#folded', '/other'].map(to => <Link key={to} to={to}>{to}</Link>)}
+    {['/story#late', '/story#here', '/story#folded', '/other', '/later'].map(to => <Link key={to} to={to}>{to}</Link>)}
     <button type="button" onClick={() => navigate(-1)}>back</button>
   </nav>;
 };
@@ -173,6 +173,20 @@ describe('arrival', () => {
     await reader.waits(500);
 
     expect(reader.heading('here')).toHaveFocus();
+  });
+
+  test('a reader who leaves for a page that loads later is not moved on the page they left', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+    site.draws('late');
+    await reader.sees('late');
+
+    await reader.follows('/later');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
   });
 
   test('a landing stops when arrival stops following', async () => {
