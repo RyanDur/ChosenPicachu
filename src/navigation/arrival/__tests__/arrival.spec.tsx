@@ -2,6 +2,7 @@ import {FC, useSyncExternalStore} from 'react';
 import {render} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useNavigate} from 'react-router';
 import {arrival} from '../arrival';
+import {useArrivalDrawn} from '../useArrivalDrawn';
 import {arrivingReader} from '../__test_support/reader';
 
 type LateTargets = {
@@ -56,8 +57,13 @@ const laterPage = (): LaterPage => {
   return {loaded, loads};
 };
 
+const Frame: FC = () => {
+  useArrivalDrawn();
+  return <><Links/><Outlet/></>;
+};
+
 const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter => createMemoryRouter([{
-  element: <><Links/><Outlet/></>,
+  element: <Frame/>,
   hydrateFallbackElement: <p>loading</p>,
   children: [
     {path: '/', element: <p>home</p>},
