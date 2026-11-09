@@ -1,10 +1,11 @@
 import {useId} from 'react';
 import {Candle, candles, Period, PeriodHistory, periodHistory, periods, Trade} from '../Market';
 import {usePeriodCandles} from './usePeriodCandles';
+import {PeriodChartKind} from './chart-kinds';
 
 type Chart = {
   id?: string;
-  name: 'price' | 'candles';
+  kind: PeriodChartKind;
   period: Period;
   trades: readonly Trade[];
 };
@@ -16,12 +17,12 @@ type PeriodChart = {
   shownCandles: readonly Candle[];
 };
 
-export const usePeriodChart = ({id, name, period, trades}: Chart): PeriodChart => {
+export const usePeriodChart = ({id, kind, period, trades}: Chart): PeriodChart => {
   const generated = useId();
   const history = usePeriodCandles(period);
   const bucketMilliseconds = periods.bucketMilliseconds[period];
   return {
-    id: id ?? `${name}${generated}`,
+    id: id ?? `${kind}${generated}`,
     history,
     bucketMilliseconds,
     shownCandles: candles.mergeLive(

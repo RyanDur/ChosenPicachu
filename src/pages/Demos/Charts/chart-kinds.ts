@@ -2,6 +2,8 @@ import {matchOn} from '@ryandur/sand';
 
 export type ChartKind = 'price' | 'candles' | 'pressure' | 'pie';
 
+export type PeriodChartKind = Extract<ChartKind, 'price' | 'candles'>;
+
 const all: readonly ChartKind[] = ['price', 'candles', 'pressure', 'pie'];
 
 const is = (kind?: string): kind is ChartKind =>

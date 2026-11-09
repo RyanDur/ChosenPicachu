@@ -28,7 +28,7 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'candles', period, trades});
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, kind: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const extent = axisRange.of(
@@ -40,7 +40,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
       {actions}
-      <PeriodMenu id={`${id}-period`} chart="candle" period={period} onPeriodChosen={onPeriodChosen}/>
+      <PeriodMenu id={`${id}-period`} kind="candles" period={period} onPeriodChosen={onPeriodChosen}/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={extent}
