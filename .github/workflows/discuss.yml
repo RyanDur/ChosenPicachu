@@ -84,6 +84,8 @@ jobs:
       # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
       contents: write
       pull-requests: write
+    outputs:
+      agreed: ${{ steps.resolve.outputs.agreed }}
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
       FIRST: ${{ needs.answer.outputs.first }}
@@ -100,6 +102,7 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL/comments/$FIRST/replies" \
             -f body="$(jq -r '"\(.verdict). \(.body)"' <<< "$ANSWER")" > /dev/null
       - name: Resolve the thread the reviewer agrees on
+        id: resolve
         if: fromJSON(env.ANSWER).verdict == 'Agreed'
         shell: bash
         run: |
@@ -110,10 +113,11 @@ jobs:
             exit 1
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
+          echo "agreed=true" >> "$GITHUB_OUTPUT"
 
   rerun:
     needs: [answer, settle]
-    if: fromJSON(needs.answer.outputs.answer).verdict == 'Agreed'
+    if: needs.settle.outputs.agreed
     concurrency:
       group: discuss-rerun-${{ github.event.pull_request.number || inputs.pull }}
       cancel-in-progress: false
