@@ -17,8 +17,8 @@
   .pill {
     position: relative;
     isolation: isolate;
-    align-content: center;
-    text-align: center;
+    display: grid;
+    place-items: center;
     height: var(--base-x-5);
     padding: 0 var(--base-x-2);
     white-space: nowrap;
@@ -40,6 +40,28 @@
 
     &:has(:checked)::before {
       opacity: 1;
+    }
+
+    /* the words cut over where the fading fill gives ink and white the same contrast, which the fill reaches sooner leaving than arriving */
+    .pill-words,
+    &::after {
+      grid-area: 1 / 1;
+      transition: opacity 0s 65ms;
+    }
+
+    &::after {
+      content: attr(data-words) / "";
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:has(:checked) {
+      .pill-words,
+      &::after { transition-delay: 115ms; }
+
+      .pill-words { opacity: 0; }
+
+      &::after { opacity: 1; }
     }
   }
 }
