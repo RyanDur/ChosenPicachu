@@ -861,7 +861,8 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['Maybe', `${Paths.demos}charts/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['z-index tab', `${Paths.demos}z-index/`]
     ]);
   });
 
