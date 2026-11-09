@@ -1,11 +1,11 @@
+import {millisecondsInHour, millisecondsInMinute} from 'date-fns/constants';
 import {Period, periods} from '../Market';
 
-const minuteMilliseconds = 60000;
-const hourMilliseconds = 3600000;
-
 const bucketLabelOf = (period: Period): string => {
-  const bucket = periods.bucketMilliseconds[period];
-  return bucket < hourMilliseconds ? `${bucket / minuteMilliseconds}m each` : `${bucket / hourMilliseconds}h each`;
+  const bucketMilliseconds = periods.bucketMilliseconds[period];
+  return bucketMilliseconds < millisecondsInHour
+    ? `${bucketMilliseconds / millisecondsInMinute}m each`
+    : `${bucketMilliseconds / millisecondsInHour}h each`;
 };
 
 const bucketLabel: Record<Period, string> = {
