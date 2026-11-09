@@ -1,8 +1,8 @@
 import {useContext} from 'react';
 import {Address} from '../profile';
-import {draftActions} from './draftActions';
+import {AddressName, draftActions} from './draftActions';
 import {draftContexts} from './draftContexts';
-import {AddressName, drafts} from './drafts';
+import {drafts} from './drafts';
 
 type AddressDraft = {
   readonly address: Address;

@@ -1,10 +1,8 @@
 import {Address, NewUser, User} from '../profile';
 import {maybe} from '@ryandur/sand';
-import {DraftAction} from './draftActions';
+import {AddressName, DraftAction} from './draftActions';
 
 type Without<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
-
-export type AddressName = 'home' | 'work';
 
 export type Draft = {
   user: Without<NewUser | User, 'work'>;

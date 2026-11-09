@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useId} from 'react';
 import {FancyInput, FancySelect} from '../../FancyFormElements';
 import {classNames} from '@components';
 import {stateAbbreviations} from './states';
-import {AddressName} from '../drafts';
+import {AddressName} from '../draftActions';
 import {useAddressDraft} from '../useAddressDraft';
 import './AddressFields.css';
 
