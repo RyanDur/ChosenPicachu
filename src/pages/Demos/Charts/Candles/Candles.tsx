@@ -3,7 +3,7 @@ import {FC, ReactNode} from 'react';
 import {Period, periodHistory, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
-import {usePeriodChart} from '../usePeriodChart';
+import {useShownCandles} from '../useShownCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, kind: 'candles', period, trades});
+  const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const extent = axisRange.of(
