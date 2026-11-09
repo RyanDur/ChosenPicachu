@@ -1,5 +1,6 @@
 import {Address, NewUser, User} from '../profile';
-import {AddressName} from './drafts';
+
+export type AddressName = 'home' | 'work';
 
 export type DraftAction =
   | {readonly type: 'firstNameEdited'; readonly firstName: string}
