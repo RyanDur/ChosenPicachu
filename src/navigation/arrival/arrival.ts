@@ -29,9 +29,9 @@ const landedOn = (target: Element): void => {
 // the router changes the address before React draws the page it leads to, and a fold opening grows the page for a
 // few frames after, so the landing looks for its target each frame and waits for it to hold still
 const landOnceItHoldsStill = (id: string): (() => void) => {
-  let frame = 0;
-  const watched = (watch: Watch, foldsOpened: boolean): void => {
-    frame = requestAnimationFrame(() => {
+  let frameRequest = 0;
+  const lookNextFrame = (watch: Watch, foldsOpened: boolean): void => {
+    frameRequest = requestAnimationFrame(() => {
       const target = targetNamedBy(id);
       const opened = foldsOpened || target.map(found => {
         openFoldsAround(found);
@@ -39,11 +39,11 @@ const landOnceItHoldsStill = (id: string): (() => void) => {
       }).orElse(false);
       const next = target.map(found => landing.watched(watch, measured(found))).orElse(landing.lookedFor(watch));
       if (next === 'land') target.map(landedOn);
-      else if (next !== 'given up') watched(next, opened);
+      else if (next !== 'given up') lookNextFrame(next, opened);
     });
   };
-  watched(landing.watching, false);
-  return () => cancelAnimationFrame(frame);
+  lookNextFrame(landing.watching, false);
+  return () => cancelAnimationFrame(frameRequest);
 };
 
 const nothingToStop = (): void => undefined;
