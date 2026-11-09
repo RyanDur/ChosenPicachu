@@ -13,11 +13,10 @@ const withPart = (open: readonly string[], title: string, opened: boolean): read
 
 export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
+  folds
 }) => {
   const [open, setOpen] = useState<readonly string[]>([]);
-  return <article className={classNames('inclusive-accordion', motion, className)}>
+  return <article className={classNames('inclusive-accordion', className)}>
     <hgroup>
       <h3 className="sub-title bold">Accordion using checkboxes and a measured height</h3>
       <p>A few lines of script measure each fold’s height.</p>

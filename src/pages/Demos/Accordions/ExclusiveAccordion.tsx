@@ -6,9 +6,8 @@ import './OldWayMotion.css';
 
 export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
-}) => <article className={classNames('exclusive-accordion', motion, className)}>
+  folds
+}) => <article className={classNames('exclusive-accordion', className)}>
   <hgroup>
     <h3 className="sub-title bold">Accordion using a radio group and a known height</h3>
     <p>No script: HTML and CSS alone.</p>

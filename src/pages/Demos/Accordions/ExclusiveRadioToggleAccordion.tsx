@@ -32,9 +32,8 @@ const spacePressed = (event: KeyboardEvent<HTMLUListElement>): void => {
 
 export const ExclusiveRadioToggleAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
-}) => <article className={classNames('toggle-accordion', motion, className)}>
+  folds
+}) => <article className={classNames('toggle-accordion', className)}>
   <header>
     <h3 className="sub-title bold">Exclusive accordion using radio group</h3>
   </header>

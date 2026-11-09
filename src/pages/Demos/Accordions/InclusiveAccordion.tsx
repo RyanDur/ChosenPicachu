@@ -6,9 +6,8 @@ import './OldWayMotion.css';
 
 export const InclusiveAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
-}) => <article className={classNames('inclusive-accordion', motion, className)}>
+  folds
+}) => <article className={classNames('inclusive-accordion', className)}>
   <hgroup>
     <h3 className="sub-title bold">Accordion using checkboxes and a known height</h3>
     <p>No script: HTML and CSS alone.</p>

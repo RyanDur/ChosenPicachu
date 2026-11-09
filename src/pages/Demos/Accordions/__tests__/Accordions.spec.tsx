@@ -13,7 +13,7 @@ describe('the inclusive toggle accordion using checkboxes', () => {
   const accordion = accordionFolds('checkbox');
 
   test('should keep every fold it opens open', async () => {
-    render(<InclusiveCheckboxToggleAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveCheckboxToggleAccordion folds={folds}/>);
 
     await accordion.press('Alpha');
     await accordion.press('Beta');
@@ -23,7 +23,7 @@ describe('the inclusive toggle accordion using checkboxes', () => {
   });
 
   test('should close only the fold whose control is pressed again', async () => {
-    render(<InclusiveCheckboxToggleAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveCheckboxToggleAccordion folds={folds}/>);
     await accordion.press('Alpha');
     await accordion.press('Beta');
 
@@ -34,7 +34,7 @@ describe('the inclusive toggle accordion using checkboxes', () => {
   });
 
   test('should leave the fold as it was when the reader presses the fold’s name', async () => {
-    render(<InclusiveCheckboxToggleAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveCheckboxToggleAccordion folds={folds}/>);
 
     await accordion.pressName('Alpha');
 
@@ -42,13 +42,13 @@ describe('the inclusive toggle accordion using checkboxes', () => {
   });
 
   test('should hold its controls in one group named folds', () => {
-    render(<InclusiveCheckboxToggleAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveCheckboxToggleAccordion folds={folds}/>);
 
     expect(accordion.controls()).toHaveLength(folds.length);
   });
 
   test('should make each fold an item of its list, with no article of its own', () => {
-    render(<InclusiveCheckboxToggleAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveCheckboxToggleAccordion folds={folds}/>);
 
     expect(accordion.articles()).toHaveLength(1);
     expect(accordion.items()).toHaveLength(folds.length);
@@ -59,7 +59,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   const accordion = accordionFolds('radio');
 
   test('should open one fold at a time', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
 
     await accordion.press('Alpha');
     await accordion.press('Beta');
@@ -69,7 +69,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should close the open fold when its radio is pressed again', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
     await accordion.press('Beta');
 
     await accordion.press('Beta');
@@ -79,7 +79,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should open a fold again after its radio closed it', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
     await accordion.press('Beta');
     await accordion.press('Beta');
 
@@ -89,7 +89,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should open a fold again after another fold opened in its place', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
     await accordion.press('Alpha');
     await accordion.press('Beta');
 
@@ -100,7 +100,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should close the open fold when the space bar goes down on its radio, with no click after', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
     await accordion.press('Alpha');
 
     await accordion.holdSpace();
@@ -109,7 +109,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should leave the fold as it was when the reader presses the fold’s name', async () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
 
     await accordion.pressName('Alpha');
 
@@ -117,13 +117,13 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should hold its controls in one group named folds', () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
 
     expect(accordion.controls()).toHaveLength(folds.length);
   });
 
   test('should make each fold an item of its list, with no article of its own', () => {
-    render(<ExclusiveRadioToggleAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveRadioToggleAccordion folds={folds}/>);
 
     expect(accordion.articles()).toHaveLength(1);
     expect(accordion.items()).toHaveLength(folds.length);
@@ -134,13 +134,13 @@ describe('the accordion using checkboxes', () => {
   const accordion = accordionFolds('checkbox');
 
   test('should hold its controls in one group named folds', () => {
-    render(<InclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveAccordion folds={folds}/>);
 
     expect(accordion.controls()).toHaveLength(folds.length);
   });
 
   test('should make each fold an item of its list, with no article of its own', () => {
-    render(<InclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveAccordion folds={folds}/>);
 
     expect(accordion.articles()).toHaveLength(1);
     expect(accordion.items()).toHaveLength(folds.length);
@@ -151,13 +151,13 @@ describe('the accordion using a radio group', () => {
   const accordion = accordionFolds('radio');
 
   test('should hold its controls, the Close bar’s among them, in one group named folds', () => {
-    render(<ExclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveAccordion folds={folds}/>);
 
     expect(accordion.controls()).toHaveLength(folds.length + 1);
   });
 
   test('should make each fold, and the Close bar, an item of its list, with no article of its own', () => {
-    render(<ExclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveAccordion folds={folds}/>);
 
     expect(accordion.articles()).toHaveLength(1);
     expect(accordion.items()).toHaveLength(folds.length + 1);
@@ -166,28 +166,28 @@ describe('the accordion using a radio group', () => {
 
 describe('the builds we used to make', () => {
   test('should name each fold’s text by its bar in the checkbox build', () => {
-    render(<InclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveAccordion folds={folds}/>);
 
     expect(foldTextUnder('Alpha')).toHaveTextContent('the first fold');
     expect(foldTextUnder('Beta')).toHaveTextContent('the second fold');
   });
 
   test('should name each fold’s text by its bar in the radio build', () => {
-    render(<ExclusiveAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveAccordion folds={folds}/>);
 
     expect(foldTextUnder('Alpha')).toHaveTextContent('the first fold');
     expect(foldTextUnder('Beta')).toHaveTextContent('the second fold');
   });
 
   test('should name each fold’s text by its bar in the measured checkbox build', () => {
-    render(<InclusiveMeasuredAccordion folds={folds} motion="reveal"/>);
+    render(<InclusiveMeasuredAccordion folds={folds}/>);
 
     expect(foldTextUnder('Alpha')).toHaveTextContent('the first fold');
     expect(foldTextUnder('Beta')).toHaveTextContent('the second fold');
   });
 
   test('should name each fold’s text by its bar in the measured radio build', () => {
-    render(<ExclusiveMeasuredAccordion folds={folds} motion="reveal"/>);
+    render(<ExclusiveMeasuredAccordion folds={folds}/>);
 
     expect(foldTextUnder('Alpha')).toHaveTextContent('the first fold');
     expect(foldTextUnder('Beta')).toHaveTextContent('the second fold');
