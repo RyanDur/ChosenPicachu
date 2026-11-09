@@ -1,10 +1,11 @@
 import {FC, useReducer} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
 import {classNames} from '@components';
-import {NewUser, User} from '../profile';
+import {User} from '../profile';
 import {draftActions} from './draftActions';
 import {AddressFields} from './AddressFields';
 import {drafts} from './drafts';
+import {draftContexts} from './draftContexts';
 import {avatars} from './avatars';
 import {Link} from 'react-router';
 import {isValid, parse} from 'date-fns';
@@ -17,13 +18,6 @@ import {useUsersSelector} from '../useUsersSelector';
 import {usersSelectors} from '../usersSelectors';
 import {useHydrated} from '@components';
 import './UserInformation.css';
-
-const newUser = (avatar: string): NewUser => ({
-  person: {firstName: '', lastName: '', email: ''},
-  friends: [],
-  homeAddress: {city: '', state: '', streetAddress: '', zip: ''},
-  avatar
-});
 
 const FormButtons: FC = () => {
   const open = useOpened();
@@ -62,17 +56,17 @@ const Draft: FC<{className?: string}> = ({className}) => {
   const confirmedAdds = useUsersSelector(usersSelectors.confirmedAdds);
   const addInFlight = useUsersSelector(usersSelectors.addInFlight);
   const [draft, dispatch] = useReducer(drafts.reduce, shown(open),
-    started => drafts.of(started.either(user => user, () => newUser(avatars.first))));
+    started => drafts.of(started.either(user => user, () => drafts.newUser(avatars.first))));
   const user = drafts.userIn(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
 
   const reset = () =>
-    dispatch(draftActions.formReset(shown(open).either(user => user, () => newUser(avatars.drawn()))));
+    dispatch(draftActions.formReset(shown(open).either(user => user, () => drafts.newUser(avatars.drawn()))));
 
   if (drafts.sentAddConfirmed(draft, confirmedAdds)) reset();
 
-  return <form aria-labelledby="form-title"
+  return <draftContexts.Draft.Provider value={{draft, dispatch}}><form aria-labelledby="form-title"
     className={classNames('user-information', className)}
     onSubmit={event => {
       event.preventDefault();
@@ -122,14 +116,10 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <output className="off-screen"
       aria-label="avatar report">{drafts.avatarReport(draft)}</output>
 
-    <AddressFields title="Home Address" className="home-address" value={user.homeAddress}
-      readOnly={readOnly} required={required}
-      onEdited={address => dispatch(draftActions.homeAddressEdited(address))}/>
+    <AddressFields name="home" title="Home Address" className="home-address" readOnly={readOnly} required={required}/>
 
-    <AddressFields title="Work Address" className="work-address"
-      value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
-      disabled={draft.sameAsHome}
-      onEdited={address => dispatch(draftActions.workAddressEdited(address))}>
+    <AddressFields name="work" title="Work Address" className="work-address" readOnly={readOnly}
+      disabled={draft.sameAsHome}>
       {not(readOnly) && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
         <input className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
@@ -142,5 +132,5 @@ const Draft: FC<{className?: string}> = ({className}) => {
 
     <FormButtons/>
 
-  </form>;
+  </form></draftContexts.Draft.Provider>;
 };

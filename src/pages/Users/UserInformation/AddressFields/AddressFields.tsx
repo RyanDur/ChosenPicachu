@@ -2,14 +2,14 @@ import {FC, PropsWithChildren, useId} from 'react';
 import {FancyInput, FancySelect} from '../../FancyFormElements';
 import {classNames} from '@components';
 import {stateAbbreviations} from './states';
-import {Address} from '../../profile';
+import {AddressName} from '../drafts';
+import {useAddressDraft} from '../useAddressDraft';
 import './AddressFields.css';
 
 type AddressFieldsAttributes = {
   title: string;
   className?: string;
-  onEdited: (address: Address) => void;
-  value?: Address;
+  name: AddressName;
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
@@ -20,29 +20,29 @@ export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
     title,
     children,
     className,
-    onEdited,
+    name,
     required,
     disabled,
-    readOnly,
-    value = {streetAddress: '', city: '', state: '', zip: ''}
+    readOnly
   }) => {
   const titleId = useId();
-  return <fieldset className={classNames('address', 'shrinkable', className)} disabled={disabled}
+  const {address, edit} = useAddressDraft(name);
+  return <fieldset name={name} className={classNames('address', 'shrinkable', className)} disabled={disabled}
     aria-labelledby={titleId}>
     <legend className="address-title sub-title bold"><span id={titleId}>{title}</span>{children}</legend>
     <FancyInput className="street"
-      required={required} value={value.streetAddress} readOnly={readOnly}
-      onChange={event => onEdited({...value, streetAddress: event.currentTarget.value})}>
+      required={required} value={address.streetAddress} readOnly={readOnly}
+      onChange={event => edit({...address, streetAddress: event.currentTarget.value})}>
       Street
     </FancyInput>
     <FancyInput className="street-2"
-      value={value.streetAddressTwo} readOnly={readOnly}
-      onChange={event => onEdited({...value, streetAddressTwo: event.currentTarget.value})}>
+      value={address.streetAddressTwo} readOnly={readOnly}
+      onChange={event => edit({...address, streetAddressTwo: event.currentTarget.value})}>
       Street Line 2
     </FancyInput>
     <FancyInput className="city"
-      required={required} value={value.city} readOnly={readOnly}
-      onChange={event => onEdited({...value, city: event.currentTarget.value})}>
+      required={required} value={address.city} readOnly={readOnly}
+      onChange={event => edit({...address, city: event.currentTarget.value})}>
       City
     </FancyInput>
 
@@ -50,18 +50,18 @@ export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
       className="state"
       required={required}
       readOnly={readOnly}
-      value={value.state}
+      value={address.state}
       optionValues={new Set(stateAbbreviations)}
-      onChange={event => onEdited({...value, state: event.currentTarget.value})}>
+      onChange={event => edit({...address, state: event.currentTarget.value})}>
       State
     </FancySelect>
 
     <FancyInput className="zip"
       pattern="^[0-9]{5}(?:-[0-9]{4})?$"
-      value={value.zip}
+      value={address.zip}
       readOnly={readOnly}
       required={required}
-      onChange={event => onEdited({...value, zip: event.currentTarget.value})}>
+      onChange={event => edit({...address, zip: event.currentTarget.value})}>
       Postal / Zip code
     </FancyInput>
   </fieldset>;
