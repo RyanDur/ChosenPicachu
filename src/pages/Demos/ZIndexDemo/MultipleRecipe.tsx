@@ -11,8 +11,6 @@ import bannersCss from '@banners/Banners.css?sample';
 import timingCss from '../../../styles/timing.css?sample';
 import '../Recipe/Recipe.css';
 
-const blankLine = lines.plain(' ');
-
 const stackFact: Record<Stack, string> = {
   down: 'the stack grows downward, so the track is a row.',
   up: 'the stack grows upward, so the track is a row.',
@@ -90,7 +88,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(changeSource, 'export const bannerChange = {'), blankLine,
+            ...carve.unit(changeSource, 'export const bannerChange = {'), lines.blank,
             ...carve.span(newsSource, "case 'raised':", ': {...news, banners: [...news.banners, change.banner]};')
           ]}/>
         </Codes>
@@ -121,10 +119,10 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), blankLine,
-            ...carve.unit(bannersCss, '.trouble {'), blankLine,
-            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), blankLine,
-            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), blankLine,
+            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), lines.blank,
+            ...carve.unit(bannersCss, '.trouble {'), lines.blank,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), lines.blank,
+            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), lines.blank,
             ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>
@@ -152,7 +150,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.unit(bannersCss, '.trouble.leaving {'), blankLine,
+            ...carve.unit(bannersCss, '.trouble.leaving {'), lines.blank,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`)
           ]}/>
           <Snippet label="TS" lines={[

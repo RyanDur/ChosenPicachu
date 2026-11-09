@@ -4,7 +4,6 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 
 export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
@@ -38,12 +37,12 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.unit(headerSource, 'const walkedTo = '), blankLine,
-              ...carve.unit(headerSource, 'const beside = '), blankLine,
+              ...carve.unit(headerSource, 'const walkedTo = '), lines.blank,
+              ...carve.unit(headerSource, 'const beside = '), lines.blank,
               ...carve.unit(headerSource, 'const moved = ')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const columnBeside = '), blankLine,
+              ...carve.unit(buildSrc, 'const columnBeside = '), lines.blank,
               ...carve.unit(buildSrc, 'const moved = ')
             ]}/>}
           {world === 'react'

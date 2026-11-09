@@ -19,33 +19,31 @@ import {WhatACustomPropertyIs} from './WhatACustomPropertyIs';
 import {WhatTheDomIs} from './WhatTheDomIs';
 import '../../Recipe/Recipe.css';
 
-const blankLine = lines.plain(' ');
-
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(sharesSource, 'const measuredWidths'), blankLine,
+      ...carve.unit(sharesSource, 'const measuredWidths'), lines.blank,
       ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(buildSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), blankLine,
+      ...carve.span(buildSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
       ...carve.span(buildSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
     ]}/>
     <Snippet label="CSS" lines={[
-      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), blankLine,
+      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), lines.blank,
       ...carve.unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(sharesSource, 'const measuredWidths'), blankLine,
+      ...carve.unit(sharesSource, 'const measuredWidths'), lines.blank,
       ...carve.unit(frameHandle, 'const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
       ...carve.unit(frameResize, 'const dressColumn = ')
     ]}/>
     <Snippet label="CSS" lines={[
-      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), blankLine,
+      ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), lines.blank,
       ...carve.unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>
@@ -56,7 +54,7 @@ const edgeMarkup: Record<World, ReactNode> = {
     ...carve.span(buildSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), blankLine,
+    ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), lines.blank,
     ...carve.span(tableSource, '</menu>', '</th>')
   ]}/>
 };
@@ -115,9 +113,9 @@ const captureSays: Record<World, ReactNode> = {
 
 const GripWords: FC = () =>
   <Snippet label="TS" lines={[
-    ...carve.unit(sharesSource, 'const grippedAt'), blankLine,
-    ...carve.unit(sharesSource, 'const soughtTrade'), blankLine,
-    ...carve.unit(stateSource, 'const grip ='), blankLine,
+    ...carve.unit(sharesSource, 'const grippedAt'), lines.blank,
+    ...carve.unit(sharesSource, 'const soughtTrade'), lines.blank,
+    ...carve.unit(stateSource, 'const grip ='), lines.blank,
     ...carve.unit(stateSource, 'const dragHandle'),
     lines.aside('// both worlds seed the grip and fold the moves in the same store')
   ]}/>;
@@ -125,14 +123,14 @@ const GripWords: FC = () =>
 const captureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(resizeSource, 'onPointerDown={(event'), blankLine,
+      ...carve.unit(resizeSource, 'onPointerDown={(event'), lines.blank,
       ...carve.unit(resizeSource, 'const followed')
     ]}/>
     <GripWords/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(frameHandle, "handle.addEventListener('pointerdown'"), blankLine,
+      ...carve.unit(frameHandle, "handle.addEventListener('pointerdown'"), lines.blank,
       ...carve.unit(frameHandle, "handle.addEventListener('pointermove'")
     ]}/>
     <GripWords/>
@@ -143,8 +141,8 @@ const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...carve.span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
-      lines.aside('// …the press measures; the bubbling stops here'), blankLine,
-      ...carve.unit(sharesSource, 'const resizeArrows'), blankLine,
+      lines.aside('// …the press measures; the bubbling stops here'), lines.blank,
+      ...carve.unit(sharesSource, 'const resizeArrows'), lines.blank,
       ...carve.span(resizeSource, 'onKeyDown={shares.resizeArrows(trade)}', 'onKeyDown={shares.resizeArrows(trade)}'),
       lines.aside('// the column drag above never gets the press')
     ]}/>
@@ -152,8 +150,8 @@ const gestureCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...carve.span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
-      lines.aside('// …the press measures; the bubbling stops here'), blankLine,
-      ...carve.unit(sharesSource, 'const resizeArrows'), blankLine,
+      lines.aside('// …the press measures; the bubbling stops here'), lines.blank,
+      ...carve.unit(sharesSource, 'const resizeArrows'), lines.blank,
       ...carve.unit(frameHandle, "handle.addEventListener('keydown'"),
       lines.aside('// the column drag above never gets the press')
     ]}/>
@@ -256,10 +254,10 @@ const WidenStory: FC<{world: World}> = ({world}) =>
             {handleMarkup[world]}
             <SpokenLabel/>
             <Snippet label="CSS" lines={[
-              ...carve.unit(baseCss, '.resize-handle {'), blankLine,
-              ...carve.unit(surfaceCss, '.borderless {'), blankLine,
-              ...carve.unit(surfaceCss, '.unfilled {'), blankLine,
-              ...carve.unit(surfaceCss, '.held-bar-after {'), blankLine,
+              ...carve.unit(baseCss, '.resize-handle {'), lines.blank,
+              ...carve.unit(surfaceCss, '.borderless {'), lines.blank,
+              ...carve.unit(surfaceCss, '.unfilled {'), lines.blank,
+              ...carve.unit(surfaceCss, '.held-bar-after {'), lines.blank,
               ...carve.unit(surfaceCss, '.focus-ringed {')
             ]}/>
           </Codes>
@@ -277,8 +275,8 @@ const WidenStory: FC<{world: World}> = ({world}) =>
           </Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(sharesSource, 'const SLIMMEST'), blankLine,
-              ...carve.unit(sharesSource, 'const floorOf'), blankLine,
+              ...carve.unit(sharesSource, 'const SLIMMEST'), lines.blank,
+              ...carve.unit(sharesSource, 'const floorOf'), lines.blank,
               ...carve.unit(sharesSource, 'const traded')
             ]}/>
           </Codes>

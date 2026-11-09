@@ -1,8 +1,6 @@
 import {FC} from 'react';
 import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words, carve, Sample, lines} from '../../../Recipe';
 
-const blankLine = lines.plain(' ');
-
 export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
   <Story param="native" id="keyboard"
     can="The user can arrange the list from the keyboard"
@@ -19,7 +17,7 @@ export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(gripSource, 'const steps'), blankLine,
+            ...carve.unit(gripSource, 'const steps'), lines.blank,
             ...carve.unit(gripSource, 'onKeyDown={event =>')
           ]}/>
         </Codes>

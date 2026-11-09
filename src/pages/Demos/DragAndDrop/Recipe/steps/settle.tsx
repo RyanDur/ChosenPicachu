@@ -3,8 +3,6 @@ import {MotionDial} from '../../../Controls';
 import {carve, Codes, lines, Sample, Says, Snippet, Step, Words} from '../../../Recipe';
 import {sources} from './sources';
 
-const blankLine = lines.plain(' ');
-
 export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Slide every moved item home on release" dial={<MotionDial name="native-motion"/>}>
     <Words want="A lazy settle happens all at once on release, so every item whose place changed has to travel, and the reader should see them all go together.">
@@ -23,8 +21,8 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), blankLine,
-        ...carve.unit(sources.slideStarts, 'const afterSettle'), blankLine,
+        ...carve.span(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), lines.blank,
+        ...carve.unit(sources.slideStarts, 'const afterSettle'), lines.blank,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
       <Snippet label="CSS" lines={[
