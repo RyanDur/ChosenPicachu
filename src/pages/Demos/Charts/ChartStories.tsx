@@ -359,7 +359,8 @@ const PressureStory: FC = () =>
             wears drawn, which gives it its charcoal stroke.</Says>
           <Says>Each bar and the wall behind it start as a square one unit on a side. The markup gives each one four
             custom properties of its own: where it starts across, where its foot sits, how wide it is and how tall. The
-            chart’s style sheet reads all four in one transform that moves the square into place and stretches it to
+            chart’s style sheet reads all four in one <Mdn
+            path="Web/CSS/transform">transform</Mdn> that moves the square into place and stretches it to
             size. I move things only by transform and opacity, which spare the browser a new layout on every frame. When
             a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars.
