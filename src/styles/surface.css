@@ -394,6 +394,18 @@
 
 .ink-inverse-after::after { color: var(--ink-inverse); }
 
+@media (forced-colors: active) {
+  .field-inverse-before::before {
+    forced-color-adjust: none;
+    background: var(--highlight);
+  }
+
+  .ink-inverse-after::after {
+    forced-color-adjust: none;
+    color: var(--highlight-ink);
+  }
+}
+
 .handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
 
 .focal-ringed:has(.focal:focus-visible) { outline: var(--hairline-x-2) solid var(--ring); }

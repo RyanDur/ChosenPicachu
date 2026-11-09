@@ -67,6 +67,8 @@
   --ink-inverse: var(--white);
   --alarm-ink: var(--international-orange-engineering);
   --ring: var(--charcoal);
+  --highlight: Highlight;
+  --highlight-ink: HighlightText;
 
   --code-comment: var(--smoke);
   --code-type: var(--code-tag);
