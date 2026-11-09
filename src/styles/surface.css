@@ -311,11 +311,6 @@
 
 .field-inverse { background: var(--field-inverse); }
 
-.field-inverse-before::before {
-  border-radius: inherit;
-  background: var(--field-inverse);
-}
-
 .faded-mint { background: var(--faded-mint); }
 
 .field-ink { color: var(--field); }
@@ -392,10 +387,15 @@
   }
 }
 
+.choice-filled-before::before {
+  border-radius: inherit;
+  background: var(--field-inverse);
+}
+
 .choice-inverse-ink:has(:checked) { color: var(--ink-inverse); }
 
 @media (forced-colors: active) {
-  .field-inverse-before::before {
+  .choice-filled-before::before {
     forced-color-adjust: none;
     background: var(--highlight);
   }
