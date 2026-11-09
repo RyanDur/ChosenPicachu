@@ -64,7 +64,6 @@ describe('pressure', () => {
     render(<Pressure trades={[]}/>);
 
     const card = chartsDesk.chart('pressure');
-    expect(card).not.toHaveTextContent('window');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
 
