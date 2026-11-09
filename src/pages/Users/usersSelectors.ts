@@ -1,9 +1,11 @@
-import {Maybe, maybe, not} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 import {arrangements, TableColumn} from '@components/DragSortableTable/model';
 import {User} from './profile';
 import {ColumnLabel, userColumns} from './columns';
 import {Membership} from './memberships';
-import {UsersState} from './usersSlice';
+import {RosterRequest, UsersState} from './usersSlice';
+
+const holdingAdds: ReadonlySet<RosterRequest> = new Set(['waiting', 'unreachable']);
 
 const inOrder = (users: readonly User[], order: readonly string[]): readonly User[] =>
   order.flatMap(id => users.filter(user => user.id === id));
@@ -32,5 +34,5 @@ export const usersSelectors: UsersSelectors = {
   friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
   confirmedAdds: ({confirmedAdds}) => confirmedAdds,
   addInFlight: ({addInFlight}) => addInFlight,
-  addWaits: ({addInFlight, rosterAnswered}) => addInFlight || not(rosterAnswered)
+  addWaits: ({addInFlight, rosterRequest}) => addInFlight || holdingAdds.has(rosterRequest)
 };
