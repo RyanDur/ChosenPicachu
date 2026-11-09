@@ -15,7 +15,7 @@ export const arrangedView: ArrangedView = {
   rowsOf: (arrangement, aggregates) => {
     const shown = cells.seated(aggregates);
     const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
-    const byLookback = new Map(aggregates.map(row => [row.lookback.display, row]));
+    const byLookback: ReadonlyMap<string, Measures> = new Map(aggregates.map(row => [row.lookback.key, row]));
     return arrangements.standingOf(arrangement, valueOf).flatMap(key => {
       const row = byLookback.get(key);
       return row ? [row] : [];
