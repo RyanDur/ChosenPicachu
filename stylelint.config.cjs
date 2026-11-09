@@ -19,10 +19,6 @@ const structure = [
 
 const motionWithAReason = ['src/pages/Demos/Accordions/OldWayMotion.css'];
 
-const stillMoveOnTheMainThread = [
-  'src/styles/reset.css'
-];
-
 module.exports = {
   overrides: [
     {
@@ -36,7 +32,6 @@ module.exports = {
     {files: ['src/styles/**/*.css', 'src/index.css'], rules: {'property-allowed-list': null}},
     {files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}},
     {files: ['src/styles/reset.css'], rules: {'selector-max-type': null}},
-    {files: stillMoveOnTheMainThread, rules: {'chosen/compositor-motion': null}},
     {files: motionWithAReason, rules: {'chosen/compositor-motion': null}}
   ],
   extends: ['stylelint-config-recommended'],
