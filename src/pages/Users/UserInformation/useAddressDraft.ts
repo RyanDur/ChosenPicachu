@@ -10,7 +10,7 @@ type AddressDraft = {
 };
 
 export const useAddressDraft = (name: AddressName): AddressDraft => {
-  const {draft, dispatch} = useContext(draftContexts.Draft);
+  const {draft, dispatch} = useContext(draftContexts.State);
   return {
     address: drafts.addressFor(draft, name),
     edit: address => dispatch(draftActions.addressEdited(name, address))

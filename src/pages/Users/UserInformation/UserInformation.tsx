@@ -66,7 +66,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
 
   if (drafts.sentAddConfirmed(draft, confirmedAdds)) reset();
 
-  return <draftContexts.Draft.Provider value={{draft, dispatch}}><form aria-labelledby="form-title"
+  return <draftContexts.State.Provider value={{draft, dispatch}}><form aria-labelledby="form-title"
     className={classNames('user-information', className)}
     onSubmit={event => {
       event.preventDefault();
@@ -132,5 +132,5 @@ const Draft: FC<{className?: string}> = ({className}) => {
 
     <FormButtons/>
 
-  </form></draftContexts.Draft.Provider>;
+  </form></draftContexts.State.Provider>;
 };
