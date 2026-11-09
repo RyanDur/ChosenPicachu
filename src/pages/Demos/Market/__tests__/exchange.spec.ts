@@ -111,6 +111,17 @@ describe('the exchange as middleware', () => {
     expect(told).toEqual([]);
   });
 
+  it('a history whose every row is unreadable is unavailable, and the trouble is told', async () => {
+    server.use(http.get(candles, () => HttpResponse.json([['1700000000', '1', '3', '2', '2.5', '1'], [1700000000, 1, 3]])));
+    const told: FeedTrouble[] = [];
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+
+    store.dispatch(marketActions.candlesAsked(Period.hour));
+
+    await vi.waitFor(() => expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unavailable'}));
+    expect(told.map(({type}) => type)).toEqual(['candlesRefused']);
+  });
+
   it('a period with no history to ask is unavailable, and no trouble is told', () => {
     const told: FeedTrouble[] = [];
     const store = marketStore(exchange({tradeFeed: '', tradeHistory: '', tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
