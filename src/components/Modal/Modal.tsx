@@ -20,8 +20,10 @@ type ModalProps = PropsWithChildren<{
   onToggle?: (event: SyntheticEvent<HTMLDialogElement>) => void;
 }>;
 
+const closesInPlaceWhenRemoved = (dialog: HTMLDialogElement) => () => dialog.close();
+
 export const Modal: FC<ModalProps> = ({id, labelledBy, className, onToggle, children}) =>
-  <dialog id={id} className={className} closedby="any" aria-labelledby={labelledBy}
+  <dialog id={id} ref={closesInPlaceWhenRemoved} className={className} closedby="any" aria-labelledby={labelledBy}
     onClick={closesOnTheVeil} onToggle={onToggle}>
     {children}
   </dialog>;
