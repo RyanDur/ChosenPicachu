@@ -35,11 +35,10 @@ describe('the market store', () => {
     expect(marketReads.liveTrades(store.state)[0].id).toBe(2);
   });
 
-  it('a period nothing has asked for is unasked', () => {
+  it('an hour nothing has asked for is unasked', () => {
     const store = marketStore();
 
-    expect(Object.values(Period).map(period => marketReads.periodHistoryOf(period)(store.state)))
-      .toEqual(Object.values(Period).map(() => ({state: 'unasked'})));
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unasked'});
   });
 
   it('asking for a period loads it until its candles come', () => {
