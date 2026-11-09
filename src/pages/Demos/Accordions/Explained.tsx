@@ -413,9 +413,14 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   ]}/>
                 </li>}
                 <li className="run">
-                  <p className="paragraph">This page lets its other folds move to auto, and this build turns that off
-                    with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for browsers
-                    that could only move between numbers.</p>
+                  <p className="paragraph">Moving to auto means a transition that ends at the
+                    keyword <code className="monospaced">auto</code> rather than at a number. The site’s own folds, such
+                    as the “How … works” folds on this tab, do that: the reset
+                    sets <Mdn path="Web/CSS/interpolate-size"><code className="monospaced">interpolate-size:
+                      allow-keywords</code></Mdn>, which lets a size move to <code className="monospaced">auto</code> in
+                    a browser that supports it. This build turns that off
+                    with <code className="monospaced">interpolate-size: numeric-only</code>, because the trick was for
+                    browsers that could only move between numbers.</p>
                   <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-measured {')}/>
                 </li>
               </ol>
