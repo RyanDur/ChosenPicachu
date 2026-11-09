@@ -101,10 +101,11 @@ const PriceStory: FC = () =>
         <Words want="A trader watching the last few minutes and one reading the whole week are asking different questions. The trader picks the period, and everything on the chart follows it.">
           <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of
             menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
-          <Says>Each period has its own bucket length for a candle, its own limit on how many candles the chart
-            holds, and its own spacing for the marks on the time axis. The hour has candles of a minute, 60 of them,
-            marked every ten minutes. The day has candles of an hour, 24 of them, marked every hour. The week has
-            candles of six hours, 28 of them, marked every day.</Says>
+          <Says>Each period has a length of time, a bucket length for a candle, and its own spacing for the marks on
+            the time axis. How many candles the chart holds follows from the first two: the period’s length divided by
+            its bucket. The hour has candles of a minute, 60 of them, marked every ten minutes. The day has candles of
+            an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them, marked every
+            day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
             of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li,
@@ -115,6 +116,7 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
+            ...carve.unit(periodSource, 'const lengths'), lines.blank,
             ...carve.unit(periodSource, 'const bucketMilliseconds'), lines.blank,
             ...carve.unit(periodSource, 'const candleCap')
           ]}/>
