@@ -1,7 +1,7 @@
 import './src/__test_support/env';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
-import {afterAll, afterEach, beforeAll, expect} from 'vitest';
+import {afterAll, afterEach, beforeAll, beforeEach, expect, vi} from 'vitest';
 import 'vitest-location-mock';
 import {faker} from '@faker-js/faker';
 import {seed} from '@components/fibs';
@@ -15,6 +15,16 @@ afterEach(() => {
   server.resetHandlers();
 });
 afterAll(() => server.close());
+
+// vitest hides a passing test's stderr, so a test that writes to console.error fails here instead
+beforeEach(() => {
+  const errorsWritten = vi.spyOn(console, 'error');
+  return () => {
+    const written = errorsWritten.mock.calls.length;
+    errorsWritten.mockRestore();
+    if (written) throw new Error('the test wrote to console.error; its stderr shows what');
+  };
+});
 
 expect.extend(matchers);
 
