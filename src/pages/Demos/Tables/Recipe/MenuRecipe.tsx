@@ -8,7 +8,7 @@ import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
 import sortingSource from '@components/DragSortableTable/model/sorting.ts?sample';
-import tableSource from '../Frame/table.html?sample';
+import frameTable from '../Frame/table.html?sample';
 import arrangementSource from '@components/DragSortableTable/model/arrangement.ts?sample';
 import arrangedViewSource from '@pages/Demos/Market/arrangedView.ts?sample';
 import frameMenus from '../Frame/table/menus.ts?sample';
@@ -22,13 +22,13 @@ import '../../Recipe/Recipe.css';
 type Build = {
   world: World;
   source: Sample;
-  menuSrc: Sample;
-  tableSrc: Sample;
-  rowSrc: Sample;
-  buildSrc: Sample;
+  menuSource: Sample;
+  tableSource: Sample;
+  rowSource: Sample;
+  buildSource: Sample;
 };
 
-const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
+const SortedDirectly: FC<Build> = ({world, menuSource}) =>
   <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
       <Says>The answer is the sort alone. The page dispatches it to its own store as an action, a record that
@@ -58,7 +58,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(menuSrc, 'export const SortMenu', '</>;')
+            ...carve.span(menuSource, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(frameMenus, 'const choosing = '), lines.blank,
@@ -69,7 +69,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
   </Step>;
 
 const RankStory: FC<{build: Build}> = ({build}) => {
-  const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
+  const {world, source, menuSource, tableSource, rowSource, buildSource} = build;
   return <Story param="menu" id="rank"
     can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
@@ -122,11 +122,11 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), lines.blank,
-                ...carve.span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
+                ...carve.span(menuSource, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), lines.blank,
+                ...carve.span(menuSource, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...carve.span(tableSource, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
+                ...carve.span(frameTable, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -224,7 +224,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
+                ...carve.span(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -270,12 +270,12 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ? <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
                 ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
-                ...carve.unit(rowSrc, 'const beside = ')
+                ...carve.unit(rowSource, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
                 ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
-                ...carve.unit(buildSrc, 'const rowBeside = '),
+                ...carve.unit(buildSource, 'const rowBeside = '),
                 lines.aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
               ]}/>}
           </Codes>
@@ -309,7 +309,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(menuSrc, 'onPointerDown={event => event.stopPropagation()}',
+                ...carve.span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
                   'onPointerDown={event => event.stopPropagation()}'),
                 lines.aside('// on the toggle and on the menu both')
               ]}/>
@@ -320,8 +320,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(tableSrc, '<Column column="lookback"', '</Column>'),
-                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '</DraggableColumn>'), lines.blank,
+                ...carve.span(tableSource, '<Column column="lookback"', '</Column>'),
+                ...carve.span(tableSource, '<DraggableColumn column="trades"', '</DraggableColumn>'), lines.blank,
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[
@@ -346,10 +346,10 @@ export const MenuRecipe: FC = () => {
   const build: Build = {
     world,
     source: paceSources.header[pace],
-    menuSrc: sources.menu,
-    tableSrc: paceSources.table[pace],
-    rowSrc: paceSources.row[pace],
-    buildSrc: buildSources[pace]
+    menuSource: sources.menu,
+    tableSource: paceSources.table[pace],
+    rowSource: paceSources.row[pace],
+    buildSource: buildSources[pace]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
     <Stories><RankStory build={build}/></Stories>
