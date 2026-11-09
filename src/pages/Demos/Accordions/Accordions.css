@@ -224,7 +224,3 @@
   transform: rotate(45deg);
   margin-right: var(--base);
 }
-
-.static .fold::details-content {
-  transition: none;
-}
