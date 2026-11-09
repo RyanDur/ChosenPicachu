@@ -171,3 +171,11 @@ test.describe('the fold measured by plain script', () => {
     await expect.poll(fold.textBelowTheFrame).toBeLessThanOrEqual(layoutRounding);
   });
 });
+
+test('the Accordions tab says the plain fold could not be assembled when its script never arrives', async ({page}) => {
+  await page.route('**/assets/assemble-*.js', route => route.abort());
+
+  await page.goto('demos/accordions/');
+
+  await expect(page.getByRole('alert')).toContainText('the plain fold could not be assembled');
+});
