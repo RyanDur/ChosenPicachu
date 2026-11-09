@@ -12,11 +12,21 @@ const messages = stylelint.utils.ruleMessages(name, {
   moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites, or a grid track opening from 0fr to 1fr`
 });
 
-/** @param {string} value a transition's value, whose functions hold no nested parentheses */
-const items = value => {
-  const flat = value.replace(/\([^()]*\)/g, '()');
-  return flat.split(',').map(item => item.trim()).filter(item => item !== '');
+/**
+ * @param {{text: string, depth: number}} flat the outermost text so far, and how deep the next character sits
+ * @param {string} char
+ */
+const keepOutermost = ({text, depth}, char) => {
+  if (char === '(') return {text: depth === 0 ? `${text}()` : text, depth: depth + 1};
+  if (char === ')') return {text, depth: depth - 1};
+  return {text: depth === 0 ? text + char : text, depth};
 };
+
+/** @param {string} value a value whose every function, nested or not, becomes name() */
+const flattened = value => value.split('').reduce(keepOutermost, {text: '', depth: 0}).text;
+
+/** @param {string} value a transition's value */
+const items = value => flattened(value).split(',').map(item => item.trim()).filter(item => item !== '');
 
 /** @param {string} item */
 const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
