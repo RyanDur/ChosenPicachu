@@ -20,8 +20,8 @@ const landed = (state: TableState, carry: Carry, landing: Landing): TableState =
 const motion = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
     case 'dropped': return tableState.unsettle(landed(state, action.carry, action.landing), action.carry, action.from);
-    case 'unsettled': return tableState.unsettle(state, action.target, action.from);
-    case 'settled': return tableState.settle(state, action.target);
+    case 'unsettled': return tableState.unsettle(state, action.carry, action.from);
+    case 'settled': return tableState.settle(state, action.carry);
     case 'shovedColumns': return tableState.shoveColumns(state, action.names, action.shove);
     case 'shovedRows': return tableState.shoveRows(state, action.keys, action.shove);
     case 'columnMovedBeside':
