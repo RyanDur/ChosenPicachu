@@ -8,13 +8,13 @@ import './Axes.css';
 type Props = PropsWithChildren<{
   extent: Maybe<AxisExtent>;
   timeFormat: string;
-  tickEvery: number;
+  tickEveryMilliseconds: number;
   headroomMilliseconds?: number;
   scaleText?: (value: number) => string;
 }>;
 
-const chosenTicks = (times: readonly number[], tickEvery: number): readonly number[] =>
-  times.filter(at => at % tickEvery === 0);
+const chosenTicks = (times: readonly number[], tickEveryMilliseconds: number): readonly number[] =>
+  times.filter(at => at % tickEveryMilliseconds === 0);
 
 const placed = (
   times: readonly number[],
@@ -27,7 +27,7 @@ const placed = (
 };
 
 export const Axes: FC<Props> = ({
-  extent, timeFormat, tickEvery, headroomMilliseconds = 0,
+  extent, timeFormat, tickEveryMilliseconds, headroomMilliseconds = 0,
   scaleText = value => money.dollars.format(value), children
 }) => <>
   <p className="y-labels caption">{extent.map(({high, low}) => <>
@@ -36,7 +36,7 @@ export const Axes: FC<Props> = ({
     <data value={low}>{scaleText(low)}</data>
   </>).orNull()}</p>
   {children}
-  <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
+  <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEveryMilliseconds), headroomMilliseconds).map(tick =>
     <time key={tick.at}
       className="tick"
       dateTime={new Date(tick.at).toISOString()}

@@ -86,7 +86,8 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={view.mBind(({series, high, low}) => axisRange.of(series.map(timed => timed.at), high, low))}
-        timeFormat={periodDisplay.timePattern[period]} tickEvery={periodDisplay.tickEveryMilliseconds[period]}
+        timeFormat={periodDisplay.timePattern[period]}
+        tickEveryMilliseconds={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="sparkline" aria-hidden="true"
           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}

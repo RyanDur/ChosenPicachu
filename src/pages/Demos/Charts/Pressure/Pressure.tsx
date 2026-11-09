@@ -33,7 +33,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={axisRange.of(pressures.map(pressure => pressure.openedAt), peak, -peak)} scaleText={money.bitcoin}
         timeFormat={periodDisplay.timePattern[Period.hour]}
-        tickEvery={periodDisplay.tickEveryMilliseconds[Period.hour]}
+        tickEveryMilliseconds={periodDisplay.tickEveryMilliseconds[Period.hour]}
         headroomMilliseconds={2 * BUCKET_MILLISECONDS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
