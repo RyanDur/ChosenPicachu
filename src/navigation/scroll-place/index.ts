@@ -1,1 +1,0 @@
-export {scrollPlace} from './scrollPlace';

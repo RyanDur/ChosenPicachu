@@ -1,7 +1,7 @@
 import {FC, useSyncExternalStore} from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useLocation, useNavigate} from 'react-router';
-import {scrollPlace} from '@navigation/scroll-place';
+import {scrollPlace} from '@navigation';
 import {arrival} from '../arrival';
 import {ArrivalDrawn} from '../ArrivalDrawn';
 import {useArrivalDrawn} from '../useArrivalDrawn';

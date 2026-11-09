@@ -4,7 +4,7 @@ import {BannerProvider, Banners} from '@banners';
 import {FeedbackProvider} from '@feedback';
 import {PageNameProvider} from '@page-name';
 import {useArrivalDrawn} from '@navigation/arrival';
-import {scrollPlace} from '@navigation/scroll-place';
+import {scrollPlace} from '@navigation';
 import {PageUnknown} from './PageUnknown';
 import {Rail} from './Rail';
 
