@@ -1,9 +1,17 @@
-import {Period} from '../Market';
+import {Period, periods} from '../Market';
+
+const minuteMilliseconds = 60000;
+const hourMilliseconds = 3600000;
+
+const bucketLabelOf = (period: Period): string => {
+  const bucket = periods.bucketMilliseconds[period];
+  return bucket < hourMilliseconds ? `${bucket / minuteMilliseconds}m each` : `${bucket / hourMilliseconds}h each`;
+};
 
 const bucketLabel: Record<Period, string> = {
-  [Period.hour]: '1m each',
-  [Period.day]: '1h each',
-  [Period.week]: '6h each'
+  [Period.hour]: bucketLabelOf(Period.hour),
+  [Period.day]: bucketLabelOf(Period.day),
+  [Period.week]: bucketLabelOf(Period.week)
 };
 
 const tickEveryMilliseconds: Record<Period, number> = {
