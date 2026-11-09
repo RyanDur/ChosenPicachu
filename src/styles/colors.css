@@ -69,6 +69,7 @@
   --ring: var(--charcoal);
   --highlight: Highlight;
   --highlight-ink: HighlightText;
+  --canvas-ink: CanvasText;
 
   --code-comment: var(--smoke);
   --code-type: var(--code-tag);
