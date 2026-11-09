@@ -148,7 +148,7 @@ describe('the chart periods', () => {
     });
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async ({request}) => {
       const granularity = granularityAsked(request);
-      if (granularity === periods.granularitySeconds[period]) {
+      if (granularity === periods.bucketSeconds[period]) {
         await arrived;
         return HttpResponse.json(rowsSpaced(granularity));
       }
