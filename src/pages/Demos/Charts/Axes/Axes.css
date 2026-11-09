@@ -1,3 +1,14 @@
+.chart-stage:has(> .y-labels) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--base);
+}
+
+:where(.chart-stage:has(> .y-labels)) > * {
+  grid-column: 2;
+  min-width: 0;
+}
+
 .y-labels {
   grid-column: 1;
   min-width: var(--base-x-8);
@@ -13,7 +24,6 @@
 }
 
 .x-labels {
-  grid-column: 2;
   position: relative;
   height: var(--base-x-2);
   margin-top: var(--base-x-0_25);
