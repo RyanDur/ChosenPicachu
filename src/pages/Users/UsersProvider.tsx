@@ -24,9 +24,10 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
 
   useEffect(() => {
     const unreachableBanner = bannerChange.raised(trouble.with('the users server')(HTTPError.NETWORK_ERROR));
-    return usersServing.reach(maybe(navigator.serviceWorker), {
+    const lowerUnreachable = () => dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
+    const stopWatching = usersServing.reach(maybe(navigator.serviceWorker), {
       reached: () => {
-        dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
+        lowerUnreachable();
         store.dispatch(usersActions.opened());
       },
       unreachable: () => {
@@ -34,6 +35,10 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
         store.dispatch(usersActions.serverUnreachable());
       }
     });
+    return () => {
+      stopWatching();
+      lowerUnreachable();
+    };
   }, [store, dispatchBanner]);
 
   return <usersContexts.State.Provider value={{state, dispatch: store.dispatch}}>

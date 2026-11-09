@@ -69,6 +69,26 @@ describe('the users page', () => {
     expect(usersPage.alertIfAny()).not.toBeInTheDocument();
   });
 
+  test('a reader who leaves while the server is unreachable finds no such banner on coming back to it in control', async () => {
+    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
+    const container = workersContainer();
+    lentToThePage(container);
+    setupUsersResponse([aUser()]);
+    render(<TestApp at={Paths.users}/>);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await usersPage.says('the users server could not be reached');
+    await site.followRail('Practice');
+    container.takeControl();
+
+    await site.followRail('Users');
+    await usersTable.roster();
+
+    expect(usersPage.alertIfAny()).not.toBeInTheDocument();
+  });
+
   test('a users server that cannot take control of the page says it could not be reached', async () => {
     lentToThePage(workersContainer({registering: Promise.reject(new Error('refused'))}));
     setupUsersResponse([aUser()]);
