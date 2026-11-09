@@ -307,6 +307,13 @@ const PressureStory: FC = () =>
           <Says><code className="monospaced">pressureShapes.buckets</code> groups the trades into minutes and keeps two
             sums for each minute: the size buyers took and the size sellers took. The chart shows up to 60
             minutes.</Says>
+          <Says><code className="monospaced">bucketOpening</code> rounds a trade’s time down to the start of its
+            minute. For each trade, <code className="monospaced">buckets</code> looks at the last minute it has kept
+            and finds it only when it started at that same time. <code className="monospaced">maybe</code> turns
+            that find, which may come back empty, into a Maybe, a value that may be missing. <code
+            className="monospaced">map</code> adds the trade to the minute when there is one, and <code
+            className="monospaced">orElse</code> handles the case with none: <code className="monospaced">openedBy</code> starts
+            a new minute with the trade.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
