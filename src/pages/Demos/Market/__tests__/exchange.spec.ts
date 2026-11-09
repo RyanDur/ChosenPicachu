@@ -76,7 +76,7 @@ describe('the exchange as middleware', () => {
   it('asking for a period fetches its candles into the store', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json([[1700000000, 1, 3, 2, 2.5, 1]])));
     const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
-    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unasked'});
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 

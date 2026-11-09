@@ -2,7 +2,7 @@ import {TableColumn} from '@components/DragSortableTable/model';
 import {Trade} from './coinbase';
 import {LiveTradesState} from './live-trades';
 import {Period} from './Period';
-import {PeriodHistory, periodHistory} from './period-history';
+import {PeriodHistory} from './period-history';
 import {Measured, Measures, cells} from './cells';
 import {tradeTotals} from './trade-totals';
 import {recentTrades} from './recent-trades';
@@ -25,5 +25,5 @@ export const marketReads: MarketReads = {
   rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, folded(trades)),
   liveTrades: ({trades}) => trades.trades,
   feedStatus: ({trades}) => trades.status,
-  periodHistoryOf: period => ({candles}) => candles[period] ?? periodHistory.loading
+  periodHistoryOf: period => ({candles}) => candles[period]
 };
