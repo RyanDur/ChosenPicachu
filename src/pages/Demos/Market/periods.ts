@@ -1,28 +1,29 @@
 import {Period} from './Period';
 
-const granularitySeconds: Record<Period, number> = {
-  [Period.hour]: 60,
-  [Period.day]: 3600,
-  [Period.week]: 21600
+type Lengths = {
+  readonly granularitySeconds: number;
+  readonly spanMilliseconds: number;
 };
 
-const spanMilliseconds: Record<Period, number> = {
-  [Period.hour]: 3600000,
-  [Period.day]: 86400000,
-  [Period.week]: 604800000
+const lengths: Record<Period, Lengths> = {
+  [Period.hour]: {granularitySeconds: 60, spanMilliseconds: 3600000},
+  [Period.day]: {granularitySeconds: 3600, spanMilliseconds: 86400000},
+  [Period.week]: {granularitySeconds: 21600, spanMilliseconds: 604800000}
 };
 
-const bucketMilliseconds: Record<Period, number> = {
-  [Period.hour]: 60000,
-  [Period.day]: 3600000,
-  [Period.week]: 21600000
-};
+const each = (read: (period: Lengths) => number): Record<Period, number> => ({
+  [Period.hour]: read(lengths[Period.hour]),
+  [Period.day]: read(lengths[Period.day]),
+  [Period.week]: read(lengths[Period.week])
+});
 
-const candleCap: Record<Period, number> = {
-  [Period.hour]: 60,
-  [Period.day]: 24,
-  [Period.week]: 28
-};
+const granularitySeconds = each(period => period.granularitySeconds);
+
+const spanMilliseconds = each(period => period.spanMilliseconds);
+
+const bucketMilliseconds = each(period => period.granularitySeconds * 1000);
+
+const candleCap = each(period => period.spanMilliseconds / (period.granularitySeconds * 1000));
 
 type Periods = {
   granularitySeconds: Record<Period, number>;
