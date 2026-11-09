@@ -40,7 +40,7 @@ type Props = {
 export const Workspace: FC<Props> = ({product}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const status = useMarketRead(marketReads.feedStatus);
-  const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
+  const {seats, absentKinds, add, remove, reorder} = useDesk();
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number, pressed: Element): void => {
@@ -84,7 +84,7 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
+    <ol className="chart-list" aria-label="charts">{seats.map(({kind}, at) => {
       const actions = plural ? <Dismissal onRemoved={pressed => removed(at, pressed)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
@@ -99,10 +99,8 @@ export const Workspace: FC<Props> = ({product}) => {
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
         {chartKinds.match(kind, {
-          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
-          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
+          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}/>,
+          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}/>,
           pressure: () => <Pressure trades={trades} actions={actions}/>,
           pie: () => <Pie trades={trades} actions={actions}/>
         }).orNull()}
