@@ -16,6 +16,7 @@ type Drafts = {
   of: (user: NewUser | User) => Draft;
   userIn: (draft: Draft) => NewUser | User;
   newUser: (avatar: string) => NewUser;
+  followsHome: (draft: Draft, name: AddressName) => boolean;
   addressFor: (draft: Draft, name: AddressName) => Address;
   avatarReport: (draft: Draft) => string;
   sentAddConfirmed: (draft: Draft, confirmedAdds: number) => boolean;
@@ -23,6 +24,8 @@ type Drafts = {
 };
 
 const unwritten: Address = {streetAddress: '', city: '', state: '', zip: ''};
+
+const followsHome = ({sameAsHome}: Draft, name: AddressName): boolean => name === 'work' && sameAsHome;
 
 const of = ({work, ...user}: NewUser | User): Draft => ({
   user,
@@ -65,8 +68,9 @@ export const drafts: Drafts = {
   of,
   userIn: ({user, sameAsHome, typedWork}) => ({...user, work: sameAsHome ? 'home' : typedWork}),
   newUser: avatar => ({person: {firstName: '', lastName: '', email: ''}, friends: [], homeAddress: unwritten, avatar}),
-  addressFor: ({user, sameAsHome, typedWork}, name) =>
-    maybe(name === 'home' || sameAsHome ? user.homeAddress : typedWork).orElse(unwritten),
+  followsHome,
+  addressFor: (draft, name) =>
+    maybe(name === 'home' || followsHome(draft, name) ? draft.user.homeAddress : draft.typedWork).orElse(unwritten),
   avatarReport: ({avatarsDrawn}) =>
     avatarsDrawn === 0 ? '' : `${avatarsDrawn} new avatar${avatarsDrawn === 1 ? '' : 's'} drawn.`,
   sentAddConfirmed: ({confirmedAddsWhenSent}, confirmedAdds) =>

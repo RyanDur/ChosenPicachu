@@ -11,7 +11,6 @@ type AddressFieldsAttributes = {
   className?: string;
   name: AddressName;
   required?: boolean;
-  disabled?: boolean;
   readOnly?: boolean;
 };
 
@@ -22,12 +21,11 @@ export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
     className,
     name,
     required,
-    disabled,
     readOnly
   }) => {
   const titleId = useId();
-  const {address, edit} = useAddressDraft(name);
-  return <fieldset name={name} className={classNames('address', 'shrinkable', className)} disabled={disabled}
+  const {address, followsHome, edit} = useAddressDraft(name);
+  return <fieldset name={name} className={classNames('address', 'shrinkable', className)} disabled={followsHome}
     aria-labelledby={titleId}>
     <legend className="address-title sub-title bold"><span id={titleId}>{title}</span>{children}</legend>
     <FancyInput className="street"
