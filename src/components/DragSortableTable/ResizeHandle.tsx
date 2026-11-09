@@ -3,23 +3,23 @@ import {maybe, not} from '@ryandur/sand';
 import {useHydrated} from '../useHydrated';
 import './Table.css';
 import {useTableDispatch} from './useTableDispatch';
-import {useTableSelector} from './useTableSelector';
-import {shares, tableActions, tableSelectors} from './model';
+import {useTableRead} from './useTableRead';
+import {shares, tableActions, tableReads} from './model';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
-  const order = useTableSelector(tableSelectors.order);
-  const neighbour = useTableSelector(tableSelectors.neighbourOfColumn(column));
-  const namedShare = useTableSelector(tableSelectors.namedShareOfColumn(column));
-  const held = useTableSelector(tableSelectors.columnGripped(column));
+  const order = useTableRead(tableReads.order);
+  const neighbor = useTableRead(tableReads.neighborOfColumn(column));
+  const namedShare = useTableRead(tableReads.namedShareOfColumn(column));
+  const held = useTableRead(tableReads.columnGripped(column));
   const hydrated = useHydrated();
 
   const awaken = (table: HTMLTableElement): void =>
     dispatch(tableActions.awoken(shares.measuredWidths(order, table), shares.measuredFloors(order, table)));
-  const trade = (delta: number): void => dispatch(tableActions.tradedBy(column, neighbour, delta));
+  const trade = (delta: number): void => dispatch(tableActions.tradedBy(column, neighbor, delta));
   const release = (): void => dispatch(tableActions.handleReleased(column));
   const followed = (event: PointerEvent<HTMLElement>): void =>
-    dispatch(tableActions.handleDragged(column, neighbour, event.clientX));
+    dispatch(tableActions.handleDragged(column, neighbor, event.clientX));
 
   return <button type="button"
     tabIndex={0}

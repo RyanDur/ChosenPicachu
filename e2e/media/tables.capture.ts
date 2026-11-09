@@ -55,7 +55,7 @@ test('sort stills: the lift, the strike, the slide', async ({browser}) => {
 
   const trades = card.getByRole('columnheader', {name: /^trades/});
   const buys = card.getByRole('columnheader', {name: /^buys/});
-  const neighbour = await boxFor(buys);
+  const neighbor = await boxFor(buys);
   const from = await grabbed(page, trades, 0.9);
   await slowDrag(page, from, from.x + from.width * 0.9 + 24, {steps: 6, anchor: 0.9});
 
@@ -68,13 +68,13 @@ test('sort stills: the lift, the strike, the slide', async ({browser}) => {
   await shot(page, frame, `${mediaRoot}/sort/stills/the-lift.png`);
   await clearCallouts(page);
 
-  await slowDrag(page, from, neighbour.x + neighbour.width * 0.2, {steps: 6, anchor: 0.9});
+  await slowDrag(page, from, neighbor.x + neighbor.width * 0.2, {steps: 6, anchor: 0.9});
   await expect(gap).toHaveCount(1);
   await calloutOn(buys, 'the inner half earns the swap');
   await shot(page, frame, `${mediaRoot}/sort/stills/the-strike.png`);
   await clearCallouts(page);
 
-  await slowDrag(page, from, neighbour.x + neighbour.width * 0.65, {steps: 2, anchor: 0.9});
+  await slowDrag(page, from, neighbor.x + neighbor.width * 0.65, {steps: 2, anchor: 0.9});
   await page.evaluate(() => document.getAnimations().forEach(animation => animation.pause()));
   const displaced = card.locator('thead th[class*="displaced"]');
   await expect(displaced).toHaveCount(1);

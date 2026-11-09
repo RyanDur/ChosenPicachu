@@ -1,13 +1,13 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '../classNames';
-import {useTableSelector} from './useTableSelector';
-import {looks, shares, tableSelectors} from './model';
+import {useTableRead} from './useTableRead';
+import {looks, shares, tableReads} from './model';
 import './Header.css';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
-  const {sorted, data} = useTableSelector(tableSelectors.columnNamed(column))
-    .orElse(tableSelectors.unknownColumn(column));
-  const width = useTableSelector(tableSelectors.widthOfColumn(column));
+  const {sorted, data} = useTableRead(tableReads.columnNamed(column))
+    .orElse(tableReads.unknownColumn(column));
+  const width = useTableRead(tableReads.widthOfColumn(column));
 
   return <th {...th}
     className={classNames(...looks.headerCell, className, ...looks.headerNeeds(false, width))}

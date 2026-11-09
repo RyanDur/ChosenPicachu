@@ -10,13 +10,13 @@ import {Landing} from './report';
 export type TableAction =
   | {readonly type: 'measured'; readonly widths: ColumnWidths; readonly floors: ColumnWidths}
   | {readonly type: 'awoken'; readonly widths: ColumnWidths; readonly floors: ColumnWidths}
-  | {readonly type: 'tradedBy'; readonly column: string; readonly neighbour: string; readonly delta: number}
+  | {readonly type: 'tradedBy'; readonly column: string; readonly neighbor: string; readonly delta: number}
   | {readonly type: 'gripped'; readonly column: string; readonly grip: Grip}
-  | {readonly type: 'handleDragged'; readonly column: string; readonly neighbour: string; readonly clientX: number}
+  | {readonly type: 'handleDragged'; readonly column: string; readonly neighbor: string; readonly clientX: number}
   | {readonly type: 'lifted'; readonly carry: Carry; readonly grab: Grab}
   | {readonly type: 'drifted'; readonly moving: Moving}
-  | {readonly type: 'columnLandingFound'; readonly neighbour?: string}
-  | {readonly type: 'rowLandingFound'; readonly neighbour?: string}
+  | {readonly type: 'columnLandingFound'; readonly neighbor?: string}
+  | {readonly type: 'rowLandingFound'; readonly neighbor?: string}
   | {readonly type: 'released'}
   | {readonly type: 'arrowLifted'; readonly column: string}
   | {readonly type: 'handleLeft'; readonly column: string}
@@ -26,9 +26,9 @@ export type TableAction =
   | {readonly type: 'settled'; readonly target: Carry}
   | {readonly type: 'shovedColumns'; readonly names: readonly string[]; readonly shove: ColumnShove}
   | {readonly type: 'shovedRows'; readonly keys: readonly string[]; readonly shove: RowShove}
-  | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbour: string; readonly widths: PixelSizes; readonly order: readonly string[]}
+  | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbor: string; readonly widths: PixelSizes; readonly order: readonly string[]}
   | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: PixelSizes; readonly order: readonly string[]}
-  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbour: string; readonly heights: PixelSizes; readonly standing: readonly string[]}
+  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbor: string; readonly heights: PixelSizes; readonly standing: readonly string[]}
   | {readonly type: 'rowWalkedTo'; readonly row: string; readonly label: string; readonly to: number; readonly heights: PixelSizes; readonly standing: readonly string[]}
   | {readonly type: 'sortChosen'; readonly column: string; readonly direction?: Direction};
 
@@ -66,13 +66,13 @@ const recognizes = (action: Foreign): action is TableAction => action.type in ac
 
 const measured = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'measured', widths, floors});
 const awoken = (widths: ColumnWidths, floors: ColumnWidths): Action => ({type: 'awoken', widths, floors});
-const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
+const tradedBy = (column: string, neighbor: string, delta: number): Action => ({type: 'tradedBy', column, neighbor, delta});
 const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
-const handleDragged = (column: string, neighbour: string, clientX: number): Action => ({type: 'handleDragged', column, neighbour, clientX});
+const handleDragged = (column: string, neighbor: string, clientX: number): Action => ({type: 'handleDragged', column, neighbor, clientX});
 const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
 const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
-const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});
-const rowLandingFound = (neighbour?: string): Action => ({type: 'rowLandingFound', neighbour});
+const columnLandingFound = (neighbor?: string): Action => ({type: 'columnLandingFound', neighbor});
+const rowLandingFound = (neighbor?: string): Action => ({type: 'rowLandingFound', neighbor});
 const released = (): Action => ({type: 'released'});
 const arrowLifted = (column: string): Action => ({type: 'arrowLifted', column});
 const handleLeft = (column: string): Action => ({type: 'handleLeft', column});
@@ -84,22 +84,22 @@ const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => 
 const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
 const columnMovedBeside = (
   name: string,
-  neighbour: string,
+  neighbor: string,
   widths: PixelSizes,
   order: readonly string[]
 ): Action =>
-  ({type: 'columnMovedBeside', name, neighbour, widths, order});
+  ({type: 'columnMovedBeside', name, neighbor, widths, order});
 const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
 type LabelledRow = {readonly row: string; readonly label: string};
 
 const rowMovedBeside = (
   {row, label}: LabelledRow,
-  neighbour: string,
+  neighbor: string,
   heights: PixelSizes,
   standing: readonly string[]
 ): Action =>
-  ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
+  ({type: 'rowMovedBeside', row, label, neighbor, heights, standing});
 const rowWalkedTo = (
   {row, label}: LabelledRow,
   to: number,

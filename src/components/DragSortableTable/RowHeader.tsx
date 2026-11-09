@@ -3,42 +3,42 @@ import {has} from '@ryandur/sand';
 import {classNames} from '../classNames';
 import {useBodyEvents} from './useBodyEvents';
 import {useTableDispatch} from './useTableDispatch';
-import {useTableSelector} from './useTableSelector';
-import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, survey, looks, travel, lifting} from './model';
+import {useTableRead} from './useTableRead';
+import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableReads, survey, looks, travel, lifting} from './model';
 import {RowGrip} from './RowGrip';
 import './motion.css';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
   const {onRowMoved} = useBodyEvents();
-  const order = useTableSelector(tableSelectors.order);
-  const columnCarried = useTableSelector(tableSelectors.columnHeld(column));
-  const carried = useTableSelector(tableSelectors.rowHeld(row));
-  const {settlingFrom, shoved} = useTableSelector(tableSelectors.rowMarks(row));
-  const standing = useTableSelector(tableSelectors.standing);
-  const position = useTableSelector(tableSelectors.positionOfRow(row));
-  const drag = useTableSelector(tableSelectors.rowDrag(row));
-  const columnSeat = useTableSelector(tableSelectors.seatOfColumn(column));
-  const rowSeat = useTableSelector(tableSelectors.seatOfRow(row));
-  const columnDrift = useTableSelector(tableSelectors.driftOfColumn(column));
-  const rowDrift = useTableSelector(tableSelectors.driftOfRow(row));
-  const settling = useTableSelector(tableSelectors.settlingOfRowIn(row, standing));
+  const order = useTableRead(tableReads.order);
+  const columnCarried = useTableRead(tableReads.columnHeld(column));
+  const carried = useTableRead(tableReads.rowHeld(row));
+  const {settlingFrom, shoved} = useTableRead(tableReads.rowMarks(row));
+  const standing = useTableRead(tableReads.standing);
+  const position = useTableRead(tableReads.positionOfRow(row));
+  const drag = useTableRead(tableReads.rowDrag(row));
+  const columnSeat = useTableRead(tableReads.seatOfColumn(column));
+  const rowSeat = useTableRead(tableReads.seatOfRow(row));
+  const columnDrift = useTableRead(tableReads.driftOfColumn(column));
+  const rowDrift = useTableRead(tableReads.driftOfRow(row));
+  const settling = useTableRead(tableReads.settlingOfRowIn(row, standing));
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
-  const beside = (neighbour: string, bounds: Survey): void => {
-    const to = standing.indexOf(neighbour);
-    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, bounds.rowHeights, standing));
+  const beside = (neighbor: string, bounds: Survey): void => {
+    const to = standing.indexOf(neighbor);
+    dispatch(tableActions.rowMovedBeside({row, label}, neighbor, bounds.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
     dispatch(tableActions.drifted(moving));
-    travel.eager(survey.rowUnder(standing, held.survey), row, neighbour => beside(neighbour, held.survey))(moving);
+    travel.eager(survey.rowUnder(standing, held.survey), row, neighbor => beside(neighbor, held.survey))(moving);
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {

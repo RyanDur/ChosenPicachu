@@ -7,7 +7,7 @@ const column = (order: readonly string[], moving: Moving) => (drag: ColumnDrag):
 const row = (standing: readonly string[], moving: Moving) => (drag: RowDrag): string | undefined =>
   travel.lazy(survey.rowUnder(standing, drag.survey))(drag.held, moving, drag.landing);
 
-const released = (drag: ColumnDrag | RowDrag, beside: (neighbour: string) => void): void => {
+const released = (drag: ColumnDrag | RowDrag, beside: (neighbor: string) => void): void => {
   if (has(drag.landing)) {
     beside(drag.landing);
   }

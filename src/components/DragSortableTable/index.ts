@@ -15,4 +15,4 @@ export {RowGrip} from './RowGrip';
 export {useBodyEvents} from './useBodyEvents';
 export {useHeaderEvents} from './useHeaderEvents';
 export {useTableDispatch} from './useTableDispatch';
-export {useTableSelector} from './useTableSelector';
+export {useTableRead} from './useTableRead';

@@ -95,9 +95,9 @@ const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): 
 
 const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
 
-const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
+const trade = (state: TableState, column: string, neighbor: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => measure(state, shares.traded(column, neighbour, delta, state.floors)(previous), state.floors))
+    .map(previous => measure(state, shares.traded(column, neighbor, delta, state.floors)(previous), state.floors))
     .orElse(state);
 
 const endSizing = ({sizing, ...state}: TableState): TableState =>
@@ -112,10 +112,10 @@ const sizingOf = (state: TableState, column: string): TableState =>
 const startedAt = (state: TableState, column: string): number | undefined =>
   state.sizing?.column === column ? state.sizing.from : state.widths?.[column];
 
-const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState => {
+const tradeBy = (state: TableState, column: string, neighbor: string, delta: number): TableState => {
   const ours = sizingOf(state, column);
   return maybe(startedAt(ours, column))
-    .map((from): TableState => trade({...ours, sizing: ours.sizing ?? {stage: 'keyed', column, from}}, column, neighbour, delta))
+    .map((from): TableState => trade({...ours, sizing: ours.sizing ?? {stage: 'keyed', column, from}}, column, neighbor, delta))
     .orElse(ours);
 };
 
@@ -135,11 +135,11 @@ const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
 const pointerHolds = (state: TableState, column: string): boolean =>
   maybe(gripOf(state, column)).map(() => true).orElse(false);
 
-const dragHandle = (state: TableState, column: string, neighbour: string, clientX: number): TableState =>
+const dragHandle = (state: TableState, column: string, neighbor: string, clientX: number): TableState =>
   maybe(gripOf(state, column))
     .map((sizing): TableState => {
       const sought = shares.soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
-      return {...trade(state, column, neighbour, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
+      return {...trade(state, column, neighbor, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
     })
     .orElse(state);
 

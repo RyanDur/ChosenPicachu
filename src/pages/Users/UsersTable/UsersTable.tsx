@@ -11,7 +11,7 @@ import {useUsersSelector} from '../useUsersSelector';
 import {usersActions} from '../usersActions';
 import {usersSelectors} from '../usersSelectors';
 import {userColumns} from '../columns';
-import {arrangements, tableReports, tableSelectors} from '@components/DragSortableTable/model';
+import {arrangements, tableReports, tableReads} from '@components/DragSortableTable/model';
 import {profile} from '../profile';
 
 export const UsersTable: FC = () => {
@@ -56,6 +56,6 @@ export const UsersTable: FC = () => {
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(tableSelectors.report(sortable))}</output>
+    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(tableReads.report(sortable))}</output>
   </DragSortable>;
 };
