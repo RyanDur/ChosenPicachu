@@ -155,7 +155,8 @@ jobs:
             read -r id status conclusion < <(gh run view "$run" --json jobs \
               -q '.jobs[] | select(.name == "review") | "\(.databaseId) \(.status) \(.conclusion)"') || true
             if [ "$status" = completed ]; then
-              if [ "$conclusion" != failure ] || gh run rerun --job "$id"; then exit 0; fi
+              case "$conclusion" in failure|cancelled) ;; *) exit 0;; esac
+              if gh run rerun --job "$id"; then exit 0; fi
             fi
             sleep 30
           done
