@@ -148,6 +148,10 @@ jobs:
           head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
           run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then exit 0; fi
-          gh run watch "$run" --interval 30 > /dev/null
-          review=$(gh run view "$run" --json jobs -q '.jobs[] | select(.name == "review" and .conclusion == "failure") | .databaseId')
-          if [ -n "$review" ]; then gh run rerun --job "$review"; fi
+          for try in 1 2 3; do
+            gh run watch "$run" --interval 30 > /dev/null
+            review=$(gh run view "$run" --json jobs -q '.jobs[] | select(.name == "review" and .conclusion == "failure") | .databaseId')
+            if [ -z "$review" ] || gh run rerun --job "$review"; then exit 0; fi
+            sleep 30
+          done
+          exit 1
