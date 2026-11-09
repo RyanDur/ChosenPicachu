@@ -51,6 +51,24 @@ describe('the users page', () => {
     expect(asks()).toEqual([true]);
   });
 
+  test('a users server that takes control after the wait takes down the could-not-be-reached banner', async () => {
+    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
+    const container = workersContainer();
+    lentToThePage(container);
+    setupUsersResponse([aUser()]);
+    render(<TestApp at={Paths.users}/>);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await usersPage.says('the users server could not be reached');
+
+    container.takeControl();
+    await usersTable.roster();
+
+    expect(usersPage.alertIfAny()).not.toBeInTheDocument();
+  });
+
   test('a users server that cannot take control of the page says it could not be reached', async () => {
     lentToThePage(workersContainer({registering: Promise.reject(new Error('refused'))}));
     setupUsersResponse([aUser()]);
