@@ -1,4 +1,4 @@
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe, maybe, not} from '@ryandur/sand';
 import {arrangements, TableColumn} from '@components/DragSortableTable/model';
 import {User} from './profile';
 import {ColumnLabel, userColumns} from './columns';
@@ -18,6 +18,7 @@ type UsersSelectors = {
   friendsReportOf: (userId: string) => (state: UsersState) => Maybe<Membership>;
   confirmedAdds: (state: UsersState) => number;
   addInFlight: (state: UsersState) => boolean;
+  addWaits: (state: UsersState) => boolean;
 };
 
 export const usersSelectors: UsersSelectors = {
@@ -30,5 +31,6 @@ export const usersSelectors: UsersSelectors = {
   withId: id => ({users}) => maybe(users.find(user => user.id === id)),
   friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
   confirmedAdds: ({confirmedAdds}) => confirmedAdds,
-  addInFlight: ({addInFlight}) => addInFlight
+  addInFlight: ({addInFlight}) => addInFlight,
+  addWaits: ({addInFlight, rosterArrived}) => addInFlight || not(rosterArrived)
 };

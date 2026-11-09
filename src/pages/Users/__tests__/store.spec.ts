@@ -32,6 +32,29 @@ describe('the users store', () => {
     expect(store.state.users).toEqual(someUsers);
   });
 
+  it('an add waits while the roster has not arrived', () => {
+    const store = usersStore();
+
+    expect(usersSelectors.addWaits(store.state)).toBe(true);
+  });
+
+  it('an add can go once the roster has arrived', () => {
+    const store = usersStore();
+
+    store.dispatch(usersActions.usersArrived([]));
+
+    expect(usersSelectors.addWaits(store.state)).toBe(false);
+  });
+
+  it('an add waits while another is in flight', () => {
+    const store = usersStore();
+    store.dispatch(usersActions.usersArrived([]));
+
+    store.dispatch(usersActions.userAdded(first));
+
+    expect(usersSelectors.addWaits(store.state)).toBe(true);
+  });
+
   it('a row moved to a new seat stays there when the roster arrives again', () => {
     const store = usersStore();
     const ids = someUsers.map(({id}) => id);
