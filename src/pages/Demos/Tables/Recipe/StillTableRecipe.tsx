@@ -14,7 +14,7 @@ import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 import {elidedHeaders} from './elidedHeaders';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
@@ -100,20 +100,20 @@ const dealCodes: Record<World, ReactNode> = {
       ...carve.span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...elidedHeaders(carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), gap,
+      ...elidedHeaders(carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), blankLine,
       ...carve.span(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(headerSource, 'return <th {...th}', 'scope="col"'), gap,
+      ...carve.span(headerSource, 'return <th {...th}', 'scope="col"'), blankLine,
       ...carve.span(cellSource, 'return <td {...td}', '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...carve.span(tableSource, '<table class="fancy-table', '</th>'), gap,
+      ...carve.span(tableSource, '<table class="fancy-table', '</th>'), blankLine,
       ...carve.span(tableSource, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[

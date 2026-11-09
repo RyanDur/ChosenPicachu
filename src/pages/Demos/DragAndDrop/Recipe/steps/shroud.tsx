@@ -3,7 +3,7 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
   <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>
@@ -15,7 +15,7 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(itemSource, 'const {held, gripped} = useDragSort();', 'const {held, gripped} = useDragSort();'), gap,
+        ...carve.span(itemSource, 'const {held, gripped} = useDragSort();', 'const {held, gripped} = useDragSort();'), blankLine,
         ...carve.span(itemSource, "className={classNames('draggable'", "held.map(lifted => lifted.item === item).orElse(false) && 'hide', className)}")
       ]}/>
       <Snippet label="CSS" lines={[

@@ -11,7 +11,7 @@ import bannersCss from '@banners/Banners.css?sample';
 import timingCss from '../../../styles/timing.css?sample';
 import '../Recipe/Recipe.css';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 const stackFact: Record<Stack, string> = {
   down: 'the stack grows downward, so the track is a row.',
@@ -90,7 +90,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(changeSource, 'export const bannerChange = {'), gap,
+            ...carve.unit(changeSource, 'export const bannerChange = {'), blankLine,
             ...carve.span(newsSource, "case 'raised':", ': {...news, banners: [...news.banners, change.banner]};')
           ]}/>
         </Codes>
@@ -121,10 +121,10 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), gap,
-            ...carve.unit(bannersCss, '.trouble {'), gap,
-            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), gap,
-            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), gap,
+            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), blankLine,
+            ...carve.unit(bannersCss, '.trouble {'), blankLine,
+            ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), blankLine,
+            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), blankLine,
             ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>
@@ -152,7 +152,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.unit(bannersCss, '.trouble.leaving {'), gap,
+            ...carve.unit(bannersCss, '.trouble.leaving {'), blankLine,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble.leaving {`)
           ]}/>
           <Snippet label="TS" lines={[

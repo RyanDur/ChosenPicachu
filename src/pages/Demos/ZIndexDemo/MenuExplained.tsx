@@ -8,7 +8,7 @@ import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const MenuExplained: FC = () =>
   <section aria-labelledby={partHeadings.stillLoses} className="stacking-part">
@@ -21,9 +21,9 @@ export const MenuExplained: FC = () =>
           Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you
           cannot see it, under card two. The menu works. It is drawn in the wrong place.</p>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.sort-choices {'), gap,
-          ...carve.unit(zIndexCss, '.old-way-card {'), gap,
-          ...carve.unit(zIndexCss, '.positioned {'), gap,
+          ...carve.unit(zIndexCss, '.sort-choices {'), blankLine,
+          ...carve.unit(zIndexCss, '.old-way-card {'), blankLine,
+          ...carve.unit(zIndexCss, '.positioned {'), blankLine,
           ...carve.unit(zIndexCss, '.forms-context {')
         ]}/>
       </li>

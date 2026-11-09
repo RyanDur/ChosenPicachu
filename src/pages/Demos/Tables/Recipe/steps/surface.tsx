@@ -3,7 +3,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} fr
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Hold the pointer from the lift">
@@ -40,7 +40,7 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'onPointerMove={has(drag) ? travel.pointer(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'), gap,
+            ...carve.span(headerSource, 'onPointerMove={has(drag) ? travel.pointer(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'), blankLine,
             ...carve.unit(headerSource, 'const release = '),
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>

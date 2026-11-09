@@ -3,7 +3,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} fr
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}> = ({world, headerSource, buildSrc}) =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
@@ -40,16 +40,16 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSrc: Sample}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'onPointerDown={travels ? lifting.column(column', 'onPointerDown={travels ? lifting.column(column'), gap,
-            ...carve.unit(headerSource, 'const lift = '), gap,
-            ...carve.unit(sources.state, 'const dragOf'), gap,
+            ...carve.span(headerSource, 'onPointerDown={travels ? lifting.column(column', 'onPointerDown={travels ? lifting.column(column'), blankLine,
+            ...carve.unit(headerSource, 'const lift = '), blankLine,
+            ...carve.unit(sources.state, 'const dragOf'), blankLine,
             ...carve.unit(sources.state, 'const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.span(buildSrc, "th.addEventListener('pointerdown', lifting.column",
-              "th.addEventListener('pointerdown', lifting.column"), gap,
-            ...carve.unit(buildSrc, 'const lift = '), gap,
-            ...carve.unit(sources.state, 'const dragOf'), gap,
+              "th.addEventListener('pointerdown', lifting.column"), blankLine,
+            ...carve.unit(buildSrc, 'const lift = '), blankLine,
+            ...carve.unit(sources.state, 'const dragOf'), blankLine,
             ...carve.unit(sources.state, 'const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[

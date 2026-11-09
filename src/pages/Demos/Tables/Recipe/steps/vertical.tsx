@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the carry vertical">
@@ -47,16 +47,16 @@ export const CarryVertical: FC<{world: World; rowSource: Sample; buildSrc: Sampl
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.unit(sources.survey, 'const rowUnder'), gap,
-            ...carve.unit(rowSource, 'const beside = '), gap,
+            ...carve.unit(sources.survey, 'const rowUnder'), blankLine,
+            ...carve.unit(rowSource, 'const beside = '), blankLine,
             ...carve.span(rowSource, 'onPointerDown={lifting.row(', 'onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}'),
             lines.aside('{/* the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(sources.survey, 'const rowUnder'), gap,
-            ...carve.unit(buildSrc, 'const rowBeside = '), gap,
-            ...carve.unit(sources.frameGrip, 'const gripping = '), gap,
-            ...carve.unit(sources.frameGrip, 'export const rowGrip = '), gap,
+            ...carve.unit(sources.survey, 'const rowUnder'), blankLine,
+            ...carve.unit(buildSrc, 'const rowBeside = '), blankLine,
+            ...carve.unit(sources.frameGrip, 'const gripping = '), blankLine,
+            ...carve.unit(sources.frameGrip, 'export const rowGrip = '), blankLine,
             ...carve.unit(sources.frameParts, 'export const wireParts = '),
             lines.aside('// the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it')
           ]}/>}

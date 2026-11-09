@@ -3,7 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {carve, Codes, lines, Sample, Says, Snippet, Step, Words} from '../../../Recipe';
 import {sources} from './sources';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Slide every moved item home on release" dial={<MotionDial name="native-motion"/>}>
@@ -23,8 +23,8 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), gap,
-        ...carve.unit(sources.slideStarts, 'const afterSettle'), gap,
+        ...carve.span(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), blankLine,
+        ...carve.unit(sources.slideStarts, 'const afterSettle'), blankLine,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
       <Snippet label="CSS" lines={[
