@@ -6,7 +6,7 @@ import {StoreStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import tradeTotalsSource from '@pages/Demos/Market/trade-totals.ts?sample';
-import buildSrc from '../Frame/builds/Eager.ts?sample';
+import buildSource from '../Frame/builds/Eager.ts?sample';
 import frameRows from '../Frame/table/rows.ts?sample';
 import hydrateSource from '@pages/Demos/Market/recent-trades.ts?sample';
 import {DataPath} from './DataPath';
@@ -39,7 +39,7 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
-      ...carve.unit(buildSrc, 'const reconciled = '), lines.blank,
+      ...carve.unit(buildSource, 'const reconciled = '), lines.blank,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
   </Codes>

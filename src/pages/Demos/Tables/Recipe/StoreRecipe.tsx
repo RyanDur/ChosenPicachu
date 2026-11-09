@@ -16,7 +16,7 @@ import marketStoreSource from '@pages/Demos/Market/marketStore.ts?sample';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import openingSource from '@pages/Demos/Market/Trading/useExchange.ts?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
-import buildSrc from '../Frame/builds/Eager.ts?sample';
+import buildSource from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
 
 const OneState: FC<{world: World}> = ({world}) =>
@@ -67,7 +67,7 @@ const OneState: FC<{world: World}> = ({world}) =>
             ...carve.unit(marketStoreSource, 'export const marketStore')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(buildSrc, 'export const dragSortable = '), lines.blank,
+            ...carve.unit(buildSource, 'export const dragSortable = '), lines.blank,
             ...carve.span(bootSource, 'const page = marketStore(', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
@@ -255,7 +255,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
             ...carve.unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), lines.blank,
+            ...carve.span(buildSource, 'hand.subscribe(', 'hand.subscribe('), lines.blank,
             ...carve.span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
           ]}/>}
       </Codes>

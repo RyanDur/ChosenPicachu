@@ -5,8 +5,8 @@ import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
-export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, buildSrc}) =>
+export const EagerPace: FC<{world: World; headerSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, buildSource}) =>
     <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
       <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
         <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a
@@ -42,8 +42,8 @@ export const EagerPace: FC<{world: World; headerSource: Sample; buildSrc: Sample
               ...carve.unit(headerSource, 'const moved = ')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const columnBeside = '), lines.blank,
-              ...carve.unit(buildSrc, 'const moved = ')
+              ...carve.unit(buildSource, 'const columnBeside = '), lines.blank,
+              ...carve.unit(buildSource, 'const moved = ')
             ]}/>}
           {world === 'react'
             ? <Snippet label="HTML" lines={[

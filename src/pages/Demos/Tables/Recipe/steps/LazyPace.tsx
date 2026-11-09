@@ -5,8 +5,8 @@ import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
-export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, paceSource, buildSrc}) =>
+export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, paceSource, buildSource}) =>
     <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
       <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
         <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers
@@ -37,8 +37,8 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
               ...carve.unit(paceSource, 'const released')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const moved = '), lines.blank,
-              ...carve.unit(buildSrc, 'const landed = ')
+              ...carve.unit(buildSource, 'const moved = '), lines.blank,
+              ...carve.unit(buildSource, 'const landed = ')
             ]}/>}
           <Snippet label="TS" lines={[
             ...carve.unit(sources.travel, 'const lazy'),

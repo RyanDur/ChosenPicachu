@@ -3,8 +3,8 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} fr
 import type {World} from '../../../Controls';
 import {sources} from './sources';
 
-export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, buildSrc}) =>
+export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, buildSource}) =>
     <Step title="The arrows give the direction">
       <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
         <Says>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener claims the verb.
@@ -24,7 +24,7 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Samp
               ...carve.unit(headerSource, 'onKeyDown={travels')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, "th.addEventListener('keydown'")
+              ...carve.unit(buildSource, "th.addEventListener('keydown'")
             ]}/>}
           <Snippet label="TS" lines={[
             ...carve.unit(sources.survey, 'const nudgedColumn'), lines.blank,

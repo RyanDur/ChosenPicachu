@@ -31,7 +31,7 @@ import {
   TwoRoads,
   WalkSlides
 } from './steps';
-import buildSrc from '../Frame/builds/Eager.ts?sample';
+import buildSource from '../Frame/builds/Eager.ts?sample';
 import tableSource from '../Builds/EagerTable/EagerTable.tsx?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import rowSource from '@components/DragSortableTable/RowHeader.tsx?sample';
@@ -48,23 +48,23 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
       <NamesInTheCode/>
       <TwoRoads/>
       <TheImplementation world={world} react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
-      <TheWholeBuild world={world} tableSource={tableSource} buildSrc={buildSrc}/>
+      <TheWholeBuild world={world} tableSource={tableSource} buildSource={buildSource}/>
       <AgainstTheStream/>
       <OwnedPixels world={world}/>
       <Promises pace="eager" origin={origin} motion={motion}/>
       <Steps>
         <CssShare world={world}/>
-        <OrderInState world={world} tableSource={tableSource} buildSrc={buildSrc}/>
-        <ListenersOnce world={world} buildSrc={buildSrc}/>
-        <LiftOnce world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <OrderInState world={world} tableSource={tableSource} buildSource={buildSource}/>
+        <ListenersOnce world={world} buildSource={buildSource}/>
+        <LiftOnce world={world} headerSource={headerSource} buildSource={buildSource}/>
         <DragSurface world={world} headerSource={headerSource}/>
         <DeadZone/>
-        <EagerPace world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <EagerPace world={world} headerSource={headerSource} buildSource={buildSource}/>
         {origin === 'hide'
-          ? <HideOrigin world={world} headerSource={headerSource} cssSource={cssSource} buildSrc={buildSrc}/>
+          ? <HideOrigin world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
           : <KeepOrigin world={world} cssSource={cssSource}/>}
         {motion === 'animated'
-          ? <AnimatedMotion world={world} headerSource={headerSource} cssSource={cssSource} buildSrc={buildSrc}/>
+          ? <AnimatedMotion world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
           : <StaticMotion world={world} cssSource={cssSource}/>}
       </Steps>
     </Story>
@@ -73,7 +73,7 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
       soThat="the lookbacks they watch closest sit on top">
       <TurnedVertical/>
       <Steps>
-        <CarryVertical world={world} rowSource={rowSource} buildSrc={buildSrc}/>
+        <CarryVertical world={world} rowSource={rowSource} buildSource={buildSource}/>
       </Steps>
     </Story>
   </>
@@ -87,17 +87,17 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
       <QuietDials/>
       <Steps>
         <FocusLands world={world} headerSource={headerSource}/>
-        <ArrowsSpeak world={world} headerSource={headerSource} buildSrc={buildSrc}/>
+        <ArrowsSpeak world={world} headerSource={headerSource} buildSource={buildSource}/>
         {motion === 'animated'
-          ? <WalkSlides world={world} headerSource={headerSource} buildSrc={buildSrc}/>
-          : <CutKey world={world} headerSource={headerSource} buildSrc={buildSrc}/>}
+          ? <WalkSlides world={world} headerSource={headerSource} buildSource={buildSource}/>
+          : <CutKey world={world} headerSource={headerSource} buildSource={buildSource}/>}
       </Steps>
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the lookbacks they watch closest sit on top">
       <Steps>
-        <GripArrows world={world} rowSource={rowSource} buildSrc={buildSrc}/>
+        <GripArrows world={world} rowSource={rowSource} buildSource={buildSource}/>
       </Steps>
     </Story>
   </>;

@@ -4,8 +4,8 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {sources} from './sources';
 
-export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, cssSource, buildSrc}) =>
+export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, cssSource, buildSource}) =>
     <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
       <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbor that has already jumped, leaves the reader to work out both.">
         <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
@@ -63,9 +63,9 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
               lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const columnShoving = '), lines.blank,
-              ...carve.unit(buildSrc, 'const columnTo = '), lines.blank,
-              ...carve.unit(buildSrc, 'const drop = '), lines.blank,
+              ...carve.unit(buildSource, 'const columnShoving = '), lines.blank,
+              ...carve.unit(buildSource, 'const columnTo = '), lines.blank,
+              ...carve.unit(buildSource, 'const drop = '), lines.blank,
               ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
             ]}/>}
