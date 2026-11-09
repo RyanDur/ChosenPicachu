@@ -110,7 +110,7 @@ describe('page error boundaries', () => {
     expect(site.pageTitle()).toHaveTextContent('Practice Structure');
   });
 
-  test('a crash in the frame around every page still says the room is closed, under the site’s own name, with the way home', async () => {
+  test('a crash in the frame around every page still says the room is closed, on a page named the closed site, with the way home', async () => {
     const feedbackThatCrashes: Environment = {
       ...environment,
       get feedbackToken(): string {
@@ -125,7 +125,7 @@ describe('page error boundaries', () => {
     );
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
-    expect(site.pageTitle()).toHaveTextContent('Chosen Picachu');
+    expect(site.pageTitle()).toHaveTextContent('Closed site');
     expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
   });
 

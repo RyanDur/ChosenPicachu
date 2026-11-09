@@ -70,6 +70,10 @@
     "title": "Closed room · Chosen Picachu",
     "description": "Something in this room broke. The rest of the site is open."
   },
+  "closedSite": {
+    "title": "Closed site · Chosen Picachu",
+    "description": "Part of the frame around every page broke, so no page can open right now."
+  },
   "noRoom": {
     "title": "No such room · Chosen Picachu",
     "description": "Nothing was built at this address. The rest of the site is open."
