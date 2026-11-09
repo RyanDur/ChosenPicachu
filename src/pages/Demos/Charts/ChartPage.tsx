@@ -72,7 +72,7 @@ const features: Record<ChartKind, Feature> = {
 
 type Props = {kind: ChartKind};
 
-const ChartTutorial: FC<Props> = ({kind}) => {
+const ChartKindTutorial: FC<Props> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
   return <article aria-labelledby={`tutorial-${kind}`} className="chart-page tutorials">
     <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
@@ -112,6 +112,6 @@ const ChartTutorial: FC<Props> = ({kind}) => {
 export const ChartPage: FC = () => {
   const {kind} = useParams();
   return chartKinds.is(kind)
-    ? <ChartTutorial kind={kind}/>
+    ? <ChartKindTutorial kind={kind}/>
     : <Navigate to={demoTab.address(DemoTopics.charts)} replace/>;
 };
