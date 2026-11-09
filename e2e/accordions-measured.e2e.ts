@@ -168,6 +168,6 @@ test.describe('the fold measured by plain script', () => {
 
     await fold.bar.click();
 
-    await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+    await expect.poll(fold.textBelowTheFrame).toBeLessThanOrEqual(layoutRounding);
   });
 });

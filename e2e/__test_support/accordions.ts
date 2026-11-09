@@ -229,6 +229,10 @@ export const plainFold = (page: Page) => {
         else window.addEventListener('load', () => loaded());
       }));
     },
-    gapUnderItsText: (): Promise<number> => gapUnder(panel, text)
+    gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
+    textBelowTheFrame: async (): Promise<number> => {
+      const [around, inner] = await Promise.all([frame.boundingBox(), text.boundingBox()]);
+      return (inner?.y ?? Infinity) + (inner?.height ?? 0) - (around?.y ?? 0) - (around?.height ?? 0);
+    }
   };
 };
