@@ -5,8 +5,15 @@ import {Candle} from './candles';
 import {Period} from './Period';
 import {periods} from './periods';
 
-const HistoryRowDecoder =
+const SixNumbers =
   schema.tuple(schema.number, schema.number, schema.number, schema.number, schema.number, schema.number);
+
+const HistoryRowDecoder = schema.array(schema.unknown).andThen(row => {
+  if (row.length !== 6) {
+    throw new schema.DecoderError(`A history row is six numbers, not ${row.length}`);
+  }
+  return SixNumbers.forceDecode(row);
+});
 
 type HistoryRow = schema.Output<typeof HistoryRowDecoder>;
 
