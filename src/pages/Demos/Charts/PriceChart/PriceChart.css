@@ -30,6 +30,7 @@
   }
 
   .headline {
+    grid-column: 1 / -1;
     min-height: var(--base-x-4_25);
     display: flex;
     align-items: baseline;
