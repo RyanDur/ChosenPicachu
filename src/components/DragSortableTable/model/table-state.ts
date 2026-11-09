@@ -169,17 +169,17 @@ const unsettledMark = <Shove>(
 ): Readonly<Record<string, Marks<Shove>>> =>
   Object.fromEntries(Object.entries(marks).filter(([marked]) => marked !== key));
 
-const unsettle = (state: TableState, target: Carry, from: Settling): TableState =>
-  target.axis === 'column'
-    ? {...state, columnMarks: marked(state.columnMarks, target.held, {settlingFrom: from})}
-    : {...state, rowMarks: marked(state.rowMarks, target.held, {settlingFrom: from})};
+const unsettle = (state: TableState, carry: Carry, from: Settling): TableState =>
+  carry.axis === 'column'
+    ? {...state, columnMarks: marked(state.columnMarks, carry.held, {settlingFrom: from})}
+    : {...state, rowMarks: marked(state.rowMarks, carry.held, {settlingFrom: from})};
 
 const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: travel.still});
 
-const settle = (state: TableState, target: Carry): TableState =>
-  target.axis === 'column'
-    ? {...state, columnMarks: unsettledMark(state.columnMarks, target.held)}
-    : {...state, rowMarks: unsettledMark(state.rowMarks, target.held)};
+const settle = (state: TableState, carry: Carry): TableState =>
+  carry.axis === 'column'
+    ? {...state, columnMarks: unsettledMark(state.columnMarks, carry.held)}
+    : {...state, rowMarks: unsettledMark(state.rowMarks, carry.held)};
 
 const shoveColumns = (state: TableState, names: readonly string[], shove: ColumnShove): TableState =>
   ({...state, columnMarks: names.reduce((marks, name) => marked(marks, name, {shoved: shove}), state.columnMarks)});

@@ -22,8 +22,8 @@ export type TableAction =
   | {readonly type: 'handleLeft'; readonly column: string}
   | {readonly type: 'handleReleased'; readonly column: string}
   | {readonly type: 'dropped'; readonly carry: Carry; readonly from: Settling; readonly landing: Landing}
-  | {readonly type: 'unsettled'; readonly target: Carry; readonly from: Settling}
-  | {readonly type: 'settled'; readonly target: Carry}
+  | {readonly type: 'unsettled'; readonly carry: Carry; readonly from: Settling}
+  | {readonly type: 'settled'; readonly carry: Carry}
   | {readonly type: 'shovedColumns'; readonly names: readonly string[]; readonly shove: ColumnShove}
   | {readonly type: 'shovedRows'; readonly keys: readonly string[]; readonly shove: RowShove}
   | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbor: string; readonly widths: PixelSizes; readonly order: readonly string[]}
@@ -78,8 +78,8 @@ const arrowLifted = (column: string): Action => ({type: 'arrowLifted', column});
 const handleLeft = (column: string): Action => ({type: 'handleLeft', column});
 const handleReleased = (column: string): Action => ({type: 'handleReleased', column});
 const dropped = (carry: Carry, from: Settling, landing: Landing): Action => ({type: 'dropped', carry, from, landing});
-const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});
-const settled = (target: Carry): Action => ({type: 'settled', target});
+const unsettled = (carry: Carry, from: Settling): Action => ({type: 'unsettled', carry, from});
+const settled = (carry: Carry): Action => ({type: 'settled', carry});
 const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
 const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});
 const columnMovedBeside = (
