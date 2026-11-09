@@ -1,8 +1,6 @@
-import {DataRouter, NavigationType} from 'react-router';
-import {Maybe, maybe, notEmpty} from '@ryandur/sand';
+import {DataRouter, NavigationType, RouterState} from 'react-router';
+import {empty, Maybe, maybe, not, notEmpty} from '@ryandur/sand';
 import {landing, Measured, Watch} from './landing';
-
-const notDrawnYet: Measured = {top: 0, pageHeight: 0, visible: false};
 
 const targetNamedBy = (id: string): Maybe<Element> => maybe(document.getElementById(id));
 
@@ -38,11 +36,11 @@ const landOnceItHoldsStill = (router: DataRouter, hash: string, id: string): voi
         openFoldsAround(found);
         return true;
       }).orElse(false);
-      const next = landing.watched(watch, target.map(measured).orElse(notDrawnYet));
-      if (next !== 'land') {
+      const next = target.map(found => landing.watched(watch, measured(found))).orElse(landing.lookedFor(watch));
+      if (next === 'land') {
+        if (router.state.location.hash === hash) target.map(landedOn);
+      } else if (next !== 'given up') {
         watched(next, opened);
-      } else if (router.state.location.hash === hash) {
-        target.map(landedOn);
       }
     });
   };
@@ -55,13 +53,15 @@ const landWhereAsked = (router: DataRouter, hash: string): void => {
 
 // the browser resolves a fragment before the page has drawn it, and restores back and forward by itself
 const follow = (router: DataRouter): (() => void) => {
-  landWhereAsked(router, router.state.location.hash);
-  let followedKey = router.state.location.key;
-  return router.subscribe(({location, historyAction, navigation}) => {
-    if (navigation.state !== 'idle' || location.key === followedKey) return;
+  let followedKey = '';
+  const arrived = ({initialized, location, historyAction, navigation}: RouterState): void => {
+    if (not(initialized) || navigation.state !== 'idle' || location.key === followedKey) return;
+    const opening = empty(followedKey);
     followedKey = location.key;
-    if (historyAction !== NavigationType.Pop) landWhereAsked(router, location.hash);
-  });
+    if (opening || historyAction !== NavigationType.Pop) landWhereAsked(router, location.hash);
+  };
+  arrived(router.state);
+  return router.subscribe(arrived);
 };
 
 export const arrival = {follow};
